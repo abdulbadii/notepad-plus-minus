@@ -1148,7 +1148,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					_options._directory = directory;
 					
 					if ((lstrlen(directory) > 0) && (directory[lstrlen(directory)-1] != '\\'))
-						_options._directory += TEXT("\\");
+						_options._directory += L"\\";
 
 					HWND hFindCombo = ::GetDlgItem(_hSelf, IDFINDWHAT);
                    combo2ExtendedMode(IDFINDWHAT);
@@ -1179,7 +1179,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					_options._directory = directory;
 					
 					if ((lstrlen(directory) > 0) && (directory[lstrlen(directory)-1] != '\\'))
-						_options._directory += TEXT("\\");
+						_options._directory += L"\\";
 
 					generic_string msg = L"Are you sure you want to replace all occurrences in :\r";
 					msg += _options._directory;
@@ -3660,7 +3660,7 @@ void FindIncrementDlg::setFindStatus(FindStatus iStatus, int nbCounted)
 	static const TCHAR * const findStatus[] = { findCount, // FSFound
 	                               L"Phrase not found", //FSNotFound
 	                               L"Reached top of page, continued from bottom", // FSTopReached
-	                               TEXT("Reached end of page, continued from top")}; // FSEndReached
+	                               L"Reached end of page, continued from top"}; // FSEndReached
 	if (nbCounted <= 0)
 		findCount[0] = '\0';
 	else if (nbCounted == 1)

@@ -828,7 +828,7 @@ bool TiXmlDocumentA::SaveFile( const char * filename ) const
 bool TiXmlDocumentA::SaveUnicodeFilePath( const TCHAR* filename ) const
 {
 	// The old c stuff lives on...
-	FILE* fp = generic_fopen( filename, TEXT("w") );
+	FILE* fp = generic_fopen( filename, L"w");
 	if ( fp )
 	{
 		Print( fp, 0 );

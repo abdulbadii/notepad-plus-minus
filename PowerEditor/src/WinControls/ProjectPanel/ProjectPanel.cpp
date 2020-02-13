@@ -1203,7 +1203,7 @@ void ProjectPanel::recursiveAddFilesFrom(const TCHAR *folderPath, HTREEITEM hTre
 	bool isInHiddenDir = false;
 	generic_string dirFilter(folderPath);
 	if (folderPath[lstrlen(folderPath)-1] != '\\')
-		dirFilter += TEXT("\\");
+		dirFilter += L"\\";
 
 	dirFilter += L"*.*";
 	WIN32_FIND_DATA foundData;
@@ -1227,9 +1227,9 @@ void ProjectPanel::recursiveAddFilesFrom(const TCHAR *folderPath, HTREEITEM hTre
 				{
 					generic_string pathDir(folderPath);
 					if (folderPath[lstrlen(folderPath)-1] != '\\')
-						pathDir += TEXT("\\");
+						pathDir += L"\\";
 					pathDir += foundData.cFileName;
-					pathDir += TEXT("\\");
+					pathDir += L"\\";
 					HTREEITEM addedItem = addFolder(hTreeItem, foundData.cFileName);
 					recursiveAddFilesFrom(pathDir.c_str(), addedItem);
 				}
@@ -1245,7 +1245,7 @@ void ProjectPanel::recursiveAddFilesFrom(const TCHAR *folderPath, HTREEITEM hTre
 	{
 		generic_string pathFile(folderPath);
 		if (folderPath[lstrlen(folderPath)-1] != '\\')
-			pathFile += TEXT("\\");
+			pathFile += L"\\";
 		pathFile += files[i];
 		_treeView.addItem(files[i].c_str(), hTreeItem, INDEX_LEAF, pathFile.c_str());
 	}

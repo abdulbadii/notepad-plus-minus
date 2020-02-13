@@ -83,9 +83,9 @@ DWORD WINAPI Notepad_plus::monitorFileOnChange(void * params)
 				while (changes.Pop(dwAction, fn))
 				{
 					// Fix monitoring files which are under root problem
-					size_t pos = fn.find(TEXT("\\\\"));
+					size_t pos = fn.find(L"\\\\");
 					if (pos == 2)
-						fn.replace(pos, 2, TEXT("\\"));
+						fn.replace(pos, 2, L"\\");
 
 					if (OrdinalIgnoreCaseCompareStrings(fullFileName, fn.c_str()) == 0)
 					{
@@ -372,7 +372,7 @@ BufferID Notepad_plus::doOpen(const generic_string& fileName, bool isRecursive, 
             {
                 generic_string fileNameStr = fileName;
                 if (fileName[fileName.size() - 1] != '\\')
-                    fileNameStr += TEXT("\\");
+                    fileNameStr += L"\\";
 
                 patterns.push_back(L"*");
                 getMatchedFileNames(fileNameStr.c_str(), patterns, fileNames, true, false);
@@ -1439,7 +1439,7 @@ bool Notepad_plus::fileSave(BufferID id)
 				// Get the custom directory, make sure it has a trailing slash
 				fn_bak = nppgui._backupDir;
 				if (fn_bak.back() != TEXT('\\'))
-					fn_bak += TEXT("\\");
+					fn_bak += L"\\";
 			}
 			else
 			{
@@ -1447,12 +1447,12 @@ bool Notepad_plus::fileSave(BufferID id)
 				generic_string path = fn;
 				::PathRemoveFileSpec(path);
 				fn_bak = path.c_str();
-				fn_bak += TEXT("\\");
+				fn_bak += L"\\";
 
 				// If verbose, save it in a sub folder
 				if (backup == bak_verbose)
 				{
-					fn_bak += TEXT("nppBackup\\");
+					fn_bak += L"nppBackup\\";
 				}
 			}
 

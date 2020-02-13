@@ -197,7 +197,7 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 
 	LocalizationSwitcher & localizationSwitcher = nppParams.getLocalizationSwitcher();
 	std::wstring localizationDir = nppDir;
-	PathAppend(localizationDir, TEXT("localization\\"));
+	PathAppend(localizationDir, L"localization\\");
 
 	_notepad_plus_plus_core.getMatchedFileNames(localizationDir.c_str(), patterns, fileNames, false, false);
 	for (size_t i = 0, len = fileNames.size(); i < len; ++i)
@@ -213,7 +213,7 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
     if (nppParams.getAppDataNppDir() && nppParams.getAppDataNppDir()[0])
     {
         themeDir = nppParams.getAppDataNppDir();
-	    PathAppend(themeDir, TEXT("themes\\"));
+	    PathAppend(themeDir, L"themes\\");
 	    _notepad_plus_plus_core.getMatchedFileNames(themeDir.c_str(), patterns, fileNames, false, false);
 	    for (size_t i = 0, len = fileNames.size() ; i < len ; ++i)
 	    {
@@ -224,7 +224,7 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	fileNames.clear();
 	themeDir.clear();
 	themeDir = nppDir.c_str(); // <- should use the pointer to avoid the constructor of copy
-	PathAppend(themeDir, TEXT("themes\\"));
+	PathAppend(themeDir, L"themes\\");
 	_notepad_plus_plus_core.getMatchedFileNames(themeDir.c_str(), patterns, fileNames, false, false);
 	for (size_t i = 0, len = fileNames.size(); i < len ; ++i)
 	{

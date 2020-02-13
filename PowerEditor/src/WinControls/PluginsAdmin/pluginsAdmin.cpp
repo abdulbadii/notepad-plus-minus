@@ -92,7 +92,7 @@ void Version::setVersionFrom(const generic_string& filePath)
 
 		VS_FIXEDFILEINFO* lpFileInfo = nullptr;
 		UINT cbFileInfo = 0;
-		VerQueryValue(buffer, TEXT("\\"), reinterpret_cast<LPVOID*>(&lpFileInfo), &cbFileInfo);
+		VerQueryValue(buffer, L"\\", reinterpret_cast<LPVOID*>(&lpFileInfo), &cbFileInfo);
 		if (cbFileInfo)
 		{
 			_major = (lpFileInfo->dwFileVersionMS & 0xFFFF0000) >> 16;
@@ -460,7 +460,7 @@ bool PluginsAdminDlg::exitToInstallRemovePlugins(Operation op, const vector<Plug
 
 	NppParameters& nppParameters = NppParameters::getInstance();
 	generic_string updaterDir = nppParameters.getNppPath();
-	updaterDir += TEXT("\\updater\\");
+	updaterDir += L"\\updater\\";
 
 	generic_string updaterFullPath = updaterDir + L"gup.exe";
 

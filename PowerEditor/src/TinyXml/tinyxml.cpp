@@ -556,7 +556,7 @@ void TiXmlElement::Print( FILE* cfile, int depth ) const
 	int i;
 	for ( i=0; i<depth; i++ )
 	{
-		generic_fprintf( cfile, TEXT("    ") );
+		generic_fprintf( cfile, L"    ");
 	}
 
 	generic_fprintf( cfile, L"<%s", value.c_str() );
@@ -564,7 +564,7 @@ void TiXmlElement::Print( FILE* cfile, int depth ) const
 	TiXmlAttribute* attrib;
 	for ( attrib = attributeSet.First(); attrib; attrib = attrib->Next() )
 	{
-		generic_fprintf( cfile, TEXT(" ") );
+		generic_fprintf( cfile, L" ");
 		attrib->Print( cfile, depth );
 	}
 
@@ -575,29 +575,29 @@ void TiXmlElement::Print( FILE* cfile, int depth ) const
 	TiXmlNode* node;
 	if ( !firstChild )
 	{
-		generic_fprintf( cfile, TEXT(" />") );
+		generic_fprintf( cfile, L" />");
 	}
 	else if ( firstChild == lastChild && firstChild->ToText() )
 	{
-		generic_fprintf( cfile, TEXT(">") );
+		generic_fprintf( cfile, L">");
 		firstChild->Print( cfile, depth + 1 );
 		generic_fprintf( cfile, L"</%s>", value.c_str() );
 	}
 	else
 	{
-		generic_fprintf( cfile, TEXT(">") );
+		generic_fprintf( cfile, L">");
 
 		for ( node = firstChild; node; node=node->NextSibling() )
 		{
 			if ( !node->ToText() )
 			{
-				generic_fprintf( cfile, TEXT("\n") );
+				generic_fprintf( cfile, L"\n");
 			}
 			node->Print( cfile, depth+1 );
 		}
-		generic_fprintf( cfile, TEXT("\n") );
+		generic_fprintf( cfile, L"\n");
 		for( i=0; i<depth; ++i )
-		generic_fprintf( cfile, TEXT("    ") );
+		generic_fprintf( cfile, L"    ");
 		generic_fprintf( cfile, L"</%s>", value.c_str() );
 	}
 }
@@ -710,7 +710,7 @@ bool TiXmlDocument::LoadFile( const TCHAR* filename )
 	// Fixed with the StringToBuffer class.
 	value = filename;
 
-	FILE* file = generic_fopen( value.c_str (), TEXT("r") );
+	FILE* file = generic_fopen( value.c_str (), L"r");
 
 	if ( file )
 	{
@@ -755,7 +755,7 @@ bool TiXmlDocument::LoadFile( const TCHAR* filename )
 bool TiXmlDocument::SaveFile( const TCHAR * filename ) const
 {
 	// The old c stuff lives on...
-	FILE* fp = generic_fopen( filename, TEXT("w") );
+	FILE* fp = generic_fopen( filename, L"w");
 	if ( fp )
 	{
 		Print( fp, 0 );
@@ -791,7 +791,7 @@ void TiXmlDocument::Print( FILE* cfile, int depth ) const
 	for ( node=FirstChild(); node; node=node->NextSibling() )
 	{
 		node->Print( cfile, depth );
-		generic_fprintf( cfile, TEXT("\n") );
+		generic_fprintf( cfile, L"\n");
 	}
 }
 
@@ -946,7 +946,7 @@ void TiXmlText::StreamOut( TIXML_OSTREAM * stream ) const
 TiXmlNode* TiXmlText::Clone() const
 {	
 	TiXmlText* clone = 0;
-	clone = new TiXmlText( TEXT("") );
+	clone = new TiXmlText( L"");
 
 	if ( !clone )
 		return 0;
@@ -1023,7 +1023,7 @@ TiXmlNode* TiXmlDeclaration::Clone() const
 void TiXmlUnknown::Print( FILE* cfile, int depth ) const
 {
 	for ( int i=0; i<depth; i++ )
-		generic_fprintf( cfile, TEXT("    ") );
+		generic_fprintf( cfile, L"    ");
 	generic_fprintf( cfile, L"%s", value.c_str() );
 }
 

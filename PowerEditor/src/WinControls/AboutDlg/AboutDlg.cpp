@@ -51,7 +51,7 @@ INT_PTR CALLBACK AboutDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 			buildTime +=  wmc.char2wchar(__TIME__, CP_ACP);
 
 			NppParameters& nppParam = NppParameters::getInstance();
-			LPCTSTR bitness = nppParam.isx64() ? L"(64-bit)" : L"(32-bit)";
+			LPCTSTR bitness = nppParam.isx64() ? L"Notepad+- 0.0   (64-bit)" : L"Notepad+- 0.0   (32-bit)";
 			::SetDlgItemText(_hSelf, IDC_VERSION_BIT, bitness);
 
 			::SendMessage(compileDateHandle, WM_SETTEXT, 0, reinterpret_cast<LPARAM>(buildTime.c_str()));

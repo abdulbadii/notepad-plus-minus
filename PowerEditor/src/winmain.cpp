@@ -519,7 +519,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 	Notepad_plus_Window notepad_plus_plus;
 
 	generic_string updaterDir = nppParameters.getNppPath();
-	updaterDir += TEXT("\\updater\\");
+	updaterDir += L"\\updater\\";
 
 	generic_string updaterFullPath = updaterDir + L"gup.exe";
 

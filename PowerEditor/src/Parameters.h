@@ -119,7 +119,7 @@ const int COPYDATA_FILENAMESW = 2;
 #define ONEDRIVE_AVAILABLE 2
 #define GOOGLEDRIVE_AVAILABLE 4
 
-const TCHAR fontSizeStrs[][3] = {L"", L"5", L"6", L"7", L"8", L"9", L"10", L"11", L"12", L"14", L"16", L"18", L"20", L"22", L"24", L"26", TEXT("28")};
+const TCHAR fontSizeStrs[][3] = {L"", L"5", L"6", L"7", L"8", L"9", L"10", L"11", L"12", L"14", L"16", L"18", L"20", L"22", L"24", L"26", L"28"};
 
 const TCHAR localConfFile[] = L"doLocalConf.xml";
 const TCHAR notepadStyleFile[] = L"asNotepad.xml";
@@ -927,7 +927,7 @@ struct ScintillaViewParams
 };
 
 const int NB_LIST = 20;
-const int NB_MAX_LRF_FILE = 55;
+const int NB_MAX_LRF_FILE = 75;
 const int NB_MAX_USER_LANG = 30;
 const int NB_MAX_EXTERNAL_LANG = 30;
 const int NB_MAX_IMPORTED_UDL = 50;

@@ -365,7 +365,7 @@ public:
 	void SetValue( const generic_string& _value )    
 	{	  
 		StringToBuffer buf( _value );
-		SetValue( buf.buffer ? buf.buffer : TEXT("") );    	
+		SetValue( buf.buffer ? buf.buffer : L"");    	
 	}	
 	#endif
 
@@ -613,13 +613,13 @@ public:
 	void SetName( const generic_string& _name )	
 	{	
 		StringToBuffer buf( _name );
-		SetName ( buf.buffer ? buf.buffer : TEXT("error") );	
+		SetName ( buf.buffer ? buf.buffer : L"error");	
 	}
 	/// STL string form.	
 	void SetValue( const generic_string& _value )	
 	{	
 		StringToBuffer buf( _value );
-		SetValue( buf.buffer ? buf.buffer : TEXT("error") );	
+		SetValue( buf.buffer ? buf.buffer : L"error");	
 	}
 	#endif
 

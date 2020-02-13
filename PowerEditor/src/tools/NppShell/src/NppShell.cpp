@@ -152,7 +152,7 @@ BOOL RegisterServer() {
 	static DOREGSTRUCT ClsidEntries[] = {
 		{HKEY_CLASSES_ROOT,	L"CLSID\\%s",									NULL,					REG_SZ,		szShellExtensionTitle},
 		{HKEY_CLASSES_ROOT,	L"CLSID\\%s\\InprocServer32",					NULL,					REG_SZ,		szModule},
-		{HKEY_CLASSES_ROOT,	L"CLSID\\%s\\InprocServer32",					L"ThreadingModel",	REG_SZ,		TEXT("Apartment")},
+		{HKEY_CLASSES_ROOT,	L"CLSID\\%s\\InprocServer32",					L"ThreadingModel",	REG_SZ,		L"Apartment"},
 
 		//Settings
 		// Context menu

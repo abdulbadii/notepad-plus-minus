@@ -433,7 +433,7 @@ void Notepad_plus::command(int id)
 				generic_string fullFilePath = id == IDM_EDIT_OPENINFOLDER ? L"/select," : L"";
 				fullFilePath += L"\"";
 				fullFilePath += currentDir;
-				fullFilePath += TEXT("\\");
+				fullFilePath += L"\\";
 				fullFilePath += curentWord;
 
 				if ((id == IDM_EDIT_OPENASFILE &&
@@ -1814,7 +1814,7 @@ void Notepad_plus::command(int id)
 				DWORD valDataLen = MAX_PATH * sizeof(TCHAR);
 				DWORD valType;
 				HKEY hKey2Check = nullptr;
-				generic_string appEntry = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\");
+				generic_string appEntry = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\";
 				appEntry += appName;
 				::RegOpenKeyEx(HKEY_LOCAL_MACHINE, appEntry.c_str(), 0, KEY_READ, &hKey2Check);
 				::RegQueryValueEx(hKey2Check, L"", nullptr, &valType, reinterpret_cast<LPBYTE>(valData), &valDataLen);

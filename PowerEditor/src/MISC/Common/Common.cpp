@@ -701,7 +701,7 @@ generic_string PathAppend(generic_string& strDest, const generic_string& str2app
 {
 	if (strDest.empty() && str2append.empty()) // "" + ""
 	{
-		strDest = TEXT("\\");
+		strDest = L"\\";
 		return strDest;
 	}
 
@@ -726,7 +726,7 @@ generic_string PathAppend(generic_string& strDest, const generic_string& str2app
 	}
 
 	// toto + titi
-	strDest += TEXT("\\");
+	strDest += L"\\";
 	strDest += str2append;
 
 	return strDest;

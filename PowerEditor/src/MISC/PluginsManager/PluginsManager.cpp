@@ -230,7 +230,7 @@ int PluginsManager::loadPlugin(const TCHAR *pluginFilePath)
 				PathAppend(xmlPath, L"plugins\\Config");
                 PathAppend(xmlPath, pi->_moduleName.c_str());
 				PathRemoveExtension( xmlPath );
-				PathAddExtension( xmlPath, TEXT(".xml") );
+				PathAddExtension( xmlPath, L".xml");
 
 				if (! PathFileExists( xmlPath ) )
 				{

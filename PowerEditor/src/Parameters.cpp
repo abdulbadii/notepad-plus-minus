@@ -103,7 +103,7 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_P,       IDM_FILE_PRINT,                               true,  false, false, nullptr },
 	{ VK_NULL,    IDM_FILE_PRINTNOW,                            false, false, false, nullptr },
 	{ VK_F4,      IDM_FILE_EXIT,                                false, true,  false, nullptr },
-	{ VK_T,       IDM_FILE_RESTORELASTCLOSEDFILE,               true,  false, true,  TEXT("Restore Recent Closed File")},
+	{ VK_T,       IDM_FILE_RESTORELASTCLOSEDFILE,               true,  false, true,  L"Restore Recent Closed File"},
 
 //	{ VK_NULL,    IDM_EDIT_UNDO,                                false, false, false, nullptr },
 //	{ VK_NULL,    IDM_EDIT_REDO,                                false, false, false, nullptr },
@@ -267,8 +267,8 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_PRIOR,   IDM_VIEW_TAB_PREV,                            true,  false, false, nullptr },
 	{ VK_NEXT,    IDM_VIEW_TAB_MOVEFORWARD,                     true,  false, true,  nullptr },
 	{ VK_PRIOR,   IDM_VIEW_TAB_MOVEBACKWARD,                    true,  false, true,  nullptr },
-	{ VK_TAB,     IDC_PREV_DOC,                                 true,  false, true,  TEXT("Switch to previous document") },
-	{ VK_TAB,     IDC_NEXT_DOC,                                 true,  false, false, TEXT("Switch to next document") },
+	{ VK_TAB,     IDC_PREV_DOC,                                 true,  false, true,  L"Switch to previous document"},
+	{ VK_TAB,     IDC_NEXT_DOC,                                 true,  false, false, L"Switch to next document"},
 	{ VK_NULL,    IDM_VIEW_WRAP,                                false, false, false, nullptr },
 	{ VK_H,       IDM_VIEW_HIDELINES,                           false, true,  false, nullptr },
 	{ VK_F8,      IDM_VIEW_SWITCHTO_OTHER_VIEW,                 false, false, false, nullptr },
@@ -378,7 +378,7 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_NULL,    IDM_SETTING_IMPORTSTYLETHEMS,                 false, false, false, nullptr },
 	{ VK_NULL,    IDM_SETTING_EDITCONTEXTMENU,                  false, false, false, nullptr },
 
-	{ VK_R,       IDC_EDIT_TOGGLEMACRORECORDING,                true,  false, true,  TEXT("Toggle macro record")},
+	{ VK_R,       IDC_EDIT_TOGGLEMACRORECORDING,                true,  false, true,  L"Toggle macro record"},
 	{ VK_NULL,    IDM_MACRO_STARTRECORDINGMACRO,                false, false, false, nullptr },
 	{ VK_NULL,    IDM_MACRO_STOPRECORDINGMACRO,                 false, false, false, nullptr },
 	{ VK_P,       IDM_MACRO_PLAYBACKRECORDEDMACRO,              true,  false, true,  nullptr },
@@ -1285,7 +1285,7 @@ bool NppParameters::load()
 	{
 		// overwrite nativeLangPath variable
 		nativeLangPath = _nppPath;
-		PathAppend(nativeLangPath, TEXT("localization\\"));
+		PathAppend(nativeLangPath, L"localization\\");
 		PathAppend(nativeLangPath, _startWithLocFileName);
 	}
 	else // use %appdata% location, or (if absence then) npp installed location
@@ -2751,7 +2751,7 @@ LangType NppParameters::getLangFromExt(const TCHAR *ext)
 void NppParameters::setCloudChoice(const TCHAR *pathChoice)
 {
 	generic_string cloudChoicePath = getSettingsFolder();
-	cloudChoicePath += TEXT("\\cloud\\");
+	cloudChoicePath += L"\\cloud\\";
 
 	if (!PathFileExists(cloudChoicePath.c_str()))
 	{
@@ -3308,7 +3308,7 @@ void NppParameters::feedUserSettings(TiXmlNode *settingsRoot)
 		}
 		else	// support for old style (pre 2.0)
 		{
-			TCHAR names[SCE_USER_TOTAL_KEYWORD_GROUPS][7] = {L"words1", L"words2", L"words3", TEXT("words4")};
+			TCHAR names[SCE_USER_TOTAL_KEYWORD_GROUPS][7] = {L"words1", L"words2", L"words3", L"words4"};
 			for (int i = 0 ; i < 4 ; ++i)
 			{
 				boolStr = (prefixNode->ToElement())->Attribute(names[i]);
@@ -3353,7 +3353,7 @@ void NppParameters::feedUserKeywordList(TiXmlNode *node)
 			{
 				kwl = (valueNode)?valueNode->Value():L"";
 				//int len = _tcslen(kwl);
-				basic_string<TCHAR> temp{TEXT(" ")};
+				basic_string<TCHAR> temp{L" "};
 
 				temp += kwl;
 				size_t pos = 0;
@@ -3644,12 +3644,12 @@ bool NppParameters::writeProjectPanelsSettings() const
 	}
 
 	// Create the Project Panel root
-	TiXmlElement projPanelRootNode{TEXT("ProjectPanels")};
+	TiXmlElement projPanelRootNode{L"ProjectPanels"};
 
 	// Add 3 Project Panel parameters
 	for (int32_t i = 0 ; i < 3 ; ++i)
 	{
-		TiXmlElement projPanelNode{TEXT("ProjectPanel")};
+		TiXmlElement projPanelNode{L"ProjectPanel"};
 		(projPanelNode.ToElement())->SetAttribute(L"id", i);
 		(projPanelNode.ToElement())->SetAttribute(L"workSpaceFile", _workSpaceFilePathes[i]);
 
@@ -3679,7 +3679,7 @@ bool NppParameters::writeFileBrowserSettings(const vector<generic_string> & root
 	}
 
 	// Create the file browser root
-	TiXmlElement fileBrowserRootNode{ TEXT("FileBrowser") };
+	TiXmlElement fileBrowserRootNode{ L"FileBrowser"};
 
 	if (rootPaths.size() != 0)
 	{
@@ -3689,7 +3689,7 @@ bool NppParameters::writeFileBrowserSettings(const vector<generic_string> & root
 		size_t len = rootPaths.size();
 		for (size_t i = 0; i < len; ++i)
 		{
-			TiXmlElement fbRootNode{ TEXT("root") };
+			TiXmlElement fbRootNode{ L"root"};
 			(fbRootNode.ToElement())->SetAttribute(L"foldername", rootPaths[i].c_str());
 
 			(fileBrowserRootNode.ToElement())->InsertEndChild(fbRootNode);
@@ -5750,7 +5750,7 @@ void NppParameters::createXmlTreeFromGUIParams()
 		GUIConfigElement->SetAttribute(L"doubleQuotes", _nppGUI._matchedPairConf._doDoubleQuotes ? L"yes" : L"no");
 		GUIConfigElement->SetAttribute(L"htmlXmlTag", _nppGUI._matchedPairConf._doHtmlXmlTag ? L"yes" : L"no");
 
-		TiXmlElement hist_element{ TEXT("") };
+		TiXmlElement hist_element{ L""};
 		hist_element.SetValue(L"UserDefinePair");
 		for (size_t i = 0, nb = _nppGUI._matchedPairConf._matchedPairs.size(); i < nb; ++i)
 		{
@@ -5936,7 +5936,7 @@ bool NppParameters::writeFindHistory()
 	(findHistoryRoot->ToElement())->SetAttribute(L"dotMatchesNewline",		_findHistory._dotMatchesNewline?L"yes":L"no");
 	(findHistoryRoot->ToElement())->SetAttribute(L"isSearch2ButtonsMode",		_findHistory._isSearch2ButtonsMode?L"yes":L"no");
 
-	TiXmlElement hist_element{TEXT("")};
+	TiXmlElement hist_element{L""};
 
 	hist_element.SetValue(L"Path");
 	for (size_t i = 0, len = _findHistory._findHistoryPaths.size(); i < len; ++i)

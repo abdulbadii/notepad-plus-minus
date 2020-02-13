@@ -307,7 +307,7 @@ void AutoCompletion::showPathCompletion()
 				autoCompleteEntries += pathToMatchPlusSlash;
 				autoCompleteEntries += data.cFileName;
 				if (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) // If directory, add trailing slash.
-					autoCompleteEntries += TEXT("\\");
+					autoCompleteEntries += L"\\";
 
 			} while (::FindNextFile(hFind, &data));
 			::FindClose(hFind);
@@ -779,7 +779,7 @@ bool AutoCompletion::setLanguage(LangType language)
 	TCHAR path[MAX_PATH];
 	::GetModuleFileName(NULL, path, MAX_PATH);
 	PathRemoveFileSpec(path);
-	wcscat_s(path, TEXT("\\autoCompletion\\"));
+	wcscat_s(path, L"\\autoCompletion\\");
 	wcscat_s(path, getApiFileName());
 	wcscat_s(path, L".xml");
 

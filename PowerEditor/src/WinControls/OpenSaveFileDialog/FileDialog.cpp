@@ -241,7 +241,7 @@ stringVector * FileDialog::doOpenMultiFilesDlg()
 		{
 			wcscpy_s(fn, _fileName);
 			if (fn[lstrlen(fn) - 1] != '\\')
-				wcscat_s(fn, TEXT("\\"));
+				wcscat_s(fn, L"\\");
 		}
 
 		int term = lstrlen(fn);
@@ -482,7 +482,7 @@ BOOL APIENTRY FileDialog::run(HWND hWnd, UINT uMsg, WPARAM, LPARAM lParam)
 
 						// There are two or more double backslash, then change it to single
 						while (filePath.find(L"\\\\") != std::wstring::npos)
-							filePath.replace(filePath.find(TEXT("\\\\")), 2, TEXT("\\"));
+							filePath.replace(filePath.find(L"\\\\"), 2, L"\\");
 
 						// change the dialog directory selection
 						::SendMessage(hFileDlg, CDM_SETCONTROLTEXT, edt1,

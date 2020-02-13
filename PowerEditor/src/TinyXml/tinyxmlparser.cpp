@@ -524,8 +524,8 @@ TiXmlNode* TiXmlNode::Identify( const TCHAR* p )
 	// - Everthing else is unknown to tinyxml.
 	//
 
-	const TCHAR* xmlHeader = { TEXT("<?xml") };
-	const TCHAR* commentHeader = { TEXT("<!--") };
+	const TCHAR* xmlHeader = { L"<?xml"};
+	const TCHAR* commentHeader = { L"<!--"};
 
 	if ( StringEqual( p, xmlHeader, true ) )
 	{
@@ -540,7 +540,7 @@ TiXmlNode* TiXmlNode::Identify( const TCHAR* p )
 		#ifdef DEBUG_PARSER
 			TIXML_LOG( "XML parsing Element\n" );
 		#endif
-		returnNode = new TiXmlElement( TEXT("") );
+		returnNode = new TiXmlElement( L"");
 	}
 	else if ( StringEqual( p, commentHeader, false ) )
 	{
@@ -610,7 +610,7 @@ void TiXmlElement::StreamIn (TIXML_ISTREAM * in, TIXML_STRING * tag)
 			if ( in->good() && in->peek() != '<' ) 
 			{
 				// Yep, text.
-				TiXmlText text( TEXT("") );
+				TiXmlText text( L"");
 				text.StreamIn( in, tag );
 
 				// What follows text is a closing tag or another node.
@@ -808,7 +808,7 @@ const TCHAR* TiXmlElement::ReadValue( const TCHAR* p, TiXmlParsingData* data )
 		if ( *p != '<' )
 		{
 			// Take what we have, make a text element.
-			TiXmlText* textNode = new TiXmlText( TEXT("") );
+			TiXmlText* textNode = new TiXmlText( L"");
 
 			if ( !textNode )
 			{

@@ -76,7 +76,7 @@ const TCHAR defExtArray[nbSupportedLang][nbExtMax][extNameMax] =
 	{L"misc",
 		L".nfo", L".mak"
 	},
-	{TEXT("customize")}
+	{L"customize"}
 };
 
 void RegExtDlg::doDialog(bool isRTL)
@@ -372,7 +372,7 @@ bool RegExtDlg::deleteExts(const TCHAR *ext2Delete)
 
 	if ((nbValue <= 1) && (!nbSubkey))
 	{
-		TCHAR subKey[32] = TEXT("\\");
+		TCHAR subKey[32] = L"\\";
 		wcscat_s(subKey, ext2Delete);
 		::RegDeleteKey(HKEY_CLASSES_ROOT, subKey);
 	}

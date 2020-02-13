@@ -45,7 +45,7 @@ bool MiniDumper::writeDump(EXCEPTION_POINTERS * pExceptionInfo)
 	LPCTSTR szResult = NULL;
 	bool retval = false;
 
-	HMODULE hDll = ::LoadLibrary( TEXT("DBGHELP.DLL") );	//that wont work on older windows version than XP, #care :)
+	HMODULE hDll = ::LoadLibrary( L"DBGHELP.DLL");	//that wont work on older windows version than XP, #care :)
 
 	if (hDll)
 	{

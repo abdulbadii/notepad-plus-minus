@@ -245,7 +245,7 @@ INT_PTR CALLBACK FileBrowser::run_dlgProc(UINT message, WPARAM wParam, LPARAM lP
 		case FB_ADDFILE:
 		{
 			const std::vector<generic_string> file2Change = *(std::vector<generic_string> *)lParam;
-			generic_string separator = TEXT("\\\\");
+			generic_string separator = L"\\\\";
 
 			size_t sepPos = file2Change[0].find(separator);
 			if (sepPos == generic_string::npos)
@@ -272,7 +272,7 @@ INT_PTR CALLBACK FileBrowser::run_dlgProc(UINT message, WPARAM wParam, LPARAM lP
 		case FB_RMFILE:
 		{
 			const std::vector<generic_string> file2Change = *(std::vector<generic_string> *)lParam;
-			generic_string separator = TEXT("\\\\");
+			generic_string separator = L"\\\\";
 
 			size_t sepPos = file2Change[0].find(separator);
 			if (sepPos == generic_string::npos)
@@ -297,7 +297,7 @@ INT_PTR CALLBACK FileBrowser::run_dlgProc(UINT message, WPARAM wParam, LPARAM lP
 		case FB_RNFILE:
 		{
 			const std::vector<generic_string> file2Change = *(std::vector<generic_string> *)lParam;
-			generic_string separator = TEXT("\\\\");
+			generic_string separator = L"\\\\";
 
 			size_t sepPos = file2Change[0].find(separator);
 			if (sepPos == generic_string::npos)
@@ -490,7 +490,7 @@ generic_string FileBrowser::getNodePath(HTREEITEM node) const
 	{
 		fullPath += fullPathArray[i];
 		if (i != 0)
-			fullPath += TEXT("\\");
+			fullPath += L"\\";
 	}
 
 	return fullPath;
@@ -892,7 +892,7 @@ void FileBrowser::getDirectoryStructure(const TCHAR *dir, const std::vector<gene
 
 	generic_string dirFilter(dir);
 	if (dirFilter[dirFilter.length() - 1] != '\\')
-		dirFilter += TEXT("\\");
+		dirFilter += L"\\";
 	dirFilter += L"*.*";
 	WIN32_FIND_DATA foundData;
 
@@ -913,9 +913,9 @@ void FileBrowser::getDirectoryStructure(const TCHAR *dir, const std::vector<gene
 				{
 					generic_string pathDir(dir);
 					if (pathDir[pathDir.length() - 1] != '\\')
-						pathDir += TEXT("\\");
+						pathDir += L"\\";
 					pathDir += foundData.cFileName;
-					pathDir += TEXT("\\");
+					pathDir += L"\\";
 
 					FolderInfo subDirectoryStructure(foundData.cFileName, &directoryStructure);
 					getDirectoryStructure(pathDir.c_str(), patterns, subDirectoryStructure, isRecursive, isInHiddenDir);
@@ -946,9 +946,9 @@ void FileBrowser::getDirectoryStructure(const TCHAR *dir, const std::vector<gene
 				{
 					generic_string pathDir(dir);
 					if (pathDir[pathDir.length() - 1] != '\\')
-						pathDir += TEXT("\\");
+						pathDir += L"\\";
 					pathDir += foundData.cFileName;
-					pathDir += TEXT("\\");
+					pathDir += L"\\";
 
 					FolderInfo subDirectoryStructure(foundData.cFileName, &directoryStructure);
 					getDirectoryStructure(pathDir.c_str(), patterns, subDirectoryStructure, isRecursive, isInHiddenDir);
@@ -1258,7 +1258,7 @@ bool FolderInfo::addToStructure(generic_string & fullpath, std::vector<generic_s
 {
 	if (linarPathArray.size() == 1) // could be file or folder
 	{
-		fullpath += TEXT("\\");
+		fullpath += L"\\";
 		fullpath += linarPathArray[0];
 		if (PathIsDirectory(fullpath.c_str()))
 		{
@@ -1289,7 +1289,7 @@ bool FolderInfo::addToStructure(generic_string & fullpath, std::vector<generic_s
 		{
 			if (folder.getName() == linarPathArray[0])
 			{
-				fullpath += TEXT("\\");
+				fullpath += L"\\";
 				fullpath += linarPathArray[0];
 				linarPathArray.erase(linarPathArray.begin());
 				return folder.addToStructure(fullpath, linarPathArray);
@@ -1417,7 +1417,7 @@ DWORD WINAPI FolderUpdater::watching(void *params)
 
 	generic_string dir2Watch = (thisFolderUpdater->_rootFolder)._rootPath;
 	if (dir2Watch[dir2Watch.length() - 1] != '\\')
-		dir2Watch += TEXT("\\"); // CReadDirectoryChanges will add another '\' so we will get "\\" as a separator (of monitored root) in the notification
+		dir2Watch += L"\\"; // CReadDirectoryChanges will add another '\' so we will get "\\" as a separator (of monitored root) in the notification
 
 	const DWORD dwNotificationFlags = FILE_NOTIFY_CHANGE_CREATION | FILE_NOTIFY_CHANGE_DIR_NAME | FILE_NOTIFY_CHANGE_FILE_NAME;
 

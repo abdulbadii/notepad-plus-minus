@@ -2480,7 +2480,7 @@ INT_PTR CALLBACK BackupDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 			auto periodicBackupInSec = static_cast<UINT>(nppGUI._snapshotBackupTiming / 1000);
 			::SetDlgItemInt(_hSelf, IDC_BACKUPDIR_RESTORESESSION_EDIT,periodicBackupInSec, FALSE);
 			generic_string backupFilePath = NppParameters::getInstance().getUserPath();
-			backupFilePath += TEXT("\\backup\\");
+			backupFilePath += L"\\backup\\";
 			::SetDlgItemText(_hSelf, IDD_BACKUPDIR_RESTORESESSION_PATH_EDIT, backupFilePath.c_str());
 
 			int ID2CheckBackupOnSave = 0;

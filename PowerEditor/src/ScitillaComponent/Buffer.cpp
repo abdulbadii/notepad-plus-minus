@@ -835,7 +835,7 @@ bool FileManager::backupCurrentBuffer()
 			{
 				// Create file
 				backupFilePath = NppParameters::getInstance().getUserPath();
-				backupFilePath += TEXT("\\backup\\");
+				backupFilePath += L"\\backup\\";
 
 				// if "backup" folder doesn't exist, create it.
 				if (!PathFileExists(backupFilePath.c_str()))

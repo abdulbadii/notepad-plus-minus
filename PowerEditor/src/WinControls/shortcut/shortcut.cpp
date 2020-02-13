@@ -139,7 +139,7 @@ KeyIDNAME namedKeyArray[] = {
 {L"]", VK_OEM_6},
 {L";", VK_OEM_1},
 {L"'", VK_OEM_7},
-{TEXT("\\"), VK_OEM_5},
+{L"\\", VK_OEM_5},
 {L",", VK_OEM_COMMA},
 {L".", VK_OEM_PERIOD},
 {L"/", VK_OEM_2},
