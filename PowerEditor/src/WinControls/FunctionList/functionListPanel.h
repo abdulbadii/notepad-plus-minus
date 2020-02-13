@@ -32,9 +32,9 @@
 #include "functionParser.h"
 #include "TreeView.h"
 
-#define FL_PANELTITLE     TEXT("Function List")
-#define FL_SORTTIP        TEXT("sort")
-#define FL_RELOADTIP      TEXT("Reload")
+#define FL_PANELTITLE     L"Function List"
+#define FL_SORTTIP        L"sort"
+#define FL_RELOADTIP      L"Reload"
 
 #define FL_FUCTIONLISTROOTNODE "FunctionList"
 #define FL_SORTLOCALNODENAME   "SortTip"

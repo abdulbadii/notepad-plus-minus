@@ -32,7 +32,7 @@
 #include "VerticalFileSwitcher_rc.h"
 #include "VerticalFileSwitcherListView.h"
 
-#define FS_PROJECTPANELTITLE		TEXT("Doc Switcher")
+#define FS_PROJECTPANELTITLE		L"Doc Switcher"
 
 struct sortCompareData {
   HWND hListView;

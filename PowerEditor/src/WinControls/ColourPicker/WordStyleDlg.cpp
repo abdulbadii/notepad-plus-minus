@@ -648,7 +648,7 @@ void WordStyleDlg::switchToTheme()
 		PathRemoveExtension(themeFileName);
 		int mb_response =
 			::MessageBox( _hSelf,
-				TEXT(" Unsaved changes are about to be discarded!\n")
+				L" Unsaved changes are about to be discarded!\n"
 				L" Do you want to save your changes before switching themes?",
 				themeFileName,
 				MB_ICONWARNING | MB_YESNO | MB_APPLMODAL | MB_SETFOREGROUND );

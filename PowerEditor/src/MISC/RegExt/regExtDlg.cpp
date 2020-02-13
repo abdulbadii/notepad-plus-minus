@@ -43,38 +43,38 @@ const int extNameMax = 18;
 const TCHAR defExtArray[nbSupportedLang][nbExtMax][extNameMax] =
 {
 	{L"Notepad",
-		L".txt", TEXT(".log")
+		L".txt", L".log"
 	},
 	{L"ms ini/inf",
-		L".ini", TEXT(".inf")
+		L".ini", L".inf"
 	},
 	{L"c, c++, objc",
 		L".h", L".hh", L".hpp", L".hxx", L".c", L".cpp", L".cxx", L".cc",
 		L".m", L".mm",
-		L".vcxproj", L".vcproj", L".props", L".vsprops", TEXT(".manifest")
+		L".vcxproj", L".vcproj", L".props", L".vsprops", L".manifest"
 	},
 	{L"java, c#, pascal",
-		L".java", L".cs", L".pas", L".pp", TEXT(".inc")
+		L".java", L".cs", L".pas", L".pp", L".inc"
 	},
 	{L"web script",
 		L".html", L".htm", L".shtml", L".shtm", L".hta",
 		L".asp", L".aspx",
 		L".css", L".js", L".json", L".jsm", L".jsp",
 		L".php", L".php3", L".php4", L".php5", L".phps", L".phpt", L".phtml",
-		L".xml", L".xhtml", L".xht", L".xul", L".kml", L".xaml", TEXT(".xsml")
+		L".xml", L".xhtml", L".xht", L".xul", L".kml", L".xaml", L".xsml"
 	},
 	{L"public script",
 		L".sh", L".bsh", L".bash", L".bat", L".cmd", L".nsi",
-		L".nsh", L".lua", L".pl", L".pm", TEXT(".py")
+		L".nsh", L".lua", L".pl", L".pm", L".py"
 	},
 	{L"property script",
-		L".rc", L".as", L".mx", L".vb", TEXT(".vbs")
+		L".rc", L".as", L".mx", L".vb", L".vbs"
 	},
 	{L"fortran, TeX, SQL",
-		L".f", L".for", L".f90", L".f95", L".f2k", L".tex", TEXT(".sql")
+		L".f", L".for", L".f90", L".f95", L".f2k", L".tex", L".sql"
 	},
 	{L"misc",
-		L".nfo", TEXT(".mak")
+		L".nfo", L".mak"
 	},
 	{TEXT("customize")}
 };

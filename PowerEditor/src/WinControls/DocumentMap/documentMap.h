@@ -31,7 +31,7 @@
 #include "DockingDlgInterface.h"
 #include "documentMap_rc.h"
 
-#define DM_PANELTITLE     TEXT("Document Map")
+#define DM_PANELTITLE     L"Document Map"
 
 #define DOCUMENTMAP_SCROLL        (WM_USER + 1)
 #define DOCUMENTMAP_MOUSECLICKED  (WM_USER + 2)

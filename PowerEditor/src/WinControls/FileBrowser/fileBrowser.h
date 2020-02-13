@@ -32,17 +32,17 @@
 #include "TreeView.h"
 #include "fileBrowser_rc.h"
 
-#define FB_PANELTITLE         TEXT("Folder as Workspace")
-#define FB_ADDROOT            TEXT("Add")
-#define FB_REMOVEALLROOTS     TEXT("Remove All")
-#define FB_REMOVEROOTFOLDER   TEXT("Remove")
-#define FB_COPYPATH           TEXT("Copy path")
-#define FB_COPYFILENAME       TEXT("Copy file name")
-#define FB_FINDINFILES        TEXT("Find in Files...")
-#define FB_EXPLORERHERE       TEXT("Explorer here")
-#define FB_CMDHERE            TEXT("CMD here")
-#define FB_OPENINNPP          TEXT("Open")
-#define FB_SHELLEXECUTE       TEXT("Run by system")
+#define FB_PANELTITLE         L"Folder as Workspace"
+#define FB_ADDROOT            L"Add"
+#define FB_REMOVEALLROOTS     L"Remove All"
+#define FB_REMOVEROOTFOLDER   L"Remove"
+#define FB_COPYPATH           L"Copy path"
+#define FB_COPYFILENAME       L"Copy file name"
+#define FB_FINDINFILES        L"Find in Files..."
+#define FB_EXPLORERHERE       L"Explorer here"
+#define FB_CMDHERE            L"CMD here"
+#define FB_OPENINNPP          L"Open"
+#define FB_SHELLEXECUTE       L"Run by system"
 
 class TiXmlNode;
 class FileBrowser;

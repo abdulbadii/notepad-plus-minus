@@ -32,7 +32,7 @@
 #include "clipboardHistoryPanel_rc.h"
 #include <vector>
 
-#define CH_PROJECTPANELTITLE		TEXT("Clipboard History")
+#define CH_PROJECTPANELTITLE		L"Clipboard History"
 
 typedef std::vector<unsigned char> ClipboardData;
 

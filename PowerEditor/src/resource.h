@@ -27,11 +27,11 @@
 
 #pragma once
 
-#define NOTEPAD_PLUS_VERSION TEXT("Notepad++ v7.8.4")
+#define NOTEPAD_PLUS_VERSION L"Notepad++ v7.8.4"
 
 // should be X.Y : ie. if VERSION_DIGITALVALUE == 4, 7, 1, 0 , then X = 4, Y = 71
-// ex : #define VERSION_VALUE TEXT("5.63\0")
-#define VERSION_VALUE TEXT("7.84\0")
+// ex : #define VERSION_VALUE L"5.63\0"
+#define VERSION_VALUE L"7.84\0"
 #define VERSION_DIGITALVALUE 7, 8, 4, 0
 
 

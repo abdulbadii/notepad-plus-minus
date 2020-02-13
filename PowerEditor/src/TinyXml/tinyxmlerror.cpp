@@ -47,5 +47,5 @@ const TCHAR* TiXmlBase::errorString[ TIXML_ERROR_STRING_COUNT ] =
 	L"Error parsing Unknown.",
 	L"Error parsing Comment.",
 	L"Error parsing Declaration.",
-	TEXT("Error document empty.")
+	L"Error document empty."
 };

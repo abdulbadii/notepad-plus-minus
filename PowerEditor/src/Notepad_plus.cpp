@@ -6445,7 +6445,7 @@ const wchar_t* wtf[nbWtf] =
 	L"lol",
 	L"ROFL",
 	L"OMFG",
-	TEXT("Husband is not an ATM machine!!!")
+	L"Husband is not an ATM machine!!!"
 };
 
 const int nbIntervalTime = 5;
