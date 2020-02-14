@@ -1129,9 +1129,9 @@ private:
 	Take an example:
 	@verbatim
 	<Document>
-		<Element attributeA = TEXT("valueA")>
-			<Child attributeB = TEXT("value1") />
-			<Child attributeB = TEXT("value2") />
+		<Element attributeA = L"valueA">
+			<Child attributeB = L"value1"/>
+			<Child attributeB = L"value2"/>
 		</Element>
 	<Document>
 	@endverbatim

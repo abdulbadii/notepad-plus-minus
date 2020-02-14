@@ -550,15 +550,15 @@ void WindowsDlg::updateColumnNames()
 	columnText = pNativeSpeaker->getAttrNameStr(L"Name", WD_ROOTNODE, WD_CLMNNAME);
 	if (_currentColumn != 0)
 	{
-		columnText = TEXT("\u21F5 ") + columnText;
+		columnText = L"\u21F5 "+ columnText;
 	}
 	else if (_reverseSort)
 	{
-		columnText = TEXT("\u25B3 ") + columnText;
+		columnText = L"\u25B3 "+ columnText;
 	}
 	else
 	{
-		columnText = TEXT("\u25BD ") + columnText;
+		columnText = L"\u25BD "+ columnText;
 	}
 	lvColumn.pszText = const_cast<TCHAR *>(columnText.c_str());
 	lvColumn.cx = static_cast<int>(SendMessage(_hList, LVM_GETCOLUMNWIDTH, 0, 0));
@@ -567,15 +567,15 @@ void WindowsDlg::updateColumnNames()
 	columnText = pNativeSpeaker->getAttrNameStr(L"Path", WD_ROOTNODE, WD_CLMNPATH);
 	if (_currentColumn != 1)
 	{
-		columnText = TEXT("\u21F5 ") + columnText;
+		columnText = L"\u21F5 "+ columnText;
 	}
 	else if (_reverseSort)
 	{
-		columnText = TEXT("\u25B3 ") + columnText;
+		columnText = L"\u25B3 "+ columnText;
 	}
 	else
 	{
-		columnText = TEXT("\u25BD ") + columnText;
+		columnText = L"\u25BD "+ columnText;
 	}
 	lvColumn.pszText = const_cast<TCHAR *>(columnText.c_str());
 	lvColumn.cx = static_cast<int>(SendMessage(_hList, LVM_GETCOLUMNWIDTH, 1, 0));
@@ -585,15 +585,15 @@ void WindowsDlg::updateColumnNames()
 	columnText = pNativeSpeaker->getAttrNameStr(L"Type", WD_ROOTNODE, WD_CLMNTYPE);
 	if (_currentColumn != 2)
 	{
-		columnText = TEXT("\u21F5 ") + columnText;
+		columnText = L"\u21F5 "+ columnText;
 	}
 	else if (_reverseSort)
 	{
-		columnText = TEXT("\u25B3 ") + columnText;
+		columnText = L"\u25B3 "+ columnText;
 	}
 	else
 	{
-		columnText = TEXT("\u25BD ") + columnText;
+		columnText = L"\u25BD "+ columnText;
 	}
 	lvColumn.pszText = const_cast<TCHAR *>(columnText.c_str());
 	lvColumn.cx = static_cast<int>(SendMessage(_hList, LVM_GETCOLUMNWIDTH, 2, 0));

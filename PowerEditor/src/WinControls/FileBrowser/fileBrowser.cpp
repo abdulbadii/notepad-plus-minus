@@ -479,7 +479,7 @@ generic_string FileBrowser::getNodePath(HTREEITEM node) const
 		if (temp == nullptr)
 		{
 			LPARAM param = _treeView.getItemParam(parent);
-			folderName = (param == 0) ? TEXT("") : *((generic_string *)param);
+			folderName = (param == 0) ? L"": *((generic_string *)param);
 		}
 		parent = temp;
 		fullPathArray.push_back(folderName);

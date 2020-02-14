@@ -248,7 +248,7 @@ INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /
 
 			// Plugins
 			_debugInfoStr += L"Plugins : ";
-			_debugInfoStr += _loadedPlugins.length() == 0 ? TEXT("none") : _loadedPlugins;
+			_debugInfoStr += _loadedPlugins.length() == 0 ? L"none": _loadedPlugins;
 			_debugInfoStr += L"\r\n";
 
 			::SetDlgItemText(_hSelf, IDC_DEBUGINFO_EDIT, _debugInfoStr.c_str());

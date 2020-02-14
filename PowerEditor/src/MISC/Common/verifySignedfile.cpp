@@ -216,7 +216,7 @@ bool SecurityGard::verifySignedLibrary(const std::wstring& filepath, NppModule m
 
 		if (!result)
 		{
-			throw wstring(L"Checking certificate of ") + filepath + TEXT(" : ") + GetLastErrorAsString(GetLastError());
+			throw wstring(L"Checking certificate of ") + filepath + L" : "+ GetLastErrorAsString(GetLastError());
 		}
 
 		// Get signer information size.

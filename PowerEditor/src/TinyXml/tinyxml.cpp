@@ -604,7 +604,7 @@ void TiXmlElement::Print( FILE* cfile, int depth ) const
 
 void TiXmlElement::StreamOut( TIXML_OSTREAM * stream ) const
 {
-	(*stream) << TEXT("<") << value;
+	(*stream) << L"<"<< value;
 
 	TiXmlAttribute* attrib;
 	for ( attrib = attributeSet.First(); attrib; attrib = attrib->Next() )

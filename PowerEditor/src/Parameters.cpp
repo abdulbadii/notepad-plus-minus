@@ -5423,13 +5423,13 @@ bool NppParameters::writeScintillaParams()
 	(scintNode->ToElement())->SetAttribute(L"lineNumberMargin", _svp._lineNumberMarginShow?L"show":L"hide");
 	(scintNode->ToElement())->SetAttribute(L"bookMarkMargin", _svp._bookMarkMarginShow?L"show":L"hide");
 	(scintNode->ToElement())->SetAttribute(L"indentGuideLine", _svp._indentGuideLineShow?L"show":L"hide");
-	const TCHAR *pFolderStyleStr = (_svp._folderStyle == FOLDER_STYLE_SIMPLE)?TEXT("simple"):
-									(_svp._folderStyle == FOLDER_STYLE_ARROW)?TEXT("arrow"):
-										(_svp._folderStyle == FOLDER_STYLE_CIRCLE)?TEXT("circle"):
+	const TCHAR *pFolderStyleStr = (_svp._folderStyle == FOLDER_STYLE_SIMPLE)?L"simple":
+									(_svp._folderStyle == FOLDER_STYLE_ARROW)?L"arrow":
+										(_svp._folderStyle == FOLDER_STYLE_CIRCLE)?L"circle":
 										(_svp._folderStyle == FOLDER_STYLE_NONE)?L"none":L"box";
 	(scintNode->ToElement())->SetAttribute(L"folderMarkStyle", pFolderStyleStr);
 
-	const TCHAR *pWrapMethodStr = (_svp._lineWrapMethod == LINEWRAP_ALIGNED)?TEXT("aligned"):
+	const TCHAR *pWrapMethodStr = (_svp._lineWrapMethod == LINEWRAP_ALIGNED)?L"aligned":
 								(_svp._lineWrapMethod == LINEWRAP_INDENT)?L"indent":L"default";
 	(scintNode->ToElement())->SetAttribute(L"lineWrapMethod", pWrapMethodStr);
 

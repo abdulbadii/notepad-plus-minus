@@ -35,8 +35,8 @@
 
 using namespace std;
 
-const TCHAR * USERMSG = TEXT(" is not compatible with the current version of Notepad++.\n\n\
-Do you want to remove this plugin from the plugins directory to prevent this message from the next launch?");
+const TCHAR * USERMSG = L" is not compatible with the current version of Notepad++.\n\n\
+Do you want to remove this plugin from the plugins directory to prevent this message from the next launch?";
 
 #ifdef _WIN64
 #define ARCH_TYPE IMAGE_FILE_MACHINE_AMD64
@@ -587,7 +587,7 @@ void PluginsManager::notify(size_t indexPluginInfo, const SCNotification *notifi
 		catch (...)
 		{
 			TCHAR funcInfo[256];
-			generic_sprintf(funcInfo, TEXT("notify(SCNotification *notification) : \r notification->nmhdr.code == %d\r notification->nmhdr.hwndFrom == %p\r notification->nmhdr.idFrom == %" PRIuPTR), \
+			generic_sprintf(funcInfo, L"notify(SCNotification *notification) : \r notification->nmhdr.code == %d\r notification->nmhdr.hwndFrom == %p\r notification->nmhdr.idFrom == %" PRIuPTR, \
 				scNotif.nmhdr.code, scNotif.nmhdr.hwndFrom, scNotif.nmhdr.idFrom);
 			pluginCrashAlert(_pluginInfos[indexPluginInfo]->_moduleName.c_str(), funcInfo);
 		}

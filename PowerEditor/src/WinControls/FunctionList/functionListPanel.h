@@ -72,7 +72,7 @@ struct SearchParameters {
 	};
 
 	bool hasParams()const{
-		return (_text2Find != TEXT("") || _doSort);
+		return (_text2Find != L""|| _doSort);
 	};
 };
 

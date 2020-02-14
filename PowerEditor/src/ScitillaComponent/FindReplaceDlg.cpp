@@ -440,14 +440,12 @@ int FindReplaceDlg::saveComboHistory(int id, int maxcount, vector<generic_string
     return count;
 }
 
-void FindReplaceDlg::updateCombos()
-{
+void FindReplaceDlg::updateCombos(){
 	updateCombo(IDREPLACEWITH);
 	updateCombo(IDFINDWHAT);
 }
 
-void FindReplaceDlg::updateCombo(int comboID)
-{
+void FindReplaceDlg::updateCombo(int comboID){
 	HWND hCombo = ::GetDlgItem(_hSelf, comboID);
 	addText2Combo(getTextFromCombo(hCombo).c_str(), hCombo);
 }
@@ -2538,7 +2536,7 @@ void FindReplaceDlg::saveInMacro(size_t cmd, int cmdType)
 {
 	int booleans = 0;
 	::SendMessage(_hParent, WM_FRSAVE_INT, IDC_FRCOMMAND_INIT, 0);
-	::SendMessage(_hParent, WM_FRSAVE_STR, IDFINDWHAT,  reinterpret_cast<LPARAM>(cmd == IDC_CLEAR_ALL ? TEXT("") : _options._str2Search.c_str()));
+	::SendMessage(_hParent, WM_FRSAVE_STR, IDFINDWHAT,  reinterpret_cast<LPARAM>(cmd == IDC_CLEAR_ALL ? L"": _options._str2Search.c_str()));
 	booleans |= _options._isWholeWord?IDF_WHOLEWORD:0;
 	booleans |= _options._isMatchCase?IDF_MATCHCASE:0;
 	booleans |= _options._dotMatchesNewline?IDF_REDOTMATCHNL:0;

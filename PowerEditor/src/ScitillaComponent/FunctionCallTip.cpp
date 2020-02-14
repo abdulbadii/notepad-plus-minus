@@ -432,7 +432,7 @@ void FunctionCallTip::showCalltip()
 	callTipText << _stop;
 	if (_descriptions.at(_currentOverload)[0])
 	{
-		callTipText << TEXT("\n") << _descriptions.at(_currentOverload);
+		callTipText << L"\n"<< _descriptions.at(_currentOverload);
 	}
 
 	if (isVisible())
