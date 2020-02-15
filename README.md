@@ -1,4 +1,4 @@
-[Contributors >200](https://github.com/notepad-plus-plus/notepad-plus-plus/graphs/contributors) (Note: 1 above is misaken)
+[Contributors >200](https://github.com/notepad-plus-plus/notepad-plus-plus/graphs/contributors) (Note: 1 contributor above is misaken)
 
 What is Notepad++ ?
 ===================
@@ -36,8 +36,6 @@ Build Notepad++
 Please follow [build guide](BUILD.md) to build Notepad++ from source.
 
 
-Code contribution is welcome. Here are some [rules](CONTRIBUTING.md) that your should follow to make your contribution accepted easily. 
-
-[E.g.](https://raw.githubusercontent.com/abdulbadii/notepad-plus-minus/master/Notepad%2B-.png)
+Code contribution is welcome. Here are some [rules](CONTRIBUTING.md) that your should follow to make your contribution accepted easily.
 
 
