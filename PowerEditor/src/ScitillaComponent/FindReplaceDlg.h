@@ -389,9 +389,9 @@ private :
 		SendMessage(_hSelf, DM_SETDEFID, nID, 0L);
 	};
 
-	void gotoCorrectTab() {
-		auto currentIndex = _tab.getCurrentTabIndex();
-		if (currentIndex != _currentStatus)
+inline	void gotoCorrectTab() {
+		// auto currentIndex = _tab.getCurrentTabIndex();
+		if (_tab.getCurrentTabIndex() != _currentStatus)
 			_tab.activateAt(_currentStatus);
 	};
 	
