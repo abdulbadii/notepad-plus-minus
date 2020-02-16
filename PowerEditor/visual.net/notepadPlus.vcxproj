@@ -50,7 +50,7 @@
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">
-    <OutDir>..\bin64\</OutDir>
+    <OutDir>..\..\Release\</OutDir>
     <IntDir>x64\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
