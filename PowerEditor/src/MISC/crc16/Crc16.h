@@ -46,10 +46,10 @@ public :
     {
         unsigned short fcs = _initVal;
         unsigned short d, i, k;
-        for (i=0; i<count; i++)
+        for (i=0; i<count; ++i)
         {
             d = *data++ << 8;
-            for (k=0; k<8; k++)
+            for (k=0; k<8; ++k)
             {
                 if ((fcs ^ d) & 0x8000)
                     fcs = (fcs << 1) ^ _polynom;
@@ -84,7 +84,7 @@ public:
         unsigned char *pBuffer = new unsigned char[count];
 
         // Reverse all bits of the byte then copy the result byte by byte in the array
-        for (int i = 0 ; i < count ; i++)
+        for (int i = 0 ; i < count ; ++i)
             pBuffer[i] = reverseByte<unsigned char>(data[i]);
 
         // calculate CRC : by default polynom = 0x1021, init val = 0xFFFF)
@@ -111,7 +111,7 @@ private:
         IntType reversedValue = 0;
         long mask = 1;
         int nBits = sizeof(val2Reverses) * 8;
-        for (int i = 0 ; i < nBits ; i++)
+        for (int i = 0 ; i < nBits ; ++i)
             if ((mask << i) & val2Reverses)
                 reversedValue += (mask << (nBits - 1 - i));
 

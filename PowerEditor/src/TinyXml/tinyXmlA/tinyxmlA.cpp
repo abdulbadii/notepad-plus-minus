@@ -557,7 +557,7 @@ void TiXmlElementA::SetAttribute( const char * name, const char * _value )
 void TiXmlElementA::Print( FILE* cfile, int depth ) const
 {
 	int i;
-	for ( i=0; i<depth; i++ )
+	for ( i=0; i<depth; ++i )
 	{
 		fprintf( cfile, "    " );
 	}
@@ -976,7 +976,7 @@ const double  TiXmlAttributeA::DoubleValue() const
 
 void TiXmlCommentA::Print( FILE* cfile, int depth ) const
 {
-	for ( int i=0; i<depth; i++ )
+	for ( int i=0; i<depth; ++i )
 	{
 		fputs( "    ", cfile );
 	}
@@ -1095,7 +1095,7 @@ TiXmlNodeA* TiXmlDeclarationA::Clone() const
 
 void TiXmlUnknownA::Print( FILE* cfile, int depth ) const
 {
-	for ( int i=0; i<depth; i++ )
+	for ( int i=0; i<depth; ++i )
 		fprintf( cfile, "    " );
 	fprintf( cfile, "%s", value.c_str() );
 }

@@ -1076,14 +1076,14 @@ bool Notepad_plus::fileCloseAll(bool doDeleteBackup, bool isSnapshotMode)
 		//first close all docs in non-current view, which gets closed automatically
 		//Set active tab to the last one closed.
 		activateBuffer(_pNonDocTab->getBufferByIndex(0), otherView());
-		for (int32_t i = static_cast<int32_t>(_pNonDocTab->nbItem()) - 1; i >= 0; i--) //close all from right to left
+		for (int32_t i = static_cast<int32_t>(_pNonDocTab->nbItem()) - 1; i >= 0; --i) //close all from right to left
 		{
 			doClose(_pNonDocTab->getBufferByIndex(i), otherView(), doDeleteBackup);
 		}
     }
 
 	activateBuffer(_pDocTab->getBufferByIndex(0), currentView());
-	for (int32_t i = static_cast<int32_t>(_pDocTab->nbItem()) - 1; i >= 0; i--)
+	for (int32_t i = static_cast<int32_t>(_pDocTab->nbItem()) - 1; i >= 0; --i)
 	{	//close all from right to left
 		doClose(_pDocTab->getBufferByIndex(i), currentView(), doDeleteBackup);
 	}
@@ -1182,7 +1182,7 @@ bool Notepad_plus::fileCloseAllToLeft()
 	// Indexes must go from high to low to deal with the fact that when one index is closed, any remaining
 	// indexes (smaller than the one just closed) will point to the wrong tab.
 	std::vector<int> vecIndexesToClose;
-	for (int i = _pDocTab->getCurrentTabIndex() - 1; i >= 0; i--)
+	for (int i = _pDocTab->getCurrentTabIndex() - 1; i >= 0; --i)
 	{
 		vecIndexesToClose.push_back(i);
 	}
@@ -1195,7 +1195,7 @@ bool Notepad_plus::fileCloseAllToRight()
 	// indexes (smaller than the one just closed) will point to the wrong tab.
 	const int kiActive = _pDocTab->getCurrentTabIndex();
 	std::vector<int> vecIndexesToClose;
-	for (int i = int(_pDocTab->nbItem()) - 1; i > kiActive; i--)
+	for (int i = int(_pDocTab->nbItem()) - 1; i > kiActive; --i)
 	{
 		vecIndexesToClose.push_back(i);
 	}
@@ -1208,7 +1208,7 @@ bool Notepad_plus::fileCloseAllUnchanged()
 	// indexes (smaller than the one just closed) will point to the wrong tab.
 	std::vector<int> vecIndexesToClose;
 
-	for (int i = int(_pDocTab->nbItem()) - 1; i >= 0; i--)
+	for (int i = int(_pDocTab->nbItem()) - 1; i >= 0; --i)
 	{
 		BufferID id = _pDocTab->getBufferByIndex(i);
 		Buffer* buf = MainFileManager.getBufferByID(id);
@@ -1295,7 +1295,7 @@ bool Notepad_plus::fileCloseAllButCurrent()
 
 			if (res == IDCANCEL)
 			{
-				for (int32_t j = static_cast<int32_t>(mainSaveOpIndex.size()) - 1; j >= 0; j--) 	//close all from right to left
+				for (int32_t j = static_cast<int32_t>(mainSaveOpIndex.size()) - 1; j >= 0; --j) 	//close all from right to left
 				{
 					doClose(_mainDocTab.getBufferByIndex(mainSaveOpIndex[j]), MAIN_VIEW, isSnapshotMode);
 				}
@@ -1366,12 +1366,12 @@ bool Notepad_plus::fileCloseAllButCurrent()
 			
 			if (res == IDCANCEL)
 			{
-				for (int32_t j = static_cast<int32_t>(mainSaveOpIndex.size()) - 1; j >= 0; j--) 	//close all from right to left
+				for (int32_t j = static_cast<int32_t>(mainSaveOpIndex.size()) - 1; j >= 0; --j) 	//close all from right to left
 				{
 					doClose(_mainDocTab.getBufferByIndex(mainSaveOpIndex[j]), MAIN_VIEW, isSnapshotMode);
 				}
 
-				for (int32_t j = static_cast<int32_t>(subSaveOpIndex.size()) - 1; j >= 0; j--) 	//close all from right to left
+				for (int32_t j = static_cast<int32_t>(subSaveOpIndex.size()) - 1; j >= 0; --j) 	//close all from right to left
 				{
 					doClose(_subDocTab.getBufferByIndex(subSaveOpIndex[j]), SUB_VIEW, isSnapshotMode);
 				}
@@ -1392,7 +1392,7 @@ bool Notepad_plus::fileCloseAllButCurrent()
 		const int viewNo = otherView();
 		activateBuffer(_pNonDocTab->getBufferByIndex(0), viewNo);
 
-		for (int32_t i = static_cast<int32_t>(_pNonDocTab->nbItem()) - 1; i >= 0; i--) 	//close all from right to left
+		for (int32_t i = static_cast<int32_t>(_pNonDocTab->nbItem()) - 1; i >= 0; --i) 	//close all from right to left
 		{
 			doClose(_pNonDocTab->getBufferByIndex(i), viewNo, isSnapshotMode);
 		}
@@ -1400,7 +1400,7 @@ bool Notepad_plus::fileCloseAllButCurrent()
 
 	const int viewNo = currentView();
 	activateBuffer(_pDocTab->getBufferByIndex(0), viewNo);
-	for (int32_t i = static_cast<int32_t>(_pDocTab->nbItem()) - 1; i >= 0; i--)	//close all from right to left
+	for (int32_t i = static_cast<int32_t>(_pDocTab->nbItem()) - 1; i >= 0; --i)	//close all from right to left
 	{
 		if (i == active)	//dont close active index
 		{

@@ -596,7 +596,7 @@ int base64ToAscii(char *dest, const char *base64Str)
 	int k = 0;
 
 	enum {b64_just, b64_1padded, b64_2padded} padd = b64_just;
-	for ( ; i < nbLoop ; i++)
+	for ( ; i < nbLoop ; ++i)
 	{
 		size_t j = i * 4;
 		UCHAR uc0, uc1, uc2, uc3, p0, p1;
@@ -1569,7 +1569,7 @@ static int CALLBACK EnumFontFamExProc(const LOGFONT* lpelfe, const TEXTMETRIC*, 
 
 	//Search through all the fonts, EnumFontFamiliesEx never states anything about order
 	//Start at the end though, that's the most likely place to find a duplicate
-	for (int i = vectSize - 1 ; i >= 0 ; i--)
+	for (int i = vectSize - 1 ; i >= 0 ; --i)
 	{
 		if (0 == lstrcmp(strVect[i].c_str(), lfFaceName))
 			return 1;	//we already have seen this typeface, ignore it
@@ -1604,7 +1604,7 @@ bool NppParameters::isInFontList(const generic_string& fontName2Search) const
 	if (fontName2Search.empty())
 		return false;
 
-	for (size_t i = 0, len = _fontlist.size(); i < len; i++)
+	for (size_t i = 0, len = _fontlist.size(); i < len; ++i)
 	{
 		if (_fontlist[i] == fontName2Search)
 			return true;

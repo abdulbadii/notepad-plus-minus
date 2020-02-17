@@ -3171,7 +3171,7 @@ void ScintillaEditView::columnReplace(ColumnModeInfos & cmi, int initial, int in
 		const size_t kiMaxSize = cmi.size();
 		while (numbers.size() < kiMaxSize)
 		{
-			for (int i = 0; i < repeat; i++)
+			for (int i = 0; i < repeat; ++i)
 			{
 				numbers.push_back(curNumber);
 				if (numbers.size() >= kiMaxSize)
@@ -3191,7 +3191,7 @@ void ScintillaEditView::columnReplace(ColumnModeInfos & cmi, int initial, int in
 
 	int totalDiff = 0;
 	const size_t len = cmi.size();
-	for (size_t i = 0 ; i < len ; i++)
+	for (size_t i = 0 ; i < len ; ++i)
 	{
 		if (cmi[i].isValid())
 		{
@@ -3363,7 +3363,7 @@ bool ScintillaEditView::markerMarginClick(int lineNumber)
 	if (closePresent)
 	{
 		openPresent = false;
-		for (lineNumber--; lineNumber >= 0 && !openPresent; lineNumber--)
+		for (lineNumber--; lineNumber >= 0 && !openPresent; --lineNumber)
 		{
 			state = execute(SCI_MARKERGET, lineNumber);
 			openPresent = ((state & (1 << MARK_HIDELINESBEGIN | 1 << MARK_HIDELINESUNDERLINE)) != 0);

@@ -58,7 +58,7 @@ const char *ProberName[] =
 
 nsMBCSGroupProber::nsMBCSGroupProber(PRUint32 aLanguageFilter)
 {
-  for (PRUint32 i = 0; i < NUM_OF_PROBERS; i++)
+  for (PRUint32 i = 0; i < NUM_OF_PROBERS; ++i)
     mProbers[i] = nsnull;
 
   mProbers[0] = new nsUTF8Prober();
@@ -81,7 +81,7 @@ nsMBCSGroupProber::nsMBCSGroupProber(PRUint32 aLanguageFilter)
 
 nsMBCSGroupProber::~nsMBCSGroupProber()
 {
-  for (PRUint32 i = 0; i < NUM_OF_PROBERS; i++)
+  for (PRUint32 i = 0; i < NUM_OF_PROBERS; ++i)
   {
     delete mProbers[i];
   }
@@ -101,7 +101,7 @@ const char* nsMBCSGroupProber::GetCharSetName()
 void  nsMBCSGroupProber::Reset(void)
 {
   mActiveNum = 0;
-  for (PRUint32 i = 0; i < NUM_OF_PROBERS; i++)
+  for (PRUint32 i = 0; i < NUM_OF_PROBERS; ++i)
   {
     if (mProbers[i])
     {
@@ -136,7 +136,7 @@ nsProbingState nsMBCSGroupProber::HandleData(const char* aBuf, PRUint32 aLen)
     {
       if (--keepNext == 0)
       {
-        for (PRUint32 i = 0; i < NUM_OF_PROBERS; i++)
+        for (PRUint32 i = 0; i < NUM_OF_PROBERS; ++i)
         {
           if (!mIsActive[i])
             continue;
@@ -153,7 +153,7 @@ nsProbingState nsMBCSGroupProber::HandleData(const char* aBuf, PRUint32 aLen)
   }
 
   if (keepNext) {
-    for (PRUint32 i = 0; i < NUM_OF_PROBERS; i++)
+    for (PRUint32 i = 0; i < NUM_OF_PROBERS; ++i)
     {
       if (!mIsActive[i])
         continue;
@@ -183,7 +183,7 @@ float nsMBCSGroupProber::GetConfidence(void)
   case eNotMe:
     return (float)0.01;
   default:
-    for (i = 0; i < NUM_OF_PROBERS; i++)
+    for (i = 0; i < NUM_OF_PROBERS; ++i)
     {
       if (!mIsActive[i])
         continue;
@@ -205,7 +205,7 @@ void nsMBCSGroupProber::DumpStatus()
   float cf;
   
   GetConfidence();
-  for (i = 0; i < NUM_OF_PROBERS; i++)
+  for (i = 0; i < NUM_OF_PROBERS; ++i)
   {
     if (!mIsActive[i])
       printf("  MBCS inactive: [%s] (confidence is too low).\r\n", ProberName[i]);

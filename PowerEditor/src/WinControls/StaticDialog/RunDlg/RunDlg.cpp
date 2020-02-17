@@ -63,7 +63,7 @@ void Command::extractArgs(TCHAR* cmd2Exec, size_t cmd2ExecLen, TCHAR* args, size
 		int l = lstrlen(args);
 		if (args[l-1] == ' ')
 		{
-			for (l -= 2 ; (l > 0) && (args[l] == ' ') ; l--);
+			for (l -= 2 ; (l > 0) && (args[l] == ' ') ; --l);
 			args[l+1] = '\0';
 		}
 	}

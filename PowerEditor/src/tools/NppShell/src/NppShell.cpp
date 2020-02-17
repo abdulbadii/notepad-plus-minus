@@ -993,7 +993,7 @@ STDMETHODIMP CShellExt::InvokeNPP(HWND /*hParent*/, LPCSTR /*pszWorkingDir*/, LP
 		bytesRequired += regSize;
 	}
 
-	for (UINT i = 0; i < m_cbFiles; i++) {
+	for (UINT i = 0; i < m_cbFiles; ++i) {
 		bytesRequired += DragQueryFile((HDROP)m_stgMedium.hGlobal, i, NULL, 0);
 		bytesRequired += 3;
 	}
@@ -1033,7 +1033,7 @@ STDMETHODIMP CShellExt::InvokeNPP(HWND /*hParent*/, LPCSTR /*pszWorkingDir*/, LP
 	while(iFileIndex < m_cbFiles) {
 		memset(pszCommand, 0, bytesRequired);
 		lstrcat(pszCommand, szNotepadExecutableFilename);
-		for (UINT iBatchSizeCounter = 0; iFileIndex < m_cbFiles && iBatchSizeCounter < kiBatchSize; iBatchSizeCounter++) {
+		for (UINT iBatchSizeCounter = 0; iFileIndex < m_cbFiles && iBatchSizeCounter < kiBatchSize; ++iBatchSizeCounter) {
 			DragQueryFile((HDROP)m_stgMedium.hGlobal, iFileIndex, szFilename, MAX_PATH);
 			lstrcat(pszCommand, L" \"");
 			lstrcat(pszCommand, szFilename);

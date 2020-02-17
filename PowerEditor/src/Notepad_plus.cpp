@@ -366,7 +366,7 @@ LRESULT Notepad_plus::init(HWND hwnd)
     //--Status Bar Section--//
 	bool willBeShown = nppGUI._statusBarShow;
     _statusBar.init(_pPublicInterface->getHinst(), hwnd, 6);
-	_statusBar.setPartWidth(STATUSBAR_DOC_SIZE, nppParam._dpiManager.scaleX(200));
+	_statusBar.setPartWidth(STATUSBAR_DOC_SIZE, nppParam._dpiManager.scaleX(250));
 	_statusBar.setPartWidth(STATUSBAR_CUR_POS, nppParam._dpiManager.scaleX(260));
 	_statusBar.setPartWidth(STATUSBAR_EOF_FORMAT, nppParam._dpiManager.scaleX(110));
 	_statusBar.setPartWidth(STATUSBAR_UNICODE_TYPE, nppParam._dpiManager.scaleX(120));
@@ -2087,7 +2087,7 @@ void doCheck(HMENU mainHandle, int id)
 	mii.fMask = MIIM_SUBMENU | MIIM_FTYPE | MIIM_ID | MIIM_STATE;
 
 	int count = ::GetMenuItemCount(mainHandle);
-	for (int i = 0; i < count; i++)
+	for (int i = 0; i < count; ++i)
 	{
 		::GetMenuItemInfo(mainHandle, i, MF_BYPOSITION, &mii);
 		if (mii.fType == MFT_RADIOCHECK || mii.fType == MFT_STRING)
@@ -2159,11 +2159,7 @@ generic_string Notepad_plus::getLangDesc(LangType langType, bool getName)
 	if (langType > L_EXTERNAL)
         langType = L_TEXT;
 
-	generic_string str2Show;
-	// if (getName)
-		str2Show = ScintillaEditView::langNames[langType].shortName;
-	// else
-		// str2Show = ScintillaEditView::langNames[langType].longName;
+	generic_string str2Show =getName? ScintillaEditView::langNames[langType].shortName: ScintillaEditView::langNames[langType].longName;
 
 	if (langType == L_USER)
 	{
@@ -2181,7 +2177,7 @@ void Notepad_plus::copyMarkedLines()
 {
 	int lastLine = _pEditView->lastZeroBasedLineNumber();
 	generic_string globalStr = L"";
-	for (int i = lastLine ; i >= 0 ; i--)
+	for (int i = lastLine ; i >= 0 ; --i)
 	{
 		if (bookmarkPresent(i))
 		{
@@ -2202,7 +2198,7 @@ void Notepad_plus::cutMarkedLines()
 	generic_string globalStr = L"";
 
 	_pEditView->execute(SCI_BEGINUNDOACTION);
-	for (int i = lastLine ; i >= 0 ; i--)
+	for (int i = lastLine ; i >= 0 ; --i)
 	{
 		if (bookmarkPresent(i))
 		{
@@ -2223,7 +2219,7 @@ void Notepad_plus::deleteMarkedLines(bool isMarked)
 	int lastLine = _pEditView->lastZeroBasedLineNumber();
 
 	_pEditView->execute(SCI_BEGINUNDOACTION);
-	for (int i = lastLine ; i >= 0 ; i--)
+	for (int i = lastLine ; i >= 0 ; --i)
 	{
 		if (bookmarkPresent(i) == isMarked)
 			deleteMarkedline(i);
@@ -2254,7 +2250,7 @@ void Notepad_plus::pasteToMarkedLines()
 	::CloseClipboard();
 
 	_pEditView->execute(SCI_BEGINUNDOACTION);
-	for (int i = lastLine ; i >= 0 ; i--)
+	for (int i = lastLine ; i >= 0 ; --i)
 	{
 		if (bookmarkPresent(i))
 		{
@@ -2376,7 +2372,7 @@ bool Notepad_plus::braceMatch()
 
 void Notepad_plus::setLangStatus(LangType langType)
 {
-	_statusBar.setText(getLangDesc(langType).c_str(), STATUSBAR_DOC_TYPE);
+	_statusBar.setText(getLangDesc(langType, true).c_str(), STATUSBAR_DOC_TYPE);
 }
 
 
@@ -2385,9 +2381,9 @@ void Notepad_plus::setDisplayFormat(EolType format)
 	const TCHAR* str = L"??";
 	switch (format)
 	{
-		case EolType::windows: str = L"Windows (CR LF)"; break;
-		case EolType::macos:   str = L"Macintosh (CR)"; break;
-		case EolType::unix:    str = L"Unix (LF)"; break;
+		case EolType::windows: str = L"\r\n"; break;
+		case EolType::macos:   str = L"\r"; break;
+		case EolType::unix:    str = L"\n"; break;
 		case EolType::unknown: str = L"Unknown"; assert(false);  break;
 	}
 	_statusBar.setText(str, STATUSBAR_EOF_FORMAT);
@@ -3262,7 +3258,7 @@ void Notepad_plus::updateStatusBar() {
     _statusBar.setText(strLnCol, STATUSBAR_CUR_POS);
 
     TCHAR strDocLen[256];
-	wsprintf(strDocLen, L"length : %s    lines : %s",
+	wsprintf(strDocLen, L"%s   %s",
 		commafyInt(_pEditView->getCurrentDocLen()).c_str(),
 		commafyInt(_pEditView->execute(SCI_GETLINECOUNT)).c_str());
 

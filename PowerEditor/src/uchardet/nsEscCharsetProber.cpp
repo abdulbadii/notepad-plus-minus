@@ -41,7 +41,7 @@
 
 nsEscCharSetProber::nsEscCharSetProber(PRUint32 aLanguageFilter)
 {
-  for (PRUint32 i = 0; i < NUM_OF_ESC_CHARSETS; i++)
+  for (PRUint32 i = 0; i < NUM_OF_ESC_CHARSETS; ++i)
     mCodingSM[i] = nsnull;
   if (aLanguageFilter & NS_FILTER_CHINESE_SIMPLIFIED) 
   {
@@ -59,14 +59,14 @@ nsEscCharSetProber::nsEscCharSetProber(PRUint32 aLanguageFilter)
 
 nsEscCharSetProber::~nsEscCharSetProber(void)
 {
-  for (PRUint32 i = 0; i < NUM_OF_ESC_CHARSETS; i++)
+  for (PRUint32 i = 0; i < NUM_OF_ESC_CHARSETS; ++i)
     delete mCodingSM[i];
 }
 
 void nsEscCharSetProber::Reset(void)
 {
   mState = eDetecting;
-  for (PRUint32 i = 0; i < NUM_OF_ESC_CHARSETS; i++)
+  for (PRUint32 i = 0; i < NUM_OF_ESC_CHARSETS; ++i)
     if (mCodingSM[i])
       mCodingSM[i]->Reset();
   mActiveSM = NUM_OF_ESC_CHARSETS;
@@ -75,9 +75,9 @@ void nsEscCharSetProber::Reset(void)
 
 nsProbingState nsEscCharSetProber::HandleData(const char* aBuf, PRUint32 aLen)
 {
-  for (PRUint32 i = 0; i < aLen && mState == eDetecting; i++)
+  for (PRUint32 i = 0; i < aLen && mState == eDetecting; ++i)
   {
-    for (PRInt32 j = mActiveSM-1; j>= 0; j--)
+    for (PRInt32 j = mActiveSM-1; j>= 0; --j)
     {
       if (mCodingSM[j])
       {

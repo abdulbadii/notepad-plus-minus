@@ -49,7 +49,7 @@ nsProbingState nsEUCKRProber::HandleData(const char* aBuf, PRUint32 aLen)
 {
   nsSMState codingState;
 
-  for (PRUint32 i = 0; i < aLen; i++)
+  for (PRUint32 i = 0; i < aLen; ++i)
   {
     codingState = mCodingSM->NextState(aBuf[i]);
     if (codingState == eItsMe)

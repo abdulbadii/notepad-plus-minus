@@ -60,13 +60,13 @@ nsUniversalDetector::nsUniversalDetector(PRUint32 aLanguageFilter)
   mLanguageFilter = aLanguageFilter;
 
   PRUint32 i;
-  for (i = 0; i < NUM_OF_CHARSET_PROBERS; i++)
+  for (i = 0; i < NUM_OF_CHARSET_PROBERS; ++i)
     mCharSetProbers[i] = nsnull;
 }
 
 nsUniversalDetector::~nsUniversalDetector() 
 {
-  for (PRInt32 i = 0; i < NUM_OF_CHARSET_PROBERS; i++)
+  for (PRInt32 i = 0; i < NUM_OF_CHARSET_PROBERS; ++i)
     delete mCharSetProbers[i];
 
   delete mEscCharSetProber;
@@ -89,7 +89,7 @@ nsUniversalDetector::Reset()
     mEscCharSetProber->Reset();
 
   PRUint32 i;
-  for (i = 0; i < NUM_OF_CHARSET_PROBERS; i++)
+  for (i = 0; i < NUM_OF_CHARSET_PROBERS; ++i)
     if (mCharSetProbers[i])
       mCharSetProbers[i]->Reset();
 }
@@ -138,7 +138,7 @@ nsresult nsUniversalDetector::HandleData(const char* aBuf, PRUint32 aLen)
   }
   
   PRUint32 i;
-  for (i = 0; i < aLen; i++)
+  for (i = 0; i < aLen; ++i)
   {
     //other than 0xa0, if every othe character is ascii, the page is ascii
     if (aBuf[i] & '\x80' && aBuf[i] != '\xA0')  //Since many Ascii only page contains NBSP 
@@ -207,7 +207,7 @@ nsresult nsUniversalDetector::HandleData(const char* aBuf, PRUint32 aLen)
     }
     break;
   case eHighbyte:
-    for (i = 0; i < NUM_OF_CHARSET_PROBERS; i++)
+    for (i = 0; i < NUM_OF_CHARSET_PROBERS; ++i)
     {
       if (mCharSetProbers[i])
       {
@@ -254,7 +254,7 @@ void nsUniversalDetector::DataEnd()
       float maxProberConfidence = (float)0.0;
       PRInt32 maxProber = 0;
 
-      for (PRInt32 i = 0; i < NUM_OF_CHARSET_PROBERS; i++)
+      for (PRInt32 i = 0; i < NUM_OF_CHARSET_PROBERS; ++i)
       {
         if (mCharSetProbers[i])
         {

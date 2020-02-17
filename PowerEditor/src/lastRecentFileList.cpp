@@ -221,7 +221,7 @@ void LastRecentFileList::clear()
 	if (_size == 0)
 		return;
 
-	for (int i = (_size-1); i >= 0; i--) 
+	for (int i = (_size-1); i >= 0; --i) 
 	{
 		::RemoveMenu(_hMenu, _lrfl.at(i)._id, MF_BYCOMMAND);
 		setAvailable(_lrfl.at(i)._id);
@@ -277,7 +277,7 @@ void LastRecentFileList::saveLRFL()
 	NppParameters& nppParams = NppParameters::getInstance();
 	if (nppParams.writeRecentFileHistorySettings(_userMax))
 	{
-		for (int i = _size - 1; i >= 0; i--)	//reverse order: so loading goes in correct order
+		for (int i = _size - 1; i >= 0; --i)	//reverse order: so loading goes in correct order
 		{
 			nppParams.writeHistory(_lrfl.at(i)._name.c_str());
 		}

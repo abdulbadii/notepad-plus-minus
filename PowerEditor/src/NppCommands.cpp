@@ -2738,7 +2738,7 @@ void Notepad_plus::command(int id)
 					calc_sha_256(sha2hash, reinterpret_cast<const uint8_t*>(selectedStr), strlen(selectedStr));
 
 					wchar_t sha2hashStr[65] = { '\0' };
-					for (size_t i = 0; i < 32; i++)
+					for (size_t i = 0; i < 32; ++i)
 						wsprintf(sha2hashStr + i * 2, L"%02x", sha2hash[i]);
 
 					str2Clipboard(sha2hashStr, _pPublicInterface->getHSelf());
@@ -3106,7 +3106,7 @@ void Notepad_plus::command(int id)
 		{
 			BufferID lastOne = BUFFER_INVALID;
 			int size = _lastRecentFileList.getSize();
-			for (int i = size - 1; i >= 0; i--)
+			for (int i = size - 1; i >= 0; --i)
 			{
 				BufferID test = doOpen(_lastRecentFileList.getIndex(i));
 				if (test != BUFFER_INVALID)

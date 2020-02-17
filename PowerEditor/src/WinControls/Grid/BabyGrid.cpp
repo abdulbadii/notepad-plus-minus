@@ -1425,7 +1425,7 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
              if(lstrlen(BGHS[SelfIndex].title) > 0)
              {
                   linecount=1;
-				  for (j = 0; j<static_cast<int>(lstrlen(BGHS[SelfIndex].title)); j++)
+				  for (j = 0; j<static_cast<int>(lstrlen(BGHS[SelfIndex].title)); ++j)
                   {
                        if (BGHS[SelfIndex].title[j] == '\n')
                        {

@@ -233,7 +233,7 @@ FindReplaceDlg::~FindReplaceDlg()
 {
 	_tab.destroy();
 	delete _pFinder;
-	for (int n = static_cast<int32_t>(_findersOfFinder.size()) - 1; n >= 0; n--)
+	for (int n = static_cast<int32_t>(_findersOfFinder.size()) - 1; n >= 0; --n)
 	{
 		delete _findersOfFinder[n];
 		_findersOfFinder.erase(_findersOfFinder.begin() + n);
