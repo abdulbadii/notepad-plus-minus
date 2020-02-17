@@ -2160,10 +2160,10 @@ generic_string Notepad_plus::getLangDesc(LangType langType, bool getName)
         langType = L_TEXT;
 
 	generic_string str2Show;
-	if (getName)
+	// if (getName)
 		str2Show = ScintillaEditView::langNames[langType].shortName;
-	else
-		str2Show = ScintillaEditView::langNames[langType].longName;
+	// else
+		// str2Show = ScintillaEditView::langNames[langType].longName;
 
 	if (langType == L_USER)
 	{
@@ -3240,8 +3240,7 @@ int Notepad_plus::wordCount()
 }
 
 
-void Notepad_plus::updateStatusBar()
-{
+void Notepad_plus::updateStatusBar() {
     TCHAR strLnCol[128];
 	TCHAR strSel[64];
 	int selByte = 0;

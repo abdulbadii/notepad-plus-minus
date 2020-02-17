@@ -3050,10 +3050,10 @@ void FindReplaceDlg::drawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	}
 	else if (_statusbarFindStatus == FSTopReached || _statusbarFindStatus == FSEndReached)
 	{
-		fgColor = RGB(0, 213, 0); // green
+		fgColor = RGB(75, 255, 99); // green
 	}
 	else {
-		fgColor = RGB(209, 209, 209); //  default
+		fgColor = RGB(219, 219, 219); //  default
 		if (_statusbarFindStatus == FSNoMessage)		ptStr = L"";
 	}
 	
@@ -3130,10 +3130,10 @@ void Finder::addSearchHitCount(int count, bool isMatchLines)
 void Finder::add(FoundInfo fi, SearchResultMarking mi, const TCHAR* foundline)
 {
 	_pMainFoundInfos->push_back(fi);
-	generic_string str = L"\tLine ";
 
 	TCHAR lnb[16];
 	wsprintf(lnb, L"%d", fi._lineNumber);
+	generic_string str = L"Line ";
 	str += lnb;
 	str += L": ";
 	mi._start += static_cast<int32_t>(str.length());
