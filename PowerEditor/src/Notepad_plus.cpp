@@ -368,7 +368,7 @@ LRESULT Notepad_plus::init(HWND hwnd)
     _statusBar.init(_pPublicInterface->getHinst(), hwnd, 6);
 	_statusBar.setPartWidth(STATUSBAR_DOC_SIZE, nppParam._dpiManager.scaleX(250));
 	_statusBar.setPartWidth(STATUSBAR_CUR_POS, nppParam._dpiManager.scaleX(260));
-	_statusBar.setPartWidth(STATUSBAR_EOF_FORMAT, nppParam._dpiManager.scaleX(110));
+	_statusBar.setPartWidth(STATUSBAR_EOF_FORMAT, nppParam._dpiManager.scaleX(73));
 	_statusBar.setPartWidth(STATUSBAR_UNICODE_TYPE, nppParam._dpiManager.scaleX(120));
 	_statusBar.setPartWidth(STATUSBAR_TYPING_MODE, nppParam._dpiManager.scaleX(30));
     _statusBar.display(willBeShown);
@@ -2381,9 +2381,9 @@ void Notepad_plus::setDisplayFormat(EolType format)
 	const TCHAR* str = L"??";
 	switch (format)
 	{
-		case EolType::windows: str = L"\r\n"; break;
-		case EolType::macos:   str = L"\r"; break;
-		case EolType::unix:    str = L"\n"; break;
+		case EolType::windows: str = L"Win \\r\\n"; break;
+		case EolType::macos:   str = L"Mac \\r"; break;
+		case EolType::unix:    str = L"Lin \\n"; break;
 		case EolType::unknown: str = L"Unknown"; assert(false);  break;
 	}
 	_statusBar.setText(str, STATUSBAR_EOF_FORMAT);
@@ -3246,11 +3246,11 @@ void Notepad_plus::updateStatusBar() {
 
 	long selected_length = _pEditView->getUnicodeSelectedLength();
 	if (selected_length != -1)
-		wsprintf(strSel, L"Sel : %s | %s", commafyInt(selected_length).c_str(), commafyInt(selLine).c_str());
+		wsprintf(strSel, L"Sel: %s  %s", commafyInt(selected_length).c_str(), commafyInt(selLine).c_str());
 	else
 		wsprintf(strSel, L"Sel : %s", L"N/A");
 
-	wsprintf(strLnCol, L"Ln : %s    Col : %s    %s",
+	wsprintf(strLnCol, L"Ln: %s    Co: %s    %s",
 		commafyInt(_pEditView->getCurrentLineNumber() + 1).c_str(),
 		commafyInt(_pEditView->getCurrentColumnNumber() + 1).c_str(),
 		strSel);
