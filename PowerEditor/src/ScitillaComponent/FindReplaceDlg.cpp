@@ -2031,8 +2031,8 @@ int FindReplaceDlg::processRange(ProcessOperation op, FindReplaceInfo & findRepl
 				}
 
 				auto lineNumber = pEditView->execute(SCI_LINEFROMPOSITION, targetStart);
-				int lend = static_cast<int32_t>(pEditView->execute(SCI_GETLINEENDPOSITION, lineNumber));
 				int lstart = static_cast<int32_t>(pEditView->execute(SCI_POSITIONFROMLINE, lineNumber));
+				int lend = static_cast<int32_t>(pEditView->execute(SCI_GETLINEENDPOSITION, lineNumber));
 				int nbChar = lend - lstart;
 
 				// use the static buffer
@@ -3057,9 +3057,9 @@ void FindReplaceDlg::drawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 		if (_statusbarFindStatus == FSNoMessage)		ptStr = L"";
 	}
 	
-	SetTextColor(lpDrawItemStruct->hDC, fgColor);
-	//COLORREF bgColor = getCtrlBgColor(_statusBar.getHSelf());
+	::SetTextColor(lpDrawItemStruct->hDC, fgColor);
 	COLORREF bgColor = RGB(0, 0, 0);
+	//COLORREF bgColor = getCtrlBgColor(_statusBar.getHSelf());
 	::SetBkColor(lpDrawItemStruct->hDC, bgColor);
 	RECT rect;
 	_statusBar.getClientRect(rect);
@@ -3135,6 +3135,7 @@ void Finder::add(FoundInfo fi, SearchResultMarking mi, const TCHAR* foundline)
 	wsprintf(lnb, L"%d", fi._lineNumber);
 	generic_string str = L"Line ";
 	str += lnb;
+	// generic_string str = lnb;
 	str += L": ";
 	mi._start += static_cast<int32_t>(str.length());
 	mi._end += static_cast<int32_t>(str.length());
@@ -3173,8 +3174,9 @@ void Finder::openAll()
 
 bool Finder::isLineActualSearchResult(const generic_string & s) const
 {
-	const auto firstColon = s.find(L"\tLine ");
-	return (firstColon == 0);
+	// const auto firstColon = s.find(L"\tLine ");
+	// return (firstColon == 0);
+	return (!s.find(L"Line "));
 }
 
 generic_string & Finder::prepareStringForClipboard(generic_string & s) const
@@ -3183,7 +3185,7 @@ generic_string & Finder::prepareStringForClipboard(generic_string & s) const
 	// Output: "search result"
 	s = stringReplace(s, L"\r", L"");
 	s = stringReplace(s, L"\n", L"");
-	const auto firstColon = s.find(TEXT(':'));
+	const auto firstColon = s.find(L':');
 	if (firstColon == std::string::npos)
 	{
 		// Should never happen.

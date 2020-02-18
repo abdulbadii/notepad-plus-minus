@@ -366,11 +366,11 @@ LRESULT Notepad_plus::init(HWND hwnd)
     //--Status Bar Section--//
 	bool willBeShown = nppGUI._statusBarShow;
     _statusBar.init(_pPublicInterface->getHinst(), hwnd, 6);
-	_statusBar.setPartWidth(STATUSBAR_DOC_SIZE, nppParam._dpiManager.scaleX(250));
-	_statusBar.setPartWidth(STATUSBAR_CUR_POS, nppParam._dpiManager.scaleX(260));
-	_statusBar.setPartWidth(STATUSBAR_EOF_FORMAT, nppParam._dpiManager.scaleX(73));
-	_statusBar.setPartWidth(STATUSBAR_UNICODE_TYPE, nppParam._dpiManager.scaleX(120));
-	_statusBar.setPartWidth(STATUSBAR_TYPING_MODE, nppParam._dpiManager.scaleX(30));
+	_statusBar.setPartWidth(STATUSBAR_DOC_SIZE, nppParam._dpiManager.scaleX(265));
+	_statusBar.setPartWidth(STATUSBAR_CUR_POS, nppParam._dpiManager.scaleX(303));
+	_statusBar.setPartWidth(STATUSBAR_EOF_FORMAT, nppParam._dpiManager.scaleX(61));
+	_statusBar.setPartWidth(STATUSBAR_UNICODE_TYPE, nppParam._dpiManager.scaleX(99));
+	_statusBar.setPartWidth(STATUSBAR_TYPING_MODE, nppParam._dpiManager.scaleX(29));
     _statusBar.display(willBeShown);
 
     _pMainWindow = &_mainDocTab;
@@ -2381,9 +2381,9 @@ void Notepad_plus::setDisplayFormat(EolType format)
 	const TCHAR* str = L"??";
 	switch (format)
 	{
-		case EolType::windows: str = L"Win \\r\\n"; break;
-		case EolType::macos:   str = L"Mac \\r"; break;
-		case EolType::unix:    str = L"Lin \\n"; break;
+		case EolType::windows: str = L"\\r\\n Win"; break;
+		case EolType::macos:   str = L"\\r Mac"; break;
+		case EolType::unix:    str = L"\\n Unix"; break;
 		case EolType::unknown: str = L"Unknown"; assert(false);  break;
 	}
 	_statusBar.setText(str, STATUSBAR_EOF_FORMAT);
@@ -2409,9 +2409,9 @@ void Notepad_plus::setUniModeText()
 			case uni16LE:
 				uniModeTextString = L"UCS-2 LE BOM"; break;
 			case uni16BE_NoBOM:
-				uniModeTextString = L"UCS-2 Big Endian"; break;
+				uniModeTextString = L"UCS-2 BE"; break;
 			case uni16LE_NoBOM:
-				uniModeTextString = L"UCS-2 Little Endian"; break;
+				uniModeTextString = L"UCS-2 LE"; break;
 			case uniCookie:
 				uniModeTextString = L"UTF-8"; break;
 			default :
