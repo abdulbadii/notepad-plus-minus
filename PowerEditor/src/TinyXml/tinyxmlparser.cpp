@@ -230,7 +230,7 @@ const TCHAR* TiXmlBase::GetEntity( const TCHAR* p, TCHAR* value )
 	// Handle the &#x entities.
 	if (generic_strncmp( L"&#x", p, 3 ) == 0)
 	{
-		const TCHAR* end = generic_strchr(p+3, TEXT(';'));
+		const TCHAR* end = generic_strchr(p+3, L';');
 		if (end && end - p <= 3 + 4)
 		{
 			TCHAR* hexend;

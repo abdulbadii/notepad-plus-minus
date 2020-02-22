@@ -250,7 +250,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			TCHAR str[strSize];
 
 			bool isFirstTime = not _findReplaceDlg.isCreated();
-			_findReplaceDlg.doDialog(FIND_DLG, _nativeLangSpeaker.isRTL());
+			// _findReplaceDlg.doDialog(FIND_DLG, _nativeLangSpeaker.isRTL());
 			
 			const NppGUI & nppGui = nppParam.getNppGUI();
 			if (!nppGui._stopFillingFindField)

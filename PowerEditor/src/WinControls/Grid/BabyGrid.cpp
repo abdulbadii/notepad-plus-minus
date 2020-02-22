@@ -376,7 +376,7 @@ void DisplayColumn(HWND hWnd,int SI,int c,int offset,HFONT hfont,HFONT hcolumnhe
 
 
     holdfont = (HFONT)SelectObject(gdc,hcolumnheadingfont);
-	SetTextColor(gdc,BGHS[SI].textcolor);
+	::SetTextColor(gdc,BGHS[SI].textcolor);
 	//display header row
 	r=0;
 
@@ -452,16 +452,16 @@ void DisplayColumn(HWND hWnd,int SI,int c,int offset,HFONT hfont,HFONT hcolumnhe
                  {
                   if(BGHS[SI].GRIDHASFOCUS)
                       {
-                       SetTextColor(gdc,BGHS[SI].highlighttextcolor);
+                       ::SetTextColor(gdc,BGHS[SI].highlighttextcolor);
                       }
                   else
                       {
-                       SetTextColor(gdc,RGB(0,0,0));//set black text for nonfocus grid hilight
+                       ::SetTextColor(gdc,RGB(0,0,0));//set black text for nonfocus grid hilight
                       }
                  }
              else
                  {
-                  SetTextColor(gdc,RGB(0,0,0));
+                  ::SetTextColor(gdc,RGB(0,0,0));
                  }
 
 		 rect.top = rect.bottom;

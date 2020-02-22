@@ -70,14 +70,14 @@ class WordStyleDlg : public StaticDialog
 public :
 	WordStyleDlg() = default;
 
-    void init(HINSTANCE hInst, HWND parent)	{
-        Window::init(hInst, parent);
+	void init(HINSTANCE hInst, HWND parent)	{
+		Window::init(hInst, parent);
 	};
 
 	virtual void create(int dialogID, bool isRTL = false, bool msgDestParent = true);
 
-    void doDialog(bool isRTL = false) {
-    	if (!isCreated())
+	void doDialog(bool isRTL = false) {
+			if (!isCreated())
 		{
 			create(IDD_STYLER_DLG, isRTL);
 			prepare2Cancel();
@@ -87,8 +87,8 @@ public :
 		{
 			prepare2Cancel();
 		}
-	    display();
-    };
+		display();
+	};
 
 	void prepare2Cancel() {
 		_styles2restored = (NppParameters::getInstance()).getLStylerArray();
@@ -96,12 +96,12 @@ public :
 		_gOverride2restored = (NppParameters::getInstance()).getGlobalOverrideStyle();
 	};
 
-    virtual void redraw(bool forceUpdate = false) const {
-        _pFgColour->redraw(forceUpdate);
+	virtual void redraw(bool forceUpdate = false) const {
+		_pFgColour->redraw(forceUpdate);
 		_pBgColour->redraw(forceUpdate);
 		::InvalidateRect(_hStyleInfoStaticText, NULL, TRUE);
 		::UpdateWindow(_hStyleInfoStaticText);
-    };
+	};
 	
 	void restoreGlobalOverrideValues() {
 		GlobalOverride & gOverride = (NppParameters::getInstance()).getGlobalOverrideStyle();
@@ -111,25 +111,25 @@ public :
 	void apply();
 
 	void addLastThemeEntry() {
-        NppParameters& nppParamInst = NppParameters::getInstance();
-        ThemeSwitcher & themeSwitcher = nppParamInst.getThemeSwitcher();
+		NppParameters& nppParamInst = NppParameters::getInstance();
+		ThemeSwitcher & themeSwitcher = nppParamInst.getThemeSwitcher();
 		std::pair<generic_string, generic_string> & themeInfo = themeSwitcher.getElementFromIndex(themeSwitcher.size() - 1);
-	    ::SendMessage(_hSwitch2ThemeCombo, CB_ADDSTRING, 0, reinterpret_cast<LPARAM>(themeInfo.first.c_str()));
-    };
+		::SendMessage(_hSwitch2ThemeCombo, CB_ADDSTRING, 0, reinterpret_cast<LPARAM>(themeInfo.first.c_str()));
+	};
 
 
 private :
-    ColourPicker *_pFgColour = nullptr;
-    ColourPicker *_pBgColour = nullptr;
+	ColourPicker *_pFgColour = nullptr;
+	ColourPicker *_pBgColour = nullptr;
 
-    int _currentLexerIndex = 0;
+	int _currentLexerIndex = 0;
 	int _currentThemeIndex = 0;
 
-    HWND _hCheckBold = nullptr;
-    HWND _hCheckItalic = nullptr;
+	HWND _hCheckBold = nullptr;
+	HWND _hCheckItalic = nullptr;
 	HWND _hCheckUnderline = nullptr;
-    HWND _hFontNameCombo = nullptr;
-    HWND _hFontSizeCombo = nullptr;
+	HWND _hFontNameCombo = nullptr;
+	HWND _hFontSizeCombo = nullptr;
 	HWND _hSwitch2ThemeCombo = nullptr;
 
 	HWND _hFgColourStaticText = nullptr;
@@ -139,7 +139,7 @@ private :
 	HWND _hStyleInfoStaticText = nullptr;
 
 	LexerStylerArray _lsArray;
-    StyleArray _globalStyles;
+	StyleArray _globalStyles;
 	generic_string _themeName;
 
 	LexerStylerArray _styles2restored;
@@ -161,15 +161,15 @@ private :
 		if (styleIndex == LB_ERR)
 			styleIndex = 0;
 
-        if (_currentLexerIndex == 0)
+		if (_currentLexerIndex == 0)
 		{
-            return _globalStyles.getStyler(styleIndex);
+				return _globalStyles.getStyler(styleIndex);
 		}
-        else
-        {
-		    LexerStyler & lexerStyler = _lsArray.getLexerFromIndex(_currentLexerIndex - 1);
-		    return lexerStyler.getStyler(styleIndex);
-        }
+		else
+		{
+			LexerStyler & lexerStyler = _lsArray.getLexerFromIndex(_currentLexerIndex - 1);
+			return lexerStyler.getStyler(styleIndex);
+		}
 	};
 
 	int whichTabColourIndex();
@@ -210,14 +210,14 @@ private :
 		::EnableWindow(_hCheckItalic, isEnable);
 		::EnableWindow(_hCheckUnderline, isEnable);
 	};
-    long notifyDataModified() {
+	long notifyDataModified() {
 		_isDirty = true;
 		_isThemeDirty = true;
 		::EnableWindow(::GetDlgItem(_hSelf, IDC_SAVECLOSE_BUTTON), TRUE);
 		return TRUE;
-    };
+	};
 	void setStyleListFromLexer(int index);
-    void setVisualFromStyleList();
+	void setVisualFromStyleList();
 
 	void updateGlobalOverrideCtrls();
 

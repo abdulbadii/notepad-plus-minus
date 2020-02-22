@@ -3200,11 +3200,11 @@ INT_PTR CALLBACK DelimiterSettingsDlg::run_dlgProc(UINT message, WPARAM wParam, 
 			if (hwnd == ::GetDlgItem(_hSelf, IDD_STATIC_BLABLA) || hwnd == ::GetDlgItem(_hSelf, IDD_STATIC_BLABLA2NDLINE))
 			{
 				COLORREF bgColor = getCtrlBgColor(_hSelf);
-				SetTextColor(hdcStatic, RGB(0, 0, 0));
+				::SetTextColor(hdcStatic, RGB(0, 0, 0));
 				BYTE r = GetRValue(bgColor) - 30;
 				BYTE g = MyGetGValue(bgColor) - 30;
 				BYTE b = GetBValue(bgColor) - 30;
-				SetBkColor(hdcStatic, RGB(r, g, b));
+				::SetBkColor(hdcStatic, RGB(r, g, b));
 				return TRUE;
 			}
 			return FALSE;

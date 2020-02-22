@@ -970,7 +970,7 @@ void Notepad_plus::command(int id)
 		}
 		break;
 
-		case IDM_SEARCH_FIND :
+		// case IDM_SEARCH_FIND :
 		case IDM_SEARCH_REPLACE :
 		case IDM_SEARCH_MARK :
 		{
@@ -979,10 +979,11 @@ void Notepad_plus::command(int id)
 
 			bool isFirstTime = !_findReplaceDlg.isCreated();
 
-			DIALOG_TYPE dlgID = FIND_DLG;
-			if (id == IDM_SEARCH_REPLACE)
-				dlgID = REPLACE_DLG;
-			else if (id == IDM_SEARCH_MARK)
+			DIALOG_TYPE dlgID;
+			//= FIND_DLG;
+			// if (id == IDM_SEARCH_REPLACE)
+			dlgID = REPLACE_DLG;
+			if (id == IDM_SEARCH_MARK)
 				dlgID = MARK_DLG;
 			_findReplaceDlg.doDialog(dlgID, _nativeLangSpeaker.isRTL());
 
@@ -1047,8 +1048,8 @@ void Notepad_plus::command(int id)
 		case IDM_SEARCH_SETANDFINDPREV :
 		{
 				bool isFirstTime = !_findReplaceDlg.isCreated();
-			if (isFirstTime)
-				_findReplaceDlg.doDialog(FIND_DLG, _nativeLangSpeaker.isRTL(), false);
+/* 			if (isFirstTime)
+				_findReplaceDlg.doDialog(FIND_DLG, _nativeLangSpeaker.isRTL(), false); */
 
 			const int strSize = FINDREPLACE_MAXLENGTH;
 			TCHAR str[strSize];

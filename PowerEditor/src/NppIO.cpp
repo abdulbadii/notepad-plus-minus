@@ -1438,7 +1438,7 @@ bool Notepad_plus::fileSave(BufferID id)
 			{
 				// Get the custom directory, make sure it has a trailing slash
 				fn_bak = nppgui._backupDir;
-				if (fn_bak.back() != TEXT('\\'))
+				if (fn_bak.back() != L'\\')
 					fn_bak += L"\\";
 			}
 			else

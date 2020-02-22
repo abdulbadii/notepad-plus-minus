@@ -676,17 +676,17 @@ generic_string BuildMenuFileName(int filenameLen, unsigned int pos, const generi
 
 generic_string PathRemoveFileSpec(generic_string& path)
 {
-    generic_string::size_type lastBackslash = path.find_last_of(TEXT('\\'));
+    generic_string::size_type lastBackslash = path.find_last_of(L'\\');
     if (lastBackslash == generic_string::npos)
     {
-        if (path.size() >= 2 && path[1] == TEXT(':'))  // "C:foo.bar" becomes "C:"
+        if (path.size() >= 2 && path[1] == L':')  // "C:foo.bar" becomes "C:"
             path.erase(2);
         else
             path.erase();
     }
     else
     {
-        if (lastBackslash == 2 && path[1] == TEXT(':') && path.size() >= 3)  // "C:\foo.exe" becomes "C:\"
+        if (lastBackslash == 2 && path[1] == L':' && path.size() >= 3)  // "C:\foo.exe" becomes "C:\"
             path.erase(3);
         else if (lastBackslash == 0 && path.size() > 1) // "\foo.exe" becomes "\"
             path.erase(1);

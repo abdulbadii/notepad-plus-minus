@@ -192,7 +192,7 @@
 	#define    IDM_CLEAN_RECENT_FILE_LIST           (IDM_EDIT + 41)
 		
 #define    IDM_SEARCH    (IDM + 3000)
-	#define    IDM_SEARCH_FIND                 (IDM_SEARCH + 1)
+	// #define    IDM_SEARCH_FIND                 (IDM_SEARCH + 1)
 	#define    IDM_SEARCH_FINDNEXT             (IDM_SEARCH + 2)
 	#define    IDM_SEARCH_REPLACE              (IDM_SEARCH + 3)
 	#define    IDM_SEARCH_GOTOLINE             (IDM_SEARCH + 4)

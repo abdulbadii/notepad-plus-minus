@@ -93,7 +93,7 @@ void FileDialog::setExtFilter(const TCHAR *extText, const TCHAR *ext, ...)
 	ext2Concat = ext;
     do
 	{
-        if (ext2Concat[0] == TEXT('.'))
+        if (ext2Concat[0] == L'.')
             exts += L"*";
         exts += ext2Concat;
         exts += L";";

@@ -526,8 +526,7 @@ void Accelerator::updateShortcuts()
 			if (std::find(incrFindAccIds.begin(), incrFindAccIds.end(), shortcuts[i].getID()) != incrFindAccIds.end())
 				incrFindAcc.push_back(_pAccelArray[offset]);
 
-			if (shortcuts[i].getID() == IDM_SEARCH_FIND)
-				pSearchFindAccel = &_pAccelArray[offset];
+			// if (shortcuts[i].getID() == IDM_SEARCH_FIND)	pSearchFindAccel = &_pAccelArray[offset];
 
 			++offset;
 		}

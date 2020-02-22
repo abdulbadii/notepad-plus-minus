@@ -688,8 +688,8 @@ INT_PTR CALLBACK FunctionListPanel::run_dlgProc(UINT message, WPARAM wParam, LPA
 			else
 				return FALSE; // no root (no parser), use the default color
 			// text not found
-			SetTextColor((HDC)wParam, TXT_COLOR);
-			SetBkColor((HDC)wParam, BCKGRD_COLOR);
+			::SetTextColor((HDC)wParam, TXT_COLOR);
+			::SetBkColor((HDC)wParam, BCKGRD_COLOR);
 			return (LRESULT)hBrushBackground;
 		}
 

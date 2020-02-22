@@ -722,19 +722,19 @@ void NativeLangSpeaker::changeFindReplaceDlgLang(FindReplaceDlg & findReplaceDlg
 			dlgNode = searchDlgNode(dlgNode, "Find");
 			if (dlgNode)
 			{
-				const char *titre1 = (dlgNode->ToElement())->Attribute("titleFind");
+				// const char *titre1 = (dlgNode->ToElement())->Attribute("titleFind");
 				const char *titre2 = (dlgNode->ToElement())->Attribute("titleReplace");
 				const char *titre3 = (dlgNode->ToElement())->Attribute("titleFindInFiles");
 				const char *titre4 = (dlgNode->ToElement())->Attribute("titleMark");
 
 				WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 
-				if (titre1 && titre1[0])
-				{
+/* 				if (titre1 && titre1[0])	{
 					basic_string<wchar_t> nameW = wmc.char2wchar(titre1, _nativeLangEncoding);
 					nppParam.getFindDlgTabTitiles()._find = nameW;
 					findReplaceDlg.changeTabName(FIND_DLG, nppParam.getFindDlgTabTitiles()._find.c_str());
 				}
+*/
 				if (titre2  && titre2[0])
 				{
 					basic_string<wchar_t> nameW = wmc.char2wchar(titre2, _nativeLangEncoding);

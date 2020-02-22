@@ -136,7 +136,7 @@ BOOL RegisterServer() {
 	TCHAR    szDefaultPath[MAX_PATH];
 
 	GetModuleFileName(_hModule, szDefaultPath, MAX_PATH);
-	TCHAR* pDest = StrRChr(szDefaultPath, NULL, TEXT('\\'));
+	TCHAR* pDest = StrRChr(szDefaultPath, NULL, L'\\');
 	pDest++;
 	pDest[0] = 0;
 	lstrcat(szDefaultPath, szNppName);
@@ -862,8 +862,8 @@ STDMETHODIMP CShellExt::Extract(LPCTSTR /*pszFile*/, UINT /*nIconIndex*/, HICON 
 	SelectObject(dcEditTemp, brush);
 	SelectObject(dcEditTemp, pen);
 	SetBkMode(dcEditTemp, TRANSPARENT);	//dont clear background when drawing text
-	SetBkColor(dcEditTemp,  backGround);
-	SetTextColor(dcEditTemp, textColor);
+	::SetBkColor(dcEditTemp,  backGround);
+	::SetTextColor(dcEditTemp, textColor);
 
 	//Calculate size of the displayed string
 	SIZE stringSize;
