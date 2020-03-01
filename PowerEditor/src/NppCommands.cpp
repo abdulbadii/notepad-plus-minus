@@ -970,7 +970,7 @@ void Notepad_plus::command(int id)
 		}
 		break;
 
-		case IDM_SEARCH_FIND :
+		// case IDM_SEARCH_FIND :
 		case IDM_SEARCH_REPLACE :
 		case IDM_SEARCH_MARK :
 		{
@@ -980,10 +980,9 @@ void Notepad_plus::command(int id)
 			bool isFirstTime = !_findReplaceDlg.isCreated();
 
 			DIALOG_TYPE dlgID;// = FIND_DLG;
-			// if (id == IDM_SEARCH_REPLACE)
-			dlgID = REPLACE_DLG;
-			// else
-			if (id == IDM_SEARCH_MARK)
+			if (id == IDM_SEARCH_REPLACE)
+				dlgID = REPLACE_DLG;
+			else //if(id == IDM_SEARCH_MARK)
 				dlgID = MARK_DLG;
 			_findReplaceDlg.doDialog(dlgID, _nativeLangSpeaker.isRTL());
 
@@ -1033,18 +1032,18 @@ void Notepad_plus::command(int id)
 			_findReplaceDlg.processFindNext(s.c_str(), &op, &status);
 			if (status == FSEndReached)
 			{
-				generic_string msg = _nativeLangSpeaker.getLocalizedStrFromID("find-status-end-reached", L"Find: Found the 1st occurrence from the top. The end of the document has been reached.");
+				generic_string msg = _nativeLangSpeaker.getLocalizedStrFromID("find-status-end-reached", L"Find: Found the 1st occurrence from the start of search up to the end of the document.");
 				_findReplaceDlg.setStatusbarMessage(msg, FSEndReached);
 			}
 			else if (status == FSTopReached)
 			{
-				generic_string msg = _nativeLangSpeaker.getLocalizedStrFromID("find-status-top-reached", L"Find: Found the 1st occurrence from the bottom. The beginning of the document has been reached.");
+				generic_string msg = _nativeLangSpeaker.getLocalizedStrFromID("find-status-top-reached", L"Find: Found the 1st occurrence from the start of search up to the beginning of the document.");
 				_findReplaceDlg.setStatusbarMessage(msg, FSTopReached);
 			}
 		}
 		break;
 
-        case IDM_SEARCH_SETANDFINDNEXT :
+      case IDM_SEARCH_SETANDFINDNEXT :
 		case IDM_SEARCH_SETANDFINDPREV :
         {
             bool isFirstTime = !_findReplaceDlg.isCreated();
