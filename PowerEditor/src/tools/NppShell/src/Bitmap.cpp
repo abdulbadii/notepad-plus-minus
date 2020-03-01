@@ -250,7 +250,7 @@ HICON LoadIconEx(HINSTANCE hInstance, LPCTSTR lpszName, int cx, int cy, int dept
 
 	int nrColors = 1 << depth;
 
-	for (i=0;i<pGrpIconDir->idCount;++i)
+	for (i=0;i<pGrpIconDir->idCount;i++)
 	{
 		GRPICONDIRENTRY & entry = pGrpIconDir->idEntries[i];
 		int iconColors = (entry.bColorCount==0)?1 << (entry.wPlanes*entry.wBitCount) : entry.bColorCount;

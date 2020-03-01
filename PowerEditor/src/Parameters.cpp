@@ -77,7 +77,8 @@ struct ScintillaKeyDefinition
 static const WinMenuKeyDefinition winKeyDefs[] =
 {
 	// V_KEY,    COMMAND_ID,                                    Ctrl,  Alt,   Shift, cmdName
-
+	// -------------------------------------------------------------------------------------
+	//
 	{ VK_N,       IDM_FILE_NEW,                                 true,  false, false, nullptr },
 	{ VK_O,       IDM_FILE_OPEN,                                true,  false, false, nullptr },
 	{ VK_NULL,    IDM_FILE_OPEN_FOLDER,                         false, false, false, nullptr },
@@ -178,7 +179,7 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_NULL,    IDM_EDIT_CLIPBOARDHISTORY_PANEL,              false, false, false, nullptr },
 	{ VK_NULL,    IDM_EDIT_SETREADONLY,                         false, false, false, nullptr },
 	{ VK_NULL,    IDM_EDIT_CLEARREADONLY,                       false, false, false, nullptr },
-	// { VK_F,       IDM_SEARCH_FIND,                              true,  false, false, nullptr },
+	{ VK_F,       IDM_SEARCH_FIND,                              true,  false, false, nullptr },
 	{ VK_F,       IDM_SEARCH_FINDINFILES,                       true,  false, true,  nullptr },
 	{ VK_F3,      IDM_SEARCH_FINDNEXT,                          false, false, false, nullptr },
 	{ VK_F3,      IDM_SEARCH_FINDPREV,                          false, false, true,  nullptr },
@@ -595,7 +596,7 @@ int base64ToAscii(char *dest, const char *base64Str)
 	int k = 0;
 
 	enum {b64_just, b64_1padded, b64_2padded} padd = b64_just;
-	for ( ; i < nbLoop ; ++i)
+	for ( ; i < nbLoop ; i++)
 	{
 		size_t j = i * 4;
 		UCHAR uc0, uc1, uc2, uc3, p0, p1;
@@ -1568,7 +1569,7 @@ static int CALLBACK EnumFontFamExProc(const LOGFONT* lpelfe, const TEXTMETRIC*, 
 
 	//Search through all the fonts, EnumFontFamiliesEx never states anything about order
 	//Start at the end though, that's the most likely place to find a duplicate
-	for (int i = vectSize - 1 ; i >= 0 ; --i)
+	for (int i = vectSize - 1 ; i >= 0 ; i--)
 	{
 		if (0 == lstrcmp(strVect[i].c_str(), lfFaceName))
 			return 1;	//we already have seen this typeface, ignore it
@@ -1603,7 +1604,7 @@ bool NppParameters::isInFontList(const generic_string& fontName2Search) const
 	if (fontName2Search.empty())
 		return false;
 
-	for (size_t i = 0, len = _fontlist.size(); i < len; ++i)
+	for (size_t i = 0, len = _fontlist.size(); i < len; i++)
 	{
 		if (_fontlist[i] == fontName2Search)
 			return true;

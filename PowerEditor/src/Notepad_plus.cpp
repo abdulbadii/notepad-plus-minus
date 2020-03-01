@@ -85,7 +85,7 @@ ToolBarButtonUnit toolBarIcons[] = {
 	{0,					IDI_SEPARATOR_ICON,		IDI_SEPARATOR_ICON,		IDI_SEPARATOR_ICON, IDI_SEPARATOR_ICON},
 	//-------------------------------------------------------------------------------------//
 
-	// {IDM_SEARCH_FIND,		IDI_FIND_OFF_ICON,		IDI_FIND_ON_ICON,		IDI_FIND_OFF_ICON, IDR_FIND},
+	{IDM_SEARCH_FIND,		IDI_FIND_OFF_ICON,		IDI_FIND_ON_ICON,		IDI_FIND_OFF_ICON, IDR_FIND},
 	{IDM_SEARCH_REPLACE,  IDI_REPLACE_OFF_ICON,	IDI_REPLACE_ON_ICON,	IDI_REPLACE_OFF_ICON, IDR_REPLACE},
 
 	//-------------------------------------------------------------------------------------//
@@ -366,11 +366,11 @@ LRESULT Notepad_plus::init(HWND hwnd)
     //--Status Bar Section--//
 	bool willBeShown = nppGUI._statusBarShow;
     _statusBar.init(_pPublicInterface->getHinst(), hwnd, 6);
-	_statusBar.setPartWidth(STATUSBAR_DOC_SIZE, nppParam._dpiManager.scaleX(265));
-	_statusBar.setPartWidth(STATUSBAR_CUR_POS, nppParam._dpiManager.scaleX(303));
-	_statusBar.setPartWidth(STATUSBAR_EOF_FORMAT, nppParam._dpiManager.scaleX(55));
-	_statusBar.setPartWidth(STATUSBAR_UNICODE_TYPE, nppParam._dpiManager.scaleX(95));
-	_statusBar.setPartWidth(STATUSBAR_TYPING_MODE, nppParam._dpiManager.scaleX(29));
+	_statusBar.setPartWidth(STATUSBAR_DOC_SIZE, nppParam._dpiManager.scaleX(200));
+	_statusBar.setPartWidth(STATUSBAR_CUR_POS, nppParam._dpiManager.scaleX(260));
+	_statusBar.setPartWidth(STATUSBAR_EOF_FORMAT, nppParam._dpiManager.scaleX(110));
+	_statusBar.setPartWidth(STATUSBAR_UNICODE_TYPE, nppParam._dpiManager.scaleX(120));
+	_statusBar.setPartWidth(STATUSBAR_TYPING_MODE, nppParam._dpiManager.scaleX(30));
     _statusBar.display(willBeShown);
 
     _pMainWindow = &_mainDocTab;
@@ -2087,7 +2087,7 @@ void doCheck(HMENU mainHandle, int id)
 	mii.fMask = MIIM_SUBMENU | MIIM_FTYPE | MIIM_ID | MIIM_STATE;
 
 	int count = ::GetMenuItemCount(mainHandle);
-	for (int i = 0; i < count; ++i)
+	for (int i = 0; i < count; i++)
 	{
 		::GetMenuItemInfo(mainHandle, i, MF_BYPOSITION, &mii);
 		if (mii.fType == MFT_RADIOCHECK || mii.fType == MFT_STRING)
@@ -2159,7 +2159,11 @@ generic_string Notepad_plus::getLangDesc(LangType langType, bool getName)
 	if (langType > L_EXTERNAL)
         langType = L_TEXT;
 
-	generic_string str2Show =getName? ScintillaEditView::langNames[langType].shortName: ScintillaEditView::langNames[langType].longName;
+	generic_string str2Show;
+	if (getName)
+		str2Show = ScintillaEditView::langNames[langType].shortName;
+	else
+		str2Show = ScintillaEditView::langNames[langType].longName;
 
 	if (langType == L_USER)
 	{
@@ -2177,7 +2181,7 @@ void Notepad_plus::copyMarkedLines()
 {
 	int lastLine = _pEditView->lastZeroBasedLineNumber();
 	generic_string globalStr = L"";
-	for (int i = lastLine ; i >= 0 ; --i)
+	for (int i = lastLine ; i >= 0 ; i--)
 	{
 		if (bookmarkPresent(i))
 		{
@@ -2198,7 +2202,7 @@ void Notepad_plus::cutMarkedLines()
 	generic_string globalStr = L"";
 
 	_pEditView->execute(SCI_BEGINUNDOACTION);
-	for (int i = lastLine ; i >= 0 ; --i)
+	for (int i = lastLine ; i >= 0 ; i--)
 	{
 		if (bookmarkPresent(i))
 		{
@@ -2219,7 +2223,7 @@ void Notepad_plus::deleteMarkedLines(bool isMarked)
 	int lastLine = _pEditView->lastZeroBasedLineNumber();
 
 	_pEditView->execute(SCI_BEGINUNDOACTION);
-	for (int i = lastLine ; i >= 0 ; --i)
+	for (int i = lastLine ; i >= 0 ; i--)
 	{
 		if (bookmarkPresent(i) == isMarked)
 			deleteMarkedline(i);
@@ -2250,7 +2254,7 @@ void Notepad_plus::pasteToMarkedLines()
 	::CloseClipboard();
 
 	_pEditView->execute(SCI_BEGINUNDOACTION);
-	for (int i = lastLine ; i >= 0 ; --i)
+	for (int i = lastLine ; i >= 0 ; i--)
 	{
 		if (bookmarkPresent(i))
 		{
@@ -2372,7 +2376,7 @@ bool Notepad_plus::braceMatch()
 
 void Notepad_plus::setLangStatus(LangType langType)
 {
-	_statusBar.setText(getLangDesc(langType, true).c_str(), STATUSBAR_DOC_TYPE);
+	_statusBar.setText(getLangDesc(langType).c_str(), STATUSBAR_DOC_TYPE);
 }
 
 
@@ -2381,9 +2385,9 @@ void Notepad_plus::setDisplayFormat(EolType format)
 	const TCHAR* str = L"??";
 	switch (format)
 	{
-		case EolType::windows: str = L"\\r\\n Win"; break;
-		case EolType::macos:   str = L"\\r Mac"; break;
-		case EolType::unix:    str = L"\\n Unix"; break;
+		case EolType::windows: str = L"Windows (CR LF)"; break;
+		case EolType::macos:   str = L"Macintosh (CR)"; break;
+		case EolType::unix:    str = L"Unix (LF)"; break;
 		case EolType::unknown: str = L"Unknown"; assert(false);  break;
 	}
 	_statusBar.setText(str, STATUSBAR_EOF_FORMAT);
@@ -2409,9 +2413,9 @@ void Notepad_plus::setUniModeText()
 			case uni16LE:
 				uniModeTextString = L"UCS-2 LE BOM"; break;
 			case uni16BE_NoBOM:
-				uniModeTextString = L"UCS-2 BE"; break;
+				uniModeTextString = L"UCS-2 Big Endian"; break;
 			case uni16LE_NoBOM:
-				uniModeTextString = L"UCS-2 LE"; break;
+				uniModeTextString = L"UCS-2 Little Endian"; break;
 			case uniCookie:
 				uniModeTextString = L"UTF-8"; break;
 			default :
@@ -3236,7 +3240,8 @@ int Notepad_plus::wordCount()
 }
 
 
-void Notepad_plus::updateStatusBar() {
+void Notepad_plus::updateStatusBar()
+{
     TCHAR strLnCol[128];
 	TCHAR strSel[64];
 	int selByte = 0;
@@ -3246,11 +3251,11 @@ void Notepad_plus::updateStatusBar() {
 
 	long selected_length = _pEditView->getUnicodeSelectedLength();
 	if (selected_length != -1)
-		wsprintf(strSel, L"Sel: %s  %s", commafyInt(selected_length).c_str(), commafyInt(selLine).c_str());
+		wsprintf(strSel, L"Sel : %s | %s", commafyInt(selected_length).c_str(), commafyInt(selLine).c_str());
 	else
 		wsprintf(strSel, L"Sel : %s", L"N/A");
 
-	wsprintf(strLnCol, L"Ln: %s    Co: %s    %s",
+	wsprintf(strLnCol, L"Ln : %s    Col : %s    %s",
 		commafyInt(_pEditView->getCurrentLineNumber() + 1).c_str(),
 		commafyInt(_pEditView->getCurrentColumnNumber() + 1).c_str(),
 		strSel);
@@ -3258,7 +3263,7 @@ void Notepad_plus::updateStatusBar() {
     _statusBar.setText(strLnCol, STATUSBAR_CUR_POS);
 
     TCHAR strDocLen[256];
-	wsprintf(strDocLen, L"%s   %s",
+	wsprintf(strDocLen, L"length : %s    lines : %s",
 		commafyInt(_pEditView->getCurrentDocLen()).c_str(),
 		commafyInt(_pEditView->execute(SCI_GETLINECOUNT)).c_str());
 
@@ -6196,7 +6201,7 @@ struct TextPlayerParams
 {
 	HWND _nppHandle = nullptr;
 	ScintillaEditView* _pCurrentView = nullptr;
-	QuoteParams* _quotParams = nullptr;
+	// QuoteParams* _quotParams = nullptr;
 };
 
 struct TextTrollerParams
@@ -6207,8 +6212,9 @@ struct TextTrollerParams
 	HANDLE _mutex;
 };
 
-
-/* static const QuoteParams quotes[] ={
+/* 
+static const QuoteParams quotes[] =
+{
 	{L"Notepad++", QuoteParams::rapid, true, SC_CP_UTF8, L_TEXT, L"I hate reading other people's code.\nSo I wrote mine, made it as open source project, and watch others suffer."},
 	{L"Notepad++ #2", QuoteParams::rapid, true, SC_CP_UTF8, L_TEXT, L"Good programmers use Notepad++ to code.\nExtreme programmers use MS Word to code, in Comic Sans, center aligned."},
 	{L"Notepad++ #3", QuoteParams::rapid, true, SC_CP_UTF8, L_TEXT, L"The best things in life are free.\nNotepad++ is free.\nSo Notepad++ is the best.\n"},
@@ -6431,7 +6437,10 @@ struct TextTrollerParams
 	{L"Alexandria Ocasio-Cortez", QuoteParams::slow, false, SC_CP_UTF8, L_TEXT, L"No one ever makes a billion dollars.\nYou TAKE a billion dollars."},
 	{L"Space Invaders", QuoteParams::speedOfLight, false, SC_CP_UTF8, L_TEXT, L"\n\n       ▄██▄\n     ▄██████▄           █   █  █▀▀▀\n     ██▄██▄██           █   █  █▄▄\n      ▄▀▄▄▀▄            █ █ █  █\n     ▀ ▀  ▀ ▀           ▀▀ ▀▀  ▀▀▀▀\n\n      ▀▄   ▄▀           ▄█▀▀▀  ▄█▀▀█▄  █▀▄▀█  █▀▀▀\n     ▄█▀███▀█▄          █      █    █  █ ▀ █  █▄▄\n    █ █▀▀▀▀▀█ █         █▄     █▄  ▄█  █   █  █\n       ▀▀ ▀▀             ▀▀▀▀   ▀▀▀▀   ▀   ▀  ▀▀▀▀\n\n     ▄▄█████▄▄          ▀█▀  █▀▄  █\n    ██▀▀███▀▀██          █   █ ▀▄ █\n    ▀▀██▀▀▀██▀▀          █   █  ▀▄█\n    ▄█▀ ▀▀▀ ▀█▄         ▀▀▀  ▀   ▀▀\n\n      ▄▄████▄▄          █▀▀█  █▀▀▀  ▄▀▀▄  ▄█▀▀▀  █▀▀▀\n    ▄██████████▄        █▄▄█  █▄▄   █▄▄█  █      █▄▄ \n  ▄██▄██▄██▄██▄██▄      █     █     █  █  █▄     █   \n    ▀█▀  ▀▀  ▀█▀        ▀     ▀▀▀▀  ▀  ▀   ▀▀▀▀  ▀▀▀▀\n\n"},
 	{L"#JeSuisCharlie", QuoteParams::rapid, false, SC_CP_UTF8, L_TEXT, L"Freedom of expression is like the air we breathe, we don't feel it, until people take it away from us.\n\nFor this reason, Je suis Charlie, not because I endorse everything they published, but because I cherish the right to speak out freely without risk even when it offends others.\nAnd no, you cannot just take someone's life for whatever he/she expressed.\n\nHence this \"Je suis Charlie\" edition.\n"}
-};
+}; */
+
+
+
 const int nbWtf = 5;
 const wchar_t* wtf[nbWtf] =
 {
@@ -6441,7 +6450,6 @@ const wchar_t* wtf[nbWtf] =
 	L"OMFG",
 	L"Husband is not an ATM machine!!!"
 };
- */
 
 const int nbIntervalTime = 5;
 int intervalTimeArray[nbIntervalTime] = {30,30,30,30,200};
@@ -6472,7 +6480,8 @@ bool isInList(int elem, vector<int> elemList)
 }
 
 
-/* DWORD WINAPI Notepad_plus::threadTextPlayer(void *params){
+/* DWORD WINAPI Notepad_plus::threadTextPlayer(void *params)
+{
 	// random seed generation needs only one time.
 	srand(static_cast<UINT>(time(NULL)));
 
@@ -6495,7 +6504,7 @@ bool isInList(int elem, vector<int> elemList)
 	::SendMessage(hNpp, NPPM_MENUCOMMAND, 0, langMenuId);
 
 	int x = 2, y = 1;
-	if (qParams->_speed == QuoteParams::slow)
+ 	if (qParams->_speed == QuoteParams::slow)
 	{
 		x = 1;
 		y = 1;
@@ -6622,6 +6631,7 @@ bool isInList(int elem, vector<int> elemList)
     return TRUE;
 }
  */
+
 DWORD WINAPI Notepad_plus::threadTextTroller(void *params)
 {
 	TextTrollerParams *textTrollerParams = static_cast<TextTrollerParams *>(params);
@@ -6745,40 +6755,44 @@ bool Notepad_plus::selectBack(ScintillaEditView *pCurrentView, BufferID targetBu
 }
 
 
-/* int Notepad_plus::getQuoteIndexFrom(const wchar_t* quoter) const{
-	if (!quoter)
-		return -1;
+/* intNotepad_plus::getQuoteIndexFrom(constwchar_t*quoter)const
+{
+if(!quoter)
+return-1;
 
-	if (wcsicmp(quoter, L"Get them all!!!") == 0)
-		return -2;
+if(wcsicmp(quoter,L"Getthemall!!!")==0)
+return-2;
 
-	int nbQuote = sizeof(quotes) / sizeof(QuoteParams);
-	if (wcsicmp(quoter, L"random") == 0)
-	{
-		srand(static_cast<UINT>(time(NULL)));
-		return getRandomNumber(nbQuote);
-	}
-
-	for (int i = 0; i < nbQuote; ++i)
-	{
-		if (wcsicmp(quotes[i]._quoter, quoter) == 0)
-			return i;
-	}
-	return -1;
+intnbQuote=sizeof(quotes)/sizeof(QuoteParams);
+if(wcsicmp(quoter,L"random")==0)
+{
+srand(static_cast<UINT>(time(NULL)));
+returngetRandomNumber(nbQuote);
 }
- */
 
-/* void Notepad_plus::showAllQuotes() const{
+for(inti=0;i<nbQuote;++i)
+{
+if(wcsicmp(quotes[i]._quoter,quoter)==0)
+returni;
 }
- */
+return-1;
+}
+*/
 
-/* void Notepad_plus::showQuoteFromIndex(int index) const{
+void Notepad_plus::showAllQuotes() const
+{
+}
+
+/* 
+void Notepad_plus::showQuoteFromIndex(int index) const
+{
 	int nbQuote = sizeof(quotes) / sizeof(QuoteParams);
 	if (index < 0 || index >= nbQuote) return;
 	showQuote(&quotes[index]);
-}
- */
-/*void Notepad_plus::showQuote(const QuoteParams* quote) const{
+} */
+
+/* void Notepad_plus::showQuote(const QuoteParams* quote) const
+{
 	static TextPlayerParams params;
 	params._quotParams = const_cast<QuoteParams*>(quote);
 	params._nppHandle = Notepad_plus::_pPublicInterface->getHSelf();
@@ -6786,8 +6800,8 @@ bool Notepad_plus::selectBack(ScintillaEditView *pCurrentView, BufferID targetBu
 
 	HANDLE hThread = ::CreateThread(NULL, 0, threadTextPlayer, &params, 0, NULL);
 	::CloseHandle(hThread);
-}
- */
+} */
+
 void Notepad_plus::launchDocumentBackupTask()
 {
 	HANDLE hThread = ::CreateThread(NULL, 0, backupDocument, NULL, 0, NULL);

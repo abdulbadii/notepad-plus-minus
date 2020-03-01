@@ -94,7 +94,7 @@ bool SecurityGard::checkSha256(const std::wstring& filePath, NppModule module2ch
 	calc_sha_256(sha2hash, reinterpret_cast<const uint8_t*>(content.c_str()), content.length());
 
 	wchar_t sha2hashStr[65] = { '\0' };
-	for (size_t i = 0; i < 32; ++i)
+	for (size_t i = 0; i < 32; i++)
 		wsprintf(sha2hashStr + i * 2, L"%02x", sha2hash[i]);
 
 	std::vector<std::wstring>* moduleSha256 = nullptr;
@@ -277,7 +277,7 @@ bool SecurityGard::verifySignedLibrary(const std::wstring& filepath, NppModule m
 		}
 
 		wstringstream ss;
-		for (unsigned i = 0; i < key_id_sze; ++i)
+		for (unsigned i = 0; i < key_id_sze; i++)
 		{
 			ss << std::uppercase << std::setfill(TCHAR('0')) << std::setw(2) << std::hex
 				<< key_id_buff[i];

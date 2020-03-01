@@ -88,7 +88,7 @@ nsSBCSGroupProber::nsSBCSGroupProber()
 
 nsSBCSGroupProber::~nsSBCSGroupProber()
 {
-  for (PRUint32 i = 0; i < NUM_OF_SBCS_PROBERS; ++i)
+  for (PRUint32 i = 0; i < NUM_OF_SBCS_PROBERS; i++)
   {
     delete mProbers[i];
   }
@@ -112,7 +112,7 @@ const char* nsSBCSGroupProber::GetCharSetName()
 void  nsSBCSGroupProber::Reset(void)
 {
   mActiveNum = 0;
-  for (PRUint32 i = 0; i < NUM_OF_SBCS_PROBERS; ++i)
+  for (PRUint32 i = 0; i < NUM_OF_SBCS_PROBERS; i++)
   {
     if (mProbers[i]) // not null
     {
@@ -147,7 +147,7 @@ nsProbingState nsSBCSGroupProber::HandleData(const char* aBuf, PRUint32 aLen)
   if (newLen1 == 0)
     goto done; // Nothing to see here, move on.
 
-  for (i = 0; i < NUM_OF_SBCS_PROBERS; ++i)
+  for (i = 0; i < NUM_OF_SBCS_PROBERS; i++)
   {
      if (!mIsActive[i])
        continue;
@@ -188,7 +188,7 @@ float nsSBCSGroupProber::GetConfidence(void)
   case eNotMe:
     return (float)0.01;  //sure no
   default:
-    for (i = 0; i < NUM_OF_SBCS_PROBERS; ++i)
+    for (i = 0; i < NUM_OF_SBCS_PROBERS; i++)
     {
       if (!mIsActive[i])
         continue;
@@ -211,7 +211,7 @@ void nsSBCSGroupProber::DumpStatus()
   
   cf = GetConfidence();
   printf(" SBCS Group Prober --------begin status \r\n");
-  for (i = 0; i < NUM_OF_SBCS_PROBERS; ++i)
+  for (i = 0; i < NUM_OF_SBCS_PROBERS; i++)
   {
     if (!mIsActive[i])
       printf("  inactive: [%s] (i.e. confidence is too low).\r\n", mProbers[i]->GetCharSetName());

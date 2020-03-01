@@ -190,8 +190,8 @@ int getNbDigits(int aNum, int base)
 			++nbChiffre;
 		}
 	}
-	if (base == 16 && (nbChiffre % 2)) //(nbChiffre % 2 != 0))
-		++nbChiffre;
+	if ((base == 16) && (nbChiffre % 2 != 0))
+		nbChiffre += 1;
 
 	return nbChiffre;
 }
@@ -226,7 +226,7 @@ void ScintillaEditView::init(HINSTANCE hInst, HWND hPere)
 {
 	if (!_hLib)
 	{
-		throw runtime_error("ScintillaEditView::init : SCINTILLA ERROR - Can not load the dynamic library");
+		throw std::runtime_error("ScintillaEditView::init : SCINTILLA ERROR - Can not load the dynamic library");
 	}
 
 	Window::init(hInst, hPere);
@@ -243,7 +243,7 @@ void ScintillaEditView::init(HINSTANCE hInst, HWND hPere)
 
 	if (!_hSelf)
 	{
-		throw runtime_error("ScintillaEditView::init : CreateWindowEx() function return null");
+		throw std::runtime_error("ScintillaEditView::init : CreateWindowEx() function return null");
 	}
 
 	_pScintillaFunc = (SCINTILLA_FUNC)::SendMessage(_hSelf, SCI_GETDIRECTFUNCTION, 0, 0);
@@ -253,12 +253,12 @@ void ScintillaEditView::init(HINSTANCE hInst, HWND hPere)
 
 	if (!_pScintillaFunc)
 	{
-		throw runtime_error("ScintillaEditView::init : SCI_GETDIRECTFUNCTION message failed");
+		throw std::runtime_error("ScintillaEditView::init : SCI_GETDIRECTFUNCTION message failed");
 	}
 
 	if (!_pScintillaPtr)
 	{
-		throw runtime_error("ScintillaEditView::init : SCI_GETDIRECTPOINTER message failed");
+		throw std::runtime_error("ScintillaEditView::init : SCI_GETDIRECTPOINTER message failed");
 	}
 
     execute(SCI_SETMARGINMASKN, _SC_MARGE_FOLDER, SC_MASK_FOLDERS);
@@ -362,7 +362,7 @@ LRESULT CALLBACK ScintillaEditView::scintillaStatic_Proc(HWND hwnd, UINT Message
 		//Hack for Synaptics TouchPad Driver
 		char synapticsHack[26];
 		GetClassNameA(hwndOnMouse, (LPSTR)&synapticsHack, 26);
-		bool isSynpnatic = string(synapticsHack) == "SynTrackCursorWindowClass";
+		bool isSynpnatic = std::string(synapticsHack) == "SynTrackCursorWindowClass";
 		bool makeTouchPadCompetible = ((NppParameters::getInstance()).getSVP())._disableAdvancedScrolling;
 
 		if (pScint && (isSynpnatic || makeTouchPadCompetible))
@@ -1179,7 +1179,7 @@ void ScintillaEditView::setObjCLexer(LangType langType)
 
 void ScintillaEditView::setKeywords(LangType langType, const char *keywords, int index)
 {
-	basic_string<char> wordList;
+	std::basic_string<char> wordList;
 	wordList = (keywords)?keywords:"";
 	execute(SCI_SETKEYWORDS, index, reinterpret_cast<LPARAM>(getCompleteKeywordList(wordList, langType, index)));
 }
@@ -1922,7 +1922,7 @@ void ScintillaEditView::activateBuffer(BufferID buffer)
 	saveCurrentPos();
 
 	// get foldStateInfo of current doc
-	vector<size_t> lineStateVector;
+	std::vector<size_t> lineStateVector;
 	getCurrentFoldStates(lineStateVector);
 
 	// put the state into the future ex buffer
@@ -1947,7 +1947,7 @@ void ScintillaEditView::activateBuffer(BufferID buffer)
 	}
 
 	// restore the collapsed info
-	const vector<size_t> & lineStateVectorNew = newBuf->getHeaderLineState(this);
+	const std::vector<size_t> & lineStateVectorNew = newBuf->getHeaderLineState(this);
 	syncFoldStateWith(lineStateVectorNew);
 
 	restoreCurrentPosPreStep();
@@ -1964,7 +1964,7 @@ void ScintillaEditView::activateBuffer(BufferID buffer)
     return;	//all done
 }
 
-void ScintillaEditView::getCurrentFoldStates(vector<size_t> & lineStateVector)
+void ScintillaEditView::getCurrentFoldStates(std::vector<size_t> & lineStateVector)
 {
 	// xCodeOptimization1304: For active document get folding state from Scintilla.
 	// The code using SCI_CONTRACTEDFOLDNEXT is usually 10%-50% faster than checking each line of the document!!
@@ -1982,7 +1982,7 @@ void ScintillaEditView::getCurrentFoldStates(vector<size_t> & lineStateVector)
 	} while (contractedFoldHeaderLine != -1);
 }
 
-void ScintillaEditView::syncFoldStateWith(const vector<size_t> & lineStateVectorNew)
+void ScintillaEditView::syncFoldStateWith(const std::vector<size_t> & lineStateVectorNew)
 {
 	size_t nbLineState = lineStateVectorNew.size();
 	for (size_t i = 0 ; i < nbLineState ; ++i)
@@ -2414,7 +2414,7 @@ generic_string ScintillaEditView::getLine(size_t lineNumber)
 {
 	int32_t lineLen = static_cast<int32_t>(execute(SCI_LINELENGTH, lineNumber));
 	const int bufSize = lineLen + 1;
-	unique_ptr<TCHAR[]> buf = make_unique<TCHAR[]>(bufSize);
+	std::unique_ptr<TCHAR[]> buf = std::make_unique<TCHAR[]>(bufSize);
 	getLine(lineNumber, buf.get(), bufSize);
 	return buf.get();
 }
@@ -2719,7 +2719,7 @@ void ScintillaEditView::updateLineNumberWidth()
 	}
 }
 
-const char * ScintillaEditView::getCompleteKeywordList(basic_string<char> & kwl, LangType langType, int keywordIndex)
+const char * ScintillaEditView::getCompleteKeywordList(std::basic_string<char> & kwl, LangType langType, int keywordIndex)
 {
 	kwl += " ";
 	const TCHAR *defKwl_generic = NppParameters::getInstance().getWordList(langType, keywordIndex);
@@ -2892,7 +2892,7 @@ void ScintillaEditView::changeCase(__inout wchar_t * const strWToConvert, const 
 			{
 				if (::IsCharAlphaW(strWToConvert[i]))
 				{
-					if (rand() & true)
+					if (std::rand() & true)
 						strWToConvert[i] = (WCHAR)(UINT_PTR)::CharUpperW((LPWSTR)strWToConvert[i]);
 					else
 						strWToConvert[i] = (WCHAR)(UINT_PTR)::CharLowerW((LPWSTR)strWToConvert[i]);
@@ -3165,13 +3165,13 @@ void ScintillaEditView::columnReplace(ColumnModeInfos & cmi, int initial, int in
 	TCHAR str[stringSize];
 
 	// Compute the numbers to be placed at each column.
-	vector<int> numbers;
+	std::vector<int> numbers;
 	{
 		int curNumber = initial;
 		const size_t kiMaxSize = cmi.size();
 		while (numbers.size() < kiMaxSize)
 		{
-			for (int i = 0; i < repeat; ++i)
+			for (int i = 0; i < repeat; i++)
 			{
 				numbers.push_back(curNumber);
 				if (numbers.size() >= kiMaxSize)
@@ -3187,11 +3187,11 @@ void ScintillaEditView::columnReplace(ColumnModeInfos & cmi, int initial, int in
 
 	const int kibEnd = getNbDigits(*numbers.rbegin(), base);
 	const int kibInit = getNbDigits(initial, base);
-	const int kib = max<int>(kibInit, kibEnd);
+	const int kib = std::max<int>(kibInit, kibEnd);
 
 	int totalDiff = 0;
 	const size_t len = cmi.size();
-	for (size_t i = 0 ; i < len ; ++i)
+	for (size_t i = 0 ; i < len ; i++)
 	{
 		if (cmi[i].isValid())
 		{
@@ -3363,7 +3363,7 @@ bool ScintillaEditView::markerMarginClick(int lineNumber)
 	if (closePresent)
 	{
 		openPresent = false;
-		for (lineNumber--; lineNumber >= 0 && !openPresent; --lineNumber)
+		for (lineNumber--; lineNumber >= 0 && !openPresent; lineNumber--)
 		{
 			state = execute(SCI_MARKERGET, lineNumber);
 			openPresent = ((state & (1 << MARK_HIDELINESBEGIN | 1 << MARK_HIDELINESUNDERLINE)) != 0);
@@ -3579,7 +3579,7 @@ void ScintillaEditView::sortLines(size_t fromLine, size_t toLine, ISorter *pSort
 	const auto startPos = execute(SCI_POSITIONFROMLINE, fromLine);
 	const auto endPos = execute(SCI_POSITIONFROMLINE, toLine) + execute(SCI_LINELENGTH, toLine);
 	const generic_string text = getGenericTextAsString(startPos, endPos);
-	vector<generic_string> splitText = stringSplit(text, getEOLString());
+	std::vector<generic_string> splitText = stringSplit(text, getEOLString());
 	const size_t lineCount = execute(SCI_GETLINECOUNT);
 	const bool sortEntireDocument = toLine == lineCount - 1;
 	if (!sortEntireDocument)
@@ -3590,7 +3590,7 @@ void ScintillaEditView::sortLines(size_t fromLine, size_t toLine, ISorter *pSort
 		}
 	}
 	assert(toLine - fromLine + 1 == splitText.size());
-	const vector<generic_string> sortedText = pSort->sort(splitText);
+	const std::vector<generic_string> sortedText = pSort->sort(splitText);
 	const generic_string joined = stringJoin(sortedText, getEOLString());
 	if (sortEntireDocument)
 	{

@@ -893,7 +893,7 @@ int OrdinalIgnoreCaseCompareStrings(LPCTSTR sz1, LPCTSTR sz2)
 	if (sz1 == nullptr) sz1 = _T("");
 	if (sz2 == nullptr) sz2 = _T("");
 
-	for (;; ++sz1, sz2++)
+	for (;; sz1++, sz2++)
 	{
 		const TCHAR c1 = *sz1;
 		const TCHAR c2 = *sz2;

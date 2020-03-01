@@ -52,7 +52,6 @@ notepad++ [--help] [-multiInst] [-noPlugin] [-lLanguage] [-LlangCode] [-nLineNum
 -openSession : Open a session. filePath must be a session file\r\
 -r : Open files recursively. This argument will be ignored\r\
      if filePath contain no wildcard character\r\
--qn : Launch ghost typing to display easter egg via its name\r\
 -qt : Launch ghost typing to display a text via the given text\r\
 -qf : Launch ghost typing to display a file content via the file path\r\
 -qSpeed : Ghost typing speed. Value from 1 to 3 for slow, fast and fastest\r\
@@ -60,6 +59,7 @@ notepad++ [--help] [-multiInst] [-noPlugin] [-lLanguage] [-LlangCode] [-nLineNum
 -openFoldersAsWorkspace: open filePath of folder(s) as workspace\r\
 filePath : file or folder name to open (absolute or relative path name)\r\
 ";
+// -qn : Launch ghost typing to display easter egg via its name\r\
 
 
 
@@ -119,6 +119,6 @@ private:
 	bool _isPrelaunch = false;
 	bool _disablePluginsManager = false;
 
-	QuoteParams _quoteParams; // keep the availability of quote parameters for thread using
+	// QuoteParams _quoteParams; // keep the availability of quote parameters for thread using
 	std::wstring _userQuote; // keep the availability of this string for thread using
 };

@@ -526,7 +526,8 @@ void Accelerator::updateShortcuts()
 			if (std::find(incrFindAccIds.begin(), incrFindAccIds.end(), shortcuts[i].getID()) != incrFindAccIds.end())
 				incrFindAcc.push_back(_pAccelArray[offset]);
 
-			// if (shortcuts[i].getID() == IDM_SEARCH_FIND)	pSearchFindAccel = &_pAccelArray[offset];
+			if (shortcuts[i].getID() == IDM_SEARCH_FIND)
+				pSearchFindAccel = &_pAccelArray[offset];
 
 			++offset;
 		}
@@ -894,7 +895,7 @@ void ScintillaAccelerator::updateKeys()
 	for (size_t i = 0; i < nb; ++i)
 	{
 		::SendMessage(_vScintillas[i], SCI_CLEARALLCMDKEYS, 0, 0);
-		for (int32_t j = static_cast<int32_t>(mapSize) - 1; j >= 0; --j) //reverse order, top of the list has highest priority
+		for (int32_t j = static_cast<int32_t>(mapSize) - 1; j >= 0; j--) //reverse order, top of the list has highest priority
 		{	
 			ScintillaKeyMap skm = map[j];
 			if (skm.isEnabled()) 

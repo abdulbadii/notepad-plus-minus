@@ -28,7 +28,7 @@
 
 #ifndef CLIPBOARDFORMATS_H
 #define CLIPBOARDFORMATS_H
- 
+
 #define CF_HTML			L"HTML Format"
 #define CF_RTF			L"Rich Text Format"
 #define CF_NPPTEXTLEN	L"Notepad++ Binary Text Length"

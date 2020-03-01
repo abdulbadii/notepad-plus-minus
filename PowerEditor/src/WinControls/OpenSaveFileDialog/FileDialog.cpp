@@ -352,7 +352,7 @@ static TCHAR * get1stExt(TCHAR *ext)
 {
 	// precondition : ext should be under the format : Batch (*.bat;*.cmd;*.nt)
 	TCHAR *begin = ext;
-	for ( ; *begin != '.' ; ++begin);
+	for ( ; *begin != '.' ; begin++);
 	TCHAR *end = ++begin;
 	for ( ; *end != ';' && *end != ')' ; end++);
 	*end = '\0';

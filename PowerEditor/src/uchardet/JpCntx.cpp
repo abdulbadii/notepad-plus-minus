@@ -173,7 +173,7 @@ void JapaneseContextAnalysis::HandleData(const char* aBuf, PRUint32 aLen)
 void JapaneseContextAnalysis::Reset(PRBool aIsPreferredLanguage)
 {
   mTotalRel = 0;
-  for (PRUint32 i = 0; i < NUM_OF_CATEGORY; ++i)
+  for (PRUint32 i = 0; i < NUM_OF_CATEGORY; i++)
     mRelSample[i] = 0;
   mNeedToSkipCharNum = 0;
   mLastCharOrder = -1;

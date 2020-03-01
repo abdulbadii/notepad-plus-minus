@@ -100,7 +100,7 @@ INT_PTR CALLBACK HashFromFilesDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 								calc_sha_256(sha2hash, reinterpret_cast<const uint8_t*>(content.c_str()), content.length());
 
 								wchar_t sha2hashStr[65] = { '\0' };
-								for (size_t i = 0; i < 32; ++i)
+								for (size_t i = 0; i < 32; i++)
 									wsprintf(sha2hashStr + i * 2, L"%02x", sha2hash[i]);
 
 								files2check += it;
@@ -224,7 +224,7 @@ void HashFromTextDlg::generateHash()
 			calc_sha_256(sha2hash, reinterpret_cast<const uint8_t*>(newText), strlen(newText));
 
 			wchar_t sha2hashStr[65] = { '\0' };
-			for (size_t i = 0; i < 32; ++i)
+			for (size_t i = 0; i < 32; i++)
 				wsprintf(sha2hashStr + i * 2, L"%02x", sha2hash[i]);
 
 			::SetDlgItemText(_hSelf, IDC_HASH_RESULT_FOMTEXT_EDIT, sha2hashStr);
@@ -275,7 +275,7 @@ void HashFromTextDlg::generateHashPerLine()
 					calc_sha_256(sha2hash, reinterpret_cast<const uint8_t*>(newText), strlen(newText));
 
 					char sha2hashStr[65] = { '\0' };
-					for (size_t i = 0; i < 32; ++i)
+					for (size_t i = 0; i < 32; i++)
 						sprintf(sha2hashStr + i * 2, "%02x", sha2hash[i]);
 
 					result += sha2hashStr;

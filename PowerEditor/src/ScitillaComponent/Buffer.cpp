@@ -519,7 +519,7 @@ void FileManager::checkFilesystemChanges(bool bCheckOnlyCurrentBuffer)
 	}
 	else
 	{
-		for (int i = int(_nbBufs) - 1; i >= 0; --i)
+		for (int i = int(_nbBufs) - 1; i >= 0; i--)
 		{
 			if (i >= int(_nbBufs))
 			{
@@ -1097,7 +1097,7 @@ bool FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool isCopy, g
 size_t FileManager::nextUntitledNewNumber() const
 {
 	std::vector<size_t> usedNumbers;
-	for (size_t i = 0; i < _buffers.size(); ++i)
+	for (size_t i = 0; i < _buffers.size(); i++)
 	{
 		Buffer *buf = _buffers.at(i);
 		if (buf->isUntitled())
@@ -1117,7 +1117,7 @@ size_t FileManager::nextUntitledNewNumber() const
 	bool found = false;
 	do
 	{
-		for (size_t j = 0; j < usedNumbers.size(); ++j)
+		for (size_t j = 0; j < usedNumbers.size(); j++)
 		{
 			numberAvailable = true;
 			found = false;
@@ -1465,7 +1465,7 @@ BufferID FileManager::getBufferFromName(const TCHAR* name)
 		::GetLongPathName(fullpath, fullpath, MAX_PATH);
 	}
 
-	for (size_t i = 0; i < _buffers.size(); ++i)
+	for (size_t i = 0; i < _buffers.size(); i++)
 	{
 		if (OrdinalIgnoreCaseCompareStrings(name, _buffers.at(i)->getFullPathName()) == 0)
 			return _buffers.at(i)->getID();

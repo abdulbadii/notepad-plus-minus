@@ -385,15 +385,15 @@ BEGIN
 
     POPUP "&Search"
     BEGIN
-        // MENUITEM "&Find...",                    IDM_SEARCH_FIND
-        MENUITEM "&Find/Replace...",                 IDM_SEARCH_REPLACE
-        MENUITEM "Find/Replace in Files...",            IDM_SEARCH_FINDINFILES
+        MENUITEM "&Find...",                    IDM_SEARCH_FIND
+        MENUITEM "Find in Files...",            IDM_SEARCH_FINDINFILES
         MENUITEM "Find &Next",                  IDM_SEARCH_FINDNEXT
         MENUITEM "Find &Previous",              IDM_SEARCH_FINDPREV
         MENUITEM "Select and Find Next",        IDM_SEARCH_SETANDFINDNEXT
         MENUITEM "Select and Find Previous",    IDM_SEARCH_SETANDFINDPREV
         MENUITEM "Find (Volatile) Next",        IDM_SEARCH_VOLATILE_FINDNEXT
         MENUITEM "Find (Volatile) Previous",    IDM_SEARCH_VOLATILE_FINDPREV
+        MENUITEM "&Replace...",                 IDM_SEARCH_REPLACE
         MENUITEM "&Incremental Search",         IDM_SEARCH_FINDINCREMENT
         MENUITEM "Search Results Window",       IDM_FOCUS_ON_FOUND_RESULTS
         MENUITEM "Next Search Result",          IDM_SEARCH_GOTONEXTFOUND
@@ -1019,7 +1019,7 @@ BEGIN
     //CONTROL         "",IDI_GILETJAUNE,"Static",SS_OWNERDRAW,20,5,64,64
     //CONTROL         "", IDI_SAMESEXMARRIAGE,"Static",SS_OWNERDRAW,20,5,64,64
     LTEXT           NOTEPAD_PLUS_VERSION, IDC_STATIC,70,20,140,11
-    LTEXT           "bit",IDC_VERSION_BIT,150,20,140,11
+    LTEXT           "bit",IDC_VERSION_BIT,205,20,135,11
     //LTEXT           "Author :",IDC_STATIC,21,45,31,8
     //LTEXT           "FREE UYGHUR",IDC_AUTHOR_NAME,70,32,70,8
     LTEXT           "Home:",IDC_STATIC,21,52,47,8

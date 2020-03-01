@@ -177,7 +177,7 @@ BOOL RegisterServer() {
 	UnregisterServer();
 
 	// Register the CLSID entries
-	for(i = 0; ClsidEntries[i].hRootKey; ++i) {
+	for(i = 0; ClsidEntries[i].hRootKey; i++) {
 		wsprintf(szSubKey, ClsidEntries[i].szSubKey, szGUID);
 		lResult = RegCreateKeyEx(ClsidEntries[i].hRootKey, szSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, &dwDisp);
 		if (NOERROR == lResult) {
@@ -862,8 +862,8 @@ STDMETHODIMP CShellExt::Extract(LPCTSTR /*pszFile*/, UINT /*nIconIndex*/, HICON 
 	SelectObject(dcEditTemp, brush);
 	SelectObject(dcEditTemp, pen);
 	SetBkMode(dcEditTemp, TRANSPARENT);	//dont clear background when drawing text
-	::SetBkColor(dcEditTemp,  backGround);
-	::SetTextColor(dcEditTemp, textColor);
+	SetBkColor(dcEditTemp,  backGround);
+	SetTextColor(dcEditTemp, textColor);
 
 	//Calculate size of the displayed string
 	SIZE stringSize;
@@ -891,8 +891,8 @@ STDMETHODIMP CShellExt::Extract(LPCTSTR /*pszFile*/, UINT /*nIconIndex*/, HICON 
 	//premultiply alpha
 	//Fill in the mask bitmap (anything not 100% alpha is transparent)
 	int red, green, blue, alpha;
-	for(int y = 0; y < sizeLarge; ++y) {
-		for(int x = 0; x < sizeLarge; ++x) {
+	for(int y = 0; y < sizeLarge; y++) {
+		for(int x = 0; x < sizeLarge; x++) {
 			DWORD * pix = pPix+(y*sizeLarge+x);
 			red = *pix & 0xFF;
 			green = *pix >> 8 & 0xFF;
@@ -993,7 +993,7 @@ STDMETHODIMP CShellExt::InvokeNPP(HWND /*hParent*/, LPCSTR /*pszWorkingDir*/, LP
 		bytesRequired += regSize;
 	}
 
-	for (UINT i = 0; i < m_cbFiles; ++i) {
+	for (UINT i = 0; i < m_cbFiles; i++) {
 		bytesRequired += DragQueryFile((HDROP)m_stgMedium.hGlobal, i, NULL, 0);
 		bytesRequired += 3;
 	}
@@ -1033,7 +1033,7 @@ STDMETHODIMP CShellExt::InvokeNPP(HWND /*hParent*/, LPCSTR /*pszWorkingDir*/, LP
 	while(iFileIndex < m_cbFiles) {
 		memset(pszCommand, 0, bytesRequired);
 		lstrcat(pszCommand, szNotepadExecutableFilename);
-		for (UINT iBatchSizeCounter = 0; iFileIndex < m_cbFiles && iBatchSizeCounter < kiBatchSize; ++iBatchSizeCounter) {
+		for (UINT iBatchSizeCounter = 0; iFileIndex < m_cbFiles && iBatchSizeCounter < kiBatchSize; iBatchSizeCounter++) {
 			DragQueryFile((HDROP)m_stgMedium.hGlobal, iFileIndex, szFilename, MAX_PATH);
 			lstrcat(pszCommand, L" \"");
 			lstrcat(pszCommand, szFilename);

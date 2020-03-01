@@ -872,7 +872,7 @@ struct NppGUI final
 	_autoUpdateOpt;
 
 	bool _doesExistUpdater = false;
-	int _caretBlinkRate = 505;
+	int _caretBlinkRate = 600;
 	int _caretWidth = 1;
 	bool _enableMultiSelection = false;
 
@@ -927,7 +927,7 @@ struct ScintillaViewParams
 };
 
 const int NB_LIST = 20;
-const int NB_MAX_LRF_FILE = 127;
+const int NB_MAX_LRF_FILE = 99;
 const int NB_MAX_USER_LANG = 30;
 const int NB_MAX_EXTERNAL_LANG = 30;
 const int NB_MAX_IMPORTED_UDL = 50;
@@ -1138,7 +1138,7 @@ struct FindHistory final
 	bool _isSearch2ButtonsMode = false;
 
 	int _nbMaxFindHistoryFind    = NB_MAX_FINDHISTORY_FIND;
-	int _nbMaxFindHistoryReplace = NB_MAX_FINDHISTORY_REPLACE;
+	int _nbMaxFindHistoryReplace = 30;
 	int _nbMaxFindHistoryPath    = 10;
 	int _nbMaxFindHistoryFilter  = 10;
 

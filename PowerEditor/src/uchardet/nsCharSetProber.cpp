@@ -50,7 +50,7 @@ PRBool nsCharSetProber::FilterWithoutEnglishLetters(const char* aBuf, PRUint32 a
   if (!newptr)
     return PR_FALSE;
 
-  for (curPtr = prevPtr = (char*)aBuf; curPtr < aBuf+aLen; ++curPtr)
+  for (curPtr = prevPtr = (char*)aBuf; curPtr < aBuf+aLen; curPtr++)
   {
     if (*curPtr & 0x80)
     {
@@ -93,7 +93,7 @@ PRBool nsCharSetProber::FilterWithEnglishLetters(const char* aBuf, PRUint32 aLen
   if (!newptr)
     return PR_FALSE;
 
-  for (curPtr = prevPtr = (char*)aBuf; curPtr < aBuf+aLen; ++curPtr)
+  for (curPtr = prevPtr = (char*)aBuf; curPtr < aBuf+aLen; curPtr++)
   {
     if (*curPtr == '>')
       isInTag = PR_FALSE;

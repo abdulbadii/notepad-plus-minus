@@ -301,7 +301,7 @@ RECT GetCellRect(HWND hWnd,int SI, int r, int c)
 	 //get column offset
 	   //first get col 0 width
 	   offset=BGHS[SI].columnwidths[0];
-	   for(j=BGHS[SI].homecol;j<c;++j)
+	   for(j=BGHS[SI].homecol;j<c;j++)
 		   {
 			offset += BGHS[SI].columnwidths[j];
 		   }
@@ -327,7 +327,7 @@ RECT GetCellRect(HWND hWnd,int SI, int r, int c)
 
 	   //now get the top and bottom of the rect
 	   offset = BGHS[SI].headerrowheight+BGHS[SI].titleheight;
-	   for(j=BGHS[SI].homerow;j<r;++j)
+	   for(j=BGHS[SI].homerow;j<r;j++)
 		   {
 			offset += BGHS[SI].rowheight;
 		   }
@@ -376,7 +376,7 @@ void DisplayColumn(HWND hWnd,int SI,int c,int offset,HFONT hfont,HFONT hcolumnhe
 
 
     holdfont = (HFONT)SelectObject(gdc,hcolumnheadingfont);
-	::SetTextColor(gdc,BGHS[SI].textcolor);
+	SetTextColor(gdc,BGHS[SI].textcolor);
 	//display header row
 	r=0;
 
@@ -452,16 +452,16 @@ void DisplayColumn(HWND hWnd,int SI,int c,int offset,HFONT hfont,HFONT hcolumnhe
                  {
                   if(BGHS[SI].GRIDHASFOCUS)
                       {
-                       ::SetTextColor(gdc,BGHS[SI].highlighttextcolor);
+                       SetTextColor(gdc,BGHS[SI].highlighttextcolor);
                       }
                   else
                       {
-                       ::SetTextColor(gdc,RGB(0,0,0));//set black text for nonfocus grid hilight
+                       SetTextColor(gdc,RGB(0,0,0));//set black text for nonfocus grid hilight
                       }
                  }
              else
                  {
-                  ::SetTextColor(gdc,RGB(0,0,0));
+                  SetTextColor(gdc,RGB(0,0,0));
                  }
 
 		 rect.top = rect.bottom;
@@ -862,7 +862,7 @@ void ShowHscroll(HWND hWnd,int SI)
 	 totalpixels = gridrect.right;
 	 totalpixels -= BGHS[SI].columnwidths[0];
      colswithwidth = 0;
-     for(j=1;j<=BGHS[SI].cols;++j)
+     for(j=1;j<=BGHS[SI].cols;j++)
          {
           totalpixels -= BGHS[SI].columnwidths[j];
           if(BGHS[SI].columnwidths[j]>0)
@@ -1108,7 +1108,7 @@ void GetVisibleColumns(HWND hWnd,int SI)
      int j;
      int value;
      value=0;
-     for(j=1;j<=BGHS[SI].cols;++j)
+     for(j=1;j<=BGHS[SI].cols;j++)
          {
           if(BGHS[SI].columnwidths[j] > 0)
               {
@@ -1219,7 +1219,7 @@ ATOM RegisterGridClass(HINSTANCE hInstance)
 {
     //initialize BGHS structure
 
-   for(int j = 0 ; j < MAX_GRIDS ; ++j)
+   for(int j = 0 ; j < MAX_GRIDS ; j++)
    {
         BGHS[j].gridmenu = 0;
         BGHS[j].hlist1 = NULL;
@@ -1264,7 +1264,7 @@ ATOM RegisterGridClass(HINSTANCE hInstance)
 		BGHS[j].INITIALCONTENT = FALSE;
 		wcscpy_s(BGHS[j].editstring, L"");
 
-		for(int k = 0 ; k < MAX_COLS ; ++k)
+		for(int k = 0 ; k < MAX_COLS ; k++)
 		{
 			BGHS[j].columnwidths[k]=50;
 		}
@@ -1377,7 +1377,7 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			     offset = BGHS[SelfIndex].columnwidths[0];
 			     j=BGHS[SelfIndex].leftvisiblecol;
 			     k=BGHS[SelfIndex].rightvisiblecol;
-			     for(c=j;c<=k;++c)
+			     for(c=j;c<=k;c++)
 			     {
 			          DisplayColumn(hWnd,SelfIndex,c,offset,BGHS[SelfIndex].hfont,BGHS[SelfIndex].hcolumnheadingfont);
 			          offset+=BGHS[SelfIndex].columnwidths[c];
@@ -1425,7 +1425,7 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
              if(lstrlen(BGHS[SelfIndex].title) > 0)
              {
                   linecount=1;
-				  for (j = 0; j<static_cast<int>(lstrlen(BGHS[SelfIndex].title)); ++j)
+				  for (j = 0; j<static_cast<int>(lstrlen(BGHS[SelfIndex].title)); j++)
                   {
                        if (BGHS[SelfIndex].title[j] == '\n')
                        {
@@ -1732,7 +1732,7 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                                int count=1;
                                TCHAR tbuffer[255];
 							   wcscpy_s(tbuffer,(TCHAR*)lParam);
-                               for(int j=0;j<(int)lstrlen(tbuffer);++j)
+                               for(int j=0;j<(int)lstrlen(tbuffer);j++)
                                    {
                                    if(tbuffer[j]=='\n'){count++;}
                                    }
@@ -1811,7 +1811,7 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				   wcscpy_s(tbuffer,buffer);
                    k=lstrlen(tbuffer);
                    c=0;
-                   for(j=13;j<k;++j)
+                   for(j=13;j<k;j++)
                        {
                         buffer[c]=tbuffer[j];
                         c++;
@@ -2929,7 +2929,7 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				BGHS[SelfIndex].cursorcolor = RGB(255,255,255);
 				BGHS[SelfIndex].protectcolor = RGB(128,128,128);
 				BGHS[SelfIndex].unprotectcolor = RGB(255,255,255);
-				for(k=1;k<MAX_COLS;++k)
+				for(k=1;k<MAX_COLS;k++)
 					{
 					 BGHS[SelfIndex].columnwidths[k]=50;
 					}
@@ -3092,7 +3092,7 @@ int CountGrids()
 	{
 	 int j,count;
 	 count=0;
-	 for(j=0;j<MAX_GRIDS;++j)
+	 for(j=0;j<MAX_GRIDS;j++)
 		 if(BGHS[j].gridmenu != 0)
 			 {
 			  count++;
@@ -3110,7 +3110,7 @@ int AddGrid( HMENU menuid)
      int j;
      BOOL MATCH;
      MATCH=FALSE;
-     for(j=0;j<MAX_GRIDS;++j)
+     for(j=0;j<MAX_GRIDS;j++)
          {
           if(BGHS[j].gridmenu == menuid)
               {
@@ -3146,7 +3146,7 @@ int FindGrid( HMENU menuid)
      int returnvalue;
      int j;
      returnvalue = -1;
-     for(j=0;j<MAX_GRIDS;++j)
+     for(j=0;j<MAX_GRIDS;j++)
          {
           if(BGHS[j].gridmenu == menuid)
               {

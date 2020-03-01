@@ -121,7 +121,7 @@ LRESULT Notepad_plus_Window::runProc(HWND hwnd, UINT message, WPARAM wParam, LPA
 int CharacterIs(TCHAR c, const TCHAR *any)
 {
 	int i;
-	for (i = 0; any[i] != 0; ++i)
+	for (i = 0; any[i] != 0; i++)
 	{
 		if (any[i] == c) return TRUE;
 	}
@@ -755,7 +755,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 			_pEditView->getGenericSelectedText(str, strSize); // this is either the selected text, or the word under the cursor if there is no selection
 			hasSlash = FALSE;
-			for (i = 0; str[i] != 0; ++i) if (CharacterIs(str[i], L"\\/")) hasSlash = TRUE;
+			for (i = 0; str[i] != 0; i++) if (CharacterIs(str[i], L"\\/")) hasSlash = TRUE;
 
 			if (hasSlash == FALSE)
 			{

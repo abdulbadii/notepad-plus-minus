@@ -216,7 +216,7 @@ private:
   {
     unsigned int i, j;
 
-    for (i = 0, j = 0; j < len; ++i, j += 4) {
+    for (i = 0, j = 0; j < len; i++, j += 4) {
       output[j] = (unsigned char)(input[i] & 0xff);
       output[j+1] = (unsigned char)((input[i] >> 8) & 0xff);
       output[j+2] = (unsigned char)((input[i] >> 16) & 0xff);
@@ -230,7 +230,7 @@ private:
   {
     unsigned int i, j;
 
-    for (i = 0, j = 0; j < len; ++i, j += 4)
+    for (i = 0, j = 0; j < len; i++, j += 4)
       output[i] = ((UINT4)input[j]) | (((UINT4)input[j+1]) << 8) |
       (((UINT4)input[j+2]) << 16) | (((UINT4)input[j+3]) << 24);
   }
@@ -326,7 +326,7 @@ public:
   {
     int pos ;
 
-    for ( pos = 0 ; pos < 16 ; ++pos )
+    for ( pos = 0 ; pos < 16 ; pos++ )
       sprintf( digestChars+(pos*2), "%02x", digestRaw[pos] ) ;
   }
 

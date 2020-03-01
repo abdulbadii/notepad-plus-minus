@@ -115,7 +115,7 @@ struct VisibleGUIConf final
 	}
 };
 
-struct QuoteParams
+/* struct QuoteParams
 {
 	enum Speed { slow = 0, rapid, speedOfLight };
 
@@ -139,7 +139,7 @@ struct QuoteParams
 	LangType _lang = L_TEXT;
 	const wchar_t* _quote = nullptr;
 };
-
+ */
 class FileDialog;
 class Notepad_plus_Window;
 class AnsiCharPanel;
@@ -149,7 +149,6 @@ class ProjectPanel;
 class DocumentMap;
 class FunctionListPanel;
 class FileBrowser;
-struct QuoteParams;
 
 class Notepad_plus final
 {
@@ -182,7 +181,7 @@ public:
 
 	void fileOpen();
 	void fileNew();
-	bool fileReload();
+    bool fileReload();
 	bool fileClose(BufferID id = BUFFER_INVALID, int curView = -1);	//use curView to override view to close from
 	bool fileCloseAll(bool doDeleteBackup, bool isSnapshotMode = false);
 	bool fileCloseAllButCurrent();
@@ -209,8 +208,8 @@ public:
 	bool saveProjectPanelsParams();
 	bool saveFileBrowserParam();
 	void saveDockingParams();
-	void saveUserDefineLangs();
-	void saveShortcuts();
+    void saveUserDefineLangs();
+    void saveShortcuts();
 	void saveSession(const Session & session);
 	void saveCurrentSession();
 	void saveFindHistory();
@@ -229,7 +228,7 @@ public:
 	bool addCurrentMacro();
 	void macroPlayback(Macro);
 
-	void loadLastSession();
+    void loadLastSession();
 	bool loadSession(Session & session, bool isSnapshotMode = false);
 
 	void prepareBufferChangedDialog(Buffer * buffer);
@@ -240,7 +239,7 @@ public:
 	void setFindReplaceFolderFilter(const TCHAR *dir, const TCHAR *filters);
 	std::vector<generic_string> addNppComponents(const TCHAR *destDir, const TCHAR *extFilterName, const TCHAR *extFilter);
 	std::vector<generic_string> addNppPlugins(const TCHAR *extFilterName, const TCHAR *extFilter);
-	int getHtmlXmlEncoding(const TCHAR *fileName) const;
+    int getHtmlXmlEncoding(const TCHAR *fileName) const;
 
 	HACCEL getAccTable() const{
 		return _accelerator.getAccTable();
@@ -254,8 +253,8 @@ public:
 
 	void launchDocumentBackupTask();
 	// int getQuoteIndexFrom(const wchar_t* quoter) const;
-	void showQuoteFromIndex(int index) const;
-	void showQuote(const QuoteParams* quote) const;
+	// void showQuoteFromIndex(int index) const;
+	// void showQuote(const QuoteParams* quote) const;
 
 	generic_string getPluginListVerStr() const {
 		return _pluginsAdminDlg.getPluginListVerStr();
@@ -263,7 +262,7 @@ public:
 
 private:
 	Notepad_plus_Window *_pPublicInterface = nullptr;
-	Window *_pMainWindow = nullptr;
+    Window *_pMainWindow = nullptr;
 	DockingManager _dockingManager;
 	std::vector<int> _internalFuncIDs;
 
@@ -271,30 +270,30 @@ private:
 	AutoCompletion _autoCompleteSub; // each Scintilla has its own autoComplete
 
 	SmartHighlighter _smartHighlighter;
-	NativeLangSpeaker _nativeLangSpeaker;
-	DocTabView _mainDocTab;
-	DocTabView _subDocTab;
-	DocTabView* _pDocTab = nullptr;
+    NativeLangSpeaker _nativeLangSpeaker;
+    DocTabView _mainDocTab;
+    DocTabView _subDocTab;
+    DocTabView* _pDocTab = nullptr;
 	DocTabView* _pNonDocTab = nullptr;
 
-	ScintillaEditView _subEditView;
-	ScintillaEditView _mainEditView;
+    ScintillaEditView _subEditView;
+    ScintillaEditView _mainEditView;
 	ScintillaEditView _invisibleEditView; // for searches
 	ScintillaEditView _fileEditView;      // for FileManager
-	ScintillaEditView* _pEditView = nullptr;
+    ScintillaEditView* _pEditView = nullptr;
 	ScintillaEditView* _pNonEditView = nullptr;
 
-	SplitterContainer* _pMainSplitter = nullptr;
-	SplitterContainer _subSplitter;
+    SplitterContainer* _pMainSplitter = nullptr;
+    SplitterContainer _subSplitter;
 
-	ContextMenu _tabPopupMenu;
+    ContextMenu _tabPopupMenu;
 	ContextMenu _tabPopupDropMenu;
 	ContextMenu _fileSwitcherMultiFilePopupMenu;
 
 	ToolBar	_toolBar;
 	IconList _docTabIconList;
 
-	StatusBar _statusBar;
+    StatusBar _statusBar;
 	bool _toReduceTabBar = false;
 	ReBar _rebarTop;
 	ReBar _rebarBottom;
@@ -304,14 +303,14 @@ private:
 	FindInFinderDlg _findInFinderDlg;
 
 	FindIncrementDlg _incrementFindDlg;
-	AboutDlg _aboutDlg;
+    AboutDlg _aboutDlg;
 	DebugInfoDlg _debugInfoDlg;
 	RunDlg _runDlg;
 	HashFromFilesDlg _md5FromFilesDlg;
 	HashFromTextDlg _md5FromTextDlg;
 	HashFromFilesDlg _sha2FromFilesDlg;
 	HashFromTextDlg _sha2FromTextDlg;
-	GoToLineDlg _goToLineDlg;
+    GoToLineDlg _goToLineDlg;
 	ColumnEditorDlg _colEditorDlg;
 	WordStyleDlg _configStyleDlg;
 	PreferenceDlg _preference;
@@ -377,7 +376,7 @@ private:
 	ScintillaAccelerator _scintaccelerator;
 
 	PluginsManager _pluginsManager;
-	ButtonDlg _restoreButton;
+    ButtonDlg _restoreButton;
 
 	bool _isFileOpening = false;
 	bool _isAdministrator = false;
@@ -408,7 +407,7 @@ private:
 
 	//User dialog docking
 	void dockUserDlg();
-	void undockUserDlg();
+    void undockUserDlg();
 
 	//View visibility
 	void showView(int whichOne);
@@ -463,7 +462,7 @@ private:
 	void dropFiles(HDROP hdrop);
 	void checkModifiedDocument(bool bCheckOnlyCurrentBuffer);
 
-	void getMainClientRect(RECT & rc) const;
+    void getMainClientRect(RECT & rc) const;
 	void staticCheckMenuAndTB() const;
 	void dynamicCheckMenuAndTB() const;
 	void enableConvertMenuItems(EolType f) const;
@@ -476,7 +475,7 @@ private:
 	void setDisplayFormat(EolType f);
 	void setUniModeText();
 	void checkLangsMenu(int id) const ;
-	void setLanguage(LangType langType);
+    void setLanguage(LangType langType);
 	LangType menuID2LangType(int cmdID);
 
 	BOOL processIncrFindAccel(MSG *msg) const;
@@ -492,7 +491,7 @@ private:
 
 	void addHotSpot();
 
-	void bookmarkAdd(int lineno) const
+    void bookmarkAdd(int lineno) const
 	{
 		if (lineno == -1)
 			lineno = static_cast<int32_t>(_pEditView->getCurrentLineNumber());
@@ -500,7 +499,7 @@ private:
 			_pEditView->execute(SCI_MARKERADD, lineno, MARK_BOOKMARK);
 	}
 
-	void bookmarkDelete(int lineno) const
+    void bookmarkDelete(int lineno) const
 	{
 		if (lineno == -1)
 			lineno = static_cast<int32_t>(_pEditView->getCurrentLineNumber());
@@ -508,7 +507,7 @@ private:
 			_pEditView->execute(SCI_MARKERDELETE, lineno, MARK_BOOKMARK);
 	}
 
-	bool bookmarkPresent(int lineno) const
+    bool bookmarkPresent(int lineno) const
 	{
 		if (lineno == -1)
 			lineno = static_cast<int32_t>(_pEditView->getCurrentLineNumber());
@@ -516,7 +515,7 @@ private:
 		return ((state & (1 << MARK_BOOKMARK)) != 0);
 	}
 
-	void bookmarkToggle(int lineno) const
+    void bookmarkToggle(int lineno) const
 	{
 		if (lineno == -1)
 			lineno = static_cast<int32_t>(_pEditView->getCurrentLineNumber());
@@ -527,7 +526,7 @@ private:
 			bookmarkAdd(lineno);
 	}
 
-	void bookmarkNext(bool forwardScan);
+    void bookmarkNext(bool forwardScan);
 	void bookmarkClearAll() const
 	{
 		_pEditView->execute(SCI_MARKERDELETEALL, MARK_BOOKMARK);
@@ -541,10 +540,10 @@ private:
 	void inverseMarks();
 	void replaceMarkedline(int ln, const TCHAR *str);
 	generic_string getMarkedLine(int ln);
-	void findMatchingBracePos(int & braceAtCaret, int & braceOpposite);
-	bool braceMatch();
+    void findMatchingBracePos(int & braceAtCaret, int & braceOpposite);
+    bool braceMatch();
 
-	void activateNextDoc(bool direction);
+    void activateNextDoc(bool direction);
 	void activateDoc(size_t pos);
 
 	void updateStatusBar();
@@ -574,7 +573,7 @@ private:
 	int getLangFromMenuName(const TCHAR * langName);
 	generic_string getLangFromMenu(const Buffer * buf);
 
-	generic_string exts2Filters(const generic_string& exts) const;
+    generic_string exts2Filters(const generic_string& exts) const;
 	int setFileOpenSaveDlgFilters(FileDialog & fDlg, int langType = -1);
 	Style * getStyleFromName(const TCHAR *styleName);
 	bool dumpFiles(const TCHAR * outdir, const TCHAR * fileprefix = L"");	//helper func

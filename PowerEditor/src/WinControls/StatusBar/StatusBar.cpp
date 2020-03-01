@@ -101,7 +101,8 @@ bool StatusBar::setPartWidth(int whichPart, int width)
 }
 
 
-void StatusBar::destroy(){
+void StatusBar::destroy()
+{
 	::DestroyWindow(_hSelf);
 }
 
@@ -126,7 +127,7 @@ void StatusBar::adjustParts(int clientWidth)
     // copy the coordinates to the array.
     int nWidth = std::max<int>(clientWidth - 20, 0);
 
-	for (int i = static_cast<int>(_partWidthArray.size()) - 1; i >= 0; --i)
+	for (int i = static_cast<int>(_partWidthArray.size()) - 1; i >= 0; i--)
     {
 		_lpParts[i] = nWidth;
 		nWidth -= _partWidthArray[i];
@@ -141,7 +142,7 @@ bool StatusBar::setText(const TCHAR* str, int whichPart)
 {
 	if ((size_t) whichPart < _partWidthArray.size())
 	{
-		if (str) //!= nullptr
+		if (str != nullptr)
 			_lastSetText = str;
 		else
 			_lastSetText.clear();
@@ -155,7 +156,7 @@ bool StatusBar::setText(const TCHAR* str, int whichPart)
 
 bool StatusBar::setOwnerDrawText(const TCHAR* str)
 {
-	if (str) //!= nullptr
+	if (str != nullptr)
 		_lastSetText = str;
 	else
 		_lastSetText.clear();

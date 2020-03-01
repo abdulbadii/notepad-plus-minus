@@ -253,7 +253,8 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	scnN.nmhdr.idFrom = 0;
 	_notepad_plus_plus_core._pluginsManager.notify(&scnN);
 
-/* 	if (!cmdLineParams->_easterEggName.empty()){
+/* 	if (!cmdLineParams->_easterEggName.empty())
+	{
 		if (cmdLineParams->_quoteType == 0) // Easter Egg Name
 		{
 			int iQuote = _notepad_plus_plus_core.getQuoteIndexFrom(cmdLineParams->_easterEggName.c_str());

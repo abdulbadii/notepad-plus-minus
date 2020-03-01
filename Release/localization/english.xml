@@ -166,9 +166,9 @@
                     <Item id="42056" name="Remove Empty Lines (Containing Blank characters)"/>
                     <Item id="42057" name="Insert Blank Line Above Current"/>
                     <Item id="42058" name="Insert Blank Line Below Current"/>
-                    <!-- <Item id="43001" name="&amp;Find..."/> -->
+                    <Item id="43001" name="&amp;Find..."/>
                     <Item id="43002" name="Find &amp;Next"/>
-                    <Item id="43003" name="Find/&amp;Replace..."/>
+                    <Item id="43003" name="&amp;Replace..."/>
                     <Item id="43004" name="&amp;Go to..."/>
                     <Item id="43005" name="Toggle Bookmark"/>
                     <Item id="43006" name="Next Bookmark"/>
@@ -185,7 +185,7 @@
                     <Item id="43009" name="Go to Matching Brace"/>
                     <Item id="43010" name="Find &amp;Previous"/>
                     <Item id="43011" name="&amp;Incremental Search"/>
-                    <Item id="43013" name="Find/Replace in Files"/>
+                    <Item id="43013" name="Find in Files"/>
                     <Item id="43014" name="Find (Volatile) Next"/>
                     <Item id="43015" name="Find (Volatile) Previous"/>
                     <Item id="43022" name="Using 1st Style"/>

@@ -119,7 +119,7 @@ void TiXmlString ::operator = (const TiXmlString & copy)
 //bool TiXmlString::isblank () const
 //{
 //    TCHAR * lookup;
-//    for (lookup = cstring; * lookup; ++lookup)
+//    for (lookup = cstring; * lookup; lookup++)
 //        if (! isspace (* lookup))
 //            return false;
 //    return true;
@@ -244,7 +244,7 @@ unsigned TiXmlString::find (TCHAR tofind, unsigned offset) const
 
     if (offset >= length ())
         return (unsigned) notfound;
-    for (lookup = cstring + offset; * lookup; ++lookup)
+    for (lookup = cstring + offset; * lookup; lookup++)
         if (* lookup == tofind)
             return lookup - cstring;
     return (unsigned) notfound;

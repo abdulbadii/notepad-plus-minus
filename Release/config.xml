@@ -1,101 +1,118 @@
 <?xml version="1.0" encoding="Windows-1252" ?>
 <NotepadPlus>
-    <FindHistory nbMaxFindHistoryPath="10" nbMaxFindHistoryFilter="10" nbMaxFindHistoryFind="77" nbMaxFindHistoryReplace="30" matchWord="yes" matchCase="yes" wrap="yes" directionDown="yes" fifRecuisive="yes" fifInHiddenFolder="no" dlgAlwaysVisible="no" fifFilterFollowsDoc="no" fifFolderFollowsDoc="no" searchMode="2" transparencyMode="1" transparency="64" dotMatchesNewline="no" isSearch2ButtonsMode="no">
-        <Path name=""/>
-        <Path name=""/>
-        <Path name=""/>
-        <Path name=""/>
-        <Path name=""/>
-        <Path name=""/>
-        <Path name=""/>
-        <Path name=""/>
-        <Path name=""/>
-        <Path name=""/>
+    <FindHistory nbMaxFindHistoryPath="10" nbMaxFindHistoryFilter="10" nbMaxFindHistoryFind="99" nbMaxFindHistoryReplace="30" matchWord="yes" matchCase="yes" wrap="yes" directionDown="yes" fifRecuisive="yes" fifInHiddenFolder="no" dlgAlwaysVisible="no" fifFilterFollowsDoc="no" fifFolderFollowsDoc="no" searchMode="0" transparencyMode="1" transparency="64" dotMatchesNewline="no" isSearch2ButtonsMode="no">
+        <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src" />
+        <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src_t" />
+        <Path name="D:\WORK\SoftScreen" />
+        <Path name="D:\WORK\SoftScreen\setting" />
+        <Path name="D:\MSYS\usr\src\notepadpp\" />
+        <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent" />
+        <Path name="Z:\Notepp" />
+        <Path name="D:\MSYS\usr\src\Ethereal\src" />
+        <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src\" />
+        <Path name="D:\MSYS\usr\src\Ethereal\srcfail" />
+        <Filter name="*.cpp *.h" />
+        <Filter name="*.js " />
+        <Filter name="*.vc* *.sln *.xml" />
+        <Filter name="*.vc* *.sln" />
+        <Filter name="*.cpp *.h *.rc" />
         <Filter name="*.c *.cpp *.cc *.h" />
         <Filter name="*.xml" />
         <Filter name="*.cpp" />
         <Filter name="*.h" />
         <Filter name="*" />
-        <Filter name="makefile *.c *.cpp" />
-        <Filter name="*.*" />
-        <Filter name="*.c *.cpp *.cc *.h *.js *.css" />
-        <Filter name="*.js" />
-        <Filter name="*.js *.htm*" />
-        <Find name="0" />
-        <Find name="1 "/>
-        <Find name="2 "/>
-        <Find name="3 "/>
-        <Find name="4 "/>
-        <Find name="5 "/>
-        <Find name="6 "/>
-        <Find name="7 "/>
-        <Find name="8 "/>
-        <Find name="9 "/>
-        <Find name="10"/>
-        <Find name="11"/>
-        <Find name="12"/>
-        <Find name="13"/>
-        <Find name="14"/>
-        <Find name="15"/>
-        <Find name="16"/>
-        <Find name="17"/>
-        <Find name="18"/>
-        <Find name="19"/>
-        <Find name="20"/>
-        <Find name="21"/>
-        <Find name="22"/>
-        <Find name="23"/>
-        <Find name="24"/>
-        <Find name="25"/>
-        <Find name="26"/>
-        <Find name="27"/>
-        <Find name="28"/>
-        <Find name="29"/>
-        <Find name="30"/>
-        <Find name="31"/>
-        <Find name="32"/>
-        <Find name="33"/>
-        <Find name="34"/>
-        <Find name="35"/>
-        <Find name="36"/>
-        <Find name="37"/>
-        <Find name="38"/>
-        <Find name="39"/>
-        <Find name="40"/>
-        <Find name="41"/>
-        <Find name="42"/>
-        <Find name="43"/>
-        <Find name="44"/>
-        <Find name="45"/>
-        <Find name="46"/>
-        <Find name="47"/>
-        <Find name="48"/>
-        <Find name="49"/>
-        <Find name="50"/>
-        <Find name="51"/>
-        <Find name="52"/>
-        <Find name="53"/>
-        <Find name="54"/>
-        <Find name="55"/>
-        <Find name="56"/>
-        <Find name="57"/>
-        <Find name="58"/>
-        <Find name="59"/>
-        <Find name="60"/>
-        <Find name="61"/>
-        <Find name="62"/>
-        <Find name="63"/>
-        <Find name="64"/>
+        <Find name="Notepad++" />
+        <Find name="::S" />
+        <Find name='\bTEXT\((&apos;\\\S&apos;|&apos;.&apos;|&quot;(?:.*?\\\r?\n)+.*?(?&lt;![^\\]\\)&quot;)\)' />
+        <Find name="TEXT(&apos;\\&apos;)" />
+        <Find name="_findInFilesClosePos" />
+        <Find name="(\bfor\h*\([^;]*;[^;]*;\h*?)(\S+)(\+\+|--)(?:(\h*,\S+)(\+\+|--))?" />
+        <Find name="(\bfor\h*\([^;]*;[^;]*;\s*?)(\S+)(\+\+|--)" />
+        <Find name="IDCANCEL" />
+        <Find name="Find Next" />
+        <Find name="FS" />
+        <Find name="Window" />
+        <Find name='\bTEXT\(&quot;(?:(?:(.*?)(?&lt;![^\\]\\)(?:&quot;\)\h*([],+)}&amp;|&lt;])|\bTEXT\(&quot;)|(.*)(?&lt;![^\\]\\)&quot;\)\h*(;|\\$))|(.*?)(?&lt;![^\\]\\)&quot;\)(?=.*?\bTEXT\(&quot;))' />
+        <Find name='\bTEXT\(&quot;([^()]*|.*?)(?&lt;![^\\]\\)&quot;(\h*\w+)?\h*\)\h*(?=[],)};+|&amp;:&lt;/&gt;]|$)' />
+        <Find name='\bTEXT\(&quot;(?:(?!.*?\bTEXT\(&quot;)(?:(.*?)(?&lt;!\\)&quot;\)([,)}]|\h*$)|(.*)(?&lt;!\\)&quot;\)(;))|(.*?)(?&lt;!\\)&quot;\)(?=.*?\bTEXT\(&quot;))' />
+        <Find name='//\bTEXT\(&quot;(?:(?!.*?\bTEXT\(&quot;)(?:(.*?)(?&lt;!\\)&quot;\)([,)}]|\h*$)|(.*)(?&lt;!\\)&quot;\)(;))|(.*?)(?&lt;!\\)&quot;\)(?=.*?\bTEXT\(&quot;))' />
+        <Find name="frog" />
+        <Find name="class" />
+        <Find name="public" />
+        <Find name="ScintillaEditView" />
+        <Find name="SCI_\S*POS" />
+        <Find name="storage.local" />
+        <Find name="child" />
+        <Find name=':\h*&quot;' />
+        <Find name="arch:IA32" />
+        <Find name="archIA32" />
+        <Find name="std::" />
+        <Find name="std" />
+        <Find name="drop" />
+        <Find name="drp" />
+        <Find name="Close" />
+        <Find name="findInFiles" />
+        <Find name="Replace in Files" />
+        <Find name="firstVisibleLine" />
+        <Find name="Notepad" />
+        <Find name="_className" />
+        <Find name="\bNotepad\+\+(?!\h+project)" />
+        <Find name="\bNotepad\+\+" />
+        <Find name="\- Notepad\+\+" />
+        <Find name="fgColor" />
+        <Find name="STATUSBAR_DOC_TYPE" />
+        <Find name="shortName" />
+        <Find name="SC_SEARCHRESULT" />
+        <Find name="\bLine" />
+        <Find name="WordStyleDlg" />
+        <Find name="include" />
+        <Find name="dwSize" />
+        <Find name="WM_DOCK_USERDEFINE_DLG" />
+        <Find name="getNbDigits" />
+        <Find name="LRESULT" />
+        <Find name="bool" />
+        <Find name="\bTEXT\(&apos;" />
+        <Find name="TEXT\(&apos;" />
+        <Find name="\bLin" />
+        <Find name="search" />
+        <Find name="\bLine\b" />
+        <Find name="\b5\b" />
+        <Find name="\b6\b" />
+        <Find name="stylers" />
+        <Find name="999933" />
+        <Find name="wrap" />
+        <Find name="IDM_LANGSTYLE_CONFIG_DLG" />
+        <Find name="\bWin\b" />
+        <Find name="isLineActualSearchResult" />
+        <Find name="Search result" />
+        <Find name="earch" />
+        <Find name="Hit " />
+        <Find name="Style " />
+        <Find name="ScintillaKeyDefinition" />
+        <Find name="SCK_INSERT" />
+        <Find name="VK_INSERT" />
+        <Find name="(?:0x2D|45)\b" />
+        <Find name="IDM_EDIT_UPPERCASE" />
+        <Find name="INSERT" />
+        <Find name="WinMenuKeyDefinition" />
+        <Find name="winKeyDefs" />
+        <Find name="DOC_SIZE" />
+        <Find name="IDM_VIEW_ALL_CHARACTERS" />
+        <Find name="Settings" />
+        <Find name="Focus on" />
+        <Replace name="L\1" />
+        <Replace name="\1\3\2\5\4" />
+        <Replace name="\1\3\2" />
+        <Replace name='L&quot;\1\3\5&quot;\2\4' />
+        <Replace name='&quot;' />
         <Replace name='L&quot;\1&quot;\2' />
         <Replace name='L&quot;\1&quot;' />
         <Replace name='L&quot;\1' />
-        <Replace name='L&quot;\1\3\5&quot;\2\4' />
         <Replace name="END" />
         <Replace name="name" />
         <Replace name='L&quot;\1\2\3\4\5&quot;' />
         <Replace name='L&quot;\1\2\3&quot;' />
         <Replace name='L&quot;\1\2&quot;' />
-        <Replace name="\1\3\2" />
         <Replace name="\\\1\2" />
         <Replace name="\\\1" />
         <Replace name="\1\\" />
@@ -113,22 +130,57 @@
         <Replace name="\1const \2" />
         <Replace name="\1 \2new \3\5[\4];" />
         <Replace name="\1 *\2; // no Slab [\3]" />
-        <Replace name="\1 *\2" />
-        <Replace name="\1 *\2;" />
-        <Replace name="\2 = FromSlab \(\3 * sizeof \(\1\)\)" />
     </FindHistory>
-    <History nbMaxFile="70" inSubMenu="no" customLength="35">
-        <File filename="" />
-		  <File filename="" />
+    <History nbMaxFile="50" inSubMenu="no" customLength="35">
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\MISC\Common\Common.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Parameters.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\MISC\Common\verifySignedfile.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\UserDefineDialog.h" />
+        <File filename="Z:\Notepp\langs.xml" />
+        <File filename="Z:\Notepp\userDefineLangs\userDefinedLang-markdown.default.modern.xml" />
+        <File filename="D:\MSYS\usr\src\notepadpp\README.md" />
+        <File filename="D:\WORK\SoftScreen\cscss\soft.css" />
+        <File filename="D:\Download\FindReplaceDlg.rc" />
+        <File filename="D:\MSYS\usr\src\notepadpp\Release\config.xml" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\FindReplaceDlg_rc.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\AboutDlg\URLCtrl.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\TinyXml\tinyxml.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\FindReplaceDlg.rc.rc" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\uchardet\JpCntx.cpp" />
+        <File filename="Z:\Notepp\shortcuts.xml" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\rgba_icons.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\shortcut\shortcut.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\keys.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\FunctionList\functionListPanel.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\tools\NppShell\src\NppShell.cpp" />
+        <File filename="Z:\Notepp\session.xml" />
+        <File filename="D:\WORK\SoftScreen\cscss\se.css" />
+        <File filename="D:\WORK\SoftScreen\cscss\bl.css" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\menuCmdID.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\resource.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\MISC\Common\Common.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\EncodingMapper.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\localization.cpp" />
+        <File filename="Z:\Notepp\autoCompletion\css.xml" />
+        <File filename="D:\WORK\SoftScreen\setting\opt.html" />
+        <File filename="D:\WORK\SoftScreen\setting\opt.js" />
+        <File filename="D:\WORK\SoftScreen\bg.js" />
+        <File filename="D:\WORK\SoftScreen\core.js" />
+        <File filename="D:\WORK\SoftScreen\cscss\quora.css" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\lastRecentFileList.h" />
+        <File filename="D:\APP\Notepp\config.xml" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus_Window.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\NppCommands.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\MISC\md5\md5Dlgs.cpp" />
     </History>
     <GUIConfigs>
         <GUIConfig name="ToolBar" visible="no">standard</GUIConfig>
         <GUIConfig name="StatusBar">show</GUIConfig>
-        <GUIConfig name="TabBar" dragAndDrop="yes" drawTopBar="yes" drawInactiveTab="yes" reduce="yes" closeButton="yes" doubleClick2Close="no" vertical="yes" multiLine="no" hide="no" quitOnEmpty="yes" />
+        <GUIConfig name="TabBar" dragAndDrop="yes" drawTopBar="no" drawInactiveTab="yes" reduce="yes" closeButton="yes" doubleClick2Close="no" vertical="yes" multiLine="no" hide="no" quitOnEmpty="yes" />
         <GUIConfig name="ScintillaViewsSplitter">vertical</GUIConfig>
         <GUIConfig name="UserDefineDlg" position="undocked">hide</GUIConfig>
         <GUIConfig name="TabSetting" replaceBySpace="no" size="3" />
-        <GUIConfig name="AppPosition" x="-13" y="-13" width="1143" height="1088" isMaximized="no" />
+        <GUIConfig name="AppPosition" x="10" y="-9" width="1308" height="1087" isMaximized="no" />
         <GUIConfig name="noUpdate" intervalDays="15" nextUpdateDate="20171218">no</GUIConfig>
         <GUIConfig name="Auto-detection">auto</GUIConfig>
         <GUIConfig name="CheckHistoryFiles">no</GUIConfig>
@@ -157,25 +209,28 @@
         <GUIConfig name="stylerTheme" path="Z:\Notepp\stylers.xml" />
         <GUIConfig name="wordCharList" useDefault="yes" charsAdded="" />
         <GUIConfig name="delimiterSelection" leftmostDelimiter="40" rightmostDelimiter="41" delimiterSelectionOnEntireDocument="no" />
-        <GUIConfig name="multiInst" setting="0" />
+        <GUIConfig name="multiInst" setting="2" />
         <GUIConfig name="MISC" fileSwitcherWithoutExtColumn="no" backSlashIsEscapeCharacterForSql="yes" monospacedFontFindDlg="no" stopFillingFindField="no" newStyleSaveDlg="no" isFolderDroppedOpenFiles="no" docPeekOnTab="no" docPeekOnMap="no" />
         <GUIConfig name="searchEngine" searchEngineChoice="2" searchEngineCustom="" />
         <GUIConfig name="SmartHighLight" matchCase="no" wholeWordOnly="yes" useFindSettings="no" onAnotherView="no">yes</GUIConfig>
         <GUIConfig name="ScintillaPrimaryView" lineNumberMargin="show" bookMarkMargin="hide" indentGuideLine="show" folderMarkStyle="box" lineWrapMethod="indent" currentLineHilitingShow="show" scrollBeyondLastLine="yes" disableAdvancedScrolling="no" wrapSymbolShow="hide" Wrap="yes" borderEdge="no" edge="no" edgeNbColumn="80" zoom="0" zoom2="0" whiteSpaceShow="hide" eolShow="hide" borderWidth="0" smoothFont="yes" />
-        <GUIConfig name="DockingManager" leftWidth="155" rightWidth="353" topHeight="200" bottomHeight="310">
+        <GUIConfig name="DockingManager" leftWidth="155" rightWidth="479" topHeight="200" bottomHeight="310">
             <FloatingWindow cont="4" x="636" y="9" width="1244" height="456" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="0" curr="1" prev="4" isVisible="yes" />
-            <PluginDlg pluginName="Notepad++::InternalFunction" id="44084" curr="1" prev="-1" isVisible="no" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="42051" curr="1" prev="-1" isVisible="no" />
+            <PluginDlg pluginName="Notepad++::InternalFunction" id="44084" curr="1" prev="-1" isVisible="no" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="42052" curr="1" prev="-1" isVisible="no" />
+            <PluginDlg pluginName="ComparePlugin.dll" id="11" curr="1" prev="-1" isVisible="no" />
+            <PluginDlg pluginName="Notepad++::InternalFunction" id="44081" curr="0" prev="-1" isVisible="no" />
+            <PluginDlg pluginName="dummy" id="0" curr="3" prev="-1" isVisible="no" />
+            <PluginDlg pluginName="JSMinNPP.dll" id="0" curr="0" prev="-1" isVisible="no" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="44080" curr="1" prev="-1" isVisible="no" />
             <PluginDlg pluginName="3P" id="2" curr="0" prev="-1" isVisible="no" />
             <PluginDlg pluginName="3P" id="1" curr="0" prev="-1" isVisible="no" />
             <ActiveTabs cont="0" activeTab="-1" />
-            <ActiveTabs cont="1" activeTab="0" />
+            <ActiveTabs cont="1" activeTab="-1" />
             <ActiveTabs cont="2" activeTab="-1" />
             <ActiveTabs cont="3" activeTab="-1" />
-            <ActiveTabs cont="4" activeTab="-1" />
         </GUIConfig>
     </GUIConfigs>
     <ProjectPanels>
