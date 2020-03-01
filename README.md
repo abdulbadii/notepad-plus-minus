@@ -1,4 +1,4 @@
-[Contributors](https://github.com/notepad-plus-plus/notepad-plus-plus/graphs/contributors) >200,  note 1 contributor above is misaken
+[Contributors](https://github.com/notepad-plus-plus/notepad-plus-plus/graphs/contributors).  1 contributor put above is misaken
 
 What is Notepad++ ?
 ===================
@@ -39,3 +39,7 @@ Please follow [build guide](BUILD.md) to build Notepad++ from source.
 Code contribution is welcome. Here are some [rules](CONTRIBUTING.md) that your should follow to make your contribution accepted easily.
 
 
+. Find, recent files history >90
+. Larger find dialog window
+. Merged Find and Replace tab
+. Wider direct visible strings on it 
