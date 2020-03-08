@@ -702,16 +702,16 @@ void Finder::addFileHitCount(int count)
 }
 
 void Finder::addSearchHitCount(int count, bool isMatchLines){
-	const TCHAR *moreInfo = isMatchLines ? L" - Only display the matched pattern results" :L"";
+	const TCHAR *moreInfo = isMatchLines ? L" - Only the matched pattern results" :L"";
 	TCHAR text[64];
 	if(count) {
 		if(_nbFoundFiles >1)
 			wsprintf(text, L" : Found %i in %i files%s", count, _nbFoundFiles, moreInfo);
 		else
-			wsprintf(text, L" : Found %i in this file%s", count, moreInfo);
+			wsprintf(text, L" : Found %i in a file%s", count, moreInfo);
 	}
 	else
-		wsprintf(text, L" was not Found");
+		wsprintf(text, L" was not found");
 	
 	setFinderReadOnly(false);
 	_scintView.insertGenericTextFrom(_lastSearchHeaderPos, text);

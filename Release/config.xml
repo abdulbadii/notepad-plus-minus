@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252" ?>
 <NotepadPlus>
-    <FindHistory nbMaxFindHistoryPath="10" nbMaxFindHistoryFilter="10" nbMaxFindHistoryFind="99" nbMaxFindHistoryReplace="30" matchWord="yes" matchCase="yes" wrap="yes" directionDown="yes" fifRecuisive="yes" fifInHiddenFolder="no" dlgAlwaysVisible="no" fifFilterFollowsDoc="no" fifFolderFollowsDoc="no" searchMode="0" transparencyMode="1" transparency="64" dotMatchesNewline="no" isSearch2ButtonsMode="yes">
+    <FindHistory nbMaxFindHistoryPath="10" nbMaxFindHistoryFilter="10" nbMaxFindHistoryFind="99" nbMaxFindHistoryReplace="30" matchWord="no" matchCase="yes" wrap="yes" directionDown="yes" fifRecuisive="yes" fifInHiddenFolder="no" dlgAlwaysVisible="no" fifFilterFollowsDoc="no" fifFolderFollowsDoc="no" searchMode="0" transparencyMode="1" transparency="64" dotMatchesNewline="no" isSearch2ButtonsMode="yes">
+        <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src; D:\MSYS\usr\src\notepadpp\scintilla" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src_f" />
@@ -10,7 +11,6 @@
         <Path name="D:\MSYS\usr\src\notepadpp\" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent" />
         <Path name="Z:\Notepp" />
-        <Path name="D:\MSYS\usr\src\Ethereal\src" />
         <Filter name="*.cpp *.h" />
         <Filter name="*.cpp *.h *.rc" />
         <Filter name="*.cpp *.h " />
@@ -21,13 +21,13 @@
         <Filter name="*.xml" />
         <Filter name="*.cpp" />
         <Filter name="*.h" />
+        <Find name="Style" />
         <Find name="finishFilesSearch" />
         <Find name="addSearchHitCount" />
         <Find name="addSearchLine" />
         <Find name="Search" />
         <Find name="Found %" />
         <Find name="getDir2Search" />
-        <Find name="Style" />
         <Find name="FIND_DLG" />
         <Find name="first_?time" />
         <Find name="firsttime" />
@@ -190,7 +190,6 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\ScintillaEditView.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Parameters.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\menuCmdID.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master\localization.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master\FindReplaceDlg.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master\NppCommands.cpp" />

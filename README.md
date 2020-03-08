@@ -1,4 +1,4 @@
-[Contributors](https://github.com/notepad-plus-plus/notepad-plus-plus/graphs/contributors).  1 contributor put above is misaken
+[Contributors](https://github.com/notepad-plus-plus/notepad-plus-plus/graphs/contributors) are not 1 as above
 
 What is Notepad++ ?
 ===================
