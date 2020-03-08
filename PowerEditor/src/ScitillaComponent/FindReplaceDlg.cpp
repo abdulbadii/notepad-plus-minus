@@ -652,6 +652,420 @@ void Finder::gotoNextFoundResult(int direction)
 	}
 }
 
+void Finder::addSearchLine(const TCHAR *searchName)
+{
+	generic_string str = L"Search \"";
+	str += searchName;
+	str += L"\"\r\n";
+
+	setFinderReadOnly(false);
+	_scintView.addGenericText(str.c_str());
+	setFinderReadOnly(true);
+	_lastSearchHeaderPos = static_cast<int32_t>(_scintView.execute(SCI_GETCURRENTPOS) - 2);
+
+	_pMainFoundInfos->push_back(EmptyFoundInfo);
+	_pMainMarkings->push_back(EmptySearchResultMarking);
+}
+
+void Finder::addFileNameTitle(const TCHAR * fileName)
+{
+	generic_string str = L" ";
+	str += fileName;
+	str += L"\r\n";
+	// generic_string str = fileName, fn;
+	// fn = str.substr(str.find_last_of('\\'));
+	// fn += L"\r\n"; 
+	// str = str.substr(0,str.find_first_of('\\',3));
+	// str += L"\\...";
+	// str += fn;											  
+	setFinderReadOnly(false);
+	_scintView.addGenericText(str.c_str());
+	setFinderReadOnly(true);
+	_lastFileHeaderPos = static_cast<int32_t>(_scintView.execute(SCI_GETCURRENTPOS) - 2);
+
+	_pMainFoundInfos->push_back(EmptyFoundInfo);
+	_pMainMarkings->push_back(EmptySearchResultMarking);
+}
+
+void Finder::addFileHitCount(int count)
+{
+	TCHAR text[8];
+	if (count>1) {
+		wsprintf(text, L" (%i)", count);
+	  
+													
+		setFinderReadOnly(false);
+		_scintView.insertGenericTextFrom(_lastFileHeaderPos, text);
+		setFinderReadOnly(true);
+	}							  
+	++_nbFoundFiles;
+}
+
+void Finder::addSearchHitCount(int count, bool isMatchLines){
+	const TCHAR *moreInfo = isMatchLines ? L" - Only display the matched pattern results" :L"";
+	TCHAR text[64];
+	if(count) {
+		if(_nbFoundFiles >1)
+			wsprintf(text, L" : Found %i in %i files%s", count, _nbFoundFiles, moreInfo);
+		else
+			wsprintf(text, L" : Found %i in this file%s", count, moreInfo);
+	}
+	else
+		wsprintf(text, L" was not Found");
+	
+	setFinderReadOnly(false);
+	_scintView.insertGenericTextFrom(_lastSearchHeaderPos, text);
+	setFinderReadOnly(true);
+}
+
+
+void Finder::add(FoundInfo fi, SearchResultMarking mi, const TCHAR* foundline)
+{
+	_pMainFoundInfos->push_back(fi);
+
+	TCHAR lnb[16];
+	wsprintf(lnb, L"%d", fi._lineNumber);
+	generic_string str = L"Line ";
+	str += lnb;
+	str += L": ";
+	mi._start += static_cast<int32_t>(str.length());
+	mi._end += static_cast<int32_t>(str.length());
+	str += foundline;
+
+	if (str.length() >= SC_SEARCHRESULT_LINEBUFFERMAXLENGTH)
+	{
+		const TCHAR * endOfLongLine = L"...\r\n";
+		str = str.substr(0, SC_SEARCHRESULT_LINEBUFFERMAXLENGTH - lstrlen(endOfLongLine) - 1);
+		str += endOfLongLine;
+	}
+	setFinderReadOnly(false);
+	_scintView.addGenericText(str.c_str(), &mi._start, &mi._end);
+	setFinderReadOnly(true);
+	_pMainMarkings->push_back(mi);
+}
+
+void Finder::removeAll() 
+{
+	_pMainFoundInfos->clear();
+	_pMainMarkings->clear();
+	setFinderReadOnly(false);
+	_scintView.execute(SCI_CLEARALL);
+	setFinderReadOnly(true);
+}
+
+void Finder::openAll()
+{
+	size_t sz = _pMainFoundInfos->size();
+
+	for (size_t i = 0; i < sz; ++i)
+	{
+		::SendMessage(::GetParent(_hParent), WM_DOOPEN, 0, reinterpret_cast<LPARAM>(_pMainFoundInfos->at(i)._fullPath.c_str()));
+	}
+}
+
+bool Finder::isLineActualSearchResult(const generic_string & s) const{
+	return (!s.find(L"Line "));
+	// const auto firstColon = s.find(L"Line ");
+	// return (firstColon == 0);
+}
+
+generic_string & Finder::prepareStringForClipboard(generic_string & s) const
+{
+	// Input: a string like "\tLine 3: search result".
+	// Output: "search result"
+	s = stringReplace(s, L"\r", L"");
+	s = stringReplace(s, L"\n", L"");
+	const auto firstColon = s.find(L':');
+	if (firstColon == std::string::npos)
+	{
+		// Should never happen.
+		assert(false);
+		return s;
+	}
+	else
+	{
+		// Plus 2 in order to deal with ": ".
+		s = s.substr(2 + firstColon);
+		return s;
+	}
+}
+
+void Finder::copy()
+{
+	size_t fromLine, toLine;
+	{
+		const auto selStart = _scintView.execute(SCI_GETSELECTIONSTART);
+		const auto selEnd = _scintView.execute(SCI_GETSELECTIONEND);
+		const bool hasSelection = selStart != selEnd;
+		const pair<int, int> lineRange = _scintView.getSelectionLinesRange();
+		if (hasSelection && lineRange.first != lineRange.second)
+		{
+			fromLine = lineRange.first;
+			toLine = lineRange.second;
+		}
+		else
+		{
+			// Abuse fold levels to find out which lines to copy to clipboard.
+			// We get the current line and then the next line which has a smaller fold level (SCI_GETLASTCHILD).
+			// Then we loop all lines between them and determine which actually contain search results.
+			fromLine = _scintView.getCurrentLineNumber();
+			const int selectedLineFoldLevel = _scintView.execute(SCI_GETFOLDLEVEL, fromLine) & SC_FOLDLEVELNUMBERMASK;
+			toLine = _scintView.execute(SCI_GETLASTCHILD, fromLine, selectedLineFoldLevel);
+		}
+	}
+
+	std::vector<generic_string> lines;
+	for (size_t line = fromLine; line <= toLine; ++line)
+	{
+		generic_string lineStr = _scintView.getLine(line);
+		if (isLineActualSearchResult(lineStr))
+		{
+			lines.push_back(prepareStringForClipboard(lineStr));
+		}
+	}
+	const generic_string toClipboard = stringJoin(lines, L"\r\n");
+	if (!toClipboard.empty())
+	{
+		if (!str2Clipboard(toClipboard, _hSelf))
+		{
+			assert(false);
+			::MessageBox(NULL, L"Error placing text in clipboard.", L"Notepad++", MB_ICONINFORMATION);
+		}
+	}
+}
+
+void Finder::beginNewFilesSearch()
+{
+	//_scintView.execute(SCI_SETLEXER, SCLEX_NULL);
+
+	_scintView.execute(SCI_SETCURRENTPOS, 0);
+	_pMainFoundInfos = _pMainFoundInfos == &_foundInfos1 ? &_foundInfos2 : &_foundInfos1;
+	_pMainMarkings = _pMainMarkings == &_markings1 ? &_markings2 : &_markings1;
+	_nbFoundFiles = 0;
+
+	// fold all old searches (1st level only)
+	_scintView.collapse(searchHeaderLevel - SC_FOLDLEVELBASE, fold_collapse);
+}
+
+void Finder::finishFilesSearch(int count, bool isMatchLines)
+{
+	std::vector<FoundInfo>* _pOldFoundInfos;
+	std::vector<SearchResultMarking>* _pOldMarkings;
+	_pOldFoundInfos = _pMainFoundInfos == &_foundInfos1 ? &_foundInfos2 : &_foundInfos1;
+	_pOldMarkings = _pMainMarkings == &_markings1 ? &_markings2 : &_markings1;
+	
+	_pOldFoundInfos->insert(_pOldFoundInfos->begin(), _pMainFoundInfos->begin(), _pMainFoundInfos->end());
+	_pOldMarkings->insert(_pOldMarkings->begin(), _pMainMarkings->begin(), _pMainMarkings->end());
+	_pMainFoundInfos->clear();
+	_pMainMarkings->clear();
+	_pMainFoundInfos = _pOldFoundInfos;
+	_pMainMarkings = _pOldMarkings;
+	
+	_markingsStruct._length = static_cast<long>(_pMainMarkings->size());
+	if (_pMainMarkings->size() > 0)
+		_markingsStruct._markings = &((*_pMainMarkings)[0]);
+
+	addSearchHitCount(count, isMatchLines);
+	_scintView.execute(SCI_SETSEL, 0, 0);
+
+	_scintView.execute(SCI_SETLEXER, SCLEX_SEARCHRESULT);
+	_scintView.execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>("1"));
+}
+
+void Finder::setFinderStyle()
+{
+	// Set global styles for the finder
+	_scintView.performGlobalStyles();
+	
+	// Set current line background color for the finder
+	const TCHAR * lexerName = ScintillaEditView::langNames[L_SEARCHRESULT].lexerName;
+	LexerStyler *pStyler = (NppParameters::getInstance().getLStylerArray()).getLexerStylerByName(lexerName);
+	if (pStyler)
+	{
+		int i = pStyler->getStylerIndexByID(SCE_SEARCHRESULT_CURRENT_LINE);
+		if (i != -1)
+		{
+			Style & style = pStyler->getStyler(i);
+			_scintView.execute(SCI_SETCARETLINEBACK, style._bgColor);
+		}
+	}
+	_scintView.setSearchResultLexer();
+	
+	// Override foreground & background colour by default foreground & background coulour
+	StyleArray & stylers = NppParameters::getInstance().getMiscStylerArray();
+	int iStyleDefault = stylers.getStylerIndexByID(STYLE_DEFAULT);
+	if (iStyleDefault != -1)
+	{
+		Style & styleDefault = stylers.getStyler(iStyleDefault);
+		_scintView.setStyle(styleDefault);
+
+		GlobalOverride & go = NppParameters::getInstance().getGlobalOverrideStyle();
+		if (go.isEnable())
+		{
+			int iGlobalOverride = stylers.getStylerIndexByName(L"Global override");
+			if (iGlobalOverride != -1)
+			{
+				Style & styleGlobalOverride = stylers.getStyler(iGlobalOverride);
+				if (go.enableFg)
+				{
+					styleDefault._fgColor = styleGlobalOverride._fgColor;
+				}
+				if (go.enableBg)
+				{
+					styleDefault._bgColor = styleGlobalOverride._bgColor;
+				}
+			}
+		}
+
+		_scintView.execute(SCI_STYLESETFORE, SCE_SEARCHRESULT_DEFAULT, styleDefault._fgColor);
+		_scintView.execute(SCI_STYLESETBACK, SCE_SEARCHRESULT_DEFAULT, styleDefault._bgColor);
+	}
+
+	_scintView.execute(SCI_COLOURISE, 0, -1);
+
+	// finder fold style follows user preference but use box when user selects none
+	ScintillaViewParams& svp = (ScintillaViewParams&)NppParameters::getInstance().getSVP();
+	_scintView.setMakerStyle(svp._folderStyle == FOLDER_STYLE_NONE ? FOLDER_STYLE_BOX : svp._folderStyle);
+}
+
+INT_PTR CALLBACK Finder::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
+{
+	switch (message) 
+	{
+		case WM_COMMAND : 
+		{
+			switch (wParam)
+			{
+				case NPPM_INTERNAL_FINDINFINDERDLG:
+				{
+					::SendMessage(::GetParent(_hParent), NPPM_INTERNAL_FINDINFINDERDLG, reinterpret_cast<WPARAM>(this), 0);
+					return TRUE;
+				}
+
+				case NPPM_INTERNAL_REMOVEFINDER:
+				{
+					if (_canBeVolatiled)
+					{
+						::SendMessage(::GetParent(_hParent), NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_hSelf));
+						setClosed(true);
+					}
+					return TRUE;
+				}
+
+				case NPPM_INTERNAL_SCINTILLAFINFERCOLLAPSE :
+				{
+					_scintView.foldAll(fold_collapse);
+					return TRUE;
+				}
+
+				case NPPM_INTERNAL_SCINTILLAFINFERUNCOLLAPSE :
+				{
+					_scintView.foldAll(fold_uncollapse);
+					return TRUE;
+				}
+
+				case NPPM_INTERNAL_SCINTILLAFINFERCOPY :
+				{
+					copy();
+					return TRUE;
+				}
+
+				case NPPM_INTERNAL_SCINTILLAFINFERSELECTALL :
+				{
+					_scintView.execute(SCI_SELECTALL);
+					return TRUE;
+				}
+
+				case NPPM_INTERNAL_SCINTILLAFINFERCLEARALL:
+				{
+					removeAll();
+					return TRUE;
+				}
+
+				case NPPM_INTERNAL_SCINTILLAFINFEROPENALL:
+				{
+					openAll();
+					return TRUE;
+				}
+
+				default :
+				{
+					return FALSE;
+				}
+			}
+		}
+		
+		case WM_CONTEXTMENU :
+		{
+			if (HWND(wParam) == _scintView.getHSelf())
+			{
+				POINT p;
+				::GetCursorPos(&p);
+				ContextMenu scintillaContextmenu;
+				vector<MenuItemUnit> tmp;
+
+				NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+
+				generic_string findInFinder = pNativeSpeaker->getLocalizedStrFromID("finder-find-in-finder", L"Find in these found results...");
+				generic_string closeThis = pNativeSpeaker->getLocalizedStrFromID("finder-close-this", L"Close this finder");
+				generic_string collapseAll = pNativeSpeaker->getLocalizedStrFromID("finder-collapse-all", L"Collapse all");
+				generic_string uncollapseAll = pNativeSpeaker->getLocalizedStrFromID("finder-uncollapse-all", L"Uncollapse all");
+				generic_string copy = pNativeSpeaker->getLocalizedStrFromID("finder-copy", L"Copy");
+				generic_string selectAll = pNativeSpeaker->getLocalizedStrFromID("finder-select-all", L"Select all");
+				generic_string clearAll = pNativeSpeaker->getLocalizedStrFromID("finder-clear-all", L"Clear all");
+				generic_string openAll = pNativeSpeaker->getLocalizedStrFromID("finder-open-all", L"Open all");
+
+				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_FINDINFINDERDLG, findInFinder));
+				if (_canBeVolatiled)
+					tmp.push_back(MenuItemUnit(NPPM_INTERNAL_REMOVEFINDER, closeThis));
+				tmp.push_back(MenuItemUnit(0, L"Separator"));
+				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFERCOLLAPSE, collapseAll));
+				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFERUNCOLLAPSE, uncollapseAll));
+				tmp.push_back(MenuItemUnit(0, L"Separator"));
+				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFERCOPY, copy));
+				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFERSELECTALL, selectAll));
+				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFERCLEARALL, clearAll));
+				tmp.push_back(MenuItemUnit(0, L"Separator"));
+				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFEROPENALL, openAll));
+
+				scintillaContextmenu.create(_hSelf, tmp);
+
+				scintillaContextmenu.display(p);
+				return TRUE;
+			}
+			return ::DefWindowProc(_hSelf, message, wParam, lParam);
+		}
+
+		case WM_SIZE :
+		{
+			RECT rc;
+			getClientRect(rc);
+			_scintView.reSizeTo(rc);
+			break;
+		}
+
+		case WM_NOTIFY:
+		{
+			notify(reinterpret_cast<SCNotification *>(lParam));
+			return FALSE;
+		}
+		default :
+			return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
+	}
+	return FALSE;
+}
+
+void FindIncrementDlg::init(HINSTANCE hInst, HWND hPere, FindReplaceDlg *pFRDlg, bool isRTL)
+{
+	Window::init(hInst, hPere);
+	if (!pFRDlg)
+		throw std::runtime_error("FindIncrementDlg::init : Parameter pFRDlg is null");
+
+	_pFRDlg = pFRDlg;
+	create(IDD_INCREMENT_FIND, isRTL);
+	_isRTL = isRTL;
+}
+
 void FindInFinderDlg::initFromOptions()
 {
 	HWND hFindCombo = ::GetDlgItem(_hSelf, IDFINDWHAT_FIFOLDER);
@@ -1139,16 +1553,16 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					TCHAR filters[filterSize+1];
 					filters[filterSize] = '\0';
 					TCHAR directory[MAX_PATH];
+					
 					::GetDlgItemText(_hSelf, IDD_FINDINFILES_FILTERS_COMBO, filters, filterSize);
-					addText2Combo(filters, ::GetDlgItem(_hSelf, IDD_FINDINFILES_FILTERS_COMBO));
 					_options._filters = filters;
+					addText2Combo(filters, ::GetDlgItem(_hSelf, IDD_FINDINFILES_FILTERS_COMBO));
 
 					::GetDlgItemText(_hSelf, IDD_FINDINFILES_DIR_COMBO, directory, MAX_PATH);
-					addText2Combo(directory, ::GetDlgItem(_hSelf, IDD_FINDINFILES_DIR_COMBO));
 					_options._directory = directory;
+					addText2Combo(directory, ::GetDlgItem(_hSelf, IDD_FINDINFILES_DIR_COMBO));
 					
-					if ((lstrlen(directory) > 0) && (directory[lstrlen(directory)-1] != '\\'))
-						_options._directory += L"\\";
+					if (directory[0] && (directory[lstrlen(directory)-1] != '\\'))		_options._directory += L"\\";
 
 					HWND hFindCombo = ::GetDlgItem(_hSelf, IDFINDWHAT);
 						combo2ExtendedMode(IDFINDWHAT);
@@ -1171,14 +1585,14 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					TCHAR filters[filterSize];
 					TCHAR directory[MAX_PATH];
 					::GetDlgItemText(_hSelf, IDD_FINDINFILES_FILTERS_COMBO, filters, filterSize);
-					addText2Combo(filters, ::GetDlgItem(_hSelf, IDD_FINDINFILES_FILTERS_COMBO));
 					_options._filters = filters;
+					addText2Combo(filters, ::GetDlgItem(_hSelf, IDD_FINDINFILES_FILTERS_COMBO));
 
 					::GetDlgItemText(_hSelf, IDD_FINDINFILES_DIR_COMBO, directory, MAX_PATH);
-					addText2Combo(directory, ::GetDlgItem(_hSelf, IDD_FINDINFILES_DIR_COMBO));
 					_options._directory = directory;
+					addText2Combo(directory, ::GetDlgItem(_hSelf, IDD_FINDINFILES_DIR_COMBO));
 					
-					if ((lstrlen(directory) > 0) && (directory[lstrlen(directory)-1] != '\\'))
+					if (directory[0] && (directory[lstrlen(directory)-1] != '\\'))
 						_options._directory += L"\\";
 
 					generic_string msg = L"Are you sure you want to replace all occurrences in :\r";
@@ -1810,7 +2224,6 @@ bool FindReplaceDlg::processReplace(const TCHAR *txt2find, const TCHAR *txt2repl
 }
 
 
-
 int FindReplaceDlg::markAll(const TCHAR *txt2find, int styleID, bool isWholeWordSelected)
 {
 	FindOption opt;
@@ -2233,9 +2646,8 @@ void FindReplaceDlg::replaceAllInOpenedDocs()
 	::SendMessage(_hParent, WM_REPLACEALL_INOPENEDDOC, 0, 0);
 }
 
-void FindReplaceDlg::findAllIn(InWhat op)
-{
-	bool justCreated = false;
+void FindReplaceDlg::findAllIn(InWhat op){
+	// bool justCreated = false;
 	if (!_pFinder)
 	{
 		_pFinder = new Finder();
@@ -2283,17 +2695,18 @@ void FindReplaceDlg::findAllIn(InWhat op)
 		_pFinder->display();
 		::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
 		::UpdateWindow(_hParent);
-		justCreated = true;
-	}
-	_pFinder->setFinderStyle();
-
-	if (justCreated)
-	{
+		_pFinder->setFinderStyle();
+		// justCreated = true;
 		// Send the address of _MarkingsStruct to the lexer
 		char ptrword[sizeof(void*)*2+1];
 		sprintf(ptrword, "%p", &_pFinder->_markingsStruct);
 		_pFinder->_scintView.execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("@MarkingsStruct"), reinterpret_cast<LPARAM>(ptrword));
 	}
+	else	_pFinder->setFinderStyle();
+
+	// if (justCreated)
+	// {
+	// }
 	
 	::SendMessage(_pFinder->getHSelf(), WM_SIZE, 0, 0);
 
@@ -2304,15 +2717,15 @@ void FindReplaceDlg::findAllIn(InWhat op)
 		cmdid = WM_FINDINFILES;
 	else if (op == CURRENT_DOC)
 		cmdid = WM_FINDALL_INCURRENTDOC;
-
-	if (!cmdid) return;
+	else
+		return;
 
 	if (::SendMessage(_hParent, cmdid, 0, 0))
 	{
-		if (_findAllResult == 1)
+		/* if (_findAllResult == 1)
 			wsprintf(_findAllResultStr, L"1 hit");
 		else
-			wsprintf(_findAllResultStr, L"%s hits", commafyInt(_findAllResult).c_str());
+			wsprintf(_findAllResultStr, L"%s hits", commafyInt(_findAllResult).c_str()); */
 		if (_findAllResult) 
 		{
 			focusOnFinder();
@@ -2555,6 +2968,7 @@ void FindReplaceDlg::saveInMacro(size_t cmd, int cmdType)
 	if (cmdType & FR_OP_FIF)
 	{
 		::SendMessage(_hParent, WM_FRSAVE_STR, IDD_FINDINFILES_DIR_COMBO, reinterpret_cast<LPARAM>(_options._directory.c_str()));
+		
 		::SendMessage(_hParent, WM_FRSAVE_STR, IDD_FINDINFILES_FILTERS_COMBO, reinterpret_cast<LPARAM>(_options._filters.c_str()));
 		booleans |= _options._isRecursive?IDF_FINDINFILES_RECURSIVE_CHECK:0;
 		booleans |= _options._isInHiddenDir?IDF_FINDINFILES_INHIDDENDIR_CHECK:0;
@@ -2734,7 +3148,7 @@ void FindReplaceDlg::execSavedCommand(int cmd, uptr_t intValue, const generic_st
 							}
 							else
 							{ */
-								result = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-nb-replaced", L"Replace All: $INT_REPLACE$ occurrence(s) were replaced.");
+								result = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-nb-replaced", L"Replace All: replaced $INT_REPLACE$ occurrence(s).");
 								result = stringReplace(result, L"$INT_REPLACE$", std::to_wstring(nbReplaced));
 							//}
 						}
@@ -3063,429 +3477,6 @@ void FindReplaceDlg::drawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	RECT rect;
 	_statusBar.getClientRect(rect);
 	::DrawText(lpDrawItemStruct->hDC, ptStr, lstrlen(ptStr), &rect, DT_SINGLELINE | DT_VCENTER | DT_LEFT);
-}
-
-void Finder::addSearchLine(const TCHAR *searchName)
-{
-	generic_string str = L"Search \"";
-	str += searchName;
-	str += L"\"\r\n";
-
-	setFinderReadOnly(false);
-	_scintView.addGenericText(str.c_str());
-	setFinderReadOnly(true);
-	_lastSearchHeaderPos = static_cast<int32_t>(_scintView.execute(SCI_GETCURRENTPOS) - 2);
-
-	_pMainFoundInfos->push_back(EmptyFoundInfo);
-	_pMainMarkings->push_back(EmptySearchResultMarking);
-}
-
-void Finder::addFileNameTitle(const TCHAR * fileName)
-{
-	generic_string str = L" ";
-	str += fileName;
-	str += L"\r\n";
-	// generic_string str = fileName, fn;
-	// fn = str.substr(str.find_last_of('\\'));
-	// fn += L"\r\n"; 
-	// str = str.substr(0,str.find_first_of('\\',3));
-	// str += L"\\...";
-	// str += fn;											  
-	setFinderReadOnly(false);
-	_scintView.addGenericText(str.c_str());
-	setFinderReadOnly(true);
-	_lastFileHeaderPos = static_cast<int32_t>(_scintView.execute(SCI_GETCURRENTPOS) - 2);
-
-	_pMainFoundInfos->push_back(EmptyFoundInfo);
-	_pMainMarkings->push_back(EmptySearchResultMarking);
-}
-
-void Finder::addFileHitCount(int count)
-{
-	TCHAR text[8];
-	if (count>1) {
-		wsprintf(text, L" (%i)", count);
-	  
-													
-		setFinderReadOnly(false);
-		_scintView.insertGenericTextFrom(_lastFileHeaderPos, text);
-		setFinderReadOnly(true);
-	}							  
-	++_nbFoundFiles;
-}
-
-void Finder::addSearchHitCount(int count, bool isMatchLines){
-	const TCHAR *moreInfo = isMatchLines ? L" - Line Filter Mode: only display the filtered results" :L"";
-	TCHAR text[64];
-/* 	if (count == 1 && _nbFoundFiles == 1)
-		wsprintf(text, L" (1 hit in 1 file%s)", moreInfo);
-	else if (count == 1 && _nbFoundFiles != 1)
-		wsprintf(text, L" (1 hit in %i files%s)", _nbFoundFiles, moreInfo);
-	else if (count != 1 && _nbFoundFiles == 1)
-		wsprintf(text, L" (%i hits in 1 file%s)", count, moreInfo);
-	else if (count != 1 && _nbFoundFiles != 1)
-		wsprintf(text, L" (%i hits in %i files%s)", count, _nbFoundFiles, moreInfo); */
-	if(count >1) {
-		if(_nbFoundFiles >1)
-			wsprintf(text, L" : Found %i in %i files%s", count, _nbFoundFiles, moreInfo);
-		else
-			wsprintf(text, L" : Found %i in this file%s", count, moreInfo);
-	}
-	else
-		wsprintf(text, L" : Found %i%s", count, moreInfo);
-	
-	setFinderReadOnly(false);
-	_scintView.insertGenericTextFrom(_lastSearchHeaderPos, text);
-	setFinderReadOnly(true);
-}
-
-
-void Finder::add(FoundInfo fi, SearchResultMarking mi, const TCHAR* foundline)
-{
-	_pMainFoundInfos->push_back(fi);
-
-	TCHAR lnb[16];
-	wsprintf(lnb, L"%d", fi._lineNumber);
-	generic_string str = L"Line ";
-	str += lnb;
-	str += L": ";
-	mi._start += static_cast<int32_t>(str.length());
-	mi._end += static_cast<int32_t>(str.length());
-	str += foundline;
-
-	if (str.length() >= SC_SEARCHRESULT_LINEBUFFERMAXLENGTH)
-	{
-		const TCHAR * endOfLongLine = L"...\r\n";
-		str = str.substr(0, SC_SEARCHRESULT_LINEBUFFERMAXLENGTH - lstrlen(endOfLongLine) - 1);
-		str += endOfLongLine;
-	}
-	setFinderReadOnly(false);
-	_scintView.addGenericText(str.c_str(), &mi._start, &mi._end);
-	setFinderReadOnly(true);
-	_pMainMarkings->push_back(mi);
-}
-
-void Finder::removeAll() 
-{
-	_pMainFoundInfos->clear();
-	_pMainMarkings->clear();
-	setFinderReadOnly(false);
-	_scintView.execute(SCI_CLEARALL);
-	setFinderReadOnly(true);
-}
-
-void Finder::openAll()
-{
-	size_t sz = _pMainFoundInfos->size();
-
-	for (size_t i = 0; i < sz; ++i)
-	{
-		::SendMessage(::GetParent(_hParent), WM_DOOPEN, 0, reinterpret_cast<LPARAM>(_pMainFoundInfos->at(i)._fullPath.c_str()));
-	}
-}
-
-bool Finder::isLineActualSearchResult(const generic_string & s) const{
-	return (!s.find(L"Line "));
-	// const auto firstColon = s.find(L"Line ");
-	// return (firstColon == 0);
-}
-
-generic_string & Finder::prepareStringForClipboard(generic_string & s) const
-{
-	// Input: a string like "\tLine 3: search result".
-	// Output: "search result"
-	s = stringReplace(s, L"\r", L"");
-	s = stringReplace(s, L"\n", L"");
-	const auto firstColon = s.find(L':');
-	if (firstColon == std::string::npos)
-	{
-		// Should never happen.
-		assert(false);
-		return s;
-	}
-	else
-	{
-		// Plus 2 in order to deal with ": ".
-		s = s.substr(2 + firstColon);
-		return s;
-	}
-}
-
-void Finder::copy()
-{
-	size_t fromLine, toLine;
-	{
-		const auto selStart = _scintView.execute(SCI_GETSELECTIONSTART);
-		const auto selEnd = _scintView.execute(SCI_GETSELECTIONEND);
-		const bool hasSelection = selStart != selEnd;
-		const pair<int, int> lineRange = _scintView.getSelectionLinesRange();
-		if (hasSelection && lineRange.first != lineRange.second)
-		{
-			fromLine = lineRange.first;
-			toLine = lineRange.second;
-		}
-		else
-		{
-			// Abuse fold levels to find out which lines to copy to clipboard.
-			// We get the current line and then the next line which has a smaller fold level (SCI_GETLASTCHILD).
-			// Then we loop all lines between them and determine which actually contain search results.
-			fromLine = _scintView.getCurrentLineNumber();
-			const int selectedLineFoldLevel = _scintView.execute(SCI_GETFOLDLEVEL, fromLine) & SC_FOLDLEVELNUMBERMASK;
-			toLine = _scintView.execute(SCI_GETLASTCHILD, fromLine, selectedLineFoldLevel);
-		}
-	}
-
-	std::vector<generic_string> lines;
-	for (size_t line = fromLine; line <= toLine; ++line)
-	{
-		generic_string lineStr = _scintView.getLine(line);
-		if (isLineActualSearchResult(lineStr))
-		{
-			lines.push_back(prepareStringForClipboard(lineStr));
-		}
-	}
-	const generic_string toClipboard = stringJoin(lines, L"\r\n");
-	if (!toClipboard.empty())
-	{
-		if (!str2Clipboard(toClipboard, _hSelf))
-		{
-			assert(false);
-			::MessageBox(NULL, L"Error placing text in clipboard.", L"Notepad++", MB_ICONINFORMATION);
-		}
-	}
-}
-
-void Finder::beginNewFilesSearch()
-{
-	//_scintView.execute(SCI_SETLEXER, SCLEX_NULL);
-
-	_scintView.execute(SCI_SETCURRENTPOS, 0);
-	_pMainFoundInfos = _pMainFoundInfos == &_foundInfos1 ? &_foundInfos2 : &_foundInfos1;
-	_pMainMarkings = _pMainMarkings == &_markings1 ? &_markings2 : &_markings1;
-	_nbFoundFiles = 0;
-
-	// fold all old searches (1st level only)
-	_scintView.collapse(searchHeaderLevel - SC_FOLDLEVELBASE, fold_collapse);
-}
-
-void Finder::finishFilesSearch(int count, bool isMatchLines)
-{
-	std::vector<FoundInfo>* _pOldFoundInfos;
-	std::vector<SearchResultMarking>* _pOldMarkings;
-	_pOldFoundInfos = _pMainFoundInfos == &_foundInfos1 ? &_foundInfos2 : &_foundInfos1;
-	_pOldMarkings = _pMainMarkings == &_markings1 ? &_markings2 : &_markings1;
-	
-	_pOldFoundInfos->insert(_pOldFoundInfos->begin(), _pMainFoundInfos->begin(), _pMainFoundInfos->end());
-	_pOldMarkings->insert(_pOldMarkings->begin(), _pMainMarkings->begin(), _pMainMarkings->end());
-	_pMainFoundInfos->clear();
-	_pMainMarkings->clear();
-	_pMainFoundInfos = _pOldFoundInfos;
-	_pMainMarkings = _pOldMarkings;
-	
-	_markingsStruct._length = static_cast<long>(_pMainMarkings->size());
-	if (_pMainMarkings->size() > 0)
-		_markingsStruct._markings = &((*_pMainMarkings)[0]);
-
-	addSearchHitCount(count, isMatchLines);
-	_scintView.execute(SCI_SETSEL, 0, 0);
-
-	_scintView.execute(SCI_SETLEXER, SCLEX_SEARCHRESULT);
-	_scintView.execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>("1"));
-}
-
-
-void Finder::setFinderStyle()
-{
-	// Set global styles for the finder
-	_scintView.performGlobalStyles();
-	
-	// Set current line background color for the finder
-	const TCHAR * lexerName = ScintillaEditView::langNames[L_SEARCHRESULT].lexerName;
-	LexerStyler *pStyler = (NppParameters::getInstance().getLStylerArray()).getLexerStylerByName(lexerName);
-	if (pStyler)
-	{
-		int i = pStyler->getStylerIndexByID(SCE_SEARCHRESULT_CURRENT_LINE);
-		if (i != -1)
-		{
-			Style & style = pStyler->getStyler(i);
-			_scintView.execute(SCI_SETCARETLINEBACK, style._bgColor);
-		}
-	}
-	_scintView.setSearchResultLexer();
-	
-	// Override foreground & background colour by default foreground & background coulour
-	StyleArray & stylers = NppParameters::getInstance().getMiscStylerArray();
-	int iStyleDefault = stylers.getStylerIndexByID(STYLE_DEFAULT);
-	if (iStyleDefault != -1)
-	{
-		Style & styleDefault = stylers.getStyler(iStyleDefault);
-		_scintView.setStyle(styleDefault);
-
-		GlobalOverride & go = NppParameters::getInstance().getGlobalOverrideStyle();
-		if (go.isEnable())
-		{
-			int iGlobalOverride = stylers.getStylerIndexByName(L"Global override");
-			if (iGlobalOverride != -1)
-			{
-				Style & styleGlobalOverride = stylers.getStyler(iGlobalOverride);
-				if (go.enableFg)
-				{
-					styleDefault._fgColor = styleGlobalOverride._fgColor;
-				}
-				if (go.enableBg)
-				{
-					styleDefault._bgColor = styleGlobalOverride._bgColor;
-				}
-			}
-		}
-
-		_scintView.execute(SCI_STYLESETFORE, SCE_SEARCHRESULT_DEFAULT, styleDefault._fgColor);
-		_scintView.execute(SCI_STYLESETBACK, SCE_SEARCHRESULT_DEFAULT, styleDefault._bgColor);
-	}
-
-	_scintView.execute(SCI_COLOURISE, 0, -1);
-
-	// finder fold style follows user preference but use box when user selects none
-	ScintillaViewParams& svp = (ScintillaViewParams&)NppParameters::getInstance().getSVP();
-	_scintView.setMakerStyle(svp._folderStyle == FOLDER_STYLE_NONE ? FOLDER_STYLE_BOX : svp._folderStyle);
-}
-
-INT_PTR CALLBACK Finder::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
-{
-	switch (message) 
-	{
-		case WM_COMMAND : 
-		{
-			switch (wParam)
-			{
-				case NPPM_INTERNAL_FINDINFINDERDLG:
-				{
-					::SendMessage(::GetParent(_hParent), NPPM_INTERNAL_FINDINFINDERDLG, reinterpret_cast<WPARAM>(this), 0);
-					return TRUE;
-				}
-
-				case NPPM_INTERNAL_REMOVEFINDER:
-				{
-					if (_canBeVolatiled)
-					{
-						::SendMessage(::GetParent(_hParent), NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_hSelf));
-						setClosed(true);
-					}
-					return TRUE;
-				}
-
-				case NPPM_INTERNAL_SCINTILLAFINFERCOLLAPSE :
-				{
-					_scintView.foldAll(fold_collapse);
-					return TRUE;
-				}
-
-				case NPPM_INTERNAL_SCINTILLAFINFERUNCOLLAPSE :
-				{
-					_scintView.foldAll(fold_uncollapse);
-					return TRUE;
-				}
-
-				case NPPM_INTERNAL_SCINTILLAFINFERCOPY :
-				{
-					copy();
-					return TRUE;
-				}
-
-				case NPPM_INTERNAL_SCINTILLAFINFERSELECTALL :
-				{
-					_scintView.execute(SCI_SELECTALL);
-					return TRUE;
-				}
-
-				case NPPM_INTERNAL_SCINTILLAFINFERCLEARALL:
-				{
-					removeAll();
-					return TRUE;
-				}
-
-				case NPPM_INTERNAL_SCINTILLAFINFEROPENALL:
-				{
-					openAll();
-					return TRUE;
-				}
-
-				default :
-				{
-					return FALSE;
-				}
-			}
-		}
-		
-		case WM_CONTEXTMENU :
-		{
-			if (HWND(wParam) == _scintView.getHSelf())
-			{
-				POINT p;
-				::GetCursorPos(&p);
-				ContextMenu scintillaContextmenu;
-				vector<MenuItemUnit> tmp;
-
-				NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
-
-				generic_string findInFinder = pNativeSpeaker->getLocalizedStrFromID("finder-find-in-finder", L"Find in these found results...");
-				generic_string closeThis = pNativeSpeaker->getLocalizedStrFromID("finder-close-this", L"Close this finder");
-				generic_string collapseAll = pNativeSpeaker->getLocalizedStrFromID("finder-collapse-all", L"Collapse all");
-				generic_string uncollapseAll = pNativeSpeaker->getLocalizedStrFromID("finder-uncollapse-all", L"Uncollapse all");
-				generic_string copy = pNativeSpeaker->getLocalizedStrFromID("finder-copy", L"Copy");
-				generic_string selectAll = pNativeSpeaker->getLocalizedStrFromID("finder-select-all", L"Select all");
-				generic_string clearAll = pNativeSpeaker->getLocalizedStrFromID("finder-clear-all", L"Clear all");
-				generic_string openAll = pNativeSpeaker->getLocalizedStrFromID("finder-open-all", L"Open all");
-
-				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_FINDINFINDERDLG, findInFinder));
-				if (_canBeVolatiled)
-					tmp.push_back(MenuItemUnit(NPPM_INTERNAL_REMOVEFINDER, closeThis));
-				tmp.push_back(MenuItemUnit(0, L"Separator"));
-				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFERCOLLAPSE, collapseAll));
-				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFERUNCOLLAPSE, uncollapseAll));
-				tmp.push_back(MenuItemUnit(0, L"Separator"));
-				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFERCOPY, copy));
-				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFERSELECTALL, selectAll));
-				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFERCLEARALL, clearAll));
-				tmp.push_back(MenuItemUnit(0, L"Separator"));
-				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFEROPENALL, openAll));
-
-				scintillaContextmenu.create(_hSelf, tmp);
-
-				scintillaContextmenu.display(p);
-				return TRUE;
-			}
-			return ::DefWindowProc(_hSelf, message, wParam, lParam);
-		}
-
-		case WM_SIZE :
-		{
-			RECT rc;
-			getClientRect(rc);
-			_scintView.reSizeTo(rc);
-			break;
-		}
-
-		case WM_NOTIFY:
-		{
-			notify(reinterpret_cast<SCNotification *>(lParam));
-			return FALSE;
-		}
-		default :
-			return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
-	}
-	return FALSE;
-}
-
-void FindIncrementDlg::init(HINSTANCE hInst, HWND hPere, FindReplaceDlg *pFRDlg, bool isRTL)
-{
-	Window::init(hInst, hPere);
-	if (!pFRDlg)
-		throw std::runtime_error("FindIncrementDlg::init : Parameter pFRDlg is null");
-
-	_pFRDlg = pFRDlg;
-	create(IDD_INCREMENT_FIND, isRTL);
-	_isRTL = isRTL;
 }
 
 void FindIncrementDlg::destroy()

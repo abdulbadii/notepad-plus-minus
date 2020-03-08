@@ -249,8 +249,8 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			const int strSize = FINDREPLACE_MAXLENGTH;
 			TCHAR str[strSize];
 
-			bool isFirstTime = not _findReplaceDlg.isCreated();
-			// _findReplaceDlg.doDialog(FIND_DLG, _nativeLangSpeaker.isRTL());
+			//bool isFirstTime = ;
+			_findReplaceDlg.doDialog(REPLACE_DLG, _nativeLangSpeaker.isRTL());
 			
 			const NppGUI & nppGui = nppParam.getNppGUI();
 			if (!nppGui._stopFillingFindField)
@@ -258,8 +258,8 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				_pEditView->getGenericSelectedText(str, strSize);
 				_findReplaceDlg.setSearchText(str);
 			}
-
-			if (isFirstTime)
+		//isFirstTime
+			if (not _findReplaceDlg.isCreated())
 				_nativeLangSpeaker.changeFindReplaceDlgLang(_findReplaceDlg);
 			_findReplaceDlg.launchFindInFilesDlg();
 			setFindReplaceFolderFilter(reinterpret_cast<const TCHAR*>(wParam), reinterpret_cast<const TCHAR*>(lParam));

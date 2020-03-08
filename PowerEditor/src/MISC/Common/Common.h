@@ -32,7 +32,7 @@
 #include <iso646.h>
 #include <cstdint>
 
-
+#define WHITESPACE L" \n\r\t\f\v"
 const bool dirUp = true;
 const bool dirDown = false;
 

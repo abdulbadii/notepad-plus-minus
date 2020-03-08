@@ -2678,43 +2678,33 @@ void ScintillaEditView::setLineIndent(int line, int indent) const
 	execute(SCI_SETSEL, crange.cpMin, crange.cpMax);
 }
 
-void ScintillaEditView::updateLineNumberWidth()
-{
-	if (_lineNumbersShown)
-	{
-		auto linesVisible = execute(SCI_LINESONSCREEN);
-		if (linesVisible)
-		{
+void ScintillaEditView::updateLineNumberWidth(){
+	if (_lineNumbersShown)	{
+		if (auto linesVisible = execute(SCI_LINESONSCREEN))	{
 			auto firstVisibleLineVis = execute(SCI_GETFIRSTVISIBLELINE);
 			auto lastVisibleLineVis = linesVisible + firstVisibleLineVis + 1;
 
-			if (execute(SCI_GETWRAPMODE) != SC_WRAP_NONE)
+/* 			if (execute(SCI_GETWRAPMODE) != SC_WRAP_NONE)
 			{
 				auto numLinesDoc = execute(SCI_GETLINECOUNT);
 				auto prevLineDoc = execute(SCI_DOCLINEFROMVISIBLE, firstVisibleLineVis);
-				for (auto i = firstVisibleLineVis + 1; i <= lastVisibleLineVis; ++i)
+				for (auto i = firstVisibleLineVis; i <= lastVisibleLineVis; ++i)// + 1
 				{
 					auto lineDoc = execute(SCI_DOCLINEFROMVISIBLE, i);
-					if (lineDoc == numLinesDoc)
-						break;
+					if (lineDoc == numLinesDoc)		break;
 					if (lineDoc == prevLineDoc)
 						lastVisibleLineVis++;
 					prevLineDoc = lineDoc;
 				}
-			}
+			} */
 
 			auto lastVisibleLineDoc = execute(SCI_DOCLINEFROMVISIBLE, lastVisibleLineVis);
-			int i = 0;
+			int i = 1;
+			while (lastVisibleLineDoc /= 10)		++i;
 
-			while (lastVisibleLineDoc)
-			{
-				lastVisibleLineDoc /= 10;
-				++i;
-			}
-
-			i = max(i, 3);
-			auto pixelWidth = 8 + i * execute(SCI_TEXTWIDTH, STYLE_LINENUMBER, reinterpret_cast<LPARAM>("8"));
-			execute(SCI_SETMARGINWIDTHN, _SC_MARGE_LINENUMBER, pixelWidth);
+			// i = max(i, 3);
+			// auto pixelWidth = ;
+			execute(SCI_SETMARGINWIDTHN, _SC_MARGE_LINENUMBER,  5 + i * execute(SCI_TEXTWIDTH, STYLE_LINENUMBER, reinterpret_cast<LPARAM>("7")));//pixelWidth
 		}
 	}
 }

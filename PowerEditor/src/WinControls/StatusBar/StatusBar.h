@@ -46,11 +46,11 @@ public:
 	bool setPartWidth(int whichPart, int width);
 
 	virtual void destroy() override;
-    virtual void reSizeTo(const RECT& rc);
+	virtual void reSizeTo(const RECT& rc);
 
 	int getHeight() const;
 
-    bool setText(const TCHAR* str, int whichPart);
+	bool setText(const TCHAR* str, int whichPart);
 	bool setOwnerDrawText(const TCHAR* str);
 	void adjustParts(int clientWidth);
 
@@ -59,7 +59,7 @@ private:
 	virtual void init(HINSTANCE hInst, HWND hPere) override;
 
 private:
-    std::vector<int> _partWidthArray;
+	std::vector<int> _partWidthArray;
 	int *_lpParts = nullptr;
 	generic_string _lastSetText;
 };

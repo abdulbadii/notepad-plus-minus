@@ -31,7 +31,7 @@
 
 const TCHAR COMMAND_ARG_HELP[] = L"Usage :\r\
 \r\
-notepad++ [--help] [-multiInst] [-noPlugin] [-lLanguage] [-LlangCode] [-nLineNumber] [-cColumnNumber] [-pPosition] [-xLeftPos] [-yTopPos] [-nosession] [-notabbar] [-ro] [-systemtray] [-loadingTime] [-alwaysOnTop] [-openSession] [-r] [-qnEasterEggName | -qtText | -qfCntentFileName] [-qSpeed1|2|3] [-quickPrint] [-openFoldersAsWorkspace] [filePath]\r\
+notepad++ [--help] [-multiInst] [-noPlugin] [-lLanguage] [-LlangCode] [-nLineNumber] [-cColumnNumber] [-pPosition] [-xLeftPos] [-yTopPos] [-nosession] [-notabbar] [-ro] [-systemtray] [-loadingTime] [-alwaysOnTop] [-openSession] [-r] [-qtText | -qfCntentFileName] [-quickPrint] [-openFoldersAsWorkspace] [filePath]\r\
 \r\
 --help : This help message\r\
 -multiInst : Launch another Notepad++ instance\r\
@@ -52,13 +52,13 @@ notepad++ [--help] [-multiInst] [-noPlugin] [-lLanguage] [-LlangCode] [-nLineNum
 -openSession : Open a session. filePath must be a session file\r\
 -r : Open files recursively. This argument will be ignored\r\
      if filePath contain no wildcard character\r\
--qt : Launch ghost typing to display a text via the given text\r\
--qf : Launch ghost typing to display a file content via the file path\r\
--qSpeed : Ghost typing speed. Value from 1 to 3 for slow, fast and fastest\r\
 -quickPrint : Print the file given as argument then quit Notepad++\r\
 -openFoldersAsWorkspace: open filePath of folder(s) as workspace\r\
 filePath : file or folder name to open (absolute or relative path name)\r\
 ";
+// -qt : Launch ghost typing to display a text via the given text\r\
+// -qf : Launch ghost typing to display a file content via the file path\r\
+// -qSpeed : Ghost typing speed. Value from 1 to 3 for slow, fast and fastest\r\
 // -qn : Launch ghost typing to display easter egg via its name\r\
 
 

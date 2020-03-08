@@ -142,7 +142,7 @@ bool StatusBar::setText(const TCHAR* str, int whichPart)
 {
 	if ((size_t) whichPart < _partWidthArray.size())
 	{
-		if (str != nullptr)
+		if (str)// != nullptr)
 			_lastSetText = str;
 		else
 			_lastSetText.clear();

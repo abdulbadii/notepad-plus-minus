@@ -970,7 +970,7 @@ void Notepad_plus::command(int id)
 		}
 		break;
 
-		// case IDM_SEARCH_FIND :
+		case IDM_SEARCH_FIND :
 		case IDM_SEARCH_REPLACE :
 		case IDM_SEARCH_MARK :
 		{
@@ -2960,9 +2960,10 @@ void Notepad_plus::command(int id)
 
         case IDM_LANGSTYLE_CONFIG_DLG :
 		{
-			bool isFirstTime = !_configStyleDlg.isCreated();
+			//bool isFirstTime = ;
 			_configStyleDlg.doDialog(_nativeLangSpeaker.isRTL());
-			if (isFirstTime)
+			//isFirstTime
+			if (!_configStyleDlg.isCreated())
                 _nativeLangSpeaker.changeConfigLang(_configStyleDlg.getHSelf());
 			break;
 		}
@@ -3227,7 +3228,7 @@ void Notepad_plus::command(int id)
 			int margin;
 			if (id == IDM_VIEW_LINENUMBER)
 				margin = ScintillaEditView::_SC_MARGE_LINENUMBER;
-			else //if (id == IDM_VIEW_SYMBOLMARGIN)
+			else// if (id == IDM_VIEW_SYMBOLMARGIN)
 				margin = ScintillaEditView::_SC_MARGE_SYBOLE;
 
 			if (_mainEditView.hasMarginShowed(margin))

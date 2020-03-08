@@ -366,11 +366,11 @@ LRESULT Notepad_plus::init(HWND hwnd)
     //--Status Bar Section--//
 	bool willBeShown = nppGUI._statusBarShow;
     _statusBar.init(_pPublicInterface->getHinst(), hwnd, 6);
-	_statusBar.setPartWidth(STATUSBAR_DOC_SIZE, nppParam._dpiManager.scaleX(200));
-	_statusBar.setPartWidth(STATUSBAR_CUR_POS, nppParam._dpiManager.scaleX(260));
-	_statusBar.setPartWidth(STATUSBAR_EOF_FORMAT, nppParam._dpiManager.scaleX(110));
-	_statusBar.setPartWidth(STATUSBAR_UNICODE_TYPE, nppParam._dpiManager.scaleX(120));
-	_statusBar.setPartWidth(STATUSBAR_TYPING_MODE, nppParam._dpiManager.scaleX(30));
+	_statusBar.setPartWidth(STATUSBAR_DOC_SIZE, nppParam._dpiManager.scaleX(290));
+	_statusBar.setPartWidth(STATUSBAR_CUR_POS, nppParam._dpiManager.scaleX(273));
+	_statusBar.setPartWidth(STATUSBAR_EOF_FORMAT, nppParam._dpiManager.scaleX(67));
+	_statusBar.setPartWidth(STATUSBAR_UNICODE_TYPE, nppParam._dpiManager.scaleX(91));
+	_statusBar.setPartWidth(STATUSBAR_TYPING_MODE, nppParam._dpiManager.scaleX(27));
     _statusBar.display(willBeShown);
 
     _pMainWindow = &_mainDocTab;
@@ -1681,94 +1681,115 @@ bool Notepad_plus::findInFinderFiles(FindersInfo *findInFolderInfo)
 	return true;
 }
 
-bool Notepad_plus::findInFiles()
-{
-	const TCHAR *dir2Search = _findReplaceDlg.getDir2Search();
-
-	if (not dir2Search[0] || not ::PathFileExists(dir2Search))
-	{
-		return false;
-	}
+bool Notepad_plus::findInFiles()	{
+	const TCHAR *dir2Search;
+	generic_string dir, tail = _findReplaceDlg.getDir2Search();
+	if (not tail[0])	return false;
+	bool	hastail=1, success=0;
+	size_t st, tailOf;
 
 	bool isRecursive = _findReplaceDlg.isRecursive();
 	bool isInHiddenDir = _findReplaceDlg.isInHiddenDir();
-	int nbTotal = 0;
 	ScintillaEditView *pOldView = _pEditView;
 	_pEditView = &_invisibleEditView;
 	Document oldDoc = _invisibleEditView.execute(SCI_GETDOCPOINTER);
+	while (hastail)	{
+		tailOf = tail.find_first_of(L';');
+		if (tailOf==string::npos){
+			hastail=0;
+			dir=tail;
+		}
+		else{
+			dir=tail.substr(0,tailOf);
+			tail= tail.substr(tailOf+1);
+		}
+		st = dir.find_first_not_of(L' ');
+		if (st==string::npos)
+		{
+			if (hastail)	continue;
+			return false;
+		}
+		if(st)	dir=dir.substr(st);
+		
+		if (dir[dir.find_last_not_of(L' ')] != L'\\')
+			dir += L'\\';
+		if (!::PathFileExists(dir2Search = dir.c_str()))
+		{
+			if (hastail)	continue;
+			return false;
+		}
 
-	vector<generic_string> patterns2Match;
-	_findReplaceDlg.getPatterns(patterns2Match);
-	if (patterns2Match.size() == 0)
-	{
-		_findReplaceDlg.setFindInFilesDirFilter(NULL, L"*.*");
+		int nbTotal = 0;
+		vector<generic_string> patterns2Match;
 		_findReplaceDlg.getPatterns(patterns2Match);
+		if (patterns2Match.size() == 0)
+		{
+			_findReplaceDlg.setFindInFilesDirFilter(NULL, L"*.*");
+			_findReplaceDlg.getPatterns(patterns2Match);
+		}
+
+		vector<generic_string> fileNames;
+		getMatchedFileNames(dir2Search, patterns2Match, fileNames, isRecursive, isInHiddenDir);
+
+		_findReplaceDlg.beginNewFilesSearch();
+
+		Progress progress(_pPublicInterface->getHinst());
+
+		size_t filesCount = fileNames.size();
+		size_t filesPerPercent = 7;
+
+		if (filesCount > 1)
+		{
+			if (filesCount >= 200)
+				filesPerPercent = filesCount / 35;
+			progress.open(_findReplaceDlg.getHSelf(), L"Find In Files progress...");
+		}
+
+		for (size_t i = 0, updateOnCount = filesPerPercent; i < filesCount; ++i)
+		{
+			if (progress.isCancelled()) break;
+
+			bool closeBuf = false;
+			BufferID id = MainFileManager.getBufferFromName(fileNames.at(i).c_str());
+			if (id == BUFFER_INVALID)
+			{
+				id = MainFileManager.loadFile(fileNames.at(i).c_str());
+				closeBuf = true;
+			}
+
+			if (id != BUFFER_INVALID)
+			{
+				Buffer * pBuf = MainFileManager.getBufferByID(id);
+				_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, pBuf->getDocument());
+				auto cp = _invisibleEditView.execute(SCI_GETCODEPAGE);
+				_invisibleEditView.execute(SCI_SETCODEPAGE, pBuf->getUnicodeMode() == uni8Bit ? cp : SC_CP_UTF8);
+				FindersInfo findersInfo;
+				findersInfo._pFileName = fileNames.at(i).c_str();
+				nbTotal += _findReplaceDlg.processAll(ProcessFindAll, FindReplaceDlg::_env, true, &findersInfo);
+				if (closeBuf)
+					MainFileManager.closeBuffer(id, _pEditView);
+			}
+			if (i == updateOnCount)
+			{
+				updateOnCount += filesPerPercent;
+				progress.setPercent(int32_t((i * 100) / filesCount), fileNames.at(i).c_str());
+			}
+			else
+			{
+				progress.setInfo(fileNames.at(i).c_str());
+			}
+		}
+		progress.close();
+		_findReplaceDlg.finishFilesSearch(nbTotal);
+
+		_findReplaceDlg.putFindResult(nbTotal);
+		success |= bool(nbTotal);
 	}
-
-	vector<generic_string> fileNames;
-	getMatchedFileNames(dir2Search, patterns2Match, fileNames, isRecursive, isInHiddenDir);
-
-	_findReplaceDlg.beginNewFilesSearch();
-
-	Progress progress(_pPublicInterface->getHinst());
-
-	size_t filesCount = fileNames.size();
-	size_t filesPerPercent = 1;
-
-	if (filesCount > 1)
-	{
-		if (filesCount >= 200)
-			filesPerPercent = filesCount / 100;
-		progress.open(_findReplaceDlg.getHSelf(), L"Find In Files progress...");
-	}
-
-	for (size_t i = 0, updateOnCount = filesPerPercent; i < filesCount; ++i)
-	{
-		if (progress.isCancelled()) break;
-
-		bool closeBuf = false;
-		BufferID id = MainFileManager.getBufferFromName(fileNames.at(i).c_str());
-		if (id == BUFFER_INVALID)
-		{
-			id = MainFileManager.loadFile(fileNames.at(i).c_str());
-			closeBuf = true;
-		}
-
-		if (id != BUFFER_INVALID)
-		{
-			Buffer * pBuf = MainFileManager.getBufferByID(id);
-			_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, pBuf->getDocument());
-			auto cp = _invisibleEditView.execute(SCI_GETCODEPAGE);
-			_invisibleEditView.execute(SCI_SETCODEPAGE, pBuf->getUnicodeMode() == uni8Bit ? cp : SC_CP_UTF8);
-			FindersInfo findersInfo;
-			findersInfo._pFileName = fileNames.at(i).c_str();
-			nbTotal += _findReplaceDlg.processAll(ProcessFindAll, FindReplaceDlg::_env, true, &findersInfo);
-			if (closeBuf)
-				MainFileManager.closeBuffer(id, _pEditView);
-		}
-		if (i == updateOnCount)
-		{
-			updateOnCount += filesPerPercent;
-			progress.setPercent(int32_t((i * 100) / filesCount), fileNames.at(i).c_str());
-		}
-		else
-		{
-			progress.setInfo(fileNames.at(i).c_str());
-		}
-	}
-
-	progress.close();
-
-	_findReplaceDlg.finishFilesSearch(nbTotal);
-
 	_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, oldDoc);
 	_pEditView = pOldView;
 
-	_findReplaceDlg.putFindResult(nbTotal);
-
-	FindHistory & findHistory = (NppParameters::getInstance()).getFindHistory();
-	if (nbTotal && !findHistory._isDlgAlwaysVisible)
-		_findReplaceDlg.display(false);
+	FindHistory& findHistory = (NppParameters::getInstance()).getFindHistory();	
+	if (success && !findHistory._isDlgAlwaysVisible)		_findReplaceDlg.display(false);
 	return true;
 }
 
@@ -2150,10 +2171,10 @@ generic_string Notepad_plus::getLangDesc(LangType langType, bool getName)
 	if ((langType >= L_EXTERNAL) && (langType < NppParameters::getInstance().L_END))
 	{
 		ExternalLangContainer & elc = NppParameters::getInstance().getELCFromIndex(langType - L_EXTERNAL);
-		if (getName)
-			return generic_string(elc._name);
-		else
-			return generic_string(elc._desc);
+		// if ()
+			return generic_string(getName? elc._name: elc._desc);
+		// else
+			// return generic_string();
 	}
 
 	if (langType > L_EXTERNAL)
@@ -2376,7 +2397,7 @@ bool Notepad_plus::braceMatch()
 
 void Notepad_plus::setLangStatus(LangType langType)
 {
-	_statusBar.setText(getLangDesc(langType).c_str(), STATUSBAR_DOC_TYPE);
+	_statusBar.setText(getLangDesc(langType,true).c_str(), STATUSBAR_DOC_TYPE);
 }
 
 
@@ -2385,9 +2406,9 @@ void Notepad_plus::setDisplayFormat(EolType format)
 	const TCHAR* str = L"??";
 	switch (format)
 	{
-		case EolType::windows: str = L"Windows (CR LF)"; break;
-		case EolType::macos:   str = L"Macintosh (CR)"; break;
-		case EolType::unix:    str = L"Unix (LF)"; break;
+		case EolType::windows: str = L"\\r\\n W"; break;
+		case EolType::macos:   str = L"\\r  M"; break;
+		case EolType::unix:    str = L"\\n  L"; break;
 		case EolType::unknown: str = L"Unknown"; assert(false);  break;
 	}
 	_statusBar.setText(str, STATUSBAR_EOF_FORMAT);
@@ -2413,9 +2434,9 @@ void Notepad_plus::setUniModeText()
 			case uni16LE:
 				uniModeTextString = L"UCS-2 LE BOM"; break;
 			case uni16BE_NoBOM:
-				uniModeTextString = L"UCS-2 Big Endian"; break;
+				uniModeTextString = L"UCS-2 BE"; break;
 			case uni16LE_NoBOM:
-				uniModeTextString = L"UCS-2 Little Endian"; break;
+				uniModeTextString = L"UCS-2 LE"; break;
 			case uniCookie:
 				uniModeTextString = L"UTF-8"; break;
 			default :
@@ -3239,10 +3260,9 @@ int Notepad_plus::wordCount()
     return _findReplaceDlg.processAll(ProcessCountAll, &env, true);
 }
 
-
 void Notepad_plus::updateStatusBar()
 {
-    TCHAR strLnCol[128];
+    TCHAR strLnCol[64];
 	TCHAR strSel[64];
 	int selByte = 0;
 	int selLine = 0;
@@ -3251,19 +3271,19 @@ void Notepad_plus::updateStatusBar()
 
 	long selected_length = _pEditView->getUnicodeSelectedLength();
 	if (selected_length != -1)
-		wsprintf(strSel, L"Sel : %s | %s", commafyInt(selected_length).c_str(), commafyInt(selLine).c_str());
+		wsprintf(strSel, L"%s  %s", commafyInt(selected_length).c_str(), commafyInt(selLine).c_str());
 	else
 		wsprintf(strSel, L"Sel : %s", L"N/A");
 
-	wsprintf(strLnCol, L"Ln : %s    Col : %s    %s",
+	wsprintf(strLnCol, L"Ln %s    Co %s    %s",
 		commafyInt(_pEditView->getCurrentLineNumber() + 1).c_str(),
 		commafyInt(_pEditView->getCurrentColumnNumber() + 1).c_str(),
 		strSel);
 
     _statusBar.setText(strLnCol, STATUSBAR_CUR_POS);
 
-    TCHAR strDocLen[256];
-	wsprintf(strDocLen, L"length : %s    lines : %s",
+    TCHAR strDocLen[64];
+	wsprintf(strDocLen, L"%s    %s",
 		commafyInt(_pEditView->getCurrentDocLen()).c_str(),
 		commafyInt(_pEditView->execute(SCI_GETLINECOUNT)).c_str());
 

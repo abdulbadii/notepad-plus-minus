@@ -503,13 +503,9 @@ public:
 		if (show == _lineNumbersShown) return;
 		_lineNumbersShown = show;
 		if (show)
-		{
 			updateLineNumberWidth();
-		}
 		else
-		{
 			execute(SCI_SETMARGINWIDTHN, _SC_MARGE_LINENUMBER, 0);
-		}
 	}
 
 	void updateLineNumberWidth();

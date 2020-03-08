@@ -226,9 +226,9 @@ struct CmdLineParams
 
 	LangType _langType = L_EXTERNAL;
 	generic_string _localizationPath;
-	generic_string _easterEggName;
+	// generic_string _easterEggName;
 	unsigned char _quoteType = '\0';
-	int _ghostTypingSpeed = -1; // -1: initial value  1: slow  2: fast  3: speed of light
+	// int _ghostTypingSpeed = -1; // -1: initial value  1: slow  2: fast  3: speed of light
 
 	CmdLineParams()
 	{
@@ -236,7 +236,7 @@ struct CmdLineParams
 		_point.y = 0;
 	}
 
-	bool isPointValid() const
+inline	bool isPointValid() const
 	{
 		return _isPointXValid && _isPointYValid;
 	}
@@ -495,21 +495,16 @@ public:
 	int getStylerIndexByID(int id)
 	{
 		for (int i = 0 ; i < _nbStyler ; ++i)
-		{
-			if (_styleArray[i]._styleID == id)
-				return i;
-		}
+			if (_styleArray[i]._styleID == id)		return i;
 		return -1;
 	}
 
 	int getStylerIndexByName(const TCHAR *name) const
 	{
-		if (!name)
-			return -1;
-		for (int i = 0 ; i < _nbStyler ; ++i)
+		if (name)
 		{
-			if (!lstrcmp(_styleArray[i]._styleDesc, name))
-				return i;
+		for (int i = 0 ; i < _nbStyler ; ++i)
+			if (!lstrcmp(_styleArray[i]._styleDesc, name))		return i;
 		}
 		return -1;
 	}

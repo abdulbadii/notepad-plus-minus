@@ -33,10 +33,7 @@
 
 typedef std::vector<generic_string> ParamVector;
 
-
-namespace
-{
-
+namespace{
 
 void allowWmCopydataMessages(Notepad_plus_Window& notepad_plus_plus, const NppParameters& nppParameters, winVer ver)
 {
@@ -237,7 +234,7 @@ generic_string getEasterEggNameFromParam(ParamVector & params, unsigned char & t
 	return EasterEggName;
 }
 
-int getGhostTypingSpeedFromParam(ParamVector & params)
+/* int getGhostTypingSpeedFromParam(ParamVector & params)
 {
 	generic_string speedStr;
 	if (!getParamValFromString(L"-qSpeed", params, speedStr))
@@ -249,7 +246,7 @@ int getGhostTypingSpeedFromParam(ParamVector & params)
 
 	return speed;
 }
-
+ */
 const TCHAR FLAG_MULTI_INSTANCE[] = L"-multiInst";
 const TCHAR FLAG_NO_PLUGIN[] = L"-noPlugin";
 const TCHAR FLAG_READONLY[] = L"-ro";
@@ -365,17 +362,14 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 
 	MiniDumper mdump;	//for debugging purposes.
 
-	bool TheFirstOne = true;
 	::SetLastError(NO_ERROR);
 	::CreateMutex(NULL, false, L"nppInstance");
-	if (::GetLastError() == ERROR_ALREADY_EXISTS)
-		TheFirstOne = false;
+	bool TheFirstOne = ::GetLastError() == ERROR_ALREADY_EXISTS? false: true;
+	// if ()		TheFirstOne = ;
 
 	// Convert commandline to notepad-compatible format, if applicable
 	if ( isInList(FLAG_NOTEPAD_COMPATIBILITY, params) )
-	{
 		params = convertParamsToNotepadStyle(pCmdLineWithoutIgnores);
-	}
 
 	bool isParamePresent;
 	bool showHelp = isInList(FLAG_HELP, params);
@@ -396,8 +390,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 	cmdLineParams._openFoldersAsWorkspace = isInList(FLAG_OPEN_FOLDERS_AS_WORKSPACE, params);
 	cmdLineParams._langType = getLangTypeFromParam(params);
 	cmdLineParams._localizationPath = getLocalizationPathFromParam(params);
-	cmdLineParams._easterEggName = getEasterEggNameFromParam(params, cmdLineParams._quoteType);
-	cmdLineParams._ghostTypingSpeed = getGhostTypingSpeedFromParam(params);
+	// cmdLineParams._easterEggName = getEasterEggNameFromParam(params, cmdLineParams._quoteType);
+	// cmdLineParams._ghostTypingSpeed = getGhostTypingSpeedFromParam(params);
 
 	// getNumberFromParam should be run at the end, to not consuming the other params
 	cmdLineParams._line2go = getNumberFromParam('n', params, isParamePresent);

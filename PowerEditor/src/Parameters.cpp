@@ -5125,13 +5125,13 @@ void NppParameters::feedScintillaParam(TiXmlNode *node)
 
 	// Line Number Margin
 	const TCHAR *nm = element->Attribute(L"lineNumberMargin");
-	if (nm)
-	{
+	// if (nm)
+	// {
 		if (!lstrcmp(nm, L"show"))
 			_svp._lineNumberMarginShow = true;
 		else if (!lstrcmp(nm, L"hide"))
 			_svp._lineNumberMarginShow = false;
-	}
+	// }
 
 	// Bookmark Margin
 	nm = element->Attribute(L"bookMarkMargin");
