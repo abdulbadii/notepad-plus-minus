@@ -691,9 +691,7 @@ void Finder::addFileHitCount(int count)
 {
 	TCHAR text[8];
 	if (count>1) {
-		wsprintf(text, L" (%i)", count);
-	  
-													
+		wsprintf(text, L" (%i)", count);													
 		setFinderReadOnly(false);
 		_scintView.insertGenericTextFrom(_lastFileHeaderPos, text);
 		setFinderReadOnly(true);
@@ -701,17 +699,20 @@ void Finder::addFileHitCount(int count)
 	++_nbFoundFiles;
 }
 
-void Finder::addSearchHitCount(int count, bool isMatchLines){
-	const TCHAR *moreInfo = isMatchLines ? L" - Only the matched pattern results" :L"";
-	TCHAR text[64];
+void Finder::addSearchHitCount(int count, bool isMatchLines, const TCHAR *dir){
+	const TCHAR *moreInfo = isMatchLines ? L" - Only the matched pattern" :L"";
+	generic_string d(256,0);
+	d = dir? L"under "+ generic_string(dir) : L"";
+
+	TCHAR text[290];
 	if(count) {
 		if(_nbFoundFiles >1)
-			wsprintf(text, L" : Found %i in %i files%s", count, _nbFoundFiles, moreInfo);
+			wsprintf(text, L" : Found %i in %i files %s%s", count, _nbFoundFiles, d.c_str(), moreInfo);
 		else
-			wsprintf(text, L" : Found %i in a file%s", count, moreInfo);
+			wsprintf(text, L" : Found %i %s%s", count, d.c_str(), moreInfo);
 	}
 	else
-		wsprintf(text, L" was not found");
+		wsprintf(text, L" was not found %s%s", d.c_str());
 	
 	setFinderReadOnly(false);
 	_scintView.insertGenericTextFrom(_lastSearchHeaderPos, text);
@@ -847,7 +848,7 @@ void Finder::beginNewFilesSearch()
 	_scintView.collapse(searchHeaderLevel - SC_FOLDLEVELBASE, fold_collapse);
 }
 
-void Finder::finishFilesSearch(int count, bool isMatchLines)
+void Finder::finishFilesSearch(int count, bool isMatchLines, bool isfold,const TCHAR *dir)
 {
 	std::vector<FoundInfo>* _pOldFoundInfos;
 	std::vector<SearchResultMarking>* _pOldMarkings;
@@ -865,11 +866,11 @@ void Finder::finishFilesSearch(int count, bool isMatchLines)
 	if (_pMainMarkings->size() > 0)
 		_markingsStruct._markings = &((*_pMainMarkings)[0]);
 
-	addSearchHitCount(count, isMatchLines);
+	addSearchHitCount(count, isMatchLines, dir);
 	_scintView.execute(SCI_SETSEL, 0, 0);
 
 	_scintView.execute(SCI_SETLEXER, SCLEX_SEARCHRESULT);
-	_scintView.execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>("1"));
+	_scintView.execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>( isfold? "1" : "0"));
 }
 
 void Finder::setFinderStyle()
@@ -2622,21 +2623,20 @@ int FindReplaceDlg::processRange(ProcessOperation op, FindReplaceInfo & findRepl
 
 	if (nbProcessed > 0)
 	{
-		Finder *pFinder = nullptr;
+		// Finder *pFinder = nullptr;
 		if (op == ProcessFindAll)
 		{
-			pFinder = _pFinder;
+			_pFinder->addFileHitCount(nbProcessed);
 		}
 		else if (op == ProcessFindInFinder)
 		{
 			if (pFindersInfo && pFindersInfo->_pDestFinder)
-				pFinder = pFindersInfo->_pDestFinder;
+				pFindersInfo->_pDestFinder->addFileHitCount(nbProcessed);
 			else
-				pFinder = _pFinder;
+				_pFinder->addFileHitCount(nbProcessed);;
 		}
-
-		if (pFinder != nullptr)
-			pFinder->addFileHitCount(nbProcessed);
+		// if (pFinder != nullptr)
+			// pFinder->addFileHitCount(nbProcessed);
 	}
 	return nbProcessed;
 }
@@ -2722,14 +2722,8 @@ void FindReplaceDlg::findAllIn(InWhat op){
 
 	if (::SendMessage(_hParent, cmdid, 0, 0))
 	{
-		/* if (_findAllResult == 1)
-			wsprintf(_findAllResultStr, L"1 hit");
-		else
-			wsprintf(_findAllResultStr, L"%s hits", commafyInt(_findAllResult).c_str()); */
 		if (_findAllResult) 
-		{
 			focusOnFinder();
-		}
 		else
 		{
 			// Show finder

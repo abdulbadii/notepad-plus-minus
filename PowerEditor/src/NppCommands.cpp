@@ -2960,9 +2960,7 @@ void Notepad_plus::command(int id)
 
         case IDM_LANGSTYLE_CONFIG_DLG :
 		{
-			//bool isFirstTime = ;
 			_configStyleDlg.doDialog(_nativeLangSpeaker.isRTL());
-			//isFirstTime
 			if (!_configStyleDlg.isCreated())
                 _nativeLangSpeaker.changeConfigLang(_configStyleDlg.getHSelf());
 			break;

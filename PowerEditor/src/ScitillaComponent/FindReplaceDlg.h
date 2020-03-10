@@ -125,14 +125,14 @@ public:
 	void addSearchLine(const TCHAR *searchName);
 	void addFileNameTitle(const TCHAR * fileName);
 	void addFileHitCount(int count);
-	void addSearchHitCount(int count, bool isMatchLines = false);
+	void addSearchHitCount(int count, bool isMatchLines = false, const TCHAR* =nullptr);
 	void add(FoundInfo fi, SearchResultMarking mi, const TCHAR* foundline);
 	void setFinderStyle();
 	void removeAll();
 	void openAll();
 	void copy();
 	void beginNewFilesSearch();
-	void finishFilesSearch(int count, bool isMatchLines = false);
+	void finishFilesSearch(int count, bool isMatchLines = false, bool isfold = true,const TCHAR* =nullptr);
 	void gotoNextFoundResult(int direction);
 	void gotoFoundLine();
 	void deleteResult();
@@ -263,9 +263,8 @@ public :
 
 	void gotoNextFoundResult(int direction = 0) {if (_pFinder) _pFinder->gotoNextFoundResult(direction);};
 
-	void putFindResult(int result) {
-		_findAllResult = result;
-	};
+	// void putFindResult(int result) {	_findAllResult = result;};
+	
 	const TCHAR * getDir2Search() const {return _env->_directory.c_str();};
 
 	void getPatterns(std::vector<generic_string> & patternVect);
@@ -302,9 +301,9 @@ public :
 		_pFinder->addSearchLine(getText2search().c_str());
 	}
 
-	void finishFilesSearch(int count)
+	void finishFilesSearch(int count, bool isfold=1, const TCHAR *dir=nullptr)
 	{
-		_pFinder->finishFilesSearch(count);
+		_pFinder->finishFilesSearch(count, 0, isfold, dir);
 	}
 
 	void focusOnFinder() {
@@ -334,6 +333,8 @@ public :
 	void setStatusbarMessage(const generic_string & msg, FindStatus staus);
 	Finder * createFinder();
 	bool removeFinder(Finder *finder2remove);
+
+	int _findAllResult;
 
 protected :
 	void resizeDialogElements(LONG newWidth);
@@ -366,7 +367,6 @@ private :
 
 	bool _isRTL = false;
 
-	int _findAllResult;
 	TCHAR _findAllResultStr[1024];
 
 	int _fileNameLenMax = 1024;

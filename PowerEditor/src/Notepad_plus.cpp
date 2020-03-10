@@ -1685,9 +1685,10 @@ bool Notepad_plus::findInFiles()	{
 	const TCHAR *dir2Search;
 	generic_string dir, tail = _findReplaceDlg.getDir2Search();
 	if (not tail[0])	return false;
-	bool	hastail=1, success=0;
+	enum :bool { noFold, fold };
 	size_t st, tailOf;
 
+	bool hastail=1, get1=0;
 	bool isRecursive = _findReplaceDlg.isRecursive();
 	bool isInHiddenDir = _findReplaceDlg.isInHiddenDir();
 	ScintillaEditView *pOldView = _pEditView;
@@ -1710,29 +1711,25 @@ bool Notepad_plus::findInFiles()	{
 			return false;
 		}
 		if(st)	dir=dir.substr(st);
-		
 		if (dir[dir.find_last_not_of(L' ')] != L'\\')
 			dir += L'\\';
-		if (!::PathFileExists(dir2Search = dir.c_str()))
+		if (!::PathFileExists(dir2Search=dir.c_str()))
 		{
 			if (hastail)	continue;
 			return false;
 		}
-
 		int nbTotal = 0;
 		vector<generic_string> patterns2Match;
 		_findReplaceDlg.getPatterns(patterns2Match);
-		if (patterns2Match.size() == 0)
+		if (!patterns2Match.size())
 		{
 			_findReplaceDlg.setFindInFilesDirFilter(NULL, L"*.*");
 			_findReplaceDlg.getPatterns(patterns2Match);
 		}
-
 		vector<generic_string> fileNames;
 		getMatchedFileNames(dir2Search, patterns2Match, fileNames, isRecursive, isInHiddenDir);
 
 		_findReplaceDlg.beginNewFilesSearch();
-
 		Progress progress(_pPublicInterface->getHinst());
 
 		size_t filesCount = fileNames.size();
@@ -1780,16 +1777,16 @@ bool Notepad_plus::findInFiles()	{
 			}
 		}
 		progress.close();
-		_findReplaceDlg.finishFilesSearch(nbTotal);
 
-		_findReplaceDlg.putFindResult(nbTotal);
-		success |= bool(nbTotal);
+		_findReplaceDlg.finishFilesSearch(nbTotal, (hastail? noFold: fold), dir2Search);
+		_findReplaceDlg._findAllResult=nbTotal;
+		get1 |= bool(nbTotal);
 	}
+	
 	_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, oldDoc);
 	_pEditView = pOldView;
-
-	FindHistory& findHistory = (NppParameters::getInstance()).getFindHistory();	
-	if (success && !findHistory._isDlgAlwaysVisible)		_findReplaceDlg.display(false);
+	if (get1 && !NppParameters::getInstance().getFindHistory()._isDlgAlwaysVisible)
+		_findReplaceDlg.display(false);
 	return true;
 }
 
@@ -1844,7 +1841,7 @@ bool Notepad_plus::findInOpenedFiles()
 	_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, oldDoc);
 	_pEditView = pOldView;
 
-	_findReplaceDlg.putFindResult(nbTotal);
+	_findReplaceDlg._findAllResult=nbTotal;
 
 	FindHistory & findHistory = (NppParameters::getInstance()).getFindHistory();
 	if (nbTotal && !findHistory._isDlgAlwaysVisible)
@@ -1877,7 +1874,7 @@ bool Notepad_plus::findInCurrentFile()
 	_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, oldDoc);
 	_pEditView = pOldView;
 
-	_findReplaceDlg.putFindResult(nbTotal);
+	_findReplaceDlg._findAllResult=nbTotal;
 
 	FindHistory & findHistory = (NppParameters::getInstance()).getFindHistory();
 	if (nbTotal && !findHistory._isDlgAlwaysVisible)

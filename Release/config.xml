@@ -12,6 +12,7 @@
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent" />
         <Path name="Z:\Notepp" />
         <Filter name="*.cpp *.h" />
+        <Filter name="*.*" />
         <Filter name="*.cpp *.h *.rc" />
         <Filter name="*.cpp *.h " />
         <Filter name="*.js " />
@@ -20,9 +21,19 @@
         <Filter name="*.c *.cpp *.cc *.h" />
         <Filter name="*.xml" />
         <Filter name="*.cpp" />
-        <Filter name="*.h" />
         <Find name="Style" />
+        <Find name="include" />
+        <Find name="Notepad" />
+        <Find name="class" />
+        <Find name="NativeLangSpeaker" />
         <Find name="finishFilesSearch" />
+        <Find name="doDialog" />
+        <Find name="menuPos" />
+        <Find name="RedrawWindow" />
+        <Find name="docTabIconIDs" />
+        <Find name="paste" />
+        <Find name="ScintillaKeyDefinition" />
+        <Find name="WinMenuKeyDefinition" />
         <Find name="addSearchHitCount" />
         <Find name="addSearchLine" />
         <Find name="Search" />
@@ -78,7 +89,6 @@
         <Find name='\bTEXT\(&quot;([^()]*|.*?)(?&lt;![^\\]\\)&quot;(\h*\w+)?\h*\)\h*(?=[],)};+|&amp;:&lt;/&gt;]|$)' />
         <Find name='\bTEXT\(&quot;(?:(?!.*?\bTEXT\(&quot;)(?:(.*?)(?&lt;!\\)&quot;\)([,)}]|\h*$)|(.*)(?&lt;!\\)&quot;\)(;))|(.*?)(?&lt;!\\)&quot;\)(?=.*?\bTEXT\(&quot;))' />
         <Find name='//\bTEXT\(&quot;(?:(?!.*?\bTEXT\(&quot;)(?:(.*?)(?&lt;!\\)&quot;\)([,)}]|\h*$)|(.*)(?&lt;!\\)&quot;\)(;))|(.*?)(?&lt;!\\)&quot;\)(?=.*?\bTEXT\(&quot;))' />
-        <Find name="class" />
         <Find name="public" />
         <Find name="ScintillaEditView" />
         <Find name="SCI_\S*POS" />
@@ -96,7 +106,6 @@
         <Find name="findInFiles" />
         <Find name="Replace in Files" />
         <Find name="firstVisibleLine" />
-        <Find name="Notepad" />
         <Find name="_className" />
         <Find name="\bNotepad\+\+(?!\h+project)" />
         <Find name="\bNotepad\+\+" />
@@ -107,19 +116,10 @@
         <Find name="SC_SEARCHRESULT" />
         <Find name="\bLine" />
         <Find name="WordStyleDlg" />
-        <Find name="include" />
         <Find name="dwSize" />
         <Find name="WM_DOCK_USERDEFINE_DLG" />
         <Find name="getNbDigits" />
         <Find name="LRESULT" />
-        <Find name="bool" />
-        <Find name="\bTEXT\(&apos;" />
-        <Find name="TEXT\(&apos;" />
-        <Find name="\bLin" />
-        <Find name="\bLine\b" />
-        <Find name="\b5\b" />
-        <Find name="\b6\b" />
-        <Find name="stylers" />
         <Replace name="L\1" />
         <Replace name='L&quot;\1\3\5&quot;\2\4' />
         <Replace name='&quot;' />
@@ -154,50 +154,13 @@
     <History nbMaxFile="50" inSubMenu="no" customLength="35">
         <File filename="D:\WORK\SoftScreen\core.js" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\lastRecentFileList.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\lesDlgs.cpp" />
         <File filename="D:\APP\Notepp\config.xml" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\MISC\PluginsManager\PluginsManager.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus_Window.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_f\localization.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_tem\NppCommands.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\NppIO.cpp" />
         <File filename="D:\MSYS\usr\src\re.c" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_f\ScitillaComponent\FindReplaceDlg.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master\ScitillaComponent\FindReplaceDlg.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\AboutDlg\AboutDlg.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_f\Notepad_plus.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_f\Notepad_plus.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\MISC\Common\verifySignedfile.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_f\WinControls\AboutDlg\AboutDlg.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus_Window.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_f\Notepad_plus.rc" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_f\resource.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\AboutDlg\AboutDlg.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\README.md" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\resource.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\Window.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\localization.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\localizationString.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\FindReplaceDlg.rc.rc" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\FindReplaceDlg.rc" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.rc" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\localization.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\AboutDlg\AboutDlg.cpp" />
-        <File filename="D:\WORK\SoftScreen\cscss\quora.css" />
-        <File filename="D:\DOC\menuCmdID.txt" />
-        <File filename="D:\MSYS\usr\src\notepadpp\Rel_src_m\shortcuts.xml" />
-        <File filename="Z:\Notepp\shortcuts.xml" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\visual.net\notepadPlus.vcxproj" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\ScintillaEditView.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Parameters.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\menuCmdID.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master\localization.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master\FindReplaceDlg.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master\NppCommands.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master\NppBigSwitch.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master\localization.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_m\Notepad_plus.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master\Notepad_plus.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\shortcut\shortcut.cpp" />
     </History>
     <GUIConfigs>
         <GUIConfig name="ToolBar" visible="no">standard</GUIConfig>
@@ -206,7 +169,7 @@
         <GUIConfig name="ScintillaViewsSplitter">vertical</GUIConfig>
         <GUIConfig name="UserDefineDlg" position="undocked">hide</GUIConfig>
         <GUIConfig name="TabSetting" replaceBySpace="no" size="3" />
-        <GUIConfig name="AppPosition" x="0" y="-16" width="1326" height="1087" isMaximized="no" />
+        <GUIConfig name="AppPosition" x="142" y="-16" width="1184" height="1087" isMaximized="no" />
         <GUIConfig name="noUpdate" intervalDays="15" nextUpdateDate="20171218">no</GUIConfig>
         <GUIConfig name="Auto-detection">auto</GUIConfig>
         <GUIConfig name="CheckHistoryFiles">no</GUIConfig>
