@@ -2403,9 +2403,9 @@ void Notepad_plus::setDisplayFormat(EolType format)
 	const TCHAR* str = L"??";
 	switch (format)
 	{
-		case EolType::windows: str = L"\\r\\n W"; break;
-		case EolType::macos:   str = L"\\r  M"; break;
-		case EolType::unix:    str = L"\\n  L"; break;
+		case EolType::windows: str = L"\\r\\n Win"; break;
+		case EolType::macos:   str = L"\\r Mac"; break;
+		case EolType::unix:    str = L"\\n Nix"; break;
 		case EolType::unknown: str = L"Unknown"; assert(false);  break;
 	}
 	_statusBar.setText(str, STATUSBAR_EOF_FORMAT);

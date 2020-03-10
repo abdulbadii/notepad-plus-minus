@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="Windows-1252" ?>
 <NotepadPlus>
     <FindHistory nbMaxFindHistoryPath="10" nbMaxFindHistoryFilter="10" nbMaxFindHistoryFind="99" nbMaxFindHistoryReplace="30" matchWord="no" matchCase="yes" wrap="yes" directionDown="yes" fifRecuisive="yes" fifInHiddenFolder="no" dlgAlwaysVisible="no" fifFilterFollowsDoc="no" fifFolderFollowsDoc="no" searchMode="0" transparencyMode="1" transparency="64" dotMatchesNewline="no" isSearch2ButtonsMode="yes">
-        <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src; D:\MSYS\usr\src\notepadpp\scintilla" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src" />
+        <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src; D:\MSYS\usr\src\notepadpp\scintilla" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src_f" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src_t" />
@@ -21,6 +21,8 @@
         <Filter name="*.c *.cpp *.cc *.h" />
         <Filter name="*.xml" />
         <Filter name="*.cpp" />
+        <Find name="Mac" />
+        <Find name="\\r\\n" />
         <Find name="Style" />
         <Find name="include" />
         <Find name="Notepad" />
@@ -118,8 +120,6 @@
         <Find name="WordStyleDlg" />
         <Find name="dwSize" />
         <Find name="WM_DOCK_USERDEFINE_DLG" />
-        <Find name="getNbDigits" />
-        <Find name="LRESULT" />
         <Replace name="L\1" />
         <Replace name='L&quot;\1\3\5&quot;\2\4' />
         <Replace name='&quot;' />
