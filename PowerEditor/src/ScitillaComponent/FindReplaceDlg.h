@@ -125,14 +125,14 @@ public:
 	void addSearchLine(const TCHAR *searchName);
 	void addFileNameTitle(const TCHAR * fileName);
 	void addFileHitCount(int count);
-	void addSearchHitCount(int count, bool isMatchLines = false, const TCHAR* =nullptr);
+	void addSearchHitCount(int count, const TCHAR* =nullptr, bool isMatchLines = false);
 	void add(FoundInfo fi, SearchResultMarking mi, const TCHAR* foundline);
 	void setFinderStyle();
 	void removeAll();
 	void openAll();
 	void copy();
 	void beginNewFilesSearch();
-	void finishFilesSearch(int count, bool isMatchLines = false, bool isfold = true,const TCHAR* =nullptr);
+	void finishFilesSearch(int count, bool isfold = true,const TCHAR* =nullptr, bool isMatchLines = false);
 	void gotoNextFoundResult(int direction);
 	void gotoFoundLine();
 	void deleteResult();
@@ -303,7 +303,7 @@ public :
 
 	void finishFilesSearch(int count, bool isfold=1, const TCHAR *dir=nullptr)
 	{
-		_pFinder->finishFilesSearch(count, 0, isfold, dir);
+		_pFinder->finishFilesSearch(count, isfold, dir);
 	}
 
 	void focusOnFinder() {

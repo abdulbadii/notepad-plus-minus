@@ -21,6 +21,7 @@
         <Filter name="*.c *.cpp *.cc *.h" />
         <Filter name="*.xml" />
         <Filter name="*.cpp" />
+        <Find name="Macint" />
         <Find name="Mac" />
         <Find name="\\r\\n" />
         <Find name="Style" />
@@ -119,7 +120,6 @@
         <Find name="\bLine" />
         <Find name="WordStyleDlg" />
         <Find name="dwSize" />
-        <Find name="WM_DOCK_USERDEFINE_DLG" />
         <Replace name="L\1" />
         <Replace name='L&quot;\1\3\5&quot;\2\4' />
         <Replace name='&quot;' />
@@ -157,10 +157,6 @@
         <File filename="D:\APP\Notepp\config.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus_Window.h" />
         <File filename="D:\MSYS\usr\src\re.c" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\MISC\Common\verifySignedfile.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_f\Notepad_plus.rc" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\AboutDlg\AboutDlg.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\README.md" />
     </History>
     <GUIConfigs>
         <GUIConfig name="ToolBar" visible="no">standard</GUIConfig>

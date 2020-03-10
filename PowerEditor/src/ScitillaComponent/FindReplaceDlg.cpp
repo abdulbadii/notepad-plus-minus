@@ -699,10 +699,10 @@ void Finder::addFileHitCount(int count)
 	++_nbFoundFiles;
 }
 
-void Finder::addSearchHitCount(int count, bool isMatchLines, const TCHAR *dir){
+void Finder::addSearchHitCount(int count, const TCHAR *dir, bool isMatchLines){
 	const TCHAR *moreInfo = isMatchLines ? L" - Only the matched pattern" :L"";
 	generic_string d(256,0);
-	d = dir? L"under "+ generic_string(dir) : L"";
+	d = dir? L"under "+generic_string(dir) : L"";
 
 	TCHAR text[290];
 	if(count) {
@@ -712,7 +712,7 @@ void Finder::addSearchHitCount(int count, bool isMatchLines, const TCHAR *dir){
 			wsprintf(text, L" : Found %i %s%s", count, d.c_str(), moreInfo);
 	}
 	else
-		wsprintf(text, L" was not found %s%s", d.c_str());
+		wsprintf(text, L" was not found %s", d.c_str());
 	
 	setFinderReadOnly(false);
 	_scintView.insertGenericTextFrom(_lastSearchHeaderPos, text);
@@ -848,7 +848,7 @@ void Finder::beginNewFilesSearch()
 	_scintView.collapse(searchHeaderLevel - SC_FOLDLEVELBASE, fold_collapse);
 }
 
-void Finder::finishFilesSearch(int count, bool isMatchLines, bool isfold,const TCHAR *dir)
+void Finder::finishFilesSearch(int count, bool isfold,const TCHAR *dir, bool isMatchLines)
 {
 	std::vector<FoundInfo>* _pOldFoundInfos;
 	std::vector<SearchResultMarking>* _pOldMarkings;
@@ -866,7 +866,7 @@ void Finder::finishFilesSearch(int count, bool isMatchLines, bool isfold,const T
 	if (_pMainMarkings->size() > 0)
 		_markingsStruct._markings = &((*_pMainMarkings)[0]);
 
-	addSearchHitCount(count, isMatchLines, dir);
+	addSearchHitCount(count, dir, isMatchLines);
 	_scintView.execute(SCI_SETSEL, 0, 0);
 
 	_scintView.execute(SCI_SETLEXER, SCLEX_SEARCHRESULT);
@@ -2622,7 +2622,7 @@ int FindReplaceDlg::processRange(ProcessOperation op, FindReplaceInfo & findRepl
 	delete [] pTextReplace;
 
 	if (nbProcessed > 0)
-	{
+{
 		// Finder *pFinder = nullptr;
 		if (op == ProcessFindAll)
 		{

@@ -1673,7 +1673,7 @@ bool Notepad_plus::findInFinderFiles(FindersInfo *findInFolderInfo)
 	}
 	progress.close();
 
-	findInFolderInfo->_pDestFinder->finishFilesSearch(nbTotal, findInFolderInfo->_findOption._isMatchLineNumber);
+	findInFolderInfo->_pDestFinder->finishFilesSearch(nbTotal, 1, nullptr, findInFolderInfo->_findOption._isMatchLineNumber);
 
 	_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, oldDoc);
 	_pEditView = pOldView;
@@ -1733,12 +1733,12 @@ bool Notepad_plus::findInFiles()	{
 		Progress progress(_pPublicInterface->getHinst());
 
 		size_t filesCount = fileNames.size();
-		size_t filesPerPercent = 7;
+		size_t filesPerPercent = 3;
 
 		if (filesCount > 1)
 		{
 			if (filesCount >= 200)
-				filesPerPercent = filesCount / 35;
+				filesPerPercent = filesCount / 55;
 			progress.open(_findReplaceDlg.getHSelf(), L"Find In Files progress...");
 		}
 
