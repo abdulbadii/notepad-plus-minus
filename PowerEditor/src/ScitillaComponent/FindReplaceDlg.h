@@ -252,7 +252,6 @@ public :
 
 	int markAll(const TCHAR *txt2find, int styleID, bool isWholeWordSelected);
 	int markAllInc(const FindOption *opt);
-	
 
 	int processAll(ProcessOperation op, const FindOption *opt, bool isEntire = false, const FindersInfo *pFindersInfo = nullptr, int colourStyleID = -1);
 	int processRange(ProcessOperation op, FindReplaceInfo & findReplaceInfo, const FindersInfo *pFindersInfo, const FindOption *opt = nullptr, int colourStyleID = -1, ScintillaEditView *view2Process = nullptr);
@@ -334,6 +333,8 @@ public :
 	Finder * createFinder();
 	bool removeFinder(Finder *finder2remove);
 
+	bool isVolatiled()
+		{return _pFinder->_canBeVolatiled;}
 	int _findAllResult;
 
 protected :

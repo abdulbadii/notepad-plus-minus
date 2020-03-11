@@ -51,7 +51,7 @@ public:
 		_moduleName = ::PathFindFileName(temp);
 	}
 
-    void create(tTbData * data, bool isRTL = false)
+	void create(tTbData * data, bool isRTL = false)
 	{
 		assert(data != nullptr);
 		StaticDialog::create(_dlgID, isRTL);
@@ -59,7 +59,7 @@ public:
 		::GetWindowText(_hSelf, temp, MAX_PATH);
 		_pluginName = temp;
 
-        // user information
+		// user information
 		data->hClient		= _hSelf;
 		data->pszName		= _pluginName.c_str();
 
@@ -75,7 +75,7 @@ public:
 		::SendMessage(_hParent, NPPM_DMMUPDATEDISPINFO, 0, reinterpret_cast<LPARAM>(_hSelf));
 	}
 
-    virtual void destroy() {}
+	virtual void destroy() {}
 
 	virtual void setBackgroundColor(COLORREF) {}
 	virtual void setForegroundColor(COLORREF) {}
@@ -138,7 +138,7 @@ protected :
 	};
 	
 	// Handles
-    HWND			_HSource = NULL;
+	HWND			_HSource = NULL;
 	int				_dlgID = -1;
 	bool            _isFloating = true;
 	int				_iDockedPos = 0;

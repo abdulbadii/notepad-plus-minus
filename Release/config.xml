@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="Windows-1252" ?>
 <NotepadPlus>
-    <FindHistory nbMaxFindHistoryPath="10" nbMaxFindHistoryFilter="10" nbMaxFindHistoryFind="99" nbMaxFindHistoryReplace="30" matchWord="no" matchCase="yes" wrap="yes" directionDown="yes" fifRecuisive="yes" fifInHiddenFolder="no" dlgAlwaysVisible="no" fifFilterFollowsDoc="no" fifFolderFollowsDoc="no" searchMode="0" transparencyMode="1" transparency="64" dotMatchesNewline="no" isSearch2ButtonsMode="yes">
-        <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src" />
+    <FindHistory nbMaxFindHistoryPath="10" nbMaxFindHistoryFilter="10" nbMaxFindHistoryFind="99" nbMaxFindHistoryReplace="30" matchWord="no" matchCase="yes" wrap="yes" directionDown="yes" fifRecuisive="yes" fifInHiddenFolder="no" dlgAlwaysVisible="no" fifFilterFollowsDoc="no" fifFolderFollowsDoc="no" searchMode="0" transparencyMode="1" transparency="64" dotMatchesNewline="no" isSearch2ButtonsMode="no">
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src; D:\MSYS\usr\src\notepadpp\scintilla" />
+        <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src_f" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src_t" />
@@ -21,10 +21,10 @@
         <Filter name="*.c *.cpp *.cc *.h" />
         <Filter name="*.xml" />
         <Filter name="*.cpp" />
+        <Find name="Style" />
         <Find name="Macint" />
         <Find name="Mac" />
         <Find name="\\r\\n" />
-        <Find name="Style" />
         <Find name="include" />
         <Find name="Notepad" />
         <Find name="class" />
@@ -151,13 +151,7 @@
         <Replace name="\1 *\2; // no Slab [\3]" />
         <Replace name="\1 *\2" />
     </FindHistory>
-    <History nbMaxFile="50" inSubMenu="no" customLength="35">
-        <File filename="D:\WORK\SoftScreen\core.js" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\lastRecentFileList.h" />
-        <File filename="D:\APP\Notepp\config.xml" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus_Window.h" />
-        <File filename="D:\MSYS\usr\src\re.c" />
-    </History>
+    <History nbMaxFile="50" inSubMenu="no" customLength="35" />
     <GUIConfigs>
         <GUIConfig name="ToolBar" visible="no">standard</GUIConfig>
         <GUIConfig name="StatusBar">show</GUIConfig>

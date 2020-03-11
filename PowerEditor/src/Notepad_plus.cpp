@@ -1628,12 +1628,12 @@ bool Notepad_plus::findInFinderFiles(FindersInfo *findInFolderInfo)
 	Progress progress(_pPublicInterface->getHinst());
 
 	size_t filesCount = fileNames.size();
-	size_t filesPerPercent = 1;
+	size_t filesPerPercent = 3;
 
 	if (filesCount > 1)
 	{
 		if (filesCount >= 200)
-			filesPerPercent = filesCount / 100;
+			filesPerPercent = filesCount / 45;
 		progress.open(_findReplaceDlg.getHSelf(), L"Find In Files progress...");
 	}
 
@@ -1683,31 +1683,31 @@ bool Notepad_plus::findInFinderFiles(FindersInfo *findInFolderInfo)
 
 bool Notepad_plus::findInFiles()	{
 	const TCHAR *dir2Search;
-	generic_string dir, tail = _findReplaceDlg.getDir2Search();
-	if (not tail[0])	return false;
+	generic_string dir, face = _findReplaceDlg.getDir2Search();
+	if (not face[0])	return false;
 	enum :bool { noFold, fold };
-	size_t st, tailOf;
+	size_t st, dirOff;
 
-	bool hastail=1, get1=0;
+	bool hasMore=1, get1=0;
 	bool isRecursive = _findReplaceDlg.isRecursive();
 	bool isInHiddenDir = _findReplaceDlg.isInHiddenDir();
 	ScintillaEditView *pOldView = _pEditView;
 	_pEditView = &_invisibleEditView;
 	Document oldDoc = _invisibleEditView.execute(SCI_GETDOCPOINTER);
-	while (hastail)	{
-		tailOf = tail.find_first_of(L';');
-		if (tailOf==string::npos){
-			hastail=0;
-			dir=tail;
+	while (hasMore)	{
+		dirOff = face.find_last_of(L';');
+		if (dirOff==string::npos){
+			hasMore=0;
+			dir=face;
 		}
 		else{
-			dir=tail.substr(0,tailOf);
-			tail= tail.substr(tailOf+1);
+			dir=face.substr(dirOff+1);
+			face= face.substr(0,dirOff);
 		}
 		st = dir.find_first_not_of(L' ');
 		if (st==string::npos)
 		{
-			if (hastail)	continue;
+			if (hasMore)	continue;
 			return false;
 		}
 		if(st)	dir=dir.substr(st);
@@ -1715,7 +1715,7 @@ bool Notepad_plus::findInFiles()	{
 			dir += L'\\';
 		if (!::PathFileExists(dir2Search=dir.c_str()))
 		{
-			if (hastail)	continue;
+			if (hasMore)	continue;
 			return false;
 		}
 		int nbTotal = 0;
@@ -1735,10 +1735,8 @@ bool Notepad_plus::findInFiles()	{
 		size_t filesCount = fileNames.size();
 		size_t filesPerPercent = 3;
 
-		if (filesCount > 1)
-		{
-			if (filesCount >= 200)
-				filesPerPercent = filesCount / 55;
+		if (filesCount > 1)	{
+			if (filesCount >= 200)		filesPerPercent = filesCount / 55;
 			progress.open(_findReplaceDlg.getHSelf(), L"Find In Files progress...");
 		}
 
@@ -1778,7 +1776,7 @@ bool Notepad_plus::findInFiles()	{
 		}
 		progress.close();
 
-		_findReplaceDlg.finishFilesSearch(nbTotal, (hastail? noFold: fold), dir2Search);
+		_findReplaceDlg.finishFilesSearch(nbTotal, (hasMore? noFold: fold), dir2Search);
 		_findReplaceDlg._findAllResult=nbTotal;
 		get1 |= bool(nbTotal);
 	}
