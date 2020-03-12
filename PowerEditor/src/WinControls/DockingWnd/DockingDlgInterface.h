@@ -45,7 +45,7 @@ public:
 
 	virtual void init(HINSTANCE hInst, HWND parent)
 	{
-		StaticDialog::init(hInst, parent);
+		Window::init(hInst, parent);//StaticDialog::init(hInst, parent);
 		TCHAR temp[MAX_PATH];
 		::GetModuleFileName(reinterpret_cast<HMODULE>(hInst), temp, MAX_PATH);
 		_moduleName = ::PathFindFileName(temp);

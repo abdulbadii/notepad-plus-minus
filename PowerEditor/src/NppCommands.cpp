@@ -1100,11 +1100,6 @@ void Notepad_plus::command(int id)
 		break;
 
 		/* case IDM_CLOSE_FOUND_RESULTS:
-			if (_findReplaceDlg._canBeVolatiled)
-			{
-			::SendMessage(::GetParent(_hParent), NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_hSelf));
-				setClosed(true);
-			}
 		break; */
 
 		case IDM_SEARCH_VOLATILE_FINDNEXT :

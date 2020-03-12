@@ -1733,10 +1733,10 @@ bool Notepad_plus::findInFiles()	{
 		Progress progress(_pPublicInterface->getHinst());
 
 		size_t filesCount = fileNames.size();
-		size_t filesPerPercent = 3;
+		size_t filesPerPercent = 5;
 
 		if (filesCount > 1)	{
-			if (filesCount >= 200)		filesPerPercent = filesCount / 55;
+			if (filesCount >= 200)		filesPerPercent = filesCount / 45;
 			progress.open(_findReplaceDlg.getHSelf(), L"Find In Files progress...");
 		}
 

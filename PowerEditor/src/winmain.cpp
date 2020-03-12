@@ -201,7 +201,7 @@ int getNumberFromParam(char paramName, ParamVector & params, bool & isParamePres
 	return generic_atoi(numStr.c_str());
 };
 
-generic_string getEasterEggNameFromParam(ParamVector & params, unsigned char & type)
+/* generic_string getEasterEggNameFromParam(ParamVector & params, unsigned char & type)
 {
 	generic_string EasterEggName;
 	if (!getParamValFromString(L"-qn", params, EasterEggName))  // get internal easter egg
@@ -230,12 +230,10 @@ generic_string getEasterEggNameFromParam(ParamVector & params, unsigned char & t
 		EasterEggName.replace(start_pos, percentTwentyStr.length(), spaceStr);
 		start_pos += spaceStr.length(); // Handles case where 'to' is a substring of 'from'
 	}
-
 	return EasterEggName;
-}
+} */
 
-/* int getGhostTypingSpeedFromParam(ParamVector & params)
-{
+/* int getGhostTypingSpeedFromParam(ParamVector & params){
 	generic_string speedStr;
 	if (!getParamValFromString(L"-qSpeed", params, speedStr))
 		return -1;
@@ -243,10 +241,8 @@ generic_string getEasterEggNameFromParam(ParamVector & params, unsigned char & t
 	int speed = std::stoi(speedStr, 0);
 	if (speed <= 0 || speed > 3)
 		return -1;
-
 	return speed;
-}
- */
+}*/
 const TCHAR FLAG_MULTI_INSTANCE[] = L"-multiInst";
 const TCHAR FLAG_NO_PLUGIN[] = L"-noPlugin";
 const TCHAR FLAG_READONLY[] = L"-ro";
@@ -349,11 +345,7 @@ PWSTR stripIgnoredParams(ParamVector & params, PWSTR pCmdLine)
 	}
 	return pCmdLine;
 }
-
-} // namespace
-
-
-
+}
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 {
@@ -416,10 +408,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 		cmdLineParams._isNoSession = true;
 	}
 
-	if (cmdLineParams._localizationPath != L"")
-	{
+	if (cmdLineParams._localizationPath[0])// != L"")
 		nppParameters.setStartWithLocFileName(cmdLineParams._localizationPath);
-	}
+
 	nppParameters.load();
 
 	nppParameters.setFunctionListExportBoolean(doFunctionListExport);
@@ -429,8 +420,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 	if (nppParameters.asNotepadStyle())
 	{
 		isMultiInst = true;
-		cmdLineParams._isNoTab = true;
-		cmdLineParams._isNoSession = true;
+		// cmdLineParams._isNoTab = true;
+		// cmdLineParams._isNoSession = true;
 	}
 
 	// override the settings if multiInst is choosen by user in the preference dialog
@@ -438,9 +429,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 	if (nppGUI._multiInstSetting == multiInst)
 	{
 		isMultiInst = true;
-		// Only the first launch remembers the session
-		if (!TheFirstOne)
-			cmdLineParams._isNoSession = true;
+		// Only the first launch remembers the session		if (!TheFirstOne)	cmdLineParams._isNoSession = true;
 	}
 
 	generic_string quotFileName = L"";
@@ -472,7 +461,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 			hNotepad_plus = ::FindWindow(Notepad_plus_Window::getClassName(), NULL);
 		}
 
-        if (hNotepad_plus)
+      if (hNotepad_plus)
         {
 			// First of all, destroy static object NppParameters
 			nppParameters.destroyInstance();
