@@ -171,7 +171,7 @@ void Notepad_plus::command(int id)
 				if (id == IDM_FILESWITCHER_FILESCLOSEOTHERS)
 				{
 					// Get current buffer and its view
-					_pFileSwitcherPanel->activateItem(_pEditView->getCurrentBufferID(), currentView());
+					_pFileSwitcherPanel->activateItem(_pEditView->getCurrentBufferID(), MAIN_VIEW);
 				}
 			}
 			break;
@@ -480,19 +480,6 @@ void Notepad_plus::command(int id)
 			{
 				url = L"https://www.google.com/search?q=$(CURRENT_WORD)";
 			}
-			else if (nppGui._searchEngineChoice == nppGui.se_bing)
-			{
-				url = L"https://www.bing.com/search?q=$(CURRENT_WORD)";
-			}
-			else if (nppGui._searchEngineChoice == nppGui.se_yahoo)
-			{
-				url = L"https://search.yahoo.com/search?q=$(CURRENT_WORD)";
-			}
-			else if (nppGui._searchEngineChoice == nppGui.se_stackoverflow)
-			{
-				url = L"https://stackoverflow.com/search?q=$(CURRENT_WORD)";
-			}
-
 			Command cmd(url.c_str());
 			cmd.run(_pPublicInterface->getHSelf());	
 		}
@@ -1093,14 +1080,15 @@ void Notepad_plus::command(int id)
 		{
 			if (GetFocus() == _findReplaceDlg.getHFindResults())
 				// focus already on found results, switch to current edit view
-				switchEditViewTo(currentView());
+				switchEditViewTo(MAIN_VIEW);
 			else
 				_findReplaceDlg.focusOnFinder();
 		}
 		break;
 
-		/* case IDM_CLOSE_FOUND_RESULTS:
-		break; */
+		case IDM_CLOSE_FOUND_RESULTS:
+		
+		break;
 
 		case IDM_SEARCH_VOLATILE_FINDNEXT :
 		case IDM_SEARCH_VOLATILE_FINDPREV :
@@ -2656,7 +2644,7 @@ void Notepad_plus::command(int id)
 			}
 			else
 			{
-				view_to_focus = currentView();
+				view_to_focus = MAIN_VIEW;
 			}
 			switchEditViewTo(view_to_focus);
 			break;

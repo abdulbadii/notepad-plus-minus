@@ -404,6 +404,7 @@ private:
 //Document management
 	UCHAR _mainWindowStatus = 0; //For 2 views and user dialog if docked
 	int _activeView = MAIN_VIEW;
+	int _otherView = _activeView == MAIN_VIEW? SUB_VIEW: MAIN_VIEW;
 
 	//User dialog docking
 	void dockUserDlg();
@@ -419,15 +420,14 @@ private:
 	bool loadStyles();
 
 	int currentView() {
-		return _activeView;
+		return MAIN_VIEW;//_activeView;
 	}
-
 	int otherView(){
-		return (_activeView == MAIN_VIEW?SUB_VIEW:MAIN_VIEW);
+		return SUB_VIEW;//_otherView;
 	}
 
-	int otherFromView(int whichOne){
-		return (whichOne == MAIN_VIEW?SUB_VIEW:MAIN_VIEW);
+	int otherView(int view_now){
+		return view_now == MAIN_VIEW? SUB_VIEW: MAIN_VIEW;
 	}
 
 	bool canHideView(int whichOne);	//true if view can safely be hidden (no open docs etc)

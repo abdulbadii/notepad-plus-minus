@@ -515,12 +515,12 @@ void Finder::gotoFoundLine()
 	Searching::displaySectionCentered(fInfo._start, fInfo._end, *_ppEditView);
 
 	// Then we colourise the double clicked line
-	setFinderStyle();
+/* 	setFinderStyle();
 
 	_scintView.execute(SCI_STYLESETEOLFILLED, SCE_SEARCHRESULT_HIGHLIGHT_LINE, true);
 	_scintView.execute(SCI_STARTSTYLING, start, STYLING_MASK);
 	_scintView.execute(SCI_SETSTYLING, end - start + 2, SCE_SEARCHRESULT_HIGHLIGHT_LINE);
-	_scintView.execute(SCI_COLOURISE, start, end + 1);
+	_scintView.execute(SCI_COLOURISE, start, end + 1); */
 }
 
 void Finder::deleteResult()
@@ -568,18 +568,16 @@ void Finder::deleteResult()
 vector<generic_string> Finder::getResultFilePaths() const
 {
 	vector<generic_string> paths;
-	size_t len = _pMainFoundInfos->size();
-	for (size_t i = 0; i < len; ++i)
+	for (size_t i = 0; i < _pMainFoundInfos->size(); ++i)
 	{
 		// make sure that path is not already in
 		generic_string & path2add = (*_pMainFoundInfos)[i]._fullPath;
-		bool found = path2add.empty();
+		bool found = 0;//path2add.empty();
 		for (size_t j = 0; j < paths.size() && not found; ++j)
-		{
 			if (paths[j] == path2add)
-				found = true;
-
-		}
+			{	found = true;
+				break;
+			};
 		if (not found)
 			paths.push_back(path2add);
 	}
@@ -591,11 +589,10 @@ bool Finder::canFind(const TCHAR *fileName, size_t lineNumber) const
 	size_t len = _pMainFoundInfos->size();
 	for (size_t i = 0; i < len; ++i)
 	{
-		if ((*_pMainFoundInfos)[i]._fullPath == fileName)
-		{
-			if (lineNumber == (*_pMainFoundInfos)[i]._lineNumber)
+		if ((*_pMainFoundInfos)[i]._fullPath == fileName &&
+			lineNumber == (*_pMainFoundInfos)[i]._lineNumber)
 				return true;
-		}
+
 	}
 	return false; 
 }

@@ -3462,7 +3462,7 @@ void Notepad_plus::hideView(int whichOne)
 	// resize the main window
 	::SendMessage(_pPublicInterface->getHSelf(), WM_SIZE, 0, 0);
 
-	switchEditViewTo(otherFromView(whichOne));
+	switchEditViewTo(otherView(whichOne));
 	int viewToDisable = (whichOne == SUB_VIEW?WindowSubActive:WindowMainActive);
 	_mainWindowStatus &= ~viewToDisable;
 }
