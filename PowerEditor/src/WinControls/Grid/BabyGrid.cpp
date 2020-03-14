@@ -1386,7 +1386,7 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			EndPaint(hWnd, &ps);
 			//
-			if(GetFocus()==hWnd)
+			if(::GetFocus()==hWnd)
 				{
 			      PostMessage(hWnd,BGM_DRAWCURSOR,(UINT)SelfIndex,0);
 				}
@@ -2261,7 +2261,7 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
              NRC=FALSE;
              NCC=FALSE;
 
-			 if(GetFocus()==hWnd)
+			 if(::GetFocus()==hWnd)
 				 {
 
 				  x=LOWORD(lParam);

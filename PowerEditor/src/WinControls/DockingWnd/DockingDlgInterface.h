@@ -37,15 +37,14 @@
 
 
 
-class DockingDlgInterface : public StaticDialog
-{
+class DockingDlgInterface : public StaticDialog{
 public:
 	DockingDlgInterface() = default;
 	explicit DockingDlgInterface(int dlgID): _dlgID(dlgID) {}
 
 	virtual void init(HINSTANCE hInst, HWND parent)
 	{
-		Window::init(hInst, parent);//StaticDialog::init(hInst, parent);
+		Window::init(hInst, parent);
 		TCHAR temp[MAX_PATH];
 		::GetModuleFileName(reinterpret_cast<HMODULE>(hInst), temp, MAX_PATH);
 		_moduleName = ::PathFindFileName(temp);

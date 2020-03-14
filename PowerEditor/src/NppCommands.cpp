@@ -957,7 +957,6 @@ void Notepad_plus::command(int id)
 		}
 		break;
 
-		case IDM_SEARCH_FIND :
 		case IDM_SEARCH_REPLACE :
 		case IDM_SEARCH_MARK :
 		{
@@ -1076,18 +1075,15 @@ void Notepad_plus::command(int id)
 		}
 		break;
 
-		case IDM_FOCUS_ON_FOUND_RESULTS:
-		{
-			if (GetFocus() == _findReplaceDlg.getHFindResults())
-				// focus already on found results, switch to current edit view
+		case IDM_TOGGLE_FIND_RESULTS:	{
+		/*if (::GetFocus() == _findReplaceDlg.getHFindResults())
 				switchEditViewTo(MAIN_VIEW);
+			else */
+			if (_findReplaceDlg._FinderIsOpen)
+				_findReplaceDlg.closeFinder();
 			else
-				_findReplaceDlg.focusOnFinder();
+				_findReplaceDlg.openFinder();
 		}
-		break;
-
-		case IDM_CLOSE_FOUND_RESULTS:
-		
 		break;
 
 		case IDM_SEARCH_VOLATILE_FINDNEXT :

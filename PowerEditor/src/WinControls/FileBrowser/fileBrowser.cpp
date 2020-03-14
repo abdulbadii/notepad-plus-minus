@@ -395,7 +395,7 @@ bool FileBrowser::selectCurrentEditingFile() const
 			if (foundItem)
 			{
 				_treeView.selectItem(foundItem);
-				_treeView.getFocus();
+				_treeView.focus();
 				return true;
 			}
 		}

@@ -726,7 +726,7 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	activateBuffer(_mainEditView.getCurrentBufferID(), MAIN_VIEW);
 	activateBuffer(_subEditView.getCurrentBufferID(), SUB_VIEW);
 	//::SetFocus(_mainEditView.getHSelf());
-	_mainEditView.getFocus();
+	_mainEditView.focus();
 
 	return TRUE;
 }
@@ -3598,7 +3598,7 @@ int Notepad_plus::switchEditViewTo(int gid)
 	if (currentView() == gid)
 	{
 		//make sure focus is ok, then leave
-		_pEditView->getFocus();	//set the focus
+		_pEditView->focus();	//set the focus
 		return gid;
 	}
 
@@ -3614,7 +3614,7 @@ int Notepad_plus::switchEditViewTo(int gid)
 	std::swap(_pEditView, _pNonEditView);
 
 	_pEditView->beSwitched();
-    _pEditView->getFocus();	//set the focus
+    _pEditView->focus();	//set the focus
 
 	if (_pDocMap)
 	{
@@ -4762,7 +4762,7 @@ void Notepad_plus::fullScreenToggle()
         int y = nppRect.top;
         ::MoveWindow(_restoreButton.getHSelf(), x, y, w, h, FALSE);
 
-        _pEditView->getFocus();
+        _pEditView->focus();
 	}
 	else	//toggle fullscreen off
 	{
@@ -4897,7 +4897,7 @@ void Notepad_plus::postItToggle()
         int y = nppRect.top + 1;
         ::MoveWindow(_restoreButton.getHSelf(), x, y, w, h, FALSE);
 
-        _pEditView->getFocus();
+        _pEditView->focus();
 	}
 	else	//PostIt enabled, disable it
 	{
@@ -6162,7 +6162,7 @@ void Notepad_plus::launchDocMap()
 	_pDocMap->wrapMap();
 	_pDocMap->display();
 
-	_pEditView->getFocus();
+	_pEditView->focus();
 }
 
 
@@ -6208,7 +6208,7 @@ void Notepad_plus::launchFunctionList()
 	_pFuncList->display();
 	_pFuncList->reload();
 
-	_pEditView->getFocus();
+	_pEditView->focus();
 }
 
 

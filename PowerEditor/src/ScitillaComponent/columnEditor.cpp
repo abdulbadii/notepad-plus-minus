@@ -264,7 +264,7 @@ INT_PTR CALLBACK ColumnEditorDlg::run_dlgProc(UINT message, WPARAM wParam, LPARA
 						}
 					}
 					(*_ppEditView)->execute(SCI_ENDUNDOACTION);
-                    (*_ppEditView)->getFocus();
+                    (*_ppEditView)->focus();
                     return TRUE;
                 }
 				case IDC_COL_TEXT_RADIO :

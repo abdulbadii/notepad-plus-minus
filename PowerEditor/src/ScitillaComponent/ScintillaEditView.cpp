@@ -2334,8 +2334,8 @@ TCHAR * ScintillaEditView::getGenericSelectedText(TCHAR * txt, int size, bool ex
 	return txt;
 }
 
-int ScintillaEditView::searchInTarget(const TCHAR * text2Find, size_t lenOfText2Find, size_t fromPos, size_t toPos) const
-{
+int ScintillaEditView::searchInTarget(const TCHAR * text2Find, size_t lenOfText2Find, size_t fromPos, size_t toPos) const	{
+	// if (fromPos && toPos)
 	execute(SCI_SETTARGETRANGE, fromPos, toPos);
 
 	WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();

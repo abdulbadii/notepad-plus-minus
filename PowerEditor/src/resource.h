@@ -292,7 +292,6 @@
 
 #define IDR_SYSTRAYPOPUP_MENU            1501
 
-// #define IDD_FIND_REPLACE_DLG        1600
 
 #define IDD_ABOUTBOX 1700
 #define IDC_LICENCE_EDIT 1701

@@ -192,9 +192,9 @@
     #define    IDM_CLEAN_RECENT_FILE_LIST           (IDM_EDIT + 41)
     
 #define    IDM_SEARCH    (IDM + 3000)
-    #define    IDM_SEARCH_FIND                 (IDM_SEARCH + 1)
     #define    IDM_SEARCH_FINDNEXT             (IDM_SEARCH + 2)
     #define    IDM_SEARCH_REPLACE              (IDM_SEARCH + 3)
+    #define    IDM_SEARCH_FINDINFILES          (IDM_SEARCH + 13)
     #define    IDM_SEARCH_GOTOLINE             (IDM_SEARCH + 4)
     #define    IDM_SEARCH_TOGGLE_BOOKMARK      (IDM_SEARCH + 5)
     #define    IDM_SEARCH_NEXT_BOOKMARK        (IDM_SEARCH + 6)
@@ -203,7 +203,6 @@
     #define    IDM_SEARCH_GOTOMATCHINGBRACE    (IDM_SEARCH + 9)
     #define    IDM_SEARCH_FINDPREV             (IDM_SEARCH + 10)
     #define    IDM_SEARCH_FINDINCREMENT        (IDM_SEARCH + 11)
-    #define    IDM_SEARCH_FINDINFILES          (IDM_SEARCH + 13)
     #define    IDM_SEARCH_VOLATILE_FINDNEXT    (IDM_SEARCH + 14)
     #define    IDM_SEARCH_VOLATILE_FINDPREV    (IDM_SEARCH + 15)
     #define    IDM_SEARCH_CUTMARKEDLINES       (IDM_SEARCH + 18)
@@ -236,8 +235,7 @@
     #define    IDM_SEARCH_GONEXTMARKER5        (IDM_SEARCH + 43)
     #define    IDM_SEARCH_GONEXTMARKER_DEF     (IDM_SEARCH + 44)
 
-    #define    IDM_FOCUS_ON_FOUND_RESULTS      (IDM_SEARCH + 45)
-    #define    IDM_CLOSE_FOUND_RESULTS      (IDM_SEARCH + 55)
+    #define    IDM_TOGGLE_FIND_RESULTS      (IDM_SEARCH + 45)
 	 
     #define    IDM_SEARCH_GOTONEXTFOUND	       (IDM_SEARCH + 46)
     #define    IDM_SEARCH_GOTOPREVFOUND	       (IDM_SEARCH + 47)

@@ -21,6 +21,20 @@
         <Filter name="*.c *.cpp *.cc *.h" />
         <Filter name="*.xml" />
         <Filter name="*.cpp" />
+        <Find name="Finder" />
+        <Find name="finishFilesSearch" />
+        <Find name="generic_string" />
+        <Find name="_nativeLangSpeaker" />
+        <Find name="Macro" />
+        <Find name="_pluginsAdminDlg" />
+        <Find name="changePluginsAdminDlgLang" />
+        <Find name="isCreated" />
+        <Find name="::SendMessage(" />
+        <Find name="showIndentGuideLine(." />
+        <Find name="showIndentGuideLine(" />
+        <Find name="SendMessage" />
+        <Find name="setMakerStyle" />
+        <Find name="setWrapMode" />
         <Find name="MENUITEM" />
         <Find name="IDM_FORMAT_TODOS" />
         <Find name="Macintosh" />
@@ -34,9 +48,7 @@
         <Find name="Don&apos;t fill find" />
         <Find name="case" />
         <Find name="TaskListDlg" />
-        <Find name="setWrapMode" />
         <Find name="Style" />
-        <Find name="finishFilesSearch" />
         <Find name="SCI_SETCURRENTPOS" />
         <Find name="_instanceCount" />
         <Find name="Notepad" />
@@ -108,18 +120,6 @@
         <Find name='\bTEXT\(&quot;([^()]*|.*?)(?&lt;![^\\]\\)&quot;(\h*\w+)?\h*\)\h*(?=[],)};+|&amp;:&lt;/&gt;]|$)' />
         <Find name='\bTEXT\(&quot;(?:(?!.*?\bTEXT\(&quot;)(?:(.*?)(?&lt;!\\)&quot;\)([,)}]|\h*$)|(.*)(?&lt;!\\)&quot;\)(;))|(.*?)(?&lt;!\\)&quot;\)(?=.*?\bTEXT\(&quot;))' />
         <Find name='//\bTEXT\(&quot;(?:(?!.*?\bTEXT\(&quot;)(?:(.*?)(?&lt;!\\)&quot;\)([,)}]|\h*$)|(.*)(?&lt;!\\)&quot;\)(;))|(.*?)(?&lt;!\\)&quot;\)(?=.*?\bTEXT\(&quot;))' />
-        <Find name="public" />
-        <Find name="ScintillaEditView" />
-        <Find name="SCI_\S*POS" />
-        <Find name="storage.local" />
-        <Find name="child" />
-        <Find name=':\h*&quot;' />
-        <Find name="arch:IA32" />
-        <Find name="archIA32" />
-        <Find name="std::" />
-        <Find name="std" />
-        <Find name="_findInFilesClosePos" />
-        <Find name="drop" />
         <Replace name="L\1" />
         <Replace name='L&quot;\1\3\5&quot;\2\4' />
         <Replace name='&quot;' />
@@ -160,6 +160,10 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\FindReplaceDlg.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\NppCommands.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\resource.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.rc" />
+        <File filename="D:\MSYS\usr\src\notepadpp\Release\shortcuts.xml" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\Preference\preferenceDlg.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\Preference\preference.rc" />
     </History>
     <GUIConfigs>
         <GUIConfig name="ToolBar" visible="no">standard</GUIConfig>
@@ -168,7 +172,7 @@
         <GUIConfig name="ScintillaViewsSplitter">vertical</GUIConfig>
         <GUIConfig name="UserDefineDlg" position="undocked">hide</GUIConfig>
         <GUIConfig name="TabSetting" replaceBySpace="no" size="3" />
-        <GUIConfig name="AppPosition" x="93" y="-11" width="1217" height="1087" isMaximized="no" />
+        <GUIConfig name="AppPosition" x="277" y="-2" width="1259" height="1087" isMaximized="no" />
         <GUIConfig name="noUpdate" intervalDays="15" nextUpdateDate="20171218">no</GUIConfig>
         <GUIConfig name="Auto-detection">auto</GUIConfig>
         <GUIConfig name="CheckHistoryFiles">no</GUIConfig>
@@ -204,7 +208,7 @@
         <GUIConfig name="ScintillaPrimaryView" lineNumberMargin="show" bookMarkMargin="hide" indentGuideLine="show" folderMarkStyle="box" lineWrapMethod="indent" currentLineHilitingShow="show" scrollBeyondLastLine="yes" disableAdvancedScrolling="no" wrapSymbolShow="hide" Wrap="yes" borderEdge="no" edge="no" edgeNbColumn="80" zoom="1" zoom2="0" whiteSpaceShow="hide" eolShow="hide" borderWidth="0" smoothFont="yes" />
         <GUIConfig name="DockingManager" leftWidth="155" rightWidth="473" topHeight="200" bottomHeight="310">
             <FloatingWindow cont="4" x="642" y="-8" width="1250" height="439" />
-            <PluginDlg pluginName="Notepad++::InternalFunction" id="0" curr="1" prev="4" isVisible="no" />
+            <PluginDlg pluginName="Notepad++::InternalFunction" id="0" curr="1" prev="4" isVisible="yes" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="42051" curr="1" prev="-1" isVisible="no" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="44084" curr="1" prev="-1" isVisible="no" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="42052" curr="1" prev="-1" isVisible="no" />
@@ -216,9 +220,10 @@
             <PluginDlg pluginName="3P" id="2" curr="0" prev="-1" isVisible="no" />
             <PluginDlg pluginName="3P" id="1" curr="0" prev="-1" isVisible="no" />
             <ActiveTabs cont="0" activeTab="-1" />
-            <ActiveTabs cont="1" activeTab="-1" />
+            <ActiveTabs cont="1" activeTab="0" />
             <ActiveTabs cont="2" activeTab="-1" />
             <ActiveTabs cont="3" activeTab="-1" />
+            <ActiveTabs cont="4" activeTab="-1" />
         </GUIConfig>
     </GUIConfigs>
     <ProjectPanels>

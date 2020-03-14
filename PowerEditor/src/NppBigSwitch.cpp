@@ -90,8 +90,7 @@ LRESULT CALLBACK Notepad_plus_Window::Notepad_plus_Proc(HWND hwnd, UINT message,
 }
 
 
-LRESULT Notepad_plus_Window::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
+LRESULT Notepad_plus_Window::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam){
 	switch (message)
 	{
 		case WM_CREATE:
@@ -128,8 +127,7 @@ int CharacterIs(TCHAR c, const TCHAR *any)
 	return FALSE;
 }
 
-LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
+LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam){
 	LRESULT result = FALSE;
 	NppParameters& nppParam = NppParameters::getInstance();
 
@@ -1641,7 +1639,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case WM_ACTIVATE:
 		{
-			_pEditView->getFocus();
+			_pEditView->focus();
 			return TRUE;
 		}
 
@@ -1911,7 +1909,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				//case WM_LBUTTONDBLCLK:
 				case WM_LBUTTONUP :
 				{
-					_pEditView->getFocus();
+					_pEditView->focus();
 					::ShowWindow(hwnd, SW_SHOW);
 					if (!_pPublicInterface->isPrelaunch())
 						_pTrayIco->doTrayIcon(REMOVE);

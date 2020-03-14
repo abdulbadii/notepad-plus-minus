@@ -483,7 +483,7 @@ bool Finder::notify(SCNotification *notification)
 		case SCN_PAINTED :
 			if (isDoubleClicked)
 			{
-				(*_ppEditView)->getFocus();
+				(*_ppEditView)->focus();
 				isDoubleClicked = false;
 			}
 			break;
@@ -1683,7 +1683,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 							}	
 						}
 						setStatusbarMessage(result, FSMessage);
-						getFocus();
+						focus();
 					}
 				}
 				return TRUE;
@@ -1720,7 +1720,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 						if (isMacroRecording) saveInMacro(wParam, FR_OP_FIND);
 						setStatusbarMessage(result, FSMessage);
-						getFocus();
+						focus();
 					}
 				}
 				return TRUE;
@@ -1758,7 +1758,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 							}
 						}
 						setStatusbarMessage(result, FSMessage);
-						getFocus();
+						focus();
 					}
 				}
 				return TRUE;
@@ -1955,8 +1955,7 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 	if (oFindStatus)
 		*oFindStatus = FSFound;
 
-	if (!txt2find || !txt2find[0])
-		return false;
+	if (!txt2find || !txt2find[0])	return false;
 
 	const FindOption *pOptions = options?options:_env;
 
@@ -2084,7 +2083,7 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 				// if the dialog is not shown, pass the focus to his parent(ie. Notepad++)
 				if (!::IsWindowVisible(_hSelf))
 				{
-					(*_ppEditView)->getFocus();
+					(*_ppEditView)->focus();
 				}
 				else
 				{
@@ -2221,29 +2220,7 @@ bool FindReplaceDlg::processReplace(const TCHAR *txt2find, const TCHAR *txt2repl
 	return moreMatches;	
 }
 
-
-int FindReplaceDlg::markAll(const TCHAR *txt2find, int styleID, bool isWholeWordSelected)
-{
-	FindOption opt;
-	opt._isMatchCase = _options._isMatchCase;
-	// if whole word is selected for being colorized, isWholeWord option in Find/Replace dialog will be checked
-	// otherwise this option is false, because user may want to find the words contain the parts to search 
-	opt._isWholeWord = isWholeWordSelected?_options._isWholeWord:false;
-	opt._str2Search = txt2find;
-
-	int nbFound = processAll(ProcessMarkAllExt, &opt, true, NULL, styleID);
-	return nbFound;
-}
-
-
-int FindReplaceDlg::markAllInc(const FindOption *opt)
-{
-	int nbFound = processAll(ProcessMarkAll_IncSearch, opt,  true);
-	return nbFound;
-}
-
-int FindReplaceDlg::processAll(ProcessOperation op, const FindOption *opt, bool isEntire, const FindersInfo *pFindersInfo, int colourStyleID)
-{
+int FindReplaceDlg::processAll(ProcessOperation op, const FindOption *opt, bool isEntire, const FindersInfo *pFindersInfo, int colourStyleID)	{
 	if (op == ProcessReplaceAll && (*_ppEditView)->getCurrentBuffer()->isReadOnly())
 	{
 		NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
@@ -2644,9 +2621,8 @@ void FindReplaceDlg::replaceAllInOpenedDocs()
 }
 
 void FindReplaceDlg::findAllIn(InWhat op){
-	// bool justCreated = false;
-	if (!_pFinder)
-	{
+
+	if (!_pFinder)	{
 		_pFinder = new Finder();
 		_pFinder->init(_hInst, _hSelf, _ppEditView);
 		_pFinder->setVolatiled(false);
@@ -2693,7 +2669,7 @@ void FindReplaceDlg::findAllIn(InWhat op){
 		::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
 		::UpdateWindow(_hParent);
 		_pFinder->setFinderStyle();
-		// justCreated = true;
+
 		// Send the address of _MarkingsStruct to the lexer
 		char ptrword[sizeof(void*)*2+1];
 		sprintf(ptrword, "%p", &_pFinder->_markingsStruct);
@@ -2701,9 +2677,6 @@ void FindReplaceDlg::findAllIn(InWhat op){
 	}
 	else	_pFinder->setFinderStyle();
 
-	// if (justCreated)
-	// {
-	// }
 	
 	::SendMessage(_pFinder->getHSelf(), WM_SIZE, 0, 0);
 
@@ -2714,30 +2687,29 @@ void FindReplaceDlg::findAllIn(InWhat op){
 		cmdid = WM_FINDINFILES;
 	else if (op == CURRENT_DOC)
 		cmdid = WM_FINDALL_INCURRENTDOC;
-	else
-		return;
-
+	else		return;
+	
+	
 	if (::SendMessage(_hParent, cmdid, 0, 0))
 	{
 		if (_findAllResult) 
-			focusOnFinder();
+			openFinder();
 		else
 		{
 			// Show finder
 			::SendMessage(_hParent, NPPM_DMMSHOW, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
-			getFocus(); // no hits
+			focus(); // no hits
 		}
 	}
 	else // error - search folder doesn't exist
 		::SendMessage(_hSelf, WM_NEXTDLGCTL, reinterpret_cast<WPARAM>(::GetDlgItem(_hSelf, IDD_FINDINFILES_DIR_COMBO)), TRUE);
 }
 
-Finder * FindReplaceDlg::createFinder()
-{
+Finder * FindReplaceDlg::createFinder()	{
 	Finder *pFinder = new Finder();
 
 	pFinder->init(_hInst, _hSelf, _ppEditView);
-	
+
 	tTbData	data = { 0 };
 	pFinder->create(&data, false);
 	::SendMessage(_hParent, NPPM_MODELESSDIALOG, MODELESSDIALOGREMOVE, reinterpret_cast<WPARAM>(pFinder->getHSelf()));
@@ -2792,7 +2764,7 @@ Finder * FindReplaceDlg::createFinder()
 
 	// Show finder
 	::SendMessage(_hParent, NPPM_DMMSHOW, 0, reinterpret_cast<LPARAM>(pFinder->getHSelf()));
-	pFinder->_scintView.getFocus();
+	pFinder->_scintView.focus();
 
 	return pFinder;
 }
@@ -2865,16 +2837,6 @@ void FindReplaceDlg::enableReplaceFunc(bool isEnable)
 	::SetWindowText(_hSelf, label);
 
 	setDefaultButton(IDOK);
-}
-
-void FindReplaceDlg::enableMarkAllControls(bool isEnable)
-{
-	int hideOrShow = isEnable?SW_SHOW:SW_HIDE;
-	::ShowWindow(::GetDlgItem(_hSelf, IDCMARKALL),hideOrShow);
-	::ShowWindow(::GetDlgItem(_hSelf, IDC_MARKLINE_CHECK),hideOrShow);
-	::ShowWindow(::GetDlgItem(_hSelf, IDC_PURGE_CHECK),hideOrShow);
-	::ShowWindow(::GetDlgItem(_hSelf, IDC_CLEAR_ALL),hideOrShow);
-	::ShowWindow(::GetDlgItem(_hSelf, IDC_IN_SELECTION_CHECK), hideOrShow);
 }
 
 void FindReplaceDlg::enableFindInFilesControls(bool isEnable)
@@ -3226,6 +3188,35 @@ void FindReplaceDlg::execSavedCommand(int cmd, uptr_t intValue, const generic_st
 	}
 }
 
+int FindReplaceDlg::markAll(const TCHAR *txt2find, int styleID, bool isWholeWordSelected)
+{
+	FindOption opt;
+	opt._isMatchCase = _options._isMatchCase;
+	// if whole word is selected for being colorized, isWholeWord option in Find/Replace dialog will be checked
+	// otherwise this option is false, because user may want to find the words contain the parts to search 
+	opt._isWholeWord = isWholeWordSelected?_options._isWholeWord:false;
+	opt._str2Search = txt2find;
+
+	int nbFound = processAll(ProcessMarkAllExt, &opt, true, NULL, styleID);
+	return nbFound;
+}
+
+int FindReplaceDlg::markAllInc(const FindOption *opt)
+{
+	int nbFound = processAll(ProcessMarkAll_IncSearch, opt,  true);
+	return nbFound;
+}
+
+void FindReplaceDlg::enableMarkAllControls(bool isEnable)
+{
+	int hideOrShow = isEnable?SW_SHOW:SW_HIDE;
+	::ShowWindow(::GetDlgItem(_hSelf, IDCMARKALL),hideOrShow);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_MARKLINE_CHECK),hideOrShow);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_PURGE_CHECK),hideOrShow);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_CLEAR_ALL),hideOrShow);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_IN_SELECTION_CHECK), hideOrShow);
+}
+
 void FindReplaceDlg::clearMarks(const FindOption& opt)
 {
 	if (opt._isInSelection)
@@ -3525,7 +3516,7 @@ INT_PTR CALLBACK FindIncrementDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 			{
 				case IDCANCEL :
 					(*(_pFRDlg->_ppEditView))->clearIndicator(SCE_UNIVERSAL_FOUND_STYLE_INC);
-					(*(_pFRDlg->_ppEditView))->getFocus();
+					(*(_pFRDlg->_ppEditView))->focus();
 					display(false);
 					return TRUE;
 

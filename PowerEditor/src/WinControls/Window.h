@@ -116,7 +116,7 @@ public:
 		return _hParent;
 	}
 
-	void getFocus() const {
+	void focus() const {
 		::SetFocus(_hSelf);
 	}
 

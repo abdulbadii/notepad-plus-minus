@@ -167,7 +167,7 @@ void AnsiCharPanel::insertChar(unsigned char char2insert) const
 	(*_ppEditView)->execute(SCI_REPLACESEL, 0, reinterpret_cast<LPARAM>(""));
 	size_t len = (char2insert < 128) ? 1 : strlen(multiByteStr);
 	(*_ppEditView)->execute(SCI_ADDTEXT, len, reinterpret_cast<LPARAM>(multiByteStr));
-	(*_ppEditView)->getFocus();
+	(*_ppEditView)->focus();
 }
 
 void AnsiCharPanel::insertString(LPWSTR string2insert) const
@@ -194,5 +194,5 @@ void AnsiCharPanel::insertString(LPWSTR string2insert) const
 	(*_ppEditView)->execute(SCI_REPLACESEL, 0, reinterpret_cast<LPARAM>(""));
 	size_t len = strlen(multiByteStr);
 	(*_ppEditView)->execute(SCI_ADDTEXT, len, reinterpret_cast<LPARAM>(multiByteStr));
-	(*_ppEditView)->getFocus();
+	(*_ppEditView)->focus();
 }

@@ -232,7 +232,6 @@ public :
 		_winVer = (NppParameters::getInstance()).getWinVersion();
 		_env = &_options;
 	};
-
 	~FindReplaceDlg();
 
 	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView) {
@@ -305,12 +304,20 @@ public :
 		_pFinder->finishFilesSearch(count, isfold, dir);
 	}
 
-	void focusOnFinder() {
+	void openFinder()	{
 		// Show finder and set focus
-		if (_pFinder) 
-		{
+		if (_pFinder)	{
+			_FinderIsOpen=1;
 			::SendMessage(_hParent, NPPM_DMMSHOW, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
-			_pFinder->_scintView.getFocus();
+			_pFinder->_scintView.focus();
+		}
+	};
+
+	void closeFinder()	{
+		if (_pFinder)	{
+			_FinderIsOpen=0;
+			::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
+			_pFinder->_scintView.focus();
 		}
 	};
 
@@ -336,6 +343,7 @@ public :
 	bool isVolatiled()
 		{return _pFinder->_canBeVolatiled;}
 	int _findAllResult;
+	bool _FinderIsOpen;
 
 protected :
 	void resizeDialogElements(LONG newWidth);
@@ -349,8 +357,7 @@ protected :
 
 private :
 	RECT _initialWindowRect;
-	LONG _deltaWidth;
-	LONG _initialClientWidth;
+	LONG _deltaWidth, _initialClientWidth;
 
 	DIALOG_TYPE _currentStatus;
 	RECT _findClosePos, _replaceClosePos, _findInFilesClosePos;
