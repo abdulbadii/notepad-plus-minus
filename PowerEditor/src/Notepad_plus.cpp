@@ -3595,8 +3595,7 @@ bool Notepad_plus::removeBufferFromView(BufferID id, int whichOne)
 
 int Notepad_plus::switchEditViewTo(int gid)
 {
-	if (currentView() == gid)
-	{
+	if (currentView() == gid)	{
 		//make sure focus is ok, then leave
 		_pEditView->focus();	//set the focus
 		return gid;
@@ -3604,7 +3603,6 @@ int Notepad_plus::switchEditViewTo(int gid)
 
 	if (!viewVisible(gid))
 		return currentView();	//cannot activate invisible view
-
 	int oldView = currentView();
 	int newView = otherView();
 

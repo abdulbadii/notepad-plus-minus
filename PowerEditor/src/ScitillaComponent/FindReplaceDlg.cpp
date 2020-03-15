@@ -2688,18 +2688,17 @@ void FindReplaceDlg::findAllIn(InWhat op){
 	else if (op == CURRENT_DOC)
 		cmdid = WM_FINDALL_INCURRENTDOC;
 	else		return;
-	
-	
+
 	if (::SendMessage(_hParent, cmdid, 0, 0))
 	{
 		if (_findAllResult) 
 			openFinder();
-		else
+/* 		else
 		{
 			// Show finder
 			::SendMessage(_hParent, NPPM_DMMSHOW, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
 			focus(); // no hits
-		}
+		} */
 	}
 	else // error - search folder doesn't exist
 		::SendMessage(_hSelf, WM_NEXTDLGCTL, reinterpret_cast<WPARAM>(::GetDlgItem(_hSelf, IDD_FINDINFILES_DIR_COMBO)), TRUE);

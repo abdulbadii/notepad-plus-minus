@@ -1075,14 +1075,19 @@ void Notepad_plus::command(int id)
 		}
 		break;
 
-		case IDM_TOGGLE_FIND_RESULTS:	{
-		/*if (::GetFocus() == _findReplaceDlg.getHFindResults())
-				switchEditViewTo(MAIN_VIEW);
-			else */
-			if (_findReplaceDlg._FinderIsOpen)
+		case IDM_TOGGLE_FIND_RESULTS:
+			if (_findReplaceDlg._FinderIsOpen)	{
 				_findReplaceDlg.closeFinder();
+				switchEditViewTo(MAIN_VIEW);
+			}
 			else
 				_findReplaceDlg.openFinder();
+		break;
+
+		case IDM_MAIN_FIND_RESULTS:	{
+			if (::GetFocus() == _findReplaceDlg.getHFindResults())
+				switchEditViewTo(MAIN_VIEW);
+			else	_findReplaceDlg.openSwFinder();
 		}
 		break;
 

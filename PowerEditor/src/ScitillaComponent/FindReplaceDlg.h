@@ -138,7 +138,8 @@ public:
 	void deleteResult();
 	std::vector<generic_string> getResultFilePaths() const;
 	bool canFind(const TCHAR *fileName, size_t lineNumber) const;
-	void setVolatiled(bool val) { _canBeVolatiled = val; };
+	void setVolatiled(bool val) { _canBeVolatiled = val;}
+	// ScintillaEditView& scView()	{return _scintView;}
 
 protected :
 	virtual INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
@@ -261,8 +262,6 @@ public :
 
 	void gotoNextFoundResult(int direction = 0) {if (_pFinder) _pFinder->gotoNextFoundResult(direction);};
 
-	// void putFindResult(int result) {	_findAllResult = result;};
-	
 	const TCHAR * getDir2Search() const {return _env->_directory.c_str();};
 
 	void getPatterns(std::vector<generic_string> & patternVect);
@@ -307,17 +306,16 @@ public :
 	void openFinder()	{
 		// Show finder and set focus
 		if (_pFinder)	{
-			_FinderIsOpen=1;
 			::SendMessage(_hParent, NPPM_DMMSHOW, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
 			_pFinder->_scintView.focus();
+			_FinderIsOpen=1;
 		}
 	};
 
 	void closeFinder()	{
 		if (_pFinder)	{
-			_FinderIsOpen=0;
 			::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
-			_pFinder->_scintView.focus();
+			_FinderIsOpen=0;
 		}
 	};
 
@@ -339,9 +337,13 @@ public :
 	void setStatusbarMessage(const generic_string & msg, FindStatus staus);
 	Finder * createFinder();
 	bool removeFinder(Finder *finder2remove);
-
 	bool isVolatiled()
 		{return _pFinder->_canBeVolatiled;}
+	void openSwFinder(){
+		if (_FinderIsOpen)	_pFinder->_scintView.focus();
+		else		openFinder();
+	}
+
 	int _findAllResult;
 	bool _FinderIsOpen;
 
@@ -365,7 +367,7 @@ private :
 	RECT _countInSelCheckPos, _replaceInSelCheckPos;
 
 	ScintillaEditView **_ppEditView = nullptr;
-	Finder  *_pFinder = nullptr;
+	Finder *_pFinder = nullptr;
 
 	std::vector<Finder *> _findersOfFinder;
 

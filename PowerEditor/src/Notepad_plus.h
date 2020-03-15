@@ -423,7 +423,7 @@ private:
 		return MAIN_VIEW;//_activeView;
 	}
 	int otherView(){
-		return SUB_VIEW;//_otherView;
+		return _otherView;
 	}
 
 	int otherView(int view_now){

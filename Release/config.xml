@@ -21,6 +21,12 @@
         <Filter name="*.c *.cpp *.cc *.h" />
         <Filter name="*.xml" />
         <Filter name="*.cpp" />
+        <Find name="charLeft" />
+        <Find name="ha" />
+        <Find name="Searching" />
+        <Find name="Progress" />
+        <Find name="WINAPI" />
+        <Find name="CreateWindowEx" />
         <Find name="Finder" />
         <Find name="finishFilesSearch" />
         <Find name="generic_string" />
@@ -114,12 +120,6 @@
         <Find name="Launch gho" />
         <Find name="_quoteParams" />
         <Find name="QuoteParams" />
-        <Find name="frog" />
-        <Find name="Window" />
-        <Find name='\bTEXT\(&quot;(?:(?:(.*?)(?&lt;![^\\]\\)(?:&quot;\)\h*([],+)}&amp;|&lt;])|\bTEXT\(&quot;)|(.*)(?&lt;![^\\]\\)&quot;\)\h*(;|\\$))|(.*?)(?&lt;![^\\]\\)&quot;\)(?=.*?\bTEXT\(&quot;))' />
-        <Find name='\bTEXT\(&quot;([^()]*|.*?)(?&lt;![^\\]\\)&quot;(\h*\w+)?\h*\)\h*(?=[],)};+|&amp;:&lt;/&gt;]|$)' />
-        <Find name='\bTEXT\(&quot;(?:(?!.*?\bTEXT\(&quot;)(?:(.*?)(?&lt;!\\)&quot;\)([,)}]|\h*$)|(.*)(?&lt;!\\)&quot;\)(;))|(.*?)(?&lt;!\\)&quot;\)(?=.*?\bTEXT\(&quot;))' />
-        <Find name='//\bTEXT\(&quot;(?:(?!.*?\bTEXT\(&quot;)(?:(.*?)(?&lt;!\\)&quot;\)([,)}]|\h*$)|(.*)(?&lt;!\\)&quot;\)(;))|(.*?)(?&lt;!\\)&quot;\)(?=.*?\bTEXT\(&quot;))' />
         <Replace name="L\1" />
         <Replace name='L&quot;\1\3\5&quot;\2\4' />
         <Replace name='&quot;' />
@@ -172,7 +172,7 @@
         <GUIConfig name="ScintillaViewsSplitter">vertical</GUIConfig>
         <GUIConfig name="UserDefineDlg" position="undocked">hide</GUIConfig>
         <GUIConfig name="TabSetting" replaceBySpace="no" size="3" />
-        <GUIConfig name="AppPosition" x="277" y="-2" width="1259" height="1087" isMaximized="no" />
+        <GUIConfig name="AppPosition" x="333" y="-13" width="1259" height="1087" isMaximized="no" />
         <GUIConfig name="noUpdate" intervalDays="15" nextUpdateDate="20171218">no</GUIConfig>
         <GUIConfig name="Auto-detection">auto</GUIConfig>
         <GUIConfig name="CheckHistoryFiles">no</GUIConfig>

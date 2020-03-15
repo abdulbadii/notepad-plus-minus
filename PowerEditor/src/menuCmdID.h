@@ -236,6 +236,7 @@
     #define    IDM_SEARCH_GONEXTMARKER_DEF     (IDM_SEARCH + 44)
 
     #define    IDM_TOGGLE_FIND_RESULTS      (IDM_SEARCH + 45)
+    #define    IDM_MAIN_FIND_RESULTS      (IDM_SEARCH + 55)
 	 
     #define    IDM_SEARCH_GOTONEXTFOUND	       (IDM_SEARCH + 46)
     #define    IDM_SEARCH_GOTOPREVFOUND	       (IDM_SEARCH + 47)

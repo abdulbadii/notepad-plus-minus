@@ -395,7 +395,8 @@ BEGIN
         MENUITEM "Find (Volatile) Next",        IDM_SEARCH_VOLATILE_FINDNEXT
         MENUITEM "Find (Volatile) Previous",    IDM_SEARCH_VOLATILE_FINDPREV
         MENUITEM "&Incremental Search",         IDM_SEARCH_FINDINCREMENT
-        MENUITEM "Toggle Search Result",       IDM_TOGGLE_FIND_RESULTS
+        MENUITEM "Show/Hide Find Result",       IDM_TOGGLE_FIND_RESULTS
+        MENUITEM "Main/Find Result View",       IDM_MAIN_FIND_RESULTS
         MENUITEM "Next Search Result",          IDM_SEARCH_GOTONEXTFOUND
         MENUITEM "Previous Search Result",      IDM_SEARCH_GOTOPREVFOUND
         MENUITEM "&Go to...",                   IDM_SEARCH_GOTOLINE
@@ -974,7 +975,7 @@ BEGIN
         MENUITEM "&Run...",    IDM_EXECUTE
     END
 
-    POPUP "&?"
+    POPUP "Help"
     BEGIN
         MENUITEM "Command Line Arguments...",      IDM_CMDLINEARGUMENTS
         MENUITEM SEPARATOR
