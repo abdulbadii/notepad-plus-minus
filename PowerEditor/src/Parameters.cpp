@@ -190,6 +190,7 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_I,       IDM_SEARCH_FINDINCREMENT,                     true,  true,  false, nullptr },
 	{ VK_SPACE,      IDM_TOGGLE_FIND_RESULTS,                  true,  true, false, nullptr },
 	{ VK_N,      IDM_MAIN_FIND_RESULTS,                  true,  true, false, nullptr },
+	{ VK_SPACE,      IDM_NPPM_IN_FINFERCLEARALL,                  true,  true, true, nullptr },
 	{ VK_F4,      IDM_SEARCH_GOTOPREVFOUND,                     false, false, true,  nullptr },
 	{ VK_F4,      IDM_SEARCH_GOTONEXTFOUND,                     false, false, false, nullptr },
 	{ VK_G,       IDM_SEARCH_GOTOLINE,                          true,  false, false, nullptr },

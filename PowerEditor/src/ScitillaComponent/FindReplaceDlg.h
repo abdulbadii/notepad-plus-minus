@@ -262,19 +262,14 @@ public :
 
 	void gotoNextFoundResult(int direction = 0) {if (_pFinder) _pFinder->gotoNextFoundResult(direction);};
 
-	const TCHAR * getDir2Search() const {return _env->_directory.c_str();};
+// inline	const TCHAR * getDir2Search() const {return _options._directory.c_str();};
+// inline generic_string getText2search() const {	return _options._str2Search;}
 
 	void getPatterns(std::vector<generic_string> & patternVect);
 
-	void launchFindInFilesDlg() {
-		doDialog(FINDINFILES_DLG);
-	};
+	void launchFindInFilesDlg() {		doDialog(FINDINFILES_DLG);};
 
 	void setFindInFilesDirFilter(const TCHAR *dir, const TCHAR *filters);
-
-	generic_string getText2search() const {
-		return _env->_str2Search;
-	};
 
 	const generic_string & getFilters() const {return _env->_filters;};
 	const generic_string & getDirectory() const {return _env->_directory;};
@@ -295,7 +290,7 @@ public :
 	void beginNewFilesSearch()
 	{
 		_pFinder->beginNewFilesSearch();
-		_pFinder->addSearchLine(getText2search().c_str());
+		_pFinder->addSearchLine(_options._str2Search.c_str());
 	}
 
 	void finishFilesSearch(int count, bool isfold=1, const TCHAR *dir=nullptr)
@@ -306,16 +301,16 @@ public :
 	void openFinder()	{
 		// Show finder and set focus
 		if (_pFinder)	{
+			_FinderIsOpen=1;
 			::SendMessage(_hParent, NPPM_DMMSHOW, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
 			_pFinder->_scintView.focus();
-			_FinderIsOpen=1;
 		}
 	};
 
 	void closeFinder()	{
 		if (_pFinder)	{
-			::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
 			_FinderIsOpen=0;
+			::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
 		}
 	};
 
@@ -339,13 +334,14 @@ public :
 	bool removeFinder(Finder *finder2remove);
 	bool isVolatiled()
 		{return _pFinder->_canBeVolatiled;}
+
 	void openSwFinder(){
-		if (_FinderIsOpen)	_pFinder->_scintView.focus();
+		if (_FinderIsOpen)		_pFinder->_scintView.focus();
 		else		openFinder();
 	}
-
+	void clearAllFinder()	{	_pFinder->removeAll(); }
 	int _findAllResult;
-	bool _FinderIsOpen;
+	bool _FinderIsOpen=0;
 
 protected :
 	void resizeDialogElements(LONG newWidth);

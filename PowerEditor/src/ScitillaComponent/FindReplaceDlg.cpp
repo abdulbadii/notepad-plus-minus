@@ -950,37 +950,37 @@ INT_PTR CALLBACK Finder::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 					return TRUE;
 				}
 
-				case NPPM_INTERNAL_SCINTILLAFINFERCOLLAPSE :
+				case NPPM_INTERNAL_FINFERCOLLAPSE :
 				{
 					_scintView.foldAll(fold_collapse);
 					return TRUE;
 				}
 
-				case NPPM_INTERNAL_SCINTILLAFINFERUNCOLLAPSE :
+				case NPPM_INTERNAL_FINFERUNCOLLAPSE :
 				{
 					_scintView.foldAll(fold_uncollapse);
 					return TRUE;
 				}
 
-				case NPPM_INTERNAL_SCINTILLAFINFERCOPY :
+				case NPPM_INTERNAL_FINFERCOPY :
 				{
 					copy();
 					return TRUE;
 				}
 
-				case NPPM_INTERNAL_SCINTILLAFINFERSELECTALL :
+				case NPPM_INTERNAL_FINFERSELECTALL :
 				{
 					_scintView.execute(SCI_SELECTALL);
 					return TRUE;
 				}
 
-				case NPPM_INTERNAL_SCINTILLAFINFERCLEARALL:
+				case NPPM_INTERNAL_FINFERCLEARALL:
 				{
 					removeAll();
 					return TRUE;
 				}
 
-				case NPPM_INTERNAL_SCINTILLAFINFEROPENALL:
+				case NPPM_INTERNAL_FINFEROPENALL:
 				{
 					openAll();
 					return TRUE;
@@ -1017,14 +1017,14 @@ INT_PTR CALLBACK Finder::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 				if (_canBeVolatiled)
 					tmp.push_back(MenuItemUnit(NPPM_INTERNAL_REMOVEFINDER, closeThis));
 				tmp.push_back(MenuItemUnit(0, L"Separator"));
-				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFERCOLLAPSE, collapseAll));
-				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFERUNCOLLAPSE, uncollapseAll));
+				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_FINFERCOLLAPSE, collapseAll));
+				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_FINFERUNCOLLAPSE, uncollapseAll));
 				tmp.push_back(MenuItemUnit(0, L"Separator"));
-				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFERCOPY, copy));
-				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFERSELECTALL, selectAll));
-				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFERCLEARALL, clearAll));
+				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_FINFERCOPY, copy));
+				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_FINFERSELECTALL, selectAll));
+				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_FINFERCLEARALL, clearAll));
 				tmp.push_back(MenuItemUnit(0, L"Separator"));
-				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFEROPENALL, openAll));
+				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_FINFEROPENALL, openAll));
 
 				scintillaContextmenu.create(_hSelf, tmp);
 
@@ -1432,7 +1432,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 				case IDC_FINDPREV:
 				case IDC_FINDNEXT:
-				case IDOK : // Find Next : only for FIND_DLG and REPLACE_DLG
+				case IDOK : // Find Next : only for REPLACE_DLG
 				{
 					setStatusbarMessage(generic_string(), FSNoMessage);
 
@@ -1513,7 +1513,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 //Process actions
 				case IDC_FINDALL_OPENEDFILES :
 				{
-					if (_currentStatus == REPLACE_DLG) //==FIND_DLG
+					if (_currentStatus == REPLACE_DLG)
 					{
 						setStatusbarMessage(L"", FSNoMessage);
  						HWND hFindCombo = ::GetDlgItem(_hSelf, IDFINDWHAT);
@@ -2074,11 +2074,9 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 			//failed, or failed twice with wrap
 			if (NotIncremental == pOptions->_incrementalType) //incremental search doesnt trigger messages
 			{	
-				generic_string newTxt2find = stringReplace(txt2find, L"&", L"&&");
-				NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
-				generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-cannot-find", L"Find: Can't find the text \"$STR_REPLACE$\"");
-				msg = stringReplace(msg, L"$STR_REPLACE$", newTxt2find);
-				setStatusbarMessage(msg, FSNotFound);
+		generic_string newTxt2find = stringReplace(txt2find, L"&", L"&&");
+		generic_string msg = NppParameters::getInstance().getNativeLangSpeaker()->getLocalizedStrFromID("find-status-cannot-find", L"Find: Can't find the text \"$STR_REPLACE$\"");
+		setStatusbarMessage(stringReplace(msg, L"$STR_REPLACE$", newTxt2find), FSNotFound);
 				
 				// if the dialog is not shown, pass the focus to his parent(ie. Notepad++)
 				if (!::IsWindowVisible(_hSelf))
@@ -2679,7 +2677,13 @@ void FindReplaceDlg::findAllIn(InWhat op){
 
 	
 	::SendMessage(_pFinder->getHSelf(), WM_SIZE, 0, 0);
-
+/*  	if ((*_ppEditView)->searchInTarget(_options._str2Search.c_str()) == -2)	{
+		NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-invalid-re", L"Find: Invalid regular expression");
+		setStatusbarMessage(msg, FSNotFound);
+		return;
+	}*/
+	
 	int cmdid = 0;
 	if (op == ALL_OPEN_DOCS)
 		cmdid = WM_FINDALL_INOPENEDDOC;
@@ -2691,14 +2695,14 @@ void FindReplaceDlg::findAllIn(InWhat op){
 
 	if (::SendMessage(_hParent, cmdid, 0, 0))
 	{
-		if (_findAllResult) 
-			openFinder();
-/* 		else
-		{
-			// Show finder
-			::SendMessage(_hParent, NPPM_DMMSHOW, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
-			focus(); // no hits
-		} */
+		if (_findAllResult)		openFinder();
+ 		else	{
+		// ::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
+		::SetFocus(::GetDlgItem(getHSelf(), IDFINDWHAT));
+		
+		generic_string msg = NppParameters::getInstance().getNativeLangSpeaker()->getLocalizedStrFromID("find-status-cannot-find", L"Find: Can't find the text \"$STR_REPLACE$\"");
+		setStatusbarMessage(stringReplace(msg, L"$STR_REPLACE$", stringReplace(_options._str2Search, L"&", L"&&")), FSNotFound);
+		}
 	}
 	else // error - search folder doesn't exist
 		::SendMessage(_hSelf, WM_NEXTDLGCTL, reinterpret_cast<WPARAM>(::GetDlgItem(_hSelf, IDD_FINDINFILES_DIR_COMBO)), TRUE);

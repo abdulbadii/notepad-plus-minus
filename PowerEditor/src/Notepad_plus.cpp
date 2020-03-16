@@ -1503,7 +1503,7 @@ bool Notepad_plus::replaceInFiles()
 {
 	std::lock_guard<std::mutex> lock(replaceInFiles_mutex);
 
-	const TCHAR *dir2Search = _findReplaceDlg.getDir2Search();
+	const TCHAR *dir2Search = _findReplaceDlg._options._directory.c_str();
 	if (!dir2Search[0] || !::PathFileExists(dir2Search))
 	{
 		return false;
@@ -1683,16 +1683,13 @@ bool Notepad_plus::findInFinderFiles(FindersInfo *findInFolderInfo)
 
 bool Notepad_plus::findInFiles()	{
 	const TCHAR *dir2Search;
-	generic_string dir, face = _findReplaceDlg.getDir2Search();
+	generic_string dir, face = _findReplaceDlg._options._directory.c_str();
 	if (not face[0])	return false;
-	enum :bool { noFold, fold };
 	size_t st, dirOff;
 
-	bool hasMore=1, get1=0;
+	bool noFold=0, fold=1, hasMore=1, get1=0;
 	bool isRecursive = _findReplaceDlg.isRecursive();
 	bool isInHiddenDir = _findReplaceDlg.isInHiddenDir();
-	ScintillaEditView *pOldView = _pEditView;
-	_pEditView = &_invisibleEditView;
 	Document oldDoc = _invisibleEditView.execute(SCI_GETDOCPOINTER);
 	while (hasMore)	{
 		dirOff = face.find_last_of(L';');
@@ -1762,7 +1759,7 @@ bool Notepad_plus::findInFiles()	{
 				findersInfo._pFileName = fileNames.at(i).c_str();
 				nbTotal += _findReplaceDlg.processAll(ProcessFindAll, FindReplaceDlg::_env, true, &findersInfo);
 				if (closeBuf)
-					MainFileManager.closeBuffer(id, _pEditView);
+					MainFileManager.closeBuffer(id, &_invisibleEditView);
 			}
 			if (i == updateOnCount)
 			{
@@ -1782,8 +1779,7 @@ bool Notepad_plus::findInFiles()	{
 	}
 	
 	_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, oldDoc);
-	_pEditView = pOldView;
-	if (get1 && !NppParameters::getInstance().getFindHistory()._isDlgAlwaysVisible)
+	if (get1)// && !NppParameters::getInstance().getFindHistory()._isDlgAlwaysVisible)
 		_findReplaceDlg.display(false);
 	return true;
 }
@@ -1792,8 +1788,8 @@ bool Notepad_plus::findInFiles()	{
 bool Notepad_plus::findInOpenedFiles()
 {
 	int nbTotal = 0;
-	ScintillaEditView *pOldView = _pEditView;
-	_pEditView = &_invisibleEditView;
+	// ScintillaEditView *pOldView = _pEditView;
+	// _pEditView = &_invisibleEditView;
 	Document oldDoc = _invisibleEditView.execute(SCI_GETDOCPOINTER);
 
 	Buffer * pBuf = NULL;
@@ -1837,12 +1833,11 @@ bool Notepad_plus::findInOpenedFiles()
 	_findReplaceDlg.finishFilesSearch(nbTotal);
 
 	_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, oldDoc);
-	_pEditView = pOldView;
+	// _pEditView = pOldView;
 
 	_findReplaceDlg._findAllResult=nbTotal;
 
-	FindHistory & findHistory = (NppParameters::getInstance()).getFindHistory();
-	if (nbTotal && !findHistory._isDlgAlwaysVisible)
+	if (nbTotal && !NppParameters::getInstance().getFindHistory()._isDlgAlwaysVisible)
 		_findReplaceDlg.display(false);
 	return true;
 }
@@ -1874,8 +1869,7 @@ bool Notepad_plus::findInCurrentFile()
 
 	_findReplaceDlg._findAllResult=nbTotal;
 
-	FindHistory & findHistory = (NppParameters::getInstance()).getFindHistory();
-	if (nbTotal && !findHistory._isDlgAlwaysVisible)
+	if (nbTotal && !NppParameters::getInstance().getFindHistory()._isDlgAlwaysVisible)
 		_findReplaceDlg.display(false);
 	return true;
 }

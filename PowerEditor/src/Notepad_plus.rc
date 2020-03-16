@@ -229,7 +229,7 @@ IDI_VIEW_MONITORING_OFF_ICON    ICON        "icons/monitoring_off.ico"
 
 IDR_M30_MENU MENU
 BEGIN
-    POPUP "&File"
+    POPUP "File"
     BEGIN
         MENUITEM "&New",                             IDM_FILE_NEW
         MENUITEM "&Open...",                         IDM_FILE_OPEN
@@ -266,7 +266,7 @@ BEGIN
         MENUITEM "E&xit",                            IDM_FILE_EXIT
     END
 
-    POPUP "&Edit"
+    POPUP "Edit"
     BEGIN
         MENUITEM "&Undo",                            IDM_EDIT_UNDO
         MENUITEM "&Redo",                            IDM_EDIT_REDO
@@ -383,7 +383,7 @@ BEGIN
         MENUITEM "Clear Read-Only Flag",    IDM_EDIT_CLEARREADONLY
     END
 
-    POPUP "&Search"
+    POPUP "Search"
     BEGIN
         // MENUITEM "&Find...",                    IDM_SEARCH_FIND
         MENUITEM "&Find/Replace",                 IDM_SEARCH_REPLACE
@@ -396,7 +396,6 @@ BEGIN
         MENUITEM "Find (Volatile) Previous",    IDM_SEARCH_VOLATILE_FINDPREV
         MENUITEM "&Incremental Search",         IDM_SEARCH_FINDINCREMENT
         MENUITEM "Show/Hide Find Result",       IDM_TOGGLE_FIND_RESULTS
-        MENUITEM "Main/Find Result View",       IDM_MAIN_FIND_RESULTS
         MENUITEM "Next Search Result",          IDM_SEARCH_GOTONEXTFOUND
         MENUITEM "Previous Search Result",      IDM_SEARCH_GOTOPREVFOUND
         MENUITEM "&Go to...",                   IDM_SEARCH_GOTOLINE
@@ -458,7 +457,7 @@ BEGIN
         MENUITEM "Find characters in range...",        IDM_SEARCH_FINDCHARINRANGE
     END
 
-    POPUP "&View"
+    POPUP "View"
     BEGIN
         MENUITEM "Always on Top",              IDM_VIEW_ALWAYSONTOP
         MENUITEM "Toggle Full Screen Mode",    IDM_VIEW_FULLSCREENTOGGLE
@@ -567,7 +566,7 @@ BEGIN
         MENUITEM "Monitoring (tail -f)",    IDM_VIEW_MONITORING
     END
 
-    POPUP "E&ncoding"
+    POPUP "Encoding"
     BEGIN
         MENUITEM "ANSI",                    IDM_FORMAT_ANSI
         MENUITEM "UTF-8",                   IDM_FORMAT_AS_UTF_8
@@ -693,7 +692,7 @@ BEGIN
         MENUITEM "Convert to UCS-2 LE BOM",    IDM_FORMAT_CONV2_UCS_2LE
     END
 
-    POPUP "&Language"
+    POPUP "Language"
     BEGIN
         MENUITEM "ActionScript",            IDM_LANG_FLASH
         MENUITEM "Ada",                     IDM_LANG_ADA
@@ -783,7 +782,7 @@ BEGIN
         MENUITEM "User-Defined",            IDM_LANG_USER
     END
 
-    POPUP "&Language"
+    POPUP "Language"
     BEGIN
     POPUP "A"
     BEGIN
@@ -930,7 +929,7 @@ BEGIN
     MENUITEM "User-Defined",              IDM_LANG_USER
     END
 
-    POPUP "Se&ttings"
+    POPUP "Settings"
     BEGIN
         MENUITEM "Preferences...",          IDM_SETTING_PREFERENCE
         MENUITEM "Style Configurator...",   IDM_LANGSTYLE_CONFIG_DLG
@@ -945,7 +944,7 @@ BEGIN
         MENUITEM "Edit Popup ContextMenu",      IDM_SETTING_EDITCONTEXTMENU
     END
 
-    POPUP "T&ools"
+    POPUP "Tools"
     BEGIN
         POPUP "MD5"
         BEGIN
@@ -961,7 +960,7 @@ BEGIN
         END
     END
     
-    POPUP "&Macro"
+    POPUP "Macro"
     BEGIN
         MENUITEM "Start Re&cording",                   IDM_MACRO_STARTRECORDINGMACRO
         MENUITEM "S&top Recording",                    IDM_MACRO_STOPRECORDINGMACRO
@@ -970,7 +969,7 @@ BEGIN
         MENUITEM "&Run a Macro Multiple Times...",     IDM_MACRO_RUNMULTIMACRODLG
     END
 
-    POPUP "&Run"
+    POPUP "Run"
     BEGIN
         MENUITEM "&Run...",    IDM_EXECUTE
     END

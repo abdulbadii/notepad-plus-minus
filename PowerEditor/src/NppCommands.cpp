@@ -962,13 +962,10 @@ void Notepad_plus::command(int id)
 		{
 			const int strSize = FINDREPLACE_MAXLENGTH;
 			TCHAR str[strSize];
-
-			bool isFirstTime = !_findReplaceDlg.isCreated();
-
-			DIALOG_TYPE dlgID;// = FIND_DLG;
+			DIALOG_TYPE dlgID;
 			if (id == IDM_SEARCH_REPLACE)
 				dlgID = REPLACE_DLG;
-			else //if(id == IDM_SEARCH_MARK)
+			else
 				dlgID = MARK_DLG;
 			_findReplaceDlg.doDialog(dlgID, _nativeLangSpeaker.isRTL());
 
@@ -981,7 +978,7 @@ void Notepad_plus::command(int id)
 
 			setFindReplaceFolderFilter(NULL, NULL);
 
-			if (isFirstTime)
+			if (!_findReplaceDlg.isCreated())
 				_nativeLangSpeaker.changeFindReplaceDlgLang(_findReplaceDlg);
 			break;
 		}
@@ -998,7 +995,7 @@ void Notepad_plus::command(int id)
 			TCHAR str[strSize];
 
 			_pEditView->getGenericSelectedText(str, strSize, false);
-			if (0 != str[0])         // the selected text is not empty, then use it
+			if (str[0])         // the selected text is not empty, then use it
 				_incrementFindDlg.setSearchText(str, _pEditView->getCurrentBuffer()->getUnicodeMode() != uni8Bit);
 
 			_incrementFindDlg.display();
@@ -1013,7 +1010,7 @@ void Notepad_plus::command(int id)
 
 			FindOption op = _findReplaceDlg.getCurrentOptions();
 			op._whichDirection = (id == IDM_SEARCH_FINDNEXT?DIR_DOWN:DIR_UP);
-			generic_string s = _findReplaceDlg.getText2search();
+			generic_string s = _findReplaceDlg._options._str2Search;
 			FindStatus status = FSNoMessage;
 			_findReplaceDlg.processFindNext(s.c_str(), &op, &status);
 			if (status == FSEndReached)
@@ -1089,6 +1086,11 @@ void Notepad_plus::command(int id)
 				switchEditViewTo(MAIN_VIEW);
 			else	_findReplaceDlg.openSwFinder();
 		}
+		break;
+		
+		case IDM_NPPM_IN_FINFERCLEARALL:
+			if (::GetFocus() == _findReplaceDlg.getHFindResults())
+				_findReplaceDlg.clearAllFinder();
 		break;
 
 		case IDM_SEARCH_VOLATILE_FINDNEXT :

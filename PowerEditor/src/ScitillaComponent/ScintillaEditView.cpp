@@ -2335,15 +2335,22 @@ TCHAR * ScintillaEditView::getGenericSelectedText(TCHAR * txt, int size, bool ex
 }
 
 int ScintillaEditView::searchInTarget(const TCHAR * text2Find, size_t lenOfText2Find, size_t fromPos, size_t toPos) const	{
-	// if (fromPos && toPos)
 	execute(SCI_SETTARGETRANGE, fromPos, toPos);
 
 	WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 	UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
 	const char *text2FindA = wmc.wchar2char(text2Find, cp);
-	size_t text2FindALen = strlen(text2FindA);
-   	size_t len = (lenOfText2Find > text2FindALen) ? lenOfText2Find : text2FindALen;
-	return static_cast<int32_t>(execute(SCI_SEARCHINTARGET, len, reinterpret_cast<LPARAM>(text2FindA)));
+	return static_cast<int32_t>(execute(SCI_SEARCHINTARGET, max(lenOfText2Find,strlen(text2FindA)), reinterpret_cast<LPARAM>(text2FindA)));
+}
+
+int ScintillaEditView::searchInTarget(const TCHAR * text2find) const	{
+	execute(SCI_SETTARGETRANGE, 0, int(execute(SCI_GETLENGTH)));
+
+	WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
+	UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
+
+	const char *text2FindA = wmc.wchar2char(text2find, cp);
+	return static_cast<int32_t>(execute(SCI_SEARCHINTARGET, max(lstrlen(text2find), strlen(text2FindA)), reinterpret_cast<LPARAM>(text2FindA)));
 }
 
 void ScintillaEditView::appandGenericText(const TCHAR * text2Append) const
