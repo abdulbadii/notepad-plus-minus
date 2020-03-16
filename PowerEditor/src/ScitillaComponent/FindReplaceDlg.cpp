@@ -2697,11 +2697,10 @@ void FindReplaceDlg::findAllIn(InWhat op){
 	{
 		if (_findAllResult)		openFinder();
  		else	{
-		// ::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
-		::SetFocus(::GetDlgItem(getHSelf(), IDFINDWHAT));
-		
-		generic_string msg = NppParameters::getInstance().getNativeLangSpeaker()->getLocalizedStrFromID("find-status-cannot-find", L"Find: Can't find the text \"$STR_REPLACE$\"");
+				generic_string msg = NppParameters::getInstance().getNativeLangSpeaker()->getLocalizedStrFromID("find-status-cannot-find", L"Find: Can't find the text \"$STR_REPLACE$\"");
 		setStatusbarMessage(stringReplace(msg, L"$STR_REPLACE$", stringReplace(_options._str2Search, L"&", L"&&")), FSNotFound);
+
+		::SendMessage(_hSelf, WM_NEXTDLGCTL, reinterpret_cast<WPARAM>(::GetDlgItem(_hSelf, IDFINDWHAT)), TRUE);
 		}
 	}
 	else // error - search folder doesn't exist

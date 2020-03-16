@@ -1690,6 +1690,8 @@ bool Notepad_plus::findInFiles()	{
 	bool noFold=0, fold=1, hasMore=1, get1=0;
 	bool isRecursive = _findReplaceDlg.isRecursive();
 	bool isInHiddenDir = _findReplaceDlg.isInHiddenDir();
+	ScintillaEditView *pOldView = _pEditView;
+	_pEditView = &_invisibleEditView;
 	Document oldDoc = _invisibleEditView.execute(SCI_GETDOCPOINTER);
 	while (hasMore)	{
 		dirOff = face.find_last_of(L';');
@@ -1759,7 +1761,7 @@ bool Notepad_plus::findInFiles()	{
 				findersInfo._pFileName = fileNames.at(i).c_str();
 				nbTotal += _findReplaceDlg.processAll(ProcessFindAll, FindReplaceDlg::_env, true, &findersInfo);
 				if (closeBuf)
-					MainFileManager.closeBuffer(id, &_invisibleEditView);
+					MainFileManager.closeBuffer(id, _pEditView);
 			}
 			if (i == updateOnCount)
 			{
@@ -1779,7 +1781,8 @@ bool Notepad_plus::findInFiles()	{
 	}
 	
 	_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, oldDoc);
-	if (get1)// && !NppParameters::getInstance().getFindHistory()._isDlgAlwaysVisible)
+	_pEditView = pOldView;
+	if (get1 && !NppParameters::getInstance().getFindHistory()._isDlgAlwaysVisible)
 		_findReplaceDlg.display(false);
 	return true;
 }
@@ -1788,8 +1791,8 @@ bool Notepad_plus::findInFiles()	{
 bool Notepad_plus::findInOpenedFiles()
 {
 	int nbTotal = 0;
-	// ScintillaEditView *pOldView = _pEditView;
-	// _pEditView = &_invisibleEditView;
+	ScintillaEditView *pOldView = _pEditView;
+	_pEditView = &_invisibleEditView;
 	Document oldDoc = _invisibleEditView.execute(SCI_GETDOCPOINTER);
 
 	Buffer * pBuf = NULL;
@@ -1817,10 +1820,8 @@ bool Notepad_plus::findInOpenedFiles()
 		for (size_t i = 0, len2 = _subDocTab.nbItem(); i < len2 ; ++i)
 	    {
 			pBuf = MainFileManager.getBufferByID(_subDocTab.getBufferByIndex(i));
-			if (_mainDocTab.getIndexByBuffer(pBuf) != -1)
-			{
-				continue;  // clone was already searched in main; skip re-searching in sub
-			}
+			if (_mainDocTab.getIndexByBuffer(pBuf) != -1)// clone is skipped searching in sub
+				continue;  
 			_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, pBuf->getDocument());
 			auto cp = _invisibleEditView.execute(SCI_GETCODEPAGE);
 			_invisibleEditView.execute(SCI_SETCODEPAGE, pBuf->getUnicodeMode() == uni8Bit ? cp : SC_CP_UTF8);
@@ -1833,10 +1834,9 @@ bool Notepad_plus::findInOpenedFiles()
 	_findReplaceDlg.finishFilesSearch(nbTotal);
 
 	_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, oldDoc);
-	// _pEditView = pOldView;
+	_pEditView = pOldView;
 
 	_findReplaceDlg._findAllResult=nbTotal;
-
 	if (nbTotal && !NppParameters::getInstance().getFindHistory()._isDlgAlwaysVisible)
 		_findReplaceDlg.display(false);
 	return true;
