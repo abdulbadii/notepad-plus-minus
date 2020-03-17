@@ -49,8 +49,8 @@ public:
 
 class NativeLangSpeaker {
 public:
-    NativeLangSpeaker():_nativeLangA(NULL), _nativeLangEncoding(CP_ACP), _isRTL(false), _fileName(NULL){};
-    void init(TiXmlDocumentA *nativeLangDocRootA, bool loadIfEnglish = false);
+	NativeLangSpeaker():_nativeLangA(NULL), _nativeLangEncoding(CP_ACP), _fileName(NULL){};
+	void init(TiXmlDocumentA *nativeLangDocRootA, bool loadIfEnglish = false);
 	void changeConfigLang(HWND hDlg);
 	void changeLangTabContextMenu(HMENU hCM);
 	TiXmlNodeA * searchDlgNode(TiXmlNodeA *node, const char *dlgTagName);
@@ -61,29 +61,27 @@ public:
 	void changeMenuLang(HMENU menuHandle, generic_string & pluginsTrans, generic_string & windowTrans);
 	void changeShortcutLang();
 	void changeStyleCtrlsLang(HWND hDlg, int *idArray, const char **translatedText);
-    void changeUserDefineLang(UserDefineDialog *userDefineDlg);
+	void changeUserDefineLang(UserDefineDialog *userDefineDlg);
 	void changeUserDefineLangPopupDlg(HWND hDlg);
-    void changeFindReplaceDlgLang(FindReplaceDlg & findReplaceDlg);
-    void changePrefereceDlgLang(PreferenceDlg & preference);
+	void changeFindReplaceDlgLang(FindReplaceDlg & findReplaceDlg);
+	void changePrefereceDlgLang(PreferenceDlg & preference);
 	void changePluginsAdminDlgLang(PluginsAdminDlg & pluginsAdminDlg);
 
 	bool getDoSaveOrNotStrings(generic_string& title, generic_string& msg);
 
-    bool isRTL() const {
-        return _isRTL;
-    };
+	bool isRTL() const {	return _isRTL;	}
 
-    const char * getFileName() const {
-        return _fileName;
-    };
+	const char * getFileName() const {
+		return _fileName;
+	};
 
-    const TiXmlNodeA * getNativeLangA() {
-        return _nativeLangA;
-    };
+	const TiXmlNodeA * getNativeLangA() {
+		return _nativeLangA;
+	};
 
-    int getLangEncoding() const {
-        return _nativeLangEncoding;
-    };
+	int getLangEncoding() const {
+		return _nativeLangEncoding;
+	};
 	bool getMsgBoxLang(const char *msgBoxTagName, generic_string & title, generic_string & message);
 	generic_string getShortcutMapperLangStr(const char *nodeName, const TCHAR *defaultStr) const;
 	generic_string getProjectPanelLangMenuStr(const char * nodeName, int cmdID, const TCHAR *defaultStr) const;
@@ -95,8 +93,8 @@ public:
 private:
 	TiXmlNodeA *_nativeLangA;
 	int _nativeLangEncoding;
-    bool _isRTL;
-    const char *_fileName;
+	bool _isRTL;
+	const char *_fileName;
 };
 
 

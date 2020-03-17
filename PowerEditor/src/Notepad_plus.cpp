@@ -1779,7 +1779,6 @@ bool Notepad_plus::findInFiles()	{
 		_findReplaceDlg._findAllResult=nbTotal;
 		get1 |= bool(nbTotal);
 	}
-	
 	_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, oldDoc);
 	_pEditView = pOldView;
 	if (get1 && !NppParameters::getInstance().getFindHistory()._isDlgAlwaysVisible)
@@ -3413,21 +3412,26 @@ void Notepad_plus::showView(int whichOne)
 	::SendMessage(_pPublicInterface->getHSelf(), WM_SIZE, 0, 0);
 }
 
+	int Notepad_plus::currentView() {
+		return MAIN_VIEW;//_activeView;
+	}
+	int Notepad_plus::otherView(){
+		return SUB_VIEW; //_otherView;
+	}
+
+	int Notepad_plus::otherView(int now){
+		return now == MAIN_VIEW? SUB_VIEW: MAIN_VIEW;
+	}
+
 bool Notepad_plus::viewVisible(int whichOne)
 {
 	int viewToCheck = (whichOne == SUB_VIEW?WindowSubActive:WindowMainActive);
 	return (_mainWindowStatus & viewToCheck) != 0;
 }
 
-void Notepad_plus::hideCurrentView()
-{
-	hideView(currentView());
-}
-
 void Notepad_plus::hideView(int whichOne)
 {
-	if (!(bothActive()))	//cannot close if not both views visible
-		return;
+	if (!(bothActive()))	return;	//cannot close if both viewsin invisible
 
 	Window * windowToSet = (whichOne == MAIN_VIEW)?&_subDocTab:&_mainDocTab;
 	if (_mainWindowStatus & WindowUserActive)

@@ -37,7 +37,7 @@
 #define FIND_RECURSIVE 1
 #define FIND_INHIDDENDIR 2
 
-#define FINDREPLACE_MAXLENGTH 2048
+#define FINDREPLACE_MAXLENGTH 1024
 //FIND_DLG, 
 enum DIALOG_TYPE {REPLACE_DLG, FINDINFILES_DLG, MARK_DLG};
 
@@ -301,18 +301,15 @@ public :
 	void openFinder()	{
 		// Show finder and set focus
 		if (_pFinder)	{
-			_FinderIsOpen=1;
 			::SendMessage(_hParent, NPPM_DMMSHOW, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
 			_pFinder->_scintView.focus();
 		}
-	};
+	}
 
 	void closeFinder()	{
-		if (_pFinder)	{
-			_FinderIsOpen=0;
+		if (_pFinder)
 			::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
-		}
-	};
+	}
 
 	HWND getHFindResults() {
 		if (_pFinder)
@@ -336,12 +333,18 @@ public :
 		{return _pFinder->_canBeVolatiled;}
 
 	void openSwFinder(){
-		if (_FinderIsOpen)		_pFinder->_scintView.focus();
+		if (::GetFocus() == _pFinder->_scintView.getHSelf())
+			_pFinder->_scintView.focus();
 		else		openFinder();
 	}
-	void clearAllFinder()	{	_pFinder->removeAll(); }
-	int _findAllResult;
-	bool _FinderIsOpen=0;
+	void clearAllFinder()	{
+		if (_pFinder)	{
+		_pFinder->removeAll();
+		::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
+		}
+	}
+	
+	int _findAllResult=0;
 
 protected :
 	void resizeDialogElements(LONG newWidth);

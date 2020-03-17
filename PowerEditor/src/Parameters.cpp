@@ -190,7 +190,7 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_I,       IDM_SEARCH_FINDINCREMENT,                     true,  true,  false, nullptr },
 	{ VK_SPACE,      IDM_TOGGLE_FIND_RESULTS,                  true,  true, false, nullptr },
 	{ VK_N,      IDM_MAIN_FIND_RESULTS,                  true,  true, false, nullptr },
-	{ VK_SPACE,      IDM_NPPM_IN_FINFERCLEARALL,                  true,  true, true, nullptr },
+	{ VK_SPACE,      IDM_CLEARFINDER_CLOSE,                  true,  true, true, nullptr },
 	{ VK_F4,      IDM_SEARCH_GOTOPREVFOUND,                     false, false, true,  nullptr },
 	{ VK_F4,      IDM_SEARCH_GOTONEXTFOUND,                     false, false, false, nullptr },
 	{ VK_G,       IDM_SEARCH_GOTOLINE,                          true,  false, false, nullptr },
@@ -5087,10 +5087,9 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 			if (optNameMonoFont)
 				_nppGUI._monospacedFontFindDlg = (lstrcmp(optNameMonoFont, L"yes") == 0);
 
-			const TCHAR * optStopFillingFindField = element->Attribute(L"stopFillingFindField");
+			/* const TCHAR * optStopFillingFindField = element->Attribute(L"stopFillingFindField");
 			if (optStopFillingFindField)
-				_nppGUI._stopFillingFindField = (lstrcmp(optStopFillingFindField, L"yes") == 0);
-
+				_nppGUI._stopFillingFindField = (lstrcmp(optStopFillingFindField, L"yes") == 0);*/
 			const TCHAR * optNameNewStyleSaveDlg = element->Attribute(L"newStyleSaveDlg");
 			if (optNameNewStyleSaveDlg)
 				_nppGUI._useNewStyleSaveDlg = (lstrcmp(optNameNewStyleSaveDlg, L"yes") == 0);
@@ -5857,7 +5856,7 @@ void NppParameters::createXmlTreeFromGUIParams()
 		GUIConfigElement->SetAttribute(L"fileSwitcherWithoutExtColumn", _nppGUI._fileSwitcherWithoutExtColumn ? L"yes" : L"no");
 		GUIConfigElement->SetAttribute(L"backSlashIsEscapeCharacterForSql", _nppGUI._backSlashIsEscapeCharacterForSql ? L"yes" : L"no");
 		GUIConfigElement->SetAttribute(L"monospacedFontFindDlg", _nppGUI._monospacedFontFindDlg ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"stopFillingFindField", _nppGUI._stopFillingFindField ? L"yes" : L"no");
+		// GUIConfigElement->SetAttribute(L"stopFillingFindField", _nppGUI._stopFillingFindField ? L"yes" : L"no");
 		GUIConfigElement->SetAttribute(L"newStyleSaveDlg", _nppGUI._useNewStyleSaveDlg ? L"yes" : L"no");
 		GUIConfigElement->SetAttribute(L"isFolderDroppedOpenFiles", _nppGUI._isFolderDroppedOpenFiles ? L"yes" : L"no");
 		GUIConfigElement->SetAttribute(L"docPeekOnTab", _nppGUI._isDocPeekOnTab ? L"yes" : L"no");

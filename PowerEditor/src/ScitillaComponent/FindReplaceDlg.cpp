@@ -1141,7 +1141,7 @@ void FindReplaceDlg::resizeDialogElements(LONG newWidth)
 		IDC_PERCENTAGE_SLIDER , IDC_REPLACEINSELECTION , IDC_IN_SELECTION_CHECK,
 
 		IDD_FINDINFILES_BROWSE_BUTTON, IDCMARKALL, IDC_CLEAR_ALL, IDCCOUNTALL, IDC_FINDALL_OPENEDFILES, IDC_FINDALL_CURRENTFILE,
-		IDREPLACE, IDREPLACEALL,IDC_REPLACE_OPENEDFILES, IDD_FINDINFILES_FIND_BUTTON, IDD_FINDINFILES_REPLACEINFILES, IDOK, IDCANCEL,
+		IDREPLACE, IDREPLACEALL,IDC_REPLACE_OPENEDFILES, IDD_FINDINFILES_FIND_BUTTON, IDD_FINDINFILES_CLEAR_FIND,IDD_FINDINFILES_REPLACEINFILES, IDOK, IDCANCEL,
 		IDC_FINDPREV, IDC_FINDNEXT, IDC_2_BUTTONS_MODE
 	};
 
@@ -1529,6 +1529,12 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 				}
 				return TRUE;
 
+				case IDC_CLEAR_FINDALL_CURRENTFILE :
+					_pFinder->_pMainFoundInfos->clear();
+					_pFinder->_pMainMarkings->clear();
+					_pFinder->setFinderReadOnly(false);
+					_pFinder->_scintView.execute(SCI_CLEARALL);
+	
 				case IDC_FINDALL_CURRENTFILE :
 				{
 					setStatusbarMessage(L"", FSNoMessage);
@@ -1544,8 +1550,13 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 				}
 				return TRUE;
 
-				case IDD_FINDINFILES_FIND_BUTTON :
-				{
+				case IDD_FINDINFILES_CLEAR_FIND:
+					_pFinder->_pMainFoundInfos->clear();
+					_pFinder->_pMainMarkings->clear();
+					_pFinder->setFinderReadOnly(false);
+					_pFinder->_scintView.execute(SCI_CLEARALL);
+
+				case IDD_FINDINFILES_FIND_BUTTON :	{
 					setStatusbarMessage(L"", FSNoMessage);
 					const int filterSize = 256;
 					TCHAR filters[filterSize+1];
@@ -1574,8 +1585,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 				}
 				return TRUE;
 
-				case IDD_FINDINFILES_REPLACEINFILES :
-				{
+				case IDD_FINDINFILES_REPLACEINFILES :	{
 					std::lock_guard<std::mutex> lock(findOps_mutex);
 
 					setStatusbarMessage(L"", FSNoMessage);
@@ -2693,14 +2703,16 @@ void FindReplaceDlg::findAllIn(InWhat op){
 		cmdid = WM_FINDALL_INCURRENTDOC;
 	else		return;
 
-	if (::SendMessage(_hParent, cmdid, 0, 0))
-	{
+	if (::SendMessage(_hParent, cmdid, 0, 0))	{
 		if (_findAllResult)		openFinder();
  		else	{
-				generic_string msg = NppParameters::getInstance().getNativeLangSpeaker()->getLocalizedStrFromID("find-status-cannot-find", L"Find: Can't find the text \"$STR_REPLACE$\"");
-		setStatusbarMessage(stringReplace(msg, L"$STR_REPLACE$", stringReplace(_options._str2Search, L"&", L"&&")), FSNotFound);
+			generic_string msg = NppParameters::getInstance().getNativeLangSpeaker()->getLocalizedStrFromID("find-status-cannot-find", L"Find: Can't find the text \"$STR_REPLACE$\"");
+			setStatusbarMessage(stringReplace(msg, L"$STR_REPLACE$", stringReplace(_options._str2Search, L"&", L"&&")), FSNotFound);
+		//BUG workaround
+			::SendMessage(_hParent, NPPM_DMMSHOW, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
+			focus();
+			::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
 
-		::SendMessage(_hSelf, WM_NEXTDLGCTL, reinterpret_cast<WPARAM>(::GetDlgItem(_hSelf, IDFINDWHAT)), TRUE);
 		}
 	}
 	else // error - search folder doesn't exist
@@ -2799,7 +2811,7 @@ void FindReplaceDlg::setSearchText(TCHAR * txt2find)
 
 void FindReplaceDlg::enableReplaceFunc(bool isEnable) 
 {
-	_currentStatus = REPLACE_DLG;//isEnable?:FIND_DLG;
+	_currentStatus = REPLACE_DLG;
 	int hideOrShow = isEnable?SW_SHOW:SW_HIDE;
 	RECT *pClosePos = &_replaceClosePos;//isEnable ? : &_findClosePos;
 	RECT *pInSelectionFramePos = isEnable ? &_replaceInSelFramePos : &_countInSelFramePos;
@@ -2826,6 +2838,7 @@ void FindReplaceDlg::enableReplaceFunc(bool isEnable)
 	// find controls
 	::ShowWindow(::GetDlgItem(_hSelf, IDCCOUNTALL),SW_SHOW);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_FINDALL_OPENEDFILES), SW_SHOW);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_CLEAR_FINDALL_CURRENTFILE),SW_SHOW);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_FINDALL_CURRENTFILE),SW_SHOW);
 
 	gotoCorrectTab();
@@ -2848,6 +2861,7 @@ void FindReplaceDlg::enableFindInFilesControls(bool isEnable)
 	::ShowWindow(::GetDlgItem(_hSelf, IDWRAP), isEnable?SW_HIDE:SW_SHOW);
 	::ShowWindow(::GetDlgItem(_hSelf, IDCCOUNTALL), isEnable?SW_HIDE:SW_SHOW);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_FINDALL_OPENEDFILES), isEnable?SW_HIDE:SW_SHOW);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_CLEAR_FINDALL_CURRENTFILE), isEnable?SW_HIDE:SW_SHOW);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_FINDALL_CURRENTFILE), isEnable?SW_HIDE:SW_SHOW);
 
 	if (isEnable)
@@ -2892,6 +2906,7 @@ void FindReplaceDlg::enableFindInFilesControls(bool isEnable)
 	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_DIR_COMBO), isEnable?SW_SHOW:SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_BROWSE_BUTTON), isEnable?SW_SHOW:SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_FIND_BUTTON), isEnable?SW_SHOW:SW_HIDE);
+	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_CLEAR_FIND), isEnable?SW_SHOW:SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_GOBACK_BUTTON), isEnable?SW_SHOW:SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_RECURSIVE_CHECK), isEnable?SW_SHOW:SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_INHIDDENDIR_CHECK), isEnable?SW_SHOW:SW_HIDE);
@@ -2943,34 +2958,32 @@ void FindReplaceDlg::saveInMacro(size_t cmd, int cmdType)
 	::SendMessage(_hParent, WM_FRSAVE_INT, IDC_FRCOMMAND_EXEC, cmd);
 }
 
-void FindReplaceDlg::setStatusbarMessage(const generic_string & msg, FindStatus staus)
-{
-	if (staus == FSNotFound)
+void FindReplaceDlg::setStatusbarMessage(const generic_string & msg, FindStatus status) {
+	if (status == FSNotFound)
 	{
 		::MessageBeep(0xFFFFFFFF);
-
 		FLASHWINFO flashInfo;
 		flashInfo.cbSize = sizeof(FLASHWINFO);
 		flashInfo.hwnd = isVisible()?_hSelf:GetParent(_hSelf);
-		flashInfo.uCount = 3;
-		flashInfo.dwTimeout = 77;
+		flashInfo.uCount = 2;
+		flashInfo.dwTimeout = 41;
 		flashInfo.dwFlags = FLASHW_ALL;
 		FlashWindowEx(&flashInfo);
 	}
-	else if ((staus == FSTopReached || staus == FSEndReached) &&!isVisible())
+	else if ((status == FSTopReached || status == FSEndReached) &&!isVisible())
 	{
 		FLASHWINFO flashInfo;
 		flashInfo.cbSize = sizeof(FLASHWINFO);
 		flashInfo.hwnd = GetParent(_hSelf);
 		flashInfo.uCount = 2;
-		flashInfo.dwTimeout = 77;
+		flashInfo.dwTimeout = 33;
 		flashInfo.dwFlags = FLASHW_ALL;
 		FlashWindowEx(&flashInfo);
 	}
 
 	if (isVisible())
 	{
-		_statusbarFindStatus = staus;
+		_statusbarFindStatus = status;
 		_statusBar.setOwnerDrawText(msg.c_str());
 	}
 }
@@ -3369,6 +3382,7 @@ void FindReplaceDlg::enableMarkFunc()
 	// find controls to hide
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_FINDALL_OPENEDFILES), SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDCCOUNTALL),SW_HIDE);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_CLEAR_FINDALL_CURRENTFILE),SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_FINDALL_CURRENTFILE),SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDOK),SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_2_BUTTONS_MODE), SW_HIDE);
@@ -3443,7 +3457,7 @@ void FindReplaceDlg::drawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 
 	if (_statusbarFindStatus == FSNotFound)
 	{
-		fgColor = RGB(0xFF, 79, 30); // red
+		fgColor = RGB(0xFF, 79, 70); // red
 	}
 	else if (_statusbarFindStatus == FSTopReached || _statusbarFindStatus == FSEndReached)
 	{

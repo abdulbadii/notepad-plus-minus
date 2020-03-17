@@ -969,12 +969,10 @@ void Notepad_plus::command(int id)
 				dlgID = MARK_DLG;
 			_findReplaceDlg.doDialog(dlgID, _nativeLangSpeaker.isRTL());
 
-			const NppGUI & nppGui = (NppParameters::getInstance()).getNppGUI();
-			if (!nppGui._stopFillingFindField)
-			{
+			// const NppGUI & nppGui = (NppParameters::getInstance()).getNppGUI(); if (!nppGui._stopFillingFindField)	{
 				_pEditView->getGenericSelectedText(str, strSize);
 				_findReplaceDlg.setSearchText(str);
-			}
+			// }
 
 			setFindReplaceFolderFilter(NULL, NULL);
 
@@ -1073,7 +1071,7 @@ void Notepad_plus::command(int id)
 		break;
 
 		case IDM_TOGGLE_FIND_RESULTS:
-			if (_findReplaceDlg._FinderIsOpen)	{
+			if (::GetFocus() == _findReplaceDlg.getHFindResults())	{
 				_findReplaceDlg.closeFinder();
 				switchEditViewTo(MAIN_VIEW);
 			}
@@ -1088,7 +1086,7 @@ void Notepad_plus::command(int id)
 		}
 		break;
 		
-		case IDM_NPPM_IN_FINFERCLEARALL:
+		case IDM_CLEARFINDER_CLOSE:
 			if (::GetFocus() == _findReplaceDlg.getHFindResults())
 				_findReplaceDlg.clearAllFinder();
 		break;

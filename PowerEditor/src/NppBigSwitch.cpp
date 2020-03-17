@@ -236,10 +236,8 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		}
 
 		case WM_REPLACEINFILES:
-		{
 			replaceInFiles();
 			return TRUE;
-		}
 
 		case NPPM_LAUNCHFINDINFILESDLG:
 		{
@@ -247,16 +245,13 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			const int strSize = FINDREPLACE_MAXLENGTH;
 			TCHAR str[strSize];
 
-			//bool isFirstTime = ;
 			_findReplaceDlg.doDialog(REPLACE_DLG, _nativeLangSpeaker.isRTL());
 			
-			const NppGUI & nppGui = nppParam.getNppGUI();
-			if (!nppGui._stopFillingFindField)
-			{
+			// const NppGUI & nppGui = nppParam.getNppGUI();if (!nppGui._stopFillingFindField)	{
 				_pEditView->getGenericSelectedText(str, strSize);
 				_findReplaceDlg.setSearchText(str);
-			}
-		//isFirstTime
+			// }
+
 			if (not _findReplaceDlg.isCreated())
 				_nativeLangSpeaker.changeFindReplaceDlgLang(_findReplaceDlg);
 			_findReplaceDlg.launchFindInFilesDlg();

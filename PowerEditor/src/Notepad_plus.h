@@ -414,21 +414,13 @@ private:
 	void showView(int whichOne);
 	bool viewVisible(int whichOne);
 	void hideView(int whichOne);
-	void hideCurrentView();
 	bool bothActive() { return (_mainWindowStatus & WindowBothActive) == WindowBothActive; };
 	bool reloadLang();
 	bool loadStyles();
 
-	int currentView() {
-		return MAIN_VIEW;//_activeView;
-	}
-	int otherView(){
-		return _otherView;
-	}
-
-	int otherView(int view_now){
-		return view_now == MAIN_VIEW? SUB_VIEW: MAIN_VIEW;
-	}
+	int currentView();
+	int otherView();
+	int otherView(int now);
 
 	bool canHideView(int whichOne);	//true if view can safely be hidden (no open docs etc)
 
