@@ -1609,8 +1609,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						_options._directory += L"\\";
 
 					generic_string msg = L"Are you sure you want to replace all occurrences in :\r";
-					msg += _options._directory;
-					msg += L"\rfor file type : ";
+					msg += _options._directory + L"\rfor file type : ";
 					msg += _options._filters[0]?_options._filters:L"*.*";
 					int res = ::MessageBox(_hParent, msg.c_str(), L"Are you sure?", MB_OKCANCEL | MB_DEFBUTTON2);
 					if (res == IDOK)
@@ -1627,6 +1626,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						::SendMessage(_hParent, WM_REPLACEINFILES, 0, 0);
 						nppParamInst._isFindReplacing = false;
 					}
+				::SetFocus(::GetDlgItem(_hSelf, IDFINDWHAT));
 				}
 				return TRUE;
 
@@ -2613,7 +2613,7 @@ int FindReplaceDlg::processRange(ProcessOperation op, FindReplaceInfo & findRepl
 
 	if (nbProcessed > 0)
 {
-		// Finder *pFinder = nullptr;
+
 		if (op == ProcessFindAll)
 		{
 			_pFinder->addFileHitCount(nbProcessed);
@@ -2625,8 +2625,7 @@ int FindReplaceDlg::processRange(ProcessOperation op, FindReplaceInfo & findRepl
 			else
 				_pFinder->addFileHitCount(nbProcessed);;
 		}
-		// if (pFinder != nullptr)
-			// pFinder->addFileHitCount(nbProcessed);
+
 	}
 	return nbProcessed;
 }
@@ -2679,7 +2678,6 @@ void FindReplaceDlg::findAllIn(InWhat op){
 		// overwrite some default settings
 		_pFinder->_scintView.showMargin(ScintillaEditView::_SC_MARGE_SYBOLE, false);
 		_pFinder->_scintView.setMakerStyle(FOLDER_STYLE_SIMPLE);
-
 		_pFinder->_scintView.display();
 		_pFinder->display();
 		::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
@@ -2692,12 +2690,20 @@ void FindReplaceDlg::findAllIn(InWhat op){
 		_pFinder->_scintView.execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("@MarkingsStruct"), reinterpret_cast<LPARAM>(ptrword));
 	}
 	else	_pFinder->setFinderStyle();
-/*  	if ((*_ppEditView)->searchInTarget(_options._str2Search.c_str()) == -2)	{
-		NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
-		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-invalid-re", L"Find: Invalid regular expression");
-		setStatusbarMessage(msg, FSNotFound);
+	
+/* 	if ((*_ppEditView)->searchInTarget(_options._str2Search.c_str()) == -1)	{
+		generic_string msg = NppParameters::getInstance().getNativeLangSpeaker()->getLocalizedStrFromID("find-status-cannot-find", L"Find: Can't find the text \"$STR_REPLACE$\"");
+		setStatusbarMessage(stringReplace(msg, L"$STR_REPLACE$", stringReplace(_options._str2Search, L"&", L"&&")), FSNotFound);
+		// if (!::IsWindowVisible(_hSelf))(*_ppEditView)->focus();
+		::SetFocus(::GetDlgItem(_hSelf, IDFINDWHAT));
 		return;
-	}*/
+	} 
+	else if ((*_ppEditView)->searchInTarget(_options._str2Search.c_str()) == -2)	{
+	generic_string msg = NppParameters::getInstance().getNativeLangSpeaker()->getLocalizedStrFromID("find-status-invalid-re", L"Find: Invalid regular expression");
+	setStatusbarMessage(msg, FSNotFound);
+	return;
+	}	*/
+	
 	::SendMessage(_pFinder->getHSelf(), WM_SIZE, 0, 0);
 	
 	int cmdid;
@@ -2713,11 +2719,11 @@ void FindReplaceDlg::findAllIn(InWhat op){
 		if (_findAllResult)		openFinder();
  		else	{
 			TCHAR s[64];
-			generic_string msg = NppParameters::getInstance().getNativeLangSpeaker()->getLocalizedStrFromID("find-status-cannot-find", L"Find: Can't find the text \"$STR_REPLACE$\" along "),
+			generic_string msg = NppParameters::getInstance().getNativeLangSpeaker()->getLocalizedStrFromID("find-status-cannot-find", L"Find: Can't find the text \"$STR_REPLACE$\" in "),
 			ms = stringReplace(msg, L"$STR_REPLACE$", stringReplace(_options._str2Search, L"&", L"&&"));
-			wsprintf(s, L"%i file(s) with filter specific above", _fileTot);
+			wsprintf(s, L"%i file(s) of specific filter above", _fileTot);
 			setStatusbarMessage(ms + generic_string(s), FSNotFound);
-			//BUG solved // if (!::IsWindowVisible(_hSelf))
+			//BUG solved
 			(*_ppEditView)->focus();	::SetFocus(::GetDlgItem(_hSelf, IDFINDWHAT));
 		}
 	}

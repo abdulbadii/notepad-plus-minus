@@ -58,7 +58,7 @@ void LastRecentFileList::switchMode()
 {
 	//Remove all menu items
 	::RemoveMenu(_hMenu, IDM_FILE_RESTORELASTCLOSEDFILE, MF_BYCOMMAND);
-	::RemoveMenu(_hMenu, IDM_OPEN_ALL_RECENT_FILE, MF_BYCOMMAND);
+	::RemoveMenu(_hMenu, IDM_OPEN_SOME_RECENT_FILES, MF_BYCOMMAND);
 	::RemoveMenu(_hMenu, IDM_CLEAN_RECENT_FILE_LIST, MF_BYCOMMAND);
 
 	for (int i = 0; i < _size; ++i)
@@ -103,7 +103,7 @@ void LastRecentFileList::updateMenu()
 
 		generic_string recentFileList = pNativeLangSpeaker->getSpecialMenuEntryName("RecentFiles");
 		generic_string openRecentClosedFile = pNativeLangSpeaker->getNativeLangMenuString(IDM_FILE_RESTORELASTCLOSEDFILE);
-		generic_string openAllFiles = pNativeLangSpeaker->getNativeLangMenuString(IDM_OPEN_ALL_RECENT_FILE);
+		generic_string openAllFiles = pNativeLangSpeaker->getNativeLangMenuString(IDM_OPEN_SOME_RECENT_FILES);
 		generic_string cleanFileList = pNativeLangSpeaker->getNativeLangMenuString(IDM_CLEAN_RECENT_FILE_LIST);
 
 		if (recentFileList == L"")
@@ -111,7 +111,7 @@ void LastRecentFileList::updateMenu()
 		if (openRecentClosedFile == L"")
 			openRecentClosedFile = L"Restore Recent Closed File";
 		if (openAllFiles == L"")
-			openAllFiles = L"Open All Recent Files";
+			openAllFiles = L"Open 5 Recent Files";
 		if (cleanFileList == L"")
 			cleanFileList = L"Empty Recent Files List";
 
@@ -119,7 +119,7 @@ void LastRecentFileList::updateMenu()
 			::InsertMenu(_hMenu, _posBase + 0, MF_BYPOSITION, static_cast<UINT_PTR>(-1), 0);
 
 		::InsertMenu(_hMenu, _posBase + 1, MF_BYPOSITION, IDM_FILE_RESTORELASTCLOSEDFILE, openRecentClosedFile.c_str());
-		::InsertMenu(_hMenu, _posBase + 2, MF_BYPOSITION, IDM_OPEN_ALL_RECENT_FILE, openAllFiles.c_str());
+		::InsertMenu(_hMenu, _posBase + 2, MF_BYPOSITION, IDM_OPEN_SOME_RECENT_FILES, openAllFiles.c_str());
 		::InsertMenu(_hMenu, _posBase + 3, MF_BYPOSITION, IDM_CLEAN_RECENT_FILE_LIST, cleanFileList.c_str());
 		::InsertMenu(_hMenu, _posBase + 4, MF_BYPOSITION, static_cast<UINT_PTR>(-1), 0);
 		_hasSeparators = true;
@@ -134,7 +134,7 @@ void LastRecentFileList::updateMenu()
 	{
 		::RemoveMenu(_hMenu, _posBase + 4, MF_BYPOSITION);
 		::RemoveMenu(_hMenu, IDM_CLEAN_RECENT_FILE_LIST, MF_BYCOMMAND);
-		::RemoveMenu(_hMenu, IDM_OPEN_ALL_RECENT_FILE, MF_BYCOMMAND);
+		::RemoveMenu(_hMenu, IDM_OPEN_SOME_RECENT_FILES, MF_BYCOMMAND);
 		::RemoveMenu(_hMenu, IDM_FILE_RESTORELASTCLOSEDFILE, MF_BYCOMMAND);
 		::RemoveMenu(_hMenu, _posBase + 0, MF_BYPOSITION);
 		_hasSeparators = false;

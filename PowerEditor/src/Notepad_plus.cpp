@@ -1531,12 +1531,12 @@ bool Notepad_plus::replaceInFiles()
 
 	Progress progress(_pPublicInterface->getHinst());
 	size_t filesCount = fileNames.size();
-	size_t filesPerPercent = 1;
+	size_t filesPerPercent = 5;
 
 	if (filesCount > 1)
 	{
 		if (filesCount >= 200)
-			filesPerPercent = filesCount / 100;
+			filesPerPercent = filesCount / 45;
 		progress.open(_findReplaceDlg.getHSelf(), L"Replace In Files progress...");
 	}
 
@@ -1579,9 +1579,7 @@ bool Notepad_plus::replaceInFiles()
 			progress.setPercent(int32_t((i * 100) / filesCount), fileNames.at(i).c_str());
 		}
 		else
-		{
 			progress.setInfo(fileNames.at(i).c_str());
-		}
 	}
 
 	progress.close();
@@ -1591,15 +1589,10 @@ bool Notepad_plus::replaceInFiles()
 	_pEditView = pOldView;
 
 	generic_string result;
-	if (nbTotal == 1)
-	{
-		result = _nativeLangSpeaker.getLocalizedStrFromID("find-status-replaceinfiles-1-replaced", L"Replace in Files: 1 occurrence was replaced.");
-	}
-	else
-	{
+	// if (nbTotal == 1)
 		result = _nativeLangSpeaker.getLocalizedStrFromID("find-status-replaceinfiles-nb-replaced", L"Replace in Files: $INT_REPLACE$ occurrences were replaced.");
 		result = stringReplace(result, L"$INT_REPLACE$", std::to_wstring(nbTotal));
-	}
+
 	_findReplaceDlg.setStatusbarMessage(result, FSMessage);
 
 	return true;
@@ -5985,7 +5978,7 @@ void Notepad_plus::launchAnsiCharPanel()
 		// the dlgDlg should be the index of funcItem where the current function pointer is
 		// in this case is DOCKABLE_DEMO_INDEX
 		// In the case of Notepad++ internal function, it'll be the command ID which triggers this dialog
-		data.dlgID = IDM_EDIT_CHAR_PANEL;
+		data.dlgID = IDM_VIEW_CHAR_PANEL;
 
 		NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
 		generic_string title_temp = pNativeSpeaker->getAttrNameStr(AI_PROJECTPANELTITLE, "AsciiInsertion", "PanelTitle");

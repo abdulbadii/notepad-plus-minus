@@ -179,7 +179,6 @@
     #define    IDM_EDIT_COPY_BINARY                 (IDM_EDIT + 48)
     #define    IDM_EDIT_CUT_BINARY                  (IDM_EDIT + 49)
     #define    IDM_EDIT_PASTE_BINARY                (IDM_EDIT + 50)
-    #define    IDM_EDIT_CHAR_PANEL                  (IDM_EDIT + 51)
     #define    IDM_EDIT_CLIPBOARDHISTORY_PANEL      (IDM_EDIT + 52)
 
     #define    IDM_EDIT_AUTOCOMPLETE                (50000 + 0)
@@ -188,7 +187,7 @@
     #define    IDM_EDIT_AUTOCOMPLETE_PATH           (50000 + 6)
     
     //Belong to MENU FILE
-    #define    IDM_OPEN_ALL_RECENT_FILE             (IDM_EDIT + 40)
+    #define    IDM_OPEN_SOME_RECENT_FILES             (IDM_EDIT + 40)
     #define    IDM_CLEAN_RECENT_FILE_LIST           (IDM_EDIT + 41)
     
 #define    IDM_SEARCH    (IDM + 3000)
@@ -337,6 +336,7 @@
 	#define    IDM_VIEW_PROJECT_PANEL_3           (IDM_VIEW + 83)
 
 	#define    IDM_VIEW_FUNC_LIST                 (IDM_VIEW + 84)
+    #define    IDM_VIEW_CHAR_PANEL                  (IDM_VIEW + 79)
 	#define    IDM_VIEW_FILEBROWSER               (IDM_VIEW + 85)
 
 	#define	   IDM_VIEW_TAB1					  (IDM_VIEW + 86)

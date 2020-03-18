@@ -934,7 +934,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case WM_MOUSEWHEEL:
 		{
-			if (0 != (LOWORD(wParam) & MK_RBUTTON))
+			if ((LOWORD(wParam) & MK_RBUTTON))
 			{
 				// redirect to the IDC_PREV_DOC or IDC_NEXT_DOC so that we have the unified process
 
