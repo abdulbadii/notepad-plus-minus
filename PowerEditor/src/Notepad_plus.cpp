@@ -1693,6 +1693,7 @@ bool Notepad_plus::findInFiles()	{
 	ScintillaEditView *pOldView = _pEditView;
 	_pEditView = &_invisibleEditView;
 	Document oldDoc = _invisibleEditView.execute(SCI_GETDOCPOINTER);
+
 	while (hasMore)	{
 		dirOff = face.find_last_of(L';');
 		if (dirOff==string::npos){
@@ -1731,8 +1732,9 @@ bool Notepad_plus::findInFiles()	{
 		_findReplaceDlg.beginNewFilesSearch();
 		Progress progress(_pPublicInterface->getHinst());
 
-		size_t filesCount = fileNames.size();
 		size_t filesPerPercent = 5;
+		size_t filesCount = fileNames.size();
+		_findReplaceDlg._fileTot = int(filesCount);
 
 		if (filesCount > 1)	{
 			if (filesCount >= 200)		filesPerPercent = filesCount / 45;

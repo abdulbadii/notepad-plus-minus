@@ -1071,7 +1071,7 @@ void Notepad_plus::command(int id)
 		break;
 
 		case IDM_TOGGLE_FIND_RESULTS:
-			if (::GetFocus() == _findReplaceDlg.getHFindResults())	{
+			if (IsWindowVisible(_findReplaceDlg.getHFindResults())) {
 				_findReplaceDlg.closeFinder();
 				switchEditViewTo(MAIN_VIEW);
 			}
@@ -1087,8 +1087,7 @@ void Notepad_plus::command(int id)
 		break;
 		
 		case IDM_CLEARFINDER_CLOSE:
-			if (::GetFocus() == _findReplaceDlg.getHFindResults())
-				_findReplaceDlg.clearAllFinder();
+			_findReplaceDlg.clearAllFinder();
 		break;
 
 		case IDM_SEARCH_VOLATILE_FINDNEXT :

@@ -24,7 +24,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
+ 
 #include <shlobj.h>
 #include <uxtheme.h>
 #include "FindReplaceDlg.h"
@@ -42,8 +42,7 @@ FindOption FindReplaceDlg::_options;
 
 void addText2Combo(const TCHAR * txt2add, HWND hCombo)
 {
-	if (!hCombo) return;
-	if (!lstrcmp(txt2add, L"")) return;
+	if (!hCombo || !lstrcmp(txt2add, L"")) return;
 
 	auto i = ::SendMessage(hCombo, CB_FINDSTRINGEXACT, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(txt2add));
 	if (i != CB_ERR) // found
@@ -704,9 +703,9 @@ void Finder::addSearchHitCount(int count, const TCHAR *dir, bool isMatchLines){
 	TCHAR text[290];
 	if(count) {
 		if(_nbFoundFiles >1)
-			wsprintf(text, L" : Found %i in %i files %s%s", count, _nbFoundFiles, d.c_str(), moreInfo);
+			wsprintf(text, L"  : %i in %i files %s%s", count, _nbFoundFiles, d.c_str(), moreInfo);
 		else
-			wsprintf(text, L" : Found %i %s%s", count, d.c_str(), moreInfo);
+			wsprintf(text, L"  : %i %s%s", count, d.c_str(), moreInfo);
 	}
 	else
 		wsprintf(text, L" was not found %s", d.c_str());
@@ -1140,7 +1139,7 @@ void FindReplaceDlg::resizeDialogElements(LONG newWidth)
 		IDC_TRANSPARENT_GRPBOX, IDC_TRANSPARENT_CHECK, IDC_TRANSPARENT_LOSSFOCUS_RADIO, IDC_TRANSPARENT_ALWAYS_RADIO,
 		IDC_PERCENTAGE_SLIDER , IDC_REPLACEINSELECTION , IDC_IN_SELECTION_CHECK,
 
-		IDD_FINDINFILES_BROWSE_BUTTON, IDCMARKALL, IDC_CLEAR_ALL, IDCCOUNTALL, IDC_FINDALL_OPENEDFILES, IDC_FINDALL_CURRENTFILE,
+		IDD_FINDINFILES_BROWSE_BUTTON, IDCMARKALL, IDC_CLEAR_ALL, IDCCOUNTALL, IDC_CLEAR_FINDALL_OPENEDFILES, IDC_FINDALL_OPENEDFILES, IDC_CLEAR_FINDALL_CURRENTFILE, IDC_FINDALL_CURRENTFILE,
 		IDREPLACE, IDREPLACEALL,IDC_REPLACE_OPENEDFILES, IDD_FINDINFILES_FIND_BUTTON, IDD_FINDINFILES_CLEAR_FIND,IDD_FINDINFILES_REPLACEINFILES, IDOK, IDCANCEL,
 		IDC_FINDPREV, IDC_FINDNEXT, IDC_2_BUTTONS_MODE
 	};
@@ -1511,6 +1510,12 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 				}
 				return TRUE;
 //Process actions
+				case IDC_CLEAR_FINDALL_OPENEDFILES :
+					_pFinder->_pMainFoundInfos->clear();
+					_pFinder->_pMainMarkings->clear();
+					_pFinder->setFinderReadOnly(false);
+					_pFinder->_scintView.execute(SCI_CLEARALL);
+	
 				case IDC_FINDALL_OPENEDFILES :
 				{
 					if (_currentStatus == REPLACE_DLG)
@@ -1700,7 +1705,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 				case IDCCOUNTALL :
 				{
-					if (_currentStatus == REPLACE_DLG) //==FIND_DLG
+					if (_currentStatus == REPLACE_DLG)
 					{
 						setStatusbarMessage(L"", FSNoMessage);
 						HWND hFindCombo = ::GetDlgItem(_hSelf, IDFINDWHAT);
@@ -2231,8 +2236,7 @@ bool FindReplaceDlg::processReplace(const TCHAR *txt2find, const TCHAR *txt2repl
 int FindReplaceDlg::processAll(ProcessOperation op, const FindOption *opt, bool isEntire, const FindersInfo *pFindersInfo, int colourStyleID)	{
 	if (op == ProcessReplaceAll && (*_ppEditView)->getCurrentBuffer()->isReadOnly())
 	{
-		NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
-		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-readonly", L"Replace All: Cannot replace text. The current document is read only.");
+		generic_string msg = NppParameters::getInstance().getNativeLangSpeaker()->getLocalizedStrFromID("find-status-replaceall-readonly", L"Replace All: Cannot replace text. The current document is read only.");
 		setStatusbarMessage(msg, FSNotFound);
 		return 0;
 	}
@@ -2254,7 +2258,7 @@ int FindReplaceDlg::processAll(ProcessOperation op, const FindOption *opt, bool 
 	bool direction = pOptions->_whichDirection;
 
 	//first try limiting scope by direction
-	if (direction == DIR_UP)	
+/* 	if (direction == DIR_UP)	
 	{
 		startPosition = 0;
 		endPosition = cr.cpMax;
@@ -2263,7 +2267,7 @@ int FindReplaceDlg::processAll(ProcessOperation op, const FindOption *opt, bool 
 	{
 		startPosition = cr.cpMin;
 		endPosition = docLength;
-	}
+	} */
 
 	//then adjust scope if the full document needs to be changed
 	if (op == ProcessCountAll && pOptions->_isInSelection)
@@ -2271,10 +2275,14 @@ int FindReplaceDlg::processAll(ProcessOperation op, const FindOption *opt, bool 
 		startPosition = cr.cpMin;
 		endPosition = cr.cpMax;
 	}
-	else if (pOptions->_isWrapAround || isEntire || op == ProcessCountAll)	//entire document needs to be scanned
+	else if (pOptions->_isWrapAround || isEntire || op == ProcessCountAll)	//entire document
 	{
 		startPosition = 0;
 		endPosition = docLength;
+	}
+	else {
+		startPosition = direction == DIR_UP? 0: cr.cpMin;
+		endPosition = direction == DIR_UP? cr.cpMax: docLength;
 	}
 	
 	//then readjust scope if the selection override is active and allowed
@@ -2684,17 +2692,15 @@ void FindReplaceDlg::findAllIn(InWhat op){
 		_pFinder->_scintView.execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("@MarkingsStruct"), reinterpret_cast<LPARAM>(ptrword));
 	}
 	else	_pFinder->setFinderStyle();
-
-	
-	::SendMessage(_pFinder->getHSelf(), WM_SIZE, 0, 0);
 /*  	if ((*_ppEditView)->searchInTarget(_options._str2Search.c_str()) == -2)	{
 		NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
 		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-invalid-re", L"Find: Invalid regular expression");
 		setStatusbarMessage(msg, FSNotFound);
 		return;
 	}*/
+	::SendMessage(_pFinder->getHSelf(), WM_SIZE, 0, 0);
 	
-	int cmdid = 0;
+	int cmdid;
 	if (op == ALL_OPEN_DOCS)
 		cmdid = WM_FINDALL_INOPENEDDOC;
 	else if (op == FILES_IN_DIR)
@@ -2706,13 +2712,13 @@ void FindReplaceDlg::findAllIn(InWhat op){
 	if (::SendMessage(_hParent, cmdid, 0, 0))	{
 		if (_findAllResult)		openFinder();
  		else	{
-			generic_string msg = NppParameters::getInstance().getNativeLangSpeaker()->getLocalizedStrFromID("find-status-cannot-find", L"Find: Can't find the text \"$STR_REPLACE$\"");
-			setStatusbarMessage(stringReplace(msg, L"$STR_REPLACE$", stringReplace(_options._str2Search, L"&", L"&&")), FSNotFound);
-		//BUG workaround
-			::SendMessage(_hParent, NPPM_DMMSHOW, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
-			focus();
-			::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
-
+			TCHAR s[64];
+			generic_string msg = NppParameters::getInstance().getNativeLangSpeaker()->getLocalizedStrFromID("find-status-cannot-find", L"Find: Can't find the text \"$STR_REPLACE$\" along "),
+			ms = stringReplace(msg, L"$STR_REPLACE$", stringReplace(_options._str2Search, L"&", L"&&"));
+			wsprintf(s, L"%i file(s) with filter specific above", _fileTot);
+			setStatusbarMessage(ms + generic_string(s), FSNotFound);
+			//BUG solved // if (!::IsWindowVisible(_hSelf))
+			(*_ppEditView)->focus();	::SetFocus(::GetDlgItem(_hSelf, IDFINDWHAT));
 		}
 	}
 	else // error - search folder doesn't exist
@@ -2837,6 +2843,7 @@ void FindReplaceDlg::enableReplaceFunc(bool isEnable)
 
 	// find controls
 	::ShowWindow(::GetDlgItem(_hSelf, IDCCOUNTALL),SW_SHOW);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_CLEAR_FINDALL_OPENEDFILES), SW_SHOW);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_FINDALL_OPENEDFILES), SW_SHOW);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_CLEAR_FINDALL_CURRENTFILE),SW_SHOW);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_FINDALL_CURRENTFILE),SW_SHOW);
@@ -2857,12 +2864,14 @@ void FindReplaceDlg::enableReplaceFunc(bool isEnable)
 void FindReplaceDlg::enableFindInFilesControls(bool isEnable)
 {
 	// Hide Items
-	::ShowWindow(::GetDlgItem(_hSelf, IDC_BACKWARDDIRECTION), isEnable?SW_HIDE:SW_SHOW);
-	::ShowWindow(::GetDlgItem(_hSelf, IDWRAP), isEnable?SW_HIDE:SW_SHOW);
-	::ShowWindow(::GetDlgItem(_hSelf, IDCCOUNTALL), isEnable?SW_HIDE:SW_SHOW);
-	::ShowWindow(::GetDlgItem(_hSelf, IDC_FINDALL_OPENEDFILES), isEnable?SW_HIDE:SW_SHOW);
-	::ShowWindow(::GetDlgItem(_hSelf, IDC_CLEAR_FINDALL_CURRENTFILE), isEnable?SW_HIDE:SW_SHOW);
-	::ShowWindow(::GetDlgItem(_hSelf, IDC_FINDALL_CURRENTFILE), isEnable?SW_HIDE:SW_SHOW);
+	bool HS = isEnable?SW_HIDE:SW_SHOW, SH=!HS;
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_BACKWARDDIRECTION), HS);
+	::ShowWindow(::GetDlgItem(_hSelf, IDWRAP), HS);
+	::ShowWindow(::GetDlgItem(_hSelf, IDCCOUNTALL), HS);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_CLEAR_FINDALL_OPENEDFILES), HS);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_FINDALL_OPENEDFILES), HS);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_CLEAR_FINDALL_CURRENTFILE), HS);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_FINDALL_CURRENTFILE), HS);
 
 	if (isEnable)
 	{
@@ -2882,16 +2891,16 @@ void FindReplaceDlg::enableFindInFilesControls(bool isEnable)
 		::ShowWindow(::GetDlgItem(_hSelf, IDC_FINDNEXT), !is2ButtonMode ? SW_HIDE : SW_SHOW);
 	}
 
-	::ShowWindow(::GetDlgItem(_hSelf, IDC_MARKLINE_CHECK), isEnable?SW_HIDE:SW_SHOW);
-	::ShowWindow(::GetDlgItem(_hSelf, IDC_PURGE_CHECK), isEnable?SW_HIDE:SW_SHOW);
-	::ShowWindow(::GetDlgItem(_hSelf, IDC_IN_SELECTION_CHECK), isEnable?SW_HIDE:SW_SHOW);
-	::ShowWindow(::GetDlgItem(_hSelf, IDC_CLEAR_ALL), isEnable?SW_HIDE:SW_SHOW);
-	::ShowWindow(::GetDlgItem(_hSelf, IDCMARKALL), isEnable?SW_HIDE:SW_SHOW);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_MARKLINE_CHECK), HS);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_PURGE_CHECK), HS);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_IN_SELECTION_CHECK), HS);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_CLEAR_ALL), HS);
+	::ShowWindow(::GetDlgItem(_hSelf, IDCMARKALL), HS);
 	
-	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACE), isEnable?SW_HIDE:SW_SHOW);
-	::ShowWindow(::GetDlgItem(_hSelf, IDC_REPLACEINSELECTION), isEnable?SW_HIDE:SW_SHOW);
-	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEALL), isEnable?SW_HIDE:SW_SHOW);
-	::ShowWindow(::GetDlgItem(_hSelf, IDC_REPLACE_OPENEDFILES), isEnable?SW_HIDE:SW_SHOW);
+	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACE), HS);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_REPLACEINSELECTION), HS);
+	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEALL), HS);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_REPLACE_OPENEDFILES), HS);
 
 	// Show Items
 	if (isEnable)
@@ -2899,18 +2908,18 @@ void FindReplaceDlg::enableFindInFilesControls(bool isEnable)
 		::ShowWindow(::GetDlgItem(_hSelf, ID_STATICTEXT_REPLACE), SW_SHOW);
 		::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEWITH), SW_SHOW);
 	}
-	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_REPLACEINFILES), isEnable?SW_SHOW:SW_HIDE);
-	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_FILTERS_STATIC), isEnable?SW_SHOW:SW_HIDE);
-	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_FILTERS_COMBO), isEnable?SW_SHOW:SW_HIDE);
-	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_DIR_STATIC), isEnable?SW_SHOW:SW_HIDE);
-	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_DIR_COMBO), isEnable?SW_SHOW:SW_HIDE);
-	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_BROWSE_BUTTON), isEnable?SW_SHOW:SW_HIDE);
-	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_FIND_BUTTON), isEnable?SW_SHOW:SW_HIDE);
-	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_CLEAR_FIND), isEnable?SW_SHOW:SW_HIDE);
-	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_GOBACK_BUTTON), isEnable?SW_SHOW:SW_HIDE);
-	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_RECURSIVE_CHECK), isEnable?SW_SHOW:SW_HIDE);
-	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_INHIDDENDIR_CHECK), isEnable?SW_SHOW:SW_HIDE);
-	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_FOLDERFOLLOWSDOC_CHECK), isEnable?SW_SHOW:SW_HIDE);
+	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_REPLACEINFILES), SH);
+	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_FILTERS_STATIC), SH);
+	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_FILTERS_COMBO), SH);
+	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_DIR_STATIC), SH);
+	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_DIR_COMBO), SH);
+	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_BROWSE_BUTTON), SH);
+	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_FIND_BUTTON), SH);
+	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_CLEAR_FIND), SH);
+	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_GOBACK_BUTTON), SH);
+	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_RECURSIVE_CHECK), SH);
+	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_INHIDDENDIR_CHECK), SH);
+	::ShowWindow(::GetDlgItem(_hSelf, IDD_FINDINFILES_FOLDERFOLLOWSDOC_CHECK), SH);
 }
 
 void FindReplaceDlg::getPatterns(vector<generic_string> & patternVect)

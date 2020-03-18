@@ -343,8 +343,8 @@ public :
 		::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
 		}
 	}
-	
-	int _findAllResult=0;
+
+	int _fileTot=0, _findAllResult=0;
 
 protected :
 	void resizeDialogElements(LONG newWidth);
@@ -354,16 +354,16 @@ protected :
 	// Window procedure for the finder
 	static LRESULT FAR PASCAL finderProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-    void combo2ExtendedMode(int comboID);
+	void combo2ExtendedMode(int comboID);
 
 private :
 	RECT _initialWindowRect;
 	LONG _deltaWidth, _initialClientWidth;
 
 	DIALOG_TYPE _currentStatus;
-	RECT _findClosePos, _replaceClosePos, _findInFilesClosePos;
-	RECT _countInSelFramePos, _replaceInSelFramePos;
-	RECT _countInSelCheckPos, _replaceInSelCheckPos;
+	RECT _findClosePos, _replaceClosePos, _findInFilesClosePos,
+	_countInSelFramePos, _replaceInSelFramePos,
+	_countInSelCheckPos, _replaceInSelCheckPos;
 
 	ScintillaEditView **_ppEditView = nullptr;
 	Finder *_pFinder = nullptr;
@@ -376,9 +376,9 @@ private :
 
 	bool _isRTL = false;
 
-	TCHAR _findAllResultStr[1024];
+	TCHAR _findAllResultStr[1024]; //can't be else
 
-	int _fileNameLenMax = 1024;
+	int _fileNameLenMax = 512;
 	char *_uniFileName;
 
 	TabBar _tab;
@@ -411,7 +411,7 @@ private :
 	void updateCombos();
 	void updateCombo(int comboID);
 	void fillFindHistory();
-    void fillComboHistory(int id, const std::vector<generic_string> & strings);
+	void fillComboHistory(int id, const std::vector<generic_string> & strings);
 	int saveComboHistory(int id, int maxcount, std::vector<generic_string> & strings, bool saveEmpty);
 	static const int FR_OP_FIND = 1;
 	static const int FR_OP_REPLACE = 2;
