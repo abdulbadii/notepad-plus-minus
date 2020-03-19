@@ -63,14 +63,13 @@ generic_string getTextFromCombo(HWND hCombo)
 
 int Searching::convertExtendedToString(const TCHAR * query, TCHAR * result, int length) 
 {	//query may equal to result, since it always gets smaller
-	int i = 0, j = 0;
-	int charLeft = length;
+	int i = 0, j = 0, charLeft = length;
 	TCHAR current;
 	while (i < length)
 	{	//because the backslash escape quences always reduce the size of the generic_string, no overflow checks have to be made for target, assuming parameters are correct
 		current = query[i];
 		--charLeft;
-		if (current == '\\' && charLeft)
+		if (charLeft && current == '\\')
 		{	//possible escape sequence
 			++i;
 			--charLeft;
@@ -1295,6 +1294,8 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 			::SetWindowTextW(::GetDlgItem(_hSelf, IDC_FINDPREV), L"▲");
 			::SetWindowTextW(::GetDlgItem(_hSelf, IDC_FINDNEXT), L"▼ Next");
+			::SetWindowTextW(::GetDlgItem(_hSelf, IDSWAP_S), L"▲▼");
+			::SetWindowTextW(::GetDlgItem(_hSelf, IDCOPY_S), L"▼+");
 			return TRUE;
 		}
 
@@ -1431,7 +1432,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 				case IDC_FINDPREV:
 				case IDC_FINDNEXT:
-				case IDOK : // Find Next : only for REPLACE_DLG
+				case IDOK : //Find Next is only for REPLACE_DLG
 				{
 					setStatusbarMessage(generic_string(), FSNoMessage);
 
@@ -1703,10 +1704,28 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 				}
 				return TRUE;
 
+				case IDC_FIND_REPLACE_SWAP :
+				{
+					HWND hFCombo = ::GetDlgItem(_hSelf, IDFINDWHAT),
+					hRCombo = ::GetDlgItem(_hSelf, IDREPLACEWITH);
+					generic_string _str4Replace = getTextFromCombo(hRCombo);
+					addText2Combo(getTextFromCombo(hFCombo).c_str(), hRCombo);
+					addText2Combo(_str4Replace.c_str(), hFCombo);
+					focus();
+				}
+				return TRUE;
+
+				case IDC_FIND_REPLACE_COPY:
+				{
+					HWND hFCombo = ::GetDlgItem(_hSelf, IDFINDWHAT);
+					addText2Combo(getTextFromCombo(hFCombo).c_str(), ::GetDlgItem(_hSelf, IDREPLACEWITH));
+					updateCombo(IDREPLACEWITH);
+					::SetFocus(::GetDlgItem(_hSelf, IDREPLACEWITH));
+				}
+				return TRUE;
+
 				case IDCCOUNTALL :
 				{
-					if (_currentStatus == REPLACE_DLG)
-					{
 						setStatusbarMessage(L"", FSNoMessage);
 						HWND hFindCombo = ::GetDlgItem(_hSelf, IDFINDWHAT);
 						updateCombo(IDFINDWHAT);
@@ -1716,27 +1735,16 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 						generic_string result;
 						NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
-						if (nbCounted < 0)
-						{
+						if (nbCounted < 0)	{
 							result = pNativeSpeaker->getLocalizedStrFromID("find-status-count-re-malformed", L"Count: The regular expression to search is malformed.");
 						}
-						else
-						{
-							if (nbCounted == 1)
-							{
-								result = pNativeSpeaker->getLocalizedStrFromID("find-status-count-1-match", L"Count: 1 match.");
-							}
-							else
-							{
-								result = pNativeSpeaker->getLocalizedStrFromID("find-status-count-nb-matches", L"Count: $INT_REPLACE$ matches.");
-								result = stringReplace(result, L"$INT_REPLACE$", std::to_wstring(nbCounted));
-							}
+						else	{
+							result = pNativeSpeaker->getLocalizedStrFromID("find-status-count-nb-matches", L"Count: $INT_REPLACE$ match(es).");
+							result = stringReplace(result, L"$INT_REPLACE$", std::to_wstring(nbCounted));
 						}
-
 						if (isMacroRecording) saveInMacro(wParam, FR_OP_FIND);
 						setStatusbarMessage(result, FSMessage);
 						focus();
-					}
 				}
 				return TRUE;
 
@@ -3239,12 +3247,16 @@ int FindReplaceDlg::markAllInc(const FindOption *opt)
 
 void FindReplaceDlg::enableMarkAllControls(bool isEnable)
 {
-	int hideOrShow = isEnable?SW_SHOW:SW_HIDE;
-	::ShowWindow(::GetDlgItem(_hSelf, IDCMARKALL),hideOrShow);
-	::ShowWindow(::GetDlgItem(_hSelf, IDC_MARKLINE_CHECK),hideOrShow);
-	::ShowWindow(::GetDlgItem(_hSelf, IDC_PURGE_CHECK),hideOrShow);
-	::ShowWindow(::GetDlgItem(_hSelf, IDC_CLEAR_ALL),hideOrShow);
-	::ShowWindow(::GetDlgItem(_hSelf, IDC_IN_SELECTION_CHECK), hideOrShow);
+	bool SH = isEnable?SW_SHOW:SW_HIDE, HS=!SH;
+	::ShowWindow(::GetDlgItem(_hSelf, IDCMARKALL),SH);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_MARKLINE_CHECK),SH);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_PURGE_CHECK),SH);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_CLEAR_ALL),SH);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_IN_SELECTION_CHECK), SH);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_FIND_REPLACE_SWAP), HS);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_FIND_REPLACE_COPY), HS);
+	::ShowWindow(::GetDlgItem(_hSelf, IDSWAP_S), HS);
+	::ShowWindow(::GetDlgItem(_hSelf, IDCOPY_S), HS);
 }
 
 void FindReplaceDlg::clearMarks(const FindOption& opt)
@@ -3395,8 +3407,8 @@ void FindReplaceDlg::enableMarkFunc()
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_REPLACEINSELECTION),SW_HIDE);
 
 	// find controls to hide
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_CLEAR_FINDALL_OPENEDFILES), SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_FINDALL_OPENEDFILES), SW_HIDE);
-	::ShowWindow(::GetDlgItem(_hSelf, IDCCOUNTALL),SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_CLEAR_FINDALL_CURRENTFILE),SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_FINDALL_CURRENTFILE),SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDOK),SW_HIDE);

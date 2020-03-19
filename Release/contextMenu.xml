@@ -12,7 +12,6 @@ Please check "How to Customize the Context Menu" : http://docs.notepad-plus-plus
 		<!-- id="0" is the separator  You can use command id to add the commands you want. 
 		Check english.xml to get commands id:https://github.com/notepad-plus-plus/notepad-plus-plus/blob/master/PowerEditor/installer/nativeLang/english.xml.
 		To add plugin commands, you have to use PluginEntryName and PluginCommandItemName to localize the plugin commands-->
-        <Item MenuEntryName="Edit" id="42051"/>
         <Item MenuEntryName="Edit" MenuItemName="Search On Internet" ItemNameAs="GooGle this"/>
         <Item MenuEntryName="Run" MenuItemName="Open it or in explorer"/>
         <Item MenuEntryName="Edit" FolderName="Blank Operations" id="42024"/>

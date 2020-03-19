@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="Windows-1252" ?>
 <NotepadPlus>
-    <FindHistory nbMaxFindHistoryPath="10" nbMaxFindHistoryFilter="10" nbMaxFindHistoryFind="99" nbMaxFindHistoryReplace="30" matchWord="no" matchCase="yes" wrap="yes" directionDown="yes" fifRecuisive="yes" fifInHiddenFolder="no" dlgAlwaysVisible="no" fifFilterFollowsDoc="no" fifFolderFollowsDoc="no" searchMode="2" transparencyMode="1" transparency="64" dotMatchesNewline="no" isSearch2ButtonsMode="yes">
-        <Path name="X:\T\" />
-        <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent" />
+    <FindHistory nbMaxFindHistoryPath="10" nbMaxFindHistoryFilter="10" nbMaxFindHistoryFind="99" nbMaxFindHistoryReplace="30" matchWord="no" matchCase="yes" wrap="yes" directionDown="yes" fifRecuisive="yes" fifInHiddenFolder="no" dlgAlwaysVisible="no" fifFilterFollowsDoc="no" fifFolderFollowsDoc="no" searchMode="0" transparencyMode="1" transparency="64" dotMatchesNewline="no" isSearch2ButtonsMode="yes">
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src\" />
+        <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent" />
+        <Path name="X:\T\" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master\" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src" />
         <Path name="D:\MSYS\usr\src\notepadpp\" />
@@ -11,8 +11,8 @@
         <Path name="D:\MSYS\usr\src\Ethereal\src" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src_f" />
-        <Filter name="*.cpp *.h" />
         <Filter name="*.cpp *.h *.rc" />
+        <Filter name="*.cpp *.h" />
         <Filter name="*.rc" />
         <Filter name="*.cpp *.h " />
         <Filter name="*.*" />
@@ -21,40 +21,44 @@
         <Filter name="*.vc* *.sln" />
         <Filter name="*.c *.cpp *.cc *.h" />
         <Filter name="*.xml" />
-        <Find name="Visible(o]" />
+        <Find name="NativeLangSpeaker" />
+        <Find name="_stopFillingFindField" />
+        <Find name="Switch to next document" />
+        <Find name="::GetFocus" />
+        <Find name="_statusbarFindStatus" />
+        <Find name="status" />
+        <Find name="IDM_VIEW_FUNC_LIST" />
+        <Find name="STopReached || statu" />
+        <Find name="_nativeLangSpeaker" />
+        <Find name="IDFINDWHAT" />
         <Find name="Visible" />
+        <Find name="Visible(o]" />
         <Find name="Visible(o)" />
         <Find name="Visible(o)?" />
         <Find name="Visible(o]?" />
         <Find name="Vosible" />
         <Find name="with filter speci" />
         <Find name="with speci" />
-        <Find name="_nativeLangSpeaker" />
         <Find name="_dockingManager" />
         <Find name="NPPM_DMMSHOW" />
         <Find name="DMM\w+?SHOW" />
         <Find name="launchAnsiCharPanel" />
         <Find name="IDD_ANSIASCII_PANEL" />
         <Find name="CharPanel" />
-        <Find name="IDM_VIEW_FUNC_LIST" />
         <Find name="IDM_VIEW_CHAR_PANEL" />
         <Find name="Character Panel" />
         <Find name="IDC_NEXT_DOC" />
-        <Find name="Switch to next document" />
         <Find name="findInFiles" />
         <Find name="WM_FINDINFILES" />
         <Find name="openSwFinder" />
-        <Find name="::GetFocus" />
         <Find name="openFinder" />
         <Find name="_findAllResult" />
         <Find name="IDM_SEARCH_FINDINFILES" />
         <Find name="Find/Replace" />
         <Find name="findAllIn" />
         <Find name="doDialog(REPLACE_DLG, _nativeLangSpeaker" />
-        <Find name="NativeLangSpeaker" />
         <Find name="IDM_NPPM_IN_FINFERCLEARALL" />
         <Find name="FINDREPLACE_MAXLENGTH" />
-        <Find name="_stopFillingFindField" />
         <Find name="NPPM_LAUNCHFINDINFILESDLG" />
         <Find name=" IDM_SEARCH_FINDINFILES" />
         <Find name="WM_NEXTDLGCTL" />
@@ -64,7 +68,6 @@
         <Find name="FINDWHAT" />
         <Find name="FindStatus" />
         <Find name="IDFIN" />
-        <Find name="IDFINDWHAT" />
         <Find name="IDM_SEARCH_REPLACE" />
         <Find name="finish\B" />
         <Find name="closeFinder" />
@@ -117,9 +120,17 @@
         <Find name="int((*_ppEditView)" />
         <Find name="view" />
         <Find name="IDI_CHAMELEON" />
-        <Find name="IMAGE_ICON" />
-        <Find name="Invalid regular" />
-        <Find name="processRange(" />
+        <Replace name="IDM_VIEW_FUNC_LIST" />
+        <Replace name="NativeLangSpeaker" />
+        <Replace name="_stopFillingFindField" />
+        <Replace name="Switch to next document" />
+        <Replace name="::GetFocus" />
+        <Replace name="fgColor" />
+        <Replace name="_statusbarFindStatus" />
+        <Replace name="status" />
+        <Replace name="STopReached || statu" />
+        <Replace name="_nativeLangSpeaker" />
+        <Replace name="IDFINDWHAT" />
         <Replace name="Visible" />
         <Replace name="Vosible" />
         <Replace name="focus\(\)" />
@@ -139,22 +150,8 @@
         <Replace name='L&quot;\1' />
         <Replace name="END" />
         <Replace name="name" />
-        <Replace name='L&quot;\1\2\3\4\5&quot;' />
-        <Replace name='L&quot;\1\2\3&quot;' />
-        <Replace name='L&quot;\1\2&quot;' />
-        <Replace name="\1\3\2" />
-        <Replace name="\\\1\2" />
-        <Replace name="\\\1" />
-        <Replace name="\1\\" />
-        <Replace name="p" />
-        <Replace name="\1\2" />
-        <Replace name="\1" />
-        <Replace name="limits." />
     </FindHistory>
     <History nbMaxFile="50" inSubMenu="no" customLength="35">
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\ScintillaCtrls.cpp" />
-        <File filename="D:\MSYS\usr\src\k.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\EncodingMapper.cpp" />
         <File filename="D:\WORK\SoftScreen\core.js" />
         <File filename="D:\WORK\SoftScreen\cscss\ms.css" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\winmain.cpp" />
@@ -189,7 +186,6 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master\ScitillaComponent\FindReplaceDlg.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master\WinControls\Window.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\Window.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\shortcut\shortcut.cpp" />
         <File filename="D:\MSYS\home\Budi\.bashrc" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\dpiManager.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Parameters.h" />
@@ -202,6 +198,9 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.rc" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\Release\contextMenu.xml" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\FindReplaceDlg.rc" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\shortcut\shortcut.cpp" />
     </History>
     <GUIConfigs>
         <GUIConfig name="ToolBar" visible="no">standard</GUIConfig>
@@ -210,7 +209,7 @@
         <GUIConfig name="ScintillaViewsSplitter">vertical</GUIConfig>
         <GUIConfig name="UserDefineDlg" position="undocked">hide</GUIConfig>
         <GUIConfig name="TabSetting" replaceBySpace="no" size="3" />
-        <GUIConfig name="AppPosition" x="122" y="-5" width="1296" height="1087" isMaximized="no" />
+        <GUIConfig name="AppPosition" x="515" y="10" width="1296" height="1087" isMaximized="no" />
         <GUIConfig name="noUpdate" intervalDays="15" nextUpdateDate="20171218">no</GUIConfig>
         <GUIConfig name="Auto-detection">auto</GUIConfig>
         <GUIConfig name="CheckHistoryFiles">no</GUIConfig>
@@ -259,10 +258,9 @@
             <PluginDlg pluginName="3P" id="2" curr="0" prev="-1" isVisible="no" />
             <PluginDlg pluginName="3P" id="1" curr="0" prev="-1" isVisible="no" />
             <ActiveTabs cont="0" activeTab="-1" />
-            <ActiveTabs cont="1" activeTab="0" />
+            <ActiveTabs cont="1" activeTab="-1" />
             <ActiveTabs cont="2" activeTab="-1" />
             <ActiveTabs cont="3" activeTab="-1" />
-            <ActiveTabs cont="4" activeTab="-1" />
         </GUIConfig>
     </GUIConfigs>
     <ProjectPanels>
