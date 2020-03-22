@@ -228,6 +228,9 @@ friend class FindIncrementDlg;
 public :
 	static FindOption _options;
 	static FindOption* _env;
+	static Notepad_plus *pNpp;
+
+
 	FindReplaceDlg() {
 		_uniFileName = new char[(_fileNameLenMax + 3) * 2];
 		_winVer = (NppParameters::getInstance()).getWinVersion();
@@ -235,11 +238,13 @@ public :
 	};
 	~FindReplaceDlg();
 
-	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView) {
+	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView, Notepad_plus *N) {
 		Window::init(hInst, hPere);
 		if (!ppEditView)
 			throw std::runtime_error("FindIncrementDlg::init : ppEditView is null.");
 		_ppEditView = ppEditView;
+		
+		pNpp = N;
 	};
 
 	virtual void create(int dialogID, bool isRTL = false, bool msgDestParent = true);
@@ -248,6 +253,7 @@ public :
 
 	void doDialog(DIALOG_TYPE whichType, bool isRTL = false, bool toShow = true);
 	bool processFindNext(const TCHAR *txt2find, const FindOption *options = NULL, FindStatus *oFindStatus = NULL, FindNextType findNextType = FINDNEXTTYPE_FINDNEXT);
+	bool processReplc1(const TCHAR *txt2find, const TCHAR *txt2replace, const FindOption *options = NULL);
 	bool processReplace(const TCHAR *txt2find, const TCHAR *txt2replace, const FindOption *options = NULL);
 
 	int markAll(const TCHAR *txt2find, int styleID, bool isWholeWordSelected);

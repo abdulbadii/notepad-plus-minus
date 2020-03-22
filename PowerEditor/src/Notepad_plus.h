@@ -159,14 +159,16 @@ public:
 	Notepad_plus();
 	~Notepad_plus();
 
+	enum comment_mode {cm_comment, cm_uncomment, cm_toggle};
 	LRESULT init(HWND hwnd);
 	LRESULT process(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
+
 	void killAllChildren();
-
-	enum comment_mode {cm_comment, cm_uncomment, cm_toggle};
-
 	void setTitle();
 	void getTaskListInfo(TaskListInfo *tli);
+	
+	void cClipb(){checkClipboard();}
+	void cUndoSt(){checkUndoState();}
 
 	// For filtering the modeless Dialog message
 

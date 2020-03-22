@@ -617,7 +617,7 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	checkMacroState();
 
 	//--Init dialogs--//
-    _findReplaceDlg.init(_pPublicInterface->getHinst(), hwnd, &_pEditView);
+    _findReplaceDlg.init(_pPublicInterface->getHinst(), hwnd, &_pEditView, this);
 	_findInFinderDlg.init(_pPublicInterface->getHinst(), hwnd);
 	_incrementFindDlg.init(_pPublicInterface->getHinst(), hwnd, &_findReplaceDlg, _nativeLangSpeaker.isRTL());
 	_incrementFindDlg.addToRebar(&_rebarBottom);

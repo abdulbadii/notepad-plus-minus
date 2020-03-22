@@ -25,6 +25,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
+#include <memory>
 #include <shlobj.h>
 #include <uxtheme.h>
 #include "FindReplaceDlg.h"
@@ -32,15 +33,18 @@
 #include "Notepad_plus_msgs.h"
 #include "UniConversion.h"
 #include "localization.h"
+#include "Notepad_plus.h"
 
 using namespace std;
 
-FindOption * FindReplaceDlg::_env;
+
+FindOption *FindReplaceDlg::_env;
 FindOption FindReplaceDlg::_options;
+Notepad_plus *FindReplaceDlg::pNpp;
 
 #define SHIFTED 0x8000
 
-void addText2Combo(const TCHAR * txt2add, HWND hCombo)
+inline void addText2Combo(const TCHAR * txt2add, HWND hCombo)
 {
 	if (!hCombo || !lstrcmp(txt2add, L"")) return;
 
@@ -54,7 +58,7 @@ void addText2Combo(const TCHAR * txt2add, HWND hCombo)
 	::SendMessage(hCombo, CB_SETCURSEL, i, 0);
 };
 
-generic_string getTextFromCombo(HWND hCombo)
+inline generic_string getTextFromCombo(HWND hCombo)
 {
 	TCHAR str[FINDREPLACE_MAXLENGTH];
 	::SendMessage(hCombo, WM_GETTEXT, FINDREPLACE_MAXLENGTH - 1, reinterpret_cast<LPARAM>(str));
@@ -1135,11 +1139,14 @@ void FindReplaceDlg::resizeDialogElements(LONG newWidth)
 	//elements that need to be moved
 	const auto moveWindowIDs = {
 		IDD_FINDINFILES_FOLDERFOLLOWSDOC_CHECK,IDD_FINDINFILES_RECURSIVE_CHECK, IDD_FINDINFILES_INHIDDENDIR_CHECK,
+		IDC_FIND_REPLACE_SWAP, IDC_FIND_REPLACE_COPY,
+		IDSWAP_S, IDCOPY_S,
 		IDC_TRANSPARENT_GRPBOX, IDC_TRANSPARENT_CHECK, IDC_TRANSPARENT_LOSSFOCUS_RADIO, IDC_TRANSPARENT_ALWAYS_RADIO,
 		IDC_PERCENTAGE_SLIDER , IDC_REPLACEINSELECTION , IDC_IN_SELECTION_CHECK,
 
 		IDD_FINDINFILES_BROWSE_BUTTON, IDCMARKALL, IDC_CLEAR_ALL, IDCCOUNTALL, IDC_CLEAR_FINDALL_OPENEDFILES, IDC_FINDALL_OPENEDFILES, IDC_CLEAR_FINDALL_CURRENTFILE, IDC_FINDALL_CURRENTFILE,
-		IDREPLACE, IDREPLACEALL,IDC_REPLACE_OPENEDFILES, IDD_FINDINFILES_FIND_BUTTON, IDD_FINDINFILES_CLEAR_FIND,IDD_FINDINFILES_REPLACEINFILES, IDOK, IDCANCEL,
+		IDREPLACE1, IDREPLACE_FINDNEXT,
+		IDREPLACEALL,IDC_REPLACE_OPENEDFILES, IDD_FINDINFILES_FIND_BUTTON, IDD_FINDINFILES_CLEAR_FIND,IDD_FINDINFILES_REPLACEINFILES, IDOK, IDCANCEL,
 		IDC_FINDPREV, IDC_FINDNEXT, IDC_2_BUTTONS_MODE
 	};
 
@@ -1293,7 +1300,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			_filterTip = CreateToolTip(IDD_FINDINFILES_FILTERS_STATIC, _hSelf, _hInst, const_cast<PTSTR>(findInFilesFilterTip.c_str()));
 
 			::SetWindowTextW(::GetDlgItem(_hSelf, IDC_FINDPREV), L"▲");
-			::SetWindowTextW(::GetDlgItem(_hSelf, IDC_FINDNEXT), L"▼ Next");
+			::SetWindowTextW(::GetDlgItem(_hSelf, IDC_FINDNEXT), L"Next ▼");
 			::SetWindowTextW(::GetDlgItem(_hSelf, IDSWAP_S), L"▲▼");
 			::SetWindowTextW(::GetDlgItem(_hSelf, IDCOPY_S), L"▼+");
 			return TRUE;
@@ -1490,12 +1497,10 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					goToCenter();
 					return TRUE;
  */
-				case IDREPLACE :
-				{
+				case IDREPLACE_FINDNEXT :	{
 					std::lock_guard<std::mutex> lock(findOps_mutex);
 
-					if (_currentStatus == REPLACE_DLG)
-					{
+					if (_currentStatus == REPLACE_DLG)	{
 						setStatusbarMessage(L"", FSNoMessage);
 						HWND hFindCombo = ::GetDlgItem(_hSelf, IDFINDWHAT);
 						HWND hReplaceCombo = ::GetDlgItem(_hSelf, IDREPLACEWITH);
@@ -1510,6 +1515,28 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					}
 				}
 				return TRUE;
+
+				case IDREPLACE1 :	{
+					std::lock_guard<std::mutex> lock(findOps_mutex);
+
+					if (_currentStatus == REPLACE_DLG)	{
+						setStatusbarMessage(L"", FSNoMessage);
+						HWND hFindCombo = ::GetDlgItem(_hSelf, IDFINDWHAT);
+						HWND hReplaceCombo = ::GetDlgItem(_hSelf, IDREPLACEWITH);
+						_options._str2Search = getTextFromCombo(hFindCombo);
+						_options._str4Replace = getTextFromCombo(hReplaceCombo);
+						updateCombos();
+
+						nppParamInst._isFindReplacing = true;
+						if (isMacroRecording) saveInMacro(wParam, FR_OP_REPLACE);
+						processReplc1(_options._str2Search.c_str(), _options._str4Replace.c_str());
+						nppParamInst._isFindReplacing = false;
+					}
+				}
+				return TRUE;
+
+
+
 //Process actions
 				case IDC_CLEAR_FINDALL_OPENEDFILES :
 					_pFinder->_pMainFoundInfos->clear();
@@ -1723,6 +1750,21 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					::SetFocus(::GetDlgItem(_hSelf, IDREPLACEWITH));
 				}
 				return TRUE;
+				
+				case IDC_UNDO:	{
+					std::lock_guard<std::mutex> lock(findOps_mutex);
+					(*_ppEditView)->execute(WM_UNDO);
+					pNpp->cClipb();
+					pNpp->cUndoSt();
+					break;
+				}
+				case IDC_REDO:	{
+					std::lock_guard<std::mutex> lock(findOps_mutex);
+					(*_ppEditView)->execute(SCI_REDO);
+					pNpp->cClipb();
+					pNpp->cUndoSt();
+					break;
+			}				
 
 				case IDCCOUNTALL :
 				{
@@ -2147,62 +2189,42 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 
 // return value :
 // true  : the text is replaced, and find the next occurrence
-// false : the text2find is not found, so the text is NOT replace
-//      || the text is replaced, and do NOT find the next occurrence
+// false : the text2find is not found, so the text is NOT replace  || the text is replaced, and do NOT find the next occurrence
 bool FindReplaceDlg::processReplace(const TCHAR *txt2find, const TCHAR *txt2replace, const FindOption *options)
 {
-	bool moreMatches;
-
-	if (!txt2find || !txt2find[0] || !txt2replace)
-		return false;
-
-	if ((*_ppEditView)->getCurrentBuffer()->isReadOnly())
-	{
-		NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
-		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replace-readonly", L"Replace: Cannot replace text. The current document is read only.");
+	if (!txt2find || !txt2find[0] || !txt2replace)	return false;
+	if ((*_ppEditView)->getCurrentBuffer()->isReadOnly())	{
+		generic_string msg = NppParameters::getInstance().getNativeLangSpeaker()->getLocalizedStrFromID("find-status-replace-readonly", L"Replace: Cannot replace text. The current document is read only.");
 		setStatusbarMessage(msg, FSNotFound);
 		return false;
 	}
-
 	FindOption replaceOptions = options ? *options : *_env;
 	replaceOptions._incrementalType = FirstIncremental;
 
 	Sci_CharacterRange currentSelection = (*_ppEditView)->getSelection();
 	FindStatus status;
-	moreMatches = processFindNext(txt2find, &replaceOptions, &status, FINDNEXTTYPE_FINDNEXTFORREPLACE);
+	bool moreMatches = processFindNext(txt2find, &replaceOptions, &status, FINDNEXTTYPE_FINDNEXTFORREPLACE);
 
-	if (moreMatches) 
-	{
+	if (moreMatches)	{
 		Sci_CharacterRange nextFind = (*_ppEditView)->getSelection();
-		
 		// If the next find is the same as the last, then perform the replacement
 		if (nextFind.cpMin == currentSelection.cpMin && nextFind.cpMax == currentSelection.cpMax)
 		{
-			bool isRegExp = replaceOptions._searchType == FindRegex;
-
 			int start = currentSelection.cpMin;
 			int replacedLen = 0;
-			if (isRegExp)
-			{
+			if (replaceOptions._searchType == FindRegex)
 				replacedLen = (*_ppEditView)->replaceTargetRegExMode(txt2replace);
+			else if (replaceOptions._searchType == FindExtended)	{
+				int stringSizeReplace = lstrlen(txt2replace);
+				TCHAR *pText2ReplaceExtended = new TCHAR[stringSizeReplace + 1];
+
+				Searching::convertExtendedToString(txt2replace, pText2ReplaceExtended, stringSizeReplace);
+				replacedLen = (*_ppEditView)->replaceTarget(pText2ReplaceExtended);
+				delete[] pText2ReplaceExtended;
 			}
 			else
-			{
-				if (replaceOptions._searchType == FindExtended)
-				{
-					int stringSizeReplace = lstrlen(txt2replace);
-					TCHAR *pText2ReplaceExtended = new TCHAR[stringSizeReplace + 1];
-					Searching::convertExtendedToString(txt2replace, pText2ReplaceExtended, stringSizeReplace);
+				replacedLen = (*_ppEditView)->replaceTarget(txt2replace);
 
-					replacedLen = (*_ppEditView)->replaceTarget(pText2ReplaceExtended);
-
-					delete[] pText2ReplaceExtended;
-				}
-				else
-				{
-					replacedLen = (*_ppEditView)->replaceTarget(txt2replace);
-				}
-			}
 			(*_ppEditView)->execute(SCI_SETSEL, start + replacedLen, start + replacedLen);
 
 			NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
@@ -2240,6 +2262,46 @@ bool FindReplaceDlg::processReplace(const TCHAR *txt2find, const TCHAR *txt2repl
 
 	return moreMatches;	
 }
+
+bool FindReplaceDlg::processReplc1(const TCHAR *txt2find, const TCHAR *txt2replace, const FindOption *options){
+	if (!txt2find || !txt2find[0] || !txt2replace)	return false;
+	if ((*_ppEditView)->getCurrentBuffer()->isReadOnly())	{
+		generic_string msg = NppParameters::getInstance().getNativeLangSpeaker()->getLocalizedStrFromID("find-status-replace-readonly", L"Replace: Cannot replace text. The current document is read only.");
+		setStatusbarMessage(msg, FSNotFound);
+		return false;
+	}
+	FindOption replaceOptions = options ? *options : *_env;
+	replaceOptions._incrementalType = FirstIncremental;
+
+	Sci_CharacterRange currentSelection = (*_ppEditView)->getSelection();
+	FindStatus status;
+	bool moreMatches = processFindNext(txt2find, &replaceOptions, &status, FINDNEXTTYPE_FINDNEXTFORREPLACE);
+
+	if (moreMatches)	{
+		Sci_CharacterRange nextFind = (*_ppEditView)->getSelection();
+		if (nextFind.cpMin == currentSelection.cpMin && nextFind.cpMax == currentSelection.cpMax)
+		{
+			int start = currentSelection.cpMin;
+			int replacedLen = 0;
+			if (replaceOptions._searchType == FindRegex)
+				replacedLen = (*_ppEditView)->replaceTargetRegExMode(txt2replace);
+			else if (replaceOptions._searchType == FindExtended)	{
+				int stringSizeReplace = lstrlen(txt2replace);
+				TCHAR *pText2ReplaceExtended = new TCHAR[stringSizeReplace + 1];
+
+				Searching::convertExtendedToString(txt2replace, pText2ReplaceExtended, stringSizeReplace);
+				replacedLen = (*_ppEditView)->replaceTarget(pText2ReplaceExtended);
+				delete[] pText2ReplaceExtended;
+			}
+			else
+				replacedLen = (*_ppEditView)->replaceTarget(txt2replace);
+
+			(*_ppEditView)->execute(SCI_SETSEL, start + replacedLen, start + replacedLen);
+		}
+	}
+	return moreMatches;	
+}
+
 
 int FindReplaceDlg::processAll(ProcessOperation op, const FindOption *opt, bool isEntire, const FindersInfo *pFindersInfo, int colourStyleID)	{
 	if (op == ProcessReplaceAll && (*_ppEditView)->getCurrentBuffer()->isReadOnly())
@@ -2841,7 +2903,8 @@ void FindReplaceDlg::enableReplaceFunc(bool isEnable)
 	enableMarkAllControls(false);
 	// replace controls
 	::ShowWindow(::GetDlgItem(_hSelf, ID_STATICTEXT_REPLACE),hideOrShow);
-	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACE),hideOrShow);
+	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACE1),hideOrShow);
+	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACE_FINDNEXT),hideOrShow);
 	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEWITH),hideOrShow);
 	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEALL),hideOrShow);
 	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEINSEL),hideOrShow);
@@ -2879,6 +2942,8 @@ void FindReplaceDlg::enableFindInFilesControls(bool isEnable)
 {
 	// Hide Items
 	bool HS = isEnable?SW_HIDE:SW_SHOW, SH=!HS;
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_UNDO), HS);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_REDO), HS);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_BACKWARDDIRECTION), HS);
 	::ShowWindow(::GetDlgItem(_hSelf, IDWRAP), HS);
 	::ShowWindow(::GetDlgItem(_hSelf, IDCCOUNTALL), HS);
@@ -2911,7 +2976,8 @@ void FindReplaceDlg::enableFindInFilesControls(bool isEnable)
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_CLEAR_ALL), HS);
 	::ShowWindow(::GetDlgItem(_hSelf, IDCMARKALL), HS);
 	
-	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACE), HS);
+	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACE1), HS);
+	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACE_FINDNEXT), HS);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_REPLACEINSELECTION), HS);
 	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEALL), HS);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_REPLACE_OPENEDFILES), HS);
@@ -3076,7 +3142,8 @@ void FindReplaceDlg::execSavedCommand(int cmd, uptr_t intValue, const generic_st
 					}
 					break;
 
-					case IDREPLACE:
+					case IDREPLACE1:
+					case IDREPLACE_FINDNEXT:
 						nppParamInst._isFindReplacing = true;
 						processReplace(_env->_str2Search.c_str(), _env->_str4Replace.c_str(), _env);
 						nppParamInst._isFindReplacing = false;
@@ -3397,16 +3464,9 @@ void FindReplaceDlg::enableMarkFunc()
 	enableFindInFilesControls(false);
 	enableMarkAllControls(true);
 
-	// Replace controls to hide
-	::ShowWindow(::GetDlgItem(_hSelf, ID_STATICTEXT_REPLACE),SW_HIDE);
-	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACE),SW_HIDE);
-	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEWITH),SW_HIDE);
-	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEALL),SW_HIDE);
-	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEINSEL),SW_HIDE);
-	::ShowWindow(::GetDlgItem(_hSelf, IDC_REPLACE_OPENEDFILES),SW_HIDE);
-	::ShowWindow(::GetDlgItem(_hSelf, IDC_REPLACEINSELECTION),SW_HIDE);
-
 	// find controls to hide
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_UNDO), SW_HIDE);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_REDO), SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_CLEAR_FINDALL_OPENEDFILES), SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_FINDALL_OPENEDFILES), SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_CLEAR_FINDALL_CURRENTFILE),SW_HIDE);
@@ -3415,6 +3475,16 @@ void FindReplaceDlg::enableMarkFunc()
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_2_BUTTONS_MODE), SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_FINDPREV), SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_FINDNEXT), SW_HIDE);
+
+	// Replace controls to hide
+	::ShowWindow(::GetDlgItem(_hSelf, ID_STATICTEXT_REPLACE),SW_HIDE);
+	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACE1),SW_HIDE);
+	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACE_FINDNEXT),SW_HIDE);
+	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEWITH),SW_HIDE);
+	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEALL),SW_HIDE);
+	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEINSEL),SW_HIDE);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_REPLACE_OPENEDFILES),SW_HIDE);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_REPLACEINSELECTION),SW_HIDE);
 
 	_currentStatus = MARK_DLG;
 	gotoCorrectTab();
