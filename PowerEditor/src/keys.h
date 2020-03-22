@@ -171,6 +171,7 @@ Altered list to support VK_0-9 and VK_A-Z
 #define VK_OEM_COMMA      0xBC   // ',' any country
 #define VK_OEM_MINUS      0xBD   // '-' any country
 #define VK_OEM_PERIOD     0xBE   // '.' any country
+#define VK_OEM_SLASH         0xBF
 #define VK_OEM_2          0xBF   // '/?' for US
 #define VK_OEM_3          0xC0   // '`~' for US
 

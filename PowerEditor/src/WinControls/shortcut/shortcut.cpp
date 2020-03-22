@@ -132,9 +132,10 @@ KeyIDNAME namedKeyArray[] = {
 {L"F11", VK_F11},
 {L"F12", VK_F12},
 
-{L"~", VK_OEM_3},
 {L"-", VK_OEM_MINUS},
 {L"=", VK_OEM_PLUS},
+{L"/", VK_OEM_2},
+{L"~", VK_OEM_3},
 {L"[", VK_OEM_4},
 {L"]", VK_OEM_6},
 {L";", VK_OEM_1},
@@ -142,7 +143,6 @@ KeyIDNAME namedKeyArray[] = {
 {L"\\", VK_OEM_5},
 {L",", VK_OEM_COMMA},
 {L".", VK_OEM_PERIOD},
-{L"/", VK_OEM_2},
 
 {L"<>", VK_OEM_102},
 };

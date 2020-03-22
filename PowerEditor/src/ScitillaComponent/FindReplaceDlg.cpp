@@ -2958,6 +2958,10 @@ void FindReplaceDlg::enableFindInFilesControls(bool isEnable)
 		::ShowWindow(::GetDlgItem(_hSelf, IDOK), SW_HIDE);
 		::ShowWindow(::GetDlgItem(_hSelf, IDC_FINDPREV), SW_HIDE);
 		::ShowWindow(::GetDlgItem(_hSelf, IDC_FINDNEXT), SW_HIDE);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_FIND_REPLACE_SWAP), SW_SHOW);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_FIND_REPLACE_COPY), SW_SHOW);
+	::ShowWindow(::GetDlgItem(_hSelf, IDSWAP_S), SW_SHOW);
+	::ShowWindow(::GetDlgItem(_hSelf, IDCOPY_S), SW_SHOW);
 	}
 	else
 	{
