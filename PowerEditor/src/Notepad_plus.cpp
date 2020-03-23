@@ -1956,17 +1956,18 @@ int Notepad_plus::doDeleteOrNot(const TCHAR *fn)
 		fn);
 }
 
-void Notepad_plus::enableMenu(int cmdID, bool doEnable) const
+/* void Notepad_plus::enableMenu(int cmdID, bool doEnable) const
 {
 	int flag = doEnable?MF_ENABLED | MF_BYCOMMAND:MF_DISABLED | MF_GRAYED | MF_BYCOMMAND;
 	::EnableMenuItem(_mainMenuHandle, cmdID, flag);
-}
+} */
 
 void Notepad_plus::enableCommand(int cmdID, bool doEnable, int which) const
 {
 	if (which & MENU)
 	{
-		enableMenu(cmdID, doEnable);
+	::EnableMenuItem(_mainMenuHandle, cmdID,doEnable?MF_ENABLED | MF_BYCOMMAND:MF_DISABLED | MF_GRAYED | MF_BYCOMMAND);
+		// enableMenu(cmdID, doEnable);
 	}
 	if (which & TOOLBAR)
 	{
@@ -1997,19 +1998,18 @@ void Notepad_plus::checkDocState()
 {
 	Buffer * curBuf = _pEditView->getCurrentBuffer();
 
-	bool isCurrentDirty = curBuf->isDirty();
-	bool isSeveralDirty = isCurrentDirty;
-	bool isFileExisting = PathFileExists(curBuf->getFullPathName()) != FALSE;
+	bool isCurrentDirty = curBuf->isDirty(),
+	isSeveralDirty = isCurrentDirty,
+	isFileExisting = PathFileExists(curBuf->getFullPathName());
+
 	if (!isCurrentDirty)
 	{
 		for (size_t i = 0; i < MainFileManager.getNbBuffers(); ++i)
-		{
 			if (MainFileManager.getBufferByIndex(i)->isDirty())
 			{
 				isSeveralDirty = true;
 				break;
 			}
-		}
 	}
 
 	bool isCurrentUntitled = curBuf->isUntitled();

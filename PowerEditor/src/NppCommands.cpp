@@ -790,15 +790,15 @@ void Notepad_plus::command(int id)
 
 		case IDM_VIEW_TAB_NEXT:
 		{
+			if (::GetFocus() == _findReplaceDlg.getHFindResults())
+				switchEditViewTo(MAIN_VIEW);
 			const int current_index = _pDocTab->getCurrentTabIndex();
 			const int last_index = _pDocTab->getItemCount() - 1;
 			_isFolding = true;
 			if (current_index < last_index)
 				switchToFile(_pDocTab->getBufferByIndex(current_index + 1));
 			else
-			{
 				switchToFile(_pDocTab->getBufferByIndex(0)); // Loop around.
-			}
 			_isFolding = false;
 		}
 		break;
@@ -1086,7 +1086,7 @@ void Notepad_plus::command(int id)
 		}
 		break;
 		
-		case IDM_CLEARFINDER_CLOSE:
+		case IDM_CLEAR_CLOSE_FINDER:
 			_findReplaceDlg.clearAllFinder();
 		break;
 
@@ -3248,7 +3248,7 @@ void Notepad_plus::command(int id)
 
 		case IDM_VIEW_CURLINE_HILITING:
 		{
-			COLORREF colour = (NppParameters::getInstance()).getCurLineHilitingColour();
+			COLORREF colour = NppParameters::getInstance().getCurLineHilitingColour();
 			_mainEditView.setCurrentLineHiLiting(!_pEditView->isCurrentLineHiLiting(), colour);
 			_subEditView.setCurrentLineHiLiting(!_pEditView->isCurrentLineHiLiting(), colour);
 		}

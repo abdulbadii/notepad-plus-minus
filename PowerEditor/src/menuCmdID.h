@@ -235,8 +235,6 @@
     #define    IDM_SEARCH_GONEXTMARKER_DEF     (IDM_SEARCH + 44)
 
     #define    IDM_TOGGLE_FIND_RESULTS      (IDM_SEARCH + 45)
-    #define    IDM_CLEARFINDER_CLOSE      (IDM_SEARCH + 55)
-    #define    IDM_MAIN_FIND_RESULTS      (IDM_SEARCH + 1)
 	 
     #define    IDM_SEARCH_GOTONEXTFOUND	       (IDM_SEARCH + 46)
     #define    IDM_SEARCH_GOTOPREVFOUND	       (IDM_SEARCH + 47)
@@ -266,7 +264,6 @@
     #define    IDM_VIEW_POSTIT                    (IDM_VIEW + 9)
     #define    IDM_VIEW_TOGGLE_FOLDALL            (IDM_VIEW + 10)
     //#define    IDM_VIEW_USER_DLG                  (IDM_VIEW + 11)
-    #define    IDM_VIEW_LINENUMBER                (IDM_VIEW + 12)
     #define    IDM_VIEW_SYMBOLMARGIN              (IDM_VIEW + 13)
     #define    IDM_VIEW_FOLDERMAGIN               (IDM_VIEW + 14)
     #define    IDM_VIEW_FOLDERMAGIN_SIMPLE        (IDM_VIEW + 15)
@@ -336,9 +333,10 @@
 	#define    IDM_VIEW_PROJECT_PANEL_3           (IDM_VIEW + 83)
 
 	#define    IDM_VIEW_FUNC_LIST                 (IDM_VIEW + 84)
-    #define    IDM_VIEW_CHAR_PANEL                  (IDM_VIEW + 79)
-	#define    IDM_VIEW_FILEBROWSER               (IDM_VIEW + 85)
+    #define    IDM_VIEW_CHAR_PANEL                  (IDM_VIEW + 78)
+    #define    IDM_VIEW_LINENUMBER                (IDM_VIEW + 79)
 
+	#define    IDM_VIEW_FILEBROWSER            (IDM_VIEW + 85)
 	#define	   IDM_VIEW_TAB1					  (IDM_VIEW + 86)
 	#define	   IDM_VIEW_TAB2					  (IDM_VIEW + 87)
 	#define	   IDM_VIEW_TAB3					  (IDM_VIEW + 88)

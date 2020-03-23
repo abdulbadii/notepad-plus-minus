@@ -851,9 +851,7 @@ int Notepad_plus::setFileOpenSaveDlgFilters(FileDialog & fDlg, int langType)
 
 bool Notepad_plus::fileClose(BufferID id, int curView)
 {
-	BufferID bufferID = id;
-	if (id == BUFFER_INVALID)
-		bufferID = _pEditView->getCurrentBufferID();
+	BufferID bufferID = id == BUFFER_INVALID? _pEditView->getCurrentBufferID() : id;
 	Buffer * buf = MainFileManager.getBufferByID(bufferID);
 
 	int res;
@@ -883,12 +881,9 @@ bool Notepad_plus::fileClose(BufferID id, int curView)
 		}
 	}
 
-	int viewToClose = currentView();
-	if (curView != -1)
-		viewToClose = curView;
+	int viewToClose = curView == -1?	currentView(): curView;
 
-	bool isSnapshotMode = NppParameters::getInstance().getNppGUI().isSnapshotMode();
-	doClose(bufferID, viewToClose, isSnapshotMode);
+	doClose(bufferID, viewToClose, NppParameters::getInstance().getNppGUI().isSnapshotMode());
 	return true;
 }
 

@@ -167,8 +167,8 @@ public:
 	void setTitle();
 	void getTaskListInfo(TaskListInfo *tli);
 	
-	void cClipb(){checkClipboard();}
-	void cUndoSt(){checkUndoState();}
+inline void cClipb(){checkClipboard();}
+inline void cUndoSt(){checkUndoState();}
 
 	// For filtering the modeless Dialog message
 
@@ -446,11 +446,11 @@ private:
 	int doCloseOrNot(const TCHAR *fn);
 	int doDeleteOrNot(const TCHAR *fn);
 
-	void enableMenu(int cmdID, bool doEnable) const;
+	// void enableMenu(int cmdID, bool doEnable) const;
 	void enableCommand(int cmdID, bool doEnable, int which) const;
 	void checkClipboard();
-	void checkDocState();
 	void checkUndoState();
+	void checkDocState();
 	void checkMacroState();
 	void checkSyncState();
 	void dropFiles(HDROP hdrop);

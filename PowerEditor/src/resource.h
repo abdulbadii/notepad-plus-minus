@@ -253,6 +253,10 @@
     //#define IDC_KEY_SELECT_2_HOME            (IDCMD+8)
     //#define IDC_KEY_SELECT_2_END            (IDCMD+9)
 
+#define IDM_MAIN_FIND_RESULTS    (IDCMD+10)
+#define IDM_CLEAR_CLOSE_FINDER    (IDCMD+11)
+// #define IDM_VIEW_LINENUMBER   (IDCMD + 12)
+
 #define IDCMD_LIMIT                        (IDCMD+20)
 
 #define IDSCINTILLA 60000

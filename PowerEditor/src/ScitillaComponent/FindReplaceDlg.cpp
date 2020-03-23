@@ -1300,7 +1300,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			_filterTip = CreateToolTip(IDD_FINDINFILES_FILTERS_STATIC, _hSelf, _hInst, const_cast<PTSTR>(findInFilesFilterTip.c_str()));
 
 			::SetWindowTextW(::GetDlgItem(_hSelf, IDC_FINDPREV), L"▲");
-			::SetWindowTextW(::GetDlgItem(_hSelf, IDC_FINDNEXT), L"Next ▼");
+			::SetWindowTextW(::GetDlgItem(_hSelf, IDC_FINDNEXT), L"Next▼");
 			::SetWindowTextW(::GetDlgItem(_hSelf, IDSWAP_S), L"▲▼");
 			::SetWindowTextW(::GetDlgItem(_hSelf, IDCOPY_S), L"▼+");
 			return TRUE;
@@ -1764,7 +1764,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					pNpp->cClipb();
 					pNpp->cUndoSt();
 					break;
-			}				
+				}				
 
 				case IDCCOUNTALL :
 				{
