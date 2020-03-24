@@ -393,7 +393,6 @@ BEGIN
 		MENUITEM "Find (Volatile) Next",        IDM_SEARCH_VOLATILE_FINDNEXT
 		MENUITEM "Find (Volatile) Previous",    IDM_SEARCH_VOLATILE_FINDPREV
 		MENUITEM "&Incremental Search",         IDM_SEARCH_FINDINCREMENT
-		MENUITEM "Show/Hide Find Result",       IDM_TOGGLE_FIND_RESULTS
 		MENUITEM "Next Search Result",          IDM_SEARCH_GOTONEXTFOUND
 		MENUITEM "Previous Search Result",      IDM_SEARCH_GOTOPREVFOUND
 		MENUITEM "&Go to...",                   IDM_SEARCH_GOTOLINE
@@ -553,6 +552,7 @@ BEGIN
 				END
 		MENUITEM "Folder as Workspace",   IDM_VIEW_FILEBROWSER
 		MENUITEM "Document Map",          IDM_VIEW_DOC_MAP
+		MENUITEM "Show/Hide Find Result",       IDM_SHOW_HIDE_FIND_RESULTS
 		MENUITEM "Function List",         IDM_VIEW_FUNC_LIST
 		MENUITEM "Character Panel",        IDM_VIEW_CHAR_PANEL
 		MENUITEM "Display line number",IDM_VIEW_LINENUMBER

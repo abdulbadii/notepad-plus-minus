@@ -244,13 +244,14 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			// Find in files function code should be here due to the number of parameters (2) cannot be passed via WM_COMMAND
 			const int strSize = FINDREPLACE_MAXLENGTH;
 			TCHAR str[strSize];
+			
+			if (::GetFocus() == _findReplaceDlg.getHFindResults())
+				_findReplaceDlg.get_scintView().getGenericSelectedText(str, strSize);
+			else
+				_pEditView->getGenericSelectedText(str, strSize);
 
 			_findReplaceDlg.doDialog(REPLACE_DLG, _nativeLangSpeaker.isRTL());
-			
-			// const NppGUI & nppGui = nppParam.getNppGUI();if (!nppGui._stopFillingFindField)	{
-				_pEditView->getGenericSelectedText(str, strSize);
-				_findReplaceDlg.setSearchText(str);
-			// }
+			_findReplaceDlg.setSearchText(str);
 
 			if (not _findReplaceDlg.isCreated())
 				_nativeLangSpeaker.changeFindReplaceDlgLang(_findReplaceDlg);

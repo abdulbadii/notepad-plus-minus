@@ -465,11 +465,11 @@ private:
 	generic_string getLangDesc(LangType langType, bool getName = false);
 
 	void setLangStatus(LangType langType);
-
 	void setDisplayFormat(EolType f);
 	void setUniModeText();
 	void checkLangsMenu(int id) const ;
 	void setLanguage(LangType langType);
+	
 	LangType menuID2LangType(int cmdID);
 
 	BOOL processIncrFindAccel(MSG *msg) const;

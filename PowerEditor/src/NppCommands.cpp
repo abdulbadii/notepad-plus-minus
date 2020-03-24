@@ -743,7 +743,7 @@ void Notepad_plus::command(int id)
 
 		case IDM_VIEW_FUNC_LIST:
 		{
-			if (_pFuncList && (not _pFuncList->isClosed()))
+			if (_pFuncList && not _pFuncList->isClosed())
 			{
 				_pFuncList->display(false);
 				_pFuncList->setClosed(true);
@@ -958,22 +958,18 @@ void Notepad_plus::command(int id)
 		break;
 
 		case IDM_SEARCH_REPLACE :
-		case IDM_SEARCH_MARK :
-		{
+		case IDM_SEARCH_MARK :	{
 			const int strSize = FINDREPLACE_MAXLENGTH;
 			TCHAR str[strSize];
-			DIALOG_TYPE dlgID;
-			if (id == IDM_SEARCH_REPLACE)
-				dlgID = REPLACE_DLG;
+
+			if (::GetFocus() == _findReplaceDlg.getHFindResults())
+				_findReplaceDlg.get_scintView().getGenericSelectedText(str, strSize);
 			else
-				dlgID = MARK_DLG;
-			_findReplaceDlg.doDialog(dlgID, _nativeLangSpeaker.isRTL());
-
-			// const NppGUI & nppGui = (NppParameters::getInstance()).getNppGUI(); if (!nppGui._stopFillingFindField)	{
 				_pEditView->getGenericSelectedText(str, strSize);
-				_findReplaceDlg.setSearchText(str);
-			// }
 
+			_findReplaceDlg.doDialog(id == IDM_SEARCH_REPLACE? REPLACE_DLG : MARK_DLG, _nativeLangSpeaker.isRTL());
+
+			_findReplaceDlg.setSearchText(str);
 			setFindReplaceFolderFilter(NULL, NULL);
 
 			if (!_findReplaceDlg.isCreated())
@@ -1070,19 +1066,20 @@ void Notepad_plus::command(int id)
 		}
 		break;
 
-		case IDM_TOGGLE_FIND_RESULTS:
+		case IDM_SHOW_HIDE_FIND_RESULTS:
 			if (IsWindowVisible(_findReplaceDlg.getHFindResults())) {
 				_findReplaceDlg.closeFinder();
 				switchEditViewTo(MAIN_VIEW);
 			}
 			else
+				// checkMenuItem(IDM_SHOW_HIDE_FIND_RESULTS, true);
 				_findReplaceDlg.openFinder();
 		break;
 
 		case IDM_MAIN_FIND_RESULTS:	{
-			if (::GetFocus() == _findReplaceDlg.getHFindResults())
-				switchEditViewTo(MAIN_VIEW);
-			else	_findReplaceDlg.openSwFinder();
+			if (::GetFocus() == _findReplaceDlg.getHFindResults())		switchEditViewTo(MAIN_VIEW);
+			else
+				_findReplaceDlg.openSwFinder();
 		}
 		break;
 		
@@ -3063,26 +3060,23 @@ void Notepad_plus::command(int id)
 		case IDC_PREV_DOC :
 		case IDC_NEXT_DOC :  {
 	
+			if (::GetFocus()==_findReplaceDlg.getHFindResults()){
+				switchEditViewTo(MAIN_VIEW);	break;
+			}
 			size_t nbDoc = viewVisible(MAIN_VIEW) ? _mainDocTab.nbItem() : viewVisible(SUB_VIEW)?_subDocTab.nbItem():0;
 
 			bool doTaskList = NppParameters::getInstance().getNppGUI()._doTaskList;
 			_isFolding = true;
 			if (nbDoc > 1)
 			{
-				bool direction = (id == IDC_NEXT_DOC)?dirDown:dirUp;
+				bool direction = id==IDC_NEXT_DOC? dirDown : dirUp;
 				if (!doTaskList)
-				{
 					activateNextDoc(direction);
-				}
-				else
-				{
-					if (TaskListDlg::_instanceCount == 0)
-					{
-						TaskListDlg tld;
-						HIMAGELIST hImgLst = _docTabIconList.getHandle();
-						tld.init(_pPublicInterface->getHinst(), _pPublicInterface->getHSelf(), hImgLst, direction);
-						tld.doDialog();
-					}
+				else if (!TaskListDlg::_instanceCount)	{
+					TaskListDlg tld;
+					HIMAGELIST hImgLst = _docTabIconList.getHandle();
+					tld.init(_pPublicInterface->getHinst(), _pPublicInterface->getHSelf(), hImgLst, direction);
+					tld.doDialog();
 				}
 			}
 			_isFolding = false;

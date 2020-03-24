@@ -1301,7 +1301,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 			::SetWindowTextW(::GetDlgItem(_hSelf, IDC_FINDPREV), L"▲");
 			::SetWindowTextW(::GetDlgItem(_hSelf, IDC_FINDNEXT), L"Next▼");
-			::SetWindowTextW(::GetDlgItem(_hSelf, IDSWAP_S), L"▲▼");
+			::SetWindowTextW(::GetDlgItem(_hSelf, IDSWAP_S), L"▼▲");
 			::SetWindowTextW(::GetDlgItem(_hSelf, IDCOPY_S), L"▼+");
 			return TRUE;
 		}
@@ -2738,7 +2738,7 @@ void FindReplaceDlg::findAllIn(InWhat op){
 		_pFinder->_scintView.execute(SCI_SETUNDOCOLLECTION, false);	//dont store any undo information
 		_pFinder->_scintView.execute(SCI_SETCARETLINEVISIBLE, 1);
 		_pFinder->_scintView.execute(SCI_SETCARETLINEVISIBLEALWAYS, true);
-		_pFinder->_scintView.execute(SCI_SETCARETWIDTH, 0);
+		_pFinder->_scintView.execute(SCI_SETCARETWIDTH, 2);
 		_pFinder->_scintView.showMargin(ScintillaEditView::_SC_MARGE_FOLDER, true);
 
 		// get the width of FindDlg
@@ -2761,14 +2761,7 @@ void FindReplaceDlg::findAllIn(InWhat op){
 	}
 	else	_pFinder->setFinderStyle();
 	
-/* 	if ((*_ppEditView)->searchInTarget(_options._str2Search.c_str()) == -1)	{
-		generic_string msg = NppParameters::getInstance().getNativeLangSpeaker()->getLocalizedStrFromID("find-status-cannot-find", L"Find: Can't find the text \"$STR_REPLACE$\"");
-		setStatusbarMessage(stringReplace(msg, L"$STR_REPLACE$", stringReplace(_options._str2Search, L"&", L"&&")), FSNotFound);
-		// if (!::IsWindowVisible(_hSelf))(*_ppEditView)->focus();
-		::SetFocus(::GetDlgItem(_hSelf, IDFINDWHAT));
-		return;
-	} 
-	else if ((*_ppEditView)->searchInTarget(_options._str2Search.c_str()) == -2)	{
+/*	else if ((*_ppEditView)->searchInTarget(_options._str2Search.c_str()) == -2)	{
 	generic_string msg = NppParameters::getInstance().getNativeLangSpeaker()->getLocalizedStrFromID("find-status-invalid-re", L"Find: Invalid regular expression");
 	setStatusbarMessage(msg, FSNotFound);
 	return;
@@ -2832,7 +2825,7 @@ Finder * FindReplaceDlg::createFinder()	{
 	pFinder->_scintView.execute(SCI_SETUNDOCOLLECTION, false);	//dont store any undo information
 	pFinder->_scintView.execute(SCI_SETCARETLINEVISIBLE, 1);
 	pFinder->_scintView.execute(SCI_SETCARETLINEVISIBLEALWAYS, true);
-	pFinder->_scintView.execute(SCI_SETCARETWIDTH, 0);
+	pFinder->_scintView.execute(SCI_SETCARETWIDTH, 2);
 	pFinder->_scintView.showMargin(ScintillaEditView::_SC_MARGE_FOLDER, true);
 
 	// get the width of FindDlg

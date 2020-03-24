@@ -139,7 +139,6 @@ public:
 	std::vector<generic_string> getResultFilePaths() const;
 	bool canFind(const TCHAR *fileName, size_t lineNumber) const;
 	void setVolatiled(bool val) { _canBeVolatiled = val;}
-	// ScintillaEditView& scView()	{return _scintView;}
 
 protected :
 	virtual INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
@@ -243,7 +242,6 @@ public :
 		if (!ppEditView)
 			throw std::runtime_error("FindIncrementDlg::init : ppEditView is null.");
 		_ppEditView = ppEditView;
-		
 		pNpp = N;
 	};
 
@@ -267,9 +265,6 @@ public :
 	void setSearchText(TCHAR * txt2find);
 
 	void gotoNextFoundResult(int direction = 0) {if (_pFinder) _pFinder->gotoNextFoundResult(direction);};
-
-// inline	const TCHAR * getDir2Search() const {return _options._directory.c_str();};
-// inline generic_string getText2search() const {	return _options._str2Search;}
 
 	void getPatterns(std::vector<generic_string> & patternVect);
 
@@ -304,17 +299,16 @@ public :
 		_pFinder->finishFilesSearch(count, isfold, dir);
 	}
 
-	void openFinder()	{
-		// Show finder and set focus
-		if (_pFinder)	{
-			::SendMessage(_hParent, NPPM_DMMSHOW, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
-			_pFinder->_scintView.focus();
-		}
-	}
+	void execSavedCommand(int cmd, uptr_t intValue, const generic_string& stringValue);
+	void clearMarks(const FindOption& opt);
+	void setStatusbarMessage(const generic_string & msg, FindStatus staus);
+	Finder * createFinder();
+	bool removeFinder(Finder *finder2remove);
+	bool isVolatiled()
+		{return _pFinder->_canBeVolatiled;}
 
-	void closeFinder()	{
-		if (_pFinder)
-			::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
+	ScintillaEditView& get_scintView()	{
+		return _pFinder->_scintView;
 	}
 
 	HWND getHFindResults() {
@@ -329,15 +323,7 @@ public :
 			_pFinder->setFinderStyle();
 		}
 	};
-
-	void execSavedCommand(int cmd, uptr_t intValue, const generic_string& stringValue);
-	void clearMarks(const FindOption& opt);
-	void setStatusbarMessage(const generic_string & msg, FindStatus staus);
-	Finder * createFinder();
-	bool removeFinder(Finder *finder2remove);
-	bool isVolatiled()
-		{return _pFinder->_canBeVolatiled;}
-
+	
 	void openSwFinder(){
 		if (::GetFocus() == _pFinder->_scintView.getHSelf())
 			_pFinder->_scintView.focus();
@@ -349,6 +335,16 @@ public :
 		::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
 		}
 	}
+	void openFinder()	{
+		if (_pFinder)	{
+			::SendMessage(_hParent, NPPM_DMMSHOW, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
+			_pFinder->_scintView.focus();
+		}
+	}
+	void closeFinder()	{
+		if (_pFinder)	::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
+	}
+
 
 	int _fileTot=0, _findAllResult=0;
 
