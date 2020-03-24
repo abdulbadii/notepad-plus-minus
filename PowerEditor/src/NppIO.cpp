@@ -853,37 +853,22 @@ bool Notepad_plus::fileClose(BufferID id, int curView)
 {
 	BufferID bufferID = id == BUFFER_INVALID? _pEditView->getCurrentBufferID() : id;
 	Buffer * buf = MainFileManager.getBufferByID(bufferID);
-
-	int res;
-
 	//process the fileNamePath into LRF
 	const TCHAR *fileNamePath = buf->getFullPathName();
 
-	if (buf->isUntitled() && buf->docLength() == 0)
+/* 	if (buf->isUntitled() && buf->docLength() == 0){}	else  */
+
+	if (buf->isDirty())
 	{
-		// Do nothing
-	}
-	else if (buf->isDirty())
-	{
-		res = doSaveOrNot(fileNamePath);
+		int res = doSaveOrNot(fileNamePath);
 		if (res == IDYES)
-		{
 			if (!fileSave(id)) // the cancel button of savedialog is pressed, aborts closing
 				return false;
-		}
-		else if (res == IDCANCEL)
-		{
-			return false;	//cancel aborts closing
-		}
-		else
-		{
-			// else IDNO we continue
-		}
+		else if (res == IDCANCEL)		return false;	//cancel aborts closing
 	}
+	switchEditViewTo(otherView());
 
-	int viewToClose = curView == -1?	currentView(): curView;
-
-	doClose(bufferID, viewToClose, NppParameters::getInstance().getNppGUI().isSnapshotMode());
+	doClose(bufferID, curView==-1?	currentView(): curView, NppParameters::getInstance().getNppGUI().isSnapshotMode());
 	return true;
 }
 

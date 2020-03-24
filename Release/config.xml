@@ -21,12 +21,14 @@
         <Filter name="*.vc* *.sln" />
         <Filter name="*.c *.cpp *.cc *.h" />
         <Filter name="*.xml" />
-        <Find name="_views" />
+        <Find name="SCNotification" />
+        <Find name="getTextFromCombo" />
+        <Find name="currentVIEW" />
         <Find name="MAIN_VIEW" />
+        <Find name="_views" />
         <Find name="SortTaskListPred" />
         <Find name="final" />
         <Find name="struct" />
-        <Find name="getTextFromCombo" />
         <Find name="SendMessage" />
         <Find name="FINDREPLACE_MAXLENGTH];" />
         <Find name="REPLACE_DLG" />
@@ -118,8 +120,6 @@
         <Find name="sellect all" />
         <Find name="Finder" />
         <Find name="setFinderStyle" />
-        <Find name="IDM_SEARCH_FINDINCREMENT" />
-        <Find name="nmhdr" />
         <Replace name="enum" />
         <Replace name="IDM_VIEW_FUNC_LIST" />
         <Replace name="NativeLangSpeaker" />
@@ -152,7 +152,6 @@
         <Replace name="END" />
     </FindHistory>
     <History nbMaxFile="50" inSubMenu="no" customLength="35">
-        <File filename="D:\WORK\SoftScreen\core.js" />
         <File filename="D:\WORK\SoftScreen\cscss\ms.css" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\winmain.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\DockingWnd\DockingManager.cpp" />
@@ -171,12 +170,10 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\FindReplaceDlg.rc.rc" />
         <File filename="D:\WORK\SoftScreen\cscss\quora.css" />
         <File filename="D:\WORK\SoftScreen\cscss\soft.css" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus_Window.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\NppNotification.cpp" />
         <File filename="Z:\Notepp\shortcuts.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\DockingWnd\DockingDlgInterface.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\StaticDialog\StaticDialog.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\MISC\PluginsManager\Notepad_plus_msgs.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master\WinControls\DockingWnd\DockingDlgInterface.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master\ScitillaComponent\FindReplaceDlg.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master\NppBigSwitch.cpp" />
@@ -194,13 +191,17 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\AnsiCharPanel\ansiCharPanel.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.rc" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\Release\contextMenu.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\FindReplaceDlg.rc" />
         <File filename="D:\MSYS\usr\src\notepadpp\Release\shortcuts.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\Preference\preferenceDlg.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\Preference\preference.rc" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\shortcut\shortcut.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\NppBigSwitch.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\MISC\PluginsManager\Notepad_plus_msgs.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus_Window.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\MISC\PluginsManager\PluginInterface.h" />
     </History>
     <GUIConfigs>
         <GUIConfig name="ToolBar" visible="no">standard</GUIConfig>
@@ -209,7 +210,7 @@
         <GUIConfig name="ScintillaViewsSplitter">vertical</GUIConfig>
         <GUIConfig name="UserDefineDlg" position="undocked">hide</GUIConfig>
         <GUIConfig name="TabSetting" replaceBySpace="no" size="3" />
-        <GUIConfig name="AppPosition" x="275" y="-16" width="1296" height="1087" isMaximized="no" />
+        <GUIConfig name="AppPosition" x="275" y="-13" width="1296" height="1087" isMaximized="no" />
         <GUIConfig name="noUpdate" intervalDays="15" nextUpdateDate="20171218">no</GUIConfig>
         <GUIConfig name="Auto-detection">auto</GUIConfig>
         <GUIConfig name="CheckHistoryFiles">no</GUIConfig>

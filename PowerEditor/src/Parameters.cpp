@@ -266,7 +266,7 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_PRIOR,   IDM_VIEW_TAB_PREV,                            true,  false, false, nullptr },
 	{ VK_NEXT,    IDM_VIEW_TAB_MOVEFORWARD,                     true,  false, true,  nullptr },
 	{ VK_PRIOR,   IDM_VIEW_TAB_MOVEBACKWARD,                    true,  false, true,  nullptr },
-	{ VK_TAB,     IDC_PREV_DOC,                                 true,  false, true,  L"Switch to previous document"},
+	{ VK_NULL,     IDC_PREV_DOC,                                 true,  false, true,  L"Switch to previous document"},
 	{ VK_TAB,     IDC_NEXT_DOC,                                 true,  false, false, L"Switch to next document"},
 	{ VK_NULL,    IDM_VIEW_WRAP,                                false, false, false, nullptr },
 	{ VK_H,       IDM_VIEW_HIDELINES,                           false, true,  false, nullptr },

@@ -3410,7 +3410,7 @@ void Notepad_plus::showView(int whichOne)
 		return MAIN_VIEW;//_activeView;
 	}
 	int Notepad_plus::otherView(){
-		return SUB_VIEW; //_otherView;
+		return _otherView;
 	}
 
 	int Notepad_plus::otherView(int now){
@@ -4515,19 +4515,14 @@ void Notepad_plus::changeToolBarIcons()
 
 bool Notepad_plus::switchToFile(BufferID id)
 {
-	int i = 0;
-	int iView = currentView();
-	if (id == BUFFER_INVALID)
-		return false;
+	int i = 0,
+	iView = currentView();
+	if (id == BUFFER_INVALID)		return false;
 
 	if ((i = _pDocTab->getIndexByBuffer(id)) != -1)
-	{
 		iView = currentView();
-	}
 	else if ((i = _pNonDocTab->getIndexByBuffer(id)) != -1)
-	{
 		iView = otherView();
-	}
 
 	if (i != -1)
 	{
