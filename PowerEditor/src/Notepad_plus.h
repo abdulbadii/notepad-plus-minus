@@ -167,11 +167,10 @@ public:
 	void setTitle();
 	void getTaskListInfo(TaskListInfo *tli);
 	
-inline void cClipb(){checkClipboard();}
-inline void cUndoSt(){checkUndoState();}
+	inline void cClipb(){checkClipboard();}
+	inline void cUndoSt(){checkUndoState();}
 
 	// For filtering the modeless Dialog message
-
 	//! \name File Operations
 	//@{
 	//The doXXX functions apply to a single buffer and dont need to worry about views, with the excpetion of doClose, since closing one view doesnt have to mean the document is gone
@@ -262,6 +261,8 @@ inline void cUndoSt(){checkUndoState();}
 		return _pluginsAdminDlg.getPluginListVerStr();
 	};
 
+	void setRcnTabIdx(int i);
+
 private:
 	Notepad_plus_Window *_pPublicInterface = nullptr;
 	Window *_pMainWindow = nullptr;
@@ -351,8 +352,10 @@ private:
 	ShortcutMapper * _pShortcutMapper = nullptr;
 
 	// For hotspot
-	bool _linkTriggered = true;
 	bool _isFolding = false;
+	bool _linkTriggered = true;
+	int _rcnTabIdx = 0;
+	BufferID _recBuf =nullptr;
 
 	//For Dynamic selection highlight
 	Sci_CharacterRange _prevSelectedRange;
