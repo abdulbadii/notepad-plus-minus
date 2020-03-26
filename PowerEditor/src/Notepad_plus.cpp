@@ -3041,17 +3041,11 @@ void Notepad_plus::setTitle()
 	::SendMessage(_pPublicInterface->getHSelf(), WM_SETTEXT, 0, reinterpret_cast<LPARAM>(result.c_str()));
 }
 
-void Notepad_plus::setRcnTabIdx(int i){
-	_rcnTabIdx = i;
-	_recBuf = _pDocTab->getBufferByIndex(i);
-}
 void Notepad_plus::activateNextDoc(bool direction)
 {
-	int nbDoc = static_cast<int32_t>(_pDocTab->nbItem());
-	int curIndex = _pDocTab->getCurrentTabIndex();
-
-	setRcnTabIdx(curIndex);
-	curIndex += (direction == dirUp)?-1:1;
+	int nbDoc = static_cast<int32_t>(_pDocTab->nbItem()),
+	curIndex = _pDocTab->getCurrentTabIndex();
+	curIndex += direction == dirUp? -1: 1 ;
 
 	if (curIndex >= nbDoc)
 	{

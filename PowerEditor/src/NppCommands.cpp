@@ -3063,21 +3063,23 @@ void Notepad_plus::command(int id)
 			if (::GetFocus()==_findReplaceDlg.getHFindResults()){
 				switchEditViewTo(MAIN_VIEW);	break;
 			}
-			size_t nbDoc = viewVisible(MAIN_VIEW) ? _mainDocTab.nbItem() : viewVisible(SUB_VIEW)?_subDocTab.nbItem():0;
+			size_t nbDoc = viewVisible(MAIN_VIEW) ? _mainDocTab.nbItem() : viewVisible(SUB_VIEW) ? _subDocTab.nbItem() : 0;
 
 			bool doTaskList = NppParameters::getInstance().getNppGUI()._doTaskList;
 			_isFolding = true;
 			if (nbDoc > 1)
 			{
+				_recBuf = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
+
 				bool direction = id==IDC_NEXT_DOC? dirDown : dirUp;
-				if (!doTaskList)
-					activateNextDoc(direction);
-				else if (!TaskListDlg::_instanceCount)	{
+				if (doTaskList && !TaskListDlg::_instanceCount)	{
 					TaskListDlg tld;
 					HIMAGELIST hImgLst = _docTabIconList.getHandle();
 					tld.init(_pPublicInterface->getHinst(), _pPublicInterface->getHSelf(), hImgLst, direction);
 					tld.doDialog();
 				}
+				else
+					activateNextDoc(direction);
 			}
 			_isFolding = false;
 			_linkTriggered = true;

@@ -197,14 +197,13 @@ public:
 	bool fileDelete(BufferID id = BUFFER_INVALID);
 	bool fileRename(BufferID id = BUFFER_INVALID);
 
-	bool switchToFile(BufferID buffer);			//find buffer in active view then in other view.
+	bool switchToFile(BufferID buffer);		//find buffer in active view then in other view.
 	//@}
 
 	bool isFileSession(const TCHAR * filename);
 	bool isFileWorkspace(const TCHAR * filename);
 	void filePrint(bool showDialog);
 	void saveScintillasZoom();
-
 	bool saveGUIParams();
 	bool saveProjectPanelsParams();
 	bool saveFileBrowserParam();
@@ -260,8 +259,12 @@ public:
 	generic_string getPluginListVerStr() const {
 		return _pluginsAdminDlg.getPluginListVerStr();
 	};
+	
+	BufferID curBuffer(){
+		return _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
+	}
 
-	void setRcnTabIdx(int i);
+	BufferID _recBuf =nullptr;
 
 private:
 	Notepad_plus_Window *_pPublicInterface = nullptr;
@@ -354,8 +357,6 @@ private:
 	// For hotspot
 	bool _isFolding = false;
 	bool _linkTriggered = true;
-	int _rcnTabIdx = 0;
-	BufferID _recBuf =nullptr;
 
 	//For Dynamic selection highlight
 	Sci_CharacterRange _prevSelectedRange;
@@ -439,7 +440,7 @@ private:
 	void loadBufferIntoView(BufferID id, int whichOne, bool dontClose = false);		//Doesnt _activate_ the buffer
 	bool removeBufferFromView(BufferID id, int whichOne);	//Activates alternative of possible, or creates clean document if not clean already
 
-	bool activateBuffer(BufferID id, int whichOne);			//activate buffer in that view if found
+	bool activateBuffer(BufferID id, int whichOne=MAIN_VIEW);			//activate buffer in that view if found
 	void notifyBufferActivated(BufferID bufid, int view);
 	void performPostReload(int whichOne);
 //END: Document management

@@ -703,10 +703,9 @@ void Notepad_plus::doClose(BufferID id, int whichOne, bool doDeleteBackup)
 			_lastRecentFileList.add(fileFullPath.c_str());
 	}
 	
-	if (_recBuf)	activateBuffer(_recBuf, currentView());
-	switchEditViewTo(currentView());
-	
-	// command(IDM_VIEW_REFRESHTABAR);
+	if (_recBuf)	activateBuffer(_recBuf);
+	// switchEditViewTo(currentView());
+	command(IDM_VIEW_REFRESHTABAR);
 
 	if (NppParameters::getInstance().getNppGUI()._tabStatus & TAB_QUITONEMPTY)	{
 		// the user closed the last open tab
@@ -855,8 +854,8 @@ bool Notepad_plus::fileClose(BufferID id, int curView)
 		}
 		else if (res == IDCANCEL)		return false;	//cancel aborts closing
 	}
+	
 	doClose(bufferID, curView==-1? currentView(): curView, NppParameters::getInstance().getNppGUI().isSnapshotMode());
-
 	return true;
 }
 

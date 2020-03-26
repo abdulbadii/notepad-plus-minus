@@ -24,8 +24,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
-#include <memory>
+ #include <memory>
 #include <shlobj.h>
 #include <uxtheme.h>
 #include "FindReplaceDlg.h"
@@ -37,10 +36,10 @@
 
 using namespace std;
 
-
 FindOption *FindReplaceDlg::_env;
 FindOption FindReplaceDlg::_options;
 Notepad_plus *FindReplaceDlg::pNpp;
+Notepad_plus *Finder::pNpp;
 
 #define SHIFTED 0x8000
 
@@ -494,8 +493,7 @@ bool Finder::notify(SCNotification *notification)
 }
 
 
-void Finder::gotoFoundLine()
-{
+void Finder::gotoFoundLine(){
 	auto currentPos = _scintView.execute(SCI_GETCURRENTPOS);
 	auto lno = _scintView.execute(SCI_LINEFROMPOSITION, currentPos);
 	auto start = _scintView.execute(SCI_POSITIONFROMLINE, lno);
@@ -510,15 +508,16 @@ void Finder::gotoFoundLine()
 	}
 
 	const FoundInfo fInfo = *(_pMainFoundInfos->begin() + lno);
+	pNpp->_recBuf = pNpp->curBuffer();
 
 	// Switch to another document
 	::SendMessage(::GetParent(_hParent), WM_DOOPEN, 0, reinterpret_cast<LPARAM>(fInfo._fullPath.c_str()));
 	(*_ppEditView)->_positionRestoreNeeded = false;
 	Searching::displaySectionCentered(fInfo._start, fInfo._end, *_ppEditView);
 
+	
 	// Then we colourise the double clicked line
 /* 	setFinderStyle();
-
 	_scintView.execute(SCI_STYLESETEOLFILLED, SCE_SEARCHRESULT_HIGHLIGHT_LINE, true);
 	_scintView.execute(SCI_STARTSTYLING, start, STYLING_MASK);
 	_scintView.execute(SCI_SETSTYLING, end - start + 2, SCE_SEARCHRESULT_HIGHLIGHT_LINE);
@@ -2709,7 +2708,7 @@ void FindReplaceDlg::findAllIn(InWhat op){
 
 	if (!_pFinder)	{
 		_pFinder = new Finder();
-		_pFinder->init(_hInst, _hSelf, _ppEditView);
+		_pFinder->init(_hInst, _hSelf, _ppEditView, pNpp);
 		_pFinder->setVolatiled(false);
 		
 		tTbData	data = {0};
@@ -2797,7 +2796,7 @@ void FindReplaceDlg::findAllIn(InWhat op){
 Finder * FindReplaceDlg::createFinder()	{
 	Finder *pFinder = new Finder();
 
-	pFinder->init(_hInst, _hSelf, _ppEditView);
+	pFinder->init(_hInst, _hSelf, _ppEditView, pNpp);
 
 	tTbData	data = { 0 };
 	pFinder->create(&data, false);

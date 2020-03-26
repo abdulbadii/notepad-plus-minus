@@ -920,7 +920,7 @@ struct ScintillaViewParams
 };
 
 const int NB_LIST = 20;
-const int NB_MAX_LRF_FILE = 99;
+const int NB_MAX_LRF_FILE = 127;
 const int NB_MAX_USER_LANG = 30;
 const int NB_MAX_EXTERNAL_LANG = 30;
 const int NB_MAX_IMPORTED_UDL = 50;

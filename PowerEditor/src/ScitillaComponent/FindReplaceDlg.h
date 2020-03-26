@@ -24,8 +24,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-
 #pragma once
 
 #include "FindReplaceDlg_rc.h"
@@ -108,7 +106,10 @@ private:
 //Finder: Dockable window that contains search results
 class Finder : public DockingDlgInterface {
 friend class FindReplaceDlg;
+
 public:
+	static Notepad_plus *pNpp;
+
 	Finder() : DockingDlgInterface(IDD_FINDRESULT) {
 		_markingsStruct._length = 0;
 		_markingsStruct._markings = NULL;
@@ -117,9 +118,10 @@ public:
 	~Finder() {
 		_scintView.destroy();
 	}
-	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView) {
+	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView, Notepad_plus *N) {
 		DockingDlgInterface::init(hInst, hPere);
 		_ppEditView = ppEditView;
+		pNpp = N;
 	};
 
 	void addSearchLine(const TCHAR *searchName);
