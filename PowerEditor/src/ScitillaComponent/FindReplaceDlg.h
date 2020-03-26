@@ -105,11 +105,9 @@ private:
 
 //Finder: Dockable window that contains search results
 class Finder : public DockingDlgInterface {
-friend class FindReplaceDlg;
+	friend class FindReplaceDlg;
 
 public:
-	static Notepad_plus *pNpp;
-
 	Finder() : DockingDlgInterface(IDD_FINDRESULT) {
 		_markingsStruct._length = 0;
 		_markingsStruct._markings = NULL;
@@ -118,10 +116,9 @@ public:
 	~Finder() {
 		_scintView.destroy();
 	}
-	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView, Notepad_plus *N) {
+	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView) {
 		DockingDlgInterface::init(hInst, hPere);
 		_ppEditView = ppEditView;
-		pNpp = N;
 	};
 
 	void addSearchLine(const TCHAR *searchName);

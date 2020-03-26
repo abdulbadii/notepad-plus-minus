@@ -591,13 +591,9 @@ bool Notepad_plus::doSave(BufferID id, const TCHAR * filename, bool isCopy)
 					}
 				}
 			}
-
 		}
-		else
-		{
-
-			if (error_msg.empty())
-			{
+		else	{
+			if (error_msg.empty())	{
 				_nativeLangSpeaker.messageBox("FileLockedWarning",
 					_pPublicInterface->getHSelf(),
 					L"Please check if this file is opened in another program.",
@@ -605,9 +601,7 @@ bool Notepad_plus::doSave(BufferID id, const TCHAR * filename, bool isCopy)
 					MB_OK);
 			}
 			else
-			{
 				::MessageBox(_pPublicInterface->getHSelf(), error_msg.c_str(), L"Save failed", MB_OK);
-			}
 		}
 	}
 
@@ -618,8 +612,8 @@ bool Notepad_plus::doSave(BufferID id, const TCHAR * filename, bool isCopy)
 	return res;
 }
 
-void Notepad_plus::doClose(BufferID id, int whichOne, bool doDeleteBackup)
-{
+void Notepad_plus::doClose(BufferID id, int whichOne, bool doDeleteBackup){
+
 	if ((whichOne==MAIN_VIEW? &_mainDocTab : &_subDocTab)->getIndexByBuffer(id) == -1)		return;
 
 	size_t numInitialOpenBuffers =
@@ -692,11 +686,9 @@ void Notepad_plus::doClose(BufferID id, int whichOne, bool doDeleteBackup)
 		if (_pFileSwitcherPanel)
 		{
 			_pFileSwitcherPanel->closeItem(id, whichOne);
-
 			if (hiddenBufferID != BUFFER_INVALID)
 				_pFileSwitcherPanel->closeItem(hiddenBufferID, whichOne);
 		}
-
 		// Add to recent file only if file is removed and does not exist in any of the views
 		BufferID buffID = MainFileManager.getBufferFromName(fileFullPath.c_str());
 		if (buffID == BUFFER_INVALID && fileFullPath.length() > 0)
@@ -704,15 +696,10 @@ void Notepad_plus::doClose(BufferID id, int whichOne, bool doDeleteBackup)
 	}
 	
 	if (_recBuf)	activateBuffer(_recBuf);
-	// switchEditViewTo(currentView());
+	
 	command(IDM_VIEW_REFRESHTABAR);
-
-	if (NppParameters::getInstance().getNppGUI()._tabStatus & TAB_QUITONEMPTY)	{
-		// the user closed the last open tab
-		if (numInitialOpenBuffers == 1 && isEmpty() && !_isAttemptingCloseOnQuit)
-			command(IDM_FILE_EXIT);
-	}
-
+	// the user closed the last open tab
+	if ((NppParameters::getInstance().getNppGUI()._tabStatus & TAB_QUITONEMPTY) && numInitialOpenBuffers == 1 && isEmpty() && !_isAttemptingCloseOnQuit)		command(IDM_FILE_EXIT);
 	return;
 }
 

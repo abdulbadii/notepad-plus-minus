@@ -39,7 +39,6 @@ using namespace std;
 FindOption *FindReplaceDlg::_env;
 FindOption FindReplaceDlg::_options;
 Notepad_plus *FindReplaceDlg::pNpp;
-Notepad_plus *Finder::pNpp;
 
 #define SHIFTED 0x8000
 
@@ -463,13 +462,17 @@ bool Finder::notify(SCNotification *notification)
 	{
 		case SCN_MARGINCLICK:
 			if (notification->margin == ScintillaEditView::_SC_MARGE_FOLDER)
-			{
 				_scintView.marginClick(notification->position, notification->modifiers);
+			break;
+
+		case SCN_PAINTED :
+			if (isDoubleClicked)	{
+				(*_ppEditView)->focus();
+				isDoubleClicked = false;
 			}
 			break;
 
-		case SCN_DOUBLECLICK:
-		{
+		case SCN_DOUBLECLICK:	{
 			// remove selection from the finder
 			isDoubleClicked = true;
 			size_t pos = notification->position;
@@ -480,42 +483,28 @@ bool Finder::notify(SCNotification *notification)
 			gotoFoundLine();
 		}
 		break;
-
-		case SCN_PAINTED :
-			if (isDoubleClicked)
-			{
-				(*_ppEditView)->focus();
-				isDoubleClicked = false;
-			}
-			break;
 	}
 	return false;
 }
 
-
 void Finder::gotoFoundLine(){
-	auto currentPos = _scintView.execute(SCI_GETCURRENTPOS);
-	auto lno = _scintView.execute(SCI_LINEFROMPOSITION, currentPos);
+	auto lno = _scintView.execute(SCI_LINEFROMPOSITION, _scintView.execute(SCI_GETCURRENTPOS));
 	auto start = _scintView.execute(SCI_POSITIONFROMLINE, lno);
 	auto end = _scintView.execute(SCI_GETLINEENDPOSITION, lno);
-
 	if (start + 2 >= end) return; // avoid empty lines
 
-	if (_scintView.execute(SCI_GETFOLDLEVEL, lno) & SC_FOLDLEVELHEADERFLAG)
-	{
+	if (_scintView.execute(SCI_GETFOLDLEVEL, lno) & SC_FOLDLEVELHEADERFLAG)	{
 		_scintView.execute(SCI_TOGGLEFOLD, lno);
 		return;
 	}
-
+	
+	FindReplaceDlg::pNpp->_recBuf = FindReplaceDlg::pNpp->curBuffer();
+	
 	const FoundInfo fInfo = *(_pMainFoundInfos->begin() + lno);
-	pNpp->_recBuf = pNpp->curBuffer();
-
 	// Switch to another document
 	::SendMessage(::GetParent(_hParent), WM_DOOPEN, 0, reinterpret_cast<LPARAM>(fInfo._fullPath.c_str()));
 	(*_ppEditView)->_positionRestoreNeeded = false;
 	Searching::displaySectionCentered(fInfo._start, fInfo._end, *_ppEditView);
-
-	
 	// Then we colourise the double clicked line
 /* 	setFinderStyle();
 	_scintView.execute(SCI_STYLESETEOLFILLED, SCE_SEARCHRESULT_HIGHLIGHT_LINE, true);
@@ -2708,7 +2697,7 @@ void FindReplaceDlg::findAllIn(InWhat op){
 
 	if (!_pFinder)	{
 		_pFinder = new Finder();
-		_pFinder->init(_hInst, _hSelf, _ppEditView, pNpp);
+		_pFinder->init(_hInst, _hSelf, _ppEditView);
 		_pFinder->setVolatiled(false);
 		
 		tTbData	data = {0};
@@ -2796,7 +2785,7 @@ void FindReplaceDlg::findAllIn(InWhat op){
 Finder * FindReplaceDlg::createFinder()	{
 	Finder *pFinder = new Finder();
 
-	pFinder->init(_hInst, _hSelf, _ppEditView, pNpp);
+	pFinder->init(_hInst, _hSelf, _ppEditView);
 
 	tTbData	data = { 0 };
 	pFinder->create(&data, false);
