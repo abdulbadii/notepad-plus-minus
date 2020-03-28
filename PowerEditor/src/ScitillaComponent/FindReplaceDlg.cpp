@@ -498,7 +498,7 @@ void Finder::gotoFoundLine(){
 		return;
 	}
 	
-	FindReplaceDlg::pNpp->_recBuf = FindReplaceDlg::pNpp->curBuffer();
+	FindReplaceDlg::pNpp->recBufIsCurrentB();
 	
 	const FoundInfo fInfo = *(_pMainFoundInfos->begin() + lno);
 	// Switch to another document

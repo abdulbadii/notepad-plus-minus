@@ -1083,10 +1083,11 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		case NPPM_TRIGGERTABBARCONTEXTMENU:
 		{
 			// similar to NPPM_ACTIVEDOC
-			int whichView = ((wParam != MAIN_VIEW) && (wParam != SUB_VIEW)) ? currentView() : static_cast<int32_t>(wParam);
+			int whichView = (wParam != MAIN_VIEW && wParam != SUB_VIEW) ? currentView() : static_cast<int32_t>(wParam);
 			int index = static_cast<int32_t>(lParam);
 
 			switchEditViewTo(whichView);
+			_recBuf = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
 			activateDoc(index);
 
 			if (message == NPPM_TRIGGERTABBARCONTEXTMENU)
@@ -2381,10 +2382,9 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			if (message == WDN_NOTIFY)
 			{
 				NMWINDLG* nmdlg = reinterpret_cast<NMWINDLG*>(lParam);
-				switch (nmdlg->type)
-				{
-					case WDT_ACTIVATE:
-					{
+				switch (nmdlg->type)	{
+					case WDT_ACTIVATE:	{
+						_recBuf = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
 						activateDoc(nmdlg->curSel);
 						nmdlg->processed = TRUE;
 						break;

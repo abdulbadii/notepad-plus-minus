@@ -65,8 +65,7 @@ struct TBHDR
 
 
 
-class TabBar : public Window
-{
+class TabBar : public Window	{
 public:
 	TabBar() = default;
 	virtual ~TabBar() = default;
@@ -134,8 +133,7 @@ struct CloseButtonZone
 	bool isHit(int x, int y, const RECT & tabRect, bool isVertical) const;
 	RECT getButtonRectFrom(const RECT & tabRect, bool isVertical) const;
 
-	int _width;
-	int _height;
+	int _width, _height;
 };
 
 

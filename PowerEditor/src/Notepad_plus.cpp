@@ -52,6 +52,8 @@
 
 using namespace std;
 
+// int Notepad_plus::rB = 0;
+
 enum tb_stat {tb_saved, tb_unsaved, tb_ro};
 #define DIR_LEFT true
 #define DIR_RIGHT false
@@ -3045,6 +3047,8 @@ void Notepad_plus::activateNextDoc(bool direction)
 {
 	int nbDoc = static_cast<int32_t>(_pDocTab->nbItem()),
 	curIndex = _pDocTab->getCurrentTabIndex();
+	_recBuf = _pDocTab->getBufferByIndex(curIndex);
+
 	curIndex += direction == dirUp? -1: 1 ;
 
 	if (curIndex >= nbDoc)
@@ -3062,21 +3066,13 @@ void Notepad_plus::activateNextDoc(bool direction)
 	activateBuffer(_pDocTab->getBufferByIndex(curIndex), currentView());
 }
 
-void Notepad_plus::activateDoc(size_t pos)
-{
-	size_t nbDoc = _pDocTab->nbItem();
-	if (pos == static_cast<size_t>(_pDocTab->getCurrentTabIndex()))
-	{
-		Buffer * buf = _pEditView->getCurrentBuffer();
-		buf->increaseRecentTag();
-		return;
-	}
+void Notepad_plus::activateDoc(size_t pos)	{
 
-	if (pos < nbDoc)
-	{
-		BufferID id = _pDocTab->getBufferByIndex(pos);
-		activateBuffer(id, currentView());
-	}
+	if (pos == static_cast<size_t>(_pDocTab->getCurrentTabIndex()))
+		_pEditView->getCurrentBuffer()->increaseRecentTag();
+
+	else if (pos < _pDocTab->nbItem())
+		activateBuffer(_pDocTab->getBufferByIndex(pos), currentView());
 }
 
 

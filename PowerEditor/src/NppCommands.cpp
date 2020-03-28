@@ -3069,10 +3069,11 @@ void Notepad_plus::command(int id)
 			_isFolding = true;
 			if (nbDoc > 1)
 			{
-				_recBuf = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
 
 				bool direction = id==IDC_NEXT_DOC? dirDown : dirUp;
 				if (doTaskList && !TaskListDlg::_instanceCount)	{
+					_recBuf = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
+
 					TaskListDlg tld;
 					HIMAGELIST hImgLst = _docTabIconList.getHandle();
 					tld.init(_pPublicInterface->getHinst(), _pPublicInterface->getHSelf(), hImgLst, direction);
@@ -3295,25 +3296,19 @@ void Notepad_plus::command(int id)
 					switchToFile(lastOpened);
 				}
 			}
-			else if ((id > IDM_LANG_USER) && (id < IDM_LANG_USER_LIMIT))
-			{
+			else if (id > IDM_LANG_USER && id < IDM_LANG_USER_LIMIT)	{
 				TCHAR langName[langNameLenMax];
 				::GetMenuString(_mainMenuHandle, id, langName, langNameLenMax, MF_BYCOMMAND);
 				_pEditView->getCurrentBuffer()->setLangType(L_USER, langName);
 				if (_pDocMap)
-				{
 					_pDocMap->setSyntaxHiliting();
-				}
 			}
-			else if ((id >= IDM_LANG_EXTERNAL) && (id <= IDM_LANG_EXTERNAL_LIMIT))
-			{
+			else if (id >= IDM_LANG_EXTERNAL && (id <= IDM_LANG_EXTERNAL_LIMIT))	{
 				setLanguage((LangType)(id - IDM_LANG_EXTERNAL + L_EXTERNAL));
 				if (_pDocMap)
-				{
 					_pDocMap->setSyntaxHiliting();
-				}
 			}
-			else if ((id >= ID_MACRO) && (id < ID_MACRO_LIMIT))
+			else if (id >= ID_MACRO && (id < ID_MACRO_LIMIT))
 			{
 				int i = id - ID_MACRO;
 				vector<MacroShortcut> & theMacros = (NppParameters::getInstance()).getMacroList();
@@ -3329,14 +3324,10 @@ void Notepad_plus::command(int id)
 				cmd.run(_pPublicInterface->getHSelf());
 			}
 			else if ((id >= ID_PLUGINS_CMD) && (id < ID_PLUGINS_CMD_LIMIT))
-			{
-				int i = id - ID_PLUGINS_CMD;
-				_pluginsManager.runPluginCommand(i);
-			}
+				_pluginsManager.runPluginCommand(id - ID_PLUGINS_CMD);
 			else if (_pluginsManager.inDynamicRange(id)) // in the dynamic range allocated with NPPM_ALLOCATECMDID
-			{
 				_pluginsManager.relayNppMessages(WM_COMMAND, id, 0);
-			}
+
 /*UNLOAD
 			else if ((id >= ID_PLUGINS_REMOVING) && (id < ID_PLUGINS_REMOVING_END))
 			{
@@ -3344,8 +3335,9 @@ void Notepad_plus::command(int id)
 				_pluginsManager.unloadPlugin(i, _pPublicInterface->getHSelf());
 			}
 */
-			else if ((id >= IDM_WINDOW_MRU_FIRST) && (id <= IDM_WINDOW_MRU_LIMIT))
+			else if (id >= IDM_WINDOW_MRU_FIRST && id <= IDM_WINDOW_MRU_LIMIT)
 			{
+				_recBuf = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
 				activateDoc(id-IDM_WINDOW_MRU_FIRST);
 			}
 	}

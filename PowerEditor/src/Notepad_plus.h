@@ -259,12 +259,15 @@ public:
 	generic_string getPluginListVerStr() const {
 		return _pluginsAdminDlg.getPluginListVerStr();
 	};
-	
-	BufferID curBuffer(){
-		return _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
-	}
 
+	// static int rB;
 	BufferID _recBuf =nullptr;
+	// BufferID _recBuf[16] ={nullptr};
+
+	void recBufIsCurrentB(){
+		_recBuf = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
+		// _recBuf[rB++] = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
+	}
 
 private:
 	Notepad_plus_Window *_pPublicInterface = nullptr;
