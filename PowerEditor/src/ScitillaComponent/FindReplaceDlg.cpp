@@ -674,31 +674,35 @@ void Finder::addFileNameTitle(const TCHAR * fileName)
 	_pMainMarkings->push_back(EmptySearchResultMarking);
 }
 
-void Finder::addFileHitCount(int count)
-{
+void Finder::addFileHitCount(int count){
 	TCHAR text[8];
 	if (count>1) {
 		wsprintf(text, L" (%i)", count);													
 		setFinderReadOnly(false);
 		_scintView.insertGenericTextFrom(_lastFileHeaderPos, text);
 		setFinderReadOnly(true);
-	}							  
+	}
 	++_nbFoundFiles;
 }
 
 void Finder::addSearchHitCount(int count, const TCHAR *dir, bool isMatchLines){
 	const TCHAR *moreInfo = isMatchLines ? L" - Only the matched pattern" :L"";
-	generic_string d(256,0);
-	d = dir? L"files under "+generic_string(dir) : L"opened files";
 
 	TCHAR text[512];
 	if(count)
 		if(_nbFoundFiles >1)
-			wsprintf(text, L"  : %i in %i %s%s", count, _nbFoundFiles, d.c_str(), moreInfo);
+			if (dir)
+				wsprintf(text, L"  : %i in %i %s%s", count, _nbFoundFiles, (L"files under "+generic_string(dir)).c_str(), moreInfo);
+			else
+				wsprintf(text, L"  : %i in %i opened files%s", count, _nbFoundFiles, moreInfo);
 		else
-			wsprintf(text, L"  : %i %s%s", count, d.c_str(), moreInfo);
+			if (dir)
+				wsprintf(text, L"  : %i in a file under %s%s", count, dir, moreInfo);
+			else
+				wsprintf(text, L"  : %i in current file%s", count, moreInfo);
 	else
-		wsprintf(text, L" was not found %s", d.c_str());
+		if (dir)	wsprintf(text, L" was not found under %s", dir);
+		else		wsprintf(text, L" was not found in any opened file");
 	
 	setFinderReadOnly(false);
 	_scintView.insertGenericTextFrom(_lastSearchHeaderPos, text);
@@ -850,13 +854,15 @@ void Finder::finishFilesSearch(int count, bool isfold,const TCHAR *dir, bool isM
 		_markingsStruct._markings = &((*_pMainMarkings)[0]);
 
 	addSearchHitCount(count, dir, isMatchLines);
-
-	auto of = (*_pMainMarkings)[2]._end;
 	auto c = _scintView.execute(SCI_POSITIONFROMLINE, 2);
-	_scintView.execute(SCI_GOTOPOS, c+of);
-	//auto end = _scintView.execute(SCI_GETLINEENDPOSITION, 2);
-	// _scintView.execute(SCI_SETTARGETRANGE, c, end);
-	// auto of=_scintView.execute(SCI_SEARCHINTARGET, 1, reinterpret_cast<LPARAM>(L":"));
+
+	// auto of = (*_pMainMarkings)[2]._end;
+	// _scintView.execute(SCI_GOTOPOS, c+of);
+
+	_scintView.execute(SCI_SETTARGETRANGE, c, _scintView.execute(SCI_GETLINEENDPOSITION, 2));
+	auto of=_scintView.execute(SCI_SEARCHINTARGET, 1, reinterpret_cast<LPARAM>(L":"));
+	_scintView.execute(SCI_GOTOPOS, of +2);
+
 	_scintView.execute(SCI_SETLEXER, SCLEX_SEARCHRESULT);
 	_scintView.execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>( isfold? "1" : "0"));
 }
