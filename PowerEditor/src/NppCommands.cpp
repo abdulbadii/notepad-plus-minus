@@ -3072,6 +3072,7 @@ void Notepad_plus::command(int id)
 
 				bool direction = id==IDC_NEXT_DOC? dirDown : dirUp;
 				if (doTaskList && !TaskListDlg::_instanceCount)	{
+					// _recBuf[rB++] = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
 					_recBuf = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
 
 					TaskListDlg tld;
@@ -3337,7 +3338,8 @@ void Notepad_plus::command(int id)
 */
 			else if (id >= IDM_WINDOW_MRU_FIRST && id <= IDM_WINDOW_MRU_LIMIT)
 			{
-				_recBuf = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
+			// _recBuf[rB++] = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
+			_recBuf = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
 				activateDoc(id-IDM_WINDOW_MRU_FIRST);
 			}
 	}

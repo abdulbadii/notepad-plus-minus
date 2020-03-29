@@ -1087,7 +1087,9 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			int index = static_cast<int32_t>(lParam);
 
 			switchEditViewTo(whichView);
+			// _recBuf[rB++] = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
 			_recBuf = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
+
 			activateDoc(index);
 
 			if (message == NPPM_TRIGGERTABBARCONTEXTMENU)
@@ -2384,6 +2386,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				NMWINDLG* nmdlg = reinterpret_cast<NMWINDLG*>(lParam);
 				switch (nmdlg->type)	{
 					case WDT_ACTIVATE:	{
+						// _recBuf[rB++] = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
 						_recBuf = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
 						activateDoc(nmdlg->curSel);
 						nmdlg->processed = TRUE;

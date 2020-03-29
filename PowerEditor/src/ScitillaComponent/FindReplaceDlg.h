@@ -36,7 +36,7 @@
 #define FIND_INHIDDENDIR 2
 
 #define FINDREPLACE_MAXLENGTH 1024
-//FIND_DLG, 
+
 enum DIALOG_TYPE {REPLACE_DLG, FINDINFILES_DLG, MARK_DLG};
 
 #define DIR_DOWN true
@@ -295,7 +295,7 @@ public :
 
 	void finishFilesSearch(int count, bool isfold=1, const TCHAR *dir=nullptr)
 	{
-		_pFinder->finishFilesSearch(count, isfold, dir);
+		_pFinder->finishFilesSearch(_findAllResult=count, isfold, dir);
 	}
 
 	void execSavedCommand(int cmd, uptr_t intValue, const generic_string& stringValue);

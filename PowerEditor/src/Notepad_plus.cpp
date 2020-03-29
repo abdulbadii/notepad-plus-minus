@@ -1731,24 +1731,20 @@ bool Notepad_plus::findInFiles()	{
 		_findReplaceDlg._fileTot = int(filesCount);
 
 		if (filesCount > 1)	{
-			if (filesCount >= 200)		filesPerPercent = filesCount / 45;
+			if (filesCount >= 170)		filesPerPercent = filesCount / 45;
 			progress.open(_findReplaceDlg.getHSelf(), L"Find In Files progress...");
 		}
 
-		for (size_t i = 0, updateOnCount = filesPerPercent; i < filesCount; ++i)
-		{
+		for (size_t i = 0, updateOnCount = filesPerPercent; i < filesCount; ++i)	{
 			if (progress.isCancelled()) break;
-
 			bool closeBuf = false;
 			BufferID id = MainFileManager.getBufferFromName(fileNames.at(i).c_str());
-			if (id == BUFFER_INVALID)
-			{
+		
+			if (id == BUFFER_INVALID)	{
 				id = MainFileManager.loadFile(fileNames.at(i).c_str());
 				closeBuf = true;
 			}
-
-			if (id != BUFFER_INVALID)
-			{
+			if (id != BUFFER_INVALID)	{
 				Buffer * pBuf = MainFileManager.getBufferByID(id);
 				_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, pBuf->getDocument());
 				auto cp = _invisibleEditView.execute(SCI_GETCODEPAGE);
@@ -1759,20 +1755,16 @@ bool Notepad_plus::findInFiles()	{
 				if (closeBuf)
 					MainFileManager.closeBuffer(id, _pEditView);
 			}
-			if (i == updateOnCount)
-			{
+			if (i == updateOnCount)	{
 				updateOnCount += filesPerPercent;
 				progress.setPercent(int32_t((i * 100) / filesCount), fileNames.at(i).c_str());
 			}
 			else
-			{
 				progress.setInfo(fileNames.at(i).c_str());
-			}
 		}
 		progress.close();
 
 		_findReplaceDlg.finishFilesSearch(nbTotal, (hasMore? noFold: fold), dir2Search);
-		_findReplaceDlg._findAllResult=nbTotal;
 		get1 |= bool(nbTotal);
 	}
 	_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, oldDoc);
@@ -1783,8 +1775,7 @@ bool Notepad_plus::findInFiles()	{
 }
 
 
-bool Notepad_plus::findInOpenedFiles()
-{
+bool Notepad_plus::findInOpenedFiles()	{
 	int nbTotal = 0;
 	ScintillaEditView *pOldView = _pEditView;
 	_pEditView = &_invisibleEditView;
@@ -1825,13 +1816,11 @@ bool Notepad_plus::findInOpenedFiles()
 			nbTotal += _findReplaceDlg.processAll(ProcessFindAll, FindReplaceDlg::_env, isEntireDoc, &findersInfo);
 		}
 	}
-
 	_findReplaceDlg.finishFilesSearch(nbTotal);
 
 	_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, oldDoc);
 	_pEditView = pOldView;
 
-	_findReplaceDlg._findAllResult=nbTotal;
 	if (nbTotal && !NppParameters::getInstance().getFindHistory()._isDlgAlwaysVisible)
 		_findReplaceDlg.display(false);
 	return true;
@@ -1840,7 +1829,7 @@ bool Notepad_plus::findInOpenedFiles()
 
 bool Notepad_plus::findInCurrentFile()
 {
-	int nbTotal = 0;
+	int nbTotal;
 	Buffer * pBuf = _pEditView->getCurrentBuffer();
 	ScintillaEditView *pOldView = _pEditView;
 	_pEditView = &_invisibleEditView;
@@ -1855,14 +1844,12 @@ bool Notepad_plus::findInCurrentFile()
 	_invisibleEditView.execute(SCI_SETCODEPAGE, pBuf->getUnicodeMode() == uni8Bit ? cp : SC_CP_UTF8);
 	FindersInfo findersInfo;
 	findersInfo._pFileName = pBuf->getFullPathName();
-	nbTotal += _findReplaceDlg.processAll(ProcessFindAll, FindReplaceDlg::_env, isEntireDoc, &findersInfo);
+	nbTotal = _findReplaceDlg.processAll(ProcessFindAll, FindReplaceDlg::_env, isEntireDoc, &findersInfo);
 
 	_findReplaceDlg.finishFilesSearch(nbTotal);
 
 	_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, oldDoc);
 	_pEditView = pOldView;
-
-	_findReplaceDlg._findAllResult=nbTotal;
 
 	if (nbTotal && !NppParameters::getInstance().getFindHistory()._isDlgAlwaysVisible)
 		_findReplaceDlg.display(false);
@@ -3047,7 +3034,9 @@ void Notepad_plus::activateNextDoc(bool direction)
 {
 	int nbDoc = static_cast<int32_t>(_pDocTab->nbItem()),
 	curIndex = _pDocTab->getCurrentTabIndex();
+
 	_recBuf = _pDocTab->getBufferByIndex(curIndex);
+	// _recBuf[rB++] = _pDocTab->getBufferByIndex(curIndex);
 
 	curIndex += direction == dirUp? -1: 1 ;
 

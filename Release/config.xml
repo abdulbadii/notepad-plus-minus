@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="Windows-1252" ?>
 <NotepadPlus>
-    <FindHistory nbMaxFindHistoryPath="10" nbMaxFindHistoryFilter="10" nbMaxFindHistoryFind="99" nbMaxFindHistoryReplace="30" matchWord="no" matchCase="no" wrap="yes" directionDown="yes" fifRecuisive="yes" fifInHiddenFolder="no" dlgAlwaysVisible="no" fifFilterFollowsDoc="no" fifFolderFollowsDoc="no" searchMode="0" transparencyMode="1" transparency="64" dotMatchesNewline="no" isSearch2ButtonsMode="yes">
-        <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src\" />
+    <FindHistory nbMaxFindHistoryPath="10" nbMaxFindHistoryFilter="10" nbMaxFindHistoryFind="99" nbMaxFindHistoryReplace="30" matchWord="no" matchCase="no" wrap="yes" directionDown="yes" fifRecuisive="yes" fifInHiddenFolder="no" dlgAlwaysVisible="no" fifFilterFollowsDoc="no" fifFolderFollowsDoc="no" searchMode="0" transparencyMode="1" transparency="64" dotMatchesNewline="no" isSearch2ButtonsMode="no">
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent" />
+        <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src\" />
         <Path name="X:\T\" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master\" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src" />
@@ -21,11 +21,18 @@
         <Filter name="*.vc* *.sln" />
         <Filter name="*.c *.cpp *.cc *.h" />
         <Filter name="*.xml" />
+        <Find name="NppGUI" />
+        <Find name="NppGUIP" />
+        <Find name="Notepad_plus" />
+        <Find name="Line" />
+        <Find name="LRESULT" />
+        <Find name="Macro" />
+        <Find name="IDC_EDIT_TOGGLEMACRORECORDING" />
+        <Find name="IDM_VIEW_WRAP" />
+        <Find name="checkMenuItem" />
         <Find name="IDM_VIEW_FUNC_LIST" />
         <Find name="DocTabView" />
         <Find name="_str2Search" />
-        <Find name="IDM_VIEW_WRAP" />
-        <Find name="checkMenuItem" />
         <Find name="function list" />
         <Find name="SCNotification" />
         <Find name="getTextFromCombo" />
@@ -113,13 +120,6 @@
         <Find name="finish" />
         <Find name="Can&apos;t find the" />
         <Find name="Can\&apos;t find the" />
-        <Find name="elif" />
-        <Find name="?" />
-        <Find name="focus()" />
-        <Find name="StaticDialog" />
-        <Find name="pFinder" />
-        <Find name="IDM_TOG" />
-        <Find name="searchInTarget" />
         <Replace name="enum" />
         <Replace name="IDM_VIEW_FUNC_LIST" />
         <Replace name="NativeLangSpeaker" />
@@ -196,9 +196,8 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\MISC\PluginsManager\PluginInterface.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\FindReplaceDlg.rc" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\NppNotification.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\menuCmdID.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Parameters.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\DocTabView.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\menuCmdID.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\ContextMenu\ContextMenu.h" />
     </History>
     <GUIConfigs>

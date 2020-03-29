@@ -695,8 +695,8 @@ void Notepad_plus::doClose(BufferID id, int whichOne, bool doDeleteBackup){
 			_lastRecentFileList.add(fileFullPath.c_str());
 	}
 	
-	if (_recBuf)	activateBuffer(_recBuf);
 	// if (_recBuf[--rB])	activateBuffer(_recBuf[rB]);
+	if (_recBuf)	activateBuffer(_recBuf);
 
 	command(IDM_VIEW_REFRESHTABAR);
 	// the user closed the last open tab

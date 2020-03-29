@@ -261,12 +261,12 @@ public:
 	};
 
 	// static int rB;
-	BufferID _recBuf =nullptr;
 	// BufferID _recBuf[16] ={nullptr};
+	BufferID _recBuf =nullptr;
 
 	void recBufIsCurrentB(){
+	// _recBuf[rB++] = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
 		_recBuf = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
-		// _recBuf[rB++] = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
 	}
 
 private:

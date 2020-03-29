@@ -39,8 +39,7 @@
 
 class DockingSplitter;
 
-class DockingManager : public Window
-{
+class DockingManager : public Window	{
 public :
 	DockingManager();
 	~DockingManager();

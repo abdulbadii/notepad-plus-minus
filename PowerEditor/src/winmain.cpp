@@ -78,11 +78,11 @@ void allowWmCopydataMessages(Notepad_plus_Window& notepad_plus_plus, const NppPa
 ParamVector parseCommandLine(const TCHAR* commandLine)
 {
 	ParamVector result;
-	if ( commandLine[0] != '\0' )
+	if ( commandLine[0] )
 	{
 		int numArgs;
 		LPWSTR* tokenizedCmdLine = CommandLineToArgvW( commandLine, &numArgs );
-		if ( tokenizedCmdLine != nullptr )
+		if ( tokenizedCmdLine )
 		{
 			result.assign( tokenizedCmdLine, tokenizedCmdLine+numArgs );
 			LocalFree( tokenizedCmdLine );
