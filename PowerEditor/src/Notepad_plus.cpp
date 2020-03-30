@@ -5593,14 +5593,7 @@ void Notepad_plus::setWorkingDir(const TCHAR *dir)
 	NppParameters& params = NppParameters::getInstance();
 	if (params.getNppGUI()._openSaveDir == dir_last)
 		return;
-	if (params.getNppGUI()._openSaveDir == dir_userDef)
-	{
-		params.setWorkingDir(NULL);
-	}
-	else if (dir && PathIsDirectory(dir))
-	{
-		params.setWorkingDir(dir);
-	}
+	params.setWorkingDir(dir);
 }
 
 int Notepad_plus::getLangFromMenuName(const TCHAR * langName)

@@ -653,7 +653,8 @@ void Notepad_plus::doClose(BufferID id, int whichOne, bool doDeleteBackup){
 			fileFullPath = buf->getFullPathName();
 
 		// We enable Wow64 system, if it was disabled
-		if (isWow64Off)	{
+		if (isWow64Off)
+		{
 			nppParam.safeWow64EnableWow64FsRedirection(TRUE);
 			//isWow64Off = false;
 		}
@@ -780,8 +781,8 @@ int Notepad_plus::setFileOpenSaveDlgFilters(FileDialog & fDlg, int langType)
 
 		if (!inExcludedList)
 		{
-			const TCHAR *defList = l->getDefaultExtList(),
-			*userList = NULL;
+			const TCHAR *defList = l->getDefaultExtList();
+			const TCHAR *userList = NULL;
 
 			LexerStylerArray &lsa = (NppParameters::getInstance()).getLStylerArray();
 			const TCHAR *lName = l->getLangName();
@@ -790,12 +791,14 @@ int Notepad_plus::setFileOpenSaveDlgFilters(FileDialog & fDlg, int langType)
 			if (pLS)
 				userList = pLS->getLexerUserExt();
 
-			generic_string list=L"";
+			generic_string list(L"");
 			if (defList)
 				list += defList;
 			if (userList)
+			{
 				list += L" ";
 				list += userList;
+			}
 
 			generic_string stringFilters = exts2Filters(list);
 			const TCHAR *filters = stringFilters.c_str();

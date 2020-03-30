@@ -252,10 +252,10 @@ public:
 	};
 
 	void getVisibleStartAndEndPosition(int * startPos, int * endPos);
-    char * getWordFromRange(char * txt, int size, int pos1, int pos2);
+	char * getWordFromRange(char * txt, int size, int pos1, int pos2);
 	char * getSelectedText(char * txt, int size, bool expand = true);
-    char * getWordOnCaretPos(char * txt, int size);
-    TCHAR * getGenericWordOnCaretPos(TCHAR * txt, int size);
+	char * getWordOnCaretPos(char * txt, int size);
+	TCHAR * getGenericWordOnCaretPos(TCHAR * txt, int size);
 	TCHAR * getGenericSelectedText(TCHAR * txt, int size, bool expand = true);
 	int searchInTarget(const TCHAR * Text2Find, size_t lenOfText2Find, size_t fromPos, size_t toPos) const;
 	int searchInTarget(const TCHAR * Text2Find) const;
@@ -302,31 +302,31 @@ public:
 			getGenericText(str, strLen, startPos, caretPos);
 	};
 
-    void doUserDefineDlg(bool willBeShown = true, bool isRTL = false) {
-        _userDefineDlg.doDialog(willBeShown, isRTL);
-    };
+	void doUserDefineDlg(bool willBeShown = true, bool isRTL = false) {
+		_userDefineDlg.doDialog(willBeShown, isRTL);
+	};
 
-    static UserDefineDialog * getUserDefineDlg() {return &_userDefineDlg;};
+	static UserDefineDialog * getUserDefineDlg() {return &_userDefineDlg;};
 
-    void setCaretColorWidth(int color, int width = 1) const {
-        execute(SCI_SETCARETFORE, color);
-        execute(SCI_SETCARETWIDTH, width);
-    };
+	void setCaretColorWidth(int color, int width = 1) const {
+		execute(SCI_SETCARETFORE, color);
+		execute(SCI_SETCARETWIDTH, width);
+	};
 
 	void beSwitched() {
 		_userDefineDlg.setScintilla(this);
 	};
 
-    //Marge member and method
-    static const int _SC_MARGE_LINENUMBER;
-    static const int _SC_MARGE_SYBOLE;
-    static const int _SC_MARGE_FOLDER;
+	//Marge member and method
+	static const int _SC_MARGE_LINENUMBER;
+	static const int _SC_MARGE_SYBOLE;
+	static const int _SC_MARGE_FOLDER;
 	//static const int _SC_MARGE_MODIFMARKER;
 
-    void showMargin(int whichMarge, bool willBeShowed = true) {
-        if (whichMarge == _SC_MARGE_LINENUMBER)
+	void showMargin(int whichMarge, bool willBeShowed = true) {
+		if (whichMarge == _SC_MARGE_LINENUMBER)
 			showLineNumbersMargin(willBeShowed);
-        else
+		else
 		{
 			int width = 3;
 			if (whichMarge == _SC_MARGE_SYBOLE)
@@ -335,16 +335,16 @@ public:
 				width = NppParameters::getInstance()._dpiManager.scaleX(100) >= 150 ? 18 : 14;
 			execute(SCI_SETMARGINWIDTHN, whichMarge, willBeShowed ? width : 0);
 		}
-    };
+	};
 
-    bool hasMarginShowed(int witchMarge) {
+	bool hasMarginShowed(int witchMarge) {
 		return (execute(SCI_GETMARGINWIDTHN, witchMarge, 0) != 0);
-    };
+	};
 
-    void updateBeginEndSelectPosition(bool is_insert, size_t position, size_t length);
-    void marginClick(Sci_Position position, int modifiers);
+	void updateBeginEndSelectPosition(bool is_insert, size_t position, size_t length);
+	void marginClick(Sci_Position position, int modifiers);
 
-    void setMakerStyle(folderStyle style) {
+	void setMakerStyle(folderStyle style) {
 		bool display;
 		if (style == FOLDER_STYLE_NONE)
 		{
@@ -362,101 +362,102 @@ public:
 		for (int i = 0 ; i < NB_FOLDER_STATE ; ++i)
 			defineMarker(_markersArray[FOLDER_TYPE][i], _markersArray[style][i], foldfgColor, foldbgColor, activeFoldFgColor);
 		showMargin(ScintillaEditView::_SC_MARGE_FOLDER, display);
-    };
+	};
 
 
-	void setWrapMode(lineWrapMethod meth) {
+	inline void setWrapMode(lineWrapMethod meth) {
 		int mode = (meth == LINEWRAP_ALIGNED)?SC_WRAPINDENT_SAME:\
 				(meth == LINEWRAP_INDENT)?SC_WRAPINDENT_INDENT:SC_WRAPINDENT_FIXED;
 		execute(SCI_SETWRAPINDENTMODE, mode);
 	};
 
 
-	void showWSAndTab(bool willBeShowed = true) {
+	inline void showWSAndTab(bool willBeShowed = true) {
 		execute(SCI_SETVIEWWS, willBeShowed?SCWS_VISIBLEALWAYS:SCWS_INVISIBLE);
 		execute(SCI_SETWHITESPACESIZE, 2, 0);
 	};
 
-	void showEOL(bool willBeShowed = true) {
+	inline void showEOL(bool willBeShowed = true) {
 		execute(SCI_SETVIEWEOL, willBeShowed);
 	};
 
-	bool isEolVisible() {
+	inline bool isEolVisible() {
 		return (execute(SCI_GETVIEWEOL) != 0);
 	};
-	void showInvisibleChars(bool willBeShowed = true) {
+
+	inline void showInvisibleChars(bool willBeShowed = true) {
 		showWSAndTab(willBeShowed);
 		showEOL(willBeShowed);
 	};
 
-	bool isInvisibleCharsShown() {
+	inline bool isInvisibleCharsShown() {
 		return (execute(SCI_GETVIEWWS) != 0);
 	};
 
 	void showIndentGuideLine(bool willBeShowed = true);
 
-	bool isShownIndentGuide() const {
+	inline bool isShownIndentGuide() const {
 		return (execute(SCI_GETINDENTATIONGUIDES) != 0);
 	};
 
-    void wrap(bool willBeWrapped = true) {
-        execute(SCI_SETWRAPMODE, willBeWrapped);
-    };
+	inline void wrap(bool willBeWrapped = true) {
+		execute(SCI_SETWRAPMODE, willBeWrapped);
+	};
 
-    bool isWrap() const {
-        return (execute(SCI_GETWRAPMODE) == SC_WRAP_WORD);
-    };
+	inline bool isWrap() const {
+		return (execute(SCI_GETWRAPMODE) == SC_WRAP_WORD);
+	};
 
-	bool isWrapSymbolVisible() const {
+	inline bool isWrapSymbolVisible() const {
 		return (execute(SCI_GETWRAPVISUALFLAGS) != SC_WRAPVISUALFLAG_NONE);
 	};
 
-    void showWrapSymbol(bool willBeShown = true) {
+	inline void showWrapSymbol(bool willBeShown = true) {
 		execute(SCI_SETWRAPVISUALFLAGSLOCATION, SC_WRAPVISUALFLAGLOC_DEFAULT);
 		execute(SCI_SETWRAPVISUALFLAGS, willBeShown?SC_WRAPVISUALFLAG_END:SC_WRAPVISUALFLAG_NONE);
-    };
+	};
 
-	size_t getCurrentLineNumber()const {
+	inline size_t getCurrentLineNumber()const {
 		return static_cast<size_t>(execute(SCI_LINEFROMPOSITION, execute(SCI_GETCURRENTPOS)));
 	};
 
-	int32_t lastZeroBasedLineNumber() const {
+	inline int32_t lastZeroBasedLineNumber() const {
 		auto endPos = execute(SCI_GETLENGTH);
 		return static_cast<int32_t>(execute(SCI_LINEFROMPOSITION, endPos));
 	};
 
-	long getCurrentXOffset()const{
+	inline long getCurrentXOffset()const{
 		return long(execute(SCI_GETXOFFSET));
 	};
 
-	void setCurrentXOffset(long xOffset){
+	inline void setCurrentXOffset(long xOffset){
 		execute(SCI_SETXOFFSET,xOffset);
 	};
 
-	void scroll(int column, int line){
+	inline void scroll(int column, int line){
 		execute(SCI_LINESCROLL, column, line);
 	};
 
-	long getCurrentPointX()const{
+	inline long getCurrentPointX()const{
 		return long (execute(SCI_POINTXFROMPOSITION, 0, execute(SCI_GETCURRENTPOS)));
 	};
 
-	long getCurrentPointY()const{
+	inline long getCurrentPointY()const{
 		return long (execute(SCI_POINTYFROMPOSITION, 0, execute(SCI_GETCURRENTPOS)));
 	};
 
-	long getTextHeight()const{
+	inline long getTextHeight()const{
 		return long(execute(SCI_TEXTHEIGHT));
 	};
 
-	void gotoLine(int line){
+	inline void gotoLine(int line){
 		if (line < execute(SCI_GETLINECOUNT))
 			execute(SCI_GOTOLINE,line);
 	};
 
-	long getCurrentColumnNumber() const {
-        return long(execute(SCI_GETCOLUMN, execute(SCI_GETCURRENTPOS)));
-    };
+	inline long getCurrentColumnNumber() const {
+		return long(execute(SCI_GETCOLUMN, execute(SCI_GETCURRENTPOS)));
+	};
 
 	bool getSelectedCount(int & selByte, int & selLine) const {
 		// return false if it's multi-selection or rectangle selection
@@ -527,14 +528,14 @@ public:
 	void expand(size_t& line, bool doExpand, bool force = false, int visLevels = 0, int level = -1);
 
 	std::pair<int, int> getSelectionLinesRange() const;
-    void currentLinesUp() const;
-    void currentLinesDown() const;
+	void currentLinesUp() const;
+	void currentLinesDown() const;
 
 	void changeCase(__inout wchar_t * const strWToConvert, const int & nbChars, const TextCase & caseToConvert) const;
 	void convertSelectedTextTo(const TextCase & caseToConvert);
 	void setMultiSelections(const ColumnModeInfos & cmi);
 
-    void convertSelectedTextToLowerCase() {
+	void convertSelectedTextToLowerCase() {
 		// if system is w2k or xp
 		if ((NppParameters::getInstance()).isTransparentAvailable())
 			convertSelectedTextTo(LOWERCASE);
@@ -542,7 +543,7 @@ public:
 			execute(SCI_LOWERCASE);
 	};
 
-    void convertSelectedTextToUpperCase() {
+	void convertSelectedTextToUpperCase() {
 		// if system is w2k or xp
 		if ((NppParameters::getInstance()).isTransparentAvailable())
 			convertSelectedTextTo(UPPERCASE);
@@ -627,13 +628,13 @@ public:
 	};
 
 	void setHotspotStyle(Style& styleToSet);
-    void setTabSettings(Lang *lang);
+	void setTabSettings(Lang *lang);
 	bool isWrapRestoreNeeded() const {return _wrapRestoreNeeded;};
 	void setWrapRestoreNeeded(bool isWrapRestoredNeeded) {_wrapRestoreNeeded = isWrapRestoredNeeded;};
 
 	bool isCJK() const {
 		return ((_codepage == CP_CHINESE_TRADITIONAL) || (_codepage == CP_CHINESE_SIMPLIFIED) ||
-			    (_codepage == CP_JAPANESE) || (_codepage == CP_KOREAN));
+				(_codepage == CP_JAPANESE) || (_codepage == CP_KOREAN));
 	};
 	void scrollPosToCenter(size_t pos);
 	generic_string getEOLString();
@@ -646,9 +647,9 @@ protected:
 	static HINSTANCE _hLib;
 	static int _refCount;
 
-    static UserDefineDialog _userDefineDlg;
+	static UserDefineDialog _userDefineDlg;
 
-    static const int _markersArray[][NB_FOLDER_STATE];
+	static const int _markersArray[][NB_FOLDER_STATE];
 
 	static LRESULT CALLBACK scintillaStatic_Proc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
 	LRESULT scintillaNew_Proc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
@@ -694,12 +695,12 @@ protected:
  	void setCppLexer(LangType type);
 	void setJsLexer();
 	void setTclLexer();
-    void setObjCLexer(LangType type);
+	void setObjCLexer(LangType type);
 	void setUserLexer(const TCHAR *userLangName = NULL);
 	void setExternalLexer(LangType typeDoc);
 	void setEmbeddedJSLexer();
-    void setEmbeddedPhpLexer();
-    void setEmbeddedAspLexer();
+	void setEmbeddedPhpLexer();
+	void setEmbeddedAspLexer();
 	void setJsonLexer();
 	//Simple lexers
 	void setCssLexer() {
@@ -853,25 +854,25 @@ protected:
 		setLexer(SCLEX_YAML, L_YAML, LIST_0);
 	};
 
-    //--------------------
+	//--------------------
 
-    void setCobolLexer() {
+	void setCobolLexer() {
 		setLexer(SCLEX_COBOL, L_COBOL, LIST_0 | LIST_1 | LIST_2);
 	};
-    void setGui4CliLexer() {
+	void setGui4CliLexer() {
 		setLexer(SCLEX_GUI4CLI, L_GUI4CLI, LIST_0 | LIST_1 | LIST_2 | LIST_3 | LIST_4);
 	};
-    void setDLexer() {
+	void setDLexer() {
 		setLexer(SCLEX_D, L_D, LIST_0 | LIST_1 | LIST_2 | LIST_3 | LIST_4 | LIST_5 | LIST_6);
 	};
-    void setPowerShellLexer() {
+	void setPowerShellLexer() {
 		setLexer(SCLEX_POWERSHELL, L_POWERSHELL, LIST_0 | LIST_1 | LIST_2 | LIST_5);
 	};
-    void setRLexer() {
+	void setRLexer() {
 		setLexer(SCLEX_R, L_R, LIST_0 | LIST_1 | LIST_2);
 	};
 
-    void setCoffeeScriptLexer() {
+	void setCoffeeScriptLexer() {
 		setLexer(SCLEX_COFFEESCRIPT, L_COFFEESCRIPT, LIST_0 | LIST_1 | LIST_2  | LIST_3);
 	};
 
@@ -986,7 +987,7 @@ protected:
 		setLexer(SCLEX_VISUALPROLOG, L_VISUALPROLOG, LIST_0 | LIST_1 | LIST_2 | LIST_3);
 	}
 
-    //--------------------
+	//--------------------
 
 	void setSearchResultLexer() {
 		execute(SCI_STYLESETEOLFILLED, SCE_SEARCHRESULT_FILE_HEADER, true);
@@ -1014,10 +1015,10 @@ protected:
 	};
 //END: Lexers and Styling
 
-    void defineMarker(int marker, int markerType, COLORREF fore, COLORREF back, COLORREF foreActive) {
-	    execute(SCI_MARKERDEFINE, marker, markerType);
-	    execute(SCI_MARKERSETFORE, marker, fore);
-	    execute(SCI_MARKERSETBACK, marker, back);
+	void defineMarker(int marker, int markerType, COLORREF fore, COLORREF back, COLORREF foreActive) {
+		execute(SCI_MARKERDEFINE, marker, markerType);
+		execute(SCI_MARKERSETFORE, marker, fore);
+		execute(SCI_MARKERSETBACK, marker, back);
 		execute(SCI_MARKERSETBACKSELECTED, marker, foreActive);
 	};
 

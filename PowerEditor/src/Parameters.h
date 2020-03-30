@@ -1517,12 +1517,11 @@ public:
 	const TCHAR * getPluginRootDir() const { return _pluginRootDir.c_str(); };
 	const TCHAR * getPluginConfDir() const { return _pluginConfDir.c_str(); };
 	const TCHAR * getUserPluginConfDir() const { return _userPluginConfDir.c_str(); };
-	const TCHAR * getWorkingDir() const {return _currentDirectory.c_str();};
-	const TCHAR * getWorkSpaceFilePath(int i) const {
-		if (i < 0 || i > 2) return nullptr;
-		return _workSpaceFilePathes[i].c_str();
-	};
+	const TCHAR * getWorkSpaceFilePath(int i) const{	return (i < 0 || i > 2)? nullptr : _workSpaceFilePathes[i].c_str();	}
 
+	const TCHAR * getWorkingDir() const {return _currentDirectory.c_str();}
+	const TCHAR * getCWDir() const{return _currentWDir.c_str();}
+	
 	const std::vector<generic_string> getFileBrowserRoots() const { return _fileBrowserRoot; };
 	void setWorkSpaceFilePath(int i, const TCHAR *wsFile);
 
@@ -1767,7 +1766,7 @@ private:
 	generic_string _pluginRootDir; // plugins root where all the plugins are installed
 	generic_string _pluginConfDir; // plugins config dir where the plugin list is installed
 	generic_string _userPluginConfDir; // plugins config dir for per user where the plugin parameters are saved / loaded
-	generic_string _currentDirectory;
+	generic_string _currentDirectory, _currentWDir;
 	generic_string _workSpaceFilePathes[3];
 
 	std::vector<generic_string> _fileBrowserRoot;

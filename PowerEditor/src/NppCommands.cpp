@@ -788,10 +788,11 @@ void Notepad_plus::command(int id)
 		}
 		break;
 
-		case IDM_VIEW_TAB_NEXT:
-		{
-			if (::GetFocus() == _findReplaceDlg.getHFindResults())
+		case IDM_VIEW_TAB_NEXT:	{
+			if (::GetFocus() == _findReplaceDlg.getHFindResults())	{
 				switchEditViewTo(MAIN_VIEW);
+				
+		}
 			const int current_index = _pDocTab->getCurrentTabIndex();
 			const int last_index = _pDocTab->getItemCount() - 1;
 			_isFolding = true;

@@ -1347,7 +1347,7 @@ INT_PTR CALLBACK DefaultDirectoryDlg::run_dlgProc(UINT message, WPARAM wParam, L
 	{
 		case WM_INITDIALOG :
 		{
-			int ID2Check = 0;
+			int ID2Check;
 			bool shouldActivated;
 			switch (nppGUI._openSaveDir)
 			{
@@ -1392,7 +1392,7 @@ INT_PTR CALLBACK DefaultDirectoryDlg::run_dlgProc(UINT message, WPARAM wParam, L
 						::SendDlgItemMessage(_hSelf, IDC_OPENSAVEDIR_ALWAYSON_EDIT, WM_GETTEXT, MAX_PATH, reinterpret_cast<LPARAM>(inputDir));
 						wcscpy_s(nppGUI._defaultDir, inputDir);
 						::ExpandEnvironmentStrings(nppGUI._defaultDir, nppGUI._defaultDirExp, _countof(nppGUI._defaultDirExp));
-						nppParam.setWorkingDir(nppGUI._defaultDirExp);
+						nppParam.setWorkingDir(nullptr);
 						return TRUE;
 					}
 				}

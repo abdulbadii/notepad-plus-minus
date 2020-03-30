@@ -974,7 +974,7 @@ BEGIN
 		MENUITEM "&Run...",    IDM_EXECUTE
 	END
 
-	POPUP "Help"
+	POPUP "?"
 	BEGIN
 		MENUITEM "Command Line Arguments...",      IDM_CMDLINEARGUMENTS
 		MENUITEM SEPARATOR

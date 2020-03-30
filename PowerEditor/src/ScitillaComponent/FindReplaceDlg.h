@@ -220,7 +220,8 @@ private:
 	void writeOptions();
 };
 
-class FindReplaceDlg : public StaticDialog	{
+class FindReplaceDlg : public StaticDialog
+{
 friend class FindIncrementDlg;
 public :
 	static FindOption _options;
@@ -404,7 +405,9 @@ private :
 			_tab.activateAt(_currentStatus);
 	};
 	
-	FindStatus getFindStatus() {	return this->_statusbarFindStatus;	}
+	FindStatus getFindStatus() {
+		return this->_statusbarFindStatus;
+	}
 
 	void updateCombos();
 	void updateCombo(int comboID);
@@ -417,6 +420,7 @@ private :
 	static const int FR_OP_GLOBAL = 8;
 	void saveInMacro(size_t cmd, int cmdType);
 	void drawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
+
 };
 
 //FindIncrementDlg: incremental search dialog, docked in rebar
