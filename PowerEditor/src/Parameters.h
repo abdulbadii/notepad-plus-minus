@@ -1517,16 +1517,20 @@ public:
 	const TCHAR * getPluginRootDir() const { return _pluginRootDir.c_str(); };
 	const TCHAR * getPluginConfDir() const { return _pluginConfDir.c_str(); };
 	const TCHAR * getUserPluginConfDir() const { return _userPluginConfDir.c_str(); };
-	const TCHAR * getWorkSpaceFilePath(int i) const{	return (i < 0 || i > 2)? nullptr : _workSpaceFilePathes[i].c_str();	}
+	const TCHAR * getWorkSpaceFilePath(int i) const {
+		if (i < 0 || i > 2) return nullptr;
+		return _workSpaceFilePathes[i].c_str();
+	};
 
-	const TCHAR * getWorkingDir() const {return _currentDirectory.c_str();}
-	const TCHAR * getCWDir() const{return _currentWDir.c_str();}
-	
 	const std::vector<generic_string> getFileBrowserRoots() const { return _fileBrowserRoot; };
+
+	const TCHAR * getWorkingDir() const{
+		return _currentWDir.c_str();	}
+	const TCHAR * getDefOpenSaveDir() const{
+		return _currentDirectory.c_str();	}
+	void setWorkingDir(const TCHAR * =nullptr, bool noLast=1);
+
 	void setWorkSpaceFilePath(int i, const TCHAR *wsFile);
-
-	void setWorkingDir(const TCHAR * newPath);
-
 	void setStartWithLocFileName(const generic_string& locPath) {
 		_startWithLocFileName = locPath;
 	};

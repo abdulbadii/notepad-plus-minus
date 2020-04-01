@@ -853,8 +853,7 @@ NppParameters::NppParameters()
 	//Initialize current directory to startup directory
 	TCHAR curDir[MAX_PATH];
 	::GetCurrentDirectory(MAX_PATH, curDir);
-	_currentDirectory = curDir;
-	_currentWDir = curDir;
+	_currentDirectory = _currentWDir = curDir;
 
 	_appdataNppDir.clear();
 	generic_string notepadStylePath(_nppPath);
@@ -1986,11 +1985,16 @@ bool NppParameters::getContextMenuFromXmlTree(HMENU mainMenuHadle, HMENU plugins
 	return true;
 }
 
-void NppParameters::setWorkingDir(const TCHAR * newPath)
+
+void NppParameters::setWorkingDir(const TCHAR * newPath, bool noLast)
 {
-	if (newPath && newPath[0])	_currentDirectory =_currentWDir=newPath;
-	else if (_nppGUI._openSaveDir == dir_userDef && PathFileExists(_nppGUI._defaultDirExp))
-			_currentDirectory = _nppGUI._defaultDirExp;
+	if (newPath && newPath[0])	{
+		_currentDirectory = newPath;
+		if (noLast)
+		_currentWDir = newPath;
+	}
+	else if (PathFileExists(_nppGUI._defaultDirExp))
+		_currentDirectory = _nppGUI._defaultDirExp;
 	else
 		_currentDirectory = _nppPath.c_str();
 }

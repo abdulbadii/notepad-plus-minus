@@ -24,9 +24,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-				
-#pragma warning(push)
-#pragma warning(disable:4706) // assignment within conditional expression
  #include <memory>
 #include <shlobj.h>
 #include <uxtheme.h>
@@ -853,21 +850,23 @@ void Finder::finishFilesSearch(int count, bool isfold,const TCHAR *dir, bool isM
 	_pMainMarkings->clear();
 	_pMainFoundInfos = _pOldFoundInfos;
 	_pMainMarkings = _pOldMarkings;
+	
 	if ((_markingsStruct._length = static_cast<long>(_pMainMarkings->size())) > 0)
 		_markingsStruct._markings = &((*_pMainMarkings)[0]);
 
 	addSearchHitCount(count, dir, isMatchLines);
 	auto c = _scintView.execute(SCI_POSITIONFROMLINE, 2);
 
-	auto of = (*_pMainMarkings)[2]._end;
-	_scintView.execute(SCI_GOTOPOS, c+of);
-	// _scintView.execute(SCI_SETTARGETRANGE, c, _scintView.execute(SCI_GETLINEENDPOSITION, 2));
-	// auto of=_scintView.execute(SCI_SEARCHINTARGET, 1, reinterpret_cast<LPARAM>(L":"));
-	// _scintView.execute(SCI_GOTOPOS, of +2);
+	// auto of = (*_pMainMarkings)[2]._end;
+	// _scintView.execute(SCI_GOTOPOS, c+of);
 
-	_scintView.execute(SCI_SETWRAPMODE, 1);
+	_scintView.execute(SCI_SETTARGETRANGE, c, _scintView.execute(SCI_GETLINEENDPOSITION, 2));
+	auto of=_scintView.execute(SCI_SEARCHINTARGET, 1, reinterpret_cast<LPARAM>(L":"));
+	_scintView.execute(SCI_GOTOPOS, of +2);
+
 	_scintView.execute(SCI_SETLEXER, SCLEX_SEARCHRESULT);
 	_scintView.execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>( isfold? "1" : "0"));
+	_scintView.execute(SCI_SETWRAPMODE, 1);
 
 }
 
@@ -1974,12 +1973,13 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 					case IDD_FINDINFILES_FOLDERFOLLOWSDOC_CHECK :
 				{
-					// if (_currentStatus == FINDINFILES_DLG)	;
+					if (_currentStatus == FINDINFILES_DLG)
+								findHistory._isFolderFollowDoc = isCheckedOrNot(IDD_FINDINFILES_FOLDERFOLLOWSDOC_CHECK);
 
-						if ((findHistory._isFolderFollowDoc = isCheckedOrNot(IDD_FINDINFILES_FOLDERFOLLOWSDOC_CHECK)))
+						if (findHistory._isFolderFollowDoc)
 						{
 								NppParameters& nppParam = NppParameters::getInstance();
-								const TCHAR * dir = nppParam.getCWDir();
+								const TCHAR * dir = nppParam.getWorkingDir();
 								::SetDlgItemText(_hSelf, IDD_FINDINFILES_DIR_COMBO, dir);
 						}
 					
@@ -3537,10 +3537,10 @@ void FindReplaceDlg::drawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	else if (_statusbarFindStatus == FSMessage)
 		fgColor = RGB(0xFF,0xFF,0xFF);
 
-	else// if (_statusbarFindStatus == FSNoMessage)
+	else
 	{
 		fgColor = RGB(0xCF,0xCF,0xCF);
-		ptStr = L"Press Alt-<an underlined character> to do the task, Tab to walk through them, Shift-Tab to do so backward";
+		ptStr = L"Hit Alt<underlined character> to set/do each job, Tab to walk through them, Shift-Tab to do so backward";
 	}
 	::SetTextColor(lpDrawItemStruct->hDC, fgColor);
 	::SetBkColor(lpDrawItemStruct->hDC, RGB(0,0,0));//getCtrlBgColor(_statusBar.getHSelf())

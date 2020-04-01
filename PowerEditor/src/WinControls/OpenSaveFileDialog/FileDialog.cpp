@@ -163,7 +163,7 @@ TCHAR* FileDialog::doOpenSingleFileDlg()
 	TCHAR dir[MAX_PATH];
 	::GetCurrentDirectory(MAX_PATH, dir);
 	NppParameters& params = NppParameters::getInstance();
-	_ofn.lpstrInitialDir = params.getWorkingDir();
+	_ofn.lpstrInitialDir = params.getDefOpenSaveDir();
 
 	_ofn.Flags |= OFN_FILEMUSTEXIST;
 
@@ -181,7 +181,7 @@ TCHAR* FileDialog::doOpenSingleFileDlg()
 		if (params.getNppGUI()._openSaveDir == dir_last)
 		{
 			::GetCurrentDirectory(MAX_PATH, dir);
-			params.setWorkingDir(dir);
+			params.setWorkingDir(dir, 0);
 		}
 	}
 	catch (std::exception& e)
@@ -209,7 +209,7 @@ stringVector * FileDialog::doOpenMultiFilesDlg()
 	::GetCurrentDirectory(MAX_PATH, dir);
 
 	NppParameters& params = NppParameters::getInstance();
-	_ofn.lpstrInitialDir = params.getWorkingDir();
+	_ofn.lpstrInitialDir = params.getDefOpenSaveDir();
 
 	_ofn.Flags |= OFN_FILEMUSTEXIST | OFN_ALLOWMULTISELECT | OFN_ENABLESIZING;
 
@@ -223,7 +223,7 @@ stringVector * FileDialog::doOpenMultiFilesDlg()
 	if (params.getNppGUI()._openSaveDir == dir_last)
 	{
 		::GetCurrentDirectory(MAX_PATH, dir);
-		params.setWorkingDir(dir);
+		params.setWorkingDir(dir, 0);
 	}
 	::SetCurrentDirectory(dir);
 
@@ -266,7 +266,7 @@ TCHAR * FileDialog::doSaveDlg()
 	::GetCurrentDirectory(MAX_PATH, dir);
 
 	NppParameters& params = NppParameters::getInstance();
-	_ofn.lpstrInitialDir = params.getWorkingDir();
+	_ofn.lpstrInitialDir = params.getDefOpenSaveDir();
 
 	_ofn.Flags |= OFN_OVERWRITEPROMPT | OFN_HIDEREADONLY | OFN_ENABLESIZING;
 
@@ -283,7 +283,7 @@ TCHAR * FileDialog::doSaveDlg()
 		if (params.getNppGUI()._openSaveDir == dir_last)
 		{
 			::GetCurrentDirectory(MAX_PATH, dir);
-			params.setWorkingDir(dir);
+			params.setWorkingDir(dir, 0);
 		}
 	}
 	catch (std::exception& e)
