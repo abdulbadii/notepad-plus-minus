@@ -188,7 +188,6 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_SPACE,       IDM_SEARCH_FINDINFILES,                       false, true, false,  nullptr },
 	{ VK_I,       IDM_SEARCH_FINDINCREMENT,                     true,  true,  false, nullptr },
 	{ VK_SPACE,      IDM_SHOW_HIDE_FIND_RESULTS,                  true,  true, false, nullptr },
-	{ VK_SPACE,      IDM_CLEAR_CLOSE_FINDER,                  true,  true, true, nullptr },
 	{ VK_F4,      IDM_SEARCH_GOTOPREVFOUND,                     false, false, true,  nullptr },
 	{ VK_F4,      IDM_SEARCH_GOTONEXTFOUND,                     false, false, false, nullptr },
 	{ VK_G,       IDM_SEARCH_GOTOLINE,                          true,  false, false, nullptr },
@@ -302,7 +301,8 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_BACK,    IDM_VIEW_FUNC_LIST,                           false, false, true, nullptr },
 	{ VK_F6,    IDM_VIEW_CHAR_PANEL,                          false, false, false, nullptr },
 	{ VK_L,    IDM_VIEW_LINENUMBER,                false, true, true, L"Display line number" },
-	{ VK_TAB,      IDM_MAIN_FIND_RESULTS,                  true,  false, true, L"Switch Main/Found view" },
+	{ VK_TAB,      IDM_MAIN_FIND_RESULTS,                  true,  false, true, L"Switch Main/Find view" },
+	{ VK_SPACE,      IDM_CLEAR_CLOSE_FINDER,                  true,  true, true, L"Clear,Close Find View" },
 
 	{ VK_NULL,    IDM_VIEW_SYNSCROLLV,                          false, false, false, nullptr },
 	{ VK_NULL,    IDM_VIEW_SYNSCROLLH,                          false, false, false, nullptr },
