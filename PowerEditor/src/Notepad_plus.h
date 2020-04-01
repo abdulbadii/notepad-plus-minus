@@ -401,9 +401,7 @@ private:
 	ProjectPanel* _pProjectPanel_1 = nullptr;
 	ProjectPanel* _pProjectPanel_2 = nullptr;
 	ProjectPanel* _pProjectPanel_3 = nullptr;
-
 	FileBrowser* _pFileBrowser = nullptr;
-
 	DocumentMap* _pDocMap = nullptr;
 	FunctionListPanel* _pFuncList = nullptr;
 
@@ -412,8 +410,8 @@ private:
 
 //Document management
 	UCHAR _mainWindowStatus = 0; //For 2 views and user dialog if docked
+
 	int _activeView = MAIN_VIEW;
-	int _otherView = _activeView == MAIN_VIEW? SUB_VIEW: MAIN_VIEW;
 
 	//User dialog docking
 	void dockUserDlg();
@@ -427,9 +425,14 @@ private:
 	bool reloadLang();
 	bool loadStyles();
 
-	int currentView();
-	int otherView();
-	int otherView(int now);
+	int currentView() {	return _activeView;	}
+
+	int otherView(int view)	{
+		return view == MAIN_VIEW? SUB_VIEW: MAIN_VIEW;	}
+
+	int otherView(){
+		return _activeView == MAIN_VIEW?SUB_VIEW:MAIN_VIEW;	}
+	
 
 	bool canHideView(int whichOne);	//true if view can safely be hidden (no open docs etc)
 

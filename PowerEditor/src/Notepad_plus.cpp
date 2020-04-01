@@ -3385,17 +3385,6 @@ void Notepad_plus::showView(int whichOne)
 	::SendMessage(_pPublicInterface->getHSelf(), WM_SIZE, 0, 0);
 }
 
-	int Notepad_plus::currentView() {
-		return MAIN_VIEW;//_activeView;
-	}
-	int Notepad_plus::otherView(){
-		return _otherView;
-	}
-
-	int Notepad_plus::otherView(int now){
-		return now == MAIN_VIEW? SUB_VIEW: MAIN_VIEW;
-	}
-
 bool Notepad_plus::viewVisible(int whichOne)
 {
 	int viewToCheck = (whichOne == SUB_VIEW?WindowSubActive:WindowMainActive);
@@ -3575,9 +3564,8 @@ int Notepad_plus::switchEditViewTo(int gid)
 	if (!viewVisible(gid))
 		return currentView();	//cannot activate invisible view
 	int oldView = currentView();
-	int newView = otherView();
+	_activeView = otherView();
 
-	_activeView = newView;
 	//Good old switcheroo
 	std::swap(_pDocTab, _pNonDocTab);
 	std::swap(_pEditView, _pNonEditView);
