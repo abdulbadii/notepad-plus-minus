@@ -691,19 +691,19 @@ void Finder::addSearchHitCount(int count, const TCHAR *dir, bool isMatchLines){
 
 	TCHAR text[512];
 	if(count)
-		if(_nbFoundFiles >1)
-			if (dir)
+		if (dir)
+			if(_nbFoundFiles >1)
 				wsprintf(text, L"  : %i in %i %s%s", count, _nbFoundFiles, (L"files under "+generic_string(dir)).c_str(), moreInfo);
 			else
-				wsprintf(text, L"  : %i in %i opened files%s", count, _nbFoundFiles, moreInfo);
+				wsprintf(text, L"  : %i in file below under %s%s", count, dir, moreInfo);
 		else
-			if (dir)
-				wsprintf(text, L"  : %i under %s%s", count, dir, moreInfo);
+			if(_nbFoundFiles >1)
+				wsprintf(text, L"  : %i in %i file(s) of %i opened files%s", count, _nbFoundFiles, _nbOpenedFiles, moreInfo);
 			else
-				wsprintf(text, L"  : %i in current file%s", count, moreInfo);
+				wsprintf(text, L"  : %i in opened file below%s", count, moreInfo);
 	else
 		if (dir)	wsprintf(text, L" was not found under %s", dir);
-		else		wsprintf(text, L" was not found in %i opened files", _nbFoundFiles);
+		else		wsprintf(text, L" was not found in %i opened files", _nbOpenedFiles);
 	
 	setFinderReadOnly(false);
 	_scintView.insertGenericTextFrom(_lastSearchHeaderPos, text);
@@ -2713,7 +2713,7 @@ void FindReplaceDlg::findAllIn(InWhat op)	{
 		// the dlgDlg should be the index of funcItem where the current function pointer is
 		// in this case is DOCKABLE_DEMO_INDEX
 		data.dlgID = 0;
-		::SendMessage(_hParent, NPPM_DMMREGASDCKDLG, 0, reinterpret_cast<LPARAM>(&data));
+		::SendMessage(_hParent, NPPM_DMMREGASDCKDLG, reinterpret_cast<LPARAM>(_pFinder->getHSelf()), reinterpret_cast<LPARAM>(&data));
 
 		_pFinder->_scintView.init(_hInst, _pFinder->getHSelf());
 
@@ -2738,8 +2738,7 @@ void FindReplaceDlg::findAllIn(InWhat op)	{
 		_pFinder->_scintView.setMakerStyle(FOLDER_STYLE_SIMPLE);
 		_pFinder->_scintView.display();
 		// _pFinder->display();
-		// ::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
-		::UpdateWindow(_hParent);
+		//::UpdateWindow(_hParent);
 		_pFinder->setFinderStyle();
 
 		// Send the address of _MarkingsStruct to the lexer
@@ -2748,7 +2747,6 @@ void FindReplaceDlg::findAllIn(InWhat op)	{
 		_pFinder->_scintView.execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("@MarkingsStruct"), reinterpret_cast<LPARAM>(ptrword));
 	}
 	// else	_pFinder->setFinderStyle();
-	::SendMessage(_pFinder->getHSelf(), WM_SIZE, 0, 0);
 	int cmdid;
 	if (op == ALL_OPEN_DOCS)
 		cmdid = WM_FINDALL_INOPENEDDOC;
@@ -2759,18 +2757,19 @@ void FindReplaceDlg::findAllIn(InWhat op)	{
 	else		return;
 
 	if (::SendMessage(_hParent, cmdid, 0, 0))	{
-
+	::SendMessage(_pFinder->getHSelf(), WM_SIZE, 0, 0);
+ 
 		if (_findAllResult)		openFinder();
  		else	{
 			TCHAR s[64];
 			generic_string msg = NppParameters::getInstance().getNativeLangSpeaker()->getLocalizedStrFromID("find-status-cannot-find", L"Find: Can't find the text \"$STR_REPLACE$\" in "),
 			ms = stringReplace(msg, L"$STR_REPLACE$", stringReplace(_options._str2Search, L"&", L"&&"));
 			if (op==ALL_OPEN_DOCS)
-				wsprintf(s, L"%i opened files", _pFinder->_nbFoundFiles);
+				wsprintf(s, L"%i opened file(s)", _pFinder->_nbOpenedFiles);
 			else if (op==CURRENT_DOC)
 				wsprintf(s, L"current file");
 			else
-				wsprintf(s, L"%i file(s) specified by filter", _fileTot);
+				wsprintf(s, L"%i file(s) as setting/filter specified", _fileTot);
 			setStatusbarMessage(ms + generic_string(s), FSNotFound);
 				
 			(*_ppEditView)->focus();	::SetFocus(::GetDlgItem(_hSelf, IDFINDWHAT));
@@ -2798,7 +2797,7 @@ Finder * FindReplaceDlg::createFinder()	{
 	// the dlgDlg should be the index of funcItem where the current function pointer is
 	// in this case is DOCKABLE_DEMO_INDEX
 	data.dlgID = 0;
-	::SendMessage(_hParent, NPPM_DMMREGASDCKDLG, 0, reinterpret_cast<LPARAM>(&data));
+	::SendMessage(_hParent, NPPM_DMMREGASDCKDLG, reinterpret_cast<LPARAM>(_pFinder->getHSelf()), reinterpret_cast<LPARAM>(&data));
 
 	pFinder->_scintView.init(_hInst, pFinder->getHSelf());
 

@@ -81,7 +81,7 @@ INT_PTR CALLBACK TaskListDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 			if (i2set < 0)
 				i2set = nbTotal - 1;
 
-			if (i2set > (nbTotal - 1))
+			else if (i2set > nbTotal - 1)
 				i2set = 0;
 
 			_taskList.init(_hInst, _hSelf, _hImalist, nbTotal, i2set);

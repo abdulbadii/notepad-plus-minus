@@ -1968,6 +1968,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 			getIntegralDockingData(*pData, iCont, isVisible);
 			_dockingManager.createDockableDlg(*pData, iCont, isVisible);
+			if(wParam) _dockingManager.showDockableDlg(reinterpret_cast<HWND>(wParam), SW_HIDE);
 			return TRUE;
 		}
 

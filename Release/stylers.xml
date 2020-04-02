@@ -183,18 +183,18 @@
             <WordsStyle name="PREPROCESSOR COMMENT DOC" styleID="24" fgColor="00FF40" bgColor="800040" fontName="" fontStyle="0" fontSize="" />
         </LexerType>
         <LexerType name="cpp" desc="C++" ext="">
-            <WordsStyle name="PREPROCESSOR" styleID="9" fgColor="C5FFB0" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
+            <WordsStyle name="PREPROCESSOR" styleID="9" fgColor="E1FFC1" bgColor="000000" fontName="" fontStyle="0" fontSize="10" />
             <WordsStyle name="DEFAULT" styleID="11" fgColor="FFC6AA" bgColor="000000" fontName="Segoe UI" fontStyle="0" fontSize="10" />
-            <WordsStyle name="INSTRUCTION WORD" styleID="5" fgColor="8DFEA4" bgColor="000000" fontName="Segoe UI" fontStyle="0" fontSize="" keywordClass="instre1" />
-            <WordsStyle name="TYPE WORD" styleID="16" fgColor="00F481" bgColor="000000" fontName="" fontStyle="0" fontSize="" keywordClass="type1" />
-            <WordsStyle name="NUMBER" styleID="4" fgColor="28FF33" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
-            <WordsStyle name="STRING" styleID="6" fgColor="FFD399" bgColor="000026" fontName="" fontStyle="0" fontSize="9" />
+            <WordsStyle name="INSTRUCTION WORD" styleID="5" fgColor="E2FF8A" bgColor="000000" fontName="Segoe UI" fontStyle="0" fontSize="9" keywordClass="instre1" />
+            <WordsStyle name="TYPE WORD" styleID="16" fgColor="00F481" bgColor="000000" fontName="" fontStyle="0" fontSize="9" keywordClass="type1" />
+            <WordsStyle name="NUMBER" styleID="4" fgColor="39FF97" bgColor="000000" fontName="" fontStyle="0" fontSize="9" />
+            <WordsStyle name="STRING" styleID="6" fgColor="DBF3A3" bgColor="000000" fontName="" fontStyle="0" fontSize="9" />
             <WordsStyle name="CHARACTER" styleID="7" fgColor="F991A3" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
             <WordsStyle name="OPERATOR" styleID="10" fgColor="00FFFF" bgColor="000000" fontName="" fontStyle="1" fontSize="" />
             <WordsStyle name="VERBATIM" styleID="13" fgColor="FFFFFF" bgColor="0000A0" fontName="" fontStyle="0" fontSize="" />
             <WordsStyle name="REGEX" styleID="14" fgColor="00FFFF" bgColor="800000" fontName="" fontStyle="1" fontSize="" />
-            <WordsStyle name="COMMENT" styleID="1" fgColor="FFFF00" bgColor="030123" fontName="" fontStyle="0" fontSize="" />
-            <WordsStyle name="COMMENT LINE" styleID="2" fgColor="DAFB57" bgColor="000015" fontName="" fontStyle="0" fontSize="" />
+            <WordsStyle name="COMMENT" styleID="1" fgColor="CED06F" bgColor="030123" fontName="" fontStyle="0" fontSize="" />
+            <WordsStyle name="COMMENT LINE" styleID="2" fgColor="73B9FF" bgColor="170013" fontName="" fontStyle="0" fontSize="9" />
             <WordsStyle name="COMMENT DOC" styleID="3" fgColor="00FD00" bgColor="260013" fontName="" fontStyle="0" fontSize="" />
             <WordsStyle name="COMMENT LINE DOC" styleID="15" fgColor="00B300" bgColor="000040" fontName="" fontStyle="0" fontSize="" />
             <WordsStyle name="COMMENT DOC KEYWORD" styleID="17" fgColor="008080" bgColor="FFFFFF" fontName="" fontStyle="1" fontSize="" />
@@ -316,15 +316,15 @@
         <LexerType name="css" desc="CSS" ext="html">
             <WordsStyle name="DEFAULT" styleID="0" fgColor="FFD7AE" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
             <WordsStyle name="TAG" styleID="1" fgColor="80FF80" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
-            <WordsStyle name="CLASS" styleID="2" fgColor="FF8083" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
-            <WordsStyle name="PSEUDOCLASS" styleID="3" fgColor="FF8E4A" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
+            <WordsStyle name="CLASS" styleID="2" fgColor="FF8083" bgColor="000000" fontName="" fontStyle="0" fontSize="10" />
+            <WordsStyle name="PSEUDOCLASS" styleID="3" fgColor="FF8E4A" bgColor="000000" fontName="" fontStyle="0" fontSize="9" />
             <WordsStyle name="UNKNOWN_PSEUDOCLASS" styleID="4" fgColor="FF8080" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
             <WordsStyle name="OPERATOR" styleID="5" fgColor="EFEFEF" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
-            <WordsStyle name="IDENTIFIER" styleID="6" fgColor="80FFFF" bgColor="000000" fontName="" fontStyle="0" fontSize="" keywordClass="instre1" />
+            <WordsStyle name="IDENTIFIER" styleID="6" fgColor="80FFFF" bgColor="000000" fontName="" fontStyle="0" fontSize="9" keywordClass="instre1" />
             <WordsStyle name="UNKNOWN_IDENTIFIER" styleID="7" fgColor="8080FF" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
-            <WordsStyle name="VALUE" styleID="8" fgColor="CBED07" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
+            <WordsStyle name="VALUE" styleID="8" fgColor="CBED07" bgColor="000000" fontName="" fontStyle="0" fontSize="10" />
             <WordsStyle name="COMMENT" styleID="9" fgColor="856AFF" bgColor="373700" fontName="" fontStyle="0" fontSize="" />
-            <WordsStyle name="ID" styleID="10" fgColor="FE54D3" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
+            <WordsStyle name="ID" styleID="10" fgColor="FE54D3" bgColor="000000" fontName="" fontStyle="0" fontSize="9" />
             <WordsStyle name="IMPORTANT" styleID="11" fgColor="FF0000" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
             <WordsStyle name="DIRECTIVE" styleID="12" fgColor="F3D91B" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
         </LexerType>
@@ -1302,15 +1302,15 @@
         <LexerType name="xml" desc="XML" ext="">
             <WordsStyle name="XMLSTART" styleID="12" fgColor="FF0000" bgColor="FFFF00" fontName="" fontStyle="0" fontSize="" />
             <WordsStyle name="XMLEND" styleID="13" fgColor="FF0000" bgColor="FFFF00" fontName="" fontStyle="0" fontSize="" />
-            <WordsStyle name="DEFAULT" styleID="0" fgColor="FFDCB9" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
+            <WordsStyle name="DEFAULT" styleID="0" fgColor="FFDCB9" bgColor="000000" fontName="" fontStyle="0" fontSize="9" />
             <WordsStyle name="COMMENT" styleID="9" fgColor="C0C0C0" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
             <WordsStyle name="NUMBER" styleID="5" fgColor="FF0000" bgColor="FFFFFF" fontName="" fontStyle="0" fontSize="" />
-            <WordsStyle name="DOUBLESTRING" styleID="6" fgColor="FFB895" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
+            <WordsStyle name="DOUBLESTRING" styleID="6" fgColor="FFB895" bgColor="000000" fontName="" fontStyle="0" fontSize="9" />
             <WordsStyle name="SINGLESTRING" styleID="7" fgColor="FFE6B0" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
-            <WordsStyle name="TAG" styleID="1" fgColor="80FF00" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
+            <WordsStyle name="TAG" styleID="1" fgColor="80FF00" bgColor="000000" fontName="" fontStyle="0" fontSize="9" />
             <WordsStyle name="TAGEND" styleID="11" fgColor="40FF70" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
             <WordsStyle name="TAGUNKNOWN" styleID="2" fgColor="000000" bgColor="E0E0E0" fontName="" fontStyle="0" fontSize="" />
-            <WordsStyle name="ATTRIBUTE" styleID="3" fgColor="FEB1F2" bgColor="000024" fontName="" fontStyle="0" fontSize="" />
+            <WordsStyle name="ATTRIBUTE" styleID="3" fgColor="FEB1F2" bgColor="000024" fontName="" fontStyle="0" fontSize="9" />
             <WordsStyle name="ATTRIBUTEUNKNOWN" styleID="4" fgColor="000000" bgColor="80FFFF" fontName="" fontStyle="0" fontSize="" />
             <WordsStyle name="SGMLDEFAULT" styleID="21" fgColor="000000" bgColor="3786DD" fontName="" fontStyle="0" fontSize="" />
             <WordsStyle name="CDATA" styleID="17" fgColor="8080FF" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
@@ -1328,31 +1328,31 @@
             <WordsStyle name="ERROR" styleID="8" fgColor="FF0000" bgColor="FFFFFF" fontName="" fontStyle="0" fontSize="" />
         </LexerType>
         <LexerType name="searchResult" desc="Search result" ext="">
-            <WordsStyle name="Search Header" styleID="1" fgColor="0BFF42" bgColor="000040" fontName="" fontStyle="1" fontSize="7" />
-            <WordsStyle name="File Header" styleID="2" fgColor="00FFFF" bgColor="33001F" fontName="" fontStyle="1" fontSize="8" />
-            <WordsStyle name="Line Number" styleID="3" fgColor="F0FFBB" bgColor="000000" fontName="" fontStyle="0" fontSize="8" />
+            <WordsStyle name="Search Header" styleID="1" fgColor="F5FFB3" bgColor="002000" fontName="" fontStyle="1" fontSize="7" />
+            <WordsStyle name="File Header" styleID="2" fgColor="39FFFF" bgColor="400040" fontName="" fontStyle="0" fontSize="8" />
+            <WordsStyle name="Line Number" styleID="3" fgColor="EBEBEB" bgColor="000000" fontName="" fontStyle="1" fontSize="8" />
             <WordsStyle name="Hit Word" styleID="4" fgColor="FFFF00" bgColor="000080" fontName="" fontStyle="0" fontSize="" />
             <WordsStyle name="Selected Line" styleID="5" fgColor="000000" bgColor="B900B9" fontName="" fontStyle="0" fontSize="8" />
-            <WordsStyle name="Current line background colour" styleID="6" bgColor="313131" fontStyle="0" />
+            <WordsStyle name="Current line background colour" styleID="6" bgColor="9D0004" fontStyle="0" />
         </LexerType>
     </LexerStyles>
     <GlobalStyles>
         <!-- Attention : Don't modify the name of styleID="0" -->
         <WidgetStyle name="Global override" styleID="0" fgColor="FFCD9F" bgColor="000000" fontName="Segoe UI" fontStyle="0" fontSize="" />
-        <WidgetStyle name="Default Style" styleID="32" fgColor="FFCC9D" bgColor="000000" fontName="Segoe UI" fontStyle="0" fontSize="" />
+        <WidgetStyle name="Default Style" styleID="32" fgColor="FFCC9D" bgColor="000000" fontName="Segoe UI" fontStyle="0" fontSize="9" />
         <WidgetStyle name="Indent guideline style" styleID="37" fgColor="808080" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
         <WidgetStyle name="Brace highlight style" styleID="34" fgColor="FF3C3C" bgColor="00005B" fontName="" fontStyle="1" fontSize="10" />
         <WidgetStyle name="Bad brace colour" styleID="35" fgColor="0000A0" bgColor="FF4A4A" fontName="" fontStyle="0" fontSize="" />
-        <WidgetStyle name="Current line background colour" styleID="0" bgColor="002228" fontStyle="0" fgColor="000000" fontSize="" />
-        <WidgetStyle name="Selected text colour" styleID="0" bgColor="9B0055" fontStyle="0" fgColor="000024" />
+        <WidgetStyle name="Current line background colour" styleID="0" bgColor="000051" fontStyle="0" fgColor="000000" fontSize="" />
+        <WidgetStyle name="Selected text colour" styleID="0" bgColor="6F003D" fontStyle="0" fgColor="000024" />
         <WidgetStyle name="Caret colour" styleID="2069" fgColor="CAFF4F" fontStyle="0" bgColor="372017" />
         <WidgetStyle name="Edge colour" styleID="0" fgColor="80FFFF" fontStyle="0" bgColor="112435" fontSize="" />
-        <WidgetStyle name="Line number margin" styleID="33" fgColor="00FF80" bgColor="000000" fontName="Segoe UI" fontStyle="0" fontSize="7" />
-        <WidgetStyle name="Fold" styleID="0" fgColor="808080" bgColor="F3F3F3" fontStyle="0" fontSize="8" />
-        <WidgetStyle name="Fold active" styleID="0" fgColor="FF0000" fontStyle="0" bgColor="2E3436" fontSize="8" />
-        <WidgetStyle name="Fold margin" styleID="0" fgColor="373737" bgColor="00002B" fontStyle="0" fontSize="" />
+        <WidgetStyle name="Line number margin" styleID="33" fgColor="1EFF94" bgColor="000000" fontName="Segoe UI" fontStyle="0" fontSize="7" />
+        <WidgetStyle name="Fold" styleID="0" fgColor="000000" bgColor="F40006" fontStyle="1" fontSize="8" />
+        <WidgetStyle name="Fold active" styleID="0" fgColor="FFFF20" fontStyle="0" bgColor="E30005" fontSize="8" />
+        <WidgetStyle name="Fold margin" styleID="0" fgColor="181818" bgColor="002000" fontStyle="0" fontSize="" />
         <WidgetStyle name="White space symbol" styleID="0" fgColor="FFFF00" fontStyle="0" bgColor="000000" />
-        <WidgetStyle name="Smart HighLighting" styleID="29" bgColor="0000FF" fontStyle="0" fgColor="000000" fontSize="" />
+        <WidgetStyle name="Smart HighLighting" styleID="29" bgColor="00F2F2" fontStyle="0" fgColor="FFFFFF" fontSize="" />
         <WidgetStyle name="Find Mark Style" styleID="31" bgColor="FF0000" fontStyle="0" fgColor="555753" fontSize="10" />
         <WidgetStyle name="Mark Style 1" styleID="25" bgColor="00FFFF" fontStyle="0" fgColor="CC0000" fontSize="10" />
         <WidgetStyle name="Mark Style 2" styleID="24" bgColor="FF8000" fontStyle="0" fgColor="80D4B2" />

@@ -1787,9 +1787,9 @@ bool Notepad_plus::findInOpenedFiles()	{
 
 	_findReplaceDlg.beginNewFilesSearch();
 
+	size_t i=0, len = _mainDocTab.nbItem();
 	if (_mainWindowStatus & WindowMainActive)
 	{
-		size_t i=0, len = _mainDocTab.nbItem();
 		_findReplaceDlg.nf(len);
 		for (; i < len ; ++i)
 		{
@@ -1803,15 +1803,15 @@ bool Notepad_plus::findInOpenedFiles()	{
 		}
 	}
 
+	size_t j=0;
 	if (_mainWindowStatus & WindowSubActive)
 	{
-		size_t i = 0, len =  _subDocTab.nbItem();
-		_findReplaceDlg.nf(len);
-		for (; i < len ; ++i)
+		for (size_t i = 0; i < _subDocTab.nbItem() ; ++i)
 		{
 			pBuf = MainFileManager.getBufferByID(_subDocTab.getBufferByIndex(i));
 			if (_mainDocTab.getIndexByBuffer(pBuf) != -1)// clone is skipped searching in sub
-				continue;  
+				continue; 
+			++j;
 			_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, pBuf->getDocument());
 			auto cp = _invisibleEditView.execute(SCI_GETCODEPAGE);
 			_invisibleEditView.execute(SCI_SETCODEPAGE, pBuf->getUnicodeMode() == uni8Bit ? cp : SC_CP_UTF8);
@@ -1820,6 +1820,7 @@ bool Notepad_plus::findInOpenedFiles()	{
 			nbTotal += _findReplaceDlg.processAll(ProcessFindAll, FindReplaceDlg::_env, isEntireDoc, &findersInfo);
 		}
 	}
+	_findReplaceDlg.nf(len +j);
 	_findReplaceDlg.finishFilesSearch(nbTotal);
 
 	_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, oldDoc);

@@ -139,7 +139,6 @@ public:
 	bool canFind(const TCHAR *fileName, size_t lineNumber) const;
 	void setVolatiled(bool val) { _canBeVolatiled = val;}
 
-	uint32_t _nbFoundFiles = 0;
 
 protected :
 	virtual INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
@@ -159,6 +158,7 @@ private:
 	SearchResultMarkings _markingsStruct;
 
 	ScintillaEditView _scintView;
+	uint32_t _nbFoundFiles = 0, _nbOpenedFiles = 0;
 
 	int _lastFileHeaderPos = 0;
 	int _lastSearchHeaderPos = 0;
@@ -261,7 +261,6 @@ public :
 	void findAllIn(InWhat op);
 	void setSearchText(TCHAR * txt2find);
 
-	void nf(size_t len){	_pFinder->_nbFoundFiles = uint32_t(len);	}
 
 	void gotoNextFoundResult(int direction = 0) {if (_pFinder) _pFinder->gotoNextFoundResult(direction);};
 
@@ -344,6 +343,7 @@ public :
 		if (_pFinder)	::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
 	}
 
+	void nf(size_t len){	_pFinder->_nbOpenedFiles = uint32_t(len);	}
 
 	int _fileTot=0, _findAllResult=0;
 
