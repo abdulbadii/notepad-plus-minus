@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="Windows-1252" ?>
 <NotepadPlus>
-    <FindHistory nbMaxFindHistoryPath="10" nbMaxFindHistoryFilter="10" nbMaxFindHistoryFind="99" nbMaxFindHistoryReplace="30" matchWord="no" matchCase="yes" wrap="yes" directionDown="yes" fifRecuisive="yes" fifInHiddenFolder="no" dlgAlwaysVisible="no" fifFilterFollowsDoc="no" fifFolderFollowsDoc="yes" searchMode="0" transparencyMode="1" transparency="64" dotMatchesNewline="no" isSearch2ButtonsMode="no">
+    <FindHistory nbMaxFindHistoryPath="10" nbMaxFindHistoryFilter="10" nbMaxFindHistoryFind="99" nbMaxFindHistoryReplace="30" matchWord="yes" matchCase="yes" wrap="yes" directionDown="yes" fifRecuisive="yes" fifInHiddenFolder="no" dlgAlwaysVisible="no" fifFilterFollowsDoc="no" fifFolderFollowsDoc="yes" searchMode="0" transparencyMode="1" transparency="64" dotMatchesNewline="no" isSearch2ButtonsMode="no">
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src\" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent" />
@@ -21,6 +21,7 @@
         <Filter name="*.vc* *.sln" />
         <Filter name="*.c *.cpp *.cc *.h" />
         <Filter name="*.xml" />
+        <Find name="DOW" />
         <Find name="Notepad_plus" />
         <Find name="IDC_CHECK_DOCSWITCH" />
         <Find name="IDM_VIEW_FUNC_LIST" />
@@ -119,7 +120,6 @@
         <Find name="tT" />
         <Find name="class\h+StaticDialog" />
         <Find name="getFocus" />
-        <Find name="focus" />
         <Replace name="enum" />
         <Replace name="IDM_VIEW_FUNC_LIST" />
         <Replace name="NativeLangSpeaker" />
@@ -256,9 +256,10 @@
             <PluginDlg pluginName="3P" id="2" curr="0" prev="-1" isVisible="no" />
             <PluginDlg pluginName="3P" id="1" curr="0" prev="-1" isVisible="no" />
             <ActiveTabs cont="0" activeTab="-1" />
-            <ActiveTabs cont="1" activeTab="-1" />
+            <ActiveTabs cont="1" activeTab="0" />
             <ActiveTabs cont="2" activeTab="-1" />
             <ActiveTabs cont="3" activeTab="-1" />
+            <ActiveTabs cont="4" activeTab="-1" />
         </GUIConfig>
     </GUIConfigs>
     <ProjectPanels>

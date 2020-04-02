@@ -139,6 +139,8 @@ public:
 	bool canFind(const TCHAR *fileName, size_t lineNumber) const;
 	void setVolatiled(bool val) { _canBeVolatiled = val;}
 
+	uint32_t _nbFoundFiles = 0;
+
 protected :
 	virtual INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 	bool notify(SCNotification *notification);
@@ -157,7 +159,6 @@ private:
 	SearchResultMarkings _markingsStruct;
 
 	ScintillaEditView _scintView;
-	unsigned int _nbFoundFiles = 0;
 
 	int _lastFileHeaderPos = 0;
 	int _lastSearchHeaderPos = 0;
@@ -227,8 +228,6 @@ public :
 	static FindOption _options;
 	static FindOption* _env;
 	static Notepad_plus *pNpp;
-
-
 	FindReplaceDlg() {
 		_uniFileName = new char[(_fileNameLenMax + 3) * 2];
 		_winVer = (NppParameters::getInstance()).getWinVersion();
@@ -245,7 +244,7 @@ public :
 	};
 
 	virtual void create(int dialogID, bool isRTL = false, bool msgDestParent = true);
-	
+
 	void initOptionsFromDlg();
 
 	void doDialog(DIALOG_TYPE whichType, bool isRTL = false, bool toShow = true);
@@ -258,10 +257,11 @@ public :
 
 	int processAll(ProcessOperation op, const FindOption *opt, bool isEntire = false, const FindersInfo *pFindersInfo = nullptr, int colourStyleID = -1);
 	int processRange(ProcessOperation op, FindReplaceInfo & findReplaceInfo, const FindersInfo *pFindersInfo, const FindOption *opt = nullptr, int colourStyleID = -1, ScintillaEditView *view2Process = nullptr);
-
 	void replaceAllInOpenedDocs();
 	void findAllIn(InWhat op);
 	void setSearchText(TCHAR * txt2find);
+
+	void nf(size_t len){	_pFinder->_nbFoundFiles = uint32_t(len);	}
 
 	void gotoNextFoundResult(int direction = 0) {if (_pFinder) _pFinder->gotoNextFoundResult(direction);};
 

@@ -698,12 +698,12 @@ void Finder::addSearchHitCount(int count, const TCHAR *dir, bool isMatchLines){
 				wsprintf(text, L"  : %i in %i opened files%s", count, _nbFoundFiles, moreInfo);
 		else
 			if (dir)
-				wsprintf(text, L"  : %i in a file under %s%s", count, dir, moreInfo);
+				wsprintf(text, L"  : %i under %s%s", count, dir, moreInfo);
 			else
 				wsprintf(text, L"  : %i in current file%s", count, moreInfo);
 	else
 		if (dir)	wsprintf(text, L" was not found under %s", dir);
-		else		wsprintf(text, L" was not found in any opened file");
+		else		wsprintf(text, L" was not found in %i opened files", _nbFoundFiles);
 	
 	setFinderReadOnly(false);
 	_scintView.insertGenericTextFrom(_lastSearchHeaderPos, text);
@@ -832,7 +832,6 @@ void Finder::beginNewFilesSearch()	{
 	_pMainFoundInfos = _pMainFoundInfos == &_foundInfos1 ? &_foundInfos2 : &_foundInfos1;
 	_pMainMarkings = _pMainMarkings == &_markings1 ? &_markings2 : &_markings1;
 	_nbFoundFiles = 0;
-
 	// fold all old searches (1st level only)
 	_scintView.collapse(searchHeaderLevel - SC_FOLDLEVELBASE, fold_collapse);
 }
@@ -2085,8 +2084,7 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 			break;
 	}
 
-	int start, end;
-	int posFind;
+	int start, end, posFind;
 
 	// Never allow a zero length match in the middle of a line end marker
 	if ((*_ppEditView)->execute(SCI_GETCHARAT, startPosition - 1) == '\r'
@@ -2761,15 +2759,20 @@ void FindReplaceDlg::findAllIn(InWhat op)	{
 	else		return;
 
 	if (::SendMessage(_hParent, cmdid, 0, 0))	{
-		if (_findAllResult)
-			openFinder();
+
+		if (_findAllResult)		openFinder();
  		else	{
 			TCHAR s[64];
 			generic_string msg = NppParameters::getInstance().getNativeLangSpeaker()->getLocalizedStrFromID("find-status-cannot-find", L"Find: Can't find the text \"$STR_REPLACE$\" in "),
 			ms = stringReplace(msg, L"$STR_REPLACE$", stringReplace(_options._str2Search, L"&", L"&&"));
-			wsprintf(s, L"%i file(s) specified by filter", _fileTot);
+			if (op==ALL_OPEN_DOCS)
+				wsprintf(s, L"%i opened files", _pFinder->_nbFoundFiles);
+			else if (op==CURRENT_DOC)
+				wsprintf(s, L"current file");
+			else
+				wsprintf(s, L"%i file(s) specified by filter", _fileTot);
 			setStatusbarMessage(ms + generic_string(s), FSNotFound);
-			//BUG solved
+				
 			(*_ppEditView)->focus();	::SetFocus(::GetDlgItem(_hSelf, IDFINDWHAT));
 		}
 	}

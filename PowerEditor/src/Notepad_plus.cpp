@@ -226,7 +226,7 @@ LRESULT Notepad_plus::init(HWND hwnd)
 
 
 	_mainWindowStatus = WindowMainActive;
-	_activeView = MAIN_VIEW;
+	// _activeView = MAIN_VIEW;
 
 	const ScintillaViewParams & svp1 = nppParam.getSVP();
 
@@ -1789,7 +1789,9 @@ bool Notepad_plus::findInOpenedFiles()	{
 
 	if (_mainWindowStatus & WindowMainActive)
 	{
-		for (size_t i = 0, len = _mainDocTab.nbItem(); i < len ; ++i)
+		size_t i=0, len = _mainDocTab.nbItem();
+		_findReplaceDlg.nf(len);
+		for (; i < len ; ++i)
 		{
 			pBuf = MainFileManager.getBufferByID(_mainDocTab.getBufferByIndex(i));
 			_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, pBuf->getDocument());
@@ -1803,7 +1805,9 @@ bool Notepad_plus::findInOpenedFiles()	{
 
 	if (_mainWindowStatus & WindowSubActive)
 	{
-		for (size_t i = 0, len2 = _subDocTab.nbItem(); i < len2 ; ++i)
+		size_t i = 0, len =  _subDocTab.nbItem();
+		_findReplaceDlg.nf(len);
+		for (; i < len ; ++i)
 		{
 			pBuf = MainFileManager.getBufferByID(_subDocTab.getBufferByIndex(i));
 			if (_mainDocTab.getIndexByBuffer(pBuf) != -1)// clone is skipped searching in sub

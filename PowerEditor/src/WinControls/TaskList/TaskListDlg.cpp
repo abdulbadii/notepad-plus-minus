@@ -85,7 +85,7 @@ INT_PTR CALLBACK TaskListDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 				i2set = 0;
 
 			_taskList.init(_hInst, _hSelf, _hImalist, nbTotal, i2set);
-			_taskList.setFont(L"Verdana", NppParameters::getInstance()._dpiManager.scaleY(14));
+			_taskList.setFont(L"Segoe UI", NppParameters::getInstance()._dpiManager.scaleY(16));
 			_rc = _taskList.adjustSize();
 
 			reSizeTo(_rc);
