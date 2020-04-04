@@ -44,7 +44,7 @@ END
 IDR_WINDOWS_MENU MENU
 BEGIN
 	MENUITEM "Recent Window",              IDM_WINDOW_MRU_FIRST, GRAYED
-	MENUITEM "&Manage them",               	IDM_WINDOW_WINDOWS
+	MENUITEM "&Manage...",               	IDM_WINDOW_WINDOWS
 END
 
 

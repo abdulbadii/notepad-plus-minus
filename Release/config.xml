@@ -11,8 +11,8 @@
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src; D:\MSYS\usr\src\notepadpp\scintilla" />
         <Path name="D:\MSYS\usr\src\Ethereal\src" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master" />
-        <Filter name="*.rc" />
         <Filter name="*.cpp *.h" />
+        <Filter name="*.rc" />
         <Filter name="*.cpp *.h *.rc" />
         <Filter name="*.cpp *.h " />
         <Filter name="*.*" />
@@ -21,6 +21,17 @@
         <Filter name="*.vc* *.sln" />
         <Filter name="*.c *.cpp *.cc *.h" />
         <Filter name="*.xml" />
+        <Find name="scintillaContextmenu" />
+        <Find name="ContextMenu" />
+        <Find name="IDD_FIND_REPLACE" />
+        <Find name="NPPM_DMMREGASDCKDLG" />
+        <Find name="_dockingManager" />
+        <Find name="IDD_FIND_REPLACE_" />
+        <Find name="IDD_FIND_REPLACE_DLG" />
+        <Find name="direction" />
+        <Find name="IDC_NEXT_DOC" />
+        <Find name="index" />
+        <Find name="FIND_" />
         <Find name="WM_MOV" />
         <Find name="IDM_VIEW_DOC_MAP" />
         <Find name="case" />
@@ -92,14 +103,12 @@
         <Find name="Vosible" />
         <Find name="with filter speci" />
         <Find name="with speci" />
-        <Find name="_dockingManager" />
         <Find name="NPPM_DMMSHOW" />
         <Find name="DMM\w+?SHOW" />
         <Find name="launchAnsiCharPanel" />
         <Find name="IDD_ANSIASCII_PANEL" />
         <Find name="CharPanel" />
         <Find name="Character Panel" />
-        <Find name="IDC_NEXT_DOC" />
         <Find name="findInFiles" />
         <Find name="WM_FINDINFILES" />
         <Find name="openSwFinder" />
@@ -111,15 +120,6 @@
         <Find name="doDialog(REPLACE_DLG, _nativeLangSpeaker" />
         <Find name="IDM_NPPM_IN_FINFERCLEARALL" />
         <Find name="FINDREPLACE_MAXLENGTH" />
-        <Find name="NPPM_LAUNCHFINDINFILESDLG" />
-        <Find name=" IDM_SEARCH_FINDINFILES" />
-        <Find name="WM_NEXTDLGCTL" />
-        <Find name="finishFilesSearch" />
-        <Find name="FINDW" />
-        <Find name="FIND" />
-        <Find name="FINDWHAT" />
-        <Find name="FindStatus" />
-        <Find name="IDFIN" />
         <Replace name="enum" />
         <Replace name="IDM_VIEW_FUNC_LIST" />
         <Replace name="NativeLangSpeaker" />
@@ -189,17 +189,8 @@
         <File filename="D:\MSYS\usr\src\notepadpp\Release\shortcuts.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\shortcut\shortcut.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\MISC\PluginsManager\Notepad_plus_msgs.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus_Window.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\MISC\PluginsManager\PluginInterface.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\FindReplaceDlg.rc" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\NppNotification.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Parameters.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\Preference\preference.rc" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\menuCmdID.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\ContextMenu\ContextMenu.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\DocTabView.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.rc" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\FindReplaceDlg.cpp" />
     </History>
     <GUIConfigs>
         <GUIConfig name="ToolBar" visible="no">standard</GUIConfig>
@@ -208,7 +199,7 @@
         <GUIConfig name="ScintillaViewsSplitter">vertical</GUIConfig>
         <GUIConfig name="UserDefineDlg" position="undocked">hide</GUIConfig>
         <GUIConfig name="TabSetting" replaceBySpace="no" size="3" />
-        <GUIConfig name="AppPosition" x="106" y="-10" width="1296" height="1087" isMaximized="no" />
+        <GUIConfig name="AppPosition" x="93" y="-4" width="1296" height="1087" isMaximized="no" />
         <GUIConfig name="noUpdate" intervalDays="15" nextUpdateDate="20171218">no</GUIConfig>
         <GUIConfig name="Auto-detection">auto</GUIConfig>
         <GUIConfig name="CheckHistoryFiles">no</GUIConfig>
@@ -242,7 +233,7 @@
         <GUIConfig name="searchEngine" searchEngineChoice="2" searchEngineCustom="" />
         <GUIConfig name="SmartHighLight" matchCase="no" wholeWordOnly="yes" useFindSettings="no" onAnotherView="no">yes</GUIConfig>
         <GUIConfig name="ScintillaPrimaryView" lineNumberMargin="show" bookMarkMargin="hide" indentGuideLine="show" folderMarkStyle="box" lineWrapMethod="indent" currentLineHilitingShow="show" scrollBeyondLastLine="yes" disableAdvancedScrolling="no" wrapSymbolShow="hide" Wrap="yes" borderEdge="no" edge="no" edgeNbColumn="80" zoom="1" zoom2="0" whiteSpaceShow="hide" eolShow="hide" borderWidth="0" smoothFont="yes" />
-        <GUIConfig name="DockingManager" leftWidth="155" rightWidth="562" topHeight="200" bottomHeight="310">
+        <GUIConfig name="DockingManager" leftWidth="155" rightWidth="596" topHeight="200" bottomHeight="310">
             <FloatingWindow cont="4" x="642" y="-8" width="1250" height="439" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="0" curr="1" prev="4" isVisible="yes" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="44084" curr="1" prev="-1" isVisible="no" />
@@ -258,10 +249,9 @@
             <PluginDlg pluginName="3P" id="2" curr="0" prev="-1" isVisible="no" />
             <PluginDlg pluginName="3P" id="1" curr="0" prev="-1" isVisible="no" />
             <ActiveTabs cont="0" activeTab="-1" />
-            <ActiveTabs cont="1" activeTab="0" />
+            <ActiveTabs cont="1" activeTab="-1" />
             <ActiveTabs cont="2" activeTab="-1" />
             <ActiveTabs cont="3" activeTab="-1" />
-            <ActiveTabs cont="4" activeTab="-1" />
         </GUIConfig>
     </GUIConfigs>
     <ProjectPanels>

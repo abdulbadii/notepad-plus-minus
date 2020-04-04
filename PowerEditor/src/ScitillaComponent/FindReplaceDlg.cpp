@@ -24,6 +24,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+  // Get the column with (GetColumn(GetCurrentPos)) then find the display line halfway down the screen with GetFirstVisibleLine + LinesOnScreen / 2, convert that to a document line with DocLineFromVisible, find the column position with FindColumn and set that as the current position
+
+
  #include <memory>
 #include <shlobj.h>
 #include <uxtheme.h>
@@ -700,7 +704,7 @@ void Finder::addSearchHitCount(int count, const TCHAR *dir, bool isMatchLines){
 			if(_nbFoundFiles >1)
 				wsprintf(text, L"  : %i in %i file(s) of %i opened files%s", count, _nbFoundFiles, _nbOpenedFiles, moreInfo);
 			else
-				wsprintf(text, L"  : %i in opened file below%s", count, moreInfo);
+				wsprintf(text, L"  : %i in current/opened file below%s", count, moreInfo);
 	else
 		if (dir)	wsprintf(text, L" was not found under %s", dir);
 		else		wsprintf(text, L" was not found in %i opened files", _nbOpenedFiles);
@@ -2713,7 +2717,7 @@ void FindReplaceDlg::findAllIn(InWhat op)	{
 		// the dlgDlg should be the index of funcItem where the current function pointer is
 		// in this case is DOCKABLE_DEMO_INDEX
 		data.dlgID = 0;
-		::SendMessage(_hParent, NPPM_DMMREGASDCKDLG, reinterpret_cast<LPARAM>(_pFinder->getHSelf()), reinterpret_cast<LPARAM>(&data));
+		::SendMessage(_hParent, NPPM_DMMREGASDCKDLG, reinterpret_cast<WPARAM>(_pFinder->getHSelf()), reinterpret_cast<LPARAM>(&data));
 
 		_pFinder->_scintView.init(_hInst, _pFinder->getHSelf());
 
@@ -2738,7 +2742,8 @@ void FindReplaceDlg::findAllIn(InWhat op)	{
 		_pFinder->_scintView.setMakerStyle(FOLDER_STYLE_SIMPLE);
 		_pFinder->_scintView.display();
 		// _pFinder->display();
-		//::UpdateWindow(_hParent);
+		// ::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
+		::UpdateWindow(_hParent);
 		_pFinder->setFinderStyle();
 
 		// Send the address of _MarkingsStruct to the lexer
@@ -2747,6 +2752,7 @@ void FindReplaceDlg::findAllIn(InWhat op)	{
 		_pFinder->_scintView.execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("@MarkingsStruct"), reinterpret_cast<LPARAM>(ptrword));
 	}
 	// else	_pFinder->setFinderStyle();
+	::SendMessage(_pFinder->getHSelf(), WM_SIZE, 0, 0);
 	int cmdid;
 	if (op == ALL_OPEN_DOCS)
 		cmdid = WM_FINDALL_INOPENEDDOC;
@@ -2757,8 +2763,7 @@ void FindReplaceDlg::findAllIn(InWhat op)	{
 	else		return;
 
 	if (::SendMessage(_hParent, cmdid, 0, 0))	{
-	::SendMessage(_pFinder->getHSelf(), WM_SIZE, 0, 0);
- 
+
 		if (_findAllResult)		openFinder();
  		else	{
 			TCHAR s[64];
@@ -2797,7 +2802,7 @@ Finder * FindReplaceDlg::createFinder()	{
 	// the dlgDlg should be the index of funcItem where the current function pointer is
 	// in this case is DOCKABLE_DEMO_INDEX
 	data.dlgID = 0;
-	::SendMessage(_hParent, NPPM_DMMREGASDCKDLG, reinterpret_cast<LPARAM>(_pFinder->getHSelf()), reinterpret_cast<LPARAM>(&data));
+	::SendMessage(_hParent, NPPM_DMMREGASDCKDLG, 0, reinterpret_cast<LPARAM>(&data));
 
 	pFinder->_scintView.init(_hInst, pFinder->getHSelf());
 

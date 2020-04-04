@@ -856,13 +856,11 @@ void WindowsMenu::init(HINSTANCE hInst, HMENU hMainMenu, const TCHAR *translatio
 		::ModifyMenu(_hMenu, IDM_WINDOW_WINDOWS, MF_BYCOMMAND, IDM_WINDOW_WINDOWS, windowStr.c_str());
 	}
 
-	int32_t pos = 0;
-	for (pos = GetMenuItemCount(hMainMenu) - 1; pos > 0; --pos)
-	{
-		if ((GetMenuState(hMainMenu, pos, MF_BYPOSITION) & MF_POPUP) != MF_POPUP)
-			continue;
-		break;
-	}
+ 	int32_t pos;
+	// for (
+	pos = GetMenuItemCount(hMainMenu) - 1; /* pos > 0; --pos)
+		if ((GetMenuState(hMainMenu, pos, MF_BYPOSITION) & MF_POPUP) == MF_POPUP)
+			break; */
 
 	MENUITEMINFO mii;
 	memset(&mii, 0, sizeof(mii));

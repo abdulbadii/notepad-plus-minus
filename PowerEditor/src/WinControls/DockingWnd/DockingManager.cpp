@@ -596,7 +596,7 @@ void DockingManager::createDockableDlg(tTbData data, int iCont, bool isVisible)
 		if (iCont == -1)
 		{
 			// set default visible state
-			isVisible = ::IsWindowVisible(data.hClient);
+			isVisible = (::IsWindowVisible(data.hClient) == TRUE);
 
 			if (data.uMask & DWS_DF_FLOATING)
 			{

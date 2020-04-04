@@ -452,12 +452,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 	//Only after loading all the file paths set the working directory
 	::SetCurrentDirectory(NppParameters::getInstance().getNppPath().c_str());	//force working directory to path of module, preventing lock
 
-	if ((!isMultiInst) && (!TheFirstOne))
+	if (!isMultiInst && !TheFirstOne)
 	{
 		HWND hNotepad_plus = ::FindWindow(Notepad_plus_Window::getClassName(), NULL);
 		for (int i = 0 ;!hNotepad_plus && i < 5 ; ++i)
 		{
-			Sleep(100);
+			::Sleep(99);
 			hNotepad_plus = ::FindWindow(Notepad_plus_Window::getClassName(), NULL);
 		}
 
@@ -466,15 +466,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 			// First of all, destroy static object NppParameters
 			nppParameters.destroyInstance();
 
-			int sw = 0;
-
+			// int sw = 0;
 			if (::IsZoomed(hNotepad_plus))
-				sw = SW_MAXIMIZE;
+				::ShowWindow(hNotepad_plus, SW_MAXIMIZE);
 			else if (::IsIconic(hNotepad_plus))
-				sw = SW_RESTORE;
+				::ShowWindow(hNotepad_plus, SW_RESTORE);
 
-			if (sw != 0)
-				::ShowWindow(hNotepad_plus, sw);
+			// if (sw != 0)
 
 			::SetForegroundWindow(hNotepad_plus);
 
@@ -501,18 +499,14 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 
 	Notepad_plus_Window notepad_plus_plus;
 
-	generic_string updaterDir = nppParameters.getNppPath();
-	updaterDir += L"\\updater\\";
-
+	/* generic_string updaterDir = nppParameters.getNppPath();	updaterDir += L"\\updater\\";
 	generic_string updaterFullPath = updaterDir + L"gup.exe";
-
-	generic_string updaterParams = L"-v";
-	updaterParams += VERSION_VALUE;
+	generic_string updaterParams = L"-v";	updaterParams += VERSION_VALUE;
 
 	bool isUpExist = nppGui._doesExistUpdater = (::PathFileExists(updaterFullPath.c_str()) == TRUE);
 
-    if (doUpdateNpp) // check more detail
-    {
+	 // check more detail
+    if (doUpdateNpp)    {
         Date today(0);
 
         if (today < nppGui._autoUpdateOpt._nextUpdateDate)
@@ -522,12 +516,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 	if (doUpdatePluginList)
 	{
 		// TODO: detect update frequency
-	}
+	} */
 
 	// wingup doesn't work with the obsolet security layer (API) under xp since downloadings are secured with SSL on notepad_plus_plus.org
 	winVer ver = nppParameters.getWinVersion();
-	bool isGtXP = ver > WV_XP;
 
+/* 	bool isGtXP = ver > WV_XP;
 	SecurityGard securityGard;
 	bool isSignatureOK = securityGard.checkModule(updaterFullPath, nm_gup);
 
@@ -578,6 +572,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 
 		}
 	}
+ */
 
 	MSG msg;
 	msg.wParam = 0;
@@ -589,7 +584,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 		bool going = true;
 		while (going)
 		{
-			going = ::GetMessageW(&msg, NULL, 0, 0) != 0;
+			going = ::GetMessageW(&msg, NULL, 0, 0);
 			if (going)
 			{
 				// if the message doesn't belong to the notepad_plus_plus's dialog

@@ -614,7 +614,7 @@ bool Notepad_plus::doSave(BufferID id, const TCHAR * filename, bool isCopy)
 
 void Notepad_plus::doClose(BufferID id, int whichOne, bool doDeleteBackup){
 
-	if ((whichOne==MAIN_VIEW? &_mainDocTab : &_subDocTab)->getIndexByBuffer(id) == -1)		return;
+	if ((whichOne==MAIN_VIEW? _mainDocTab : _subDocTab).getIndexByBuffer(id) == -1)		return;
 
 	size_t numInitialOpenBuffers =
 		((_mainWindowStatus & WindowMainActive) == WindowMainActive ? _mainDocTab.nbItem() : 0) +
@@ -654,10 +654,7 @@ void Notepad_plus::doClose(BufferID id, int whichOne, bool doDeleteBackup){
 
 		// We enable Wow64 system, if it was disabled
 		if (isWow64Off)
-		{
 			nppParam.safeWow64EnableWow64FsRedirection(TRUE);
-			//isWow64Off = false;
-		}
 	}
 
 	size_t nbDocs = whichOne==MAIN_VIEW?(_mainDocTab.nbItem()):(_subDocTab.nbItem());
@@ -826,24 +823,66 @@ int Notepad_plus::setFileOpenSaveDlgFilters(FileDialog & fDlg, int langType)
 	return ltIndex;
 }
 
+/* bool Notepad_plus::fileClose(BufferID id, int curView){
+	BufferID bufferID = id;
+	if (id == BUFFER_INVALID)
+		bufferID = _pEditView->getCurrentBufferID();
+	Buffer * buf = MainFileManager.getBufferByID(bufferID);
 
-bool Notepad_plus::fileClose(BufferID id, int curView)
-{
+	int res;
+
+	//process the fileNamePath into LRF
+	const TCHAR *fileNamePath = buf->getFullPathName();
+
+	if (buf->isUntitled() && buf->docLength() == 0)
+	{
+		// Do nothing
+	}
+	else if (buf->isDirty())
+	{
+		res = doSaveOrNot(fileNamePath);
+		if (res == IDYES)
+		{
+			if (!fileSave(id)) // the cancel button of savedialog is pressed, aborts closing
+				return false;
+		}
+		else if (res == IDCANCEL)
+		{
+			return false;	//cancel aborts closing
+		}
+		else
+		{
+			// else IDNO we continue
+		}
+	}
+
+	int viewToClose = currentView();
+	if (curView != -1)
+		viewToClose = curView;
+
+	bool isSnapshotMode = NppParameters::getInstance().getNppGUI().isSnapshotMode();
+	doClose(bufferID, viewToClose, isSnapshotMode);
+	return true;
+}
+ */
+
+bool Notepad_plus::fileClose(BufferID id, int curView)	{
+
 	BufferID bufferID = id == BUFFER_INVALID? _pEditView->getCurrentBufferID() : id;
 	Buffer * buf = MainFileManager.getBufferByID(bufferID);
 	//process the fileNamePath into LRF
 	const TCHAR *fileNamePath = buf->getFullPathName();
 	//* 	if (buf->isUntitled() && !buf->docLength()){}	else
 
-	if (buf->isDirty())	{
+	if (buf->isDirty() && (buf->docLength() || !buf->isUntitled()))	{
+		
 		int res = doSaveOrNot(fileNamePath);
-		if (res == IDYES) {
+		if (res == IDCANCEL)		return false;	//cancel aborts closing
+		else if (res == IDYES)
 			if (!fileSave(id))	return false; // the cancel button of savedialog is pressed, aborts closing
-		}
-		else if (res == IDCANCEL)		return false;	//cancel aborts closing
 	}
 	
-	doClose(bufferID, curView==-1? currentView(): curView, NppParameters::getInstance().getNppGUI().isSnapshotMode());
+	doClose(bufferID, (curView==-1? currentView() : curView), NppParameters::getInstance().getNppGUI().isSnapshotMode());
 	return true;
 }
 
