@@ -42,27 +42,27 @@
 
 class NativeLangSpeaker;
 
-const bool POS_VERTICAL = true;
-const bool POS_HORIZOTAL = false;
+constexpr bool POS_VERTICAL = true;
+constexpr bool POS_HORIZOTAL = false;
 
-const int UDD_SHOW   = 1; // 0000 0001
-const int UDD_DOCKED = 2; // 0000 0010
+constexpr int UDD_SHOW   = 1; // 0000 0001
+constexpr int UDD_DOCKED = 2; // 0000 0010
 
 // 0 : 0000 0000 hide & undocked
 // 1 : 0000 0001 show & undocked
 // 2 : 0000 0010 hide & docked
 // 3 : 0000 0011 show & docked
 
-const int TAB_DRAWTOPBAR = 1;      //0000 0000 0001
-const int TAB_DRAWINACTIVETAB = 2; //0000 0000 0010
-const int TAB_DRAGNDROP = 4;       //0000 0000 0100
-const int TAB_REDUCE = 8;          //0000 0000 1000
-const int TAB_CLOSEBUTTON = 16;    //0000 0001 0000
-const int TAB_DBCLK2CLOSE = 32;    //0000 0010 0000
-const int TAB_VERTICAL = 64;       //0000 0100 0000
-const int TAB_MULTILINE = 128;     //0000 1000 0000
-const int TAB_HIDE = 256;          //0001 0000 0000
-const int TAB_QUITONEMPTY = 512;   //0010 0000 0000
+constexpr int TAB_DRAWTOPBAR = 1;      //0000 0000 0001
+constexpr int TAB_DRAWINACTIVETAB = 2; //0000 0000 0010
+constexpr int TAB_DRAGNDROP = 4;       //0000 0000 0100
+constexpr int TAB_REDUCE = 8;          //0000 0000 1000
+constexpr int TAB_CLOSEBUTTON = 16;    //0000 0001 0000
+constexpr int TAB_DBCLK2CLOSE = 32;    //0000 0010 0000
+constexpr int TAB_VERTICAL = 64;       //0000 0100 0000
+constexpr int TAB_MULTILINE = 128;     //0000 1000 0000
+constexpr int TAB_HIDE = 256;          //0001 0000 0000
+constexpr int TAB_QUITONEMPTY = 512;   //0010 0000 0000
 
 
 enum class EolType: std::uint8_t
@@ -90,19 +90,19 @@ enum BackupFeature {bak_none = 0, bak_simple = 1, bak_verbose = 2};
 enum OpenSaveDirSetting {dir_followCurrent = 0, dir_last = 1, dir_userDef = 2};
 enum MultiInstSetting {monoInst = 0, multiInstOnSession = 1, multiInst = 2};
 
-const int LANG_INDEX_INSTR = 0;
-const int LANG_INDEX_INSTR2 = 1;
-const int LANG_INDEX_TYPE = 2;
-const int LANG_INDEX_TYPE2 = 3;
-const int LANG_INDEX_TYPE3 = 4;
-const int LANG_INDEX_TYPE4 = 5;
-const int LANG_INDEX_TYPE5 = 6;
-const int LANG_INDEX_TYPE6 = 7;
-const int LANG_INDEX_TYPE7 = 8;
+constexpr int LANG_INDEX_INSTR = 0;
+constexpr int LANG_INDEX_INSTR2 = 1;
+constexpr int LANG_INDEX_TYPE = 2;
+constexpr int LANG_INDEX_TYPE2 = 3;
+constexpr int LANG_INDEX_TYPE3 = 4;
+constexpr int LANG_INDEX_TYPE4 = 5;
+constexpr int LANG_INDEX_TYPE5 = 6;
+constexpr int LANG_INDEX_TYPE6 = 7;
+constexpr int LANG_INDEX_TYPE7 = 8;
 
-const int COPYDATA_PARAMS = 0;
-const int COPYDATA_FILENAMESA = 1;
-const int COPYDATA_FILENAMESW = 2;
+constexpr int COPYDATA_PARAMS = 0;
+constexpr int COPYDATA_FILENAMESA = 1;
+constexpr int COPYDATA_FILENAMESW = 2;
 
 #define PURE_LC_NONE	0
 #define PURE_LC_BOL	 1
@@ -117,11 +117,11 @@ const int COPYDATA_FILENAMESW = 2;
 #define ONEDRIVE_AVAILABLE 2
 #define GOOGLEDRIVE_AVAILABLE 4
 
-const TCHAR fontSizeStrs[][3] = {L"", L"5", L"6", L"7", L"8", L"9", L"10", L"11", L"12", L"14", L"16", L"18", L"20", L"22", L"24", L"26", L"28"};
+constexpr TCHAR fontSizeStrs[][3] = {L"", L"5", L"6", L"7", L"8", L"9", L"10", L"11", L"12", L"14", L"16", L"18", L"20", L"22", L"24", L"26", L"28"};
 
-const TCHAR localConfFile[] = L"doLocalConf.xml";
-const TCHAR notepadStyleFile[] = L"asNotepad.xml";
-const TCHAR pluginsForAllUsersFile[] = L"pluginsForAllUsers.xml";
+constexpr TCHAR localConfFile[] = L"doLocalConf.xml";
+constexpr TCHAR notepadStyleFile[] = L"asNotepad.xml";
+constexpr TCHAR pluginsForAllUsersFile[] = L"pluginsForAllUsers.xml";
 
 void cutString(const TCHAR *str2cut, std::vector<generic_string> & patternVect);
 
@@ -349,16 +349,16 @@ struct DockingManagerData final
 
 
 
-const int FONTSTYLE_NONE = 0;
-const int FONTSTYLE_BOLD = 1;
-const int FONTSTYLE_ITALIC = 2;
-const int FONTSTYLE_UNDERLINE = 4;
+constexpr int FONTSTYLE_NONE = 0;
+constexpr int FONTSTYLE_BOLD = 1;
+constexpr int FONTSTYLE_ITALIC = 2;
+constexpr int FONTSTYLE_UNDERLINE = 4;
 
-const int STYLE_NOT_USED = -1;
+constexpr int STYLE_NOT_USED = -1;
 
-const int COLORSTYLE_FOREGROUND = 0x01;
-const int COLORSTYLE_BACKGROUND = 0x02;
-const int COLORSTYLE_ALL = COLORSTYLE_FOREGROUND|COLORSTYLE_BACKGROUND;
+constexpr int COLORSTYLE_FOREGROUND = 0x01;
+constexpr int COLORSTYLE_BACKGROUND = 0x02;
+constexpr int COLORSTYLE_ALL = COLORSTYLE_FOREGROUND|COLORSTYLE_BACKGROUND;
 
 
 
@@ -555,7 +555,7 @@ private :
 
 
 
-const int MAX_LEXER_STYLE = 100;
+constexpr int MAX_LEXER_STYLE = 100;
 
 struct LexerStylerArray
 {
@@ -919,20 +919,20 @@ struct ScintillaViewParams
 	bool _showBorderEdge = true;
 };
 
-const int NB_LIST = 20;
-const int NB_MAX_LRF_FILE = 127;
-const int NB_MAX_USER_LANG = 30;
-const int NB_MAX_EXTERNAL_LANG = 30;
-const int NB_MAX_IMPORTED_UDL = 50;
+constexpr int NB_LIST = 20;
+constexpr int NB_MAX_LRF_FILE = 127;
+constexpr int NB_MAX_USER_LANG = 30;
+constexpr int NB_MAX_EXTERNAL_LANG = 30;
+constexpr int NB_MAX_IMPORTED_UDL = 50;
 
-const int NB_MAX_FINDHISTORY_FIND	= 256;
-const int NB_MAX_FINDHISTORY_REPLACE = 30;
-const int NB_MAX_FINDHISTORY_PATH	= 30;
-const int NB_MAX_FINDHISTORY_FILTER  = 20;
+constexpr int NB_MAX_FINDHISTORY_FIND	= 256;
+constexpr int NB_MAX_FINDHISTORY_REPLACE = 30;
+constexpr int NB_MAX_FINDHISTORY_PATH	= 30;
+constexpr int NB_MAX_FINDHISTORY_FILTER  = 20;
 
 
-const int MASK_ReplaceBySpc = 0x80;
-const int MASK_TabSize = 0x7F;
+constexpr int MASK_ReplaceBySpc = 0x80;
+constexpr int MASK_TabSize = 0x7F;
 
 
 
@@ -1280,12 +1280,12 @@ struct UdlXmlFileState final {
 	UdlXmlFileState(TiXmlDocument* doc, bool isDirty, std::pair<unsigned char, unsigned char> range) : _udlXmlDoc(doc), _isDirty(isDirty), _indexRange(range) {};
 };
 
-const int NB_LANG = 100;
-const bool DUP = true;
-const bool FREE = false;
+constexpr int NB_LANG = 100;
+constexpr bool DUP = true;
+constexpr bool FREE = false;
 
-const int RECENTFILES_SHOWFULLPATH = 1;
-const int RECENTFILES_SHOWONLYFILENAME = 0;
+constexpr int RECENTFILES_SHOWFULLPATH = 1;
+constexpr int RECENTFILES_SHOWONLYFILENAME = 0;
 
 class NppParameters final
 {

@@ -1141,7 +1141,7 @@ void FindReplaceDlg::resizeDialogElements(LONG newWidth)
 
 		IDD_FINDINFILES_BROWSE_BUTTON, IDCMARKALL, IDC_CLEAR_ALL, IDCCOUNTALL, IDC_CLEAR_FINDALL_OPENEDFILES, IDC_FINDALL_OPENEDFILES, IDC_CLEAR_FINDALL_CURRENTFILE, IDC_FINDALL_CURRENTFILE,
 		IDREPLACE1, IDREPLACE_FINDNEXT,
-		IDREPLACEALL,IDC_REPLACE_OPENEDFILES, IDD_FINDINFILES_FIND_BUTTON, IDD_FINDINFILES_CLEAR_FIND,IDD_FINDINFILES_REPLACEINFILES, IDOK, IDCANCEL,
+		IDREPLACEALL,IDREPLACEALL_SAVE,IDC_REPLACE_OPENEDFILES, IDD_FINDINFILES_FIND_BUTTON, IDD_FINDINFILES_CLEAR_FIND,IDD_FINDINFILES_REPLACEINFILES, IDOK, IDCANCEL,
 		IDC_FINDPREV, IDC_FINDNEXT, IDC_2_BUTTONS_MODE
 	};
 
@@ -1209,7 +1209,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 		case WM_INITDIALOG :
 		{
-			if ((NppParameters::getInstance()).getNppGUI()._monospacedFontFindDlg)
+			if (NppParameters::getInstance().getNppGUI()._monospacedFontFindDlg)
 			{
 				HWND hFindCombo = ::GetDlgItem(_hSelf, IDFINDWHAT);
 				HWND hReplaceCombo = ::GetDlgItem(_hSelf, IDREPLACEWITH);
@@ -1251,7 +1251,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			_replaceClosePos.left = p.x;
 			_replaceClosePos.top = p.y;
 
-			p = getTopPoint(::GetDlgItem(_hSelf, IDREPLACEALL), !_isRTL);
+			// p = getTopPoint(::GetDlgItem(_hSelf, IDREPLACEALL), !_isRTL);
 			// _findInFilesClosePos.left = p.x;	_findInFilesClosePos.top = p.y;
 
 			p = getTopPoint(::GetDlgItem(_hSelf, IDCANCEL), !_isRTL);
@@ -1667,6 +1667,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 				}			
 				return TRUE;
 
+				case IDREPLACEALL_SAVE :
 				case IDREPLACEALL :
 				{
 					std::lock_guard<std::mutex> lock(findOps_mutex);
@@ -1716,6 +1717,8 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						setStatusbarMessage(result, FSMessage);
 						focus();
 					}
+					if(wParam == IDREPLACEALL_SAVE)
+						pNpp->fileSave();
 				}
 				return TRUE;
 
@@ -2884,6 +2887,7 @@ void FindReplaceDlg::enableReplaceFunc(bool isEnable)
 	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACE_FINDNEXT),hideOrShow);
 	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEWITH),hideOrShow);
 	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEALL),hideOrShow);
+	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEALL_SAVE),hideOrShow);
 	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEINSEL),hideOrShow);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_REPLACE_OPENEDFILES),hideOrShow);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_REPLACEINSELECTION), SW_SHOW);
@@ -2961,6 +2965,7 @@ void FindReplaceDlg::enableFindInFilesControls(bool isEnable)
 	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACE_FINDNEXT), HS);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_REPLACEINSELECTION), HS);
 	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEALL), HS);
+	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEALL_SAVE), HS);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_REPLACE_OPENEDFILES), HS);
 
 	// Show Items
@@ -3459,6 +3464,7 @@ void FindReplaceDlg::enableMarkFunc()
 	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACE_FINDNEXT),SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEWITH),SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEALL),SW_HIDE);
+	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEALL_SAVE),SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDREPLACEINSEL),SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_REPLACE_OPENEDFILES),SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_REPLACEINSELECTION),SW_HIDE);

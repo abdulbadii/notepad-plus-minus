@@ -1368,14 +1368,14 @@ bool Notepad_plus::fileSave(BufferID id)
 		bufferID = _pEditView->getCurrentBufferID();
 	Buffer * buf = MainFileManager.getBufferByID(bufferID);
 
-	if (!buf->getFileReadOnly() && buf->isDirty())	//cannot save if readonly
+	if (buf->isDirty() && !buf->getFileReadOnly())	// save if not readonly
 	{
 		if (buf->isUntitled())
 		{
 			return fileSaveAs(bufferID);
 		}
 
-		const NppGUI & nppgui = (NppParameters::getInstance()).getNppGUI();
+		const NppGUI & nppgui = NppParameters::getInstance().getNppGUI();
 		BackupFeature backup = nppgui._backup;
 
 		if (backup != bak_none)
