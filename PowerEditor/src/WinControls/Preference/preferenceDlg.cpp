@@ -156,7 +156,7 @@ INT_PTR CALLBACK PreferenceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM 
 			_wVector.push_back(DlgInfo(&_marginsDlg, L"Editing", L"Scintillas"));
 			_wVector.push_back(DlgInfo(&_defaultNewDocDlg, L"New Document", L"NewDoc"));
 			_wVector.push_back(DlgInfo(&_defaultDirectoryDlg, L"Default Directory", L"DefaultDir"));
-			_wVector.push_back(DlgInfo(&_recentFilesHistoryDlg, L"Recent Files History", L"RecentFilesHistory"));
+			_wVector.push_back(DlgInfo(&_recentFilesHistoryDlg, L"Files & Find History", L"RecentFilesHistory"));
 			_wVector.push_back(DlgInfo(&_fileAssocDlg, L"File Association", L"FileAssoc"));
 			_wVector.push_back(DlgInfo(&_langMenuDlg, L"Language", L"Language"));
 			_wVector.push_back(DlgInfo(&_highlighting, L"Highlighting", L"Highlighting"));
@@ -1436,16 +1436,20 @@ INT_PTR CALLBACK DefaultDirectoryDlg::run_dlgProc(UINT message, WPARAM wParam, L
 	return FALSE;
 }
 
-INT_PTR CALLBACK RecentFilesHistoryDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
-{
+
+INT_PTR CALLBACK RecentFilesHistoryDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)	{
 	NppParameters& nppParam = NppParameters::getInstance();
 	NppGUI & nppGUI = (NppGUI & )nppParam.getNppGUI();
 	NativeLangSpeaker *pNativeSpeaker = nppParam.getNativeLangSpeaker();
 
-	switch (message) 
-	{
+	switch (message) 	{
 		case WM_INITDIALOG :
 		{
+			// Max number find setting
+			::SetDlgItemInt(_hSelf, IDC_MAXNBFINDVAL_STATIC, nppParam.getNbMaxFind(), FALSE);
+			_nbFindHistory.init(_hInst, _hSelf);
+			_nbFindHistory.create(::GetDlgItem(_hSelf, IDC_MAXNBFINDVAL_STATIC), IDC_MAXNBFINDVAL_STATIC);
+
 			// Max number recent file setting
 			::SetDlgItemInt(_hSelf, IDC_MAXNBFILEVAL_STATIC, nppParam.getNbMaxRecentFile(), FALSE);
 			_nbHistoryVal.init(_hInst, _hSelf);
@@ -1479,8 +1483,6 @@ INT_PTR CALLBACK RecentFilesHistoryDlg::run_dlgProc(UINT message, WPARAM wParam,
 			::SetDlgItemInt(_hSelf, IDC_CUSTOMIZELENGTHVAL_STATIC, length, FALSE);
 			_customLenVal.init(_hInst, _hSelf);
 			_customLenVal.create(::GetDlgItem(_hSelf, IDC_CUSTOMIZELENGTHVAL_STATIC), nullptr);
-
-			//
 			// To avoid the white control background to be displayed in dialog
 			//
 			ETDTProc enableDlgTheme = (ETDTProc)nppParam.getEnableThemeDlgTexture();
@@ -1492,13 +1494,28 @@ INT_PTR CALLBACK RecentFilesHistoryDlg::run_dlgProc(UINT message, WPARAM wParam,
 		{
 			switch (wParam)
 			{
-				case IDC_CHECK_DONTCHECKHISTORY:
-					nppGUI._checkHistoryFiles = !isCheckedOrNot(IDC_CHECK_DONTCHECKHISTORY);
-					return TRUE;
+			case IDC_MAXNBFINDVAL_STATIC:	{
+					generic_string staticText = L"Max.:";
+					ValueDlg nbFindMaxDlg;
+					nbFindMaxDlg.init(NULL, _hSelf, nppParam.getNbMaxFind(), staticText.c_str());
+					
+					POINT p;
+					::GetCursorPos(&p);
 
+					int nbMax = nbFindMaxDlg.doDialog(p);
+					if (nbMax != -1)	{
+						if (nbMax > NB_MAX_FINDHISTORY_FIND)
+							nbMax = NB_MAX_FINDHISTORY_FIND;
+						
+						nppParam.setNbMaxFind(nbMax);
+						::SetDlgItemInt(_hSelf, IDC_MAXNBFINDVAL_STATIC, nbMax, FALSE);
+					}
+					return TRUE;
+				}
+				
 				case IDC_MAXNBFILEVAL_STATIC:
 				{
-					generic_string staticText = pNativeSpeaker->getLocalizedStrFromID("recent-file-history-maxfile", L"Max File: ");
+					generic_string staticText = pNativeSpeaker->getLocalizedStrFromID("recent-file-history-maxfile", L"Max File:");
 					ValueDlg nbFileMaxDlg;
 					nbFileMaxDlg.init(NULL, _hSelf, nppParam.getNbMaxRecentFile(), staticText.c_str());
 					
@@ -1519,6 +1536,10 @@ INT_PTR CALLBACK RecentFilesHistoryDlg::run_dlgProc(UINT message, WPARAM wParam,
 					}
 					return TRUE;
 				}
+
+				case IDC_CHECK_DONTCHECKHISTORY:
+					nppGUI._checkHistoryFiles = !isCheckedOrNot(IDC_CHECK_DONTCHECKHISTORY);
+					return TRUE;
 
 				case IDC_CHECK_INSUBMENU:
 					nppParam.setPutRecentFileInSubMenu(isCheckedOrNot(IDC_CHECK_INSUBMENU));

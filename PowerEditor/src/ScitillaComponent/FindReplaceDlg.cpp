@@ -24,10 +24,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-  // Get the column with (GetColumn(GetCurrentPos)) then find the display line halfway down the screen with GetFirstVisibleLine + LinesOnScreen / 2, convert that to a document line with DocLineFromVisible, find the column position with FindColumn and set that as the current position
-
-
  #include <memory>
 #include <shlobj.h>
 #include <uxtheme.h>
@@ -858,14 +854,12 @@ void Finder::finishFilesSearch(int count, bool isfold,const TCHAR *dir, bool isM
 		_markingsStruct._markings = &((*_pMainMarkings)[0]);
 
 	addSearchHitCount(count, dir, isMatchLines);
-	auto c = _scintView.execute(SCI_POSITIONFROMLINE, 2);
 
-	// auto of = (*_pMainMarkings)[2]._end;
-	// _scintView.execute(SCI_GOTOPOS, c+of);
-
-	_scintView.execute(SCI_SETTARGETRANGE, c, _scintView.execute(SCI_GETLINEENDPOSITION, 2));
-	auto of=_scintView.execute(SCI_SEARCHINTARGET, 1, reinterpret_cast<LPARAM>(L":"));
-	_scintView.execute(SCI_GOTOPOS, of +2);
+	auto of = (*_pMainMarkings)[2]._end;
+	_scintView.execute(SCI_GOTOPOS, _scintView.execute(SCI_POSITIONFROMLINE, 2) + of);
+	// _scintView.execute(SCI_SETTARGETRANGE, c, _scintView.execute(SCI_GETLINEENDPOSITION, 2));
+	// auto of=_scintView.execute(SCI_SEARCHINTARGET, 1, reinterpret_cast<LPARAM>(L":"));
+	// _scintView.execute(SCI_GOTOPOS, of +2);
 
 	_scintView.execute(SCI_SETLEXER, SCLEX_SEARCHRESULT);
 	_scintView.execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>( isfold? "1" : "0"));
@@ -2717,7 +2711,7 @@ void FindReplaceDlg::findAllIn(InWhat op)	{
 		// the dlgDlg should be the index of funcItem where the current function pointer is
 		// in this case is DOCKABLE_DEMO_INDEX
 		data.dlgID = 0;
-		::SendMessage(_hParent, NPPM_DMMREGASDCKDLG, reinterpret_cast<WPARAM>(_pFinder->getHSelf()), reinterpret_cast<LPARAM>(&data));
+		::SendMessage(_hParent, NPPM_DMMREGASDCKDLG, 0, reinterpret_cast<LPARAM>(&data));
 
 		_pFinder->_scintView.init(_hInst, _pFinder->getHSelf());
 

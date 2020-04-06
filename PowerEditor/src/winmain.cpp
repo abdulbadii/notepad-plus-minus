@@ -35,8 +35,7 @@ typedef std::vector<generic_string> ParamVector;
 
 namespace{
 
-void allowWmCopydataMessages(Notepad_plus_Window& notepad_plus_plus, const NppParameters& nppParameters, winVer ver)
-{
+void allowWmCopydataMessages(Notepad_plus_Window& notepad_plus_plus, const NppParameters& nppParameters, winVer ver){
 	#ifndef MSGFLT_ADD
 	const DWORD MSGFLT_ADD = 1;
 	#endif
@@ -261,7 +260,7 @@ const TCHAR FLAG_OPEN_FOLDERS_AS_WORKSPACE[] = L"-openFoldersAsWorkspace";
 
 void doException(Notepad_plus_Window & notepad_plus_plus)
 {
-	Win32Exception::removeHandler();	//disable exception handler after excpetion, we dont want corrupt data structurs to crash the exception handler
+	Win32Exception::removeHandler();	//disable exception handler after it, we dont want corrupt data structurs to crash the exception handler
 	::MessageBox(Notepad_plus_Window::gNppHWND, L"Notepad++ will attempt to save any unsaved data. However, dataloss is very likely.", L"Recovery initiating", MB_OK | MB_ICONINFORMATION);
 
 	TCHAR tmpDir[1024];
@@ -295,7 +294,7 @@ PWSTR advanceCmdLine(PWSTR pCmdLine, const generic_string& string)
 	
 		// Match the substring only if it matched an entire substring		
 		if ((ignoredString == pCmdLine || iswspace(*(ignoredString - 1))) && // Check start
-			(iswspace(*(ignoredString + len)) || *(ignoredString + len) == '\0' || *(ignoredString + len) == '"'))
+			(iswspace(*(ignoredString + len)) || *(ignoredString + len) == 0 || *(ignoredString + len) == '"'))
 		{
 			ignoredString += len;
 
@@ -322,7 +321,7 @@ PWSTR stripIgnoredParams(ParamVector & params, PWSTR pCmdLine)
 {
 	for ( auto it = params.begin(); it != params.end(); )
 	{
-		if (lstrcmp(it->c_str(), L"-z") == 0)
+		if (!lstrcmp(it->c_str(), L"-z"))
 		{
 			pCmdLine = advanceCmdLine(pCmdLine, *it);
 
@@ -334,7 +333,7 @@ PWSTR stripIgnoredParams(ParamVector & params, PWSTR pCmdLine)
 			}
 			it = params.erase(it);
 		}
-		else if (lstrcmp(it->c_str(), FLAG_NOTEPAD_COMPATIBILITY) == 0)
+		else if (!lstrcmp(it->c_str(), FLAG_NOTEPAD_COMPATIBILITY))
 		{
 			pCmdLine = advanceCmdLine(pCmdLine, *it++);
 		}
@@ -384,7 +383,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 	cmdLineParams._localizationPath = getLocalizationPathFromParam(params);
 	// cmdLineParams._easterEggName = getEasterEggNameFromParam(params, cmdLineParams._quoteType);
 	// cmdLineParams._ghostTypingSpeed = getGhostTypingSpeedFromParam(params);
-
 	// getNumberFromParam should be run at the end, to not consuming the other params
 	cmdLineParams._line2go = getNumberFromParam('n', params, isParamePresent);
     cmdLineParams._column2go = getNumberFromParam('c', params, isParamePresent);
@@ -398,17 +396,18 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 
 	NppParameters& nppParameters = NppParameters::getInstance();
 	NppGUI & nppGui = const_cast<NppGUI &>(nppParameters.getNppGUI());
-	bool doUpdateNpp = nppGui._autoUpdateOpt._doAutoUpdate;
 	bool doUpdatePluginList = nppGui._autoUpdateOpt._doAutoUpdate;
+	// bool doUpdateNpp = nppGui._autoUpdateOpt._doAutoUpdate;
 
 	if (doFunctionListExport || doPrintAndQuit) // export functionlist feature will serialize fuctionlist on the disk, then exit Notepad++. So it's important to not launch into existing instance, and keep it silent.
 	{
 		isMultiInst = true;
-		doUpdateNpp = doUpdatePluginList = false;
 		cmdLineParams._isNoSession = true;
+		// doUpdateNpp = 
+		doUpdatePluginList = false;
 	}
 
-	if (cmdLineParams._localizationPath[0])// != L"")
+	if (cmdLineParams._localizationPath[0])
 		nppParameters.setStartWithLocFileName(cmdLineParams._localizationPath);
 
 	nppParameters.load();
@@ -417,18 +416,17 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 	nppParameters.setPrintAndExitBoolean(doPrintAndQuit);
 
 	// override the settings if notepad style is present
-	if (nppParameters.asNotepadStyle())
+	/* if (nppParameters.asNotepadStyle())
 	{
 		isMultiInst = true;
-		// cmdLineParams._isNoTab = true;
-		// cmdLineParams._isNoSession = true;
-	}
+		cmdLineParams._isNoTab = true;
+		cmdLineParams._isNoSession = true;
+	} */
 
-	// override the settings if multiInst is choosen by user in the preference dialog
 	const NppGUI & nppGUI = nppParameters.getNppGUI();
-	if (nppGUI._multiInstSetting == multiInst)
-	{
+	if (nppGUI._multiInstSetting == multiInst)	{
 		isMultiInst = true;
+	// override the settings if multiInst is choosen by user in the preference dialog
 		// Only the first launch remembers the session		if (!TheFirstOne)	cmdLineParams._isNoSession = true;
 	}
 
@@ -457,7 +455,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 		HWND hNotepad_plus = ::FindWindow(Notepad_plus_Window::getClassName(), NULL);
 		for (int i = 0 ;!hNotepad_plus && i < 5 ; ++i)
 		{
-			::Sleep(99);
+			Sleep(91);
 			hNotepad_plus = ::FindWindow(Notepad_plus_Window::getClassName(), NULL);
 		}
 
@@ -466,13 +464,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 			// First of all, destroy static object NppParameters
 			nppParameters.destroyInstance();
 
-			// int sw = 0;
 			if (::IsZoomed(hNotepad_plus))
 				::ShowWindow(hNotepad_plus, SW_MAXIMIZE);
 			else if (::IsIconic(hNotepad_plus))
 				::ShowWindow(hNotepad_plus, SW_RESTORE);
-
-			// if (sw != 0)
 
 			::SetForegroundWindow(hNotepad_plus);
 
@@ -499,34 +494,34 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 
 	Notepad_plus_Window notepad_plus_plus;
 
-	/* generic_string updaterDir = nppParameters.getNppPath();	updaterDir += L"\\updater\\";
-	generic_string updaterFullPath = updaterDir + L"gup.exe";
-	generic_string updaterParams = L"-v";	updaterParams += VERSION_VALUE;
+	// generic_string updaterDir = nppParameters.getNppPath();
+	// updaterDir += L"\\updater\\";
 
-	bool isUpExist = nppGui._doesExistUpdater = (::PathFileExists(updaterFullPath.c_str()) == TRUE);
+	// generic_string updaterFullPath = updaterDir + L"gup.exe";
 
-	 // check more detail
-    if (doUpdateNpp)    {
+	// generic_string updaterParams = L"-v";
+	// updaterParams += VERSION_VALUE;
+
+	// bool isUpExist = nppGui._doesExistUpdater = (::PathFileExists(updaterFullPath.c_str()) == TRUE);
+
+    /* if (doUpdateNpp) // check more detail
+    {
         Date today(0);
 
         if (today < nppGui._autoUpdateOpt._nextUpdateDate)
             doUpdateNpp = false;
-    }
-
-	if (doUpdatePluginList)
-	{
+    } */
+	if (doUpdatePluginList)	{
 		// TODO: detect update frequency
-	} */
+	}
 
 	// wingup doesn't work with the obsolet security layer (API) under xp since downloadings are secured with SSL on notepad_plus_plus.org
 	winVer ver = nppParameters.getWinVersion();
 
-/* 	bool isGtXP = ver > WV_XP;
-	SecurityGard securityGard;
-	bool isSignatureOK = securityGard.checkModule(updaterFullPath, nm_gup);
-
-	if (TheFirstOne && isUpExist && isGtXP && isSignatureOK)
-	{
+	// bool isGtXP = ver > WV_XP;
+	// SecurityGard securityGard;
+	// bool isSignatureOK = securityGard.checkModule(updaterFullPath, nm_gup);
+	/* if (TheFirstOne && isUpExist && isGtXP && isSignatureOK)	{
 		if (nppParameters.isx64())
 		{
 			updaterParams += L" -px64";
@@ -571,8 +566,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 			// TODO: Update next update date
 
 		}
-	}
- */
+	}*/
 
 	MSG msg;
 	msg.wParam = 0;
@@ -585,18 +579,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 		while (going)
 		{
 			going = ::GetMessageW(&msg, NULL, 0, 0);
-			if (going)
-			{
-				// if the message doesn't belong to the notepad_plus_plus's dialog
-				if (!notepad_plus_plus.isDlgsMsg(&msg))
+			if (going && !notepad_plus_plus.isDlgsMsg(&msg))
+				if (! ::TranslateAccelerator(notepad_plus_plus.getHSelf(), notepad_plus_plus.getAccTable(), &msg))
 				{
-					if (::TranslateAccelerator(notepad_plus_plus.getHSelf(), notepad_plus_plus.getAccTable(), &msg) == 0)
-					{
-						::TranslateMessage(&msg);
-						::DispatchMessageW(&msg);
-					}
+					::TranslateMessage(&msg);
+					::DispatchMessageW(&msg);
 				}
-			}
 		}
 	}
 	catch (int i)

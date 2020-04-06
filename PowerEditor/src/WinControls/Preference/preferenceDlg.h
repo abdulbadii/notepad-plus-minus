@@ -97,20 +97,23 @@ private :
 	INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 };
 
-class RecentFilesHistoryDlg : public StaticDialog
-{
-public :
-	RecentFilesHistoryDlg() = default;
-	virtual void destroy() {
-		_nbHistoryVal.destroy();
-		_customLenVal.destroy();
-	};
-private :
+
+class RecentFilesHistoryDlg : public StaticDialog	{
+
+	URLCtrl _nbFindHistory;
 	URLCtrl _nbHistoryVal;
 	URLCtrl _customLenVal;
 	std::vector<LangID_Name> _langList;
 	void setCustomLen(int val);
 	INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
+
+public :
+	RecentFilesHistoryDlg() = default;
+	virtual void destroy() {
+		_nbFindHistory.destroy();
+		_nbHistoryVal.destroy();
+		_customLenVal.destroy();
+	};
 };
 
 class LangMenuDlg : public StaticDialog

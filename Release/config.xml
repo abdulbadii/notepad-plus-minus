@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="Windows-1252" ?>
 <NotepadPlus>
-    <FindHistory nbMaxFindHistoryPath="10" nbMaxFindHistoryFilter="10" nbMaxFindHistoryFind="99" nbMaxFindHistoryReplace="30" matchWord="yes" matchCase="yes" wrap="yes" directionDown="yes" fifRecuisive="yes" fifInHiddenFolder="no" dlgAlwaysVisible="no" fifFilterFollowsDoc="no" fifFolderFollowsDoc="no" searchMode="0" transparencyMode="1" transparency="64" dotMatchesNewline="no" isSearch2ButtonsMode="no">
+    <FindHistory nbMaxFindHistoryPath="10" nbMaxFindHistoryFilter="10" nbMaxFindHistoryFind="131" nbMaxFindHistoryReplace="30" matchWord="no" matchCase="yes" wrap="yes" directionDown="yes" fifRecuisive="yes" fifInHiddenFolder="no" dlgAlwaysVisible="no" fifFilterFollowsDoc="no" fifFolderFollowsDoc="no" searchMode="0" transparencyMode="1" transparency="64" dotMatchesNewline="no" isSearch2ButtonsMode="no">
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\TaskList" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src\" />
@@ -21,6 +21,15 @@
         <Filter name="*.vc* *.sln" />
         <Filter name="*.c *.cpp *.cc *.h" />
         <Filter name="*.xml" />
+        <Find name="Notepad_plus" />
+        <Find name="checkClipboard" />
+        <Find name="Notepad_plus_Window" />
+        <Find name="lParam" />
+        <Find name="L_SEARCHRESULT" />
+        <Find name="_pMainM" />
+        <Find name="Filter" />
+        <Find name="NPPM_DMMSHOW" />
+        <Find name="findInFiles" />
         <Find name="scintillaContextmenu" />
         <Find name="ContextMenu" />
         <Find name="IDD_FIND_REPLACE" />
@@ -42,7 +51,6 @@
         <Find name="DOW" />
         <Find name="`" />
         <Find name="Segoe" />
-        <Find name="Notepad_plus" />
         <Find name="IDM_VIEW_FUNC_LIST" />
         <Find name="Document List" />
         <Find name="DOWN" />
@@ -103,23 +111,16 @@
         <Find name="Vosible" />
         <Find name="with filter speci" />
         <Find name="with speci" />
-        <Find name="NPPM_DMMSHOW" />
         <Find name="DMM\w+?SHOW" />
         <Find name="launchAnsiCharPanel" />
         <Find name="IDD_ANSIASCII_PANEL" />
         <Find name="CharPanel" />
         <Find name="Character Panel" />
-        <Find name="findInFiles" />
         <Find name="WM_FINDINFILES" />
         <Find name="openSwFinder" />
         <Find name="openFinder" />
         <Find name="_findAllResult" />
         <Find name="IDM_SEARCH_FINDINFILES" />
-        <Find name="Find/Replace" />
-        <Find name="findAllIn" />
-        <Find name="doDialog(REPLACE_DLG, _nativeLangSpeaker" />
-        <Find name="IDM_NPPM_IN_FINFERCLEARALL" />
-        <Find name="FINDREPLACE_MAXLENGTH" />
         <Replace name="enum" />
         <Replace name="IDM_VIEW_FUNC_LIST" />
         <Replace name="NativeLangSpeaker" />
@@ -151,7 +152,7 @@
         <Replace name='L&quot;\1' />
         <Replace name="END" />
     </FindHistory>
-    <History nbMaxFile="50" inSubMenu="no" customLength="35">
+    <History nbMaxFile="127" inSubMenu="no" customLength="35">
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\DockingWnd\DockingManager.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\DockingWnd\DockingCont.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\Preference\preference_rc.h" />
@@ -190,7 +191,7 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\shortcut\shortcut.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\MISC\PluginsManager\Notepad_plus_msgs.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\FindReplaceDlg.rc" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\FindReplaceDlg.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\Release\config.xml" />
     </History>
     <GUIConfigs>
         <GUIConfig name="ToolBar" visible="no">standard</GUIConfig>
@@ -199,7 +200,7 @@
         <GUIConfig name="ScintillaViewsSplitter">vertical</GUIConfig>
         <GUIConfig name="UserDefineDlg" position="undocked">hide</GUIConfig>
         <GUIConfig name="TabSetting" replaceBySpace="no" size="3" />
-        <GUIConfig name="AppPosition" x="93" y="-4" width="1296" height="1087" isMaximized="no" />
+        <GUIConfig name="AppPosition" x="322" y="-9" width="1296" height="1087" isMaximized="no" />
         <GUIConfig name="noUpdate" intervalDays="15" nextUpdateDate="20171218">no</GUIConfig>
         <GUIConfig name="Auto-detection">auto</GUIConfig>
         <GUIConfig name="CheckHistoryFiles">no</GUIConfig>
@@ -223,7 +224,7 @@
         <GUIConfig name="MenuBar">show</GUIConfig>
         <GUIConfig name="Caret" width="3" blinkRate="707" />
         <GUIConfig name="ScintillaGlobalSettings" enableMultiSelection="yes" />
-        <GUIConfig name="openSaveDir" value="2" defaultDirPath="D:\MSYS\usr\src" />
+        <GUIConfig name="openSaveDir" value="0" defaultDirPath="D:\MSYS\usr\src" />
         <GUIConfig name="titleBar" short="no" />
         <GUIConfig name="stylerTheme" path="D:\MSYS\usr\src\notepadpp\Release\stylers.xml" />
         <GUIConfig name="wordCharList" useDefault="yes" charsAdded="" />
@@ -233,7 +234,7 @@
         <GUIConfig name="searchEngine" searchEngineChoice="2" searchEngineCustom="" />
         <GUIConfig name="SmartHighLight" matchCase="no" wholeWordOnly="yes" useFindSettings="no" onAnotherView="no">yes</GUIConfig>
         <GUIConfig name="ScintillaPrimaryView" lineNumberMargin="show" bookMarkMargin="hide" indentGuideLine="show" folderMarkStyle="box" lineWrapMethod="indent" currentLineHilitingShow="show" scrollBeyondLastLine="yes" disableAdvancedScrolling="no" wrapSymbolShow="hide" Wrap="yes" borderEdge="no" edge="no" edgeNbColumn="80" zoom="1" zoom2="0" whiteSpaceShow="hide" eolShow="hide" borderWidth="0" smoothFont="yes" />
-        <GUIConfig name="DockingManager" leftWidth="155" rightWidth="596" topHeight="200" bottomHeight="310">
+        <GUIConfig name="DockingManager" leftWidth="155" rightWidth="494" topHeight="200" bottomHeight="310">
             <FloatingWindow cont="4" x="642" y="-8" width="1250" height="439" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="0" curr="1" prev="4" isVisible="yes" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="44084" curr="1" prev="-1" isVisible="no" />

@@ -36,14 +36,8 @@
 
 
 
-class StatusBar final : public Window	{
-
-	virtual void init(HINSTANCE hInst, HWND hPere) override;
-
-	std::vector<int> _partWidthArray;
-	int *_lpParts = nullptr;
-	generic_string _lastSetText;
-
+class StatusBar final : public Window
+{
 public:
 	virtual ~StatusBar();
 
@@ -60,4 +54,12 @@ public:
 	bool setOwnerDrawText(const TCHAR* str);
 	void adjustParts(int clientWidth);
 
+
+private:
+	virtual void init(HINSTANCE hInst, HWND hPere) override;
+
+private:
+	std::vector<int> _partWidthArray;
+	int *_lpParts = nullptr;
+	generic_string _lastSetText;
 };

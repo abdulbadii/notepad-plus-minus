@@ -856,10 +856,10 @@ NppParameters::NppParameters()
 	_currentDirectory = _currentWDir = curDir;
 
 	_appdataNppDir.clear();
-	generic_string notepadStylePath(_nppPath);
-	PathAppend(notepadStylePath, notepadStyleFile);
+	// generic_string notepadStylePath(_nppPath);
+	// PathAppend(notepadStylePath, notepadStyleFile);
 
-	_asNotepadStyle = (PathFileExists(notepadStylePath.c_str()) == TRUE);
+	// _asNotepadStyle = (PathFileExists(notepadStylePath.c_str()) == TRUE);
 
 	//Load initial accelerator key definitions
 	initMenuKeys();

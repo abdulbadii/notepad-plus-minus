@@ -33,7 +33,10 @@
 const TCHAR Notepad_plus_Window::_className[32] = L"Notepad++";
 HWND Notepad_plus_Window::gNppHWND = NULL;
 
-namespace {
+
+
+namespace // anonymous
+{
 
 	struct PaintLocker final
 	{
@@ -57,7 +60,11 @@ namespace {
 		HWND handle;
 	};
 
-}
+} // anonymous namespace
+
+
+
+
 
 void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLine, CmdLineParams *cmdLineParams)
 {
@@ -82,7 +89,9 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	_isPrelaunch = cmdLineParams->_isPreLaunch;
 
 	if (!::RegisterClass(&nppClass))
+	{
 		throw std::runtime_error("Notepad_plus_Window::init : RegisterClass() function failed");
+	}
 
 	NppParameters& nppParams = NppParameters::getInstance();
 	NppGUI & nppGUI = const_cast<NppGUI &>(nppParams.getNppGUI());
@@ -95,7 +104,7 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 		_className,
 		L"Notepad++",
 		(WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN),
-		// CreateWindowEx bug : set all 0 to work around
+		// CreateWindowEx bug : set all 0 to walk around the pb
 		0, 0, 0, 0,
 		_hParent, nullptr, _hInst,
 		(LPVOID) this); // pass the ptr of this instantiated object
@@ -233,7 +242,9 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	// Launch folder as workspace after all this dockable panel being restored from the last session
 	// To avoid dockable panel toggle problem.
 	if (cmdLineParams->_openFoldersAsWorkspace)
+	{
 		_notepad_plus_plus_core.launchFileBrowser(fns, true);
+	}
 
 	// Notify plugins that Notepad++ is ready
 	SCNotification scnN;
@@ -306,10 +317,12 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 		::MessageBoxA(NULL, dest, "", MB_OK);
 	}
 
-	if (nppGUI.isSnapshotMode())
+	bool isSnapshotMode = nppGUI.isSnapshotMode();
+	if (isSnapshotMode)
 	{
 		_notepad_plus_plus_core.checkModifiedDocument(false);
-		_notepad_plus_plus_core.launchDocumentBackupTask();		// Lauch backup task
+		// Lauch backup task
+		_notepad_plus_plus_core.launchDocumentBackupTask();
 	}
 
 	// Make this call later to take effect

@@ -925,7 +925,7 @@ const int NB_MAX_USER_LANG = 30;
 const int NB_MAX_EXTERNAL_LANG = 30;
 const int NB_MAX_IMPORTED_UDL = 50;
 
-const int NB_MAX_FINDHISTORY_FIND	= 127;
+const int NB_MAX_FINDHISTORY_FIND	= 256;
 const int NB_MAX_FINDHISTORY_REPLACE = 30;
 const int NB_MAX_FINDHISTORY_PATH	= 30;
 const int NB_MAX_FINDHISTORY_FILTER  = 20;
@@ -1369,11 +1369,13 @@ public:
 		return _LRFileList[index];
 	};
 
-	void setNbMaxRecentFile(int nb) {
-		_nbMaxRecentFile = nb;
-	};
-
+	int getNbMaxFind() const {return _findHistory._nbMaxFindHistoryFind;}
+	void setNbMaxFind(int n) {	_findHistory._nbMaxFindHistoryFind = n;
+	}
 	int getNbMaxRecentFile() const {return _nbMaxRecentFile;};
+	void setNbMaxRecentFile(int nb) {	_nbMaxRecentFile = nb;
+	}
+
 
 	void setPutRecentFileInSubMenu(bool doSubmenu) {
 		_putRecentFileInSubMenu = doSubmenu;
@@ -1562,7 +1564,7 @@ public:
 
 	FindDlgTabTitiles & getFindDlgTabTitiles() { return _findDlgTabTitiles;};
 
-	bool asNotepadStyle() const {return _asNotepadStyle;};
+	// bool asNotepadStyle() const {return _asNotepadStyle;};
 
 	bool reloadPluginCmds() {
 		return getPluginCmdsFromXmlTree();
@@ -1779,7 +1781,7 @@ private:
 	ScintillaAccelerator * _pScintAccelerator;
 
 	FindDlgTabTitiles _findDlgTabTitiles;
-	bool _asNotepadStyle = false;
+	// bool _asNotepadStyle = false;
 
 	winVer _winVersion;
 	Platform _platForm;
