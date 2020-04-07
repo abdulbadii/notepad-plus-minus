@@ -1347,7 +1347,7 @@ INT_PTR CALLBACK DefaultDirectoryDlg::run_dlgProc(UINT message, WPARAM wParam, L
 	{
 		case WM_INITDIALOG :
 		{
-			int ID2Check = 0;
+			int ID2Check;
 			bool shouldActivated;
 			switch (nppGUI._openSaveDir)
 			{
