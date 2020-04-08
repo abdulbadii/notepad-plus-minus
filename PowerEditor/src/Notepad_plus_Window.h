@@ -65,8 +65,8 @@ filePath : file or folder name to open (absolute or relative path name)\r\
 
 
 
-class Notepad_plus_Window : public Window
-{
+class Notepad_plus_Window : public Window	{
+
 public:
 	void init(HINSTANCE, HWND, const TCHAR *cmdLine, CmdLineParams *cmdLineParams);
 
@@ -77,8 +77,8 @@ public:
 		return _notepad_plus_plus_core.getAccTable();
 	}
 
-	bool emergency(const generic_string& emergencySavedDir)
-	{
+	bool emergency(const generic_string& emergencySavedDir)	{
+
 		return _notepad_plus_plus_core.emergency(emergencySavedDir);
 	}
 
@@ -87,8 +87,8 @@ public:
 		return _isPrelaunch;
 	}
 
-	void setIsPrelaunch(bool val)
-	{
+	void setIsPrelaunch(bool val)	{
+
 		_isPrelaunch = val;
 	}
 

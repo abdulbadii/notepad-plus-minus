@@ -32,8 +32,8 @@
 #include <mutex>
 
 template <typename C>
-class CThreadSafeQueue : protected std::list<C>
-{
+class CThreadSafeQueue : protected std::list<C>	{
+
 protected:
 	using Base = std::list<C>;
 
@@ -53,8 +53,8 @@ public:
 		m_hEvent = NULL;
 	}
 
-	void push(C& c)
-	{
+	void push(C& c)	{
+
 		{
 			std::lock_guard<std::mutex> lock(m_mutex);
 			Base::push_back(c);
@@ -62,11 +62,11 @@ public:
 		::SetEvent(m_hEvent);
 	}
 
-	bool pop(C& c)
-	{
+	bool pop(C& c)	{
+
 		std::lock_guard<std::mutex> lock(m_mutex);
-		if (Base::empty())
-		{
+		if (Base::empty())	{
+
 			return false;
 		}
 

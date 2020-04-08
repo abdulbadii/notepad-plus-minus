@@ -29,8 +29,8 @@
 #include "ScintillaCtrls.h"
 #include "ScintillaEditView.h"
 
-HWND ScintillaCtrls::createSintilla(HWND hParent) 
-{
+HWND ScintillaCtrls::createSintilla(HWND hParent)	{ 
+
 	_hParent = hParent;
 	ScintillaEditView *scint = new ScintillaEditView;
 	scint->init(_hInst, _hParent);
@@ -38,12 +38,12 @@ HWND ScintillaCtrls::createSintilla(HWND hParent)
 	return scint->getHSelf();
 }
 
-int ScintillaCtrls::getIndexFrom(HWND handle2Find)
-{
-	for (size_t i = 0, len = _scintVector.size(); i < len ; ++i)
-	{
-		if (_scintVector[i]->getHSelf() == handle2Find)
-		{
+int ScintillaCtrls::getIndexFrom(HWND handle2Find)	{
+
+	for (size_t i = 0, len = _scintVector.size(); i < len ; ++i)	{
+
+		if (_scintVector[i]->getHSelf() == handle2Find)	{
+
 			return static_cast<int32_t>(i);
 		}
 	}
@@ -59,8 +59,8 @@ ScintillaEditView * ScintillaCtrls::getScintillaEditViewFrom(HWND handle2Find)
 }
 
 /*
-bool ScintillaCtrls::destroyScintilla(HWND handle2Destroy)
-{
+bool ScintillaCtrls::destroyScintilla(HWND handle2Destroy)	{
+
 	int i = getIndexFrom(handle2Destroy);
 	if (i == -1)
 		return false;
@@ -74,10 +74,10 @@ bool ScintillaCtrls::destroyScintilla(HWND handle2Destroy)
 }
 */
 
-void ScintillaCtrls::destroy() 
-{
-	for (size_t i = 0, len = _scintVector.size(); i < len ; ++i)
-	{
+void ScintillaCtrls::destroy()	{ 
+
+	for (size_t i = 0, len = _scintVector.size(); i < len ; ++i)	{
+
 		_scintVector[i]->destroy();
 		delete _scintVector[i];
 	}

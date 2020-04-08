@@ -37,8 +37,8 @@ TiXmlStringA::TiXmlStringA (const char* instring)
     unsigned newlen;
     char * newstring;
 
-    if (!instring)
-    {
+    if (!instring)	{
+
         allocated = 0;
         cstring = NULL;
         current_length = 0;
@@ -63,8 +63,8 @@ TiXmlStringA::TiXmlStringA (const TiXmlStringA& copy)
 	if ( &copy == this )
 		return;
 
-    if (! copy . allocated)
-    {
+    if (! copy . allocated)	{
+
         allocated = 0;
         cstring = NULL;
         current_length = 0;
@@ -85,8 +85,8 @@ void TiXmlStringA ::operator = (const char * content)
     unsigned newlen;
     char * newstring;
 
-    if (! content)
-    {
+    if (! content)	{
+
         empty_it ();
         return;
     }
@@ -106,8 +106,8 @@ void TiXmlStringA ::operator = (const TiXmlStringA & copy)
     unsigned newlen;
     char * newstring;
 
-    if (! copy . length ())
-    {
+    if (! copy . length ())	{
+
         empty_it ();
         return;
     }
@@ -126,15 +126,15 @@ void TiXmlStringA ::operator = (const TiXmlStringA & copy)
 //bool TiXmlStringA::isblank () const
 //{
 //    char * lookup;
-//    for (lookup = cstring; * lookup; lookup++)
+//    for (lookup = cstring; * lookup; ++lookup )
 //        if (! isspace (* lookup))
 //            return false;
 //    return true;
 //}
 
 // append a const char * to an existing TiXmlStringA
-void TiXmlStringA::append( const char* str, int len )
-{
+void TiXmlStringA::append( const char* str, int len )	{
+
     char * new_string;
     unsigned new_alloc, new_size, size_suffix;
 
@@ -146,8 +146,8 @@ void TiXmlStringA::append( const char* str, int len )
 
     new_size = length () + size_suffix + 1;
     // check if we need to expand
-    if (new_size > allocated)
-    {
+    if (new_size > allocated)	{
+
         // compute new size
         new_alloc = assign_new_size (new_size);
 
@@ -174,8 +174,8 @@ void TiXmlStringA::append( const char* str, int len )
         cstring = new_string;
         allocated = new_alloc;
     }
-    else
-    {
+    else	{
+
         // we know we can safely append the new string
         // strncat (cstring, str, len);
         memcpy (cstring + length (), 
@@ -188,15 +188,15 @@ void TiXmlStringA::append( const char* str, int len )
 
 
 // append a const char * to an existing TiXmlStringA
-void TiXmlStringA::append( const char * suffix )
-{
+void TiXmlStringA::append( const char * suffix )	{
+
     char * new_string;
     unsigned new_alloc, new_size;
 
     new_size = length () + strlen (suffix) + 1;
     // check if we need to expand
-    if (new_size > allocated)
-    {
+    if (new_size > allocated)	{
+
         // compute new size
         new_alloc = assign_new_size (new_size);
 
@@ -222,8 +222,8 @@ void TiXmlStringA::append( const char * suffix )
         cstring = new_string;
         allocated = new_alloc;
     }
-    else
-    {
+    else	{
+
         // we know we can safely append the new string
         memcpy (cstring + length (), 
                 suffix, 
@@ -253,7 +253,7 @@ unsigned TiXmlStringA::find (char tofind, unsigned offset) const
 
     if (offset >= length ())
         return (unsigned) notfound;
-    for (lookup = cstring + offset; * lookup; lookup++)
+    for (lookup = cstring + offset; * lookup; ++lookup )
         if (* lookup == tofind)
             return lookup - cstring;
     return (unsigned) notfound;
@@ -262,8 +262,8 @@ unsigned TiXmlStringA::find (char tofind, unsigned offset) const
 
 bool TiXmlStringA::operator == (const TiXmlStringA & compare) const
 {
-	if ( allocated && compare.allocated )
-	{
+	if ( allocated && compare.allocated )	{
+
 		assert( cstring );
 		assert( compare.cstring );
 		return ( strcmp( cstring, compare.cstring ) == 0 );
@@ -274,8 +274,8 @@ bool TiXmlStringA::operator == (const TiXmlStringA & compare) const
 
 bool TiXmlStringA::operator < (const TiXmlStringA & compare) const
 {
-	if ( allocated && compare.allocated )
-	{
+	if ( allocated && compare.allocated )	{
+
 		assert( cstring );
 		assert( compare.cstring );
 		return ( strcmp( cstring, compare.cstring ) > 0 );
@@ -286,8 +286,8 @@ bool TiXmlStringA::operator < (const TiXmlStringA & compare) const
 
 bool TiXmlStringA::operator > (const TiXmlStringA & compare) const
 {
-	if ( allocated && compare.allocated )
-	{
+	if ( allocated && compare.allocated )	{
+
 		assert( cstring );
 		assert( compare.cstring );
 		return ( strcmp( cstring, compare.cstring ) < 0 );

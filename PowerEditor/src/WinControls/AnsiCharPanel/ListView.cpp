@@ -34,8 +34,8 @@
 
 using namespace std;
 
-void ListView::init(HINSTANCE hInst, HWND parent)
-{
+void ListView::init(HINSTANCE hInst, HWND parent)	{
+
 	Window::init(hInst, parent);
     INITCOMMONCONTROLSEX icex;
 
@@ -60,8 +60,8 @@ void ListView::init(HINSTANCE hInst, HWND parent)
                                 nullptr,
                                 hInst,
                                 nullptr);
-	if (!_hSelf)
-	{
+	if (!_hSelf)	{
+
 		throw std::runtime_error("ListView::init : CreateWindowEx() function return null");
 	}
 
@@ -72,14 +72,14 @@ void ListView::init(HINSTANCE hInst, HWND parent)
 	exStyle |= LVS_EX_FULLROWSELECT | LVS_EX_BORDERSELECT | _extraStyle;
 	ListView_SetExtendedListViewStyle(_hSelf, exStyle);
 
-	if (_columnInfos.size())
-	{
+	if (_columnInfos.size())	{
+
 		LVCOLUMN lvColumn;
 		lvColumn.mask = LVCF_TEXT | LVCF_WIDTH;
 
 		short i = 0;
-		for (auto it = _columnInfos.begin(); it != _columnInfos.end(); ++it)
-		{
+		for (auto it = _columnInfos.begin(); it != _columnInfos.end(); ++it)	{
+
 			lvColumn.cx = static_cast<int>(it->_width);
 			lvColumn.pszText = const_cast<TCHAR *>(it->_label.c_str());
 			ListView_InsertColumn(_hSelf, ++i, &lvColumn);
@@ -87,14 +87,14 @@ void ListView::init(HINSTANCE hInst, HWND parent)
 	}
 }
 
-void ListView::destroy()
-{
+void ListView::destroy()	{
+
 	::DestroyWindow(_hSelf);
 	_hSelf = NULL;
 }
 
-void ListView::addLine(const vector<generic_string> & values2Add, LPARAM lParam, int pos2insert)
-{
+void ListView::addLine(const vector<generic_string> & values2Add, LPARAM lParam, int pos2insert)	{
+
 	if (not values2Add.size())
 		return;
 
@@ -114,8 +114,8 @@ void ListView::addLine(const vector<generic_string> & values2Add, LPARAM lParam,
 	++it;
 
 	int j = 0;
-	for (; it != values2Add.end(); ++it)
-	{
+	for (; it != values2Add.end(); ++it)	{
+
 		ListView_SetItemText(_hSelf, pos2insert, ++j, const_cast<TCHAR *>(it->c_str()));
 	}
 }
@@ -126,24 +126,24 @@ size_t ListView::findAlphabeticalOrderPos(const generic_string& string2Cmp, Sort
 	if (!nbItem)
 		return 0;
 
-	for (size_t i = 0; i < nbItem; ++i)
-	{
+	for (size_t i = 0; i < nbItem; ++i)	{
+
 		TCHAR str[MAX_PATH];
 		ListView_GetItemText(_hSelf, i, 0, str, sizeof(str));
 
 		int res = lstrcmp(string2Cmp.c_str(), str);
 
-		if (res < 0) // string2Cmp < str
-		{
-			if (sortDir == sortEncrease)
-			{
+		if (res < 0)	{ // string2Cmp < str
+
+			if (sortDir == sortEncrease)	{
+
 				return i;
 			}
 		}
-		else // str2Cmp >= str
-		{
-			if (sortDir == sortDecrease)
-			{
+		else	{ // str2Cmp >= str
+
+			if (sortDir == sortDecrease)	{
+
 				return i;
 			}
 		}
@@ -166,8 +166,8 @@ std::vector<size_t> ListView::getCheckedIndexes() const
 {
 	vector<size_t> checkedIndexes;
 	size_t nbItem = ListView_GetItemCount(_hSelf);
-	for (size_t i = 0; i < nbItem; ++i)
-	{
+	for (size_t i = 0; i < nbItem; ++i)	{
+
 		UINT st = ListView_GetItemState(_hSelf, i, LVIS_STATEIMAGEMASK);
 		if (st == INDEXTOSTATEIMAGEMASK(2)) // checked
 			checkedIndexes.push_back(i);
@@ -175,8 +175,8 @@ std::vector<size_t> ListView::getCheckedIndexes() const
 	return checkedIndexes;
 }
 
-LRESULT ListView::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
-{
+LRESULT ListView::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)	{
+
 	return ::CallWindowProc(_defaultProc, hwnd, Message, wParam, lParam);
 }
 

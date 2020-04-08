@@ -32,8 +32,8 @@
 #include "BabyGrid.h"
 #include "Window.h"
 
-class BabyGridWrapper : public Window
-{
+class BabyGridWrapper : public Window	{
+
 public :
 	BabyGridWrapper() = default;
     ~BabyGridWrapper() = default;

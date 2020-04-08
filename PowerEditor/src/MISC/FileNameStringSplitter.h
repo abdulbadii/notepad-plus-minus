@@ -29,8 +29,8 @@
 
 typedef std::vector<generic_string> stringVector;
 
-class FileNameStringSplitter
-{
+class FileNameStringSplitter	{
+
 public:
 	FileNameStringSplitter(const TCHAR *fileNameStr)
 	{
@@ -43,17 +43,17 @@ public:
 		int i = 0;
         bool fini = false;
 
-		for (pStr = (TCHAR *)fileNameStr ; !fini ; )
-		{
+		for (pStr = (TCHAR *)fileNameStr ; !fini ; )	{
+
 			if (i >= filePathLength)
 				break;
 
-			switch (*pStr)
-			{
+			switch (*pStr)	{
+
 				case '"':
 				{
-					if (isInsideQuotes)
-					{
+					if (isInsideQuotes)	{
+
 						str[i] = '\0';
                         if (str[0])
 							_fileNames.push_back(generic_string(str));
@@ -66,13 +66,13 @@ public:
 
 				case ' ':
 				{
-					if (isInsideQuotes)
-					{
+					if (isInsideQuotes)	{
+
 						str[i] = *pStr;
 						i++;
 					}
-					else
-					{
+					else	{
+
 						str[i] = '\0';
                         if (str[0])
 							_fileNames.push_back(generic_string(str));

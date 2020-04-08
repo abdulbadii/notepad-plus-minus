@@ -59,8 +59,8 @@ static winVer windowsVersion = WV_UNKNOWN;
 
 static LRESULT CALLBACK hookProc(UINT nCode, WPARAM wParam, LPARAM lParam);
 
-class TaskListDlg : public StaticDialog
-{
+class TaskListDlg : public StaticDialog	{
+
 public :
 		TaskListDlg() : StaticDialog() { _instanceCount++; };
 		void init(HINSTANCE hInst, HWND parent, HIMAGELIST hImgLst, bool dir) {

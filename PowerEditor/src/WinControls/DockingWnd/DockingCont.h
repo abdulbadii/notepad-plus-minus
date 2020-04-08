@@ -54,8 +54,8 @@ enum eMousePos {
 #define CLOSEBTN_POS_TOP	3
 
 
-class DockingCont : public StaticDialog
-{
+class DockingCont : public StaticDialog	{
+
 public:
 	DockingCont();
 	~DockingCont();
@@ -78,10 +78,10 @@ public:
 	void showToolbar(tTbData *pTbData, BOOL state);
 
 	BOOL updateInfo(HWND hClient) {
-		for (size_t iTb = 0; iTb < _vTbData.size(); ++iTb)
-		{
-			if (_vTbData[iTb]->hClient == hClient)
-			{
+		for (size_t iTb = 0; iTb < _vTbData.size(); ++iTb)	{
+
+			if (_vTbData[iTb]->hClient == hClient)	{
+
 				updateCaption();
 				return TRUE;
 			}
@@ -134,8 +134,8 @@ public:
 	};
 
     virtual void destroy() {
-		for (int iTb = static_cast<int>(_vTbData.size()); iTb > 0; iTb--)
-		{
+		for (int iTb = static_cast<int>(_vTbData.size()); iTb > 0; --iTb )	{
+
 			delete _vTbData[iTb-1];
 		}
 		::DestroyWindow(_hSelf);

@@ -39,8 +39,8 @@ struct RecentItem {
 
 typedef std::deque<RecentItem> recentList;
 
-class LastRecentFileList
-{
+class LastRecentFileList	{
+
 public:
 	LastRecentFileList() {
 		_userMax = (NppParameters::getInstance()).getNbMaxRecentFile();

@@ -31,18 +31,18 @@
 #include "resource.h"
 #include "menuCmdID.h"
 
-void ValueDlg::init(HINSTANCE hInst, HWND parent, int valueToSet, const TCHAR *text) 
-{
+void ValueDlg::init(HINSTANCE hInst, HWND parent, int valueToSet, const TCHAR *text)	{ 
+
 	Window::init(hInst, parent);
 	_defaultValue = valueToSet;
 	_name = text;
 }
 
-int ValueDlg::doDialog(POINT p, bool isRTL) 
-{
+int ValueDlg::doDialog(POINT p, bool isRTL)	{ 
+
 	_p = p;
-	if (isRTL)
-	{
+	if (isRTL)	{
+
 		DLGTEMPLATE *pMyDlgTemplate = NULL;
 		HGLOBAL hMyDlgTemplate = makeRTLResource(IDD_VALUE_DLG, &pMyDlgTemplate);
 		int result = static_cast<int32_t>(::DialogBoxIndirectParam(_hInst, pMyDlgTemplate, _hParent, dlgProc, reinterpret_cast<LPARAM>(this)));
@@ -53,8 +53,8 @@ int ValueDlg::doDialog(POINT p, bool isRTL)
 }
 
 
-int ValueDlg::reSizeValueBox()
-{
+int ValueDlg::reSizeValueBox()	{
+
 	if (_nbNumber == DEFAULT_NB_NUMBER) return 0;
 	RECT rect;
 	POINT p;
@@ -81,10 +81,10 @@ int ValueDlg::reSizeValueBox()
 
 INT_PTR CALLBACK ValueDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM) 
 {
-	switch (Message)
-	{
-		case WM_INITDIALOG :
-		{
+	switch (Message)	{
+
+		case WM_INITDIALOG :	{
+
 			::SetDlgItemText(_hSelf, IDC_VALUE_STATIC, _name.c_str());
 			::SetDlgItemInt(_hSelf, IDC_VALUE_EDIT, _defaultValue, FALSE);
 
@@ -96,12 +96,12 @@ INT_PTR CALLBACK ValueDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 			return TRUE;
 		}
 
-		case WM_COMMAND : 
-		{
-			switch (wParam)
-			{
-				case IDOK :
-				{
+		case WM_COMMAND :	{ 
+
+			switch (wParam)	{
+
+				case IDOK :	{
+
 					int i = ::GetDlgItemInt(_hSelf, IDC_VALUE_EDIT, NULL, FALSE);
 					::EndDialog(_hSelf, i);
 					return TRUE;
@@ -124,34 +124,34 @@ INT_PTR CALLBACK ValueDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 
 INT_PTR CALLBACK ButtonDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM) 
 {
-	switch (Message)
-	{
-		case WM_INITDIALOG :
-		{
+	switch (Message)	{
+
+		case WM_INITDIALOG :	{
+
 			return TRUE;
 		}
 
-		case WM_COMMAND : 
-		{
-			switch (wParam)
-			{
-				case IDC_RESTORE_BUTTON :
-				{
+		case WM_COMMAND :	{ 
+
+			switch (wParam)	{
+
+				case IDC_RESTORE_BUTTON :	{
+
                     int bs = getButtonStatus();
                     bool isFullScreen = (bs & buttonStatus_fullscreen) != 0;
                     bool isPostIt = (bs & buttonStatus_postit) != 0;
                     int cmd = 0;
-                    if (isFullScreen && isPostIt)
-                    {
+                    if (isFullScreen && isPostIt)	{
+
                         // remove postit firstly
                         cmd = IDM_VIEW_POSTIT;
                     }
-                    else if (isFullScreen)
-                    {
+                    else if (isFullScreen)	{
+
                         cmd = IDM_VIEW_FULLSCREENTOGGLE;
                     }
-                    else if (isPostIt)
-                    {
+                    else if (isPostIt)	{
+
                         cmd = IDM_VIEW_POSTIT;
                     }
                     ::SendMessage(_hParent, WM_COMMAND, cmd, 0);
@@ -171,8 +171,8 @@ INT_PTR CALLBACK ButtonDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 
 
 
-void ButtonDlg::doDialog(bool isRTL) 
-{
+void ButtonDlg::doDialog(bool isRTL)	{ 
+
     if (!isCreated())
 			create(IDD_BUTTON_DLG, isRTL);
 	display();

@@ -29,8 +29,8 @@
 
 
 
-struct MenuItemUnit final
-{
+struct MenuItemUnit final	{
+
 	unsigned long _cmdID = 0;
 	generic_string _itemName;
 	generic_string _parentFolderName;
@@ -42,8 +42,8 @@ struct MenuItemUnit final
 };
 
 
-class ContextMenu final
-{
+class ContextMenu final	{
+
 public:
 	~ContextMenu();
 

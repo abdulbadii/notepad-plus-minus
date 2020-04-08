@@ -42,8 +42,8 @@
 
 #include "nsGB2312Prober.h"
 
-void  nsGB18030Prober::Reset(void)
-{
+void  nsGB18030Prober::Reset(void)	{
+
   mCodingSM->Reset(); 
   mState = eDetecting;
   mDistributionAnalyser.Reset(mIsPreferredLanguage);
@@ -54,20 +54,20 @@ nsProbingState nsGB18030Prober::HandleData(const char* aBuf, PRUint32 aLen)
 {
   nsSMState codingState;
 
-  for (PRUint32 i = 0; i < aLen; i++)
-  {
+  for (PRUint32 i = 0; i < aLen; ++i )	{
+
     codingState = mCodingSM->NextState(aBuf[i]);
-    if (codingState == eItsMe)
-    {
+    if (codingState == eItsMe)	{
+
       mState = eFoundIt;
       break;
     }
-    if (codingState == eStart)
-    {
+    if (codingState == eStart)	{
+
       PRUint32 charLen = mCodingSM->GetCurrentCharLen();
 
-      if (i == 0)
-      {
+      if (i == 0)	{
+
         mLastChar[1] = aBuf[0];
         mDistributionAnalyser.HandleOneChar(mLastChar, charLen);
       }
@@ -87,8 +87,8 @@ nsProbingState nsGB18030Prober::HandleData(const char* aBuf, PRUint32 aLen)
   return mState;
 }
 
-float nsGB18030Prober::GetConfidence(void)
-{
+float nsGB18030Prober::GetConfidence(void)	{
+
   float distribCf = mDistributionAnalyser.GetConfidence();
 
   return (float)distribCf;

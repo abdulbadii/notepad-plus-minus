@@ -31,10 +31,10 @@
 
 INT_PTR CALLBACK DocumentPeeker::run_dlgProc(UINT message, WPARAM /*wParam*/, LPARAM /*lParam*/)
 {
-	switch (message)
-	{
-        case WM_INITDIALOG :
-		{
+	switch (message)	{
+
+        case WM_INITDIALOG :	{
+
 			HWND hwndScintilla = reinterpret_cast<HWND>(::SendMessage(_hParent, NPPM_CREATESCINTILLAHANDLE, 0, reinterpret_cast<LPARAM>(_hSelf)));
 			_pPeekerView = reinterpret_cast<ScintillaEditView *>(::SendMessage(_hParent, NPPM_INTERNAL_GETSCINTEDTVIEW, 0, reinterpret_cast<LPARAM>(hwndScintilla)));
 			_pPeekerView->execute(SCI_SETZOOM, static_cast<WPARAM>(-10), 0);
@@ -51,10 +51,10 @@ INT_PTR CALLBACK DocumentPeeker::run_dlgProc(UINT message, WPARAM /*wParam*/, LP
 	return FALSE;
 }
 
-void DocumentPeeker::doDialog(POINT p, Buffer *pBuf, ScintillaEditView & scintSource)
-{
-	if (!isCreated())
-	{
+void DocumentPeeker::doDialog(POINT p, Buffer *pBuf, ScintillaEditView & scintSource)	{
+
+	if (!isCreated())	{
+
 		create(IDD_DOCUMENTSNAPSHOT);
 	}
 
@@ -63,16 +63,16 @@ void DocumentPeeker::doDialog(POINT p, Buffer *pBuf, ScintillaEditView & scintSo
 	goTo(p);
 }
 
-void DocumentPeeker::goTo(POINT p)
-{
+void DocumentPeeker::goTo(POINT p)	{
+
 	::SetWindowPos(_hSelf, HWND_TOP, p.x, p.y + 10, _rc.right - _rc.left, _rc.bottom - _rc.top, SWP_SHOWWINDOW | SWP_NOACTIVATE);
 }
 
 
-void DocumentPeeker::syncDisplay(Buffer *buf, ScintillaEditView & scintSource)
-{
-	if (_pPeekerView)
-	{
+void DocumentPeeker::syncDisplay(Buffer *buf, ScintillaEditView & scintSource)	{
+
+	if (_pPeekerView)	{
+
 		_pPeekerView->execute(SCI_SETDOCPOINTER, 0, static_cast<LPARAM>(buf->getDocument()));
 		_pPeekerView->setCurrentBuffer(buf);
 
@@ -86,8 +86,8 @@ void DocumentPeeker::syncDisplay(Buffer *buf, ScintillaEditView & scintSource)
 		// Wraping & scrolling
 		//
 		MapPosition mp = buf->getMapPosition();
-		if (mp.isValid() && mp.canScroll())
-		{
+		if (mp.isValid() && mp.canScroll())	{
+
 			scrollSnapshotWith(mp);
 		}
 
@@ -105,21 +105,21 @@ void DocumentPeeker::syncDisplay(Buffer *buf, ScintillaEditView & scintSource)
 }
 
 
-void DocumentPeeker::scrollSnapshotWith(const MapPosition & mapPos)
-{
-	if (_pPeekerView)
-	{
+void DocumentPeeker::scrollSnapshotWith(const MapPosition & mapPos)	{
+
+	if (_pPeekerView)	{
+
 		bool hasBeenChanged = false;
 		//
 		// if window size has been changed, resize windows
 		//
-		if (mapPos._height != -1 && _rc.bottom != _rc.top + mapPos._height)
-		{
+		if (mapPos._height != -1 && _rc.bottom != _rc.top + mapPos._height)	{
+
 			_rc.bottom = _rc.top + mapPos._height;
 			hasBeenChanged = true;
 		}
-		if (mapPos._width != -1 && _rc.right != _rc.left + mapPos._width)
-		{
+		if (mapPos._width != -1 && _rc.right != _rc.left + mapPos._width)	{
+
 			_rc.right = _rc.left + mapPos._width;
 			hasBeenChanged = true;
 		}
@@ -146,10 +146,10 @@ void DocumentPeeker::scrollSnapshotWith(const MapPosition & mapPos)
 	}
 }
 
-void DocumentPeeker::saveCurrentSnapshot(ScintillaEditView & editView)
-{
-	if (_pPeekerView)
-	{
+void DocumentPeeker::saveCurrentSnapshot(ScintillaEditView & editView)	{
+
+	if (_pPeekerView)	{
+
 		Buffer *buffer = editView.getCurrentBuffer();
 		MapPosition mapPos = buffer->getMapPosition();
 
@@ -166,8 +166,8 @@ void DocumentPeeker::saveCurrentSnapshot(ScintillaEditView & editView)
 		RECT editorRect;
 		editView.getClientRect(editorRect);
 		int marginWidths = 0;
-		for (int m = 0; m < 4; ++m)
-		{
+		for (int m = 0; m < 4; ++m)	{
+
 			marginWidths += static_cast<int32_t>(editView.execute(SCI_GETMARGINWIDTHN, m));
 		}
 		double editViewWidth = editorRect.right - editorRect.left - marginWidths;
@@ -176,8 +176,8 @@ void DocumentPeeker::saveCurrentSnapshot(ScintillaEditView & editView)
 
 		mapPos._wrapIndentMode = static_cast<int32_t>(editView.execute(SCI_GETWRAPINDENTMODE));
 		mapPos._isWrap = static_cast<int32_t>(editView.isWrap());
-		if (editView.isWrap())
-		{
+		if (editView.isWrap())	{
+
 			mapPos._higherPos = static_cast<int32_t>(editView.execute(SCI_POSITIONFROMPOINT, 0, 0));
 		}
 

@@ -32,8 +32,8 @@
 #include <commctrl.h>
 #include "Window.h"
 
-class ToolTip : public Window
-{
+class ToolTip : public Window	{
+
 public :
 	ToolTip() = default;
     

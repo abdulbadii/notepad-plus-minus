@@ -34,8 +34,8 @@ class ColourPopup;
 
 #define CPN_COLOURPICKED (BN_CLICKED)
 
-class ColourPicker : public Window
-{
+class ColourPicker : public Window	{
+
 public :
 	ColourPicker() = default;
     ~ColourPicker() = default;

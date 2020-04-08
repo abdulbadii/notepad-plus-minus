@@ -28,8 +28,8 @@
 
 #include "ControlsTab.h"
 
-void ControlsTab::createTabs(WindowVector & winVector)
-{
+void ControlsTab::createTabs(WindowVector & winVector)	{
+
 	_pWinVector = &winVector;
 
 	for (size_t i = 0, len = winVector.size(); i < len; ++i)
@@ -39,28 +39,28 @@ void ControlsTab::createTabs(WindowVector & winVector)
 	activateWindowAt(0);
 }
 
-void ControlsTab::activateWindowAt(int index)
-{
+void ControlsTab::activateWindowAt(int index)	{
+
     if (index == _current)  return;
 	(*_pWinVector)[_current]._dlg->display(false);
 	(*_pWinVector)[index]._dlg->display(true);
 	_current = index;
 }
 
-void ControlsTab::reSizeTo(RECT & rc)
-{
+void ControlsTab::reSizeTo(RECT & rc)	{
+
 	TabBar::reSizeTo(rc);
 	rc.left += marge;
 	rc.top += marge;
 	
 	//-- We do those dirty things 
 	//-- because it's a "vertical" tab control
-    if (_isVertical)
-    {
+    if (_isVertical)	{
+
 	    rc.right -= 40;
 	    rc.bottom -= 20;
-	    if (getRowCount() == 2)
-	    {
+	    if (getRowCount() == 2)	{
+
 		    rc.right -= 20;
 	    }
     }
@@ -73,14 +73,14 @@ void ControlsTab::reSizeTo(RECT & rc)
 
 }
 
-bool ControlsTab::renameTab(const TCHAR *internalName, const TCHAR *newName)
-{
+bool ControlsTab::renameTab(const TCHAR *internalName, const TCHAR *newName)	{
+
 	bool foundIt = false;
 	size_t i = 0;
-	for (size_t len = _pWinVector->size(); i < len; ++i)
-	{
-		if ((*_pWinVector)[i]._internalName == internalName)
-		{
+	for (size_t len = _pWinVector->size(); i < len; ++i)	{
+
+		if ((*_pWinVector)[i]._internalName == internalName)	{
+
 			foundIt = true;
 			break;
 		}
@@ -92,8 +92,8 @@ bool ControlsTab::renameTab(const TCHAR *internalName, const TCHAR *newName)
 	return true;
 }
 
-void ControlsTab::renameTab(size_t index, const TCHAR *newName)
-{
+void ControlsTab::renameTab(size_t index, const TCHAR *newName)	{
+
 	TCITEM tie;
 	tie.mask = TCIF_TEXT;
 	tie.pszText = (TCHAR *)newName;

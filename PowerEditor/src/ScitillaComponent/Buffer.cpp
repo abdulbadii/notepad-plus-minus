@@ -49,10 +49,10 @@ namespace // anonymous
 	{
 		assert(length == 0 or data != nullptr && "invalid buffer for getEOLFormatForm()");
 
-		for (size_t i = 0; i != length; ++i)
-		{
-			if (data[i] == CR)
-			{
+		for (size_t i = 0; i != length; ++i)	{
+
+			if (data[i] == CR)	{
+
 				if (i + 1 < length && data[i + 1] == LF)
 					return EolType::windows;
 
@@ -95,39 +95,39 @@ Buffer::Buffer(FileManager * pManager, BufferID id, Document doc, DocFileStatus 
 }
 
 
-void Buffer::doNotify(int mask)
-{
-	if (_canNotify)
-	{
+void Buffer::doNotify(int mask)	{
+
+	if (_canNotify)	{
+
 		assert(_pManager != nullptr);
 		_pManager->beNotifiedOfBufferChange(this, mask);
 	}
 }
 
 
-void Buffer::setDirty(bool dirty)
-{
+void Buffer::setDirty(bool dirty)	{
+
 	_isDirty = dirty;
 	doNotify(BufferChangeDirty);
 }
 
 
-void Buffer::setEncoding(int encoding)
-{
+void Buffer::setEncoding(int encoding)	{
+
 	_encoding = encoding;
 	doNotify(BufferChangeUnicode | BufferChangeDirty);
 }
 
 
-void Buffer::setUnicodeMode(UniMode mode)
-{
+void Buffer::setUnicodeMode(UniMode mode)	{
+
 	_unicodeMode = mode;
 	doNotify(BufferChangeUnicode | BufferChangeDirty);
 }
 
 
-void Buffer::setLangType(LangType lang, const TCHAR* userLangName)
-{
+void Buffer::setLangType(LangType lang, const TCHAR* userLangName)	{
+
 	if (lang == _lang && lang != L_USER)
 		return;
 
@@ -140,17 +140,17 @@ void Buffer::setLangType(LangType lang, const TCHAR* userLangName)
 }
 
 
-void Buffer::updateTimeStamp()
-{
+void Buffer::updateTimeStamp()	{
+
 	FILETIME timeStamp = {};
 	WIN32_FILE_ATTRIBUTE_DATA attributes;
-	if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes) != 0)
-	{
+	if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes) != 0)	{
+
 		timeStamp = attributes.ftLastWriteTime;
 	}
 
-	if (CompareFileTime(&_timeStamp, &timeStamp) != 0)
-	{
+	if (CompareFileTime(&_timeStamp, &timeStamp) != 0)	{
+
 		_timeStamp = timeStamp;
 		doNotify(BufferChangeTimestamp);
 	}
@@ -160,11 +160,11 @@ void Buffer::updateTimeStamp()
 // Set full path file name in buffer object,
 // and determinate its language by its extension.
 // If the ext is not in the list, the defaultLang passed as argument will be set.
-void Buffer::setFileName(const TCHAR *fn, LangType defaultLang)
-{
+void Buffer::setFileName(const TCHAR *fn, LangType defaultLang)	{
+
 	NppParameters& nppParamInst = NppParameters::getInstance();
-	if (_fullPathName == fn)
-	{
+	if (_fullPathName == fn)	{
+
 		updateTimeStamp();
 		doNotify(BufferChangeTimestamp);
 		return;
@@ -176,26 +176,26 @@ void Buffer::setFileName(const TCHAR *fn, LangType defaultLang)
 	// for _lang
 	LangType newLang = defaultLang;
 	TCHAR *ext = PathFindExtension(_fullPathName.c_str());
-	if (*ext == '.') // extension found
-	{
+	if (*ext == '.')	{ // extension found
+
 		ext += 1;
 
 		// Define User Lang firstly
 		const TCHAR* langName = nppParamInst.getUserDefinedLangNameFromExt(ext, _fileName);
-		if (langName)
-		{
+		if (langName)	{
+
 			newLang = L_USER;
 			_userLangExt = langName;
 		}
-		else // if it's not user lang, then check if it's supported lang
-		{
+		else	{ // if it's not user lang, then check if it's supported lang
+
 			_userLangExt.clear();
 			newLang = nppParamInst.getLangFromExt(ext);
 		}
 	}
 
-	if (newLang == defaultLang || newLang == L_TEXT)	//language can probably be refined
-	{
+	if (newLang == defaultLang || newLang == L_TEXT)	{	//language can probably be refined
+
 		if ((OrdinalIgnoreCaseCompareStrings(_fileName, L"makefile") == 0) || (OrdinalIgnoreCaseCompareStrings(_fileName, L"GNUmakefile") == 0))
 			newLang = L_MAKEFILE;
 		else if (OrdinalIgnoreCaseCompareStrings(_fileName, L"CmakeLists.txt") == 0)
@@ -208,8 +208,8 @@ void Buffer::setFileName(const TCHAR *fn, LangType defaultLang)
 
 	updateTimeStamp();
 
-	if (!_hasLangBeenSetFromMenu && (newLang != _lang || _lang == L_USER))
-	{
+	if (!_hasLangBeenSetFromMenu && (newLang != _lang || _lang == L_USER))	{
+
 		_lang = newLang;
 		doNotify(BufferChangeFilename | BufferChangeLanguage | BufferChangeTimestamp);
 		return;
@@ -219,8 +219,8 @@ void Buffer::setFileName(const TCHAR *fn, LangType defaultLang)
 }
 
 
-bool Buffer::checkFileState() // returns true if the status has been changed (it can change into DOC_REGULAR too). false otherwise
-{
+bool Buffer::checkFileState()	{ // returns true if the status has been changed (it can change into DOC_REGULAR too). false otherwise
+
 	// 1. Unsaved document cannot change by environment
 	// 2. Monitoring is sent by NPPM_INTERNAL_RELOADSCROLLTOEND
 	// So no need to check file status for both the above cases
@@ -231,15 +231,15 @@ bool Buffer::checkFileState() // returns true if the status has been changed (it
 	bool isWow64Off = false;
 	NppParameters& nppParam = NppParameters::getInstance();
 
-	if (not PathFileExists(_fullPathName.c_str()))
-	{
+	if (not PathFileExists(_fullPathName.c_str()))	{
+
 		nppParam.safeWow64EnableWow64FsRedirection(FALSE);
 		isWow64Off = true;
 	}
 
 	bool isOK = false;
-	if (_currentStatus != DOC_DELETED && not PathFileExists(_fullPathName.c_str()))	//document has been deleted
-	{
+	if (_currentStatus != DOC_DELETED && not PathFileExists(_fullPathName.c_str()))	{	//document has been deleted
+
 		_currentStatus = DOC_DELETED;
 		_isFileReadOnly = false;
 		_isDirty = true;	//dirty sicne no match with filesystem
@@ -247,44 +247,44 @@ bool Buffer::checkFileState() // returns true if the status has been changed (it
 		doNotify(BufferChangeStatus | BufferChangeReadonly | BufferChangeTimestamp);
 		isOK = true;
 	}
-	else if (_currentStatus == DOC_DELETED && PathFileExists(_fullPathName.c_str()))
-	{	//document has returned from its grave
-		if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes) != 0)
-		{
+	else if (_currentStatus == DOC_DELETED && PathFileExists(_fullPathName.c_str()))	{
+	//document has returned from its grave
+		if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes) != 0)	{
+
 			_isFileReadOnly = attributes.dwFileAttributes & FILE_ATTRIBUTE_READONLY;
 
 			_currentStatus = DOC_MODIFIED;
 			_timeStamp = attributes.ftLastWriteTime;
 
-			if (_reloadFromDiskRequestGuard.try_lock())
-			{
+			if (_reloadFromDiskRequestGuard.try_lock())	{
+
 				doNotify(BufferChangeStatus | BufferChangeReadonly | BufferChangeTimestamp);
 				_reloadFromDiskRequestGuard.unlock();
 			}
 			isOK = true;
 		}
 	}
-	else if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes) != 0)
-	{
+	else if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes) != 0)	{
+
 		int mask = 0;	//status always 'changes', even if from modified to modified
 		bool isFileReadOnly = attributes.dwFileAttributes & FILE_ATTRIBUTE_READONLY;
-		if (isFileReadOnly != _isFileReadOnly)
-		{
+		if (isFileReadOnly != _isFileReadOnly)	{
+
 			_isFileReadOnly = isFileReadOnly;
 			mask |= BufferChangeReadonly;
 		}
-		if (CompareFileTime(&_timeStamp, &attributes.ftLastWriteTime) != 0)
-		{
+		if (CompareFileTime(&_timeStamp, &attributes.ftLastWriteTime) != 0)	{
+
 			_timeStamp = attributes.ftLastWriteTime;
 			mask |= BufferChangeTimestamp;
 			_currentStatus = DOC_MODIFIED;
 			mask |= BufferChangeStatus;	//status always 'changes', even if from modified to modified
 		}
 
-		if (mask != 0)
-		{
-			if (_reloadFromDiskRequestGuard.try_lock())
-			{
+		if (mask != 0)	{
+
+			if (_reloadFromDiskRequestGuard.try_lock())	{
+
 				doNotify(mask);
 
 				_reloadFromDiskRequestGuard.unlock();
@@ -296,18 +296,18 @@ bool Buffer::checkFileState() // returns true if the status has been changed (it
 		return false;
 	}
 
-	if (isWow64Off)
-	{
+	if (isWow64Off)	{
+
 		nppParam.safeWow64EnableWow64FsRedirection(TRUE);
 	}
 	return isOK;
 }
 
-void Buffer::reload()
-{
+void Buffer::reload()	{
+
 	WIN32_FILE_ATTRIBUTE_DATA attributes;
-	if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes) != 0)
-	{
+	if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes) != 0)	{
+
 		_timeStamp = attributes.ftLastWriteTime;
 		_currentStatus = DOC_NEEDRELOAD;
 		doNotify(BufferChangeTimestamp | BufferChangeStatus);
@@ -320,8 +320,8 @@ int64_t Buffer::getFileLength() const
 		return -1;
 
 	WIN32_FILE_ATTRIBUTE_DATA attributes;
-	if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes) != 0)
-	{
+	if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes) != 0)	{
+
 		LARGE_INTEGER size;
 		size.LowPart = attributes.nFileSizeLow;
 		size.HighPart = attributes.nFileSizeHigh;
@@ -335,14 +335,14 @@ generic_string Buffer::getFileTime(fileTimeType ftt) const
 {
 	generic_string result;
 
-	if (_currentStatus != DOC_UNNAMED)
-	{
+	if (_currentStatus != DOC_UNNAMED)	{
+
 		WIN32_FILE_ATTRIBUTE_DATA attributes;
-		if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes) != 0)
-		{
+		if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes) != 0)	{
+
 			FILETIME rawtime;
-			switch (ftt)
-			{
+			switch (ftt)	{
+
 				case ft_created:
 					rawtime = attributes.ftCreationTime;
 					break;
@@ -373,8 +373,8 @@ generic_string Buffer::getFileTime(fileTimeType ftt) const
 }
 
 
-void Buffer::setPosition(const Position & pos, ScintillaEditView * identifier)
-{
+void Buffer::setPosition(const Position & pos, ScintillaEditView * identifier)	{
+
 	int index = indexOfReference(identifier);
 	if (index == -1)
 		return;
@@ -389,8 +389,8 @@ Position& Buffer::getPosition(ScintillaEditView* identifier)
 }
 
 
-void Buffer::setHeaderLineState(const std::vector<size_t> & folds, ScintillaEditView * identifier)
-{
+void Buffer::setHeaderLineState(const std::vector<size_t> & folds, ScintillaEditView * identifier)	{
+
 	int index = indexOfReference(identifier);
 	if (index == -1)
 		return;
@@ -417,8 +417,8 @@ Lang * Buffer::getCurrentLang() const
 	int i = 0;
 	Lang *l = nppParam.getLangFromIndex(i);
 	++i;
-	while (l)
-	{
+	while (l)	{
+
 		if (l->_langID == _lang)
 			return l;
 
@@ -432,8 +432,8 @@ Lang * Buffer::getCurrentLang() const
 int Buffer::indexOfReference(const ScintillaEditView * identifier) const
 {
 	size_t size = _referees.size();
-	for (size_t i = 0; i < size; ++i)
-	{
+	for (size_t i = 0; i < size; ++i)	{
+
 		if (_referees[i] == identifier)
 			return static_cast<int>(i);
 	}
@@ -441,8 +441,8 @@ int Buffer::indexOfReference(const ScintillaEditView * identifier) const
 }
 
 
-int Buffer::addReference(ScintillaEditView * identifier)
-{
+int Buffer::addReference(ScintillaEditView * identifier)	{
+
 	if (indexOfReference(identifier) != -1)
 		return _references;
 
@@ -454,8 +454,8 @@ int Buffer::addReference(ScintillaEditView * identifier)
 }
 
 
-int Buffer::removeReference(ScintillaEditView * identifier)
-{
+int Buffer::removeReference(ScintillaEditView * identifier)	{
+
 	int indexToPop = indexOfReference(identifier);
 	if (indexToPop == -1)
 		return _references;
@@ -468,14 +468,14 @@ int Buffer::removeReference(ScintillaEditView * identifier)
 }
 
 
-void Buffer::setHideLineChanged(bool isHide, int location)
-{
+void Buffer::setHideLineChanged(bool isHide, int location)	{
+
 	//First run through all docs without removing markers
 	for (int i = 0; i < _references; ++i)
 		_referees.at(i)->notifyMarkers(this, isHide, location, false); // (i == _references-1));
 
-	if (!isHide) // no deleting if hiding lines
-	{
+	if (!isHide)	{ // no deleting if hiding lines
+
 		//Then all docs to remove markers.
 		for (int i = 0; i < _references; ++i)
 			_referees.at(i)->notifyMarkers(this, isHide, location, true);
@@ -483,8 +483,8 @@ void Buffer::setHideLineChanged(bool isHide, int location)
 }
 
 
-void Buffer::setDeferredReload() // triggers a reload on the next Document access
-{
+void Buffer::setDeferredReload()	{ // triggers a reload on the next Document access
+
 	_isDirty = false;	//when reloading, just set to false, since it should be marked as clean
 	_needReloading = true;
 	doNotify(BufferChangeDirty);
@@ -495,14 +495,14 @@ void Buffer::setDeferredReload() // triggers a reload on the next Document acces
 
 FileManager::~FileManager()
 {
-	for (std::vector<Buffer *>::iterator it = _buffers.begin(), end = _buffers.end(); it != end; ++it)
-	{
+	for (std::vector<Buffer *>::iterator it = _buffers.begin(), end = _buffers.end(); it != end; ++it)	{
+
 		delete *it;
 	}
 }
 
-void FileManager::init(Notepad_plus * pNotepadPlus, ScintillaEditView * pscratchTilla)
-{
+void FileManager::init(Notepad_plus * pNotepadPlus, ScintillaEditView * pscratchTilla)	{
+
 	_pNotepadPlus = pNotepadPlus;
 	_pscratchTilla = pscratchTilla;
 	_pscratchTilla->execute(SCI_SETUNDOCOLLECTION, false);	//dont store any undo information
@@ -510,19 +510,19 @@ void FileManager::init(Notepad_plus * pNotepadPlus, ScintillaEditView * pscratch
 	_pscratchTilla->execute(SCI_ADDREFDOCUMENT, 0, _scratchDocDefault);
 }
 
-void FileManager::checkFilesystemChanges(bool bCheckOnlyCurrentBuffer)
-{
-	if (bCheckOnlyCurrentBuffer)
-	{
+void FileManager::checkFilesystemChanges(bool bCheckOnlyCurrentBuffer)	{
+
+	if (bCheckOnlyCurrentBuffer)	{
+
 		Buffer* buffer = _pNotepadPlus->getCurrentBuffer();
 		buffer->checkFileState();
 	}
-	else
-	{
-		for (int i = int(_nbBufs) - 1; i >= 0; i--)
-		{
-			if (i >= int(_nbBufs))
-			{
+	else	{
+
+		for (int i = int(_nbBufs) - 1; i >= 0; --i )	{
+
+			if (i >= int(_nbBufs))	{
+
 				if (_nbBufs == 0)
 					return;
 
@@ -536,18 +536,18 @@ void FileManager::checkFilesystemChanges(bool bCheckOnlyCurrentBuffer)
 size_t FileManager::getNbDirtyBuffers() const
 {
 	size_t nb_dirtyBufs = 0;
-	for (size_t i = 0; i < _nbBufs; ++i)
-	{
+	for (size_t i = 0; i < _nbBufs; ++i)	{
+
 		if (_buffers[i]->_isDirty)
 			++nb_dirtyBufs;
 	}
 	return nb_dirtyBufs;
 }
 
-int FileManager::getBufferIndexByID(BufferID id)
-{
-	for (size_t i = 0; i < _nbBufs; ++i)
-	{
+int FileManager::getBufferIndexByID(BufferID id)	{
+
+	for (size_t i = 0; i < _nbBufs; ++i)	{
+
 		if (_buffers[i]->_id == id)
 			return static_cast<int>(i);
 	}
@@ -562,28 +562,28 @@ Buffer* FileManager::getBufferByIndex(size_t index)
 }
 
 
-void FileManager::beNotifiedOfBufferChange(Buffer* theBuf, int mask)
-{
+void FileManager::beNotifiedOfBufferChange(Buffer* theBuf, int mask)	{
+
 	_pNotepadPlus->notifyBufferChanged(theBuf, mask);
 }
 
 
-void FileManager::addBufferReference(BufferID buffer, ScintillaEditView * identifier)
-{
+void FileManager::addBufferReference(BufferID buffer, ScintillaEditView * identifier)	{
+
 	Buffer* buf = getBufferByID(buffer);
 	buf->addReference(identifier);
 }
 
 
-void FileManager::closeBuffer(BufferID id, ScintillaEditView * identifier)
-{
+void FileManager::closeBuffer(BufferID id, ScintillaEditView * identifier)	{
+
 	int index = getBufferIndexByID(id);
 	Buffer* buf = getBufferByIndex(index);
 
 	int refs = buf->removeReference(identifier);
 
-	if (!refs) // buffer can be deallocated
-	{
+	if (!refs)	{ // buffer can be deallocated
+
 		_pscratchTilla->execute(SCI_RELEASEDOCUMENT, 0, buf->_doc);	//release for FileManager, Document is now gone
 		_buffers.erase(_buffers.begin() + index);
 		delete buf;
@@ -596,22 +596,22 @@ void FileManager::closeBuffer(BufferID id, ScintillaEditView * identifier)
 BufferID FileManager::loadFile(const TCHAR * filename, Document doc, int encoding, const TCHAR *backupFileName, FILETIME fileNameTimestamp)
 {
 	bool ownDoc = false;
-	if (doc == NULL)
-	{
+	if (doc == NULL)	{
+
 		doc = (Document)_pscratchTilla->execute(SCI_CREATEDOCUMENT);
 		ownDoc = true;
 	}
 
 	TCHAR fullpath[MAX_PATH];
 	::GetFullPathName(filename, MAX_PATH, fullpath, NULL);
-	if (_tcschr(fullpath, '~'))
-	{
+	if (_tcschr(fullpath, '~'))	{
+
 		::GetLongPathName(fullpath, fullpath, MAX_PATH);
 	}
 
 	bool isSnapshotMode = backupFileName != NULL && PathFileExists(backupFileName);
-	if (isSnapshotMode && !PathFileExists(fullpath)) // if backup mode and fullpath doesn't exist, we guess is UNTITLED
-	{
+	if (isSnapshotMode && !PathFileExists(fullpath))	{ // if backup mode and fullpath doesn't exist, we guess is UNTITLED
+
 		wcscpy_s(fullpath, MAX_PATH, filename); // we restore fullpath with filename, in our case is "new  #"
 	}
 
@@ -625,14 +625,14 @@ BufferID FileManager::loadFile(const TCHAR * filename, Document doc, int encodin
 	loadedFileFormat._language = L_TEXT;
 
 	bool res = loadFileData(doc, backupFileName ? backupFileName : fullpath, data, &UnicodeConvertor, loadedFileFormat);
-	if (res)
-	{
+	if (res)	{
+
 		Buffer* newBuf = new Buffer(this, _nextBufferID, doc, DOC_REGULAR, fullpath);
 		BufferID id = static_cast<BufferID>(newBuf);
 		newBuf->_id = id;
 
-		if (backupFileName != NULL)
-		{
+		if (backupFileName != NULL)	{
+
 			newBuf->_backupFileName = backupFileName;
 			if (!PathFileExists(fullpath))
 				newBuf->_currentStatus = DOC_UNNAMED;
@@ -659,8 +659,8 @@ BufferID FileManager::loadFile(const TCHAR * filename, Document doc, int encodin
 		++_nextBufferID;
 		return id;
 	}
-	else //failed loading, release document
-	{
+	else	{ //failed loading, release document
+
 		if (ownDoc)
 			_pscratchTilla->execute(SCI_RELEASEDOCUMENT, 0, doc);	//Failure, so release document
 		return BUFFER_INVALID;
@@ -668,8 +668,8 @@ BufferID FileManager::loadFile(const TCHAR * filename, Document doc, int encodin
 }
 
 
-bool FileManager::reloadBuffer(BufferID id)
-{
+bool FileManager::reloadBuffer(BufferID id)	{
+
 	Buffer* buf = getBufferByID(id);
 	Document doc = buf->getDocument();
 	Utf8_16_Read UnicodeConvertor;
@@ -687,18 +687,18 @@ bool FileManager::reloadBuffer(BufferID id)
 	bool res = loadFileData(doc, buf->getFullPathName(), data, &UnicodeConvertor, loadedFileFormat);
 	buf->_canNotify = true;
 
-	if (res)
-	{
+	if (res)	{
+
 		setLoadedBufferEncodingAndEol(buf, UnicodeConvertor, loadedFileFormat._encoding, loadedFileFormat._eolFormat);
 	}
 	return res;
 }
 
 
-void FileManager::setLoadedBufferEncodingAndEol(Buffer* buf, const Utf8_16_Read& UnicodeConvertor, int encoding, EolType bkformat)
-{
-	if (encoding == -1)
-	{
+void FileManager::setLoadedBufferEncodingAndEol(Buffer* buf, const Utf8_16_Read& UnicodeConvertor, int encoding, EolType bkformat)	{
+
+	if (encoding == -1)	{
+
 		NppParameters& nppParamInst = NppParameters::getInstance();
 		const NewDocDefaultSettings & ndds = (nppParamInst.getNppGUI()).getNewDocDefaultSettings();
 
@@ -708,8 +708,8 @@ void FileManager::setLoadedBufferEncodingAndEol(Buffer* buf, const Utf8_16_Read&
 
 		buf->setUnicodeMode(um);
 	}
-	else
-	{
+	else	{
+
 		// Test if encoding is set to UTF8 w/o BOM (usually for utf8 indicator of xml or html)
 		buf->setEncoding((encoding == SC_CP_UTF8)?-1:encoding);
 		buf->setUnicodeMode(uniCookie);
@@ -721,15 +721,15 @@ void FileManager::setLoadedBufferEncodingAndEol(Buffer* buf, const Utf8_16_Read&
 }
 
 
-bool FileManager::reloadBufferDeferred(BufferID id)
-{
+bool FileManager::reloadBufferDeferred(BufferID id)	{
+
 	Buffer* buf = getBufferByID(id);
 	buf->setDeferredReload();
 	return true;
 }
 
-bool FileManager::deleteFile(BufferID id)
-{
+bool FileManager::deleteFile(BufferID id)	{
+
 	Buffer* buf = getBufferByID(id);
 	generic_string fileNamePath = buf->getFullPathName();
 
@@ -753,8 +753,8 @@ bool FileManager::deleteFile(BufferID id)
 }
 
 
-bool FileManager::moveFile(BufferID id, const TCHAR * newFileName)
-{
+bool FileManager::moveFile(BufferID id, const TCHAR * newFileName)	{
+
 	Buffer* buf = getBufferByID(id);
 	const TCHAR *fileNamePath = buf->getFullPathName();
 	if (::MoveFileEx(fileNamePath, newFileName, MOVEFILE_REPLACE_EXISTING | MOVEFILE_COPY_ALLOWED) == 0)
@@ -810,18 +810,18 @@ For untitled document (new  4)
 
 std::mutex backup_mutex;
 
-bool FileManager::backupCurrentBuffer()
-{
+bool FileManager::backupCurrentBuffer()	{
+
 	std::lock_guard<std::mutex> lock(backup_mutex);
 
 	Buffer* buffer = _pNotepadPlus->getCurrentBuffer();
 	bool result = false;
 	bool hasModifForSession = false;
 
-	if (buffer->isDirty())
-	{
-		if (buffer->isModified()) // buffer dirty and modified, write the backup file
-		{
+	if (buffer->isDirty())	{
+
+		if (buffer->isModified())	{ // buffer dirty and modified, write the backup file
+
 			UniMode mode = buffer->getUnicodeMode();
 			if (mode == uniCookie)
 				mode = uni8Bit;	//set the mode to ANSI to prevent converter from adding BOM and performing conversions, Scintilla's data can be copied directly
@@ -831,15 +831,15 @@ bool FileManager::backupCurrentBuffer()
 			int encoding = buffer->getEncoding();
 
 			generic_string backupFilePath = buffer->getBackupFileName();
-			if (backupFilePath.empty())
-			{
+			if (backupFilePath.empty())	{
+
 				// Create file
 				backupFilePath = NppParameters::getInstance().getUserPath();
 				backupFilePath += L"\\backup\\";
 
 				// if "backup" folder doesn't exist, create it.
-				if (!PathFileExists(backupFilePath.c_str()))
-				{
+				if (!PathFileExists(backupFilePath.c_str()))	{
+
 					::CreateDirectory(backupFilePath.c_str(), NULL);
 				}
 
@@ -863,37 +863,37 @@ bool FileManager::backupCurrentBuffer()
 
 			TCHAR fullpath[MAX_PATH];
 			::GetFullPathName(backupFilePath.c_str(), MAX_PATH, fullpath, NULL);
-			if (_tcschr(fullpath, '~'))
-			{
+			if (_tcschr(fullpath, '~'))	{
+
 				::GetLongPathName(fullpath, fullpath, MAX_PATH);
 			}
 
 			// Make sure the backup file is not read only
 			DWORD dwFileAttribs = ::GetFileAttributes(fullpath);
-			if (dwFileAttribs & FILE_ATTRIBUTE_READONLY) // if file is read only, remove read only attribute
-			{
+			if (dwFileAttribs & FILE_ATTRIBUTE_READONLY)	{ // if file is read only, remove read only attribute
+
 				dwFileAttribs ^= FILE_ATTRIBUTE_READONLY;
 				::SetFileAttributes(fullpath, dwFileAttribs);
 			}
 
 			FILE *fp = UnicodeConvertor.fopen(fullpath, L"wb");
-			if (fp)
-			{
+			if (fp)	{
+
 				int lengthDoc = _pNotepadPlus->_pEditView->getCurrentDocLen();
 				char* buf = (char*)_pNotepadPlus->_pEditView->execute(SCI_GETCHARACTERPOINTER);	//to get characters directly from Scintilla buffer
 				size_t items_written = 0;
-				if (encoding == -1) //no special encoding; can be handled directly by Utf8_16_Write
-				{
+				if (encoding == -1)	{ //no special encoding; can be handled directly by Utf8_16_Write
+
 					items_written = UnicodeConvertor.fwrite(buf, lengthDoc);
 					if (lengthDoc == 0)
 						items_written = 1;
 				}
-				else
-				{
+				else	{
+
 					WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 					int grabSize;
-					for (int i = 0; i < lengthDoc; i += grabSize)
-					{
+					for (int i = 0; i < lengthDoc; i += grabSize)	{
+
 						grabSize = lengthDoc - i;
 						if (grabSize > blockSize)
 							grabSize = blockSize;
@@ -910,23 +910,23 @@ bool FileManager::backupCurrentBuffer()
 				UnicodeConvertor.fclose();
 
 				// Note that fwrite() doesn't return the number of bytes written, but rather the number of ITEMS.
-				if (items_written == 1) // backup file has been saved
-				{
+				if (items_written == 1)	{ // backup file has been saved
+
 					buffer->setModifiedStatus(false);
 					result = true;	//all done
 				}
 			}
 		}
-		else // buffer dirty but unmodified
-		{
+		else	{ // buffer dirty but unmodified
+
 			result = true;
 		}
 	}
-	else // buffer not dirty, sync: delete the backup file
-	{
+	else	{ // buffer not dirty, sync: delete the backup file
+
 		generic_string backupFilePath = buffer->getBackupFileName();
-		if (not backupFilePath.empty())
-		{
+		if (not backupFilePath.empty())	{
+
 			// delete backup file
 			generic_string file2Delete = buffer->getBackupFileName();
 			buffer->setBackupFileName(generic_string());
@@ -940,21 +940,21 @@ bool FileManager::backupCurrentBuffer()
 	}
 	//printStr(L"backup sync");
 
-	if (result && hasModifForSession)
-	{
+	if (result && hasModifForSession)	{
+
 		//printStr(buffer->getBackupFileName().c_str());
 		_pNotepadPlus->saveCurrentSession();
 	}
 	return result;
 }
 
-bool FileManager::deleteBufferBackup(BufferID id)
-{
+bool FileManager::deleteBufferBackup(BufferID id)	{
+
 	Buffer* buffer = getBufferByID(id);
 	bool result = true;
 	generic_string backupFilePath = buffer->getBackupFileName();
-	if (not backupFilePath.empty())
-	{
+	if (not backupFilePath.empty())	{
+
 		// delete backup file
 		buffer->setBackupFileName(generic_string());
 		result = (::DeleteFile(backupFilePath.c_str()) != 0);
@@ -965,8 +965,8 @@ bool FileManager::deleteBufferBackup(BufferID id)
 
 std::mutex save_mutex;
 
-bool FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool isCopy, generic_string * error_msg)
-{
+bool FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool isCopy, generic_string * error_msg)	{
+
 	std::lock_guard<std::mutex> lock(save_mutex);
 
 	Buffer* buffer = getBufferByID(id);
@@ -975,17 +975,17 @@ bool FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool isCopy, g
 
 	TCHAR fullpath[MAX_PATH];
 	::GetFullPathName(filename, MAX_PATH, fullpath, NULL);
-	if (_tcschr(fullpath, '~'))
-	{
+	if (_tcschr(fullpath, '~'))	{
+
 		::GetLongPathName(fullpath, fullpath, MAX_PATH);
 	}
 
-	if (PathFileExists(fullpath))
-	{
+	if (PathFileExists(fullpath))	{
+
 		attrib = ::GetFileAttributes(fullpath);
 
-		if (attrib != INVALID_FILE_ATTRIBUTES)
-		{
+		if (attrib != INVALID_FILE_ATTRIBUTES)	{
+
 			isHiddenOrSys = (attrib & (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM)) != 0;
 			if (isHiddenOrSys)
 				::SetFileAttributes(filename, attrib & ~(FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM));
@@ -1002,25 +1002,25 @@ bool FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool isCopy, g
 	int encoding = buffer->getEncoding();
 
 	FILE *fp = UnicodeConvertor.fopen(fullpath, L"wb");
-	if (fp)
-	{
+	if (fp)	{
+
 		_pscratchTilla->execute(SCI_SETDOCPOINTER, 0, buffer->_doc);	//generate new document
 
 		int lengthDoc = _pscratchTilla->getCurrentDocLen();
 		char* buf = (char*)_pscratchTilla->execute(SCI_GETCHARACTERPOINTER);	//to get characters directly from Scintilla buffer
 		size_t items_written = 0;
-		if (encoding == -1) //no special encoding; can be handled directly by Utf8_16_Write
-		{
+		if (encoding == -1)	{ //no special encoding; can be handled directly by Utf8_16_Write
+
 			items_written = UnicodeConvertor.fwrite(buf, lengthDoc);
 			if (lengthDoc == 0)
 				items_written = 1;
 		}
-		else
-		{
+		else	{
+
 			WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 			int grabSize;
-			for (int i = 0; i < lengthDoc; i += grabSize)
-			{
+			for (int i = 0; i < lengthDoc; i += grabSize)	{
+
 				grabSize = lengthDoc - i;
 				if (grabSize > blockSize)
 					grabSize = blockSize;
@@ -1042,8 +1042,8 @@ bool FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool isCopy, g
 
 		// Error, we didn't write the entire document to disk.
 		// Note that fwrite() doesn't return the number of bytes written, but rather the number of ITEMS.
-		if (items_written != 1)
-		{
+		if (items_written != 1)	{
+
 			_pscratchTilla->execute(SCI_SETDOCPOINTER, 0, _scratchDocDefault);
 
 			if (error_msg != NULL)
@@ -1055,14 +1055,14 @@ bool FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool isCopy, g
 		if (isHiddenOrSys)
 			::SetFileAttributes(fullpath, attrib);
 
-		if (isCopy) // Save As command
-		{
+		if (isCopy)	{ // Save As command
+
 			_pscratchTilla->execute(SCI_SETDOCPOINTER, 0, _scratchDocDefault);
 
 			/* for saveAs it's not necessary since this action is for the "current" directory, so we let manage in SAVEPOINTREACHED event
 			generic_string backupFilePath = buffer->getBackupFileName();
-			if (not backupFilePath.empty())
-			{
+			if (not backupFilePath.empty())	{
+
 				// delete backup file
 				generic_string file2Delete = buffer->getBackupFileName();
 				buffer->setBackupFileName(generic_string());
@@ -1081,8 +1081,8 @@ bool FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool isCopy, g
 		_pscratchTilla->execute(SCI_SETDOCPOINTER, 0, _scratchDocDefault);
 
 		generic_string backupFilePath = buffer->getBackupFileName();
-		if (not backupFilePath.empty())
-		{
+		if (not backupFilePath.empty())	{
+
 			// delete backup file
 			buffer->setBackupFileName(generic_string());
 			::DeleteFile(backupFilePath.c_str());
@@ -1097,14 +1097,14 @@ bool FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool isCopy, g
 size_t FileManager::nextUntitledNewNumber() const
 {
 	std::vector<size_t> usedNumbers;
-	for (size_t i = 0; i < _buffers.size(); i++)
-	{
+	for (size_t i = 0; i < _buffers.size(); ++i )	{
+
 		Buffer *buf = _buffers.at(i);
-		if (buf->isUntitled())
-		{
+		if (buf->isUntitled())	{
+
 			// if untitled document is invisible, then don't put its number into array (so its number is available to be used)
-			if ((buf->_referees[0])->isVisible())
-			{
+			if ((buf->_referees[0])->isVisible())	{
+
 				TCHAR *numberStr = buf->_fileName + lstrlen(UNTITLED_STR);
 				int usedNumber = generic_atoi(numberStr);
 				usedNumbers.push_back(usedNumber);
@@ -1117,12 +1117,12 @@ size_t FileManager::nextUntitledNewNumber() const
 	bool found = false;
 	do
 	{
-		for (size_t j = 0; j < usedNumbers.size(); j++)
-		{
+		for (size_t j = 0; j < usedNumbers.size(); ++j )	{
+
 			numberAvailable = true;
 			found = false;
-			if (usedNumbers[j] == newNumber)
-			{
+			if (usedNumbers[j] == newNumber)	{
+
 				numberAvailable = false;
 				found = true;
 				break;
@@ -1176,8 +1176,8 @@ BufferID FileManager::bufferFromDocument(Document doc, bool dontIncrease, bool d
 	return id;
 }
 
-int FileManager::detectCodepage(char* buf, size_t len)
-{
+int FileManager::detectCodepage(char* buf, size_t len)	{
+
 	uchardet_t ud = uchardet_new();
 	uchardet_handle_data(ud, buf, len);
 	uchardet_data_end(ud);
@@ -1189,8 +1189,8 @@ int FileManager::detectCodepage(char* buf, size_t len)
 
 LangType FileManager::detectLanguageFromTextBegining(const unsigned char *data, size_t dataLen)
 {
-	struct FirstLineLanguages
-	{
+	struct FirstLineLanguages	{
+
 		std::string pattern;
 		LangType lang;
 	};
@@ -1207,8 +1207,8 @@ LangType FileManager::detectLanguageFromTextBegining(const unsigned char *data, 
 		i += 3;
 
 	// Skip any space-like char
-	for (; i < dataLen; ++i)
-	{
+	for (; i < dataLen; ++i)	{
+
 		if (data[i] != ' ' && data[i] != '\t' && data[i] != '\n' && data[i] != '\r')
 			break;
 	}
@@ -1229,8 +1229,8 @@ LangType FileManager::detectLanguageFromTextBegining(const unsigned char *data, 
 	std::string shebang = "#!";
 
 	size_t foundPos = buf2Test.find(shebang);
-	if (foundPos == 0)
-	{
+	if (foundPos == 0)	{
+
 		// Make a list of the most commonly used languages
 		const size_t NB_SHEBANG_LANGUAGES = 6;
 		FirstLineLanguages ShebangLangs[NB_SHEBANG_LANGUAGES] = {
@@ -1243,10 +1243,10 @@ LangType FileManager::detectLanguageFromTextBegining(const unsigned char *data, 
 		};
 
 		// Go through the list of languages
-		for (i = 0; i < NB_SHEBANG_LANGUAGES; ++i)
-		{
-			if (buf2Test.find(ShebangLangs[i].pattern) != std::string::npos)
-			{
+		for (i = 0; i < NB_SHEBANG_LANGUAGES; ++i)	{
+
+			if (buf2Test.find(ShebangLangs[i].pattern) != std::string::npos)	{
+
 				return ShebangLangs[i].lang;
 			}
 		}
@@ -1265,11 +1265,11 @@ LangType FileManager::detectLanguageFromTextBegining(const unsigned char *data, 
 		{ "<?",				L_PHP } // MUST be after "<?php" and "<?xml" to get the result as accurate as possible
 	};
 
-	for (i = 0; i < NB_FIRST_LINE_LANGUAGES; ++i)
-	{
+	for (i = 0; i < NB_FIRST_LINE_LANGUAGES; ++i)	{
+
 		foundPos = buf2Test.find(languages[i].pattern);
-		if (foundPos == 0)
-		{
+		if (foundPos == 0)	{
+
 			return languages[i].lang;
 		}
 	}
@@ -1278,8 +1278,8 @@ LangType FileManager::detectLanguageFromTextBegining(const unsigned char *data, 
 	return L_TEXT;
 }
 
-bool FileManager::loadFileData(Document doc, const TCHAR * filename, char* data, Utf8_16_Read * unicodeConvertor, LoadedFileFormat& fileFormat)
-{
+bool FileManager::loadFileData(Document doc, const TCHAR * filename, char* data, Utf8_16_Read * unicodeConvertor, LoadedFileFormat& fileFormat)	{
+
 	FILE *fp = generic_fopen(filename, L"rb");
 	if (not fp)
 		return false;
@@ -1291,8 +1291,8 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, char* data,
 	// size/6 is the normal room Scintilla keeps for editing, but here we limit it to 1MiB when loading (maybe we want to load big files without editing them too much)
 	unsigned __int64 bufferSizeRequested = fileSize + min(1<<20,fileSize/6);
 	// As a 32bit application, we cannot allocate 2 buffer of more than INT_MAX size (it takes the whole address space)
-	if (bufferSizeRequested > INT_MAX)
-	{
+	if (bufferSizeRequested > INT_MAX)	{
+
 		NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
 		pNativeSpeaker->messageBox("FileTooBigToOpen",
 										NULL,
@@ -1308,19 +1308,19 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, char* data,
 	_pscratchTilla->execute(SCI_SETSTATUS, SC_STATUS_OK); // reset error status
 	_pscratchTilla->execute(SCI_SETDOCPOINTER, 0, doc);
 	bool ro = _pscratchTilla->execute(SCI_GETREADONLY) != 0;
-	if (ro)
-	{
+	if (ro)	{
+
 		_pscratchTilla->execute(SCI_SETREADONLY, false);
 	}
 	_pscratchTilla->execute(SCI_CLEARALL);
 
 
-	if (fileFormat._language < L_EXTERNAL)
-	{
+	if (fileFormat._language < L_EXTERNAL)	{
+
 		_pscratchTilla->execute(SCI_SETLEXER, ScintillaEditView::langNames[fileFormat._language].lexerID);
 	}
-	else
-	{
+	else	{
+
 		int id = fileFormat._language - L_EXTERNAL;
 		TCHAR * name = NppParameters::getInstance().getELCFromIndex(id)._name;
 		WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
@@ -1350,23 +1350,23 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, char* data,
 			lenFile = fread(data+incompleteMultibyteChar, 1, blockSize-incompleteMultibyteChar, fp) + incompleteMultibyteChar;
 			if (lenFile == 0) break;
 
-            if (isFirstTime)
-            {
+            if (isFirstTime)	{
+
 				// check if file contain any BOM
-                if (Utf8_16_Read::determineEncoding((unsigned char *)data, lenFile) != uni8Bit)
-                {
+                if (Utf8_16_Read::determineEncoding((unsigned char *)data, lenFile) != uni8Bit)	{
+
                     // if file contains any BOM, then encoding will be erased,
                     // and the document will be interpreted as UTF
 					fileFormat._encoding = -1;
 				}
-				else if (fileFormat._encoding == -1)
-				{
+				else if (fileFormat._encoding == -1)	{
+
 					if (NppParameters::getInstance().getNppGUI()._detectEncoding)
 						fileFormat._encoding = detectCodepage(data, lenFile);
                 }
 
-				if (fileFormat._language == L_TEXT)
-				{
+				if (fileFormat._language == L_TEXT)	{
+
 					// check the language du fichier
 					fileFormat._language = detectLanguageFromTextBegining((unsigned char *)data, lenFile);
 				}
@@ -1374,15 +1374,15 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, char* data,
                 isFirstTime = false;
             }
 
-			if (fileFormat._encoding != -1)
-			{
-				if (fileFormat._encoding == SC_CP_UTF8)
-				{
+			if (fileFormat._encoding != -1)	{
+
+				if (fileFormat._encoding == SC_CP_UTF8)	{
+
 					// Pass through UTF-8 (this does not check validity of characters, thus inserting a multi-byte character in two halfs is working)
 					_pscratchTilla->execute(SCI_APPENDTEXT, lenFile, reinterpret_cast<LPARAM>(data));
 				}
-				else
-				{
+				else	{
+
 					WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 					int newDataLen = 0;
 					const char *newData = wmc.encode(fileFormat._encoding, SC_CP_UTF8, data, static_cast<int32_t>(lenFile), &newDataLen, &incompleteMultibyteChar);
@@ -1392,8 +1392,8 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, char* data,
 				if (format == EolType::unknown)
 					format = getEOLFormatForm(data, lenFile, EolType::unknown);
 			}
-			else
-			{
+			else	{
+
 				lenConvert = unicodeConvertor->convert(data, lenFile);
 				_pscratchTilla->execute(SCI_APPENDTEXT, lenConvert, reinterpret_cast<LPARAM>(unicodeConvertor->getNewBuf()));
 				if (format == EolType::unknown)
@@ -1403,8 +1403,8 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, char* data,
 			if (_pscratchTilla->execute(SCI_GETSTATUS) != SC_STATUS_OK)
 				throw;
 
-			if (incompleteMultibyteChar != 0)
-			{
+			if (incompleteMultibyteChar != 0)	{
+
 				// copy bytes to next buffer
 				memcpy(data, data + blockSize - incompleteMultibyteChar, incompleteMultibyteChar);
 			}
@@ -1426,21 +1426,21 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, char* data,
 	fclose(fp);
 
 	// broadcast the format
-	if (format == EolType::unknown)
-	{
+	if (format == EolType::unknown)	{
+
 		NppParameters& nppParamInst = NppParameters::getInstance();
 		const NewDocDefaultSettings & ndds = (nppParamInst.getNppGUI()).getNewDocDefaultSettings(); // for ndds._format
 		fileFormat._eolFormat = ndds._format;
 
 		//for empty files, if the default for new files is UTF8, and "Apply to opened ANSI files" is set, apply it
-		if (fileSize == 0)
-		{
+		if (fileSize == 0)	{
+
 			if (ndds._unicodeMode == uniCookie && ndds._openAnsiAsUtf8)
 				fileFormat._encoding = SC_CP_UTF8;
 		}
 	}
-	else
-	{
+	else	{
+
 		fileFormat._eolFormat = format;
 	}
 
@@ -1460,13 +1460,13 @@ BufferID FileManager::getBufferFromName(const TCHAR* name)
 {
 	TCHAR fullpath[MAX_PATH];
 	::GetFullPathName(name, MAX_PATH, fullpath, NULL);
-	if (_tcschr(fullpath, '~'))
-	{
+	if (_tcschr(fullpath, '~'))	{
+
 		::GetLongPathName(fullpath, fullpath, MAX_PATH);
 	}
 
-	for (size_t i = 0; i < _buffers.size(); i++)
-	{
+	for (size_t i = 0; i < _buffers.size(); ++i )	{
+
 		if (OrdinalIgnoreCaseCompareStrings(name, _buffers.at(i)->getFullPathName()) == 0)
 			return _buffers.at(i)->getID();
 	}
@@ -1476,8 +1476,8 @@ BufferID FileManager::getBufferFromName(const TCHAR* name)
 
 BufferID FileManager::getBufferFromDocument(Document doc)
 {
-	for (size_t i = 0; i < _nbBufs; ++i)
-	{
+	for (size_t i = 0; i < _nbBufs; ++i)	{
+
 		if (_buffers[i]->_doc == doc)
 			return _buffers[i]->_id;
 	}
@@ -1485,8 +1485,8 @@ BufferID FileManager::getBufferFromDocument(Document doc)
 }
 
 
-bool FileManager::createEmptyFile(const TCHAR * path)
-{
+bool FileManager::createEmptyFile(const TCHAR * path)	{
+
 	FILE * file = generic_fopen(path, L"wb");
 	if (!file)
 		return false;
@@ -1495,8 +1495,8 @@ bool FileManager::createEmptyFile(const TCHAR * path)
 }
 
 
-int FileManager::getFileNameFromBuffer(BufferID id, TCHAR * fn2copy)
-{
+int FileManager::getFileNameFromBuffer(BufferID id, TCHAR * fn2copy)	{
+
 	if (getBufferIndexByID(id) == -1)
 		return -1;
 

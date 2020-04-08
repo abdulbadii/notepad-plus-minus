@@ -33,10 +33,10 @@
 
 INT_PTR CALLBACK FindCharsInRangeDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 {
-	switch (message) 
-	{
-		case WM_INITDIALOG :
-		{
+	switch (message)	{ 
+
+		case WM_INITDIALOG :	{
+
 			::SendDlgItemMessage(_hSelf, IDC_RANGESTART_EDIT, EM_LIMITTEXT, 3, 0);
 			::SendDlgItemMessage(_hSelf, IDC_RANGEEND_EDIT, EM_LIMITTEXT, 3, 0);
 			::SendDlgItemMessage(_hSelf, IDC_NONASCCI_RADIO, BM_SETCHECK, TRUE, 0);
@@ -44,23 +44,23 @@ INT_PTR CALLBACK FindCharsInRangeDlg::run_dlgProc(UINT message, WPARAM wParam, L
 			goToCenter();
 			return TRUE;
 		}
-		case WM_COMMAND :
-		{
-			switch (wParam)
-			{
+		case WM_COMMAND :	{
+
+			switch (wParam)	{
+
 				case IDCANCEL : // Close
 					display(false);
 					return TRUE;
 
-				case ID_FINDCHAR_NEXT:
-				{
+				case ID_FINDCHAR_NEXT:	{
+
 					int currentPos = static_cast<int32_t>((*_ppEditView)->execute(SCI_GETCURRENTPOS));
 					unsigned char startRange = 0;
 					unsigned char endRange = 255;
 					bool direction = dirDown;
 					bool isWrap = true;
-					if (!getRangeFromUI(startRange, endRange))
-					{
+					if (!getRangeFromUI(startRange, endRange))	{
+
 						//STOP!
 						NppParameters::getInstance().getNativeLangSpeaker()->messageBox("FindCharRangeValueError",
 							_hSelf,
@@ -85,8 +85,8 @@ INT_PTR CALLBACK FindCharsInRangeDlg::run_dlgProc(UINT message, WPARAM wParam, L
 	}
 }
 
-bool FindCharsInRangeDlg::findCharInRange(unsigned char beginRange, unsigned char endRange, int startPos, bool direction, bool wrap)
-{
+bool FindCharsInRangeDlg::findCharInRange(unsigned char beginRange, unsigned char endRange, int startPos, bool direction, bool wrap)	{
+
 	int totalSize = (*_ppEditView)->getCurrentDocLen();
 	if (startPos == -1)
 		startPos = direction==dirDown?0:totalSize-1;
@@ -101,23 +101,23 @@ bool FindCharsInRangeDlg::findCharInRange(unsigned char beginRange, unsigned cha
 		(direction == dirDown)?i < totalSize:i >= 0 ;
 		(direction == dirDown)?(++i):(--i))
 	{
-		if (static_cast<unsigned char>(content[i]) >= beginRange && static_cast<unsigned char>(content[i]) <= endRange)
-		{
+		if (static_cast<unsigned char>(content[i]) >= beginRange && static_cast<unsigned char>(content[i]) <= endRange)	{
+
 			found = i;
 			break;
 		}
 	}
 	
-	if (found == -1)
-	{
-		if (wrap)
-		{
+	if (found == -1)	{
+
+		if (wrap)	{
+
 			for (int i = (direction == dirUp?totalSize-1:0); 
 				(direction == dirDown)?i < totalSize:i >= 0 ;
 				(direction == dirDown)?(++i):(--i))
 			{
-				if (static_cast<unsigned char>(content[i]) >= beginRange && static_cast<unsigned char>(content[i]) <= endRange)
-				{
+				if (static_cast<unsigned char>(content[i]) >= beginRange && static_cast<unsigned char>(content[i]) <= endRange)	{
+
 					found = i;
 					break;
 				}
@@ -125,8 +125,8 @@ bool FindCharsInRangeDlg::findCharInRange(unsigned char beginRange, unsigned cha
 		}
 	}
 
-	if (found != -1)
-	{
+	if (found != -1)	{
+
 		//printInt(found);
 		auto sci_line = (*_ppEditView)->execute(SCI_LINEFROMPOSITION, found);
 		(*_ppEditView)->execute(SCI_ENSUREVISIBLE, sci_line);
@@ -137,29 +137,29 @@ bool FindCharsInRangeDlg::findCharInRange(unsigned char beginRange, unsigned cha
 	return (found != -1);
 }
 
-void FindCharsInRangeDlg::getDirectionFromUI(bool & whichDirection, bool & isWrap)
-{
+void FindCharsInRangeDlg::getDirectionFromUI(bool & whichDirection, bool & isWrap)	{
+
 	whichDirection = isCheckedOrNot(ID_FINDCHAR_DIRUP);
 	isWrap = isCheckedOrNot(ID_FINDCHAR_WRAP);
 }
 
-bool FindCharsInRangeDlg::getRangeFromUI(unsigned char & startRange, unsigned char & endRange)
-{
-	if (isCheckedOrNot(IDC_NONASCCI_RADIO))
-	{
+bool FindCharsInRangeDlg::getRangeFromUI(unsigned char & startRange, unsigned char & endRange)	{
+
+	if (isCheckedOrNot(IDC_NONASCCI_RADIO))	{
+
 		startRange = 128;
 		endRange = 255;
 		return true;
 	}
-	if (isCheckedOrNot(IDC_ASCCI_RADIO))
-	{
+	if (isCheckedOrNot(IDC_ASCCI_RADIO))	{
+
 		startRange = 0;
 		endRange = 127;
 		return true;
 	}
 	
-	if (isCheckedOrNot(IDC_MYRANGE_RADIO))
-	{
+	if (isCheckedOrNot(IDC_MYRANGE_RADIO))	{
+
 		BOOL startBool, endBool;
 		int start = ::GetDlgItemInt(_hSelf, IDC_RANGESTART_EDIT, &startBool, FALSE);
 		int end = ::GetDlgItemInt(_hSelf, IDC_RANGEEND_EDIT, &endBool, FALSE);

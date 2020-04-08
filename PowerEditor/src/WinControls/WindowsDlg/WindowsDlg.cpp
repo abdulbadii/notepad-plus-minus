@@ -79,8 +79,8 @@ inline static BOOL ModifyStyleEx(HWND hWnd, DWORD dwRemove, DWORD dwAdd) {
 }
 
 
-struct NumericStringEquivalence
-{
+struct NumericStringEquivalence	{
+
 	int operator()(const TCHAR* s1, const TCHAR* s2) const
 	{
 		return numstrcmp(s1, s2);
@@ -100,16 +100,16 @@ struct NumericStringEquivalence
 	{
 		TCHAR *p1, *p2;
 		int c1, c2, lcmp = 0;
-		for (;;)
-		{
-			if (*str1 == 0 || *str2 == 0)
-			{
+		for (;;)	{
+
+			if (*str1 == 0 || *str2 == 0)	{
+
 				if (*str1 != *str2)
 					lcmp = *str1 - *str2;
 				break;
 			}
-			if (_istdigit(*str1) && _istdigit(*str2))
-			{
+			if (_istdigit(*str1) && _istdigit(*str2))	{
+
 				lcmp = generic_strtol(str1, &p1, 10) - generic_strtol(str2, &p2, 10);
 				if ( lcmp == 0 )
 					lcmp = static_cast<int32_t>((p2 - str2) - (p1 - str1));
@@ -117,8 +117,8 @@ struct NumericStringEquivalence
 					break;
 				str1 = p1, str2 = p2;
 			}
-			else
-			{
+			else	{
+
 				if (_istascii(*str1) && _istupper(*str1))
 					c1 = _totlower(*str1);
 				else
@@ -137,8 +137,8 @@ struct NumericStringEquivalence
 	}
 };
 
-struct BufferEquivalent
-{
+struct BufferEquivalent	{
+
 	NumericStringEquivalence _strequiv;
 	DocTabView *_pTab;
 	int _iColumn;
@@ -156,15 +156,15 @@ struct BufferEquivalent
 
 	bool compare(int i1, int i2) const
 	{
-		if (_iColumn >= 0 && _iColumn <= 2)
-		{
+		if (_iColumn >= 0 && _iColumn <= 2)	{
+
 			BufferID bid1 = _pTab->getBufferByIndex(i1);
 			BufferID bid2 = _pTab->getBufferByIndex(i2);
 			Buffer * b1 = MainFileManager.getBufferByID(bid1);
 			Buffer * b2 = MainFileManager.getBufferByID(bid2);
 			
-			if (_iColumn == 0)
-			{
+			if (_iColumn == 0)	{
+
 				const TCHAR *s1 = b1->getFileName();
 				const TCHAR *s2 = b2->getFileName();
 				int result = _strequiv(s1, s2);
@@ -172,8 +172,8 @@ struct BufferEquivalent
 				if (result != 0) // default to filepath sorting when equivalent
 					return result < 0;
 			}
-			else if (_iColumn == 2)
-			{
+			else if (_iColumn == 2)	{
+
 				auto t1 = b1->getLangType();
 				auto t2 = b2->getLangType();
 				
@@ -225,14 +225,14 @@ WindowsDlg::WindowsDlg() : MyBaseClass(WindowsDlgMap)
 	_szMinListCtrl = SIZEZERO;
 }
 
-void WindowsDlg::init(HINSTANCE hInst, HWND parent, DocTabView *pTab)
-{
+void WindowsDlg::init(HINSTANCE hInst, HWND parent, DocTabView *pTab)	{
+
 	MyBaseClass::init(hInst, parent);
 	_pTab = pTab;
 }
 
-void WindowsDlg::init(HINSTANCE hInst, HWND parent)
-{
+void WindowsDlg::init(HINSTANCE hInst, HWND parent)	{
+
 	assert(!"Call other initialize method");
 	MyBaseClass::init(hInst, parent);
 	_pTab = NULL;
@@ -240,45 +240,45 @@ void WindowsDlg::init(HINSTANCE hInst, HWND parent)
 
 INT_PTR CALLBACK WindowsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-	switch (message)
-	{
-		case WM_INITDIALOG :
-		{
+	switch (message)	{
+
+		case WM_INITDIALOG :	{
+
 			NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
 			pNativeSpeaker->changeDlgLang(_hSelf, "Window");
 			return MyBaseClass::run_dlgProc(message, wParam, lParam);
 		}
 
-		case WM_COMMAND :
-		{
-			switch (wParam)
-			{
-				case IDOK:
-				{
+		case WM_COMMAND :	{
+
+			switch (wParam)	{
+
+				case IDOK:	{
+
 					activateCurrent();
 					return TRUE;
 				}
-				case IDCANCEL:
-				{
+				case IDCANCEL:	{
+
 					::GetWindowRect(_hSelf, &_lastKnownLocation);
 					EndDialog(_hSelf, IDCANCEL);
 					return TRUE;
 				}
-				case IDC_WINDOWS_SAVE:
-				{
+				case IDC_WINDOWS_SAVE:	{
+
 					doSave();
 					return TRUE;
 				}
-				case IDC_WINDOWS_CLOSE:
-				{
+				case IDC_WINDOWS_CLOSE:	{
+
 					doClose();
 					return TRUE;
 				}
-				case IDC_WINDOWS_SORT:
-				{
+				case IDC_WINDOWS_SORT:	{
+
 					// they never set a column to sort by, so assume they wanted filename
-					if (_currentColumn == -1)
-					{
+					if (_currentColumn == -1)	{
+
 						_currentColumn = 0;
 						_reverseSort = false;
 						_lastSort = _currentColumn;
@@ -297,23 +297,23 @@ INT_PTR CALLBACK WindowsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPa
 			break;
 		}
 
-		case WM_DESTROY:
-		{
+		case WM_DESTROY:	{
+
 			//destroy();
 			return TRUE;
 		}
 
-		case WM_NOTIFY :
-		{
-			if (wParam == IDC_WINDOWS_LIST)
-			{
+		case WM_NOTIFY :	{
+
+			if (wParam == IDC_WINDOWS_LIST)	{
+
 				NMHDR* pNMHDR = reinterpret_cast<NMHDR*>(lParam);
-				if (pNMHDR->code == LVN_GETDISPINFO)
-				{
+				if (pNMHDR->code == LVN_GETDISPINFO)	{
+
 					NMLVDISPINFO *pLvdi = (NMLVDISPINFO *)pNMHDR;
 
-					if (pLvdi->item.mask & LVIF_TEXT)
-					{
+					if (pLvdi->item.mask & LVIF_TEXT)	{
+
 						pLvdi->item.pszText[0] = 0;
 						size_t index = pLvdi->item.iItem;
 						if (index >= _pTab->nbItem() || index >= _idxMap.size())
@@ -323,30 +323,30 @@ INT_PTR CALLBACK WindowsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPa
 						//const Buffer& buffer = _pView->getBufferAt(index);
 						BufferID bufID = _pTab->getBufferByIndex(index);
 						Buffer * buf = MainFileManager.getBufferByID(bufID);
-						if (pLvdi->item.iSubItem == 0) // file name
-						{
+						if (pLvdi->item.iSubItem == 0)	{ // file name
+
 							int len = pLvdi->item.cchTextMax;
 							const TCHAR *fileName = buf->getFileName();
 							generic_strncpy(pLvdi->item.pszText, fileName, len-1);
 							pLvdi->item.pszText[len-1] = 0;
 							len = lstrlen(pLvdi->item.pszText);
-							if (buf->isDirty())
-							{
-								if (len < pLvdi->item.cchTextMax)
-								{
+							if (buf->isDirty())	{
+
+								if (len < pLvdi->item.cchTextMax)	{
+
 									pLvdi->item.pszText[len++] = '*';
 									pLvdi->item.pszText[len] = 0;
 								}
 							}
-							else if (buf->isReadOnly())
-							{
+							else if (buf->isReadOnly())	{
+
 								len += lstrlen(readonlyString);
 								if (len <= pLvdi->item.cchTextMax)
 									wcscat_s(pLvdi->item.pszText, pLvdi->item.cchTextMax, readonlyString);
 							}
 						}
-						else if (pLvdi->item.iSubItem == 1) // directory
-						{
+						else if (pLvdi->item.iSubItem == 1)	{ // directory
+
 							const TCHAR *fullName = buf->getFullPathName();
 							const TCHAR *fileName = buf->getFileName();
 							int len = lstrlen(fullName)-lstrlen(fileName);
@@ -359,33 +359,33 @@ INT_PTR CALLBACK WindowsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPa
 							generic_strncpy(pLvdi->item.pszText, fullName, len-1);
 							pLvdi->item.pszText[len-1] = 0;
 						}
-						else if (pLvdi->item.iSubItem == 2) // Type
-						{
+						else if (pLvdi->item.iSubItem == 2)	{ // Type
+
 							int len = pLvdi->item.cchTextMax;
 							NppParameters& nppParameters = NppParameters::getInstance();
 							Lang *lang = nppParameters.getLangFromID(buf->getLangType());
-							if (NULL != lang)
-							{
+							if (NULL != lang)	{
+
 								generic_strncpy(pLvdi->item.pszText, lang->getLangName(), len-1);
 							}
 						}
 					}
 					return TRUE;
 				}
-				else if (pNMHDR->code == LVN_COLUMNCLICK) // sort columns with stable sort
-				{
+				else if (pNMHDR->code == LVN_COLUMNCLICK)	{ // sort columns with stable sort
+
 					NMLISTVIEW *pNMLV = (NMLISTVIEW *)pNMHDR;
-					if (pNMLV->iItem == -1)
-					{
+					if (pNMLV->iItem == -1)	{
+
 						_currentColumn = pNMLV->iSubItem;
 						
-						if (_lastSort == _currentColumn)
-						{
+						if (_lastSort == _currentColumn)	{
+
 							_reverseSort = true;
 							_lastSort = -1;
 						}
-						else
-						{
+						else	{
+
 							_reverseSort = false;
 							_lastSort = _currentColumn;
 						}
@@ -395,25 +395,25 @@ INT_PTR CALLBACK WindowsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPa
 					}
 					return TRUE;
 				}
-				else if (pNMHDR->code == LVN_ITEMACTIVATE || pNMHDR->code == LVN_ITEMCHANGED || pNMHDR->code == LVN_ODSTATECHANGED)
-				{
+				else if (pNMHDR->code == LVN_ITEMACTIVATE || pNMHDR->code == LVN_ITEMCHANGED || pNMHDR->code == LVN_ODSTATECHANGED)	{
+
 					updateButtonState();
 					return TRUE;
 				}
-				else if (pNMHDR->code == NM_DBLCLK)
-				{
+				else if (pNMHDR->code == NM_DBLCLK)	{
+
 					::PostMessage(_hSelf, WM_COMMAND, IDOK, 0);
 					return TRUE;
 				}
-				else if (pNMHDR->code == LVN_KEYDOWN)
-				{
+				else if (pNMHDR->code == LVN_KEYDOWN)	{
+
 					NMLVKEYDOWN *lvkd = (NMLVKEYDOWN *)pNMHDR;
 					// Ctrl+A
 					short ctrl = GetKeyState(VK_CONTROL);
 					short alt = GetKeyState(VK_MENU);
 					short shift = GetKeyState(VK_SHIFT);
-					if (lvkd->wVKey == 0x41/*a*/ && ctrl<0 && alt>=0 && shift>=0)
-					{
+					if (lvkd->wVKey == 0x41/*a*/ && ctrl<0 && alt>=0 && shift>=0)	{
+
 						for (int i=0, n=ListView_GetItemCount(_hList); i<n; ++i)
 							ListView_SetItemState(_hList, i, LVIS_SELECTED, LVIS_SELECTED);
 					}
@@ -426,8 +426,8 @@ INT_PTR CALLBACK WindowsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPa
 	return MyBaseClass::run_dlgProc(message, wParam, lParam);
 }
 
-void WindowsDlg::doColumnSort()
-{
+void WindowsDlg::doColumnSort()	{
+
 	if (_currentColumn == -1)
 		return;
 	
@@ -447,17 +447,17 @@ void WindowsDlg::doColumnSort()
 }
 
 
-void WindowsDlg::updateButtonState()
-{
+void WindowsDlg::updateButtonState()	{
+
 	int nSelection = ListView_GetSelectedCount(_hList);
-	if (nSelection == 0)
-	{
+	if (nSelection == 0)	{
+
 		EnableWindow(GetDlgItem(_hSelf, IDOK), FALSE);
 		EnableWindow(GetDlgItem(_hSelf, IDC_WINDOWS_SAVE), FALSE);
 		EnableWindow(GetDlgItem(_hSelf, IDC_WINDOWS_CLOSE), FALSE);
 	}
-	else
-	{
+	else	{
+
 		EnableWindow(GetDlgItem(_hSelf, IDC_WINDOWS_SAVE), TRUE);
 		EnableWindow(GetDlgItem(_hSelf, IDC_WINDOWS_CLOSE), TRUE);
 		if (nSelection == 1)
@@ -468,13 +468,13 @@ void WindowsDlg::updateButtonState()
 	EnableWindow(GetDlgItem(_hSelf, IDC_WINDOWS_SORT), TRUE);
 }
 
-int WindowsDlg::doDialog()
-{
+int WindowsDlg::doDialog()	{
+
 	return static_cast<int>(DialogBoxParam(_hInst, MAKEINTRESOURCE(IDD_WINDOWS), _hParent, dlgProc, reinterpret_cast<LPARAM>(this)));
 };
 
-BOOL WindowsDlg::onInitDialog()
-{
+BOOL WindowsDlg::onInitDialog()	{
+
 	_winMgr.InitToFitSizeFromCurrent(_hSelf);
 
 	// save min size for OK/Cancel buttons
@@ -523,13 +523,13 @@ BOOL WindowsDlg::onInitDialog()
 
 	fitColumnsToSize();
 
-	if (_lastKnownLocation.bottom > 0 && _lastKnownLocation.right > 0)
-	{
+	if (_lastKnownLocation.bottom > 0 && _lastKnownLocation.right > 0)	{
+
 		SetWindowPos(_hSelf, NULL, _lastKnownLocation.left, _lastKnownLocation.top,
 			_lastKnownLocation.right-_lastKnownLocation.left, _lastKnownLocation.bottom-_lastKnownLocation.top, SWP_SHOWWINDOW);
 	}
-	else
-	{
+	else	{
+
 		goToCenter();
 	}
 
@@ -537,8 +537,8 @@ BOOL WindowsDlg::onInitDialog()
 	return TRUE;
 }
 
-void WindowsDlg::updateColumnNames()
-{
+void WindowsDlg::updateColumnNames()	{
+
 	LVCOLUMN lvColumn;
 	memset(&lvColumn, 0, sizeof(lvColumn));
 	lvColumn.mask = LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM | LVCF_FMT;
@@ -548,16 +548,16 @@ void WindowsDlg::updateColumnNames()
 	NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
 	
 	columnText = pNativeSpeaker->getAttrNameStr(L"Name", WD_ROOTNODE, WD_CLMNNAME);
-	if (_currentColumn != 0)
-	{
+	if (_currentColumn != 0)	{
+
 		columnText = L"\u21F5 "+ columnText;
 	}
-	else if (_reverseSort)
-	{
+	else if (_reverseSort)	{
+
 		columnText = L"\u25B3 "+ columnText;
 	}
-	else
-	{
+	else	{
+
 		columnText = L"\u25BD "+ columnText;
 	}
 	lvColumn.pszText = const_cast<TCHAR *>(columnText.c_str());
@@ -565,16 +565,16 @@ void WindowsDlg::updateColumnNames()
 	SendMessage(_hList, LVM_SETCOLUMN, 0, LPARAM(&lvColumn));
 
 	columnText = pNativeSpeaker->getAttrNameStr(L"Path", WD_ROOTNODE, WD_CLMNPATH);
-	if (_currentColumn != 1)
-	{
+	if (_currentColumn != 1)	{
+
 		columnText = L"\u21F5 "+ columnText;
 	}
-	else if (_reverseSort)
-	{
+	else if (_reverseSort)	{
+
 		columnText = L"\u25B3 "+ columnText;
 	}
-	else
-	{
+	else	{
+
 		columnText = L"\u25BD "+ columnText;
 	}
 	lvColumn.pszText = const_cast<TCHAR *>(columnText.c_str());
@@ -583,16 +583,16 @@ void WindowsDlg::updateColumnNames()
 
 	lvColumn.fmt = LVCFMT_CENTER;
 	columnText = pNativeSpeaker->getAttrNameStr(L"Type", WD_ROOTNODE, WD_CLMNTYPE);
-	if (_currentColumn != 2)
-	{
+	if (_currentColumn != 2)	{
+
 		columnText = L"\u21F5 "+ columnText;
 	}
-	else if (_reverseSort)
-	{
+	else if (_reverseSort)	{
+
 		columnText = L"\u25B3 "+ columnText;
 	}
-	else
-	{
+	else	{
+
 		columnText = L"\u25BD "+ columnText;
 	}
 	lvColumn.pszText = const_cast<TCHAR *>(columnText.c_str());
@@ -600,23 +600,23 @@ void WindowsDlg::updateColumnNames()
 	SendMessage(_hList, LVM_SETCOLUMN, 2, LPARAM(&lvColumn));
 }
 
-void WindowsDlg::onSize(UINT nType, int cx, int cy)
-{
+void WindowsDlg::onSize(UINT nType, int cx, int cy)	{
+
 	MyBaseClass::onSize(nType, cx, cy);
 	fitColumnsToSize();
 }
 
-void WindowsDlg::onGetMinMaxInfo(MINMAXINFO* lpMMI)
-{
+void WindowsDlg::onGetMinMaxInfo(MINMAXINFO* lpMMI)	{
+
 	MyBaseClass::onGetMinMaxInfo(lpMMI);
 }
 
-LRESULT WindowsDlg::onWinMgr(WPARAM wp, LPARAM lp)
-{
+LRESULT WindowsDlg::onWinMgr(WPARAM wp, LPARAM lp)	{
+
 	NMWINMGR &nmw = *reinterpret_cast<NMWINMGR *>(lp);
 	if (nmw.code==NMWINMGR::GET_SIZEINFO) {
-		switch(wp)
-		{
+		switch(wp)	{
+
 		case IDOK:
 		case IDCANCEL:
 		case IDC_WINDOWS_SAVE:
@@ -635,19 +635,19 @@ LRESULT WindowsDlg::onWinMgr(WPARAM wp, LPARAM lp)
 	return MyBaseClass::onWinMgr(wp, lp);
 }
 
-void WindowsDlg::doRefresh(bool invalidate /*= false*/)
-{
-	if (_hSelf != NULL && isVisible())
-	{
-		if (_hList != NULL)
-		{
+void WindowsDlg::doRefresh(bool invalidate /*= false*/)	{
+
+	if (_hSelf != NULL && isVisible())	{
+
+		if (_hList != NULL)	{
+
 			size_t count = (_pTab != NULL) ? _pTab->nbItem() : 0;
 			size_t oldSize = _idxMap.size();
 			if (!invalidate && count == oldSize)
 				return;
 
-			if (count != oldSize)
-			{
+			if (count != oldSize)	{
+
 				size_t lo = 0;
 				_idxMap.resize(count);
 				if (oldSize < count)
@@ -665,12 +665,12 @@ void WindowsDlg::doRefresh(bool invalidate /*= false*/)
 	}
 }
 
-void WindowsDlg::fitColumnsToSize()
-{
+void WindowsDlg::fitColumnsToSize()	{
+
 	// perhaps make the path column auto size
 	RECT rc;
-	if (GetClientRect(_hList, &rc))
-	{
+	if (GetClientRect(_hList, &rc))	{
+
 		int len = (rc.right - rc.left);
 		len -= static_cast<int>(SendMessage(_hList, LVM_GETCOLUMNWIDTH, 0, 0));
 		len -= static_cast<int>(SendMessage(_hList, LVM_GETCOLUMNWIDTH, 2, 0));
@@ -680,25 +680,25 @@ void WindowsDlg::fitColumnsToSize()
 	}
 }
 
-void WindowsDlg::resetSelection()
-{
+void WindowsDlg::resetSelection()	{
+
 	auto curSel = _pTab->getCurrentTabIndex();
 	int pos = 0;
-	for (vector<int>::iterator itr = _idxMap.begin(), end = _idxMap.end(); itr != end; ++itr, ++pos)
-	{
-		if (*itr == curSel)
-		{
+	for (vector<int>::iterator itr = _idxMap.begin(), end = _idxMap.end(); itr != end; ++itr, ++pos)	{
+
+		if (*itr == curSel)	{
+
 			ListView_SetItemState(_hList, pos, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 		}
-		else
-		{
+		else	{
+
 			ListView_SetItemState(_hList, pos, 0, LVIS_SELECTED);
 		}
 	}
 }
 
-void WindowsDlg::doSave()
-{
+void WindowsDlg::doSave()	{
+
 	NMWINDLG nmdlg;
 	nmdlg.type = WDT_SAVE;
 	nmdlg.curSel = ListView_GetNextItem(_hList, -1, LVNI_SELECTED);
@@ -706,8 +706,8 @@ void WindowsDlg::doSave()
 	nmdlg.code = WDN_NOTIFY;
 	nmdlg.nItems = ListView_GetSelectedCount(_hList);
 	nmdlg.Items = new UINT[nmdlg.nItems];
-	for (int i=-1, j=0; ; ++j)
-	{
+	for (int i=-1, j=0; ; ++j)	{
+
 		i = ListView_GetNextItem(_hList, i, LVNI_SELECTED);
 		if (i == -1) break;
 		nmdlg.Items[j] = _idxMap[i];
@@ -718,8 +718,8 @@ void WindowsDlg::doSave()
 	ListView_RedrawItems(_hList, 0, ListView_GetSelectedCount(_hList));
 }
 
-void WindowsDlg::destroy()
-{
+void WindowsDlg::destroy()	{
+
 	::GetWindowRect(_hSelf, &_lastKnownLocation);
 
 	HWND hSelf = _hSelf;
@@ -727,10 +727,10 @@ void WindowsDlg::destroy()
 	::DestroyWindow(hSelf);
 }
 
-void WindowsDlg::activateCurrent()
-{
-	if (ListView_GetSelectedCount(_hList) == 1)
-	{
+void WindowsDlg::activateCurrent()	{
+
+	if (ListView_GetSelectedCount(_hList) == 1)	{
+
 		NMWINDLG nmdlg;
 		nmdlg.type = WDT_ACTIVATE;
 		nmdlg.curSel = _idxMap[ListView_GetNextItem(_hList, -1, LVNI_ALL|LVNI_SELECTED)];
@@ -743,8 +743,8 @@ void WindowsDlg::activateCurrent()
 	}
 }
 
-void WindowsDlg::doClose()
-{
+void WindowsDlg::doClose()	{
+
 	NMWINDLG nmdlg;
 	nmdlg.type = WDT_CLOSE;
 	int index = ListView_GetNextItem(_hList, -1, LVNI_ALL|LVNI_SELECTED);
@@ -757,8 +757,8 @@ void WindowsDlg::doClose()
 	nmdlg.Items = new UINT[nmdlg.nItems];
 	vector<int> key;
 	key.resize(n, 0x7fffffff);
-	for (int i=-1, j=0;; ++j)
-	{
+	for (int i=-1, j=0;; ++j)	{
+
 		i = ListView_GetNextItem(_hList, i, LVNI_SELECTED);
 		if (i == -1) break;
 		ListView_SetItemState(_hList, i, 0, LVIS_SELECTED); // deselect
@@ -766,14 +766,14 @@ void WindowsDlg::doClose()
 		key[j] = i;
 	}
 	SendMessage(_hParent, WDN_NOTIFY, 0, LPARAM(&nmdlg));
-	if (nmdlg.processed)
-	{
+	if (nmdlg.processed)	{
+
 		// Trying to retain sort order. fairly sure there is a much better algorithm for this
 		vector<int>::iterator kitr = key.begin();
-		for (UINT i=0; i<n; ++i, ++kitr)
-		{
-			if (nmdlg.Items[i] == -1)
-			{
+		for (UINT i=0; i<n; ++i, ++kitr)	{
+
+			if (nmdlg.Items[i] == -1)	{
+
 				int oldVal = _idxMap[*kitr];
 				_idxMap[*kitr] = -1;
 				for (vector<int>::iterator itr = _idxMap.begin(), end = _idxMap.end(); itr != end; ++itr)
@@ -787,14 +787,14 @@ void WindowsDlg::doClose()
 
 	if (_pTab->nbItem() != _idxMap.size())
 		doRefresh(true);
-	else
-	{
+	else	{
+
 		// select first previously selected item (or last one if only the last one was removed)
 		if (index == static_cast<int>(_idxMap.size()))
 			index -= 1;
 
-		if (index >= 0)
-		{
+		if (index >= 0)	{
+
 			ListView_SetItemState(_hList, index, LVIS_SELECTED, LVIS_SELECTED);
 			ListView_RedrawItems(_hList, 0, _idxMap.size() - 1);
 		}
@@ -802,8 +802,8 @@ void WindowsDlg::doClose()
 	}
 }
 
-void WindowsDlg::doSortToTabs()
-{
+void WindowsDlg::doSortToTabs()	{
+
 	int curSel = ListView_GetNextItem(_hList, -1, LVNI_SELECTED);
 
 	if (curSel == -1)
@@ -817,8 +817,8 @@ void WindowsDlg::doSortToTabs()
 	nmdlg.nItems = ListView_GetItemCount(_hList);
 	nmdlg.Items = new UINT[nmdlg.nItems];
 
-	for (int i=-1, j=0;; ++j)
-	{
+	for (int i=-1, j=0;; ++j)	{
+
 		i = ListView_GetNextItem(_hList, i, LVNI_ALL);
 		if (i == -1)
 			break;
@@ -828,8 +828,8 @@ void WindowsDlg::doSortToTabs()
 	}
 
 	SendMessage(_hParent, WDN_NOTIFY, 0, LPARAM(&nmdlg));
-	if (nmdlg.processed)
-	{
+	if (nmdlg.processed)	{
+
 		_idxMap.clear();
 		doRefresh(true);
 	}
@@ -845,20 +845,20 @@ WindowsMenu::~WindowsMenu()
 		DestroyMenu(_hMenu);
 }
 
-void WindowsMenu::init(HINSTANCE hInst, HMENU hMainMenu, const TCHAR *translation)
-{
+void WindowsMenu::init(HINSTANCE hInst, HMENU hMainMenu, const TCHAR *translation)	{
+
 	_hMenu = ::LoadMenu(hInst, MAKEINTRESOURCE(IDR_WINDOWS_MENU));
 
-	if (translation && translation[0])
-	{
+	if (translation && translation[0])	{
+
 		generic_string windowStr(translation);
 		windowStr += L"...";
 		::ModifyMenu(_hMenu, IDM_WINDOW_WINDOWS, MF_BYCOMMAND, IDM_WINDOW_WINDOWS, windowStr.c_str());
 	}
 
 	int32_t pos = 0;
-	for (pos = GetMenuItemCount(hMainMenu) - 1; pos > 0; --pos)
-	{
+	for (pos = GetMenuItemCount(hMainMenu) - 1; pos > 0; --pos)	{
+
 		if ((GetMenuState(hMainMenu, pos, MF_BYPOSITION) & MF_POPUP) != MF_POPUP)
 			continue;
 		break;
@@ -876,18 +876,18 @@ void WindowsMenu::init(HINSTANCE hInst, HMENU hMainMenu, const TCHAR *translatio
 	InsertMenuItem(hMainMenu, pos, TRUE, &mii);
 }
 
-void WindowsMenu::initPopupMenu(HMENU hMenu, DocTabView *pTab)
-{
-	if (hMenu == _hMenu)
-	{
+void WindowsMenu::initPopupMenu(HMENU hMenu, DocTabView *pTab)	{
+
+	if (hMenu == _hMenu)	{
+
 		auto curDoc = pTab->getCurrentTabIndex();
 		size_t nMaxDoc = IDM_WINDOW_MRU_LIMIT - IDM_WINDOW_MRU_FIRST + 1;
 		size_t nDoc = pTab->nbItem();
 		nDoc = min(nDoc, nMaxDoc);
 		int id;
 		size_t pos;
-		for (id = IDM_WINDOW_MRU_FIRST, pos = 0; id < IDM_WINDOW_MRU_FIRST + static_cast<int32_t>(nDoc); ++id, ++pos)
-		{
+		for (id = IDM_WINDOW_MRU_FIRST, pos = 0; id < IDM_WINDOW_MRU_FIRST + static_cast<int32_t>(nDoc); ++id, ++pos)	{
+
 			BufferID bufID = pTab->getBufferByIndex(pos);
 			Buffer * buf = MainFileManager.getBufferByID(bufID);
 
@@ -912,8 +912,8 @@ void WindowsMenu::initPopupMenu(HMENU hMenu, DocTabView *pTab)
 			else
 				SetMenuItemInfo(hMenu, id, FALSE, &mii);
 		}
-		for ( ; id<=IDM_WINDOW_MRU_LIMIT; ++id)
-		{
+		for ( ; id<=IDM_WINDOW_MRU_LIMIT; ++id)	{
+
 			DeleteMenu(hMenu, id, FALSE);
 		}
 	}

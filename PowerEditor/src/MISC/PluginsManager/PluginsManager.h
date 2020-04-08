@@ -35,16 +35,16 @@
 
 typedef BOOL (__cdecl * PFUNCISUNICODE)();
 
-struct PluginCommand
-{
+struct PluginCommand	{
+
 	generic_string _pluginName;
 	int _funcID;
 	PFUNCPLUGINCMD _pFunc;
 	PluginCommand(const TCHAR *pluginName, int funcID, PFUNCPLUGINCMD pFunc): _funcID(funcID), _pFunc(pFunc), _pluginName(pluginName){};
 };
 
-struct PluginInfo
-{
+struct PluginInfo	{
+
 	PluginInfo() = default;
 	~PluginInfo()
 	{
@@ -71,16 +71,16 @@ struct PluginInfo
 	generic_string _funcName;
 };
 
-struct LoadedDllInfo
-{
+struct LoadedDllInfo	{
+
 	generic_string _fullFilePath;
 	generic_string _fileName;
 
 	LoadedDllInfo(const generic_string & fullFilePath, const generic_string & fileName) : _fullFilePath(fullFilePath), _fileName(fileName) {};
 };
 
-class PluginsManager
-{
+class PluginsManager	{
+
 friend class PluginsAdminDlg;
 public:
 	PluginsManager() : _dynamicIDAlloc(ID_PLUGINS_CMD_DYNAMIC, ID_PLUGINS_CMD_DYNAMIC_LIMIT),
@@ -94,8 +94,8 @@ public:
 			DestroyMenu(_hPluginsMenu);
 	}
 
-	void init(const NppData & nppData)
-	{
+	void init(const NppData & nppData)	{
+
 		_nppData = nppData;
 	}
 
@@ -140,16 +140,16 @@ private:
 	IDAllocator _markerAlloc;
 	bool _noMoreNotification = false;
 
-	void pluginCrashAlert(const TCHAR *pluginName, const TCHAR *funcSignature)
-	{
+	void pluginCrashAlert(const TCHAR *pluginName, const TCHAR *funcSignature)	{
+
 		generic_string msg = pluginName;
 		msg += L" just crashed in\r";
 		msg += funcSignature;
 		::MessageBox(NULL, msg.c_str(), L"Plugin Crash", MB_OK|MB_ICONSTOP);
 	}
 
-	void pluginExceptionAlert(const TCHAR *pluginName, const std::exception& e)
-	{
+	void pluginExceptionAlert(const TCHAR *pluginName, const std::exception& e)	{
+
 		generic_string msg = L"An exception occurred due to plugin: ";
 		msg += pluginName;
 		msg += L"\r\n\r\nException reason: ";

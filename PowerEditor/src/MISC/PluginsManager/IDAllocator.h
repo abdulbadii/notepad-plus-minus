@@ -30,8 +30,8 @@
 
 #pragma once
 
-class IDAllocator
-{
+class IDAllocator	{
+
 public:
 	IDAllocator(int start, int maximumID);
 

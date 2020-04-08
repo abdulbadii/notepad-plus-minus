@@ -29,8 +29,8 @@
 #include <stdexcept>
 #include "ImageListSet.h"
 
-void IconList::create(HINSTANCE hInst, int iconSize) 
-{
+void IconList::create(HINSTANCE hInst, int iconSize)	{ 
+
 	InitCommonControls();
 	_hInst = hInst;
 	_iconSize = iconSize; 
@@ -39,8 +39,8 @@ void IconList::create(HINSTANCE hInst, int iconSize)
 		throw std::runtime_error("IconList::create : ImageList_Create() function return null");
 };
 
-void IconList::create(int iconSize, HINSTANCE hInst, int *iconIDArray, int iconIDArraySize)
-{
+void IconList::create(int iconSize, HINSTANCE hInst, int *iconIDArray, int iconIDArraySize)	{
+
 	create(hInst, iconSize);
 	_pIconIDArray = iconIDArray;
 	_iconIDArraySize = iconIDArraySize;
@@ -77,23 +77,23 @@ void IconList::setIconSize(int size) const
 		addIcon(_pIconIDArray[i]);
 }
 
-void ToolBarIcons::init(ToolBarButtonUnit *buttonUnitArray, int arraySize)
-{
+void ToolBarIcons::init(ToolBarButtonUnit *buttonUnitArray, int arraySize)	{
+
 	for (int i = 0 ; i < arraySize ; ++i)
 		_tbiis.push_back(buttonUnitArray[i]);
 	_nbCmd = arraySize;
 }
 
-void ToolBarIcons::reInit(int size)
-{
+void ToolBarIcons::reInit(int size)	{
+
 	ImageList_SetIconSize(getDefaultLst(), size, size);
 	ImageList_SetIconSize(getHotLst(), size, size);
 	ImageList_SetIconSize(getDisableLst(), size, size);
 
-	for (size_t i = 0, len = _tbiis.size(); i < len; ++i)
-	{
-		if (_tbiis[i]._defaultIcon != -1)
-		{
+	for (size_t i = 0, len = _tbiis.size(); i < len; ++i)	{
+
+		if (_tbiis[i]._defaultIcon != -1)	{
+
 			_iconListVector[HLIST_DEFAULT].addIcon(_tbiis[i]._defaultIcon);
 			_iconListVector[HLIST_HOT].addIcon(_tbiis[i]._hotIcon);
 			_iconListVector[HLIST_DISABLE].addIcon(_tbiis[i]._grayIcon);
@@ -101,8 +101,8 @@ void ToolBarIcons::reInit(int size)
 	}
 }
 
-void ToolBarIcons::create(HINSTANCE hInst, int iconSize)
-{
+void ToolBarIcons::create(HINSTANCE hInst, int iconSize)	{
+
 	_iconListVector.push_back(IconList());
 	_iconListVector.push_back(IconList());
 	_iconListVector.push_back(IconList());
@@ -114,8 +114,8 @@ void ToolBarIcons::create(HINSTANCE hInst, int iconSize)
 	reInit(iconSize);
 }
 
-void ToolBarIcons::destroy()
-{
+void ToolBarIcons::destroy()	{
+
 	_iconListVector[HLIST_DEFAULT].destroy();
 	_iconListVector[HLIST_HOT].destroy();
 	_iconListVector[HLIST_DISABLE].destroy();

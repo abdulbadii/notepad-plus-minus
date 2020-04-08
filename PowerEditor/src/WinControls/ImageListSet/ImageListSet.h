@@ -35,8 +35,8 @@
 const int nbMax = 45;
 #define	IDI_SEPARATOR_ICON -1
 
-class IconList
-{
+class IconList	{
+
 public :
 	IconList() = default;
 	void create(HINSTANCE hInst, int iconSize);
@@ -73,8 +73,8 @@ typedef std::vector<ToolBarButtonUnit> ToolBarIconIDs;
 
 typedef std::vector<IconList> IconListVector;
 
-class IconLists
-{
+class IconLists	{
+
 public :
 	IconLists() = default;
 	HIMAGELIST getImageListHandle(int index) const {
@@ -89,8 +89,8 @@ const int HLIST_DEFAULT = 0;
 const int HLIST_HOT = 1;
 const int HLIST_DISABLE = 2;
 
-class ToolBarIcons : public IconLists
-{
+class ToolBarIcons : public IconLists	{
+
 public :
 	ToolBarIcons() = default;
 

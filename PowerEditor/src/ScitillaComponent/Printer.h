@@ -39,8 +39,8 @@ struct NPP_RangeToFormat {
 	Sci_CharacterRange chrg;
 };
 
-class Printer
-{
+class Printer	{
+
 public :
 	Printer() = default;
 

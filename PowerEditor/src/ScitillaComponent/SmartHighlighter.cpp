@@ -37,8 +37,8 @@ SmartHighlighter::SmartHighlighter(FindReplaceDlg * pFRDlg)
 	//Nothing to do
 }
 
-void SmartHighlighter::highlightViewWithWord(ScintillaEditView * pHighlightView, const generic_string & word2Hilite)
-{
+void SmartHighlighter::highlightViewWithWord(ScintillaEditView * pHighlightView, const generic_string & word2Hilite)	{
+
 	// save target locations for other search functions
 	auto originalStartPos = pHighlightView->execute(SCI_GETTARGETSTART);
 	auto originalEndPos = pHighlightView->execute(SCI_GETTARGETEND);
@@ -59,16 +59,16 @@ void SmartHighlighter::highlightViewWithWord(ScintillaEditView * pHighlightView,
 
 	const NppGUI & nppGUI = NppParameters::getInstance().getNppGUI();
 
-	if (nppGUI._smartHiliteUseFindSettings)
-	{
+	if (nppGUI._smartHiliteUseFindSettings)	{
+
 		// fetch find dialog's setting
 		NppParameters& nppParams = NppParameters::getInstance();
 		FindHistory &findHistory = nppParams.getFindHistory();
 		isWordOnly = findHistory._isMatchWord;
 		isCaseSensentive = findHistory._isMatchCase;
 	}
-	else
-	{
+	else	{
+
 		isWordOnly = nppGUI._smartHiliteWordOnly;
 		isCaseSensentive = nppGUI._smartHiliteCaseSensitive;
 	}
@@ -80,8 +80,8 @@ void SmartHighlighter::highlightViewWithWord(ScintillaEditView * pHighlightView,
 	FindReplaceInfo frInfo;
 	frInfo._txt2find = word2Hilite.c_str();
 
-	for (; currentLine < lastLine; ++currentLine)
-	{
+	for (; currentLine < lastLine; ++currentLine)	{
+
 		int docLine = static_cast<int>(pHighlightView->execute(SCI_DOCLINEFROMVISIBLE, currentLine));
 		if (docLine == prevDocLineChecked)
 			continue;	//still on same line (wordwrap)
@@ -91,14 +91,14 @@ void SmartHighlighter::highlightViewWithWord(ScintillaEditView * pHighlightView,
 		
 		frInfo._startRange = startPos;
 		frInfo._endRange = endPos;
-		if (endPos == -1)
-		{	//past EOF
+		if (endPos == -1)	{
+	//past EOF
 			frInfo._endRange = pHighlightView->getCurrentDocLen() - 1;
 			_pFRDlg->processRange(ProcessMarkAll_2, frInfo, NULL, &fo, -1, pHighlightView);
 			break;
 		}
-		else
-		{
+		else	{
+
 			_pFRDlg->processRange(ProcessMarkAll_2, frInfo, NULL, &fo, -1, pHighlightView);
 		}
 	}
@@ -107,16 +107,16 @@ void SmartHighlighter::highlightViewWithWord(ScintillaEditView * pHighlightView,
 	pHighlightView->execute(SCI_SETTARGETRANGE, originalStartPos, originalEndPos);
 }
 
-void SmartHighlighter::highlightView(ScintillaEditView * pHighlightView, ScintillaEditView * unfocusView)
-{
+void SmartHighlighter::highlightView(ScintillaEditView * pHighlightView, ScintillaEditView * unfocusView)	{
+
 	// Clear marks
 	pHighlightView->clearIndicator(SCE_UNIVERSAL_FOUND_STYLE_SMART);
 
 	const NppGUI & nppGUI = NppParameters::getInstance().getNppGUI();
 
 	// If nothing selected or smart highlighting disabled, don't mark anything
-	if ((!nppGUI._enableSmartHilite) || (pHighlightView->execute(SCI_GETSELECTIONEMPTY) == 1))
-	{
+	if ((!nppGUI._enableSmartHilite) || (pHighlightView->execute(SCI_GETSELECTIONEMPTY) == 1))	{
+
 		if (nppGUI._smartHiliteOnAnotherView && unfocusView && unfocusView->isVisible()
 			&& unfocusView->getCurrentBufferID() != pHighlightView->getCurrentBufferID())
 		{
@@ -132,30 +132,30 @@ void SmartHighlighter::highlightView(ScintillaEditView * pHighlightView, Scintil
 	// Determine mode for SmartHighlighting
 	bool isWordOnly = true;
 
-	if (nppGUI._smartHiliteUseFindSettings)
-	{
+	if (nppGUI._smartHiliteUseFindSettings)	{
+
 		// fetch find dialog's setting
 		NppParameters& nppParams = NppParameters::getInstance();
 		FindHistory &findHistory = nppParams.getFindHistory();
 		isWordOnly = findHistory._isMatchWord;
 	}
-	else
-	{
+	else	{
+
 		isWordOnly = nppGUI._smartHiliteWordOnly;
 	}
 
 	// additional checks for wordOnly mode
 	// Make sure the "word" positions match the current selection
-	if (isWordOnly)
-	{
+	if (isWordOnly)	{
+
 		auto wordStart = pHighlightView->execute(SCI_WORDSTARTPOSITION, curPos, true);
 		auto wordEnd = pHighlightView->execute(SCI_WORDENDPOSITION, wordStart, true);
 
 		if (wordStart == wordEnd || wordStart != range.cpMin || wordEnd != range.cpMax)
 			return;
 	}
-	else
-	{
+	else	{
+
 		auto line = pHighlightView->execute(SCI_LINEFROMPOSITION, curPos);
 		auto lineLength = pHighlightView->execute(SCI_LINELENGTH, line);
 		if (textlen > lineLength)

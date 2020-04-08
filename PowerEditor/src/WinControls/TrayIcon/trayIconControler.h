@@ -37,8 +37,8 @@
 #define INCORRECT_OPERATION     1
 #define OPERATION_INCOHERENT    2
 
-class trayIconControler
-{
+class trayIconControler	{
+
 public:
   trayIconControler(HWND hwnd, UINT uID, UINT uCBMsg, HICON hicon, const TCHAR *tip);
   int doTrayIcon(DWORD op);

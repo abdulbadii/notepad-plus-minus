@@ -11,8 +11,8 @@
 unsigned int UTF8Length(const wchar_t *uptr, unsigned int tlen)
 {
 	unsigned int len = 0;
-	for (unsigned int i = 0; i < tlen && uptr[i]; ++i)
-	{
+	for (unsigned int i = 0; i < tlen && uptr[i]; ++i)	{
+
 		unsigned int uch = uptr[i];
 		if (uch < 0x80)
 			++len;
@@ -24,23 +24,23 @@ unsigned int UTF8Length(const wchar_t *uptr, unsigned int tlen)
 	return len;
 }
 
-void UTF8FromUCS2(const wchar_t *uptr, unsigned int tlen, char *putf, unsigned int len)
-{
+void UTF8FromUCS2(const wchar_t *uptr, unsigned int tlen, char *putf, unsigned int len)	{
+
 	int k = 0;
-	for (unsigned int i = 0; i < tlen && uptr[i]; ++i)
-	{
+	for (unsigned int i = 0; i < tlen && uptr[i]; ++i)	{
+
 		unsigned int uch = uptr[i];
-		if (uch < 0x80)
-		{
+		if (uch < 0x80)	{
+
 			putf[k++] = static_cast<char>(uch);
 		}
-		else if (uch < 0x800)
-		{
+		else if (uch < 0x800)	{
+
 			putf[k++] = static_cast<char>(0xC0 | (uch >> 6));
 			putf[k++] = static_cast<char>(0x80 | (uch & 0x3f));
 		}
-		else
-		{
+		else	{
+
 			putf[k++] = static_cast<char>(0xE0 | (uch >> 12));
 			putf[k++] = static_cast<char>(0x80 | ((uch >> 6) & 0x3f));
 			putf[k++] = static_cast<char>(0x80 | (uch & 0x3f));
@@ -52,8 +52,8 @@ void UTF8FromUCS2(const wchar_t *uptr, unsigned int tlen, char *putf, unsigned i
 unsigned int UCS2Length(const char *s, unsigned int len)
 {
 	unsigned int ulen = 0;
-	for (unsigned int i=0; i<len; ++i)
-	{
+	for (unsigned int i=0; i<len; ++i)	{
+
 		UCHAR ch = static_cast<UCHAR>(s[i]);
 		if ((ch < 0x80) || (ch > (0x80 + 0x40)))
 			++ulen;
@@ -66,21 +66,21 @@ unsigned int UCS2FromUTF8(const char *s, unsigned int len, wchar_t *tbuf, unsign
 	unsigned int ui=0;
 	const UCHAR *us = reinterpret_cast<const UCHAR *>(s);
 	unsigned int i=0;
-	while ((i<len) && (ui<tlen))
-	{
+	while ((i<len) && (ui<tlen))	{
+
 		UCHAR ch = us[i++];
-		if (ch < 0x80)
-		{
+		if (ch < 0x80)	{
+
 			tbuf[ui] = ch;
 		}
-		else if (ch < 0x80 + 0x40 + 0x20)
-		{
+		else if (ch < 0x80 + 0x40 + 0x20)	{
+
 			tbuf[ui] = static_cast<wchar_t>((ch & 0x1F) << 6);
 			ch = us[i++];
 			tbuf[ui] = static_cast<wchar_t>(tbuf[ui] + (ch & 0x7F));
 		}
-		else
-		{
+		else	{
+
 			tbuf[ui] = static_cast<wchar_t>((ch & 0xF) << 12);
 			ch = us[i++];
 			tbuf[ui] = static_cast<wchar_t>(tbuf[ui] + ((ch & 0x7F) << 6));
@@ -98,8 +98,8 @@ unsigned int ascii_to_utf8(const char * pszASCII, unsigned int lenASCII, char * 
   // length of pszUTF8 must be enough; 
   // its maximum is (lenASCII*3 + 1)
   
-  if (!lenASCII || !pszASCII)
-  {
+  if (!lenASCII || !pszASCII)	{
+
     pszUTF8[0] = 0;
     return 0;  
   }
@@ -107,8 +107,8 @@ unsigned int ascii_to_utf8(const char * pszASCII, unsigned int lenASCII, char * 
   unsigned int lenUCS2;
   unsigned int lenUTF8;
   wchar_t *pszUCS2 = new wchar_t[lenASCII * 3 + 1];
-  if (!pszUCS2)
-  {
+  if (!pszUCS2)	{
+
     pszUTF8[0] = 0;
     return 0;  
   }
@@ -121,13 +121,13 @@ unsigned int ascii_to_utf8(const char * pszASCII, unsigned int lenASCII, char * 
   return lenUTF8;
 }
 
-int utf8_to_ascii(const char * pszUTF8, unsigned int lenUTF8, char * pszASCII)
-{
+int utf8_to_ascii(const char * pszUTF8, unsigned int lenUTF8, char * pszASCII)	{
+
   // length of pszASCII must be enough;
   // its maximum is (lenUTF8 + 1)
   
-  if (!lenUTF8 || !pszUTF8)
-  {
+  if (!lenUTF8 || !pszUTF8)	{
+
     pszASCII[0] = 0;
     return 0;
   }  
@@ -136,8 +136,8 @@ int utf8_to_ascii(const char * pszUTF8, unsigned int lenUTF8, char * pszASCII)
   wchar_t*     pszUCS2;
 
   pszUCS2 = new wchar_t[lenUTF8 + 1];
-  if (!pszUCS2)
-  {
+  if (!pszUCS2)	{
+
     pszASCII[0] = 0;
     return 0;
   }

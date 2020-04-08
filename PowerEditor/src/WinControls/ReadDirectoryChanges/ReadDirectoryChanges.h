@@ -107,8 +107,8 @@ namespace ReadDirectoryChangesPrivate
 ///		}
 /// </code></example>
 /// </remarks>
-class CReadDirectoryChanges
-{
+class CReadDirectoryChanges	{
+
 public:
 	CReadDirectoryChanges();
 	~CReadDirectoryChanges();

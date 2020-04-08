@@ -48,8 +48,8 @@ along with this program; if not, write to the Free Software \
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA."
 
 
-class AboutDlg : public StaticDialog
-{
+class AboutDlg : public StaticDialog	{
+
 public :
 	AboutDlg() = default;
 
@@ -69,8 +69,8 @@ private :
 };
 
 
-class DebugInfoDlg : public StaticDialog
-{
+class DebugInfoDlg : public StaticDialog	{
+
 public:
 	DebugInfoDlg() = default;
 
@@ -97,8 +97,8 @@ private:
 	URLCtrl _copyToClipboardLink;
 };
 
-class DoSaveOrNotBox : public StaticDialog
-{
+class DoSaveOrNotBox : public StaticDialog	{
+
 public:
 	DoSaveOrNotBox() = default;
 

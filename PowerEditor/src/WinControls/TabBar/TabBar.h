@@ -57,8 +57,8 @@ const TCHAR TABBAR_ACTIVEUNFOCUSEDINDCATOR[64] = L"Active tab unfocused indicato
 const TCHAR TABBAR_ACTIVETEXT[64] = L"Active tab text";
 const TCHAR TABBAR_INACTIVETEXT[64] = L"Inactive tabs";
 
-struct TBHDR
-{
+struct TBHDR	{
+
 	NMHDR _hdr;
 	int _tabOrigin;
 };
@@ -127,8 +127,8 @@ protected:
 };
 
 
-struct CloseButtonZone
-{
+struct CloseButtonZone	{
+
 	CloseButtonZone();
 	bool isHit(int x, int y, const RECT & tabRect, bool isVertical) const;
 	RECT getButtonRectFrom(const RECT & tabRect, bool isVertical) const;
@@ -138,8 +138,8 @@ struct CloseButtonZone
 
 
 
-class TabBarPlus : public TabBar
-{
+class TabBarPlus : public TabBar	{
+
 public :
 	TabBarPlus() = default;
 	enum tabColourIndex {
@@ -270,13 +270,13 @@ protected:
 	void drawItem(DRAWITEMSTRUCT *pDrawItemStruct);
 	void draggingCursor(POINT screenPoint);
 
-	int getTabIndexAt(const POINT & p)
-	{
+	int getTabIndexAt(const POINT & p)	{
+
 		return getTabIndexAt(p.x, p.y);
 	}
 
-	int32_t getTabIndexAt(int x, int y)
-	{
+	int32_t getTabIndexAt(int x, int y)	{
+
 		TCHITTESTINFO hitInfo;
 		hitInfo.pt.x = x;
 		hitInfo.pt.y = y;

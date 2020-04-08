@@ -105,11 +105,11 @@ static const unsigned char Latin1ClassModel[] =
 /*ASO*/  0,  3,  1,  3,  1,  1,  3,  3,
 };
 
-void  nsLatin1Prober::Reset(void)
-{
+void  nsLatin1Prober::Reset(void)	{
+
   mState = eDetecting;
   mLastCharClass = OTH;
-  for (int i = 0; i < FREQ_CAT_NUM; i++)
+  for (int i = 0; i < FREQ_CAT_NUM; ++i )
     mFreqCounter[i] = 0;
 }
 
@@ -126,8 +126,8 @@ nsProbingState nsLatin1Prober::HandleData(const char* aBuf, PRUint32 aLen)
   
   unsigned char charClass;
   unsigned char freq;
-  for (PRUint32 i = 0; i < newLen1; i++)
-  {
+  for (PRUint32 i = 0; i < newLen1; ++i )	{
+
     charClass = Latin1_CharToClass[(unsigned char)newBuf1[i]];
     freq = Latin1ClassModel[mLastCharClass*CLASS_NUM + charClass];
     if (freq == 0) {
@@ -144,20 +144,20 @@ nsProbingState nsLatin1Prober::HandleData(const char* aBuf, PRUint32 aLen)
   return mState;
 }
 
-float nsLatin1Prober::GetConfidence(void)
-{
+float nsLatin1Prober::GetConfidence(void)	{
+
   if (mState == eNotMe)
     return 0.01f;
   
   float confidence;
   PRUint32 total = 0;
-  for (PRInt32 i = 0; i < FREQ_CAT_NUM; i++)
+  for (PRInt32 i = 0; i < FREQ_CAT_NUM; ++i )
     total += mFreqCounter[i];
 
   if (!total)
     confidence = 0.0f;
-  else
-  {
+  else	{
+
     confidence = mFreqCounter[3]*1.0f / total;
     confidence -= mFreqCounter[1]*20.0f/total;
   }
@@ -173,8 +173,8 @@ float nsLatin1Prober::GetConfidence(void)
 }
 
 #ifdef DEBUG_chardet
-void  nsLatin1Prober::DumpStatus()
-{
+void  nsLatin1Prober::DumpStatus()	{
+
   printf(" Latin1Prober: %1.3f [%s]\r\n", GetConfidence(), GetCharSetName());
 }
 #endif

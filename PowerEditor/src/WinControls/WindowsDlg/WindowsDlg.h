@@ -56,8 +56,8 @@ struct NMWINDLG : public NMHDR {
 extern const UINT WDN_NOTIFY;
 
 
-class WindowsDlg : public SizeableDlg
-{
+class WindowsDlg : public SizeableDlg	{
+
 	typedef SizeableDlg MyBaseClass;
 
 public :
@@ -98,8 +98,8 @@ private:
 	virtual void init(HINSTANCE hInst, HWND parent);	
 };
 
-class WindowsMenu
-{
+class WindowsMenu	{
+
 public:
 	WindowsMenu();
 	~WindowsMenu();

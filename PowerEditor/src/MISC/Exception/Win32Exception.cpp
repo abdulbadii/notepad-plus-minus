@@ -40,8 +40,8 @@ Win32Exception::Win32Exception(EXCEPTION_POINTERS * info)
 	_location = info->ExceptionRecord->ExceptionAddress;
 	_code = info->ExceptionRecord->ExceptionCode;
 	_info = info;
-	switch (_code)
-	{
+	switch (_code)	{
+
 		case EXCEPTION_ACCESS_VIOLATION:
 			_event = "Access violation";
 			break;
@@ -54,25 +54,25 @@ Win32Exception::Win32Exception(EXCEPTION_POINTERS * info)
 	}
 }
 
-void Win32Exception::installHandler()
-{
+void Win32Exception::installHandler()	{
+
 #ifndef __MINGW32__
 	_set_se_translator(Win32Exception::translate);
 #endif
 }
 
-void  Win32Exception::removeHandler()
-{
+void  Win32Exception::removeHandler()	{
+
 #ifndef __MINGW32__
 	_set_se_translator(NULL);
 #endif
 }
 
-void Win32Exception::translate(unsigned code, EXCEPTION_POINTERS * info)
-{
+void Win32Exception::translate(unsigned code, EXCEPTION_POINTERS * info)	{
+
 	// Windows guarantees that *(info->ExceptionRecord) is valid
-	switch (code)
-	{
+	switch (code)	{
+
 		case EXCEPTION_ACCESS_VIOLATION:
 			throw Win32AccessViolation(info);
 			break;

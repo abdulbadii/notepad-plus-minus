@@ -47,16 +47,16 @@
 #define SURE_NO  0.01f
 
 //return confidence base on received data
-float CharDistributionAnalysis::GetConfidence(void)
-{ 
+float CharDistributionAnalysis::GetConfidence(void)	{
+ 
   //if we didn't receive any character in our consideration range, or the
   // number of frequent characters is below the minimum threshold, return
   // negative answer
   if (mTotalChars <= 0 || mFreqChars <= mDataThreshold)
     return SURE_NO;
 
-  if (mTotalChars != mFreqChars)
-  {
+  if (mTotalChars != mFreqChars)	{
+
     float r = mFreqChars / ((mTotalChars - mFreqChars) * mTypicalDistributionRatio);
 
     if (r < SURE_YES)

@@ -37,10 +37,10 @@
 
 INT_PTR CALLBACK AboutDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-	switch (message)
-	{
-        case WM_INITDIALOG :
-		{
+	switch (message)	{
+
+        case WM_INITDIALOG :	{
+
 			HWND compileDateHandle = ::GetDlgItem(_hSelf, IDC_BUILD_DATETIME);
 			generic_string buildTime = L"Build time : ";
 
@@ -69,8 +69,8 @@ INT_PTR CALLBACK AboutDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 			getClientRect(_rc);
 
 			ETDTProc enableDlgTheme = (ETDTProc)nppParam.getEnableThemeDlgTexture();
-			if (enableDlgTheme)
-			{
+			if (enableDlgTheme)	{
+
 				enableDlgTheme(_hSelf, ETDT_ENABLETAB);
 				redraw();
 			}
@@ -78,8 +78,8 @@ INT_PTR CALLBACK AboutDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 			return TRUE;
 		}
 
-		case WM_DRAWITEM :
-		{
+		case WM_DRAWITEM :	{
+
 			HICON hIcon = (HICON)::LoadImage(_hInst, MAKEINTRESOURCE(IDI_CHAMELEON), IMAGE_ICON, 64, 64, LR_DEFAULTSIZE);
 			//HICON hIcon = (HICON)::LoadImage(_hInst, MAKEINTRESOURCE(IDI_JESUISCHARLIE), IMAGE_ICON, 64, 64, LR_DEFAULTSIZE);
 			//HICON hIcon = (HICON)::LoadImage(_hInst, MAKEINTRESOURCE(IDI_GILETJAUNE), IMAGE_ICON, 64, 64, LR_DEFAULTSIZE);
@@ -89,10 +89,10 @@ INT_PTR CALLBACK AboutDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 			return TRUE;
 		}
 
-		case WM_COMMAND :
-		{
-			switch (wParam)
-			{
+		case WM_COMMAND :	{
+
+			switch (wParam)	{
+
 				case IDCANCEL :
 				case IDOK :
 					display(false);
@@ -103,16 +103,16 @@ INT_PTR CALLBACK AboutDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 			}
 		}
 
-		case WM_DESTROY :
-		{
+		case WM_DESTROY :	{
+
 			return TRUE;
 		}
 	}
 	return FALSE;
 }
 
-void AboutDlg::doDialog()
-{
+void AboutDlg::doDialog()	{
+
 	if (!isCreated())
 		create(IDD_ABOUTBOX);
 
@@ -123,10 +123,10 @@ void AboutDlg::doDialog()
 
 INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /*lParam*/)
 {
-	switch (message)
-	{
-		case WM_INITDIALOG:
-		{
+	switch (message)	{
+
+		case WM_INITDIALOG:	{
+
 			NppParameters& nppParam = NppParameters::getInstance();
 
 			// Notepad++ version
@@ -173,8 +173,8 @@ INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /
 			TCHAR szUBR[12] = L"0";
 
 			// NOTE: RegQueryValueExW is not guaranteed to return null-terminated strings
-			if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", 0, KEY_READ, &hKey) == ERROR_SUCCESS)
-			{
+			if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", 0, KEY_READ, &hKey) == ERROR_SUCCESS)	{
+
 				dataSize = sizeof(szProductName);
 				RegQueryValueExW(hKey, L"ProductName", NULL, NULL, reinterpret_cast<LPBYTE>(szProductName), &dataSize);
 				szProductName[sizeof(szProductName) / sizeof(TCHAR) - 1] = '\0';
@@ -188,8 +188,8 @@ INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /
 				szCurrentBuildNumber[sizeof(szCurrentBuildNumber) / sizeof(TCHAR) - 1] = '\0';
 				
 				dataSize = sizeof(DWORD);
-				if (RegQueryValueExW(hKey, L"UBR", NULL, NULL, reinterpret_cast<LPBYTE>(&dwUBR), &dataSize) == ERROR_SUCCESS)
-				{
+				if (RegQueryValueExW(hKey, L"UBR", NULL, NULL, reinterpret_cast<LPBYTE>(&dwUBR), &dataSize) == ERROR_SUCCESS)	{
+
 					generic_sprintf(szUBR, L"%u", dwUBR);
 				}
 				
@@ -197,15 +197,15 @@ INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /
 			}
 
 			// Get alternative OS information
-			if (szProductName[0] == '\0')
-			{
+			if (szProductName[0] == '\0')	{
+
 				generic_sprintf(szProductName, L"%s", (NppParameters::getInstance()).getWinVersionStr().c_str());
 			}
-			if (szCurrentBuildNumber[0] == '\0')
-			{
+			if (szCurrentBuildNumber[0] == '\0')	{
+
 				DWORD dwVersion = GetVersion();
-				if (dwVersion < 0x80000000)
-				{
+				if (dwVersion < 0x80000000)	{
+
 					generic_sprintf(szCurrentBuildNumber, L"%u", HIWORD(dwVersion));
 				}
 			}
@@ -217,15 +217,15 @@ INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /
 			_debugInfoStr += L") ";
 			_debugInfoStr += L"\r\n";
 			
-			if (szReleaseId[0] != '\0')
-			{
+			if (szReleaseId[0] != '\0')	{
+
 				_debugInfoStr += L"OS Version : ";
 				_debugInfoStr += szReleaseId;
 				_debugInfoStr += L"\r\n";
 			}
 
-			if (szCurrentBuildNumber[0] != '\0')
-			{
+			if (szCurrentBuildNumber[0] != '\0')	{
+
 				_debugInfoStr += L"OS Build : ";
 				_debugInfoStr += szCurrentBuildNumber;
 				_debugInfoStr += L".";
@@ -235,8 +235,8 @@ INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /
 
 			// Detect WINE
 			PWINEGETVERSION pWGV = (PWINEGETVERSION)GetProcAddress(GetModuleHandle(L"ntdll.dll"), "wine_get_version");
-			if (pWGV != NULL)
-			{
+			if (pWGV != NULL)	{
+
 				TCHAR szWINEVersion[32];
 				generic_sprintf(szWINEVersion, L"%hs", pWGV());
 
@@ -259,19 +259,19 @@ INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /
 			return TRUE;
 		}
 
-		case WM_COMMAND:
-		{
-			switch (wParam)
-			{
+		case WM_COMMAND:	{
+
+			switch (wParam)	{
+
 				case IDCANCEL:
 				case IDOK:
 					display(false);
 					return TRUE;
 
-				case IDC_DEBUGINFO_COPYLINK:
-				{
-					if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
-					{
+				case IDC_DEBUGINFO_COPYLINK:	{
+
+					if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)	{
+
 						// Visual effect
 						::SendDlgItemMessage(_hSelf, IDC_DEBUGINFO_EDIT, EM_SETSEL, 0, _debugInfoStr.length() - 1);
 
@@ -285,16 +285,16 @@ INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /
 			}
 		}
 
-		case WM_DESTROY:
-		{
+		case WM_DESTROY:	{
+
 			return TRUE;
 		}
 	}
 	return FALSE;
 }
 
-void DebugInfoDlg::doDialog()
-{
+void DebugInfoDlg::doDialog()	{
+
 	if (!isCreated())
 		create(IDD_DEBUGINFOBOX);
 
@@ -302,11 +302,11 @@ void DebugInfoDlg::doDialog()
 	goToCenter();
 }
 
-void DoSaveOrNotBox::doDialog(bool isRTL)
-{
+void DoSaveOrNotBox::doDialog(bool isRTL)	{
+
 	
-	if (isRTL)
-	{
+	if (isRTL)	{
+
 		DLGTEMPLATE *pMyDlgTemplate = NULL;
 		HGLOBAL hMyDlgTemplate = makeRTLResource(IDD_DOSAVEORNOTBOX, &pMyDlgTemplate);
 		::DialogBoxIndirectParam(_hInst, pMyDlgTemplate, _hParent, dlgProc, reinterpret_cast<LPARAM>(this));
@@ -316,14 +316,14 @@ void DoSaveOrNotBox::doDialog(bool isRTL)
 		::DialogBoxParam(_hInst, MAKEINTRESOURCE(IDD_DOSAVEORNOTBOX), _hParent, dlgProc, reinterpret_cast<LPARAM>(this));
 }
 
-void DoSaveOrNotBox::changeLang()
-{
+void DoSaveOrNotBox::changeLang()	{
+
 	generic_string msg;
 	generic_string defaultMessage = L"Save file \"$STR_REPLACE$\" ?";
 	NativeLangSpeaker* nativeLangSpeaker = NppParameters::getInstance().getNativeLangSpeaker();
 
-	if (nativeLangSpeaker->changeDlgLang(_hSelf, "DoSaveOrNot"))
-	{
+	if (nativeLangSpeaker->changeDlgLang(_hSelf, "DoSaveOrNot"))	{
+
 		const unsigned char len = 255;
 		TCHAR text[len];
 		::GetDlgItemText(_hSelf, IDC_DOSAVEORNOTTEX, text, len);
@@ -339,10 +339,10 @@ void DoSaveOrNotBox::changeLang()
 
 INT_PTR CALLBACK DoSaveOrNotBox::run_dlgProc(UINT message, WPARAM wParam, LPARAM /*lParam*/)
 {
-	switch (message)
-	{
-		case WM_INITDIALOG :
-		{
+	switch (message)	{
+
+		case WM_INITDIALOG :	{
+
 			changeLang();
 			::EnableWindow(::GetDlgItem(_hSelf, IDRETRY), _isMulti);
 			::EnableWindow(::GetDlgItem(_hSelf, IDIGNORE), _isMulti);
@@ -350,40 +350,40 @@ INT_PTR CALLBACK DoSaveOrNotBox::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			return TRUE;
 		}
 
-		case WM_COMMAND:
-		{
-			switch (LOWORD(wParam))
-			{
-				case IDCANCEL:
-				{
+		case WM_COMMAND:	{
+
+			switch (LOWORD(wParam))	{
+
+				case IDCANCEL:	{
+
 					::EndDialog(_hSelf, -1);
 					clickedButtonId = IDCANCEL;
 					return TRUE;
 				}
 
-				case IDYES:
-				{
+				case IDYES:	{
+
 					::EndDialog(_hSelf, 0);
 					clickedButtonId = IDYES;
 					return TRUE;
 				}
 
-				case IDNO:
-				{
+				case IDNO:	{
+
 					::EndDialog(_hSelf, 0);
 					clickedButtonId = IDNO;
 					return TRUE;
 				}
 
-				case IDIGNORE:
-				{
+				case IDIGNORE:	{
+
 					::EndDialog(_hSelf, 0);
 					clickedButtonId = IDIGNORE;
 					return TRUE;
 				}
 
-				case IDRETRY:
-				{
+				case IDRETRY:	{
+
 					::EndDialog(_hSelf, 0);
 					clickedButtonId = IDRETRY;
 					return TRUE;

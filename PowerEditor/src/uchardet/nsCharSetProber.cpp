@@ -50,14 +50,14 @@ PRBool nsCharSetProber::FilterWithoutEnglishLetters(const char* aBuf, PRUint32 a
   if (!newptr)
     return PR_FALSE;
 
-  for (curPtr = prevPtr = (char*)aBuf; curPtr < aBuf+aLen; curPtr++)
-  {
-    if (*curPtr & 0x80)
-    {
+  for (curPtr = prevPtr = (char*)aBuf; curPtr < aBuf+aLen; ++curPtr )	{
+
+    if (*curPtr & 0x80)	{
+
       meetMSB = PR_TRUE;
     }
-    else if (*curPtr < 'A' || (*curPtr > 'Z' && *curPtr < 'a') || *curPtr > 'z') 
-    {
+    else if (*curPtr < 'A' || (*curPtr > 'Z' && *curPtr < 'a') || *curPtr > 'z')	{ 
+
       //current char is a symbol, most likely a punctuation. we treat it as segment delimiter
       if (meetMSB && curPtr > prevPtr) 
       //this segment contains more than single symbol, and it has upper ASCII, we need to keep it
@@ -93,8 +93,8 @@ PRBool nsCharSetProber::FilterWithEnglishLetters(const char* aBuf, PRUint32 aLen
   if (!newptr)
     return PR_FALSE;
 
-  for (curPtr = prevPtr = (char*)aBuf; curPtr < aBuf+aLen; curPtr++)
-  {
+  for (curPtr = prevPtr = (char*)aBuf; curPtr < aBuf+aLen; ++curPtr )	{
+
     if (*curPtr == '>')
       isInTag = PR_FALSE;
     else if (*curPtr == '<')

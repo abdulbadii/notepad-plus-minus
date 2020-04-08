@@ -40,8 +40,8 @@ generic_string changeExt(generic_string fn, generic_string ext, bool forceReplac
 void goToCenter(HWND hwnd);
 
 
-class FileDialog
-{
+class FileDialog	{
+
 public:
 	FileDialog(HWND hwnd, HINSTANCE hInst);
 	~FileDialog();

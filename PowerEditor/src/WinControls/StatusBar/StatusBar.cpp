@@ -51,14 +51,14 @@ StatusBar::~StatusBar()
 }
 
 
-void StatusBar::init(HINSTANCE /*hInst*/, HWND /*hPere*/)
-{
+void StatusBar::init(HINSTANCE /*hInst*/, HWND /*hPere*/)	{
+
 	assert(false and "should never be called");
 }
 
 
-void StatusBar::init(HINSTANCE hInst, HWND hPere, int nbParts)
-{
+void StatusBar::init(HINSTANCE hInst, HWND hPere, int nbParts)	{
+
 	Window::init(hInst, hPere);
     InitCommonControls();
 
@@ -89,10 +89,10 @@ void StatusBar::init(HINSTANCE hInst, HWND hPere, int nbParts)
 }
 
 
-bool StatusBar::setPartWidth(int whichPart, int width)
-{
-	if ((size_t) whichPart < _partWidthArray.size())
-	{
+bool StatusBar::setPartWidth(int whichPart, int width)	{
+
+	if ((size_t) whichPart < _partWidthArray.size())	{
+
 		_partWidthArray[whichPart] = width;
 		return true;
 	}
@@ -101,14 +101,14 @@ bool StatusBar::setPartWidth(int whichPart, int width)
 }
 
 
-void StatusBar::destroy()
-{
+void StatusBar::destroy()	{
+
 	::DestroyWindow(_hSelf);
 }
 
 
-void StatusBar::reSizeTo(const RECT& rc)
-{
+void StatusBar::reSizeTo(const RECT& rc)	{
+
 	::MoveWindow(_hSelf, rc.left, rc.top, rc.right, rc.bottom, TRUE);
 	adjustParts(rc.right);
 	redraw();
@@ -121,14 +121,14 @@ int StatusBar::getHeight() const
 }
 
 
-void StatusBar::adjustParts(int clientWidth)
-{
+void StatusBar::adjustParts(int clientWidth)	{
+
     // Calculate the right edge coordinate for each part, and
     // copy the coordinates to the array.
     int nWidth = std::max<int>(clientWidth - 20, 0);
 
-	for (int i = static_cast<int>(_partWidthArray.size()) - 1; i >= 0; i--)
-    {
+	for (int i = static_cast<int>(_partWidthArray.size()) - 1; i >= 0; --i )	{
+
 		_lpParts[i] = nWidth;
 		nWidth -= _partWidthArray[i];
 	}
@@ -138,10 +138,10 @@ void StatusBar::adjustParts(int clientWidth)
 }
 
 
-bool StatusBar::setText(const TCHAR* str, int whichPart)
-{
-	if ((size_t) whichPart < _partWidthArray.size())
-	{
+bool StatusBar::setText(const TCHAR* str, int whichPart)	{
+
+	if ((size_t) whichPart < _partWidthArray.size())	{
+
 		if (str)// != nullptr)
 			_lastSetText = str;
 		else
@@ -154,8 +154,8 @@ bool StatusBar::setText(const TCHAR* str, int whichPart)
 }
 
 
-bool StatusBar::setOwnerDrawText(const TCHAR* str)
-{
+bool StatusBar::setOwnerDrawText(const TCHAR* str)	{
+
 	if (str != nullptr)
 		_lastSetText = str;
 	else

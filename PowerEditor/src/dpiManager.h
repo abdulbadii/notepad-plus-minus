@@ -28,8 +28,8 @@
 #ifndef DPIMANAGER_H
 #define DPIMANAGER_H
 
-class DPIManager
-{
+class DPIManager	{
+
 public:
     DPIManager() { 
 		init();
@@ -58,22 +58,22 @@ public:
     }
 
     // Scale Point from raw pixels to relative pixels.
-    void scalePoint(__inout POINT *pPoint)
-    {
+    void scalePoint(__inout POINT *pPoint)	{
+
         pPoint->x = scaleX(pPoint->x);
         pPoint->y = scaleY(pPoint->y);        
     }
 
     // Scale Size from raw pixels to relative pixels.
-    void scaleSize(__inout SIZE *pSize)
-    {
+    void scaleSize(__inout SIZE *pSize)	{
+
         pSize->cx = scaleX(pSize->cx);
         pSize->cy = scaleY(pSize->cy);		
     }
 
     // Determine if screen resolution meets minimum requirements in relative pixels.
-    bool isResolutionAtLeast(int cxMin, int cyMin) 
-    { 
+    bool isResolutionAtLeast(int cxMin, int cyMin)	{ 
+ 
         return (scaledScreenWidth() >= cxMin) && (scaledScreenHeight() >= cyMin); 
     }
 
@@ -92,8 +92,8 @@ private:
 
 	void init() {
 	    HDC hdc = GetDC(NULL);
-        if (hdc)
-        {
+        if (hdc)	{
+
             // Initialize the DPIManager member variable
             // This will correspond to the DPI setting
             // With all Windows OS's to date the X and Y DPI will be identical					
@@ -115,8 +115,8 @@ private:
     // For example, the value 120 at 120 DPI setting gets scaled down to 96		
     // X and Y versions are provided, though to date all Windows OS releases 
     // have equal X and Y scale values
-    int scaledSystemMetricY(int nIndex) 
-    {
+    int scaledSystemMetricY(int nIndex)	{ 
+
         return MulDiv(GetSystemMetrics(nIndex), 96, _dpiY); 
     }
 };

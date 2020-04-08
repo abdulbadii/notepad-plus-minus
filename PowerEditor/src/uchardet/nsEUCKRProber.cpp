@@ -37,8 +37,8 @@
 
 #include "nsEUCKRProber.h"
 
-void  nsEUCKRProber::Reset(void)
-{
+void  nsEUCKRProber::Reset(void)	{
+
   mCodingSM->Reset(); 
   mState = eDetecting;
   mDistributionAnalyser.Reset(mIsPreferredLanguage);
@@ -49,20 +49,20 @@ nsProbingState nsEUCKRProber::HandleData(const char* aBuf, PRUint32 aLen)
 {
   nsSMState codingState;
 
-  for (PRUint32 i = 0; i < aLen; i++)
-  {
+  for (PRUint32 i = 0; i < aLen; ++i )	{
+
     codingState = mCodingSM->NextState(aBuf[i]);
-    if (codingState == eItsMe)
-    {
+    if (codingState == eItsMe)	{
+
       mState = eFoundIt;
       break;
     }
-    if (codingState == eStart)
-    {
+    if (codingState == eStart)	{
+
       PRUint32 charLen = mCodingSM->GetCurrentCharLen();
 
-      if (i == 0)
-      {
+      if (i == 0)	{
+
         mLastChar[1] = aBuf[0];
         mDistributionAnalyser.HandleOneChar(mLastChar, charLen);
       }
@@ -82,8 +82,8 @@ nsProbingState nsEUCKRProber::HandleData(const char* aBuf, PRUint32 aLen)
   return mState;
 }
 
-float nsEUCKRProber::GetConfidence(void)
-{
+float nsEUCKRProber::GetConfidence(void)	{
+
   float distribCf = mDistributionAnalyser.GetConfidence();
 
   return (float)distribCf;

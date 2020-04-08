@@ -36,8 +36,8 @@
 
 
 
-class StatusBar final : public Window
-{
+class StatusBar final : public Window	{
+
 public:
 	virtual ~StatusBar();
 

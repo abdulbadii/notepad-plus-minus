@@ -29,8 +29,8 @@
 
 #include "ListView.h"
 
-class AsciiListView : public ListView
-{
+class AsciiListView : public ListView	{
+
 public:
 	void setValues(int codepage = 0);
 	void resetValues(int codepage);

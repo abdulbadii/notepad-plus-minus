@@ -32,8 +32,8 @@
 #include "Common.h"
 
 const int DEFAULT_NB_NUMBER = 2;
-class ValueDlg : public StaticDialog
-{
+class ValueDlg : public StaticDialog	{
+
 public :
         ValueDlg() = default;
         void init(HINSTANCE hInst, HWND parent, int valueToSet, const TCHAR *text);
@@ -62,8 +62,8 @@ const int buttonStatus_nada = 0;
 const int buttonStatus_fullscreen = 1;
 const int buttonStatus_postit = 2;
 
-class ButtonDlg : public StaticDialog
-{
+class ButtonDlg : public StaticDialog	{
+
 public :
     ButtonDlg() = default;
     void init(HINSTANCE hInst, HWND parent){
@@ -81,8 +81,8 @@ public :
 
     void display(bool toShow = true) const {
         int cmdToShow = toShow?SW_SHOW:SW_HIDE;
-        if (!toShow)
-        {
+        if (!toShow)	{
+
             cmdToShow = (_buttonStatus != buttonStatus_nada)?SW_SHOW:SW_HIDE; 
         }
 		::ShowWindow(_hSelf, cmdToShow);

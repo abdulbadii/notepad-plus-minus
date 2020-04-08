@@ -66,8 +66,8 @@ CReadChangesRequest::~CReadChangesRequest()
 }
 
 
-bool CReadChangesRequest::OpenDirectory()
-{
+bool CReadChangesRequest::OpenDirectory()	{
+
 	// Allow this routine to be called redundantly.
 	if (m_hDirectory)
 		return true;
@@ -84,16 +84,16 @@ bool CReadChangesRequest::OpenDirectory()
 		 | FILE_FLAG_OVERLAPPED,
 		NULL);                              // file with attributes to copy
 
-	if (m_hDirectory == INVALID_HANDLE_VALUE)
-	{
+	if (m_hDirectory == INVALID_HANDLE_VALUE)	{
+
 		return false;
 	}
 
 	return true;
 }
 
-void CReadChangesRequest::BeginRead()
-{
+void CReadChangesRequest::BeginRead()	{
+
 	DWORD dwBytes=0;
 
 	// This call needs to be reissued after every APC.
@@ -116,8 +116,8 @@ VOID CALLBACK CReadChangesRequest::NotificationCompletion(
 {
 	CReadChangesRequest* pBlock = static_cast<CReadChangesRequest*>(lpOverlapped->hEvent);
 
-	if (dwErrorCode == ERROR_OPERATION_ABORTED)
-	{
+	if (dwErrorCode == ERROR_OPERATION_ABORTED)	{
+
 		::InterlockedDecrement(&pBlock->m_pServer->m_nOutstandingRequests);
 		delete pBlock;
 		return;
@@ -138,12 +138,12 @@ VOID CALLBACK CReadChangesRequest::NotificationCompletion(
 	pBlock->ProcessNotification();
 }
 
-void CReadChangesRequest::ProcessNotification()
-{
+void CReadChangesRequest::ProcessNotification()	{
+
 	BYTE* pBase = m_BackupBuffer.data();
 
-	for (;;)
-	{
+	for (;;)	{
+
 		FILE_NOTIFY_INFORMATION& fni = (FILE_NOTIFY_INFORMATION&)*pBase;
 
 		std::wstring wstrFilename(fni.FileName, fni.FileNameLength/sizeof(wchar_t));
@@ -157,8 +157,8 @@ void CReadChangesRequest::ProcessNotification()
 		LPCWSTR wszFilename = ::PathFindFileNameW(wstrFilename.c_str());
 		int len = lstrlenW(wszFilename);
 		// The maximum length of an 8.3 filename is twelve, including the dot.
-		if (len <= 12 && wcschr(wszFilename, L'~'))
-		{
+		if (len <= 12 && wcschr(wszFilename, L'~'))	{
+
 			// Convert to the long filename form. Unfortunately, this
 			// does not work for deletions, so it's an imperfect fix.
 			wchar_t wbuf[MAX_PATH];

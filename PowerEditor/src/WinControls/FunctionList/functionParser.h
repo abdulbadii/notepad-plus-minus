@@ -31,16 +31,16 @@ class ScintillaEditView;
 class TiXmlDocument;
 class TiXmlNode;
 
-struct foundInfo final
-{
+struct foundInfo final	{
+
 	generic_string _data;
 	generic_string _data2;
 	int _pos = -1;
 	int _pos2 = -1;
 };
 
-class FunctionParser
-{
+class FunctionParser	{
+
 friend class FunctionParsersManager;
 public:
 	FunctionParser(const TCHAR *id, const TCHAR *displayName, const TCHAR *commentExpr, const generic_string& functionExpr, const std::vector<generic_string>& functionNameExprArray, const std::vector<generic_string>& classNameExprArray):
@@ -64,8 +64,8 @@ protected:
 };
 
 
-class FunctionZoneParser : public FunctionParser
-{
+class FunctionZoneParser : public FunctionParser	{
+
 public:
 	FunctionZoneParser() = delete;
 	FunctionZoneParser(const TCHAR *id, const TCHAR *displayName, const TCHAR *commentExpr, const generic_string& rangeExpr, const generic_string& openSymbole, const generic_string& closeSymbole,
@@ -87,8 +87,8 @@ private:
 
 
 
-class FunctionUnitParser : public FunctionParser
-{
+class FunctionUnitParser : public FunctionParser	{
+
 public:
 	FunctionUnitParser(const TCHAR *id, const TCHAR *displayName, const TCHAR *commentExpr,
 		const generic_string& mainExpr, const std::vector<generic_string>& functionNameExprArray,
@@ -98,8 +98,8 @@ public:
 	void parse(std::vector<foundInfo> & foundInfos, size_t begin, size_t end, ScintillaEditView **ppEditView, generic_string classStructName = L"");
 };
 
-class FunctionMixParser : public FunctionZoneParser
-{
+class FunctionMixParser : public FunctionZoneParser	{
+
 public:
 	FunctionMixParser(const TCHAR *id, const TCHAR *displayName, const TCHAR *commentExpr, const generic_string& rangeExpr, const generic_string& openSymbole, const generic_string& closeSymbole,
 		const std::vector<generic_string>& classNameExprArray, const generic_string& functionExpr, const std::vector<generic_string>& functionNameExprArray, FunctionUnitParser *funcUnitPaser):
@@ -117,8 +117,8 @@ private:
 };
 
 
-struct AssociationInfo final
-{
+struct AssociationInfo final	{
+
 	int _id;
 	int _langID;
 	generic_string _ext;
@@ -140,8 +140,8 @@ struct AssociationInfo final
 };
 
 
-class FunctionParsersManager final
-{
+class FunctionParsersManager final	{
+
 public:
 	~FunctionParsersManager();
 

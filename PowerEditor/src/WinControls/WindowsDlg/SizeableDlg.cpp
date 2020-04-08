@@ -34,8 +34,8 @@ SizeableDlg::SizeableDlg(WINRECT* pWinMap)
 {
 }
 
-BOOL SizeableDlg::onInitDialog()
-{
+BOOL SizeableDlg::onInitDialog()	{
+
 	_winMgr.InitToFitSizeFromCurrent(_hSelf);
 	_winMgr.CalcLayout(_hSelf);
 	_winMgr.SetWindowPositions(_hSelf);
@@ -43,37 +43,37 @@ BOOL SizeableDlg::onInitDialog()
 	return TRUE;
 }
 
-void SizeableDlg::onSize(UINT, int cx, int cy)
-{
+void SizeableDlg::onSize(UINT, int cx, int cy)	{
+
 	_winMgr.CalcLayout(cx,cy,_hSelf);
 	_winMgr.SetWindowPositions(_hSelf);
 }
 
-void SizeableDlg::onGetMinMaxInfo(MINMAXINFO* lpMMI)
-{
+void SizeableDlg::onGetMinMaxInfo(MINMAXINFO* lpMMI)	{
+
 	_winMgr.GetMinMaxInfo(_hSelf, lpMMI);
 }
 
-LRESULT SizeableDlg::onWinMgr(WPARAM, LPARAM)
-{
+LRESULT SizeableDlg::onWinMgr(WPARAM, LPARAM)	{
+
 	return 0;
 }
 
 INT_PTR CALLBACK SizeableDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-	switch (message)
-	{
-		case WM_INITDIALOG:
-		{
+	switch (message)	{
+
+		case WM_INITDIALOG:	{
+
 			return onInitDialog();
 		}
-		case WM_GETMINMAXINFO:
-		{
+		case WM_GETMINMAXINFO:	{
+
 			onGetMinMaxInfo((MINMAXINFO*)lParam);
 			return TRUE;
 		}
-		case WM_SIZE:
-		{
+		case WM_SIZE:	{
+
 			onSize(static_cast<UINT>(wParam), LOWORD(lParam), HIWORD(lParam));
 			return TRUE;
 		}

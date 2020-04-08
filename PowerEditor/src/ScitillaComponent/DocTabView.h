@@ -35,8 +35,8 @@ const int UNSAVED_IMG_INDEX = 1;
 const int REDONLY_IMG_INDEX = 2;
 const int MONITORING_IMG_INDEX = 3;
 
-class DocTabView : public TabBarPlus
-{
+class DocTabView : public TabBarPlus	{
+
 public :
 	DocTabView():TabBarPlus(), _pView(NULL) {};
 	virtual ~DocTabView(){};
@@ -45,8 +45,8 @@ public :
 		TabBarPlus::destroy();
 	};
 
-	void init(HINSTANCE hInst, HWND parent, ScintillaEditView * pView, IconList *pIconList = NULL)
-	{
+	void init(HINSTANCE hInst, HWND parent, ScintillaEditView * pView, IconList *pIconList = NULL)	{
+
 		TabBarPlus::init(hInst, parent);
 		_pView = pView;
 		if (pIconList)

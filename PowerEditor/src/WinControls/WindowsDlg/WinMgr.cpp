@@ -35,8 +35,8 @@ CWinMgr::~CWinMgr()
 // Set each control's tofit (desired) size to current size. Useful for
 // dialogs, to "remember" the current sizes as desired size.
 //
-void CWinMgr::InitToFitSizeFromCurrent(HWND hWnd)
-{
+void CWinMgr::InitToFitSizeFromCurrent(HWND hWnd)	{
+
 	assert(hWnd);
 	assert(m_map);
 	GetWindowPositions(hWnd);
@@ -50,8 +50,8 @@ void CWinMgr::InitToFitSizeFromCurrent(HWND hWnd)
 //////////////////
 // Load all rectangles from current window positions.
 //
-void CWinMgr::GetWindowPositions(HWND hWnd)
-{
+void CWinMgr::GetWindowPositions(HWND hWnd)	{
+
 	assert(m_map);
 	assert(hWnd);
 	for (WINRECT* wrc=m_map; !wrc->IsEnd(); ++wrc) {
@@ -103,8 +103,8 @@ CWinMgr::SetWindowPositions(HWND hWnd)
 // Count number of table entries that correspond to windows--ie,
 // that have a child window ID associated with the entry.
 //
-int CWinMgr::CountWindows()
-{
+int CWinMgr::CountWindows()	{
+
 	assert(m_map);
 	int nWin = 0;
 	for (WINRECT* w=m_map; !w->IsEnd(); ++w) {
@@ -117,8 +117,8 @@ int CWinMgr::CountWindows()
 //////////////////
 // Find the entry for a given control ID
 //
-WINRECT* CWinMgr::FindRect(int nID)
-{
+WINRECT* CWinMgr::FindRect(int nID)	{
+
 	assert(m_map);
 	for (WINRECT* w=m_map; !w->IsEnd(); ++w) {
 		if (w->GetID() == static_cast<UINT>(nID))
@@ -381,15 +381,15 @@ CWinMgr::OnGetSizeInfo(SIZEINFO& szi, WINRECT* wrc, HWND hWnd)
 //////////////////
 // Send message to parent, then window itself, to get size info.
 //
-BOOL CWinMgr::SendGetSizeInfo(SIZEINFO& szi, HWND hWnd, UINT nID)
-{
+BOOL CWinMgr::SendGetSizeInfo(SIZEINFO& szi, HWND hWnd, UINT nID)	{
+
 	NMWINMGR nmw;
 	nmw.code = NMWINMGR::GET_SIZEINFO;	// request size info
 	nmw.idFrom = nID;							// ID of child I'm computing
 	nmw.sizeinfo = szi;						// copy
 
-	if (!SendMessage(hWnd, WM_WINMGR, nID, reinterpret_cast<LPARAM>(&nmw)) && !nmw.processed)
-	{
+	if (!SendMessage(hWnd, WM_WINMGR, nID, reinterpret_cast<LPARAM>(&nmw)) && !nmw.processed)	{
+
 		HWND hwndChild = ::GetDlgItem(hWnd, nID);
 		if (!hwndChild || !::SendMessage(hwndChild, WM_WINMGR, nID, reinterpret_cast<LPARAM>(&nmw)))
 			return FALSE;
@@ -413,8 +413,8 @@ CWinMgr::GetMinMaxInfo(HWND hWnd, MINMAXINFO* lpMMI)
 //////////////////
 // Get min/max info.
 //
-void CWinMgr::GetMinMaxInfo(HWND hWnd, SIZEINFO& szi)
-{
+void CWinMgr::GetMinMaxInfo(HWND hWnd, SIZEINFO& szi)	{
+
 	OnGetSizeInfo(szi, m_map, hWnd);  // get size info
 	if (!hWnd)					 // window not created ==> done
 		return;
@@ -422,30 +422,30 @@ void CWinMgr::GetMinMaxInfo(HWND hWnd, SIZEINFO& szi)
 	// Add extra space for frame/dialog screen junk.
 	DWORD dwStyle = GetStyle(hWnd);
 	DWORD dwExStyle = GetExStyle(hWnd);
-	if (dwStyle & WS_VISIBLE)
-	{
+	if (dwStyle & WS_VISIBLE)	{
+
 		SIZE& szMin = szi.szMin; // ref!
-		if (!(dwStyle & WS_CHILD))
-		{
+		if (!(dwStyle & WS_CHILD))	{
+
 			if (dwStyle & WS_CAPTION)
 				szMin.cy += GetSystemMetrics(SM_CYCAPTION);
 			if (::GetMenu(hWnd))
 				szMin.cy += GetSystemMetrics(SM_CYMENU);
 		}
 
-		if (dwStyle & WS_THICKFRAME)
-		{
+		if (dwStyle & WS_THICKFRAME)	{
+
 			szMin.cx += 2*GetSystemMetrics(SM_CXSIZEFRAME);
 			szMin.cy += 2*GetSystemMetrics(SM_CYSIZEFRAME);
 		}
-		else if (dwStyle & WS_BORDER)
-		{
+		else if (dwStyle & WS_BORDER)	{
+
 			szMin.cx += 2*GetSystemMetrics(SM_CXBORDER);
 			szMin.cy += 2*GetSystemMetrics(SM_CYBORDER);
 		}
 
-		if (dwExStyle & WS_EX_CLIENTEDGE)
-		{
+		if (dwExStyle & WS_EX_CLIENTEDGE)	{
+
 			szMin.cx += 2*GetSystemMetrics(SM_CXEDGE);
 			szMin.cy += 2*GetSystemMetrics(SM_CYEDGE);
 		}
@@ -456,8 +456,8 @@ void CWinMgr::GetMinMaxInfo(HWND hWnd, SIZEINFO& szi)
 // Move desired rectangle by a given vector amount.
 // Call this when a sizer bar tells you it has moved.
 //
-void CWinMgr::MoveRect(WINRECT* pwrcMove, POINT ptMove, HWND pParentWnd)
-{
+void CWinMgr::MoveRect(WINRECT* pwrcMove, POINT ptMove, HWND pParentWnd)	{
+
 	assert(pwrcMove);
 	WINRECT* prev = pwrcMove->Prev();
 	assert(prev);
@@ -468,15 +468,15 @@ void CWinMgr::MoveRect(WINRECT* pwrcMove, POINT ptMove, HWND pParentWnd)
 
 	RECT& rcNext = next->GetRect();
 	RECT& rcPrev = prev->GetRect();
-	if (bIsRow)
-	{
+	if (bIsRow)	{
+
 		// a row can only be moved up or down
 		ptMove.x = 0;
 		rcPrev.bottom += ptMove.y;
 		rcNext.top += ptMove.y;
 	}
-	else
-	{
+	else	{
+
 		// a column can only be moved left or right
 		ptMove.y = 0;
 		rcPrev.right += ptMove.x;

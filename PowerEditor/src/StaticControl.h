@@ -30,8 +30,8 @@
 #define STATIC_CONTROL_H
 
 #include "Window.h"
-class StaticControl : public Window
-{
+class StaticControl : public Window	{
+
 public :
 	StaticControl() : Window() {};
 	~StaticControl(){};

@@ -38,8 +38,8 @@ HWND Notepad_plus_Window::gNppHWND = NULL;
 namespace // anonymous
 {
 
-	struct PaintLocker final
-	{
+	struct PaintLocker final	{
+
 		explicit PaintLocker(HWND handle)
 			: handle(handle)
 		{
@@ -66,8 +66,8 @@ namespace // anonymous
 
 
 
-void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLine, CmdLineParams *cmdLineParams)
-{
+void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLine, CmdLineParams *cmdLineParams)	{
+
 	time_t timestampBegin = 0;
 	if (cmdLineParams->_showLoadingTime)
 		timestampBegin = time(NULL);
@@ -88,8 +88,8 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 
 	_isPrelaunch = cmdLineParams->_isPreLaunch;
 
-	if (!::RegisterClass(&nppClass))
-	{
+	if (!::RegisterClass(&nppClass))	{
+
 		throw std::runtime_error("Notepad_plus_Window::init : RegisterClass() function failed");
 	}
 
@@ -121,12 +121,12 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 
 	gNppHWND = _hSelf;
 
-	if (cmdLineParams->isPointValid())
-	{
+	if (cmdLineParams->isPointValid())	{
+
 		::MoveWindow(_hSelf, cmdLineParams->_point.x, cmdLineParams->_point.y, nppGUI._appPos.right, nppGUI._appPos.bottom, TRUE);
 	}
-	else
-	{
+	else	{
+
 		WINDOWPLACEMENT posInfo;
 	    posInfo.length = sizeof(WINDOWPLACEMENT);
 		posInfo.flags = 0;
@@ -154,12 +154,12 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	if (!nppGUI._menuBarShow)
 		::SetMenu(_hSelf, NULL);
 
-	if (cmdLineParams->_isNoTab || (nppGUI._tabStatus & TAB_HIDE))
-	{
+	if (cmdLineParams->_isNoTab || (nppGUI._tabStatus & TAB_HIDE))	{
+
 		const int tabStatusOld = nppGUI._tabStatus;
 		::SendMessage(_hSelf, NPPM_HIDETABBAR, 0, TRUE);
-		if (cmdLineParams->_isNoTab)
-		{
+		if (cmdLineParams->_isNoTab)	{
+
 			// Restore old settings when tab bar has been hidden from tab bar.
 			nppGUI._tabStatus = tabStatusOld;
 		}
@@ -172,15 +172,15 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	if (nppGUI._rememberLastSession && !cmdLineParams->_isNoSession)
 		_notepad_plus_plus_core.loadLastSession();
 
-	if (not cmdLineParams->_isPreLaunch)
-	{
+	if (not cmdLineParams->_isPreLaunch)	{
+
 		if (cmdLineParams->isPointValid())
 			::ShowWindow(_hSelf, SW_SHOW);
 		else
 			::ShowWindow(_hSelf, nppGUI._isMaximized ? SW_MAXIMIZE : SW_SHOW);
 	}
-	else
-	{
+	else	{
+
 		_notepad_plus_plus_core._pTrayIco = new trayIconControler(_hSelf, IDI_M30ICON, IDC_MINIMIZED_TRAY, ::LoadIcon(_hInst, MAKEINTRESOURCE(IDI_M30ICON)), L"");
 		_notepad_plus_plus_core._pTrayIco->doTrayIcon(ADD);
 	}
@@ -210,13 +210,13 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	//  overriding default themes of the same name.
 
 	generic_string themeDir;
-    if (nppParams.getAppDataNppDir() && nppParams.getAppDataNppDir()[0])
-    {
+    if (nppParams.getAppDataNppDir() && nppParams.getAppDataNppDir()[0])	{
+
         themeDir = nppParams.getAppDataNppDir();
 	    PathAppend(themeDir, L"themes\\");
 	    _notepad_plus_plus_core.getMatchedFileNames(themeDir.c_str(), patterns, fileNames, false, false);
-	    for (size_t i = 0, len = fileNames.size() ; i < len ; ++i)
-	    {
+	    for (size_t i = 0, len = fileNames.size() ; i < len ; ++i)	{
+
 		    themeSwitcher.addThemeFromXml(fileNames[i]);
 	    }
     }
@@ -226,11 +226,11 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	themeDir = nppDir.c_str(); // <- should use the pointer to avoid the constructor of copy
 	PathAppend(themeDir, L"themes\\");
 	_notepad_plus_plus_core.getMatchedFileNames(themeDir.c_str(), patterns, fileNames, false, false);
-	for (size_t i = 0, len = fileNames.size(); i < len ; ++i)
-	{
+	for (size_t i = 0, len = fileNames.size(); i < len ; ++i)	{
+
 		generic_string themeName( themeSwitcher.getThemeFromXmlFileName(fileNames[i].c_str()) );
-		if (! themeSwitcher.themeNameExists(themeName.c_str()) )
-		{
+		if (! themeSwitcher.themeNameExists(themeName.c_str()) )	{
+
 			themeSwitcher.addThemeFromXml(fileNames[i]);
 		}
 	}
@@ -241,8 +241,8 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 
 	// Launch folder as workspace after all this dockable panel being restored from the last session
 	// To avoid dockable panel toggle problem.
-	if (cmdLineParams->_openFoldersAsWorkspace)
-	{
+	if (cmdLineParams->_openFoldersAsWorkspace)	{
+
 		_notepad_plus_plus_core.launchFileBrowser(fns, true);
 	}
 
@@ -255,16 +255,16 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 
 /* 	if (!cmdLineParams->_easterEggName.empty())
 	{
-		if (cmdLineParams->_quoteType == 0) // Easter Egg Name
-		{
+		if (cmdLineParams->_quoteType == 0)	{ // Easter Egg Name
+
 			int iQuote = _notepad_plus_plus_core.getQuoteIndexFrom(cmdLineParams->_easterEggName.c_str());
-			if (iQuote != -1)
-			{
+			if (iQuote != -1)	{
+
 				_notepad_plus_plus_core.showQuoteFromIndex(iQuote);
 			}
 		}
-		else if (cmdLineParams->_quoteType == 1) // command line quote
-		{
+		else if (cmdLineParams->_quoteType == 1)	{ // command line quote
+
 			_userQuote = cmdLineParams->_easterEggName;
 			_quoteParams.reset();
 			_quoteParams._quote = _userQuote.c_str();
@@ -280,15 +280,15 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 
 			_notepad_plus_plus_core.showQuote(&_quoteParams);
 		}
-		else if (cmdLineParams->_quoteType == 2) // content drom file
-		{
-			if (::PathFileExists(cmdLineParams->_easterEggName.c_str()))
-			{
+		else if (cmdLineParams->_quoteType == 2)	{ // content drom file
+
+			if (::PathFileExists(cmdLineParams->_easterEggName.c_str()))	{
+
 				std::string content = getFileContent(cmdLineParams->_easterEggName.c_str());
 				WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 				_userQuote = wmc.char2wchar(content.c_str(), SC_CP_UTF8);
-				if (!_userQuote.empty())
-				{
+				if (!_userQuote.empty())	{
+
 					_quoteParams.reset();
 					_quoteParams._quote = _userQuote.c_str();
 					_quoteParams._quoter = L"Anonymous #999";
@@ -307,8 +307,8 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 		}
 	}
  */
-	if (cmdLineParams->_showLoadingTime)
-	{
+	if (cmdLineParams->_showLoadingTime)	{
+
 		time_t timestampEnd = time(NULL);
 		double loadTime = difftime(timestampEnd, timestampBegin);
 
@@ -318,8 +318,8 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	}
 
 	bool isSnapshotMode = nppGUI.isSnapshotMode();
-	if (isSnapshotMode)
-	{
+	if (isSnapshotMode)	{
+
 		_notepad_plus_plus_core.checkModifiedDocument(false);
 		// Lauch backup task
 		_notepad_plus_plus_core.launchDocumentBackupTask();
@@ -338,8 +338,8 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 
 bool Notepad_plus_Window::isDlgsMsg(MSG *msg) const
 {
-	for (size_t i = 0, len = _notepad_plus_plus_core._hModelessDlgs.size(); i < len; ++i)
-	{
+	for (size_t i = 0, len = _notepad_plus_plus_core._hModelessDlgs.size(); i < len; ++i)	{
+
 		if (_notepad_plus_plus_core.processIncrFindAccel(msg))
 			return true;
 

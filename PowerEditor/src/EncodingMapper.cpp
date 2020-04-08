@@ -83,20 +83,20 @@ static EncodingUnit encodings[] = {
     {20866, "koi8_r csKOI8R"}                                                                   //IDM_FORMAT_KOI8R_CYRILLIC
 };
 
-bool isInListA(const char *token, const char *list)
-{
+bool isInListA(const char *token, const char *list)	{
+
 	if ((!token) || (!list))
 		return false;
 
 	char word[64];
 	size_t i = 0;
 	size_t j = 0;
-	for (size_t len = strlen(list); i <= len; ++i)
-	{
-		if ((list[i] == ' ')||(list[i] == '\0'))
-		{
-			if (j != 0)
-			{
+	for (size_t len = strlen(list); i <= len; ++i)	{
+
+		if ((list[i] == ' ')||(list[i] == '\0'))	{
+
+			if (j != 0)	{
+
 				word[j] = '\0';
 				j = 0;
 				
@@ -104,8 +104,8 @@ bool isInListA(const char *token, const char *list)
 					return true;
 			}
 		}
-		else 
-		{
+		else	{ 
+
 			word[j] = list[i];
 			++j;
 		}
@@ -128,10 +128,10 @@ int EncodingMapper::getIndexFromEncoding(int encoding) const
 	int i = 0;
 	if (encoding == -1)
 		return -1;
-	for ( ; i < nbItem; ++i)
-	{
-		if (encodings[i]._codePage == encoding)
-		{
+	for ( ; i < nbItem; ++i)	{
+
+		if (encodings[i]._codePage == encoding)	{
+
 			found = true;
 			break;
 		}
@@ -146,10 +146,10 @@ int EncodingMapper::getEncodingFromString(const char *encodingAlias) const
 
 	size_t nbItem = sizeof(encodings)/sizeof(EncodingUnit);
 	int enc = -1;
-	for (size_t i = 0 ; i < nbItem ; ++i)
-	{
-		if (isInListA(encodingAlias, encodings[i]._aliasList))
-		{
+	for (size_t i = 0 ; i < nbItem ; ++i)	{
+
+		if (isInListA(encodingAlias, encodings[i]._aliasList))	{
+
 			enc = encodings[i]._codePage;
 			break;
 		}

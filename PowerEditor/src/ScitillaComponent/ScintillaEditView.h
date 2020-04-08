@@ -189,8 +189,8 @@ struct LanguageName {
 
 class ISorter;
 
-class ScintillaEditView : public Window
-{
+class ScintillaEditView : public Window	{
+
 friend class Finder;
 public:
 	ScintillaEditView(): Window() {
@@ -201,14 +201,14 @@ public:
 	{
 		--_refCount;
 
-		if ((!_refCount)&&(_hLib))
-		{
+		if ((!_refCount)&&(_hLib))	{
+
 			::FreeLibrary(_hLib);
 
-			for (BufferStyleMap::iterator it(_hotspotStyles.begin()); it != _hotspotStyles.end(); ++it )
-			{
-				for (StyleMap::iterator it2(it->second->begin()) ; it2 != it->second->end() ; ++it2)
-				{
+			for (BufferStyleMap::iterator it(_hotspotStyles.begin()); it != _hotspotStyles.end(); ++it )	{
+
+				for (StyleMap::iterator it2(it->second->begin()) ; it2 != it->second->end() ; ++it2)	{
+
 					delete [] it2->second._fontName;
 				}
 				delete it->second;
@@ -326,8 +326,8 @@ public:
     void showMargin(int whichMarge, bool willBeShowed = true) {
         if (whichMarge == _SC_MARGE_LINENUMBER)
 			showLineNumbersMargin(willBeShowed);
-        else
-		{
+        else	{
+
 			int width = 3;
 			if (whichMarge == _SC_MARGE_SYBOLE)
 				width = NppParameters::getInstance()._dpiManager.scaleX(100) >= 150 ? 20 : 16;
@@ -346,13 +346,13 @@ public:
 
     void setMakerStyle(folderStyle style) {
 		bool display;
-		if (style == FOLDER_STYLE_NONE)
-		{
+		if (style == FOLDER_STYLE_NONE)	{
+
 			style = FOLDER_STYLE_BOX;
 			display = false;
 		}
-		else
-		{
+		else	{
+
 			display = true;
 		}
 
@@ -499,8 +499,8 @@ public:
 
 	void setLineIndent(int line, int indent) const;
 
-	void showLineNumbersMargin(bool show)
-	{
+	void showLineNumbersMargin(bool show)	{
+
 		if (show == _lineNumbersShown) return;
 		_lineNumbersShown = show;
 		if (show)
@@ -600,14 +600,14 @@ public:
 		static Sci_CharacterRange previousSelRange = getSelection();
 		Sci_CharacterRange currentSelRange = getSelection();
 
-		if (currentSelRange.cpMin == currentSelRange.cpMax)
-		{
+		if (currentSelRange.cpMin == currentSelRange.cpMax)	{
+
 			previousSelRange = currentSelRange;
 			return false;
 		}
 
-		if ((previousSelRange.cpMin == currentSelRange.cpMin) || (previousSelRange.cpMax == currentSelRange.cpMax))
-		{
+		if ((previousSelRange.cpMin == currentSelRange.cpMin) || (previousSelRange.cpMax == currentSelRange.cpMax))	{
+
 			previousSelRange = currentSelRange;
 			return true;
 		}
@@ -995,8 +995,8 @@ protected:
 	};
 
 	bool isNeededFolderMarge(LangType typeDoc) const {
-		switch (typeDoc)
-		{
+		switch (typeDoc)	{
+
 			case L_ASCII:
 			case L_BATCH:
 			case L_TEXT:
@@ -1022,8 +1022,8 @@ protected:
 	};
 
 	int codepage2CharSet() const {
-		switch (_codepage)
-		{
+		switch (_codepage)	{
+
 			case CP_CHINESE_TRADITIONAL : return SC_CHARSET_CHINESEBIG5;
 			case CP_CHINESE_SIMPLIFIED : return SC_CHARSET_GB2312;
 			case CP_KOREAN : return SC_CHARSET_HANGUL;

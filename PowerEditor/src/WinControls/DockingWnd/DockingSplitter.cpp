@@ -44,10 +44,10 @@ static HHOOK	hookMouse		= NULL;
 
 static LRESULT CALLBACK hookProcMouse(int nCode, WPARAM wParam, LPARAM lParam)
 {
-    if (nCode >= 0)
-    {
-		switch (wParam)
-		{
+    if (nCode >= 0)	{
+
+		switch (wParam)	{
+
 			case WM_MOUSEMOVE:
 			case WM_NCMOUSEMOVE:
 				::PostMessage(hWndMouse, static_cast<UINT>(wParam), 0, 0);
@@ -66,22 +66,22 @@ static LRESULT CALLBACK hookProcMouse(int nCode, WPARAM wParam, LPARAM lParam)
 	return ::CallNextHookEx(hookMouse, nCode, wParam, lParam);
 }
 
-void DockingSplitter::init(HINSTANCE hInst, HWND hWnd, HWND hMessage, UINT flags)
-{
+void DockingSplitter::init(HINSTANCE hInst, HWND hWnd, HWND hMessage, UINT flags)	{
+
 	Window::init(hInst, hWnd);
 	_hMessage = hMessage;
 	_flags = flags;
 
 	WNDCLASS wc;
 
-	if (flags & DMS_HORIZONTAL)
-	{
+	if (flags & DMS_HORIZONTAL)	{
+
 		//double sided arrow pointing north-south as cursor
 		wc.hCursor			= ::LoadCursor(NULL,IDC_SIZENS);
 		wc.lpszClassName	= L"nsdockspliter";
 	}
-	else
-	{
+	else	{
+
 		// double sided arrow pointing east-west as cursor
 		wc.hCursor			= ::LoadCursor(NULL,IDC_SIZEWE);
 		wc.lpszClassName	= L"wedockspliter";
@@ -99,16 +99,16 @@ void DockingSplitter::init(HINSTANCE hInst, HWND hWnd, HWND hMessage, UINT flags
 		wc.hbrBackground = (HBRUSH)(COLOR_3DFACE+1);
 		wc.lpszMenuName = NULL;
 
-		if (!::RegisterClass(&wc))
-		{
+		if (!::RegisterClass(&wc))	{
+
 			throw std::runtime_error("DockingSplitter::init : RegisterClass() function failed");
 		}
-		else if (flags & DMS_HORIZONTAL)
-		{
+		else if (flags & DMS_HORIZONTAL)	{
+
 			_isHoriReg	= TRUE;
 		}
-		else
-		{
+		else	{
+
 			_isVertReg	= TRUE;
 		}
 	}
@@ -118,8 +118,8 @@ void DockingSplitter::init(HINSTANCE hInst, HWND hWnd, HWND hMessage, UINT flags
 								CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 								_hParent, NULL, _hInst, (LPVOID)this);
 
-	if (!_hSelf)
-	{
+	if (!_hSelf)	{
+
 		throw std::runtime_error("DockingSplitter::init : CreateWindowEx() function return null");
 	}
 }
@@ -129,8 +129,8 @@ void DockingSplitter::init(HINSTANCE hInst, HWND hWnd, HWND hMessage, UINT flags
 LRESULT CALLBACK DockingSplitter::staticWinProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	DockingSplitter *pDockingSplitter = NULL;
-	switch (message)
-	{
+	switch (message)	{
+
 		case WM_NCCREATE :
 			pDockingSplitter = reinterpret_cast<DockingSplitter *>(reinterpret_cast<LPCREATESTRUCT>(lParam)->lpCreateParams);
 			pDockingSplitter->_hSelf = hwnd;
@@ -146,23 +146,23 @@ LRESULT CALLBACK DockingSplitter::staticWinProc(HWND hwnd, UINT message, WPARAM 
 }
 
 
-LRESULT DockingSplitter::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	switch (message)
-	{
-		case WM_LBUTTONDOWN:
-		{
+LRESULT DockingSplitter::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)	{
+
+	switch (message)	{
+
+		case WM_LBUTTONDOWN:	{
+
 			hWndMouse = hwnd;
 			hookMouse = ::SetWindowsHookEx(WH_MOUSE_LL, hookProcMouse, _hInst, 0);
-			if (!hookMouse)
-			{
+			if (!hookMouse)	{
+
 				DWORD dwError = ::GetLastError();
 				TCHAR  str[128];
 				::wsprintf(str, L"GetLastError() returned %lu", dwError);
 				::MessageBox(NULL, str, L"SetWindowsHookEx(MOUSE) failed on runProc", MB_OK | MB_ICONERROR);
 			}
-			else
-			{
+			else	{
+
 				::SetCapture(_hSelf);
 				::GetCursorPos(&_ptOldPos);
 				_isLeftButtonDown = TRUE;
@@ -171,11 +171,11 @@ LRESULT DockingSplitter::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 			break;
 		}
 		case WM_LBUTTONUP:
-		case WM_NCLBUTTONUP:
-		{
+		case WM_NCLBUTTONUP:	{
+
 			/* end hooking */
-			if (hookMouse)
-			{
+			if (hookMouse)	{
+
 				::UnhookWindowsHookEx(hookMouse);
 				::ReleaseCapture();
 				hookMouse = NULL;
@@ -184,20 +184,20 @@ LRESULT DockingSplitter::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 			break;
 		}
 		case WM_MOUSEMOVE:
-		case WM_NCMOUSEMOVE:
-		{
-			if (_isLeftButtonDown == TRUE)
-			{
+		case WM_NCMOUSEMOVE:	{
+
+			if (_isLeftButtonDown == TRUE)	{
+
 				POINT	pt;
 
 				::GetCursorPos(&pt);
 
-				if ((_flags & DMS_HORIZONTAL) && (_ptOldPos.y != pt.y))
-				{
+				if ((_flags & DMS_HORIZONTAL) && (_ptOldPos.y != pt.y))	{
+
 					::SendMessage(_hMessage, DMM_MOVE_SPLITTER, _ptOldPos.y - pt.y, reinterpret_cast<LPARAM>(_hSelf));
 				}
-				else if (_ptOldPos.x != pt.x)
-				{
+				else if (_ptOldPos.x != pt.x)	{
+
 					::SendMessage(_hMessage, DMM_MOVE_SPLITTER, _ptOldPos.x - pt.x, reinterpret_cast<LPARAM>(_hSelf));
 				}
 				_ptOldPos = pt;

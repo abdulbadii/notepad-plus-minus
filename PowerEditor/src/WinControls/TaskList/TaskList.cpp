@@ -32,8 +32,8 @@
 #include "ImageListSet.h"
 #include "Parameters.h"
 
-void TaskList::init(HINSTANCE hInst, HWND parent, HIMAGELIST hImaLst, int nbItem, int index2set)
-{
+void TaskList::init(HINSTANCE hInst, HWND parent, HIMAGELIST hImaLst, int nbItem, int index2set)	{
+
 	Window::init(hInst, parent);
 
 	_currentIndex = index2set;
@@ -63,8 +63,8 @@ void TaskList::init(HINSTANCE hInst, HWND parent, HIMAGELIST hImaLst, int nbItem
                                 NULL, 
                                 hInst,
                                 NULL);
-	if (!_hSelf)
-	{
+	if (!_hSelf)	{
+
 		throw std::runtime_error("TaskList::init : CreateWindowEx() function return null");
 	}
 
@@ -90,8 +90,8 @@ void TaskList::init(HINSTANCE hInst, HWND parent, HIMAGELIST hImaLst, int nbItem
 	ListView_SetBkColor(_hSelf, lightYellow);
 }
 
-void TaskList::destroy()
-{
+void TaskList::destroy()	{
+
 	if (_hFont)
 		DeleteObject(_hFont);
 	if (_hFontSelected)
@@ -100,8 +100,8 @@ void TaskList::destroy()
 	_hSelf = NULL;
 }
 
-RECT TaskList::adjustSize()
-{
+RECT TaskList::adjustSize()	{
+
 	RECT rc;
 	ListView_GetItemRect(_hSelf, 0, &rc, LVIR_ICON);
 	const int imgWidth = rc.right - rc.left;
@@ -114,8 +114,8 @@ RECT TaskList::adjustSize()
 
 	_rc = { 0, 0, 0, 0 };
 	TCHAR buf[MAX_PATH];
-	for (int i = 0 ; i < _nbItem ; ++i)
-	{
+	for (int i = 0 ; i < _nbItem ; ++i)	{
+
 		ListView_GetItemText(_hSelf, i, 0, buf, MAX_PATH);
 		int width = ListView_GetStringWidth(_hSelf, buf);
 		if (width > maxwidth)
@@ -128,8 +128,8 @@ RECT TaskList::adjustSize()
 	::SendMessage(_hSelf, WM_SETFONT, reinterpret_cast<WPARAM>(_hFont), 0);
 
 	//if the tasklist exceeds the height of the display, leave some space at the bottom
-	if (_rc.bottom > ::GetSystemMetrics(SM_CYSCREEN) - 120)
-	{
+	if (_rc.bottom > ::GetSystemMetrics(SM_CYSCREEN) - 120)	{
+
 		_rc.bottom = ::GetSystemMetrics(SM_CYSCREEN) - 120;
 	}
 	reSizeTo(_rc);
@@ -139,8 +139,8 @@ RECT TaskList::adjustSize()
 	return _rc;
 }
 
-void TaskList::setFont(const TCHAR *fontName, int fontSize)
-{
+void TaskList::setFont(const TCHAR *fontName, int fontSize)	{
+
 	if (_hFont)
 		::DeleteObject(_hFont);
 	if (_hFontSelected)
@@ -162,13 +162,13 @@ void TaskList::setFont(const TCHAR *fontName, int fontSize)
 		::SendMessage(_hSelf, WM_SETFONT, reinterpret_cast<WPARAM>(_hFont), 0);
 }
 
-int TaskList::updateCurrentIndex()
-{
-	for (int i = 0 ; i < _nbItem ; ++i)
-	{
+int TaskList::updateCurrentIndex()	{
+
+	for (int i = 0 ; i < _nbItem ; ++i)	{
+
 		int isSelected = ListView_GetItemState(_hSelf, i, LVIS_SELECTED);
-		if (isSelected == LVIS_SELECTED)
-		{
+		if (isSelected == LVIS_SELECTED)	{
+
 			_currentIndex = i;
 			return _currentIndex;
 		}
@@ -176,24 +176,24 @@ int TaskList::updateCurrentIndex()
 	return _currentIndex;
 }
 
-LRESULT TaskList::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
-{
-	switch (Message)
-	{
-		case WM_KEYUP:
-		{
-			if (wParam == VK_CONTROL)
-			{
+LRESULT TaskList::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)	{
+
+	switch (Message)	{
+
+		case WM_KEYUP:	{
+
+			if (wParam == VK_CONTROL)	{
+
 				::SendMessage(_hParent, WM_COMMAND, ID_PICKEDUP, _currentIndex);
 			}
 		}
 		return TRUE;
 
-		case WM_MOUSEWHEEL :
-		{
+		case WM_MOUSEWHEEL :	{
+
 			short zDelta = (short) HIWORD(wParam);
-			if (zDelta > 0)
-			{
+			if (zDelta > 0)	{
+
 				int32_t selected = (_currentIndex - 1) < 0 ? (_nbItem - 1) : (_currentIndex - 1);
 				ListView_SetItemState(_hSelf, _currentIndex, 0, LVIS_SELECTED|LVIS_FOCUSED);
 				// tells what item(s) to be repainted
@@ -207,8 +207,8 @@ LRESULT TaskList::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 				UpdateWindow(_hSelf);              
 				_currentIndex = selected;
 			}
-			else
-			{
+			else	{
+
 				int32_t selected = (_currentIndex + 1) > (_nbItem - 1) ? 0 : (_currentIndex + 1);
 				ListView_SetItemState(_hSelf, _currentIndex, 0, LVIS_SELECTED|LVIS_FOCUSED);
 				// tells what item(s) to be repainted
@@ -226,20 +226,20 @@ LRESULT TaskList::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 			return TRUE;
 		}
 
-		case WM_KEYDOWN :
-		{
+		case WM_KEYDOWN :	{
+
 			return TRUE;
 		}
 		
 
-		case WM_GETDLGCODE :
-		{
+		case WM_GETDLGCODE :	{
+
 			MSG *msg = (MSG*)lParam;
 
-			if ( msg != NULL)
-			{
-				if ((msg->message == WM_KEYDOWN) && (0x80 & GetKeyState(VK_CONTROL)))
-				{
+			if ( msg != NULL)	{
+
+				if ((msg->message == WM_KEYDOWN) && (0x80 & GetKeyState(VK_CONTROL)))	{
+
 					// Shift+Tab is cool but I think VK_UP and VK_LEFT are also cool :-)
 					if (((msg->wParam == VK_TAB) && (0x80 & GetKeyState(VK_SHIFT))) ||
 					    (msg->wParam == VK_UP))
@@ -258,8 +258,8 @@ LRESULT TaskList::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 						_currentIndex = selected;
 					}
 					// VK_DOWN and VK_RIGHT do the same as VK_TAB does
-					else if ((msg->wParam == VK_TAB) || (msg->wParam == VK_DOWN))
-					{
+					else if ((msg->wParam == VK_TAB) || (msg->wParam == VK_DOWN))	{
+
 						int32_t selected = (_currentIndex + 1) > (_nbItem - 1) ? 0 : (_currentIndex + 1);
 						ListView_SetItemState(_hSelf, _currentIndex, 0, LVIS_SELECTED|LVIS_FOCUSED);
 						// tells what item(s) to be repainted
@@ -275,8 +275,8 @@ LRESULT TaskList::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 					}
 					ListView_EnsureVisible(_hSelf, _currentIndex, true);
 				}
-				else
-				{
+				else	{
+
 					return TRUE;
 				}
 			}

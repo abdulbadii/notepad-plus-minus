@@ -32,8 +32,8 @@
 #include "Window.h"
 #include "Common.h"
 
-struct DlgInfo
-{
+struct DlgInfo	{
+
     Window *_dlg;
     generic_string _name;
 	generic_string _internalName;
@@ -44,8 +44,8 @@ struct DlgInfo
 typedef std::vector<DlgInfo> WindowVector;
 
 
-class ControlsTab final : public TabBar
-{
+class ControlsTab final : public TabBar	{
+
 public :
 	ControlsTab() = default;
 	virtual ~ControlsTab() = default;
@@ -58,16 +58,16 @@ public :
 
 	void createTabs(WindowVector & winVector);
 
-	void destroy()
-	{
+	void destroy()	{
+
 		TabBar::destroy();
 	}
 
 	virtual void reSizeTo(RECT & rc);
 	void activateWindowAt(int index);
 
-	void clickedUpdate()
-	{
+	void clickedUpdate()	{
+
 		int indexClicked = int(::SendMessage(_hSelf, TCM_GETCURSEL, 0, 0));
 		activateWindowAt(indexClicked);
 	};

@@ -104,8 +104,8 @@ static BYTE ANDMask[128] =
 
 
 
-void URLCtrl::create(HWND itemHandle, const TCHAR * link, COLORREF linkColor)
-{
+void URLCtrl::create(HWND itemHandle, const TCHAR * link, COLORREF linkColor)	{
+
 	// turn on notify style
     ::SetWindowLongPtr(itemHandle, GWL_STYLE, ::GetWindowLongPtr(itemHandle, GWL_STYLE) | SS_NOTIFY);
 
@@ -128,8 +128,8 @@ void URLCtrl::create(HWND itemHandle, const TCHAR * link, COLORREF linkColor)
 	// save hwnd
 	_hSelf = itemHandle;
 }
-void URLCtrl::create(HWND itemHandle, int cmd, HWND msgDest)
-{
+void URLCtrl::create(HWND itemHandle, int cmd, HWND msgDest)	{
+
 	// turn on notify style
     ::SetWindowLongPtr(itemHandle, GWL_STYLE, ::GetWindowLongPtr(itemHandle, GWL_STYLE) | SS_NOTIFY);
 
@@ -149,34 +149,34 @@ void URLCtrl::create(HWND itemHandle, int cmd, HWND msgDest)
 	_hSelf = itemHandle;
 }
 
-void URLCtrl::destroy()
-{
+void URLCtrl::destroy()	{
+
     	if (_hfUnderlined)
             ::DeleteObject(_hfUnderlined);
         if (_hCursor)
             ::DestroyCursor(_hCursor);
 }
 
-void URLCtrl::action()
-{
-	if (_cmdID)
-	{
+void URLCtrl::action()	{
+
+	if (_cmdID)	{
+
 		::SendMessage(_msgDest?_msgDest:_hParent, WM_COMMAND, _cmdID, 0);
 	}
-	else
-	{
+	else	{
+
 		_linkColor = _visitedColor;
 
 		::InvalidateRect(_hSelf, 0, 0);
 		::UpdateWindow(_hSelf);
 
 		// Open a browser
-		if (_URL != L"")
-		{
+		if (_URL != L"")	{
+
 			::ShellExecute(NULL, L"open", _URL.c_str(), NULL, NULL, SW_SHOWNORMAL);
 		}
-		else
-		{
+		else	{
+
 			TCHAR szWinText[MAX_PATH];
 			::GetWindowText(_hSelf, szWinText, MAX_PATH);
 			::ShellExecute(NULL, L"open", szWinText, NULL, NULL, SW_SHOWNORMAL);
@@ -184,10 +184,10 @@ void URLCtrl::action()
 	}
 }
 
-LRESULT URLCtrl::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
-{
-    switch(Message)
-    {
+LRESULT URLCtrl::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)	{
+
+    switch(Message)	{
+
 	    // Free up the structure we allocated
 	    case WM_NCDESTROY:
 		    //HeapFree(GetProcessHeap(), 0, url);
@@ -195,8 +195,8 @@ LRESULT URLCtrl::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 
 	    // Paint the static control using our custom
 	    // colours, and with an underline text style
-	    case WM_PAINT:
-        {
+	    case WM_PAINT:	{
+
 			DWORD dwStyle = static_cast<DWORD>(::GetWindowLongPtr(hwnd, GWL_STYLE));
 		    DWORD dwDTStyle = DT_SINGLELINE;
 
@@ -216,8 +216,8 @@ LRESULT URLCtrl::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
             ::SetBkColor(hdc, getCtrlBgColor(GetParent(hwnd))); ///*::GetSysColor(COLOR_3DFACE)*/);
 
 		    // Create an underline font
-		    if (_hfUnderlined == 0)
-		    {
+		    if (_hfUnderlined == 0)	{
+
 			    // Get the default GUI font
 			    LOGFONT lf;
                 HFONT hf = (HFONT)::GetStockObject(DEFAULT_GUI_FONT);
@@ -244,16 +244,16 @@ LRESULT URLCtrl::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 		    return 0;
         }
 
-	    case WM_SETTEXT:
-        {
+	    case WM_SETTEXT:	{
+
             LRESULT ret = ::CallWindowProc(_oldproc, hwnd, Message, wParam, lParam);
             ::InvalidateRect(hwnd, 0, 0);
             return ret;
         }
 	    // Provide a hand cursor when the mouse moves over us
 	    //case WM_SETCURSOR:
-        case WM_MOUSEMOVE:
-        {
+        case WM_MOUSEMOVE:	{
+
             if (_hCursor == 0)
                 _hCursor = ::CreateCursor(::GetModuleHandle(0), 5, 2, 32, 32, XORMask, ANDMask);
 
@@ -266,8 +266,8 @@ LRESULT URLCtrl::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 		    break;
 
 	    case WM_LBUTTONUP:
-		    if (_clicking)
-		    {
+		    if (_clicking)	{
+
 			    _clicking = false;
 
 				action();
@@ -282,8 +282,8 @@ LRESULT URLCtrl::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case WM_KEYUP:
-			if (wParam == VK_SPACE && _clicking)
-			{
+			if (wParam == VK_SPACE && _clicking)	{
+
 				_clicking = false;
 
 				action();

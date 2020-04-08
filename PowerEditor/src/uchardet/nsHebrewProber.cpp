@@ -115,21 +115,21 @@ nsProbingState nsHebrewProber::HandleData(const char* aBuf, PRUint32 aLen)
   const char *curPtr, *endPtr = aBuf+aLen;
   char cur;
 
-  for (curPtr = (char*)aBuf; curPtr < endPtr; ++curPtr)
-  {
+  for (curPtr = (char*)aBuf; curPtr < endPtr; ++curPtr)	{
+
     cur = *curPtr;
-    if (cur == ' ') // We stand on a space - a word just ended
-    {
-      if (mBeforePrev != ' ') // *(curPtr-2) was not a space so prev is not a 1 letter word
-      {
+    if (cur == ' ')	{ // We stand on a space - a word just ended
+
+      if (mBeforePrev != ' ')	{ // *(curPtr-2) was not a space so prev is not a 1 letter word
+
         if (isFinal(mPrev)) // case (1) [-2:not space][-1:final letter][cur:space]
           ++mFinalCharLogicalScore;
         else if (isNonFinal(mPrev)) // case (2) [-2:not space][-1:Non-Final letter][cur:space]
           ++mFinalCharVisualScore;
       }
     }
-    else  // Not standing on a space
-    {
+    else	{  // Not standing on a space
+
       if ((mBeforePrev == ' ') && (isFinal(mPrev)) && (cur != ' ')) // case (3) [-2:space][-1:final letter][cur:not space]
         ++mFinalCharVisualScore;
     }
@@ -142,8 +142,8 @@ nsProbingState nsHebrewProber::HandleData(const char* aBuf, PRUint32 aLen)
 }
 
 // Make the decision: is it Logical or Visual?
-const char* nsHebrewProber::GetCharSetName()
-{
+const char* nsHebrewProber::GetCharSetName()	{
+
   // If the final letter score distance is dominant enough, rely on it.
   PRInt32 finalsub = mFinalCharLogicalScore - mFinalCharVisualScore;
   if (finalsub >= MIN_FINAL_CHAR_DISTANCE) 
@@ -167,8 +167,8 @@ const char* nsHebrewProber::GetCharSetName()
 }
 
 
-void nsHebrewProber::Reset(void)
-{
+void nsHebrewProber::Reset(void)	{
+
   mFinalCharLogicalScore = 0;
   mFinalCharVisualScore = 0;
 
@@ -187,8 +187,8 @@ nsProbingState nsHebrewProber::GetState(void)
 }
 
 #ifdef DEBUG_chardet
-void  nsHebrewProber::DumpStatus()
-{
+void  nsHebrewProber::DumpStatus()	{
+
   printf("  HEB: %d - %d [Logical-Visual score]\r\n", mFinalCharLogicalScore, mFinalCharVisualScore);
 }
 #endif

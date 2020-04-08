@@ -128,8 +128,8 @@ const PRUint8 jp2CharContext[83][83] =
 
 #define MINIMUM_DATA_THRESHOLD  4
 
-void JapaneseContextAnalysis::HandleData(const char* aBuf, PRUint32 aLen)
-{
+void JapaneseContextAnalysis::HandleData(const char* aBuf, PRUint32 aLen)	{
+
   PRUint32 charLen;
   PRInt32 order;
   PRUint32 i;
@@ -143,21 +143,21 @@ void JapaneseContextAnalysis::HandleData(const char* aBuf, PRUint32 aLen)
   //We can choose to record those bytes as well and analyse the character once it 
   //is complete, but since a character will not make much difference, by simply skipping
   //this character will simply our logic and improve performance.
-  for (i = mNeedToSkipCharNum; i < aLen; )
-  {
+  for (i = mNeedToSkipCharNum; i < aLen; )	{
+
     order = GetOrder(aBuf+i, &charLen);
     i+= charLen;
     if (i > aLen){
       mNeedToSkipCharNum = i - aLen;
       mLastCharOrder = -1;
     }
-    else 
-    {
-      if (order != -1 && mLastCharOrder != -1)
-      {
+    else	{ 
+
+      if (order != -1 && mLastCharOrder != -1)	{
+
         mTotalRel ++;
-        if (mTotalRel > MAX_REL_THRESHOLD)
-        {
+        if (mTotalRel > MAX_REL_THRESHOLD)	{
+
           mDone = PR_TRUE;
           break;
         }
@@ -170,10 +170,10 @@ void JapaneseContextAnalysis::HandleData(const char* aBuf, PRUint32 aLen)
   return;
 }
 
-void JapaneseContextAnalysis::Reset(PRBool aIsPreferredLanguage)
-{
+void JapaneseContextAnalysis::Reset(PRBool aIsPreferredLanguage)	{
+
   mTotalRel = 0;
-  for (PRUint32 i = 0; i < NUM_OF_CATEGORY; i++)
+  for (PRUint32 i = 0; i < NUM_OF_CATEGORY; ++i )
     mRelSample[i] = 0;
   mNeedToSkipCharNum = 0;
   mLastCharOrder = -1;
@@ -182,8 +182,8 @@ void JapaneseContextAnalysis::Reset(PRBool aIsPreferredLanguage)
 }
 #define DONT_KNOW (float)-1
 
-float  JapaneseContextAnalysis::GetConfidence(void)
-{
+float  JapaneseContextAnalysis::GetConfidence(void)	{
+
   //This is just one way to calculate confidence. It works well for me.
   if (mTotalRel > mDataThreshold)
     return ((float)(mTotalRel - mRelSample[0]))/mTotalRel;

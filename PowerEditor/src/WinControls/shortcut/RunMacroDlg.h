@@ -36,8 +36,8 @@
 #define RM_RUN_MULTI 1
 #define RM_RUN_EOF 2
 
-class RunMacroDlg : public StaticDialog
-{
+class RunMacroDlg : public StaticDialog	{
+
 public :
 	RunMacroDlg() = default;
 	~RunMacroDlg() = default;
@@ -49,8 +49,8 @@ public :
 	void doDialog(bool isRTL = false) {
 		if (!isCreated())
 			create(IDD_RUN_MACRO_DLG, isRTL);
-		else
-		{
+		else	{
+
 			// Shortcut might have been updated for current session
 			// So reload the macro list (issue #4526)
 			initMacroList();

@@ -33,8 +33,8 @@
 
 const int extNameLen = 32;
 
-class RegExtDlg : public StaticDialog
-{
+class RegExtDlg : public StaticDialog	{
+
 public :
 	RegExtDlg() = default;
 	~RegExtDlg() = default;

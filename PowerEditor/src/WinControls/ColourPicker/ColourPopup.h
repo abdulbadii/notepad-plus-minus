@@ -35,8 +35,8 @@
 #define WM_PICKUP_CANCEL (COLOURPOPUP_USER + 2)
 
 
-class ColourPopup : public Window
-{
+class ColourPopup : public Window	{
+
 public :
 	ColourPopup() = default;
 	explicit ColourPopup(COLORREF defaultColor) : _colour(defaultColor) {}
@@ -49,8 +49,8 @@ public :
 
 	void create(int dialogID);
 
-	void doDialog(POINT p)
-	{
+	void doDialog(POINT p)	{
+
 		if (!isCreated())
 			create(IDD_COLOUR_POPUP);
 		::SetWindowPos(_hSelf, HWND_TOP, p.x, p.y, _rc.right - _rc.left, _rc.bottom - _rc.top, SWP_SHOWWINDOW);
@@ -61,8 +61,8 @@ public :
 		::DestroyWindow(_hSelf);
 	}
 
-	void setColour(COLORREF c)
-	{
+	void setColour(COLORREF c)	{
+
 		_colour = c;
 	}
 

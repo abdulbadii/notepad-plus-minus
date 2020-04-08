@@ -32,8 +32,8 @@
 
 enum progType {WIN32_PROG, CONSOLE_PROG};
 
-class Process
-{
+class Process	{
+
 public:
     Process(const TCHAR *cmd, const TCHAR *args, const TCHAR *cDir)
 		:_command(cmd), _args(args), _curDir(cDir){}

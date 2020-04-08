@@ -37,8 +37,8 @@
 
 class PluginsManager;
 
-struct Version
-{
+struct Version	{
+
 	unsigned long _major = 0;
 	unsigned long _minor = 0;
 	unsigned long _patch = 0;
@@ -73,8 +73,8 @@ struct Version
 	};
 };
 
-struct PluginUpdateInfo
-{
+struct PluginUpdateInfo	{
+
 	generic_string _fullFilePath; // only for the installed Plugin
 
 	generic_string _folderName;   // plugin folder name - should be the same name with plugin and should be uniq among the plugins
@@ -93,8 +93,8 @@ struct PluginUpdateInfo
 	PluginUpdateInfo(const generic_string& fullFilePath, const generic_string& fileName);
 };
 
-struct NppCurrentStatus
-{
+struct NppCurrentStatus	{
+
 	bool _isAdminMode;              // can launch gitup en Admin mode directly
 
 	bool _isInProgramFiles;         // true: install/update/remove on "Program files" (ADMIN MODE)
@@ -115,22 +115,22 @@ enum COLUMN_TYPE { COLUMN_PLUGIN, COLUMN_VERSION };
 enum SORT_TYPE { DISPLAY_NAME_ALPHABET_ENCREASE, DISPLAY_NAME_ALPHABET_DECREASE };
 
 
-struct SortDisplayNameDecrease final
-{
-	bool operator() (PluginUpdateInfo* l, PluginUpdateInfo* r)
-	{
+struct SortDisplayNameDecrease final	{
+
+	bool operator() (PluginUpdateInfo* l, PluginUpdateInfo* r)	{
+
 		return (l->_displayName.compare(r->_displayName) <= 0);
 	}
 };
 
-class PluginViewList
-{
+class PluginViewList	{
+
 public:
 	PluginViewList() = default;
 	~PluginViewList() {
 		_ui.destroy();
-		for (auto i : _list)
-		{
+		for (auto i : _list)	{
+
 			delete i;
 		}
 	};
@@ -168,8 +168,8 @@ private:
 enum LIST_TYPE { AVAILABLE_LIST, UPDATES_LIST, INSTALLED_LIST };
 
 
-class PluginsAdminDlg final : public StaticDialog
-{
+class PluginsAdminDlg final : public StaticDialog	{
+
 public :
 	PluginsAdminDlg();
 	~PluginsAdminDlg() = default;
@@ -181,13 +181,13 @@ public :
 	virtual void create(int dialogID, bool isRTL = false, bool msgDestParent = true);
 
     void doDialog(bool isRTL = false) {
-    	if (!isCreated())
-		{
+    	if (!isCreated())	{
+
 			create(IDD_PLUGINSADMIN_DLG, isRTL);
 		}
 
-		if (!::IsWindowVisible(_hSelf))
-		{
+		if (!::IsWindowVisible(_hSelf))	{
+
 
 		}
 	    display();

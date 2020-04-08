@@ -35,8 +35,8 @@
 #define	DMS_VERTICAL		0x00000001
 #define	DMS_HORIZONTAL		0x00000002
 
-class DockingSplitter : public Window
-{
+class DockingSplitter : public Window	{
+
 public :
 	DockingSplitter() = default;
 	~DockingSplitter() = default;

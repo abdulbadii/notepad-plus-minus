@@ -24,8 +24,8 @@
 #include "Notepad_plus.h"
 
 
-void Command::extractArgs(TCHAR* cmd2Exec, size_t cmd2ExecLen, TCHAR* args, size_t argsLen, const TCHAR* cmdEntier)
-{
+void Command::extractArgs(TCHAR* cmd2Exec, size_t cmd2ExecLen, TCHAR* args, size_t argsLen, const TCHAR* cmdEntier)	{
+
 	size_t i = 0;
 	bool quoted = false;
 
@@ -36,8 +36,8 @@ void Command::extractArgs(TCHAR* cmd2Exec, size_t cmd2ExecLen, TCHAR* args, size
 	if (cmdEntierLen > shortest)
 		cmdEntierLen = shortest - 1;
 
-	for (; i < cmdEntierLen; ++i)
-	{
+	for (; i < cmdEntierLen; ++i)	{
+
 		if (cmdEntier[i] == ' ' && !quoted)
 			break;
 
@@ -48,34 +48,34 @@ void Command::extractArgs(TCHAR* cmd2Exec, size_t cmd2ExecLen, TCHAR* args, size
 	}
 	cmd2Exec[i] = '\0';
 	
-	if (i < cmdEntierLen)
-	{
+	if (i < cmdEntierLen)	{
+
 		for (size_t len = cmdEntierLen; (i < len) && (cmdEntier[i] == ' ') ; ++i);
 
-		if (i < cmdEntierLen)
-		{
-			for (size_t k = 0, len2 = cmdEntierLen; i <= len2; ++i, ++k)
-			{
+		if (i < cmdEntierLen)	{
+
+			for (size_t k = 0, len2 = cmdEntierLen; i <= len2; ++i, ++k)	{
+
 				args[k] = cmdEntier[i];
 			}
 		}
 
 		int l = lstrlen(args);
-		if (args[l-1] == ' ')
-		{
-			for (l -= 2 ; (l > 0) && (args[l] == ' ') ; l--);
+		if (args[l-1] == ' ')	{
+
+			for (l -= 2 ; (l > 0) && (args[l] == ' ') ; --l );
 			args[l+1] = '\0';
 		}
 	}
-	else
-	{
+	else	{
+
 		args[0] = '\0';
 	}
 }
 
 
-int whichVar(TCHAR *str)
-{
+int whichVar(TCHAR *str)	{
+
 	if (!lstrcmp(fullCurrentPath, str))
 		return FULL_CURRENT_PATH;
 	else if (!lstrcmp(currentDirectory, str))
@@ -101,29 +101,29 @@ int whichVar(TCHAR *str)
 }
 
 // Since I'm sure the length will be 256, I won't check the lstrlen : watch out!
-void expandNppEnvironmentStrs(const TCHAR *strSrc, TCHAR *stringDest, size_t strDestLen, HWND hWnd)
-{
+void expandNppEnvironmentStrs(const TCHAR *strSrc, TCHAR *stringDest, size_t strDestLen, HWND hWnd)	{
+
 	size_t j = 0;
-	for (int i = 0, len = lstrlen(strSrc); i < len; ++i)
-	{
+	for (int i = 0, len = lstrlen(strSrc); i < len; ++i)	{
+
 		int iBegin = -1;
 		int iEnd = -1;
-		if ((strSrc[i] == '$') && (strSrc[i+1] == '('))
-		{
+		if ((strSrc[i] == '$') && (strSrc[i+1] == '('))	{
+
 			iBegin = i += 2;
-			for (size_t len2 = size_t(lstrlen(strSrc)); size_t(i) < len2 ; ++i)
-			{
-				if (strSrc[i] == ')')
-				{
+			for (size_t len2 = size_t(lstrlen(strSrc)); size_t(i) < len2 ; ++i)	{
+
+				if (strSrc[i] == ')')	{
+
 					iEnd = i - 1;
 					break;
 				}
 			}
 		}
-		if (iBegin != -1)
-		{
-			if (iEnd != -1)
-			{
+		if (iBegin != -1)	{
+
+			if (iEnd != -1)	{
+
 				TCHAR str[MAX_PATH];
 				int m = 0;
 				for (int k = iBegin  ; k <= iEnd ; ++k)
@@ -131,27 +131,27 @@ void expandNppEnvironmentStrs(const TCHAR *strSrc, TCHAR *stringDest, size_t str
 				str[m] = '\0';
 
 				int internalVar = whichVar(str);
-				if (internalVar == VAR_NOT_RECOGNIZED)
-				{
+				if (internalVar == VAR_NOT_RECOGNIZED)	{
+
 					i = iBegin - 2;
 					if (j < (strDestLen-1))
 						stringDest[j++] = strSrc[i];
 					else
 						break;
 				}
-				else
-				{
+				else	{
+
 					TCHAR expandedStr[CURRENTWORD_MAXLENGTH];
-					if (internalVar == CURRENT_LINE || internalVar == CURRENT_COLUMN)
-					{
+					if (internalVar == CURRENT_LINE || internalVar == CURRENT_COLUMN)	{
+
 						auto lineNumber = ::SendMessage(hWnd, RUNCOMMAND_USER + internalVar, 0, 0);
 						wsprintf(expandedStr, L"%d", lineNumber);
 					}
 					else
 						::SendMessage(hWnd, RUNCOMMAND_USER + internalVar, CURRENTWORD_MAXLENGTH, reinterpret_cast<LPARAM>(expandedStr));
 
-					for (size_t p = 0, len3 = size_t(lstrlen(expandedStr)); p < len3; ++p)
-					{
+					for (size_t p = 0, len3 = size_t(lstrlen(expandedStr)); p < len3; ++p)	{
+
 						if (j < (strDestLen-1))
 							stringDest[j++] = expandedStr[p];
 						else
@@ -159,8 +159,8 @@ void expandNppEnvironmentStrs(const TCHAR *strSrc, TCHAR *stringDest, size_t str
 					}
 				}
 			}
-			else
-			{
+			else	{
+
 				i = iBegin - 2;
 				if (j < (strDestLen-1))
 					stringDest[j++] = strSrc[i];
@@ -177,13 +177,13 @@ void expandNppEnvironmentStrs(const TCHAR *strSrc, TCHAR *stringDest, size_t str
 	stringDest[j] = '\0';
 }
 
-HINSTANCE Command::run(HWND hWnd)
-{
+HINSTANCE Command::run(HWND hWnd)	{
+
 	return run(hWnd, L".");
 }
 
-HINSTANCE Command::run(HWND hWnd, const TCHAR* cwd)
-{
+HINSTANCE Command::run(HWND hWnd, const TCHAR* cwd)	{
+
 	const int argsIntermediateLen = MAX_PATH*2;
 	const int args2ExecLen = CURRENTWORD_MAXLENGTH+MAX_PATH*2;
 
@@ -219,8 +219,8 @@ HINSTANCE Command::run(HWND hWnd, const TCHAR* cwd)
 	// If the function succeeds, it returns a value greater than 32.
 	// If the function fails, it returns an error value that indicates the cause of the failure.
 	int retResult = static_cast<int>(reinterpret_cast<INT_PTR>(res));
-	if (retResult <= 32)
-	{
+	if (retResult <= 32)	{
+
 		generic_string errorMsg;
 		errorMsg += GetLastErrorAsString(retResult);
 		errorMsg += L"An attempt was made to execute the below command.";
@@ -241,42 +241,42 @@ HINSTANCE Command::run(HWND hWnd, const TCHAR* cwd)
 
 INT_PTR CALLBACK RunDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-	switch (message) 
-	{
-		case NPPM_INTERNAL_FINDKEYCONFLICTS:
-		{
+	switch (message)	{ 
+
+		case NPPM_INTERNAL_FINDKEYCONFLICTS:	{
+
 			return ::SendMessage(_hParent, message, wParam, lParam);
 		}
 
-		case WM_COMMAND : 
-		{
-			switch (wParam)
-			{
+		case WM_COMMAND :	{ 
+
+			switch (wParam)	{
+
 				case IDCANCEL :
 					display(false);
 					return TRUE;
 				
-				case IDOK :
-				{
+				case IDOK :	{
+
 					TCHAR cmd[MAX_PATH];
 					::GetDlgItemText(_hSelf, IDC_COMBO_RUN_PATH, cmd, MAX_PATH);
 					_cmdLine = cmd;
 
 					HINSTANCE hInst = run(_hParent);
-					if (reinterpret_cast<INT_PTR>(hInst) > 32)
-					{
+					if (reinterpret_cast<INT_PTR>(hInst) > 32)	{
+
 						addTextToCombo(_cmdLine.c_str());
 						display(false);
 					}
-					else
-					{
+					else	{
+
 						removeTextFromCombo(_cmdLine.c_str());
 					}
 					return TRUE;
 				}
 
-				case IDC_BUTTON_SAVE :
-				{
+				case IDC_BUTTON_SAVE :	{
+
 					std::vector<UserCommand> & theUserCmds = (NppParameters::getInstance()).getUserCommandList();
 
 					int nbCmd = static_cast<int32_t>(theUserCmds.size());
@@ -287,8 +287,8 @@ INT_PTR CALLBACK RunDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 					UserCommand uc(Shortcut(), cmd, cmdID);
 					uc.init(_hInst, _hSelf);
 
-					if (uc.doDialog() != -1)
-					{
+					if (uc.doDialog() != -1)	{
+
 						HMENU mainMenu = reinterpret_cast<HMENU>(::SendMessage(_hParent, NPPM_INTERNAL_GETMENU, 0, 0));
 						HMENU hRunMenu = ::GetSubMenu(mainMenu, MENUINDEX_RUN);
 						int const posBase = 2;
@@ -300,8 +300,8 @@ INT_PTR CALLBACK RunDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 						::InsertMenu(hRunMenu, posBase + nbCmd, MF_BYPOSITION, cmdID, uc.toMenuItemString().c_str());
 
 						NppParameters& nppParams = NppParameters::getInstance();
-                        if (nbCmd == 0)
-                        {
+                        if (nbCmd == 0)	{
+
                             // Insert the separator and modify/delete command
 							::InsertMenu(hRunMenu, posBase + nbCmd + 1, MF_BYPOSITION, static_cast<unsigned int>(-1), 0);
 							NativeLangSpeaker *pNativeLangSpeaker = nppParams.getNativeLangSpeaker();
@@ -317,22 +317,22 @@ INT_PTR CALLBACK RunDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 					return TRUE;
 				}
 
-				case IDC_BUTTON_FILE_BROWSER :
-				{
+				case IDC_BUTTON_FILE_BROWSER :	{
+
 					FileDialog fd(_hSelf, _hInst);
 					fd.setExtFilter(L"Executable file : ", L".exe", L".com", L".cmd", L".bat", NULL);
 					fd.setExtFilter(L"All files : ", L".*", NULL);
 
-					if (const TCHAR *fn = fd.doOpenSingleFileDlg())
-					{
-						if (wcschr(fn, ' ') != NULL)
-						{
+					if (const TCHAR *fn = fd.doOpenSingleFileDlg())	{
+
+						if (wcschr(fn, ' ') != NULL)	{
+
 							generic_string fn_quotes(fn);
 							fn_quotes = L"\"" + fn_quotes + L"\"";
 							addTextToCombo(fn_quotes.c_str());
 						}
-						else
-						{
+						else	{
+
 							addTextToCombo(fn);
 						}
 					}
@@ -364,8 +364,8 @@ void RunDlg::removeTextFromCombo(const TCHAR *txt2Remove) const
 	::SendMessage(handle, CB_DELETESTRING, i, 0);
 }
 
-void RunDlg::doDialog(bool isRTL)
-{
+void RunDlg::doDialog(bool isRTL)	{
+
 	if (!isCreated())
 		create(IDD_RUN_DLG, isRTL);
 

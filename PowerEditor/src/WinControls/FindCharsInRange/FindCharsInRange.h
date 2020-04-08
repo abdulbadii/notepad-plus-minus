@@ -31,8 +31,8 @@
 #include "findCharsInRange_rc.h"
 #include "ScintillaEditView.h"
 
-class FindCharsInRangeDlg : public StaticDialog
-{
+class FindCharsInRangeDlg : public StaticDialog	{
+
 public :
 	FindCharsInRangeDlg() = default;
 

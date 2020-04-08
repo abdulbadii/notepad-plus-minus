@@ -76,8 +76,8 @@ class TiXmlParsingData;
 /*	Internal structure for tracking location of items 
 	in the XML file.
 */
-struct TiXmlCursor
-{
+struct TiXmlCursor	{
+
 	TiXmlCursor()		{ Clear(); }
 	void Clear()		{ row = col = -1; }
 
@@ -116,8 +116,8 @@ enum
 	A Decleration contains: Attributes (not on tree)
 	@endverbatim
 */
-class TiXmlBase
-{
+class TiXmlBase	{
+
 	friend class TiXmlNode;
 	friend class TiXmlElement;
 	friend class TiXmlDocument;
@@ -168,8 +168,8 @@ public:
 protected:
 	// See STL_STRING_BUG
 	// Utility class to overcome a bug.
-	class StringToBuffer
-	{
+	class StringToBuffer	{
+
 	  public:
 		StringToBuffer( const TIXML_STRING& str );
 		~StringToBuffer();
@@ -210,12 +210,12 @@ protected:
 	inline static const TCHAR* GetChar( const TCHAR* p, TCHAR* _value )
 	{
 		assert( p );
-		if ( *p == '&' )
-		{
+		if ( *p == '&' )	{
+
 			return GetEntity( p, _value );
 		}
-		else
-		{
+		else	{
+
 			*_value = *p;
 			return p+1;
 		}
@@ -257,8 +257,8 @@ protected:
 	TiXmlCursor location;
 
 private:
-	struct Entity
-	{
+	struct Entity	{
+
 		const TCHAR*     str;
 		unsigned int	strLength;
 		TCHAR		    chr;
@@ -280,8 +280,8 @@ private:
 	in a document, or stand on its own. The type of a TiXmlNode
 	can be queried, and it can be cast to its more defined type.
 */
-class TiXmlNode : public TiXmlBase
-{
+class TiXmlNode : public TiXmlBase	{
+
 	friend class TiXmlDocument;
 	friend class TiXmlElement;
 
@@ -362,8 +362,8 @@ public:
 
     #ifdef TIXML_USE_STL
 	/// STL string form.
-	void SetValue( const generic_string& _value )    
-	{	  
+	void SetValue( const generic_string& _value )	{    
+	  
 		StringToBuffer buf( _value );
 		SetValue( buf.buffer ? buf.buffer : L"");    	
 	}	
@@ -552,8 +552,8 @@ protected:
 		  part of the tinyXML document object model. There are other
 		  suggested ways to look at this problem.
 */
-class TiXmlAttribute : public TiXmlBase
-{
+class TiXmlAttribute : public TiXmlBase	{
+
 	friend class TiXmlAttributeSet;
 
 public:
@@ -610,14 +610,14 @@ public:
 
     #ifdef TIXML_USE_STL
 	/// STL string form.
-	void SetName( const generic_string& _name )	
-	{	
+	void SetName( const generic_string& _name )	{	
+	
 		StringToBuffer buf( _name );
 		SetName ( buf.buffer ? buf.buffer : L"error");	
 	}
 	/// STL string form.	
-	void SetValue( const generic_string& _value )	
-	{	
+	void SetValue( const generic_string& _value )	{	
+	
 		StringToBuffer buf( _value );
 		SetValue( buf.buffer ? buf.buffer : L"error");	
 	}
@@ -667,8 +667,8 @@ private:
 		- I like circular lists
 		- it demonstrates some independence from the (typical) doubly linked list.
 */
-class TiXmlAttributeSet
-{
+class TiXmlAttributeSet	{
+
 public:
 	TiXmlAttributeSet();
 	~TiXmlAttributeSet();
@@ -689,8 +689,8 @@ private:
 	and can contain other elements, text, comments, and unknowns.
 	Elements also contain an arbitrary number of attributes.
 */
-class TiXmlElement : public TiXmlNode
-{
+class TiXmlElement : public TiXmlNode	{
+
 public:
 	/// Construct an element.
 	TiXmlElement (const TCHAR * in_value);
@@ -748,16 +748,16 @@ public:
 	const TCHAR* Attribute( const generic_string& name, int* i ) const		{ return Attribute( name.c_str(), i ); }
 
 	/// STL string form.
-	void SetAttribute( const generic_string& name, const generic_string& _value )	
-	{	
+	void SetAttribute( const generic_string& name, const generic_string& _value )	{	
+	
 		StringToBuffer n( name );
 		StringToBuffer v( _value );
 		if ( n.buffer && v.buffer )
 			SetAttribute (n.buffer, v.buffer );	
 	}	
 	///< STL string form.
-	void SetAttribute( const generic_string& name, int _value )	
-	{	
+	void SetAttribute( const generic_string& name, int _value )	{	
+	
 		StringToBuffer n( name );
 		if ( n.buffer )
 			SetAttribute (n.buffer, _value);	
@@ -812,8 +812,8 @@ private:
 
 /**	An XML comment.
 */
-class TiXmlComment : public TiXmlNode
-{
+class TiXmlComment : public TiXmlNode	{
+
 public:
 	/// Constructs an empty comment.
 	TiXmlComment() : TiXmlNode( TiXmlNode::COMMENT ) {}
@@ -839,8 +839,8 @@ protected:
 
 /** XML text. Contained in an element.
 */
-class TiXmlText : public TiXmlNode
-{
+class TiXmlText : public TiXmlNode	{
+
 	friend class TiXmlElement;
 public:
 	/// Constructor.
@@ -892,8 +892,8 @@ protected :
 	handled as special cases, not generic attributes, simply
 	because there can only be at most 3 and they are always the same.
 */
-class TiXmlDeclaration : public TiXmlNode
-{
+class TiXmlDeclaration : public TiXmlNode	{
+
 public:
 	/// Construct an empty declaration.
 	TiXmlDeclaration()   : TiXmlNode( TiXmlNode::DECLARATION ) {}
@@ -954,8 +954,8 @@ private:
 	It will be written back to the XML, unchanged, when the file
 	is saved.
 */
-class TiXmlUnknown : public TiXmlNode
-{
+class TiXmlUnknown : public TiXmlNode	{
+
 public:
 	TiXmlUnknown() : TiXmlNode( TiXmlNode::UNKNOWN ) {}
 	virtual ~TiXmlUnknown() {}
@@ -981,8 +981,8 @@ protected:
 	XML pieces. It can be saved, loaded, and printed to the screen.
 	The 'value' of a document node is the xml file name.
 */
-class TiXmlDocument : public TiXmlNode
-{
+class TiXmlDocument : public TiXmlNode	{
+
 public:
 	/// Create an empty document, that has no name.
 	TiXmlDocument();
@@ -1015,8 +1015,8 @@ public:
 	bool SaveFile( const TCHAR * filename ) const;
 
 	#ifdef TIXML_USE_STL
-	bool LoadFile( const generic_string& filename )			///< STL string version.
-	{
+	bool LoadFile( const generic_string& filename )	{			///< STL string version.
+
 		StringToBuffer f( filename );
 		return ( f.buffer && LoadFile( f.buffer ));
 	}
@@ -1141,17 +1141,17 @@ private:
 
 	@verbatim
 	TiXmlElement* root = document.FirstChildElement( "Document" );
-	if ( root )
-	{
+	if ( root )	{
+
 		TiXmlElement* element = root->FirstChildElement( "Element" );
-		if ( element )
-		{
+		if ( element )	{
+
 			TiXmlElement* child = element->FirstChildElement( "Child" );
-			if ( child )
-			{
+			if ( child )	{
+
 				TiXmlElement* child2 = child->NextSiblingElement( "Child" );
-				if ( child2 )
-				{
+				if ( child2 )	{
+
 					// Finally do something useful.
 	@endverbatim
 
@@ -1162,8 +1162,8 @@ private:
 	@verbatim
 	TiXmlHandle docHandle( &document );
 	TiXmlElement* child2 = docHandle.FirstChild( "Document" ).FirstChild( "Element" ).Child( "Child", 1 ).Element();
-	if ( child2 )
-	{
+	if ( child2 )	{
+
 		// do something useful
 	@endverbatim
 
@@ -1178,8 +1178,8 @@ private:
 
 	@verbatim
 	int i=0; 
-	while ( true )
-	{
+	while ( true )	{
+
 		TiXmlElement* child = docHandle.FirstChild( "Document" ).FirstChild( "Element" ).Child( "Child", i ).Element();
 		if ( !child )
 			break;
@@ -1195,14 +1195,14 @@ private:
 	@verbatim
 	TiXmlElement* child = docHandle.FirstChild( "Document" ).FirstChild( "Element" ).FirstChild( "Child" ).Element();
 
-	for( child; child; child=child->NextSiblingElement() )
-	{
+	for( child; child; child=child->NextSiblingElement() )	{
+
 		// do something
 	}
 	@endverbatim
 */
-class TiXmlHandle
-{
+class TiXmlHandle	{
+
 public:
 	/// Create a handle from any node (at any depth of the tree.) This can be a null pointer.
 	TiXmlHandle( TiXmlNode* node )			{ this->node = node; }

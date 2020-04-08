@@ -28,8 +28,8 @@
 
 #include "TreeView.h"
 
-HTREEITEM TreeView::insertTo(HTREEITEM parent, TCHAR *itemStr, int imgIndex)
-{
+HTREEITEM TreeView::insertTo(HTREEITEM parent, TCHAR *itemStr, int imgIndex)	{
+
 	TV_INSERTSTRUCT tvinsert;
 	tvinsert.hParent=parent;
 	tvinsert.hInsertAfter=parent?TVI_LAST:TVI_ROOT;
@@ -40,8 +40,8 @@ HTREEITEM TreeView::insertTo(HTREEITEM parent, TCHAR *itemStr, int imgIndex)
 	return (HTREEITEM)::SendMessage(_hSelf, TVM_INSERTITEM, 0, (LPARAM)&tvinsert);
 }
 
-void TreeView::init(HINSTANCE hInst, HWND pere)
-{
+void TreeView::init(HINSTANCE hInst, HWND pere)	{
+
 	Window::init(hInst, pere);
 	InitCommonControls();
 

@@ -64,8 +64,8 @@ enum SearchIncrementalType { NotIncremental, FirstIncremental, NextIncremental }
 enum SearchType { FindNormal, FindExtended, FindRegex };
 enum ProcessOperation { ProcessFindAll, ProcessReplaceAll, ProcessCountAll, ProcessMarkAll, ProcessMarkAll_2, ProcessMarkAll_IncSearch, ProcessMarkAllExt, ProcessFindInFinder };
 
-struct FindOption
-{
+struct FindOption	{
+
 	bool _isWholeWord = true;
 	bool _isMatchCase = true;
 	bool _isWrapAround = true;
@@ -186,16 +186,16 @@ enum FindNextType {
 	FINDNEXTTYPE_FINDNEXTFORREPLACE
 };
 
-struct FindReplaceInfo
-{
+struct FindReplaceInfo	{
+
 	const TCHAR *_txt2find = nullptr;
 	const TCHAR *_txt2replace = nullptr;
 	int _startRange = -1;
 	int _endRange = -1;
 };
 
-struct FindersInfo
-{
+struct FindersInfo	{
+
 	Finder *_pSourceFinder = nullptr;
 	Finder *_pDestFinder = nullptr;
 	const TCHAR *_pFileName = nullptr;
@@ -203,8 +203,8 @@ struct FindersInfo
 	FindOption _findOption;
 };
 
-class FindInFinderDlg : public StaticDialog
-{
+class FindInFinderDlg : public StaticDialog	{
+
 public:
 	void init(HINSTANCE hInst, HWND hPere) {
 		Window::init(hInst, hPere);
@@ -221,8 +221,8 @@ private:
 	void writeOptions();
 };
 
-class FindReplaceDlg : public StaticDialog
-{
+class FindReplaceDlg : public StaticDialog	{
+
 friend class FindIncrementDlg;
 public :
 	static FindOption _options;
@@ -286,14 +286,14 @@ public :
 		_tab.getCurrentTitle(label, MAX_PATH);
 		::SetWindowText(_hSelf, label);
 	}
-	void beginNewFilesSearch()
-	{
+	void beginNewFilesSearch()	{
+
 		_pFinder->beginNewFilesSearch();
 		_pFinder->addSearchLine(_options._str2Search.c_str());
 	}
 
-	void finishFilesSearch(int count, bool isfold=1, const TCHAR *dir=nullptr)
-	{
+	void finishFilesSearch(int count, bool isfold=1, const TCHAR *dir=nullptr)	{
+
 		_pFinder->finishFilesSearch(_findAllResult=count, isfold, dir);
 	}
 
@@ -302,8 +302,8 @@ public :
 	void setStatusbarMessage(const generic_string & msg, FindStatus staus);
 	Finder * createFinder();
 	bool removeFinder(Finder *finder2remove);
-	bool isVolatiled()
-		{return _pFinder->_canBeVolatiled;}
+	bool isVolatiled()	{
+return _pFinder->_canBeVolatiled;}
 
 	ScintillaEditView& get_scintView()	{
 		return _pFinder->_scintView;
@@ -316,8 +316,8 @@ public :
 	}
 
 	void updateFinderScintilla() {
-		if (_pFinder && _pFinder->isCreated() && _pFinder->isVisible())
-		{
+		if (_pFinder && _pFinder->isCreated() && _pFinder->isVisible())	{
+
 			_pFinder->setFinderStyle();
 		}
 	};
@@ -424,8 +424,8 @@ private :
 };
 
 //FindIncrementDlg: incremental search dialog, docked in rebar
-class FindIncrementDlg : public StaticDialog
-{
+class FindIncrementDlg : public StaticDialog	{
+
 public :
 	FindIncrementDlg() = default;
 	void init(HINSTANCE hInst, HWND hPere, FindReplaceDlg *pFRDlg, bool isRTL = false);
@@ -456,8 +456,8 @@ private :
 };
 
 
-class Progress
-{
+class Progress	{
+
 public:
 	explicit Progress(HINSTANCE hInst);
 	~Progress();

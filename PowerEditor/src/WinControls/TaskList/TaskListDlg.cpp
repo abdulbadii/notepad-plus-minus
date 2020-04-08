@@ -35,18 +35,18 @@ int TaskListDlg::_instanceCount = 0;
 
 LRESULT CALLBACK hookProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
-	if ((nCode >= 0) && (wParam == WM_RBUTTONUP))
-    {
+	if ((nCode >= 0) && (wParam == WM_RBUTTONUP))	{
+
 		::PostMessage(hWndServer, WM_RBUTTONUP, 0, 0);
     }
-	else if ((nCode >= 0) && (wParam == WM_MOUSEWHEEL) && windowsVersion >= WV_WIN10)
-	{
+	else if ((nCode >= 0) && (wParam == WM_MOUSEWHEEL) && windowsVersion >= WV_WIN10)	{
+
 		MSLLHOOKSTRUCT* pMD = (MSLLHOOKSTRUCT*)lParam;
 		RECT rCtrl;
 		GetWindowRect(hWndServer, &rCtrl);
 		//to avoid duplicate messages, only send this message to the list control if it comes from outside the control window. if the message occurs whilst the mouse is inside the control, the control will have receive the mouse wheel message itself
-		if (false == PtInRect(&rCtrl, pMD->pt))
-		{
+		if (false == PtInRect(&rCtrl, pMD->pt))	{
+
 			::PostMessage(hWndServer, WM_MOUSEWHEEL, (WPARAM)pMD->mouseData, MAKELPARAM(pMD->pt.x, pMD->pt.y));
 		}
 	}
@@ -54,10 +54,10 @@ LRESULT CALLBACK hookProc(int nCode, WPARAM wParam, LPARAM lParam)
 	return ::CallNextHookEx(hook, nCode, wParam, lParam);
 }
 
- int TaskListDlg::doDialog(bool isRTL) 
- {
-	if (isRTL)
-	{
+ int TaskListDlg::doDialog(bool isRTL)	{ 
+
+	if (isRTL)	{
+
 		DLGTEMPLATE *pMyDlgTemplate = NULL;
 		HGLOBAL hMyDlgTemplate = makeRTLResource(IDD_VALUE_DLG, &pMyDlgTemplate);
 		int result = static_cast<int32_t>(::DialogBoxIndirectParam(_hInst, pMyDlgTemplate, _hParent, dlgProc, reinterpret_cast<LPARAM>(this)));
@@ -69,10 +69,10 @@ LRESULT CALLBACK hookProc(int nCode, WPARAM wParam, LPARAM lParam)
 
 INT_PTR CALLBACK TaskListDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam)
 {
-	switch (Message)
-	{
-		case WM_INITDIALOG :
-		{
+	switch (Message)	{
+
+		case WM_INITDIALOG :	{
+
 			::SendMessage(_hParent, WM_GETTASKLISTINFO, reinterpret_cast<WPARAM>(&_taskListInfo), 0);
 			int nbTotal = static_cast<int32_t>(_taskListInfo._tlfsLst.size());
 
@@ -103,8 +103,8 @@ INT_PTR CALLBACK TaskListDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 			return FALSE;
 		}
 
-		case WM_DESTROY :
-		{
+		case WM_DESTROY :	{
+
 			_taskList.destroy();
 			::UnhookWindowsHookEx(_hHooker);
 			_instanceCount--;
@@ -112,30 +112,30 @@ INT_PTR CALLBACK TaskListDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 		}
 
 
-		case WM_RBUTTONUP:
-		{
+		case WM_RBUTTONUP:	{
+
 			::SendMessage(_hSelf, WM_COMMAND, ID_PICKEDUP, _taskList.getCurrentIndex());
 			return TRUE;
 		}
 		
-		case WM_MOUSEWHEEL:
-		{
+		case WM_MOUSEWHEEL:	{
+
 			::SendMessage(_taskList.getHSelf(), WM_MOUSEWHEEL, wParam, lParam);
 			return TRUE;
 		}
 
-		case WM_DRAWITEM :
-		{
+		case WM_DRAWITEM :	{
+
 			drawItem((DRAWITEMSTRUCT *)lParam);
 			return TRUE;
 		}
 
-		case WM_NOTIFY:
-		{
-			switch (((LPNMHDR)lParam)->code)
-			{
-				case LVN_GETDISPINFO:
-				{
+		case WM_NOTIFY:	{
+
+			switch (((LPNMHDR)lParam)->code)	{
+
+				case LVN_GETDISPINFO:	{
+
 					LV_ITEM &lvItem = reinterpret_cast<LV_DISPINFO*>(reinterpret_cast<LV_DISPINFO FAR *>(lParam))->item;
 
 					TaskLstFnStatus & fileNameStatus = _taskListInfo._tlfsLst[lvItem.iItem];
@@ -147,8 +147,8 @@ INT_PTR CALLBACK TaskListDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 				}
 		
 				case NM_CLICK :
-				case NM_RCLICK :
-				{
+				case NM_RCLICK :	{
+
 					::SendMessage(_hSelf, WM_COMMAND, ID_PICKEDUP, _taskList.updateCurrentIndex());
 					return TRUE;
 				}
@@ -159,12 +159,12 @@ INT_PTR CALLBACK TaskListDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 			break;
 		}
 
-		case WM_COMMAND : 
-		{
-			switch (wParam)
-			{
-				case ID_PICKEDUP :
-				{
+		case WM_COMMAND :	{ 
+
+			switch (wParam)	{
+
+				case ID_PICKEDUP :	{
+
 					auto listIndex = lParam;
 					int view2set = _taskListInfo._tlfsLst[listIndex]._iView;
 					int index2Switch = _taskListInfo._tlfsLst[listIndex]._docIndex;
@@ -185,8 +185,8 @@ INT_PTR CALLBACK TaskListDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 	return FALSE;
 }
 
-void TaskListDlg::drawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
-{
+void TaskListDlg::drawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)	{
+
 	RECT rect = lpDrawItemStruct->rcItem;
 	HDC hDC = lpDrawItemStruct->hDC;
 	int nItem = lpDrawItemStruct->itemID;
@@ -198,8 +198,8 @@ void TaskListDlg::drawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	COLORREF textColor = darkGrey;
 	int imgStyle = ILD_SELECTED;
 
-	if (lpDrawItemStruct->itemState & ODS_SELECTED)
-	{
+	if (lpDrawItemStruct->itemState & ODS_SELECTED)	{
+
 		imgStyle = ILD_TRANSPARENT;
 		textColor = black;
 		::SelectObject(hDC, _taskList.GetFontSelected());

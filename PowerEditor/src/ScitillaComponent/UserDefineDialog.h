@@ -45,8 +45,8 @@ struct Style;
 const bool DOCK = true;
 const bool UNDOCK = false;
 
-class GlobalMappers
-{
+class GlobalMappers	{
+
     public:
 
 		std::unordered_map<generic_string, int> keywordIdMapper;
@@ -248,8 +248,8 @@ class GlobalMappers
 
 GlobalMappers & globalMappper();
 
-class SharedParametersDialog : public StaticDialog
-{
+class SharedParametersDialog : public StaticDialog	{
+
 friend class StylerDlg;
 public:
     SharedParametersDialog() = default;
@@ -263,8 +263,8 @@ protected :
     virtual void setKeywords2List(int ctrlID) = 0;
 };
 
-class FolderStyleDialog : public SharedParametersDialog
-{
+class FolderStyleDialog : public SharedParametersDialog	{
+
 public:
     FolderStyleDialog() = default;
     void updateDlg();
@@ -276,8 +276,8 @@ private :
     URLCtrl _pageLink;
 };
 
-class KeyWordsStyleDialog : public SharedParametersDialog
-{
+class KeyWordsStyleDialog : public SharedParametersDialog	{
+
 public:
     KeyWordsStyleDialog() = default;
     void updateDlg();
@@ -286,8 +286,8 @@ protected :
     void setKeywords2List(int id);
 };
 
-class CommentStyleDialog : public SharedParametersDialog
-{
+class CommentStyleDialog : public SharedParametersDialog	{
+
 public :
     CommentStyleDialog() = default;
     void updateDlg();
@@ -298,8 +298,8 @@ private :
     void retrieve(TCHAR *dest, const TCHAR *toRetrieve, TCHAR *prefix) const;
 };
 
-class SymbolsStyleDialog : public SharedParametersDialog
-{
+class SymbolsStyleDialog : public SharedParametersDialog	{
+
 public :
     SymbolsStyleDialog() = default;
     void updateDlg();
@@ -310,15 +310,15 @@ private :
     void retrieve(TCHAR *dest, const TCHAR *toRetrieve, TCHAR *prefix) const;
 };
 
-class UserDefineDialog : public SharedParametersDialog
-{
+class UserDefineDialog : public SharedParametersDialog	{
+
 friend class ScintillaEditView;
 public :
     UserDefineDialog();
     ~UserDefineDialog();
     void init(HINSTANCE hInst, HWND hPere, ScintillaEditView *pSev) {
-        if (!_pScintilla)
-        {
+        if (!_pScintilla)	{
+
             Window::init(hInst, hPere);
             _pScintilla = pSev;
         }
@@ -395,8 +395,8 @@ protected :
     void updateDlg();
 };
 
-class StringDlg : public StaticDialog
-{
+class StringDlg : public StaticDialog	{
+
 public :
     StringDlg() = default;
 	void init(HINSTANCE hInst, HWND parent, const TCHAR *title, const TCHAR *staticName, const TCHAR *text2Set, int txtLen = 0, const TCHAR* restrictedChars = nullptr, bool bGotoCenter = false) {
@@ -406,8 +406,8 @@ public :
 		_textValue = text2Set;
 		_txtLen = txtLen;
 		_shouldGotoCenter = bGotoCenter;
-		if (restrictedChars && _tcslen(restrictedChars))
-		{
+		if (restrictedChars && _tcslen(restrictedChars))	{
+
 			_restrictedChars = restrictedChars;
 		}
 	};
@@ -437,8 +437,8 @@ private :
 	WNDPROC _oldEditProc = nullptr;
 };
 
-class StylerDlg
-{
+class StylerDlg	{
+
 public:
     StylerDlg( HINSTANCE hInst, HWND parent, int stylerIndex = 0, int enabledNesters = -1):
         _hInst(hInst), _parent(parent), _stylerIndex(stylerIndex), _enabledNesters(enabledNesters) {

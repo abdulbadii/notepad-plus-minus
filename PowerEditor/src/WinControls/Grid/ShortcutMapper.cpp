@@ -32,14 +32,14 @@
 
 using namespace std;
 
-void ShortcutMapper::initTabs()
-{
+void ShortcutMapper::initTabs()	{
+
 	HWND hTab = _hTabCtrl = ::GetDlgItem(_hSelf, IDC_BABYGRID_TABBAR);
 	TCITEM tie;
 	tie.mask = TCIF_TEXT;
 
-	for (size_t i = 0; i < _nbTab; ++i)
-	{
+	for (size_t i = 0; i < _nbTab; ++i)	{
+
 		_tabNames[i] = getTabString(i);
 
 		tie.pszText = const_cast<LPWSTR>(_tabNames[i].c_str());
@@ -78,8 +78,8 @@ generic_string ShortcutMapper::getTabString(size_t i) const
 		return L"";
 
 	NativeLangSpeaker* nativeLangSpeaker = NppParameters::getInstance().getNativeLangSpeaker();
-	switch (i)
-	{
+	switch (i)	{
+
 		case 1:
 			return nativeLangSpeaker->getShortcutMapperLangStr("MacrosTab", L"Macros");
 
@@ -98,8 +98,8 @@ generic_string ShortcutMapper::getTabString(size_t i) const
 }
 
 
-void ShortcutMapper::initBabyGrid()
-{
+void ShortcutMapper::initBabyGrid()	{
+
 	RECT rect;
 	getClientRect(rect);
 
@@ -141,8 +141,8 @@ void ShortcutMapper::initBabyGrid()
 	_conflictInfoEditing = nativeLangSpeaker->getShortcutMapperLangStr("ConflictInfoEditing", L"No conflicts . . .");
 }
 
-generic_string ShortcutMapper::getTextFromCombo(HWND hCombo)
-{
+generic_string ShortcutMapper::getTextFromCombo(HWND hCombo)	{
+
 	const int NB_MAX(128);
 	TCHAR str[NB_MAX](L"\0");
 	::SendMessage(hCombo, WM_GETTEXT, NB_MAX, reinterpret_cast<LPARAM>(str));
@@ -150,12 +150,12 @@ generic_string ShortcutMapper::getTextFromCombo(HWND hCombo)
 	return stringToLower(res);
 };
 
-bool ShortcutMapper::isFilterValid(Shortcut sc)
-{
+bool ShortcutMapper::isFilterValid(Shortcut sc)	{
+
 	bool match = false;
 	generic_string shortcut_name = stringToLower(generic_string(sc.getName()));
-	if (_shortcutFilter.empty())
-	{
+	if (_shortcutFilter.empty())	{
+
 		return true;
 	}
 	// test the filter on the shortcut name
@@ -166,8 +166,8 @@ bool ShortcutMapper::isFilterValid(Shortcut sc)
 	return match;
 }
 
-bool ShortcutMapper::isFilterValid(PluginCmdShortcut sc)
-{
+bool ShortcutMapper::isFilterValid(PluginCmdShortcut sc)	{
+
 	// Do like a classic search on shortcut name, then search on the plugin name.
 	Shortcut shortcut = sc;
 	bool match = false;
@@ -183,8 +183,8 @@ bool ShortcutMapper::isFilterValid(PluginCmdShortcut sc)
 	return match;
 }
 
-void ShortcutMapper::fillOutBabyGrid()
-{
+void ShortcutMapper::fillOutBabyGrid()	{
+
 	NppParameters& nppParam = NppParameters::getInstance();
 	_babygrid.clear();
 	_babygrid.setInitialContent(true);
@@ -198,10 +198,10 @@ void ShortcutMapper::fillOutBabyGrid()
 	_babygrid.setText(0, 1, nameStr.c_str());
 	_babygrid.setText(0, 2, shortcutStr.c_str());
 	
-	switch(_currentState)
-	{
-		case STATE_MENU:
-		{
+	switch(_currentState)	{
+
+		case STATE_MENU:	{
+
 			nbItems = nppParam.getUserShortcuts().size();
 			_babygrid.setLineColNumber(nbItems, 3);
 			generic_string categoryStr = nativeLangSpeaker->getShortcutMapperLangStr("ColumnCategory", L"Category");
@@ -209,22 +209,22 @@ void ShortcutMapper::fillOutBabyGrid()
 		}
 		break;
 
-		case STATE_MACRO:
-		{
+		case STATE_MACRO:	{
+
 			nbItems = nppParam.getMacroList().size();
 			_babygrid.setLineColNumber(nbItems, 2);
 		}
 		break;
 
-		case STATE_USER:
-		{
+		case STATE_USER:	{
+
 			nbItems = nppParam.getUserCommandList().size();
 			_babygrid.setLineColNumber(nbItems, 2);
 		}
 		break;
 
-		case STATE_PLUGIN:
-		{
+		case STATE_PLUGIN:	{
+
 			nbItems = nppParam.getPluginCommandList().size();
 			_babygrid.setLineColNumber(nbItems, 3);
 			generic_string pluginStr = nativeLangSpeaker->getShortcutMapperLangStr("ColumnPlugin", L"Plugin");
@@ -232,8 +232,8 @@ void ShortcutMapper::fillOutBabyGrid()
 		}
 		break;
 
-		case STATE_SCINTILLA:
-		{
+		case STATE_SCINTILLA:	{
+
 			nbItems = nppParam.getScintillaKeyList().size();
 			_babygrid.setLineColNumber(nbItems, 2);
 		}
@@ -244,16 +244,16 @@ void ShortcutMapper::fillOutBabyGrid()
 	size_t cs_index = 0;
 	_shortcutFilter = getTextFromCombo(::GetDlgItem(_hSelf, IDC_BABYGRID_FILTER));
 
-	switch(_currentState) 
-	{
-		case STATE_MENU:
-		{
+	switch(_currentState)	{ 
+
+		case STATE_MENU:	{
+
 			vector<CommandShortcut> & cshortcuts = nppParam.getUserShortcuts();
 			cs_index = 1;
-			for (size_t i = 0; i < nbItems; ++i)
-			{
-				if (isFilterValid(cshortcuts[i]))
-				{
+			for (size_t i = 0; i < nbItems; ++i)	{
+
+				if (isFilterValid(cshortcuts[i]))	{
+
 					if (findKeyConflicts(nullptr, cshortcuts[i].getKeyCombo(), i))
 						isMarker = _babygrid.setMarker(true);
 
@@ -274,14 +274,14 @@ void ShortcutMapper::fillOutBabyGrid()
 		}
 		break;
 
-		case STATE_MACRO:
-		{
+		case STATE_MACRO:	{
+
 			vector<MacroShortcut> & cshortcuts = nppParam.getMacroList();
 			cs_index = 1;
-			for (size_t i = 0; i < nbItems; ++i)
-			{
-				if (isFilterValid(cshortcuts[i]))
-				{
+			for (size_t i = 0; i < nbItems; ++i)	{
+
+				if (isFilterValid(cshortcuts[i]))	{
+
 					if (findKeyConflicts(nullptr, cshortcuts[i].getKeyCombo(), i))
 						isMarker = _babygrid.setMarker(true);
 
@@ -303,14 +303,14 @@ void ShortcutMapper::fillOutBabyGrid()
 		}
 		break;
 
-		case STATE_USER:
-		{
+		case STATE_USER:	{
+
 			vector<UserCommand> & cshortcuts = nppParam.getUserCommandList();
 			cs_index = 1;
-			for (size_t i = 0; i < nbItems; ++i)
-			{
-				if (isFilterValid(cshortcuts[i]))
-				{
+			for (size_t i = 0; i < nbItems; ++i)	{
+
+				if (isFilterValid(cshortcuts[i]))	{
+
 					if (findKeyConflicts(nullptr, cshortcuts[i].getKeyCombo(), i))
 						isMarker = _babygrid.setMarker(true);
 
@@ -333,14 +333,14 @@ void ShortcutMapper::fillOutBabyGrid()
 		}
 		break;
 
-		case STATE_PLUGIN:
-		{
+		case STATE_PLUGIN:	{
+
 			vector<PluginCmdShortcut> & cshortcuts = nppParam.getPluginCommandList();
 			cs_index = 1;
-			for (size_t i = 0; i < nbItems; ++i)
-			{
-				if (isFilterValid(cshortcuts[i]))
-				{
+			for (size_t i = 0; i < nbItems; ++i)	{
+
+				if (isFilterValid(cshortcuts[i]))	{
+
 					if (findKeyConflicts(nullptr, cshortcuts[i].getKeyCombo(), i))
 						isMarker = _babygrid.setMarker(true);
 
@@ -363,21 +363,21 @@ void ShortcutMapper::fillOutBabyGrid()
 		}
 		break;
 
-		case STATE_SCINTILLA:
-		{
+		case STATE_SCINTILLA:	{
+
 			vector<ScintillaKeyMap> & cshortcuts = nppParam.getScintillaKeyList();
 			cs_index=1;
-			for (size_t i = 0; i < nbItems; ++i)
-			{
-				if (isFilterValid(cshortcuts[i]))
-				{
-					if (cshortcuts[i].isEnabled())
-					{
+			for (size_t i = 0; i < nbItems; ++i)	{
+
+				if (isFilterValid(cshortcuts[i]))	{
+
+					if (cshortcuts[i].isEnabled())	{
+
 						size_t sciCombos = cshortcuts[i].getSize();
-						for (size_t sciIndex = 0; sciIndex < sciCombos; ++sciIndex)
-						{
-							if (findKeyConflicts(nullptr, cshortcuts[i].getKeyComboByIndex(sciIndex), i))
-							{
+						for (size_t sciIndex = 0; sciIndex < sciCombos; ++sciIndex)	{
+
+							if (findKeyConflicts(nullptr, cshortcuts[i].getKeyComboByIndex(sciIndex), i))	{
+
 								isMarker = _babygrid.setMarker(true);
 								break;
 							}
@@ -412,10 +412,10 @@ void ShortcutMapper::fillOutBabyGrid()
 
 INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-	switch (message) 
-	{
-		case WM_INITDIALOG :
-		{
+	switch (message)	{ 
+
+		case WM_INITDIALOG :	{
+
 			initBabyGrid();
 			initTabs();
 			fillOutBabyGrid();
@@ -435,19 +435,19 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 			return TRUE;
 		}
-		case WM_GETMINMAXINFO :
-		{
+		case WM_GETMINMAXINFO :	{
+
 			MINMAXINFO* mmi = (MINMAXINFO*)lParam;
-			if (_dialogInitDone)
-			{
+			if (_dialogInitDone)	{
+
 				mmi->ptMinTrackSize.x = _initClientWidth;
 				mmi->ptMinTrackSize.y = _initClientHeight;
 			}
 			return 0;
 		}
 
-		case WM_DESTROY:
-		{
+		case WM_DESTROY:	{
+
 			for (const HFONT & hFont : _hGridFonts)
 				::DeleteObject(hFont);
 
@@ -456,8 +456,8 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			break;
 		}
 
-		case WM_SIZE:
-		{
+		case WM_SIZE:	{
+
 			LONG newWidth = LOWORD(lParam);
 			LONG newHeight = HIWORD(lParam);
 			RECT rect;
@@ -477,8 +477,8 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			const UINT flags = SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOACTIVATE | SWP_NOCOPYBITS;
 			Window::getClientRect(rect);
 
-			for (int moveWndID : moveWindowIDs)
-			{
+			for (int moveWndID : moveWindowIDs)	{
+
 				HWND moveHwnd = ::GetDlgItem(_hSelf, moveWndID);
 				::GetWindowRect(moveHwnd, &rect);
 				::MapWindowPoints(NULL, _hSelf, (LPPOINT)&rect, 2);
@@ -505,20 +505,20 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 		}
 		break;
 
-		case WM_NOTIFY:
-		{
+		case WM_NOTIFY:	{
+
 			NMHDR nmh = *((NMHDR*)lParam);
-			if (nmh.hwndFrom == _hTabCtrl)
-			{
-				if (nmh.code == TCN_SELCHANGE)
-				{
+			if (nmh.hwndFrom == _hTabCtrl)	{
+
+				if (nmh.code == TCN_SELCHANGE)	{
+
 					//save the current view
 					_lastHomeRow[_currentState] = _babygrid.getHomeRow();
 					_lastCursorRow[_currentState] = _babygrid.getSelectedRow();
 					int index = TabCtrl_GetCurSel(_hTabCtrl);
 
-					switch (index)
-					{
+					switch (index)	{
+
 						case 0:
 							_currentState = STATE_MENU;
 							break;
@@ -545,8 +545,8 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 		}
 		break;
 
-		case NPPM_INTERNAL_FINDKEYCONFLICTS:
-		{
+		case NPPM_INTERNAL_FINDKEYCONFLICTS:	{
+
 			if (not wParam || not lParam)
 				break;
 
@@ -563,23 +563,23 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			return TRUE;
 		}
 
-		case WM_COMMAND : 
-		{
-			switch (LOWORD(wParam))
-			{
-				case IDCANCEL :
-				{
+		case WM_COMMAND :	{ 
+
+			switch (LOWORD(wParam))	{
+
+				case IDCANCEL :	{
+
 					::EndDialog(_hSelf, -1);
 					return TRUE;
 				}
-				case IDOK :
-				{
+				case IDOK :	{
+
 					::EndDialog(_hSelf, 0);
 					return TRUE;
 				}
 
-				case IDM_BABYGRID_CLEAR :
-				{
+				case IDM_BABYGRID_CLEAR :	{
+
 					if (_babygrid.getNumberRows() < 1)
 						return TRUE;
 
@@ -588,10 +588,10 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					size_t shortcutIndex = _shortcutIndex[row-1];
 					bool isModified = false;
 
-					switch(_currentState)
-					{
-						case STATE_MENU:
-						{
+					switch(_currentState)	{
+
+						case STATE_MENU:	{
+
 							//Get CommandShortcut corresponding to row
 							vector<CommandShortcut> & shortcuts = nppParam.getUserShortcuts();
 							CommandShortcut csc = shortcuts[shortcutIndex];
@@ -613,8 +613,8 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						}
 						break;
 
-						case STATE_MACRO: 
-						{
+						case STATE_MACRO:	{ 
+
 							//Get MacroShortcut corresponding to row
 							vector<MacroShortcut> & shortcuts = nppParam.getMacroList();
 							MacroShortcut msc = shortcuts[shortcutIndex];
@@ -633,8 +633,8 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						}
 						break;
 
-						case STATE_USER: 
-						{
+						case STATE_USER:	{ 
+
 							//Get UserCommand corresponding to row
 							vector<UserCommand> & shortcuts = nppParam.getUserCommandList();
 							UserCommand ucmd = shortcuts[shortcutIndex];
@@ -656,8 +656,8 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						}
 						break;
 
-						case STATE_PLUGIN: 
-						{
+						case STATE_PLUGIN:	{ 
+
 							//Get PluginCmdShortcut corresponding to row
 							vector<PluginCmdShortcut> & shortcuts = nppParam.getPluginCommandList();
 							PluginCmdShortcut pcsc = shortcuts[shortcutIndex];
@@ -687,8 +687,8 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						}
 						break;
 
-						case STATE_SCINTILLA: 
-						{
+						case STATE_SCINTILLA:	{ 
+
 							// Do nothing
 						}
 						break;
@@ -701,8 +701,8 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					return TRUE;
 				}
 
-				case IDM_BABYGRID_MODIFY :
-				{
+				case IDM_BABYGRID_MODIFY :	{
+
 					if (_babygrid.getNumberRows() < 1)
 						return TRUE;
 
@@ -711,16 +711,16 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					size_t shortcutIndex = _shortcutIndex[row-1];
 					bool isModified = false;
 
-					switch(_currentState)
-					{
-						case STATE_MENU:
-						{
+					switch(_currentState)	{
+
+						case STATE_MENU:	{
+
 							//Get CommandShortcut corresponding to row
 							vector<CommandShortcut> & shortcuts = nppParam.getUserShortcuts();
 							CommandShortcut csc = shortcuts[shortcutIndex], prevcsc = shortcuts[shortcutIndex];
 							csc.init(_hInst, _hSelf);
-							if (csc.doDialog() != -1 && prevcsc != csc)
-							{
+							if (csc.doDialog() != -1 && prevcsc != csc)	{
+
 								//shortcut was altered
 								nppParam.addUserModifiedIndex(shortcutIndex);
 								shortcuts[shortcutIndex] = csc;
@@ -739,14 +739,14 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						}
 						break;
 
-						case STATE_MACRO: 
-						{
+						case STATE_MACRO:	{ 
+
 							//Get MacroShortcut corresponding to row
 							vector<MacroShortcut> & shortcuts = nppParam.getMacroList();
 							MacroShortcut msc = shortcuts[shortcutIndex], prevmsc = shortcuts[shortcutIndex];
 							msc.init(_hInst, _hSelf);
-							if (msc.doDialog() != -1 && prevmsc != msc)
-							{
+							if (msc.doDialog() != -1 && prevmsc != msc)	{
+
 								//shortcut was altered
 								shortcuts[shortcutIndex] = msc;
 
@@ -764,15 +764,15 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						}
 						break; 
 
-						case STATE_USER: 
-						{
+						case STATE_USER:	{ 
+
 							//Get UserCommand corresponding to row
 							vector<UserCommand> & shortcuts = nppParam.getUserCommandList();
 							UserCommand ucmd = shortcuts[shortcutIndex];
 							ucmd.init(_hInst, _hSelf);
 							UserCommand prevucmd = ucmd;
-							if (ucmd.doDialog() != -1 && prevucmd != ucmd)
-							{
+							if (ucmd.doDialog() != -1 && prevucmd != ucmd)	{
+
 								//shortcut was altered
 								shortcuts[shortcutIndex] = ucmd;
 
@@ -790,15 +790,15 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						}
 						break; 
 
-						case STATE_PLUGIN:
-						{
+						case STATE_PLUGIN:	{
+
 							//Get PluginCmdShortcut corresponding to row
 							vector<PluginCmdShortcut> & shortcuts = nppParam.getPluginCommandList();
 							PluginCmdShortcut pcsc = shortcuts[shortcutIndex];
 							pcsc.init(_hInst, _hSelf);
 							PluginCmdShortcut prevpcsc = pcsc;
-							if (pcsc.doDialog() != -1 && prevpcsc != pcsc)
-							{
+							if (pcsc.doDialog() != -1 && prevpcsc != pcsc)	{
+
 								//shortcut was altered
 								nppParam.addPluginModifiedIndex(shortcutIndex);
 								shortcuts[shortcutIndex] = pcsc;
@@ -825,14 +825,14 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						}
 						break;
 
-						case STATE_SCINTILLA:
-						{
+						case STATE_SCINTILLA:	{
+
 							//Get ScintillaKeyMap corresponding to row
 							vector<ScintillaKeyMap> & shortcuts = nppParam.getScintillaKeyList();
 							ScintillaKeyMap skm = shortcuts[shortcutIndex], prevskm = shortcuts[shortcutIndex];
 							skm.init(_hInst, _hSelf);
-							if (skm.doDialog() != -1 && prevskm != skm)
-							{
+							if (skm.doDialog() != -1 && prevskm != skm)	{
+
 								//shortcut was altered
 								nppParam.addScintillaModifiedIndex((int)shortcutIndex);
 								shortcuts[shortcutIndex] = skm;
@@ -859,8 +859,8 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					return TRUE;
 				}
 
-				case IDM_BABYGRID_DELETE :
-				{
+				case IDM_BABYGRID_DELETE :	{
+
 					if (_babygrid.getNumberRows() < 1)
 						return TRUE;
 
@@ -871,8 +871,8 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						L"Are you sure?",
 						MB_OKCANCEL);
 
-					if (res == IDOK)
-					{
+					if (res == IDOK)	{
+
 						const int row = _babygrid.getSelectedRow();
 						size_t shortcutIndex = _shortcutIndex[row-1];
 						DWORD cmdID = 0;
@@ -882,17 +882,17 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						size_t nbElem = 0;
 						HMENU hMenu = NULL;
                         int modifCmd = IDM_SETTING_SHORTCUT_MAPPER_RUN;
-						switch(_currentState) 
-						{
+						switch(_currentState)	{ 
+
 							case STATE_MENU:
 							case STATE_PLUGIN:
-							case STATE_SCINTILLA: 
-							{
+							case STATE_SCINTILLA:	{ 
+
 								return FALSE;			//this is bad
 							}
 
-							case STATE_MACRO: 
-							{
+							case STATE_MACRO:	{ 
+
 								vector<MacroShortcut> & theMacros = nppParam.getMacroList();
 								vector<MacroShortcut>::iterator it = theMacros.begin();
 								cmdID = theMacros[shortcutIndex].getID();
@@ -916,8 +916,8 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 								HMENU m = reinterpret_cast<HMENU>(::SendMessage(_hParent, NPPM_INTERNAL_GETMENU, 0, 0));
 								hMenu = ::GetSubMenu(m, MENUINDEX_MACRO);
 								modifCmd = IDM_SETTING_SHORTCUT_MAPPER_MACRO;
-								for (size_t i = shortcutIndex; i < nbElem; ++i)	//lower the IDs of the remaining items so there are no gaps
-								{
+								for (size_t i = shortcutIndex; i < nbElem; ++i)	{	//lower the IDs of the remaining items so there are no gaps
+
 									MacroShortcut ms = theMacros[i];
 									ms.setID(ms.getID() - 1);	//shift all IDs
 									theMacros[i] = ms;
@@ -925,8 +925,8 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 							}
 							break; 
 
-							case STATE_USER: 
-							{
+							case STATE_USER:	{ 
+
 								vector<UserCommand> & theUserCmds = nppParam.getUserCommandList();
 								vector<UserCommand>::iterator it = theUserCmds.begin();
 								cmdID = theUserCmds[shortcutIndex].getID();
@@ -950,8 +950,8 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 								HMENU m = reinterpret_cast<HMENU>(::SendMessage(_hParent, NPPM_INTERNAL_GETMENU, 0, 0));
 								hMenu = ::GetSubMenu(m, MENUINDEX_RUN);
 								modifCmd = IDM_SETTING_SHORTCUT_MAPPER_RUN;
-								for (size_t i = shortcutIndex; i < nbElem; ++i)	//lower the IDs of the remaining items so there are no gaps
-								{
+								for (size_t i = shortcutIndex; i < nbElem; ++i)	{	//lower the IDs of the remaining items so there are no gaps
+
 									UserCommand uc = theUserCmds[i];
 									uc.setID(uc.getID() - 1);	//shift all IDs
 									theUserCmds[i] = uc;
@@ -967,8 +967,8 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
                         // All menu items are shifted up. So we delete the last item
 						::RemoveMenu(hMenu, posBase + static_cast<int32_t>(nbElem), MF_BYPOSITION);
 
-                        if (nbElem == 0) 
-                        {
+                        if (nbElem == 0)	{ 
+
                             ::RemoveMenu(hMenu, modifCmd, MF_BYCOMMAND);
                             
                             //remove separator
@@ -979,21 +979,21 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					return TRUE;
 				}
 
-				case IDD_BABYGRID_ID1: 
-				{
-					switch (HIWORD(wParam))
-					{
-						case BGN_CELLDBCLICKED: //a cell was clicked in the properties grid
-						{
+				case IDD_BABYGRID_ID1:	{ 
+
+					switch (HIWORD(wParam))	{
+
+						case BGN_CELLDBCLICKED:	{ //a cell was clicked in the properties grid
+
 							return ::SendMessage(_hSelf, WM_COMMAND, IDM_BABYGRID_MODIFY, LOWORD(lParam));
 						}
 
-						case BGN_CELLRCLICKED: //a cell was clicked in the properties grid
-						{
+						case BGN_CELLRCLICKED:	{ //a cell was clicked in the properties grid
+
 							POINT p;
 							::GetCursorPos(&p);
-							if (!_rightClickMenu.isCreated())
-							{
+							if (!_rightClickMenu.isCreated())	{
+
 								vector<MenuItemUnit> itemUnitArray;
 								itemUnitArray.push_back(MenuItemUnit(IDM_BABYGRID_MODIFY, L"Modify"));
 								itemUnitArray.push_back(MenuItemUnit(IDM_BABYGRID_DELETE, L"Delete"));
@@ -1001,14 +1001,14 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 								_rightClickMenu.create(_hSelf, itemUnitArray);
 							}
 
-							if (_babygrid.getNumberRows() < 1)
-							{
+							if (_babygrid.getNumberRows() < 1)	{
+
 								_rightClickMenu.enableItem(IDM_BABYGRID_MODIFY, false);
 								_rightClickMenu.enableItem(IDM_BABYGRID_DELETE, false);
 								_rightClickMenu.enableItem(IDM_BABYGRID_CLEAR, false);
 							}
-							else
-							{
+							else	{
+
 								_rightClickMenu.enableItem(IDM_BABYGRID_MODIFY, true);
 								_rightClickMenu.enableItem(IDM_BABYGRID_DELETE, true);
 								if (_currentState == STATE_SCINTILLA)
@@ -1016,19 +1016,19 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 								else
 									_rightClickMenu.enableItem(IDM_BABYGRID_CLEAR, true);
 
-								switch(_currentState)
-								{
+								switch(_currentState)	{
+
 									case STATE_MACRO:
-									case STATE_USER:
-									{
+									case STATE_USER:	{
+
 										_rightClickMenu.enableItem(IDM_BABYGRID_DELETE, true);
 									}
 									break;
 
 									case STATE_MENU:
 									case STATE_PLUGIN:
-									case STATE_SCINTILLA:
-									{
+									case STATE_SCINTILLA:	{
+
 										_rightClickMenu.enableItem(IDM_BABYGRID_DELETE, false);
 									}
 									break;
@@ -1039,10 +1039,10 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 							return TRUE;
 						}
 
-						case BGN_DELETECELL: //VK_DELETE
-						{
-							switch(_currentState) 
-							{
+						case BGN_DELETECELL:	{ //VK_DELETE
+
+							switch(_currentState)	{ 
+
 								case STATE_MACRO:
 								case STATE_USER:
 									return ::SendMessage(_hSelf, WM_COMMAND, IDM_BABYGRID_DELETE, 0);
@@ -1050,8 +1050,8 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 							return TRUE;
 						}
 
-						case BGN_ROWCHANGED:
-						{
+						case BGN_ROWCHANGED:	{
+
 							if (_babygrid.getNumberRows() < 1)
 								return TRUE;
 
@@ -1059,38 +1059,38 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 							const size_t currentIndex = LOWORD(lParam) - 1;
 							generic_string conflictInfo;
 
-							switch (_currentState)
-							{
-								case STATE_MENU:
-								{
+							switch (_currentState)	{
+
+								case STATE_MENU:	{
+
 									vector<CommandShortcut> & vShortcuts = nppParam.getUserShortcuts();
 									findKeyConflicts(&conflictInfo, vShortcuts[currentIndex].getKeyCombo(), currentIndex);
 								}
 								break;
 
-								case STATE_MACRO:
-								{
+								case STATE_MACRO:	{
+
 									vector<MacroShortcut> & vShortcuts = nppParam.getMacroList();
 									findKeyConflicts(&conflictInfo, vShortcuts[currentIndex].getKeyCombo(), currentIndex);
 								}
 								break;
 
-								case STATE_USER:
-								{
+								case STATE_USER:	{
+
 									vector<UserCommand> & vShortcuts = nppParam.getUserCommandList();
 									findKeyConflicts(&conflictInfo, vShortcuts[currentIndex].getKeyCombo(), currentIndex);
 								}
 								break;
 
-								case STATE_PLUGIN:
-								{
+								case STATE_PLUGIN:	{
+
 									vector<PluginCmdShortcut> & vShortcuts = nppParam.getPluginCommandList();
 									findKeyConflicts(&conflictInfo, vShortcuts[currentIndex].getKeyCombo(), currentIndex);
 								}
 								break;
 
-								case STATE_SCINTILLA:
-								{
+								case STATE_SCINTILLA:	{
+
 									vector<ScintillaKeyMap> & vShortcuts = nppParam.getScintillaKeyList();
 									size_t sciCombos = vShortcuts[currentIndex].getSize();
 									for (size_t sciIndex = 0; sciIndex < sciCombos; ++sciIndex)
@@ -1108,10 +1108,10 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						}
 					}
 				}
-				case IDC_BABYGRID_FILTER:
-				{
-					if (HIWORD(wParam) == EN_CHANGE)
-					{
+				case IDC_BABYGRID_FILTER:	{
+
+					if (HIWORD(wParam) == EN_CHANGE)	{
+
 						fillOutBabyGrid();
 					}
 					return TRUE;
@@ -1136,29 +1136,29 @@ bool ShortcutMapper::findKeyConflicts(__inout_opt generic_string * const keyConf
 	bool retIsConflict = false; //returns true when a conflict is found
 	NppParameters& nppParam = NppParameters::getInstance();
 
-	for (size_t gridState = STATE_MENU; gridState <= STATE_SCINTILLA; ++gridState)
-	{
-		switch (gridState)
-		{
-			case STATE_MENU:
-			{
+	for (size_t gridState = STATE_MENU; gridState <= STATE_SCINTILLA; ++gridState)	{
+
+		switch (gridState)	{
+
+			case STATE_MENU:	{
+
 				vector<CommandShortcut> & vShortcuts = nppParam.getUserShortcuts();
 				size_t nbItems = vShortcuts.size();
-				for (size_t itemIndex = 0; itemIndex < nbItems; ++itemIndex)
-				{
+				for (size_t itemIndex = 0; itemIndex < nbItems; ++itemIndex)	{
+
 					if (not vShortcuts[itemIndex].isEnabled()) //no key assignment
 						continue;
 
 					if ((itemIndex == itemIndexToTest) && (gridState == static_cast<size_t>(_currentState))) //don't catch oneself
 						continue;
 
-					if (isConflict(vShortcuts[itemIndex].getKeyCombo(), itemKeyComboToTest))
-					{
+					if (isConflict(vShortcuts[itemIndex].getKeyCombo(), itemKeyComboToTest))	{
+
 						retIsConflict = true;
 						if (keyConflictLocation == nullptr)
 							return retIsConflict;
-						else
-						{
+						else	{
+
 							if (not keyConflictLocation->empty())
 								*keyConflictLocation += L"\r\n";
 							*keyConflictLocation += _tabNames[gridState];
@@ -1174,25 +1174,25 @@ bool ShortcutMapper::findKeyConflicts(__inout_opt generic_string * const keyConf
 				}
 				break;
 			} //case STATE_MENU
-			case STATE_MACRO:
-			{
+			case STATE_MACRO:	{
+
 				vector<MacroShortcut> & vShortcuts = nppParam.getMacroList();
 				size_t nbItems = vShortcuts.size();
-				for (size_t itemIndex = 0; itemIndex < nbItems; ++itemIndex)
-				{
+				for (size_t itemIndex = 0; itemIndex < nbItems; ++itemIndex)	{
+
 					if (not vShortcuts[itemIndex].isEnabled()) //no key assignment
 						continue;
 
 					if ((itemIndex == itemIndexToTest) && (gridState == static_cast<size_t>(_currentState))) //don't catch oneself
 						continue;
 
-					if (isConflict(vShortcuts[itemIndex].getKeyCombo(), itemKeyComboToTest))
-					{
+					if (isConflict(vShortcuts[itemIndex].getKeyCombo(), itemKeyComboToTest))	{
+
 						retIsConflict = true;
 						if (keyConflictLocation == nullptr)
 							return retIsConflict;
-						else
-						{
+						else	{
+
 							if (not keyConflictLocation->empty())
 								*keyConflictLocation += L"\r\n";
 							*keyConflictLocation += _tabNames[gridState];
@@ -1208,25 +1208,25 @@ bool ShortcutMapper::findKeyConflicts(__inout_opt generic_string * const keyConf
 				}
 				break;
 			} //case STATE_MACRO
-			case STATE_USER:
-			{
+			case STATE_USER:	{
+
 				vector<UserCommand> & vShortcuts = nppParam.getUserCommandList();
 				size_t nbItems = vShortcuts.size();
-				for (size_t itemIndex = 0; itemIndex < nbItems; ++itemIndex)
-				{
+				for (size_t itemIndex = 0; itemIndex < nbItems; ++itemIndex)	{
+
 					if (not vShortcuts[itemIndex].isEnabled()) //no key assignment
 						continue;
 
 					if ((itemIndex == itemIndexToTest) && (gridState == static_cast<size_t>(_currentState))) //don't catch oneself
 						continue;
 
-					if (isConflict(vShortcuts[itemIndex].getKeyCombo(), itemKeyComboToTest))
-					{
+					if (isConflict(vShortcuts[itemIndex].getKeyCombo(), itemKeyComboToTest))	{
+
 						retIsConflict = true;
 						if (keyConflictLocation == nullptr)
 							return retIsConflict;
-						else
-						{
+						else	{
+
 							if (not keyConflictLocation->empty())
 								*keyConflictLocation += L"\r\n";
 							*keyConflictLocation += _tabNames[gridState];
@@ -1242,25 +1242,25 @@ bool ShortcutMapper::findKeyConflicts(__inout_opt generic_string * const keyConf
 				}
 				break;
 			} //case STATE_USER
-			case STATE_PLUGIN:
-			{
+			case STATE_PLUGIN:	{
+
 				vector<PluginCmdShortcut> & vShortcuts = nppParam.getPluginCommandList();
 				size_t nbItems = vShortcuts.size();
-				for (size_t itemIndex = 0; itemIndex < nbItems; ++itemIndex)
-				{
+				for (size_t itemIndex = 0; itemIndex < nbItems; ++itemIndex)	{
+
 					if (not vShortcuts[itemIndex].isEnabled()) //no key assignment
 						continue;
 
 					if ((itemIndex == itemIndexToTest) && (gridState == static_cast<size_t>(_currentState))) //don't catch oneself
 						continue;
 
-					if (isConflict(vShortcuts[itemIndex].getKeyCombo(), itemKeyComboToTest))
-					{
+					if (isConflict(vShortcuts[itemIndex].getKeyCombo(), itemKeyComboToTest))	{
+
 						retIsConflict = true;
 						if (keyConflictLocation == nullptr)
 							return retIsConflict;
-						else
-						{
+						else	{
+
 							if (not keyConflictLocation->empty())
 								*keyConflictLocation += L"\r\n";
 							*keyConflictLocation += _tabNames[gridState];
@@ -1276,12 +1276,12 @@ bool ShortcutMapper::findKeyConflicts(__inout_opt generic_string * const keyConf
 				}
 				break;
 			} //case STATE_PLUGIN
-			case STATE_SCINTILLA:
-			{
+			case STATE_SCINTILLA:	{
+
 				vector<ScintillaKeyMap> & vShortcuts = nppParam.getScintillaKeyList();
 				size_t nbItems = vShortcuts.size();
-				for (size_t itemIndex = 0; itemIndex < nbItems; ++itemIndex)
-				{
+				for (size_t itemIndex = 0; itemIndex < nbItems; ++itemIndex)	{
+
 					if (not vShortcuts[itemIndex].isEnabled()) //no key assignment
 						continue;
 
@@ -1289,15 +1289,15 @@ bool ShortcutMapper::findKeyConflicts(__inout_opt generic_string * const keyConf
 						continue;
 
 					size_t sciCombos = vShortcuts[itemIndex].getSize();
-					for (size_t sciIndex = 0; sciIndex < sciCombos; ++sciIndex)
-					{
-						if (isConflict(vShortcuts[itemIndex].getKeyComboByIndex(sciIndex), itemKeyComboToTest))
-						{
+					for (size_t sciIndex = 0; sciIndex < sciCombos; ++sciIndex)	{
+
+						if (isConflict(vShortcuts[itemIndex].getKeyComboByIndex(sciIndex), itemKeyComboToTest))	{
+
 							retIsConflict = true;
 							if (keyConflictLocation == nullptr)
 								return retIsConflict;
-							else
-							{
+							else	{
+
 								if (not keyConflictLocation->empty())
 									*keyConflictLocation += L"\r\n";
 								*keyConflictLocation += _tabNames[gridState];

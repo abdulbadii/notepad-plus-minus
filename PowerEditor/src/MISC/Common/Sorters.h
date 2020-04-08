@@ -33,8 +33,8 @@
 #include <utility>
 
 // Base interface for line sorting.
-class ISorter
-{
+class ISorter	{
+
 private:
 	bool _isDescending;
 	size_t _fromColumn, _toColumn;
@@ -45,26 +45,26 @@ protected:
 		return _isDescending;
 	}
 
-	generic_string getSortKey(const generic_string& input)
-	{
-		if (isSortingSpecificColumns())
-		{
+	generic_string getSortKey(const generic_string& input)	{
+
+		if (isSortingSpecificColumns())	{
+
 			// prevent an std::out_of_range exception
-			if (input.length() < _fromColumn)
-			{
+			if (input.length() < _fromColumn)	{
+
 				return L"";
 			}
 
 			return input.substr(_fromColumn, 1 + _toColumn - _fromColumn);
 		}
-		else
-		{
+		else	{
+
 			return input;
 		}
 	}
 
-	bool isSortingSpecificColumns()
-	{
+	bool isSortingSpecificColumns()	{
+
 		return _fromColumn != 0 && _toColumn != 0;
 	}
 
@@ -78,8 +78,8 @@ public:
 };
 
 // Implementation of lexicographic sorting of lines.
-class LexicographicSorter : public ISorter
-{
+class LexicographicSorter : public ISorter	{
+
 public:
 	LexicographicSorter(bool isDescending, size_t fromColumn, size_t toColumn) : ISorter(isDescending, fromColumn, toColumn) { };
 	
@@ -88,31 +88,31 @@ public:
 		// Note that both branches here are equivalent in the sense that they give always give the same answer.
 		// However, if we are *not* sorting specific columns, then we get a 40% speed improvement by not calling
 		// getSortKey() so many times.
-		if (isSortingSpecificColumns())
-		{
+		if (isSortingSpecificColumns())	{
+
 			std::sort(lines.begin(), lines.end(), [this](generic_string a, generic_string b)
 			{
-				if (isDescending())
-				{
+				if (isDescending())	{
+
 					return getSortKey(a).compare(getSortKey(b)) > 0;
 					
 				}
-				else
-				{
+				else	{
+
 					return getSortKey(a).compare(getSortKey(b)) < 0;
 				}
 			});
 		}
-		else
-		{
+		else	{
+
 			std::sort(lines.begin(), lines.end(), [this](generic_string a, generic_string b)
 			{
-				if (isDescending())
-				{
+				if (isDescending())	{
+
 					return a.compare(b) > 0;
 				}
-				else
-				{
+				else	{
+
 					return a.compare(b) < 0;
 				}
 			});
@@ -123,8 +123,8 @@ public:
 
 // Treat consecutive numerals as one number
 // Otherwise it is a lexicographic sort
-class NaturalSorter : public ISorter
-{
+class NaturalSorter : public ISorter	{
+
 public:
 	NaturalSorter(bool isDescending, size_t fromColumn, size_t toColumn) : ISorter(isDescending, fromColumn, toColumn) { };
 
@@ -133,8 +133,8 @@ public:
 		// Note that both branches here are equivalent in the sense that they give always give the same answer.
 		// However, if we are *not* sorting specific columns, then we get a 40% speed improvement by not calling
 		// getSortKey() so many times.
-		if (isSortingSpecificColumns())
-		{
+		if (isSortingSpecificColumns())	{
+
 			std::sort(lines.begin(), lines.end(), [this](generic_string aIn, generic_string bIn)
 			{
 				generic_string a = getSortKey(aIn);
@@ -142,10 +142,10 @@ public:
 
 				long long compareResult = 0;
 				size_t i = 0;
-				while (compareResult == 0)
-				{
-					if (i >= a.length() || i >= b.length())
-					{
+				while (compareResult == 0)	{
+
+					if (i >= a.length() || i >= b.length())	{
+
 						compareResult = a.compare(min(i, a.length()), generic_string::npos, b, min(i, b.length()), generic_string::npos);
 						break;
 					}
@@ -154,14 +154,14 @@ public:
 					bool bChunkIsNum = b[i] >= L'0' && b[i] <= L'9';
 
 					// One is number and one is string
-					if (aChunkIsNum != bChunkIsNum)
-					{
+					if (aChunkIsNum != bChunkIsNum)	{
+
 						compareResult = a[i] - b[i];
 						// No need to update i; compareResult != 0
 					}
 					// Both are numbers
-					else if (aChunkIsNum)
-					{
+					else if (aChunkIsNum)	{
+
 						size_t delta = 0;
 
 						// stoll crashes if number exceeds the limit for unsigned long long
@@ -172,8 +172,8 @@ public:
 						i += delta;
 					}
 					// Both are strings
-					else
-					{
+					else	{
+
 						size_t aChunkEnd = a.find_first_of(L"1234567890", i);
 						size_t bChunkEnd = b.find_first_of(L"1234567890", i);
 						compareResult = a.compare(i, aChunkEnd - i, b, i, bChunkEnd - i);
@@ -181,26 +181,26 @@ public:
 					}
 				}
 
-				if (isDescending())
-				{
+				if (isDescending())	{
+
 					return compareResult > 0;
 				}
-				else
-				{
+				else	{
+
 					return compareResult < 0;
 				}
 			});
 		}
-		else
-		{
+		else	{
+
 			std::sort(lines.begin(), lines.end(), [this](generic_string a, generic_string b)
 			{
 				long long compareResult = 0;
 				size_t i = 0;
-				while (compareResult == 0)
-				{
-					if (i >= a.length() || i >= b.length())
-					{
+				while (compareResult == 0)	{
+
+					if (i >= a.length() || i >= b.length())	{
+
 						compareResult = a.compare(min(i,a.length()), generic_string::npos, b, min(i,b.length()), generic_string::npos);
 						break;
 					}
@@ -209,14 +209,14 @@ public:
 					bool bChunkIsNum = b[i] >= L'0' && b[i] <= L'9';
 
 					// One is number and one is string
-					if (aChunkIsNum != bChunkIsNum)
-					{
+					if (aChunkIsNum != bChunkIsNum)	{
+
 						compareResult = a[i] - b[i];
 						// No need to update i; compareResult != 0
 					}
 					// Both are numbers
-					else if (aChunkIsNum)
-					{
+					else if (aChunkIsNum)	{
+
 						size_t delta = 0;
 
 						// stoll crashes if number exceeds the limit for unsigned long long
@@ -227,8 +227,8 @@ public:
 						i += delta;
 					}
 					// Both are strings
-					else
-					{
+					else	{
+
 						size_t aChunkEnd = a.find_first_of(L"1234567890", i);
 						size_t bChunkEnd = b.find_first_of(L"1234567890", i);
 						compareResult = a.compare(i, aChunkEnd-i, b, i, bChunkEnd-i);
@@ -236,12 +236,12 @@ public:
 					}
 				}
 
-				if (isDescending())
-				{
+				if (isDescending())	{
+
 					return compareResult > 0;
 				}
-				else
-				{
+				else	{
+
 					return compareResult < 0;
 				}
 			});
@@ -253,8 +253,8 @@ public:
 // Convert each line to a number and then sort.
 // The conversion must be implemented in classes which inherit from this, see prepareStringForConversion and convertStringToNumber.
 template<typename T_Num>
-class NumericSorter : public ISorter
-{
+class NumericSorter : public ISorter	{
+
 public:
 	NumericSorter(bool isDescending, size_t fromColumn, size_t toColumn) : ISorter(isDescending, fromColumn, toColumn)
 	{
@@ -278,16 +278,16 @@ public:
 		std::vector<std::pair<size_t, T_Num>> nonEmptyInputAsNumbers;
 		std::vector<generic_string> empties;
 		nonEmptyInputAsNumbers.reserve(lines.size());
-		for (size_t lineIndex = 0; lineIndex < lines.size(); ++lineIndex)
-		{
+		for (size_t lineIndex = 0; lineIndex < lines.size(); ++lineIndex)	{
+
 			const generic_string originalLine = lines[lineIndex];
 			const generic_string preparedLine = prepareStringForConversion(originalLine);
-			if (considerStringEmpty(preparedLine))
-			{
+			if (considerStringEmpty(preparedLine))	{
+
 				empties.push_back(originalLine);
 			}
-			else
-			{
+			else	{
+
 				try
 				{
 					nonEmptyInputAsNumbers.push_back(std::make_pair(lineIndex, convertStringToNumber(preparedLine)));
@@ -302,27 +302,27 @@ public:
 		const bool descending = isDescending();
 		std::sort(nonEmptyInputAsNumbers.begin(), nonEmptyInputAsNumbers.end(), [descending](std::pair<size_t, T_Num> a, std::pair<size_t, T_Num> b)
 		{
-			if (descending)
-			{
+			if (descending)	{
+
 				return a.second > b.second;
 			}
-			else
-			{
+			else	{
+
 				return a.second < b.second;
 			}
 		});
 		std::vector<generic_string> output;
 		output.reserve(lines.size());
-		if (!isDescending())
-		{
+		if (!isDescending())	{
+
 			output.insert(output.end(), empties.begin(), empties.end());
 		}
-		for (auto it = nonEmptyInputAsNumbers.begin(); it != nonEmptyInputAsNumbers.end(); ++it)
-		{
+		for (auto it = nonEmptyInputAsNumbers.begin(); it != nonEmptyInputAsNumbers.end(); ++it)	{
+
 			output.push_back(lines[it->first]);
 		}
-		if (isDescending())
-		{
+		if (isDescending())	{
+
 			output.insert(output.end(), empties.begin(), empties.end());
 		}
 		assert(output.size() == lines.size());
@@ -330,8 +330,8 @@ public:
 	}
 
 protected:
-	bool considerStringEmpty(const generic_string& input)
-	{
+	bool considerStringEmpty(const generic_string& input)	{
+
 		// String has something else than just whitespace.
 		return input.find_first_not_of(L" \t\r\n") == std::string::npos;
 	}
@@ -349,8 +349,8 @@ protected:
 };
 
 // Converts lines to double before sorting (assumes decimal comma).
-class DecimalCommaSorter : public NumericSorter<double>
-{
+class DecimalCommaSorter : public NumericSorter<double>	{
+
 public:
 	DecimalCommaSorter(bool isDescending, size_t fromColumn, size_t toColumn) : NumericSorter<double>(isDescending, fromColumn, toColumn) { };
 
@@ -368,8 +368,8 @@ protected:
 };
 
 // Converts lines to double before sorting (assumes decimal dot).
-class DecimalDotSorter : public NumericSorter<double>
-{
+class DecimalDotSorter : public NumericSorter<double>	{
+
 public:
 	DecimalDotSorter(bool isDescending, size_t fromColumn, size_t toColumn) : NumericSorter<double>(isDescending, fromColumn, toColumn) { };
 

@@ -37,8 +37,8 @@ class CReadChangesServer;
 
 // All functions in CReadChangesRequest run in the context of the worker thread.
 // One instance of this object is created for each call to AddDirectory().
-class CReadChangesRequest
-{
+class CReadChangesRequest	{
+
 public:
 	CReadChangesRequest(CReadChangesServer* pServer, LPCTSTR sz, BOOL b, DWORD dw, DWORD size);
 
@@ -49,8 +49,8 @@ public:
 	void BeginRead();
 
 	// The dwSize is the actual number of bytes sent to the APC.
-	void BackupBuffer(DWORD dwSize)
-	{
+	void BackupBuffer(DWORD dwSize)	{
+
 		// We could just swap back and forth between the two
 		// buffers, but this code is easier to understand and debug.
 		memcpy(&m_BackupBuffer[0], &m_Buffer[0], dwSize);
@@ -58,8 +58,8 @@ public:
 
 	void ProcessNotification();
 
-	void RequestTermination()
-	{
+	void RequestTermination()	{
+
 		::CancelIo(m_hDirectory);
 		::CloseHandle(m_hDirectory);
 		m_hDirectory = nullptr;
@@ -101,8 +101,8 @@ protected:
 // One instance of this object is allocated for each instance of CReadDirectoryChanges.
 // This class is responsible for thread startup, orderly thread shutdown, and shimming
 // the various C++ member functions with C-style Win32 functions.
-class CReadChangesServer
-{
+class CReadChangesServer	{
+
 public:
 	explicit CReadChangesServer(CReadDirectoryChanges* pParent)
 	{
@@ -136,18 +136,18 @@ public:
 
 protected:
 
-	void Run()
-	{
-		while (m_nOutstandingRequests || !m_bTerminate)
-		{
+	void Run()	{
+
+		while (m_nOutstandingRequests || !m_bTerminate)	{
+
 			::SleepEx(INFINITE, true);
 		}
 	}
 
-	void AddDirectory( CReadChangesRequest* pBlock )
-	{
-		if (pBlock->OpenDirectory())
-		{
+	void AddDirectory( CReadChangesRequest* pBlock )	{
+
+		if (pBlock->OpenDirectory())	{
+
 			::InterlockedIncrement(&pBlock->m_pServer->m_nOutstandingRequests);
 			m_pBlocks.push_back(pBlock);
 			pBlock->BeginRead();
@@ -156,12 +156,12 @@ protected:
 			delete pBlock;
 	}
 
-	void RequestTermination()
-	{
+	void RequestTermination()	{
+
 		m_bTerminate = true;
 
-		for (DWORD i=0; i<m_pBlocks.size(); ++i)
-		{
+		for (DWORD i=0; i<m_pBlocks.size(); ++i)	{
+
 			// Each Request object will delete itself.
 			m_pBlocks[i]->RequestTermination();
 		}

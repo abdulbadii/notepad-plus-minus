@@ -62,8 +62,8 @@
 enum SecurityMode { sm_certif = 0, sm_sha256 = 1 };
 enum NppModule { nm_scilexer = 0, nm_gup = 1, nm_pluginList = 2 };
 
-class SecurityGard final
-{
+class SecurityGard final	{
+
 public:
 	SecurityGard();
 	bool checkModule(const std::wstring& filePath, NppModule module2check);

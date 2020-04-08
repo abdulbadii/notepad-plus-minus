@@ -26,10 +26,10 @@
 
 INT_PTR CALLBACK HashFromFilesDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /*lParam*/)
 {
-	switch (message) 
-	{
-		case WM_INITDIALOG:
-		{
+	switch (message)	{ 
+
+		case WM_INITDIALOG:	{
+
 			int fontDpiDynamicalHeight = NppParameters::getInstance()._dpiManager.scaleY(13);
 			HFONT hFont = ::CreateFontA(fontDpiDynamicalHeight, 0, 0, 0, 0, FALSE, FALSE, FALSE, ANSI_CHARSET,
 				OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
@@ -49,39 +49,39 @@ INT_PTR CALLBACK HashFromFilesDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 		}
 		return TRUE;
 
-		case WM_COMMAND : 
-		{
-			switch (wParam)
-			{
+		case WM_COMMAND :	{ 
+
+			switch (wParam)	{
+
 				case IDCANCEL :
 					display(false);
 					return TRUE;
 				
-				case IDOK :
-				{
+				case IDOK :	{
+
 					return TRUE;
 				}
 
-				case IDC_HASH_FILEBROWSER_BUTTON:
-				{
+				case IDC_HASH_FILEBROWSER_BUTTON:	{
+
 					FileDialog fDlg(_hSelf, ::GetModuleHandle(NULL));
 					fDlg.setExtFilter(L"All types", L".*", NULL);
 
-					if (stringVector *pfns = fDlg.doOpenMultiFilesDlg())
-					{
+					if (stringVector *pfns = fDlg.doOpenMultiFilesDlg())	{
+
 						std::wstring files2check, hashResultStr;
-						for (const auto& it : *pfns)
-						{
-							if (_ht == hashType::hash_md5)
-							{
+						for (const auto& it : *pfns)	{
+
+							if (_ht == hashType::hash_md5)	{
+
 								WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 								const char *path = wmc.wchar2char(it.c_str(), CP_ACP);
 
 								MD5 md5;
 								char *md5Result = md5.digestFile(path);
 
-								if (md5Result)
-								{
+								if (md5Result)	{
+
 									files2check += it;
 									files2check += L"\r\n";
 
@@ -92,15 +92,15 @@ INT_PTR CALLBACK HashFromFilesDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 									hashResultStr += L"\r\n";
 								}
 							}
-							else if (_ht == hashType::hash_sha256)
-							{
+							else if (_ht == hashType::hash_sha256)	{
+
 								std::string content = getFileContent(it.c_str());
 
 								uint8_t sha2hash[32];
 								calc_sha_256(sha2hash, reinterpret_cast<const uint8_t*>(content.c_str()), content.length());
 
 								wchar_t sha2hashStr[65] = { '\0' };
-								for (size_t i = 0; i < 32; i++)
+								for (size_t i = 0; i < 32; ++i )
 									wsprintf(sha2hashStr + i * 2, L"%02x", sha2hash[i]);
 
 								files2check += it;
@@ -112,14 +112,14 @@ INT_PTR CALLBACK HashFromFilesDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 								hashResultStr += fileName;
 								hashResultStr += L"\r\n";
 							}
-							else
-							{
+							else	{
+
 								// unknown
 							}
 						}
 
-						if (!files2check.empty() && !hashResultStr.empty())
-						{
+						if (!files2check.empty() && !hashResultStr.empty())	{
+
 							::SetDlgItemText(_hSelf, IDC_HASH_PATH_EDIT, files2check.c_str());
 							::SetDlgItemText(_hSelf, IDC_HASH_RESULT_EDIT, hashResultStr.c_str());
 						}
@@ -127,11 +127,11 @@ INT_PTR CALLBACK HashFromFilesDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 				}
 				return TRUE;
 
-				case IDC_HASH_TOCLIPBOARD_BUTTON:
-				{
+				case IDC_HASH_TOCLIPBOARD_BUTTON:	{
+
 					int len = static_cast<int>(::SendMessage(::GetDlgItem(_hSelf, IDC_HASH_RESULT_EDIT), WM_GETTEXTLENGTH, 0, 0));
-					if (len)
-					{
+					if (len)	{
+
 						wchar_t *rStr = new wchar_t[len+1];
 						::GetDlgItemText(_hSelf, IDC_HASH_RESULT_EDIT, rStr, len + 1);
 						str2Clipboard(rStr, _hSelf);
@@ -148,19 +148,19 @@ INT_PTR CALLBACK HashFromFilesDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 	return FALSE;	
 }
 
-LRESULT run_textEditProc(WNDPROC oldEditProc, HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	switch (message)
-	{
-		case WM_GETDLGCODE:
-		{
+LRESULT run_textEditProc(WNDPROC oldEditProc, HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)	{
+
+	switch (message)	{
+
+		case WM_GETDLGCODE:	{
+
 			return DLGC_WANTALLKEYS | ::CallWindowProc(oldEditProc, hwnd, message, wParam, lParam);
 		}
 
-		case WM_CHAR:
-		{
-			if (wParam == 1) // Ctrl+A
-			{
+		case WM_CHAR:	{
+
+			if (wParam == 1)	{ // Ctrl+A
+
 				::SendMessage(hwnd, EM_SETSEL, 0, -1);
 				return TRUE;
 			}
@@ -173,19 +173,19 @@ LRESULT run_textEditProc(WNDPROC oldEditProc, HWND hwnd, UINT message, WPARAM wP
 	return ::CallWindowProc(oldEditProc, hwnd, message, wParam, lParam);
 }
 
-void HashFromFilesDlg::setHashType(hashType hashType2set)
-{
+void HashFromFilesDlg::setHashType(hashType hashType2set)	{
+
 	_ht = hashType2set;
 }
 
-void HashFromFilesDlg::doDialog(bool isRTL)
-{
-	if (!isCreated())
-	{
+void HashFromFilesDlg::doDialog(bool isRTL)	{
+
+	if (!isCreated())	{
+
 		create(IDD_HASHFROMFILES_DLG, isRTL);
 
-		if (_ht == hash_sha256)
-		{
+		if (_ht == hash_sha256)	{
+
 			generic_string title = L"Generate SHA-256 digest from files";
 			::SetWindowText(_hSelf, title.c_str());
 
@@ -198,50 +198,50 @@ void HashFromFilesDlg::doDialog(bool isRTL)
 	goToCenter();
 };
 
-void HashFromTextDlg::generateHash()
-{
+void HashFromTextDlg::generateHash()	{
+
 	if (_ht != hash_md5 && _ht != hash_sha256)
 		return;
 
 	int len = static_cast<int>(::SendMessage(::GetDlgItem(_hSelf, IDC_HASH_TEXT_EDIT), WM_GETTEXTLENGTH, 0, 0));
-	if (len)
-	{
+	if (len)	{
+
 		// it's important to get text from UNICODE then convert it to UTF8
 		// So we get the result of UTF8 text (tested with Chinese).
 		wchar_t *text = new wchar_t[len + 1];
 		::GetDlgItemText(_hSelf, IDC_HASH_TEXT_EDIT, text, len + 1);
 		WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 		const char *newText = wmc.wchar2char(text, SC_CP_UTF8);
-		if (_ht == hash_md5)
-		{
+		if (_ht == hash_md5)	{
+
 			MD5 md5;
 			char* md5Result = md5.digestString(newText);
 			::SetDlgItemTextA(_hSelf, IDC_HASH_RESULT_FOMTEXT_EDIT, md5Result);
 		}
-		else if (_ht == hash_sha256)
-		{
+		else if (_ht == hash_sha256)	{
+
 			uint8_t sha2hash[32];
 			calc_sha_256(sha2hash, reinterpret_cast<const uint8_t*>(newText), strlen(newText));
 
 			wchar_t sha2hashStr[65] = { '\0' };
-			for (size_t i = 0; i < 32; i++)
+			for (size_t i = 0; i < 32; ++i )
 				wsprintf(sha2hashStr + i * 2, L"%02x", sha2hash[i]);
 
 			::SetDlgItemText(_hSelf, IDC_HASH_RESULT_FOMTEXT_EDIT, sha2hashStr);
 		}
 		delete[] text;
 	}
-	else
-	{
+	else	{
+
 		::SetDlgItemTextA(_hSelf, IDC_HASH_RESULT_FOMTEXT_EDIT, "");
 	}
 }
 
-void HashFromTextDlg::generateHashPerLine()
-{
+void HashFromTextDlg::generateHashPerLine()	{
+
 	int len = static_cast<int>(::SendMessage(::GetDlgItem(_hSelf, IDC_HASH_TEXT_EDIT), WM_GETTEXTLENGTH, 0, 0));
-	if (len)
-	{
+	if (len)	{
+
 		wchar_t *text = new wchar_t[len + 1];
 		::GetDlgItemText(_hSelf, IDC_HASH_TEXT_EDIT, text, len + 1);
 
@@ -250,8 +250,8 @@ void HashFromTextDlg::generateHashPerLine()
 		std::string result;
 		MD5 md5;
 		WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
-		while (std::getline(ss, aLine))
-		{
+		while (std::getline(ss, aLine))	{
+
 			// getline() detect only '\n' but not "\r\n" under windows
 			// this hack is to walk around such bug
 			if (aLine.back() == '\r')
@@ -259,23 +259,23 @@ void HashFromTextDlg::generateHashPerLine()
 
 			if (aLine.empty())
 				result += "\r\n";
-			else
-			{
+			else	{
+
 				const char *newText = wmc.wchar2char(aLine.c_str(), SC_CP_UTF8);
 
-				if (_ht == hash_md5)
-				{
+				if (_ht == hash_md5)	{
+
 					char* md5Result = md5.digestString(newText);
 					result += md5Result;
 					result += "\r\n";
 				}
-				else if (_ht == hash_sha256)
-				{
+				else if (_ht == hash_sha256)	{
+
 					uint8_t sha2hash[32];
 					calc_sha_256(sha2hash, reinterpret_cast<const uint8_t*>(newText), strlen(newText));
 
 					char sha2hashStr[65] = { '\0' };
-					for (size_t i = 0; i < 32; i++)
+					for (size_t i = 0; i < 32; ++i )
 						sprintf(sha2hashStr + i * 2, "%02x", sha2hash[i]);
 
 					result += sha2hashStr;
@@ -286,18 +286,18 @@ void HashFromTextDlg::generateHashPerLine()
 		delete[] text;
 		::SetDlgItemTextA(_hSelf, IDC_HASH_RESULT_FOMTEXT_EDIT, result.c_str());
 	}
-	else
-	{
+	else	{
+
 		::SetDlgItemTextA(_hSelf, IDC_HASH_RESULT_FOMTEXT_EDIT, "");
 	}
 }
 
 INT_PTR CALLBACK HashFromTextDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /*lParam*/)
 {
-	switch (message) 
-	{
-		case WM_INITDIALOG:
-		{
+	switch (message)	{ 
+
+		case WM_INITDIALOG:	{
+
 			int fontDpiDynamicalHeight = NppParameters::getInstance()._dpiManager.scaleY(13);
 			HFONT hFont = ::CreateFontA(fontDpiDynamicalHeight, 0, 0, 0, 0, FALSE, FALSE, FALSE, ANSI_CHARSET,
 				OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
@@ -317,49 +317,49 @@ INT_PTR CALLBACK HashFromTextDlg::run_dlgProc(UINT message, WPARAM wParam, LPARA
 		}
 		return TRUE;
 
-		case WM_COMMAND : 
-		{
-			if (HIWORD(wParam) == EN_CHANGE && LOWORD(wParam) == IDC_HASH_TEXT_EDIT)
-			{
-				if (isCheckedOrNot(IDC_HASH_EACHLINE_CHECK))
-				{
+		case WM_COMMAND :	{ 
+
+			if (HIWORD(wParam) == EN_CHANGE && LOWORD(wParam) == IDC_HASH_TEXT_EDIT)	{
+
+				if (isCheckedOrNot(IDC_HASH_EACHLINE_CHECK))	{
+
 					generateHashPerLine();
 				}
-				else
-				{
+				else	{
+
 					generateHash();
 				}
 			}
 
-			switch (wParam)
-			{
+			switch (wParam)	{
+
 				case IDCANCEL :
 					display(false);
 					return TRUE;
 				
-				case IDOK :
-				{
+				case IDOK :	{
+
 					return TRUE;
 				}
 
-				case IDC_HASH_EACHLINE_CHECK:
-				{
-					if (isCheckedOrNot(IDC_HASH_EACHLINE_CHECK))
-					{
+				case IDC_HASH_EACHLINE_CHECK:	{
+
+					if (isCheckedOrNot(IDC_HASH_EACHLINE_CHECK))	{
+
 						generateHashPerLine();
 					}
-					else
-					{
+					else	{
+
 						generateHash();
 					}
 				}
 				return TRUE;
 
-				case IDC_HASH_FROMTEXT_TOCLIPBOARD_BUTTON:
-				{
+				case IDC_HASH_FROMTEXT_TOCLIPBOARD_BUTTON:	{
+
 					int len = static_cast<int>(::SendMessage(::GetDlgItem(_hSelf, IDC_HASH_RESULT_FOMTEXT_EDIT), WM_GETTEXTLENGTH, 0, 0));
-					if (len)
-					{
+					if (len)	{
+
 						wchar_t *rStr = new wchar_t[len+1];
 						::GetDlgItemText(_hSelf, IDC_HASH_RESULT_FOMTEXT_EDIT, rStr, len + 1);
 						str2Clipboard(rStr, _hSelf);
@@ -376,19 +376,19 @@ INT_PTR CALLBACK HashFromTextDlg::run_dlgProc(UINT message, WPARAM wParam, LPARA
 	return FALSE;	
 }
 
-void HashFromTextDlg::setHashType(hashType hashType2set)
-{
+void HashFromTextDlg::setHashType(hashType hashType2set)	{
+
 	_ht = hashType2set;
 }
 
-void HashFromTextDlg::doDialog(bool isRTL)
-{
-	if (!isCreated())
-	{
+void HashFromTextDlg::doDialog(bool isRTL)	{
+
+	if (!isCreated())	{
+
 		create(IDD_HASHFROMTEXT_DLG, isRTL);
 
-		if (_ht == hash_sha256)
-		{
+		if (_ht == hash_sha256)	{
+
 			generic_string title = L"Generate SHA-256 digest";
 			::SetWindowText(_hSelf, title.c_str());
 		}

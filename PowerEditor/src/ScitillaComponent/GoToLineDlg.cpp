@@ -31,37 +31,37 @@
 
 INT_PTR CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 {
-	switch (message) 
-	{
-		case WM_INITDIALOG :
-		{
+	switch (message)	{ 
+
+		case WM_INITDIALOG :	{
+
 			::SendDlgItemMessage(_hSelf, IDC_RADIO_GOTOLINE, BM_SETCHECK, TRUE, 0);
 			goToCenter();
 			return TRUE;
 		}
-		case WM_COMMAND : 
-		{
-			switch (wParam)
-			{
+		case WM_COMMAND :	{ 
+
+			switch (wParam)	{
+
 				case IDCANCEL : // Close
 					display(false);
                     cleanLineEdit();
 					return TRUE;
 
-				case IDOK :
-                {
+				case IDOK :	{
+
                     int line = getLine();
-                    if (line != -1)
-                    {
+                    if (line != -1)	{
+
                         display(false);
                         cleanLineEdit();
-						if (_mode == go2line)
-						{
+						if (_mode == go2line)	{
+
 							(*_ppEditView)->execute(SCI_ENSUREVISIBLE, line-1);
 							(*_ppEditView)->execute(SCI_GOTOLINE, line-1);
 						}
-						else
-						{
+						else	{
+
 							auto sci_line = (*_ppEditView)->execute(SCI_LINEFROMPOSITION, line);
 							(*_ppEditView)->execute(SCI_ENSUREVISIBLE, sci_line);
 							(*_ppEditView)->execute(SCI_GOTOPOS, line);
@@ -79,18 +79,18 @@ INT_PTR CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
                 }
 
 				case IDC_RADIO_GOTOLINE :
-				case IDC_RADIO_GOTOOFFSET :
-				{
+				case IDC_RADIO_GOTOOFFSET :	{
+
 				
 					bool isLine, isOffset;
-					if (wParam == IDC_RADIO_GOTOLINE)
-					{
+					if (wParam == IDC_RADIO_GOTOLINE)	{
+
 						isLine = true;
 						isOffset = false;
 						_mode = go2line;
 					}
-					else
-					{
+					else	{
+
 						isLine = false;
 						isOffset = true;
 						_mode = go2offsset;
@@ -102,8 +102,8 @@ INT_PTR CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 				}
 				default :
 				{
-					switch (HIWORD(wParam))
-					{
+					switch (HIWORD(wParam))	{
+
 						case EN_SETFOCUS :
 						case BN_SETFOCUS :
 							updateLinesNumbers();
@@ -126,13 +126,13 @@ void GoToLineDlg::updateLinesNumbers() const
 	unsigned int current = 0;
 	unsigned int limit = 0;
 	
-	if (_mode == go2line)
-	{
+	if (_mode == go2line)	{
+
 		current = static_cast<unsigned int>((*_ppEditView)->getCurrentLineNumber() + 1);
 		limit = static_cast<unsigned int>((*_ppEditView)->execute(SCI_GETLINECOUNT));
 	}
-	else
-	{
+	else	{
+
 		current = static_cast<unsigned int>((*_ppEditView)->execute(SCI_GETCURRENTPOS));
 		limit = static_cast<unsigned int>((*_ppEditView)->getCurrentDocLen() - 1);
 	}

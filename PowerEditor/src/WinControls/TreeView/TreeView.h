@@ -38,8 +38,8 @@
 
 #include <commctrl.h>
 
-class TreeView : public Window
-{
+class TreeView : public Window	{
+
 public :
 	TreeView(){};
 	~TreeView(){};

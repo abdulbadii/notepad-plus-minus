@@ -31,15 +31,15 @@
 #include "menuCmdID.h"
 #include "localization.h"
 
-void LastRecentFileList::initMenu(HMENU hMenu, int idBase, int posBase, Accelerator *pAccelerator, bool doSubMenu)
-{
-	if (doSubMenu)
-	{
+void LastRecentFileList::initMenu(HMENU hMenu, int idBase, int posBase, Accelerator *pAccelerator, bool doSubMenu)	{
+
+	if (doSubMenu)	{
+
 		_hParentMenu = hMenu;
 		_hMenu = ::CreatePopupMenu();
 	}
-	else
-	{
+	else	{
+
 		_hParentMenu = NULL;
 		_hMenu = hMenu;
 	}
@@ -54,21 +54,21 @@ void LastRecentFileList::initMenu(HMENU hMenu, int idBase, int posBase, Accelera
 }
 
 
-void LastRecentFileList::switchMode()
-{
+void LastRecentFileList::switchMode()	{
+
 	//Remove all menu items
 	::RemoveMenu(_hMenu, IDM_FILE_RESTORELASTCLOSEDFILE, MF_BYCOMMAND);
 	::RemoveMenu(_hMenu, IDM_OPEN_SOME_RECENT_FILES, MF_BYCOMMAND);
 	::RemoveMenu(_hMenu, IDM_CLEAN_RECENT_FILE_LIST, MF_BYCOMMAND);
 
-	for (int i = 0; i < _size; ++i)
-	{
+	for (int i = 0; i < _size; ++i)	{
+
 		::RemoveMenu(_hMenu, _lrfl.at(i)._id, MF_BYCOMMAND);
 	}
 
-	if (_hParentMenu == NULL) // mode main menu
-	{	if (_size > 0)
-		{
+	if (_hParentMenu == NULL)	{ // mode main menu
+	if (_size > 0)	{
+
 			::RemoveMenu(_hMenu, _posBase, MF_BYPOSITION);
 			::RemoveMenu(_hMenu, _posBase, MF_BYPOSITION);
 		}
@@ -77,10 +77,10 @@ void LastRecentFileList::switchMode()
 		_hMenu = ::CreatePopupMenu();
 		::RemoveMenu(_hMenu, _posBase+1, MF_BYPOSITION);
 	}
-	else // mode sub-menu
-	{
-		if (_size > 0)
-		{
+	else	{ // mode sub-menu
+
+		if (_size > 0)	{
+
 			::RemoveMenu(_hParentMenu, _posBase, MF_BYPOSITION);
 			::RemoveMenu(_hParentMenu, _posBase, MF_BYPOSITION);
 		}
@@ -92,12 +92,12 @@ void LastRecentFileList::switchMode()
 	_hasSeparators = false;
 };
 
-void LastRecentFileList::updateMenu()
-{
+void LastRecentFileList::updateMenu()	{
+
 	NppParameters& nppParam = NppParameters::getInstance();
 
-	if (!_hasSeparators && _size > 0) 
-	{	
+	if (!_hasSeparators && _size > 0)	{ 
+	
 		//add separators
 		NativeLangSpeaker *pNativeLangSpeaker = nppParam.getNativeLangSpeaker();
 
@@ -124,14 +124,14 @@ void LastRecentFileList::updateMenu()
 		::InsertMenu(_hMenu, _posBase + 4, MF_BYPOSITION, static_cast<UINT_PTR>(-1), 0);
 		_hasSeparators = true;
 
-		if (isSubMenuMode())
-		{
+		if (isSubMenuMode())	{
+
 			::InsertMenu(_hParentMenu, _posBase + 0, MF_BYPOSITION | MF_POPUP, reinterpret_cast<UINT_PTR>(_hMenu), (LPCTSTR)recentFileList.c_str());
 			::InsertMenu(_hParentMenu, _posBase + 1, MF_BYPOSITION, static_cast<UINT_PTR>(-1), 0);
 		}
 	}
-	else if (_hasSeparators && _size == 0) 	//remove separators
-	{
+	else if (_hasSeparators && _size == 0)	{ 	//remove separators
+
 		::RemoveMenu(_hMenu, _posBase + 4, MF_BYPOSITION);
 		::RemoveMenu(_hMenu, IDM_CLEAN_RECENT_FILE_LIST, MF_BYCOMMAND);
 		::RemoveMenu(_hMenu, IDM_OPEN_SOME_RECENT_FILES, MF_BYCOMMAND);
@@ -139,8 +139,8 @@ void LastRecentFileList::updateMenu()
 		::RemoveMenu(_hMenu, _posBase + 0, MF_BYPOSITION);
 		_hasSeparators = false;
 
-		if (isSubMenuMode())
-		{
+		if (isSubMenuMode())	{
+
 			// Remove "Recent Files" Entry and the separator from the main menu
 			::RemoveMenu(_hParentMenu, _posBase + 1, MF_BYPOSITION);
 			::RemoveMenu(_hParentMenu, _posBase + 0, MF_BYPOSITION);
@@ -153,40 +153,40 @@ void LastRecentFileList::updateMenu()
 	_pAccelerator->updateFullMenu();
 
 	//Remove all menu items
-	for (int i = 0; i < _size; ++i) 
-	{
+	for (int i = 0; i < _size; ++i)	{ 
+
 		::RemoveMenu(_hMenu, _lrfl.at(i)._id, MF_BYCOMMAND);
 	}
 	//Then readd them, so everything stays in sync
-	for (int j = 0; j < _size; ++j)
-	{
+	for (int j = 0; j < _size; ++j)	{
+
 		generic_string strBuffer(BuildMenuFileName(nppParam.getRecentFileCustomLength(), j, _lrfl.at(j)._name));
 		::InsertMenu(_hMenu, _posBase + j, MF_BYPOSITION, _lrfl.at(j)._id, strBuffer.c_str());
 	}
 	
 }
 
-void LastRecentFileList::add(const TCHAR *fn) 
-{
+void LastRecentFileList::add(const TCHAR *fn)	{ 
+
 	if (_userMax == 0 || _locked)
 		return;
 
 	RecentItem itemToAdd(fn);
 
 	int index = find(fn);
-	if (index != -1)
-	{
+	if (index != -1)	{
+
 		//already in list, bump upwards
 		remove(index);
 	}
 
-	if (_size == _userMax)
-	{
+	if (_size == _userMax)	{
+
 		itemToAdd._id = _lrfl.back()._id;
 		_lrfl.pop_back();	//remove oldest
 	}
-	else
-	{
+	else	{
+
 		itemToAdd._id = popFirstAvailableID();
 		++_size;
 	}
@@ -194,19 +194,19 @@ void LastRecentFileList::add(const TCHAR *fn)
 	updateMenu();
 };
 
-void LastRecentFileList::remove(const TCHAR *fn) 
-{ 
+void LastRecentFileList::remove(const TCHAR *fn)	{ 
+ 
 	int index = find(fn);
 	if (index != -1)
 		remove(index);
 };
 
-void LastRecentFileList::remove(size_t index) 
-{
+void LastRecentFileList::remove(size_t index)	{ 
+
 	if (_size == 0 || _locked)
 		return;
-	if (index < _lrfl.size())
-	{
+	if (index < _lrfl.size())	{
+
 		::RemoveMenu(_hMenu, _lrfl.at(index)._id, MF_BYCOMMAND);
 		setAvailable(_lrfl.at(index)._id);
 		_lrfl.erase(_lrfl.begin() + index);
@@ -216,13 +216,13 @@ void LastRecentFileList::remove(size_t index)
 };
 
 
-void LastRecentFileList::clear() 
-{
+void LastRecentFileList::clear()	{ 
+
 	if (_size == 0)
 		return;
 
-	for (int i = (_size-1); i >= 0; i--) 
-	{
+	for (int i = (_size-1); i >= 0; --i )	{ 
+
 		::RemoveMenu(_hMenu, _lrfl.at(i)._id, MF_BYCOMMAND);
 		setAvailable(_lrfl.at(i)._id);
 		_lrfl.erase(_lrfl.begin() + i);
@@ -232,11 +232,11 @@ void LastRecentFileList::clear()
 }
 
 
-generic_string & LastRecentFileList::getItem(int id) 
-{
+generic_string & LastRecentFileList::getItem(int id)	{ 
+
 	int i = 0;
-	for (; i < _size; ++i)
-	{
+	for (; i < _size; ++i)	{
+
 		if (_lrfl.at(i)._id == id)
 			break;
 	}
@@ -245,20 +245,20 @@ generic_string & LastRecentFileList::getItem(int id)
 	return _lrfl.at(i)._name;	//if not found, return first
 };
 
-generic_string & LastRecentFileList::getIndex(int index)
-{
+generic_string & LastRecentFileList::getIndex(int index)	{
+
 	return _lrfl.at(index)._name;	//if not found, return first
 }
 
 
-void LastRecentFileList::setUserMaxNbLRF(int size)
-{
+void LastRecentFileList::setUserMaxNbLRF(int size)	{
+
 	_userMax = size;
-	if (_size > _userMax) 
-	{	//start popping items
+	if (_size > _userMax)	{ 
+	//start popping items
 		int toPop = _size-_userMax;
-		while (toPop > 0) 
-		{
+		while (toPop > 0)	{ 
+
 			::RemoveMenu(_hMenu, _lrfl.back()._id, MF_BYCOMMAND);
 			setAvailable(_lrfl.back()._id);
 			_lrfl.pop_back();
@@ -272,37 +272,37 @@ void LastRecentFileList::setUserMaxNbLRF(int size)
 
 
 
-void LastRecentFileList::saveLRFL()
-{
+void LastRecentFileList::saveLRFL()	{
+
 	NppParameters& nppParams = NppParameters::getInstance();
-	if (nppParams.writeRecentFileHistorySettings(_userMax))
-	{
-		for (int i = _size - 1; i >= 0; i--)	//reverse order: so loading goes in correct order
-		{
+	if (nppParams.writeRecentFileHistorySettings(_userMax))	{
+
+		for (int i = _size - 1; i >= 0; --i )	{	//reverse order: so loading goes in correct order
+
 			nppParams.writeHistory(_lrfl.at(i)._name.c_str());
 		}
 	}
 }
 
 
-int LastRecentFileList::find(const TCHAR *fn)
-{
-	for (int i = 0; i < _size; ++i)
-	{
-		if (OrdinalIgnoreCaseCompareStrings(_lrfl.at(i)._name.c_str(), fn) == 0)
-		{
+int LastRecentFileList::find(const TCHAR *fn)	{
+
+	for (int i = 0; i < _size; ++i)	{
+
+		if (OrdinalIgnoreCaseCompareStrings(_lrfl.at(i)._name.c_str(), fn) == 0)	{
+
 			return i;
 		}
 	}
 	return -1;
 }
 
-int LastRecentFileList::popFirstAvailableID() 
-{
-	for (int i = 0 ; i < NB_MAX_LRF_FILE ; ++i)
-	{
-		if (_idFreeArray[i])
-		{
+int LastRecentFileList::popFirstAvailableID()	{ 
+
+	for (int i = 0 ; i < NB_MAX_LRF_FILE ; ++i)	{
+
+		if (_idFreeArray[i])	{
+
 			_idFreeArray[i] = false;
 			return i + _idBase;
 		}
@@ -310,8 +310,8 @@ int LastRecentFileList::popFirstAvailableID()
 	return 0;
 }
 
-void LastRecentFileList::setAvailable(int id)
-{
+void LastRecentFileList::setAvailable(int id)	{
+
 	int index = id - _idBase;
 	_idFreeArray[index] = true;
 }

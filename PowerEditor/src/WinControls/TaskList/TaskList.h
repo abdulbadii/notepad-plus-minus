@@ -36,8 +36,8 @@
 #define WM_MOUSEWHEEL 0x020A
 #endif //WM_MOUSEWHEEL
 
-class TaskList : public Window
-{
+class TaskList : public Window	{
+
 public:
 	TaskList() : Window() {
 		_rc.left = 0;

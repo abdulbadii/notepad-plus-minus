@@ -42,8 +42,8 @@ distribution.
    The buffer allocation is made by a simplistic power of 2 like mechanism : if we increase
    a string and there's no more room, we allocate a buffer twice as big as we need.
 */
-class TiXmlStringA
-{
+class TiXmlStringA	{
+
   public :
     // TiXmlStringA constructor, based on a string
     TiXmlStringA (const char * instring);
@@ -139,11 +139,11 @@ class TiXmlStringA
     /*	Function to reserve a big amount of data when we know we'll need it. Be aware that this
 		function clears the content of the TiXmlStringA if any exists.
     */
-    void reserve (unsigned size)
-    {
+    void reserve (unsigned size)	{
+
         empty_it ();
-        if (size)
-        {
+        if (size)	{
+
             allocated = size;
 			TIXMLA_STRING cstring = new char [size];
             cstring [0] = 0;
@@ -175,14 +175,14 @@ class TiXmlStringA
 
     // New size computation. It is simplistic right now : it returns twice the amount
     // we need
-    unsigned assign_new_size (unsigned minimum_to_allocate)
-    {
+    unsigned assign_new_size (unsigned minimum_to_allocate)	{
+
         return minimum_to_allocate * 2;
     }
 
     // Internal function that clears the content of a TiXmlStringA
-    void empty_it ()
-    {
+    void empty_it ()	{
+
         if (cstring)
             delete [] cstring;
         cstring = NULL;
@@ -193,14 +193,14 @@ class TiXmlStringA
     void append (const char *suffix );
 
     // append function for another TiXmlStringA
-    void append (const TiXmlStringA & suffix)
-    {
+    void append (const TiXmlStringA & suffix)	{
+
         append (suffix . c_str ());
     }
 
     // append for a single char. This could be improved a lot if needed
-    void append (char single)
-    {
+    void append (char single)	{
+
         char smallstr [2];
         smallstr [0] = single;
         smallstr [1] = 0;
@@ -213,8 +213,8 @@ class TiXmlStringA
    TiXmlOutStreamA is an emulation of std::ostream. It is based on TiXmlStringA.
    Only the operators that we need for TinyXML have been developped.
 */
-class TiXmlOutStreamA : public TiXmlStringA
-{
+class TiXmlOutStreamA : public TiXmlStringA	{
+
 public :
     TiXmlOutStreamA () : TiXmlStringA () {}
 

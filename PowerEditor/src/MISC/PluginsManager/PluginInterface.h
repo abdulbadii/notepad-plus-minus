@@ -35,8 +35,8 @@ const int nbChar = 64;
 
 typedef const TCHAR * (__cdecl * PFUNCGETNAME)();
 
-struct NppData
-{
+struct NppData	{
+
 	HWND _nppHandle;
 	HWND _scintillaMainHandle;
 	HWND _scintillaSecondHandle;
@@ -48,16 +48,16 @@ typedef void (__cdecl * PBENOTIFIED)(SCNotification *);
 typedef LRESULT (__cdecl * PMESSAGEPROC)(UINT Message, WPARAM wParam, LPARAM lParam);
 
 
-struct ShortcutKey
-{
+struct ShortcutKey	{
+
 	bool _isCtrl;
 	bool _isAlt;
 	bool _isShift;
 	UCHAR _key;
 };
 
-struct FuncItem
-{
+struct FuncItem	{
+
 	TCHAR _itemName[nbChar];
 	PFUNCPLUGINCMD _pFunc;
 	int _cmdID;

@@ -43,18 +43,18 @@ nsProbingState nsSingleByteCharSetProber::HandleData(const char* aBuf, PRUint32 
 {
   unsigned char order;
 
-  for (PRUint32 i = 0; i < aLen; i++)
-  {
+  for (PRUint32 i = 0; i < aLen; ++i )	{
+
     order = mModel->charToOrderMap[(unsigned char)aBuf[i]];
 
     if (order < SYMBOL_CAT_ORDER)
       mTotalChar++;
-    if (order < SAMPLE_SIZE)
-    {
+    if (order < SAMPLE_SIZE)	{
+
         mFreqChar++;
 
-      if (mLastOrder < SAMPLE_SIZE)
-      {
+      if (mLastOrder < SAMPLE_SIZE)	{
+
         mTotalSeqs++;
         if (!mReversed)
           ++(mSeqCounters[mModel->precedenceMatrix[mLastOrder*SAMPLE_SIZE+order]]);
@@ -66,8 +66,8 @@ nsProbingState nsSingleByteCharSetProber::HandleData(const char* aBuf, PRUint32 
   }
 
   if (mState == eDetecting)
-    if (mTotalSeqs > SB_ENOUGH_REL_THRESHOLD)
-    {
+    if (mTotalSeqs > SB_ENOUGH_REL_THRESHOLD)	{
+
       float cf = GetConfidence();
       if (cf > POSITIVE_SHORTCUT_THRESHOLD)
         mState = eFoundIt;
@@ -78,11 +78,11 @@ nsProbingState nsSingleByteCharSetProber::HandleData(const char* aBuf, PRUint32 
   return mState;
 }
 
-void  nsSingleByteCharSetProber::Reset(void)
-{
+void  nsSingleByteCharSetProber::Reset(void)	{
+
   mState = eDetecting;
   mLastOrder = 255;
-  for (PRUint32 i = 0; i < NUMBER_OF_SEQ_CAT; i++)
+  for (PRUint32 i = 0; i < NUMBER_OF_SEQ_CAT; ++i )
     mSeqCounters[i] = 0;
   mTotalSeqs = 0;
   mTotalChar = 0;
@@ -91,8 +91,8 @@ void  nsSingleByteCharSetProber::Reset(void)
 
 //#define NEGATIVE_APPROACH 1
 
-float nsSingleByteCharSetProber::GetConfidence(void)
-{
+float nsSingleByteCharSetProber::GetConfidence(void)	{
+
 #ifdef NEGATIVE_APPROACH
   if (mTotalSeqs > 0)
     if (mTotalSeqs > mSeqCounters[NEGATIVE_CAT]*10 )
@@ -112,16 +112,16 @@ float nsSingleByteCharSetProber::GetConfidence(void)
 #endif
 }
 
-const char* nsSingleByteCharSetProber::GetCharSetName() 
-{
+const char* nsSingleByteCharSetProber::GetCharSetName()	{ 
+
   if (!mNameProber)
     return mModel->charsetName;
   return mNameProber->GetCharSetName();
 }
 
 #ifdef DEBUG_chardet
-void nsSingleByteCharSetProber::DumpStatus()
-{
+void nsSingleByteCharSetProber::DumpStatus()	{
+
   printf("  SBCS: %1.3f [%s]\r\n", GetConfidence(), GetCharSetName());
 }
 #endif

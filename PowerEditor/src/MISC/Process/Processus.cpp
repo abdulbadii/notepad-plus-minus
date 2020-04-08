@@ -53,8 +53,8 @@ unsigned long Process::runSync(bool isElevationRequired) const
 	WaitForSingleObject(ShExecInfo.hProcess, INFINITE);
 
 	unsigned long exitCode;
-	if (::GetExitCodeProcess(ShExecInfo.hProcess, &exitCode) == FALSE)
-	{
+	if (::GetExitCodeProcess(ShExecInfo.hProcess, &exitCode) == FALSE)	{
+
 		// throw exception
 		throw GetLastErrorAsString(GetLastError());
 	}

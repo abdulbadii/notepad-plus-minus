@@ -50,8 +50,8 @@ public:
 		_moduleName = ::PathFindFileName(temp);
 	}
 
-	void create(tTbData * data, bool isRTL = false)
-	{
+	void create(tTbData * data, bool isRTL = false)	{
+
 		assert(data != nullptr);
 		StaticDialog::create(_dlgID, isRTL);
 		TCHAR temp[MAX_PATH];
@@ -98,28 +98,28 @@ public:
 protected :
 	virtual INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM, LPARAM lParam)
 	{
-		switch (message) 
-		{
+		switch (message)	{ 
 
-			case WM_NOTIFY: 
-			{
+
+			case WM_NOTIFY:	{ 
+
 				LPNMHDR	pnmh = reinterpret_cast<LPNMHDR>(lParam);
 
-				if (pnmh->hwndFrom == _hParent)
-				{
-					switch (LOWORD(pnmh->code))
-					{
-						case DMN_CLOSE:
-						{
+				if (pnmh->hwndFrom == _hParent)	{
+
+					switch (LOWORD(pnmh->code))	{
+
+						case DMN_CLOSE:	{
+
 							break;
 						}
-						case DMN_FLOAT:
-						{
+						case DMN_FLOAT:	{
+
 							_isFloating = true;
 							break;
 						}
-						case DMN_DOCK:
-						{
+						case DMN_DOCK:	{
+
 							_iDockedPos = HIWORD(pnmh->code);
 							_isFloating = false;
 							break;

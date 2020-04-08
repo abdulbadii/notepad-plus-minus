@@ -31,8 +31,8 @@
 
 #include "Window.h"
 
-class WindowInterface : public Window
-{
+class WindowInterface : public Window	{
+
 public :
 	void init(HINSTANCE hInst, HWND parent, HWND hSelf) {
 		Window::init(hInst, parent);

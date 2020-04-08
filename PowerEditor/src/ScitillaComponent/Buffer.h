@@ -68,8 +68,8 @@ const TCHAR UNTITLED_STR[] = L"new ";
 
 
 //File manager class maintains all buffers
-class FileManager final
-{
+class FileManager final	{
+
 public:
 	void init(Notepad_plus* pNotepadPlus, ScintillaEditView* pscratchTilla);
 
@@ -151,8 +151,8 @@ private:
 
 #define MainFileManager FileManager::getInstance()
 
-class Buffer final
-{
+class Buffer final	{
+
 	friend class FileManager;
 public:
 	//Loading a document:
@@ -298,8 +298,8 @@ public:
 		return _needLexer;
 	}
 
-	void setNeedsLexing(bool lex)
-	{
+	void setNeedsLexing(bool lex)	{
+
 		_needLexer = lex;
 		doNotify(BufferChangeLexing);
 	}
@@ -312,13 +312,13 @@ public:
 
 	void setDeferredReload();
 
-	bool getNeedReload()
-	{
+	bool getNeedReload()	{
+
 		return _needReloading;
 	}
 
-	void setNeedReload(bool reload)
-	{
+	void setNeedReload(bool reload)	{
+
 		_needReloading = reload;
 	}
 
@@ -346,8 +346,8 @@ public:
 		return _isLoadedDirty;
 	}
 
-	void setLoadedDirty(bool val)
-	{
+	void setLoadedDirty(bool val)	{
+
 		_isLoadedDirty = val;
 	}
 

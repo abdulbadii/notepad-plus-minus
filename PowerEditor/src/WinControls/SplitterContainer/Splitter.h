@@ -61,8 +61,8 @@ enum class SplitterMode: std::uint8_t
 
 
 
-class Splitter : public Window
-{
+class Splitter : public Window	{
+
 public:
 	Splitter() = default;
 	virtual ~Splitter() = default;

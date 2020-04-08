@@ -23,8 +23,8 @@ enum hashType {hash_md5, hash_sha256};
 
 LRESULT run_textEditProc(WNDPROC oldEditProc, HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-class HashFromFilesDlg : public StaticDialog
-{
+class HashFromFilesDlg : public StaticDialog	{
+
 public :
 	HashFromFilesDlg() = default;
 
@@ -51,8 +51,8 @@ private :
 	WNDPROC _oldHashResultProc = nullptr;
 };
 
-class HashFromTextDlg : public StaticDialog
-{
+class HashFromTextDlg : public StaticDialog	{
+
 public :
 	HashFromTextDlg() = default;
 

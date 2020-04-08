@@ -39,21 +39,21 @@
 #include "../Utf8.h"
 #include <Parameters.h>
 
-void printInt(int int2print)
-{
+void printInt(int int2print)	{
+
 	TCHAR str[32];
 	wsprintf(str, L"%d", int2print);
 	::MessageBox(NULL, str, L"", MB_OK);
 }
 
 
-void printStr(const TCHAR *str2print)
-{
+void printStr(const TCHAR *str2print)	{
+
 	::MessageBox(NULL, str2print, L"", MB_OK);
 }
 
-generic_string commafyInt(size_t n)
-{
+generic_string commafyInt(size_t n)	{
+
 	generic_stringstream ss;
 	ss.imbue(std::locale(""));
 	ss << n;
@@ -83,8 +83,8 @@ std::string getFileContent(const TCHAR *file2read)
 	return wholeFileContent;
 }
 
-char getDriveLetter()
-{
+char getDriveLetter()	{
+
 	char drive = '\0';
 	TCHAR current[MAX_PATH];
 
@@ -97,21 +97,21 @@ char getDriveLetter()
 }
 
 
-generic_string relativeFilePathToFullFilePath(const TCHAR *relativeFilePath)
-{
+generic_string relativeFilePathToFullFilePath(const TCHAR *relativeFilePath)	{
+
 	generic_string fullFilePathName;
 	TCHAR fullFileName[MAX_PATH];
 	BOOL isRelative = ::PathIsRelative(relativeFilePath);
 
-	if (isRelative)
-	{
+	if (isRelative)	{
+
 		::GetFullPathName(relativeFilePath, MAX_PATH, fullFileName, NULL);
 		fullFilePathName += fullFileName;
 	}
-	else
-	{
-		if ((relativeFilePath[0] == '\\' && relativeFilePath[1] != '\\') || relativeFilePath[0] == '/')
-		{
+	else	{
+
+		if ((relativeFilePath[0] == '\\' && relativeFilePath[1] != '\\') || relativeFilePath[0] == '/')	{
+
 			fullFilePathName += getDriveLetter();
 			fullFilePathName += ':';
 		}
@@ -123,8 +123,8 @@ generic_string relativeFilePathToFullFilePath(const TCHAR *relativeFilePath)
 }
 
 
-void writeFileContent(const TCHAR *file2write, const char *content2write)
-{
+void writeFileContent(const TCHAR *file2write, const char *content2write)	{
+
 	FILE *f = generic_fopen(file2write, L"w+");
 	fwrite(content2write, sizeof(content2write[0]), strlen(content2write), f);
 	fflush(f);
@@ -132,8 +132,8 @@ void writeFileContent(const TCHAR *file2write, const char *content2write)
 }
 
 
-void writeLog(const TCHAR *logFileName, const char *log2write)
-{
+void writeLog(const TCHAR *logFileName, const char *log2write)	{
+
 	FILE *f = generic_fopen(logFileName, L"a+");
 	fwrite(log2write, sizeof(log2write[0]), strlen(log2write), f);
 	fputc('\n', f);
@@ -152,8 +152,8 @@ static int __stdcall BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM, LPARAM pDa
 };
 
 
-generic_string folderBrowser(HWND parent, const generic_string & title, int outputCtrlID, const TCHAR *defaultStr)
-{
+generic_string folderBrowser(HWND parent, const generic_string & title, int outputCtrlID, const TCHAR *defaultStr)	{
+
 	generic_string dirStr;
 
 	// This code was copied and slightly modifed from:
@@ -164,8 +164,8 @@ generic_string folderBrowser(HWND parent, const generic_string & title, int outp
 	// memory, so we need to get a pointer to the shell malloc COM
 	// object that will free the PIDL later on.
 	LPMALLOC pShellMalloc = 0;
-	if (::SHGetMalloc(&pShellMalloc) == NO_ERROR)
-	{
+	if (::SHGetMalloc(&pShellMalloc) == NO_ERROR)	{
+
 		// If we were able to get the shell malloc object,
 		// then proceed by initializing the BROWSEINFO stuct
 		BROWSEINFO info;
@@ -193,13 +193,13 @@ generic_string folderBrowser(HWND parent, const generic_string & title, int outp
 
 		// pidl will be null if they cancel the browse dialog.
 		// pidl will be not null when they select a folder.
-		if (pidl)
-		{
+		if (pidl)	{
+
 			// Try to convert the pidl to a display generic_string.
 			// Return is true if success.
 			TCHAR szDir[MAX_PATH];
-			if (::SHGetPathFromIDList(pidl, szDir))
-			{
+			if (::SHGetPathFromIDList(pidl, szDir))	{
+
 				// Set edit control to the directory path.
 				if (outputCtrlID != 0)
 					::SetDlgItemText(parent, outputCtrlID, szDir);
@@ -213,13 +213,13 @@ generic_string folderBrowser(HWND parent, const generic_string & title, int outp
 }
 
 
-generic_string getFolderName(HWND parent, const TCHAR *defaultDir)
-{
+generic_string getFolderName(HWND parent, const TCHAR *defaultDir)	{
+
 	generic_string folderName;
 	LPMALLOC pShellMalloc = 0;
 
-	if (::SHGetMalloc(&pShellMalloc) == NO_ERROR)
-	{
+	if (::SHGetMalloc(&pShellMalloc) == NO_ERROR)	{
+
 		BROWSEINFO info;
 		memset(&info, 0, sizeof(info));
 		info.hwndOwner = parent;
@@ -236,8 +236,8 @@ generic_string getFolderName(HWND parent, const TCHAR *defaultDir)
 
 		// pidl will be null if they cancel the browse dialog.
 		// pidl will be not null when they select a folder.
-		if (pidl)
-		{
+		if (pidl)	{
+
 			// Try to convert the pidl to a display generic_string.
 			// Return is true if success.
 			TCHAR szDir[MAX_PATH];
@@ -252,8 +252,8 @@ generic_string getFolderName(HWND parent, const TCHAR *defaultDir)
 }
 
 
-void ClientRectToScreenRect(HWND hWnd, RECT* rect)
-{
+void ClientRectToScreenRect(HWND hWnd, RECT* rect)	{
+
 	POINT		pt;
 
 	pt.x		 = rect->left;
@@ -280,8 +280,8 @@ std::vector<generic_string> tokenizeString(const generic_string & tokenString, c
     // Find first "non-delimiter".
     generic_string::size_type pos     = tokenString.find_first_of(delim, lastPos);
 
-    while (pos != std::string::npos || lastPos != std::string::npos)
-    {
+    while (pos != std::string::npos || lastPos != std::string::npos)	{
+
         // Found a token, add it to the vector.
         tokens.push_back(tokenString.substr(lastPos, pos - lastPos));
         // Skip delimiters.  Note the "not_of"
@@ -293,8 +293,8 @@ std::vector<generic_string> tokenizeString(const generic_string & tokenString, c
 }
 
 
-void ScreenRectToClientRect(HWND hWnd, RECT* rect)
-{
+void ScreenRectToClientRect(HWND hWnd, RECT* rect)	{
+
 	POINT		pt;
 
 	pt.x		 = rect->left;
@@ -311,16 +311,16 @@ void ScreenRectToClientRect(HWND hWnd, RECT* rect)
 }
 
 
-int filter(unsigned int code, struct _EXCEPTION_POINTERS *)
-{
+int filter(unsigned int code, struct _EXCEPTION_POINTERS *)	{
+
     if (code == EXCEPTION_ACCESS_VIOLATION)
         return EXCEPTION_EXECUTE_HANDLER;
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
 
-bool isInList(const TCHAR *token, const TCHAR *list)
-{
+bool isInList(const TCHAR *token, const TCHAR *list)	{
+
 	if ((!token) || (!list))
 		return false;
 
@@ -331,12 +331,12 @@ bool isInList(const TCHAR *token, const TCHAR *list)
 	size_t i = 0;
 	size_t j = 0;
 
-	for (; i <= listLen; ++i)
-	{
-		if ((list[i] == ' ')||(list[i] == '\0'))
-		{
-			if (j != 0)
-			{
+	for (; i <= listLen; ++i)	{
+
+		if ((list[i] == ' ')||(list[i] == '\0'))	{
+
+			if (j != 0)	{
+
 				word[j] = '\0';
 				j = 0;
 
@@ -344,8 +344,8 @@ bool isInList(const TCHAR *token, const TCHAR *list)
 					return true;
 			}
 		}
-		else
-		{
+		else	{
+
 			word[j] = list[i];
 			++j;
 
@@ -357,8 +357,8 @@ bool isInList(const TCHAR *token, const TCHAR *list)
 }
 
 
-generic_string purgeMenuItemString(const TCHAR * menuItemStr, bool keepAmpersand)
-{
+generic_string purgeMenuItemString(const TCHAR * menuItemStr, bool keepAmpersand)	{
+
 	const size_t cleanedNameLen = 64;
 	TCHAR cleanedName[cleanedNameLen] = L"";
 	size_t j = 0;
@@ -366,17 +366,17 @@ generic_string purgeMenuItemString(const TCHAR * menuItemStr, bool keepAmpersand
 	if (menuNameLen >= cleanedNameLen)
 		menuNameLen = cleanedNameLen - 1;
 
-	for (size_t k = 0 ; k < menuNameLen ; ++k)
-	{
-		if (menuItemStr[k] == '\t')
-		{
+	for (size_t k = 0 ; k < menuNameLen ; ++k)	{
+
+		if (menuItemStr[k] == '\t')	{
+
 			cleanedName[k] = 0;
 			break;
 		}
-		else
-		{
-			if (menuItemStr[k] == '&')
-			{
+		else	{
+
+			if (menuItemStr[k] == '&')	{
+
 				if (keepAmpersand)
 					cleanedName[j++] = menuItemStr[k];
 				//else skip
@@ -398,8 +398,8 @@ const wchar_t * WcharMbcsConvertor::char2wchar(const char * mbcs2Convert, UINT c
 		return nullptr;
 
 	// Do not process empty strings
-	if (lenMbcs == 0 || lenMbcs == -1 && mbcs2Convert[0] == 0)
-	{
+	if (lenMbcs == 0 || lenMbcs == -1 && mbcs2Convert[0] == 0)	{
+
 		_wideCharStr.empty();
 		return _wideCharStr;
 	}
@@ -408,43 +408,43 @@ const wchar_t * WcharMbcsConvertor::char2wchar(const char * mbcs2Convert, UINT c
 	int lenWc = 0;
 
 	// If length not specified, simply convert without checking
-	if (lenMbcs == -1)
-	{
+	if (lenMbcs == -1)	{
+
 		lenWc = MultiByteToWideChar(codepage, 0, mbcs2Convert, lenMbcs, NULL, 0);
 	}
 	// Otherwise, test if we are cutting a multi-byte character at end of buffer
-	else if (lenMbcs != -1 && codepage == CP_UTF8) // For UTF-8, we know how to test it
-	{
+	else if (lenMbcs != -1 && codepage == CP_UTF8)	{ // For UTF-8, we know how to test it
+
 		int indexOfLastChar = Utf8::characterStart(mbcs2Convert, lenMbcs-1); // get index of last character
-		if (indexOfLastChar != 0 && !Utf8::isValid(mbcs2Convert+indexOfLastChar, lenMbcs-indexOfLastChar)) // if it is not valid we do not process it right now (unless its the only character in string, to ensure that we always progress, e.g. that bytesNotProcessed < lenMbcs)
-		{
+		if (indexOfLastChar != 0 && !Utf8::isValid(mbcs2Convert+indexOfLastChar, lenMbcs-indexOfLastChar))	{ // if it is not valid we do not process it right now (unless its the only character in string, to ensure that we always progress, e.g. that bytesNotProcessed < lenMbcs)
+
 			bytesNotProcessed = lenMbcs-indexOfLastChar;
 		}
 		lenWc = MultiByteToWideChar(codepage, 0, mbcs2Convert, lenMbcs-bytesNotProcessed, NULL, 0);
 	}
-	else // For other encodings, ask system if there are any invalid characters; note that it will not correctly know if last character is cut when there are invalid characters inside the text
-	{
+	else	{ // For other encodings, ask system if there are any invalid characters; note that it will not correctly know if last character is cut when there are invalid characters inside the text
+
 		lenWc = MultiByteToWideChar(codepage, (lenMbcs == -1) ? 0 : MB_ERR_INVALID_CHARS, mbcs2Convert, lenMbcs, NULL, 0);
-		if (lenWc == 0 && GetLastError() == ERROR_NO_UNICODE_TRANSLATION)
-		{
+		if (lenWc == 0 && GetLastError() == ERROR_NO_UNICODE_TRANSLATION)	{
+
 			// Test without last byte
 			if (lenMbcs > 1) lenWc = MultiByteToWideChar(codepage, MB_ERR_INVALID_CHARS, mbcs2Convert, lenMbcs-1, NULL, 0);
-			if (lenWc == 0) // don't have to check that the error is still ERROR_NO_UNICODE_TRANSLATION, since only the length parameter changed
-			{
+			if (lenWc == 0)	{ // don't have to check that the error is still ERROR_NO_UNICODE_TRANSLATION, since only the length parameter changed
+
 				// TODO: should warn user about incorrect loading due to invalid characters
 				// We still load the file, but the system will either strip or replace invalid characters (including the last character, if cut in half)
 				lenWc = MultiByteToWideChar(codepage, 0, mbcs2Convert, lenMbcs, NULL, 0);
 			}
-			else
-			{
+			else	{
+
 				// We found a valid text by removing one byte.
 				bytesNotProcessed = 1;
 			}
 		}
 	}
 
-	if (lenWc > 0)
-	{
+	if (lenWc > 0)	{
+
 		_wideCharStr.sizeTo(lenWc);
 		MultiByteToWideChar(codepage, 0, mbcs2Convert, lenMbcs-bytesNotProcessed, _wideCharStr, lenWc);
 	}
@@ -468,24 +468,24 @@ const wchar_t * WcharMbcsConvertor::char2wchar(const char * mbcs2Convert, UINT c
 	if (!mbcs2Convert) return NULL;
 
 	int len = MultiByteToWideChar(codepage, 0, mbcs2Convert, -1, NULL, 0);
-	if (len > 0)
-	{
+	if (len > 0)	{
+
 		_wideCharStr.sizeTo(len);
 		len = MultiByteToWideChar(codepage, 0, mbcs2Convert, -1, _wideCharStr, len);
 
-		if ((size_t)*mstart < strlen(mbcs2Convert) && (size_t)*mend <= strlen(mbcs2Convert))
-		{
+		if ((size_t)*mstart < strlen(mbcs2Convert) && (size_t)*mend <= strlen(mbcs2Convert))	{
+
 			*mstart = MultiByteToWideChar(codepage, 0, mbcs2Convert, *mstart, _wideCharStr, 0);
 			*mend   = MultiByteToWideChar(codepage, 0, mbcs2Convert, *mend, _wideCharStr, 0);
-			if (*mstart >= len || *mend >= len)
-			{
+			if (*mstart >= len || *mend >= len)	{
+
 				*mstart = 0;
 				*mend = 0;
 			}
 		}
 	}
-	else
-	{
+	else	{
+
 		_wideCharStr.empty();
 		*mstart = 0;
 		*mend = 0;
@@ -494,14 +494,14 @@ const wchar_t * WcharMbcsConvertor::char2wchar(const char * mbcs2Convert, UINT c
 }
 
 
-const char* WcharMbcsConvertor::wchar2char(const wchar_t * wcharStr2Convert, UINT codepage, int lenWc, int *pLenMbcs)
-{
+const char* WcharMbcsConvertor::wchar2char(const wchar_t * wcharStr2Convert, UINT codepage, int lenWc, int *pLenMbcs)	{
+
 	if (nullptr == wcharStr2Convert)
 		return nullptr;
 
 	int lenMbcs = WideCharToMultiByte(codepage, 0, wcharStr2Convert, lenWc, NULL, 0, NULL, NULL);
-	if (lenMbcs > 0)
-	{
+	if (lenMbcs > 0)	{
+
 		_multiByteStr.sizeTo(lenMbcs);
 		WideCharToMultiByte(codepage, 0, wcharStr2Convert, lenWc, _multiByteStr, lenMbcs, NULL, NULL);
 	}
@@ -514,23 +514,23 @@ const char* WcharMbcsConvertor::wchar2char(const wchar_t * wcharStr2Convert, UIN
 }
 
 
-const char * WcharMbcsConvertor::wchar2char(const wchar_t * wcharStr2Convert, UINT codepage, long *mstart, long *mend)
-{
+const char * WcharMbcsConvertor::wchar2char(const wchar_t * wcharStr2Convert, UINT codepage, long *mstart, long *mend)	{
+
 	if (nullptr == wcharStr2Convert)
 		return nullptr;
 
 	int len = WideCharToMultiByte(codepage, 0, wcharStr2Convert, -1, NULL, 0, NULL, NULL);
-	if (len > 0)
-	{
+	if (len > 0)	{
+
 		_multiByteStr.sizeTo(len);
 		len = WideCharToMultiByte(codepage, 0, wcharStr2Convert, -1, _multiByteStr, len, NULL, NULL); // not needed?
 
-        if (*mstart < lstrlenW(wcharStr2Convert) && *mend < lstrlenW(wcharStr2Convert))
-        {
+        if (*mstart < lstrlenW(wcharStr2Convert) && *mend < lstrlenW(wcharStr2Convert))	{
+
 			*mstart = WideCharToMultiByte(codepage, 0, wcharStr2Convert, *mstart, NULL, 0, NULL, NULL);
 			*mend = WideCharToMultiByte(codepage, 0, wcharStr2Convert, *mend, NULL, 0, NULL, NULL);
-			if (*mstart >= len || *mend >= len)
-			{
+			if (*mstart >= len || *mend >= len)	{
+
 				*mstart = 0;
 				*mend = 0;
 			}
@@ -546,8 +546,8 @@ const char * WcharMbcsConvertor::wchar2char(const wchar_t * wcharStr2Convert, UI
 std::wstring string2wstring(const std::string & rString, UINT codepage)
 {
 	int len = MultiByteToWideChar(codepage, 0, rString.c_str(), -1, NULL, 0);
-	if (len > 0)
-	{
+	if (len > 0)	{
+
 		std::vector<wchar_t> vw(len);
 		MultiByteToWideChar(codepage, 0, rString.c_str(), -1, &vw[0], len);
 		return &vw[0];
@@ -559,8 +559,8 @@ std::wstring string2wstring(const std::string & rString, UINT codepage)
 std::string wstring2string(const std::wstring & rwString, UINT codepage)
 {
 	int len = WideCharToMultiByte(codepage, 0, rwString.c_str(), -1, NULL, 0, NULL, NULL);
-	if (len > 0)
-	{
+	if (len > 0)	{
+
 		std::vector<char> vw(len);
 		WideCharToMultiByte(codepage, 0, rwString.c_str(), -1, &vw[0], len, NULL, NULL);
 		return &vw[0];
@@ -571,12 +571,12 @@ std::string wstring2string(const std::wstring & rwString, UINT codepage)
 
 // Escapes ampersands in file name to use it in menu
 template <typename T>
-generic_string convertFileName(T beg, T end)
-{
+generic_string convertFileName(T beg, T end)	{
+
 	generic_string strTmp;
 
-	for (T it = beg; it != end; ++it)
-	{
+	for (T it = beg; it != end; ++it)	{
+
 		if (*it == '&') strTmp.push_back('&');
 		strTmp.push_back(*it);
 	}
@@ -585,8 +585,8 @@ generic_string convertFileName(T beg, T end)
 }
 
 
-generic_string intToString(int val)
-{
+generic_string intToString(int val)	{
+
 	std::vector<TCHAR> vt;
 	bool isNegative = val < 0;
 	// can't use abs here because std::numeric_limits<int>::min() has no positive representation
@@ -594,8 +594,8 @@ generic_string intToString(int val)
 
 	vt.push_back('0' + static_cast<TCHAR>(std::abs(val % 10)));
 	val /= 10;
-	while (val != 0)
-	{
+	while (val != 0)	{
+
 		vt.push_back('0' + static_cast<TCHAR>(std::abs(val % 10)));
 		val /= 10;
 	}
@@ -607,14 +607,14 @@ generic_string intToString(int val)
 }
 
 
-generic_string uintToString(unsigned int val)
-{
+generic_string uintToString(unsigned int val)	{
+
 	std::vector<TCHAR> vt;
 
 	vt.push_back('0' + static_cast<TCHAR>(val % 10));
 	val /= 10;
-	while (val != 0)
-	{
+	while (val != 0)	{
+
 		vt.push_back('0' + static_cast<TCHAR>(val % 10));
 		val /= 10;
 	}
@@ -623,34 +623,34 @@ generic_string uintToString(unsigned int val)
 }
 
 // Build Recent File menu entries from given
-generic_string BuildMenuFileName(int filenameLen, unsigned int pos, const generic_string &filename)
-{
+generic_string BuildMenuFileName(int filenameLen, unsigned int pos, const generic_string &filename)	{
+
 	generic_string strTemp;
 
-	if (pos < 9)
-	{
+	if (pos < 9)	{
+
 		strTemp.push_back('&');
 		strTemp.push_back('1' + static_cast<TCHAR>(pos));
 	}
-	else if (pos == 9)
-	{
+	else if (pos == 9)	{
+
 		strTemp.append(L"1&0");
 	}
-	else
-	{
+	else	{
+
 		strTemp.append(uintToString(pos + 1));
 	}
 	strTemp.append(L": ");
 
-	if (filenameLen > 0)
-	{
+	if (filenameLen > 0)	{
+
 		std::vector<TCHAR> vt(filenameLen + 1);
 		// W removed from PathCompactPathExW due to compiler errors for ANSI version.
 		PathCompactPathEx(&vt[0], filename.c_str(), filenameLen + 1, 0);
 		strTemp.append(convertFileName(vt.begin(), vt.begin() + lstrlen(&vt[0])));
 	}
-	else
-	{
+	else	{
+
 		// (filenameLen < 0)
 		generic_string::const_iterator it = filename.begin();
 
@@ -658,12 +658,12 @@ generic_string BuildMenuFileName(int filenameLen, unsigned int pos, const generi
 			it += PathFindFileName(filename.c_str()) - filename.c_str();
 
 		// MAX_PATH is still here to keep old trimming behaviour.
-		if (filename.end() - it < MAX_PATH)
-		{
+		if (filename.end() - it < MAX_PATH)	{
+
 			strTemp.append(convertFileName(it, filename.end()));
 		}
-		else
-		{
+		else	{
+
 			strTemp.append(convertFileName(it, it + MAX_PATH / 2 - 3));
 			strTemp.append(L"...");
 			strTemp.append(convertFileName(filename.end() - MAX_PATH / 2, filename.end()));
@@ -674,18 +674,18 @@ generic_string BuildMenuFileName(int filenameLen, unsigned int pos, const generi
 }
 
 
-generic_string PathRemoveFileSpec(generic_string& path)
-{
+generic_string PathRemoveFileSpec(generic_string& path)	{
+
     generic_string::size_type lastBackslash = path.find_last_of(L'\\');
-    if (lastBackslash == generic_string::npos)
-    {
+    if (lastBackslash == generic_string::npos)	{
+
         if (path.size() >= 2 && path[1] == L':')  // "C:foo.bar" becomes "C:"
             path.erase(2);
         else
             path.erase();
     }
-    else
-    {
+    else	{
+
         if (lastBackslash == 2 && path[1] == L':' && path.size() >= 3)  // "C:\foo.exe" becomes "C:\"
             path.erase(3);
         else if (lastBackslash == 0 && path.size() > 1) // "\foo.exe" becomes "\"
@@ -697,22 +697,22 @@ generic_string PathRemoveFileSpec(generic_string& path)
 }
 
 
-generic_string PathAppend(generic_string& strDest, const generic_string& str2append)
-{
-	if (strDest.empty() && str2append.empty()) // "" + ""
-	{
+generic_string PathAppend(generic_string& strDest, const generic_string& str2append)	{
+
+	if (strDest.empty() && str2append.empty())	{ // "" + ""
+
 		strDest = L"\\";
 		return strDest;
 	}
 
-	if (strDest.empty() && not str2append.empty()) // "" + titi
-	{
+	if (strDest.empty() && not str2append.empty())	{ // "" + titi
+
 		strDest = str2append;
 		return strDest;
 	}
 
-	if (strDest[strDest.length() - 1] == '\\' && (not str2append.empty() && str2append[0] == '\\')) // toto\ + \titi
-	{
+	if (strDest[strDest.length() - 1] == '\\' && (not str2append.empty() && str2append[0] == '\\'))	{ // toto\ + \titi
+
 		strDest.erase(strDest.length() - 1, 1);
 		strDest += str2append;
 		return strDest;
@@ -733,29 +733,29 @@ generic_string PathAppend(generic_string& strDest, const generic_string& str2app
 }
 
 
-COLORREF getCtrlBgColor(HWND hWnd)
-{
+COLORREF getCtrlBgColor(HWND hWnd)	{
+
 	COLORREF crRet = CLR_INVALID;
-	if (hWnd && IsWindow(hWnd))
-	{
+	if (hWnd && IsWindow(hWnd))	{
+
 		RECT rc;
-		if (GetClientRect(hWnd, &rc))
-		{
+		if (GetClientRect(hWnd, &rc))	{
+
 			HDC hDC = GetDC(hWnd);
-			if (hDC)
-			{
+			if (hDC)	{
+
 				HDC hdcMem = CreateCompatibleDC(hDC);
-				if (hdcMem)
-				{
+				if (hdcMem)	{
+
 					HBITMAP hBmp = CreateCompatibleBitmap(hDC,
 					rc.right, rc.bottom);
-					if (hBmp)
-					{
+					if (hBmp)	{
+
 						HGDIOBJ hOld = SelectObject(hdcMem, hBmp);
-						if (hOld)
-						{
-							if (SendMessage(hWnd, WM_ERASEBKGND, reinterpret_cast<WPARAM>(hdcMem), 0))
-							{
+						if (hOld)	{
+
+							if (SendMessage(hWnd, WM_ERASEBKGND, reinterpret_cast<WPARAM>(hdcMem), 0))	{
+
 								crRet = GetPixel(hdcMem, 2, 2); // 0, 0 is usually on the border
 							}
 							SelectObject(hdcMem, hOld);
@@ -772,26 +772,26 @@ COLORREF getCtrlBgColor(HWND hWnd)
 }
 
 
-generic_string stringToUpper(generic_string strToConvert)
-{
+generic_string stringToUpper(generic_string strToConvert)	{
+
     std::transform(strToConvert.begin(), strToConvert.end(), strToConvert.begin(), 
         [](TCHAR ch){ return static_cast<TCHAR>(_totupper(ch)); }
     );
     return strToConvert;
 }
 
-generic_string stringToLower(generic_string strToConvert)
-{
+generic_string stringToLower(generic_string strToConvert)	{
+
     std::transform(strToConvert.begin(), strToConvert.end(), strToConvert.begin(), ::towlower);
     return strToConvert;
 }
 
 
-generic_string stringReplace(generic_string subject, const generic_string& search, const generic_string& replace)
-{
+generic_string stringReplace(generic_string subject, const generic_string& search, const generic_string& replace)	{
+
 	size_t pos = 0;
-	while ((pos = subject.find(search, pos)) != std::string::npos)
-	{
+	while ((pos = subject.find(search, pos)) != std::string::npos)	{
+
 		subject.replace(pos, search.length(), replace);
 		pos += replace.length();
 	}
@@ -805,8 +805,8 @@ std::vector<generic_string> stringSplit(const generic_string& input, const gener
 	size_t end = input.find(delimiter);
 	std::vector<generic_string> output;
 	const size_t delimiterLength = delimiter.length();
-	while (end != std::string::npos)
-	{
+	while (end != std::string::npos)	{
+
 		output.push_back(input.substr(start, end - start));
 		start = end + delimiterLength;
 		end = input.find(delimiter, start);
@@ -816,15 +816,15 @@ std::vector<generic_string> stringSplit(const generic_string& input, const gener
 }
 
 
-generic_string stringJoin(const std::vector<generic_string>& strings, const generic_string& separator)
-{
+generic_string stringJoin(const std::vector<generic_string>& strings, const generic_string& separator)	{
+
 	generic_string joined;
 	size_t length = strings.size();
-	for (size_t i = 0; i < length; ++i)
-	{
+	for (size_t i = 0; i < length; ++i)	{
+
 		joined += strings.at(i);
-		if (i != length - 1)
-		{
+		if (i != length - 1)	{
+
 			joined += separator;
 		}
 	}
@@ -832,23 +832,23 @@ generic_string stringJoin(const std::vector<generic_string>& strings, const gene
 }
 
 
-generic_string stringTakeWhileAdmissable(const generic_string& input, const generic_string& admissable)
-{
+generic_string stringTakeWhileAdmissable(const generic_string& input, const generic_string& admissable)	{
+
 	// Find first non-admissable character in "input", and remove everything after it.
 	size_t idx = input.find_first_not_of(admissable);
-	if (idx == std::string::npos)
-	{
+	if (idx == std::string::npos)	{
+
 		return input;
 	}
-	else
-	{
+	else	{
+
 		return input.substr(0, idx);
 	}
 }
 
 
-double stodLocale(const generic_string& str, _locale_t loc, size_t* idx)
-{
+double stodLocale(const generic_string& str, _locale_t loc, size_t* idx)	{
+
 	// Copied from the std::stod implementation but uses _wcstod_l instead of wcstod.
 	const wchar_t* ptr = str.c_str();
 	errno = 0;
@@ -873,8 +873,8 @@ static TCHAR ToUpperInvariant(TCHAR input)
 {
 	TCHAR result;
 	LONG lres = LCMapString(LOCALE_INVARIANT, LCMAP_UPPERCASE, &input, 1, &result, 1);
-	if (lres == 0)
-	{
+	if (lres == 0)	{
+
 		assert(false and "LCMapString failed to convert a character to upper case");
 		result = input;
 	}
@@ -883,33 +883,33 @@ static TCHAR ToUpperInvariant(TCHAR input)
 
 // Source: https://blogs.msdn.microsoft.com/greggm/2005/09/21/comparing-file-names-in-native-code/
 // Modified to use TCHAR's instead of assuming Unicode and reformatted to conform with Notepad++ code style
-int OrdinalIgnoreCaseCompareStrings(LPCTSTR sz1, LPCTSTR sz2)
-{
-	if (sz1 == sz2)
-	{
+int OrdinalIgnoreCaseCompareStrings(LPCTSTR sz1, LPCTSTR sz2)	{
+
+	if (sz1 == sz2)	{
+
 		return 0;
 	}
 
 	if (sz1 == nullptr) sz1 = _T("");
 	if (sz2 == nullptr) sz2 = _T("");
 
-	for (;; sz1++, sz2++)
-	{
+	for (;; ++sz1, ++sz2)	{
+
 		const TCHAR c1 = *sz1;
 		const TCHAR c2 = *sz2;
 
 		// check for binary equality first
-		if (c1 == c2)
-		{
-			if (c1 == 0)
-			{
+		if (c1 == c2)	{
+
+			if (c1 == 0)	{
+
 				return 0; // We have reached the end of both strings. No difference found.
 			}
 		}
-		else
-		{
-			if (c1 == 0 || c2 == 0)
-			{
+		else	{
+
+			if (c1 == 0 || c2 == 0)	{
+
 				return (c1-c2); // We have reached the end of one string
 			}
 
@@ -917,38 +917,38 @@ int OrdinalIgnoreCaseCompareStrings(LPCTSTR sz1, LPCTSTR sz2)
 			// See http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dndotnet/html/StringsinNET20.asp
 			const TCHAR u1 = ToUpperInvariant(c1);
 			const TCHAR u2 = ToUpperInvariant(c2);
-			if (u1 != u2)
-			{
+			if (u1 != u2)	{
+
 				return (u1-u2); // strings are different
 			}
 		}
 	}
 }
 
-bool str2Clipboard(const generic_string &str2cpy, HWND hwnd)
-{
+bool str2Clipboard(const generic_string &str2cpy, HWND hwnd)	{
+
 	size_t len2Allocate = (str2cpy.size() + 1) * sizeof(TCHAR);
 	HGLOBAL hglbCopy = ::GlobalAlloc(GMEM_MOVEABLE, len2Allocate);
-	if (hglbCopy == NULL)
-	{
+	if (hglbCopy == NULL)	{
+
 		return false;
 	}
-	if (!::OpenClipboard(hwnd))
-	{
+	if (!::OpenClipboard(hwnd))	{
+
 		::GlobalFree(hglbCopy);
 		::CloseClipboard();
 		return false;
 	}
-	if (!::EmptyClipboard())
-	{
+	if (!::EmptyClipboard())	{
+
 		::GlobalFree(hglbCopy);
 		::CloseClipboard();
 		return false;
 	}
 	// Lock the handle and copy the text to the buffer.
 	TCHAR *pStr = (TCHAR *)::GlobalLock(hglbCopy);
-	if (pStr == NULL)
-	{
+	if (pStr == NULL)	{
+
 		::GlobalUnlock(hglbCopy);
 		::GlobalFree(hglbCopy);
 		::CloseClipboard();
@@ -958,26 +958,26 @@ bool str2Clipboard(const generic_string &str2cpy, HWND hwnd)
 	::GlobalUnlock(hglbCopy);
 	// Place the handle on the clipboard.
 	unsigned int clipBoardFormat = CF_UNICODETEXT;
-	if (::SetClipboardData(clipBoardFormat, hglbCopy) == NULL)
-	{
+	if (::SetClipboardData(clipBoardFormat, hglbCopy) == NULL)	{
+
 		::GlobalFree(hglbCopy);
 		::CloseClipboard();
 		return false;
 	}
-	if (!::CloseClipboard())
-	{
+	if (!::CloseClipboard())	{
+
 		return false;
 	}
 	return true;
 }
 
-bool matchInList(const TCHAR *fileName, const std::vector<generic_string> & patterns)
-{
+bool matchInList(const TCHAR *fileName, const std::vector<generic_string> & patterns)	{
+
 	bool is_matched = false;
-	for (size_t i = 0, len = patterns.size(); i < len; ++i)
-	{
-		if (patterns[i].length() > 1 && patterns[i][0] == '!')
-		{
+	for (size_t i = 0, len = patterns.size(); i < len; ++i)	{
+
+		if (patterns[i].length() > 1 && patterns[i][0] == '!')	{
+
 			if (PathMatchSpec(fileName, patterns[i].c_str() + 1))
 				return false;
 
@@ -990,8 +990,8 @@ bool matchInList(const TCHAR *fileName, const std::vector<generic_string> & patt
 	return is_matched;
 }
 
-generic_string GetLastErrorAsString(DWORD errorCode)
-{
+generic_string GetLastErrorAsString(DWORD errorCode)	{
+
 	generic_string errorMsg(_T(""));
 	// Get the error message, if any.
 	// If both error codes (passed error n GetLastError) are 0, then return empty
@@ -1012,17 +1012,17 @@ generic_string GetLastErrorAsString(DWORD errorCode)
 	return errorMsg;
 }
 
-HWND CreateToolTip(int toolID, HWND hDlg, HINSTANCE hInst, const PTSTR pszText)
-{
-	if (!toolID || !hDlg || !pszText)
-	{
+HWND CreateToolTip(int toolID, HWND hDlg, HINSTANCE hInst, const PTSTR pszText)	{
+
+	if (!toolID || !hDlg || !pszText)	{
+
 		return NULL;
 	}
 
 	// Get the window of the tool.
 	HWND hwndTool = GetDlgItem(hDlg, toolID);
-	if (!hwndTool)
-	{
+	if (!hwndTool)	{
+
 		return NULL;
 	}
 
@@ -1034,8 +1034,8 @@ HWND CreateToolTip(int toolID, HWND hDlg, HINSTANCE hInst, const PTSTR pszText)
 		hDlg, NULL,
 		hInst, NULL);
 
-	if (!hwndTip)
-	{
+	if (!hwndTip)	{
+
 		return NULL;
 	}
 
@@ -1046,8 +1046,8 @@ HWND CreateToolTip(int toolID, HWND hDlg, HINSTANCE hInst, const PTSTR pszText)
 	toolInfo.uFlags = TTF_IDISHWND | TTF_SUBCLASS;
 	toolInfo.uId = (UINT_PTR)hwndTool;
 	toolInfo.lpszText = pszText;
-	if (!SendMessage(hwndTip, TTM_ADDTOOL, 0, (LPARAM)&toolInfo))
-	{
+	if (!SendMessage(hwndTip, TTM_ADDTOOL, 0, (LPARAM)&toolInfo))	{
+
 		DestroyWindow(hwndTip);
 		return NULL;
 	}
@@ -1060,8 +1060,8 @@ HWND CreateToolTip(int toolID, HWND hDlg, HINSTANCE hInst, const PTSTR pszText)
 	return hwndTip;
 }
 
-bool isCertificateValidated(const generic_string & fullFilePath, const generic_string & subjectName2check)
-{
+bool isCertificateValidated(const generic_string & fullFilePath, const generic_string & subjectName2check)	{
+
 	bool isOK = false;
 	HCERTSTORE hStore = NULL;
 	HCRYPTMSG hMsg = NULL;
@@ -1089,8 +1089,8 @@ bool isCertificateValidated(const generic_string & fullFilePath, const generic_s
 			&hMsg,
 			NULL);
 
-		if (!result)
-		{
+		if (!result)	{
+
 			generic_string errorMessage = L"Check certificate of " + fullFilePath + L" : ";
 			errorMessage += GetLastErrorAsString(GetLastError());
 			throw errorMessage;
@@ -1098,8 +1098,8 @@ bool isCertificateValidated(const generic_string & fullFilePath, const generic_s
 
 		// Get signer information size.
 		result = CryptMsgGetParam(hMsg, CMSG_SIGNER_INFO_PARAM, 0, NULL, &dwSignerInfo);
-		if (!result)
-		{
+		if (!result)	{
+
 			generic_string errorMessage = L"CryptMsgGetParam first call: ";
 			errorMessage += GetLastErrorAsString(GetLastError());
 			throw errorMessage;
@@ -1107,8 +1107,8 @@ bool isCertificateValidated(const generic_string & fullFilePath, const generic_s
 
 		// Allocate memory for signer information.
 		pSignerInfo = (PCMSG_SIGNER_INFO)LocalAlloc(LPTR, dwSignerInfo);
-		if (!pSignerInfo)
-		{
+		if (!pSignerInfo)	{
+
 			generic_string errorMessage = L"CryptMsgGetParam memory allocation problem: ";
 			errorMessage += GetLastErrorAsString(GetLastError());
 			throw errorMessage;
@@ -1116,8 +1116,8 @@ bool isCertificateValidated(const generic_string & fullFilePath, const generic_s
 
 		// Get Signer Information.
 		result = CryptMsgGetParam(hMsg, CMSG_SIGNER_INFO_PARAM, 0, (PVOID)pSignerInfo, &dwSignerInfo);
-		if (!result)
-		{
+		if (!result)	{
+
 			generic_string errorMessage = L"CryptMsgGetParam: ";
 			errorMessage += GetLastErrorAsString(GetLastError());
 			throw errorMessage;
@@ -1129,8 +1129,8 @@ bool isCertificateValidated(const generic_string & fullFilePath, const generic_s
 		CertInfo.SerialNumber = pSignerInfo->SerialNumber;
 
 		pCertContext = CertFindCertificateInStore(hStore, X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, 0, CERT_FIND_SUBJECT_CERT, (PVOID)&CertInfo, NULL);
-		if (not pCertContext)
-		{
+		if (not pCertContext)	{
+
 			generic_string errorMessage = L"Certificate context: ";
 			errorMessage += GetLastErrorAsString(GetLastError());
 			throw errorMessage;
@@ -1140,28 +1140,28 @@ bool isCertificateValidated(const generic_string & fullFilePath, const generic_s
 
 		// Get Subject name size.
 		dwData = CertGetNameString(pCertContext, CERT_NAME_SIMPLE_DISPLAY_TYPE, 0, NULL, NULL, 0);
-		if (dwData <= 1)
-		{
+		if (dwData <= 1)	{
+
 			throw generic_string(L"Certificate checking error: getting data size problem.");
 		}
 
 		// Allocate memory for subject name.
 		szName = (LPTSTR)LocalAlloc(LPTR, dwData * sizeof(TCHAR));
-		if (!szName)
-		{
+		if (!szName)	{
+
 			throw generic_string(L"Certificate checking error: memory allocation problem.");
 		}
 
 		// Get subject name.
-		if (CertGetNameString(pCertContext, CERT_NAME_SIMPLE_DISPLAY_TYPE, 0, NULL, szName, dwData) <= 1)
-		{
+		if (CertGetNameString(pCertContext, CERT_NAME_SIMPLE_DISPLAY_TYPE, 0, NULL, szName, dwData) <= 1)	{
+
 			throw generic_string(L"Cannot get certificate info.");
 		}
 
 		// check Subject name.
 		subjectName = szName;
-		if (subjectName != subjectName2check)
-		{
+		if (subjectName != subjectName2check)	{
+
 			throw generic_string(L"Certificate checking error: the certificate is not matched.");
 		}
 
@@ -1190,14 +1190,14 @@ bool isCertificateValidated(const generic_string & fullFilePath, const generic_s
 	return isOK;
 }
 
-bool isAssoCommandExisting(LPCTSTR FullPathName)
-{
+bool isAssoCommandExisting(LPCTSTR FullPathName)	{
+
 	bool isAssoCommandExisting = false;
 
 	bool isFileExisting = PathFileExists(FullPathName) != FALSE;
 
-	if (isFileExisting)
-	{
+	if (isFileExisting)	{
+
 		PTSTR ext = PathFindExtension(FullPathName);
 
 		HRESULT hres;
@@ -1231,8 +1231,8 @@ std::string ws2s(const std::wstring& wstr)
 	return converterX.to_bytes(wstr);
 }
 
-bool deleteFileOrFolder(const generic_string& f2delete)
-{
+bool deleteFileOrFolder(const generic_string& f2delete)	{
+
 	auto len = f2delete.length();
 	TCHAR* actionFolder = new TCHAR[len + 2];
 	wcscpy_s(actionFolder, len + 2, f2delete.c_str());
@@ -1256,22 +1256,22 @@ bool deleteFileOrFolder(const generic_string& f2delete)
 }
 
 // Get a vector of full file paths in a given folder. File extension type filter should be *.*, *.xml, *.dll... according the type of file you want to get.  
-void getFilesInFolder(std::vector<generic_string>& files, const generic_string& extTypeFilter, const generic_string& inFolder)
-{
+void getFilesInFolder(std::vector<generic_string>& files, const generic_string& extTypeFilter, const generic_string& inFolder)	{
+
 	generic_string filter = inFolder;
 	PathAppend(filter, extTypeFilter);
 
 	WIN32_FIND_DATA foundData;
 	HANDLE hFindFile = ::FindFirstFile(filter.c_str(), &foundData);
 
-	if (hFindFile != INVALID_HANDLE_VALUE && !(foundData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
-	{
+	if (hFindFile != INVALID_HANDLE_VALUE && !(foundData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))	{
+
 		generic_string foundFullPath = inFolder;
 		PathAppend(foundFullPath, foundData.cFileName);
 		files.push_back(foundFullPath);
 
-		while (::FindNextFile(hFindFile, &foundData))
-		{
+		while (::FindNextFile(hFindFile, &foundData))	{
+
 			generic_string foundFullPath2 = inFolder;
 			PathAppend(foundFullPath2, foundData.cFileName);
 			files.push_back(foundFullPath2);

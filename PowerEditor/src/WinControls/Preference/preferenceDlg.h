@@ -35,8 +35,8 @@
 #include "regExtDlg.h"
 #include "WordStyleDlg.h"
 
-class SettingsDlg : public StaticDialog
-{
+class SettingsDlg : public StaticDialog	{
+
 public :
 	SettingsDlg() = default;
 
@@ -44,16 +44,16 @@ private :
 	INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 };
 
-class BarsDlg : public StaticDialog
-{
+class BarsDlg : public StaticDialog	{
+
 public :
 	BarsDlg() = default;
 private :
 	INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 };
 
-class MarginsDlg : public StaticDialog
-{
+class MarginsDlg : public StaticDialog	{
+
 public :
 	MarginsDlg() = default;
 	virtual void destroy() {
@@ -66,15 +66,15 @@ private :
 	void initScintParam();
 };
 
-struct LangID_Name
-{
+struct LangID_Name	{
+
 	LangType _id;
 	generic_string _name;
 	LangID_Name(LangType id, const generic_string& name) : _id(id), _name(name){};
 };
 
-class DefaultNewDocDlg : public StaticDialog
-{
+class DefaultNewDocDlg : public StaticDialog	{
+
 public :
 	DefaultNewDocDlg() = default;
 
@@ -88,8 +88,8 @@ private :
 	INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 };
 
-class DefaultDirectoryDlg : public StaticDialog
-{
+class DefaultDirectoryDlg : public StaticDialog	{
+
 public :
 	DefaultDirectoryDlg() = default;
 
@@ -116,8 +116,8 @@ public :
 	};
 };
 
-class LangMenuDlg : public StaticDialog
-{
+class LangMenuDlg : public StaticDialog	{
+
 public :
 	LangMenuDlg() = default;
 	virtual void destroy() {
@@ -131,8 +131,8 @@ private :
 	std::vector<LangMenuItem> _langList;
 };
 
-class Highlighting : public StaticDialog
-{
+class Highlighting : public StaticDialog	{
+
 public :
 	Highlighting() = default;
 
@@ -148,8 +148,8 @@ struct strCouple {
 	strCouple(const TCHAR *varDesc, const TCHAR *var): _varDesc(varDesc), _var(var){};
 };
 
-class PrintSettingsDlg : public StaticDialog
-{
+class PrintSettingsDlg : public StaticDialog	{
+
 public :
 	PrintSettingsDlg() = default;
 
@@ -159,8 +159,8 @@ private :
 	int _focusedEditCtrl = 0;
 };
 
-class BackupDlg : public StaticDialog
-{
+class BackupDlg : public StaticDialog	{
+
 public :
 	BackupDlg() = default;
 
@@ -170,8 +170,8 @@ private :
 };
 
 
-class AutoCompletionDlg : public StaticDialog
-{
+class AutoCompletionDlg : public StaticDialog	{
+
 public :
 	AutoCompletionDlg() = default;
 private :
@@ -179,8 +179,8 @@ private :
 	INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 };
 
-class MultiInstDlg : public StaticDialog
-{
+class MultiInstDlg : public StaticDialog	{
+
 public :
 	MultiInstDlg() = default;
 
@@ -188,8 +188,8 @@ private :
 	INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 };
 
-class DelimiterSettingsDlg : public StaticDialog
-{
+class DelimiterSettingsDlg : public StaticDialog	{
+
 public :
 	DelimiterSettingsDlg() = default;
 	~DelimiterSettingsDlg() {
@@ -208,8 +208,8 @@ private :
 	void setWarningIfNeed() const;
 };
 
-class SettingsOnCloudDlg : public StaticDialog
-{
+class SettingsOnCloudDlg : public StaticDialog	{
+
 public :
 	SettingsOnCloudDlg() = default;
 
@@ -217,8 +217,8 @@ private :
 	INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 };
 
-class SearchEngineChoiceDlg : public StaticDialog
-{
+class SearchEngineChoiceDlg : public StaticDialog	{
+
 public :
 	SearchEngineChoiceDlg() = default;
 
@@ -226,8 +226,8 @@ private :
 	INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 };
 
-class PreferenceDlg : public StaticDialog
-{
+class PreferenceDlg : public StaticDialog	{
+
 friend class NativeLangSpeaker;
 
 public :
@@ -238,8 +238,8 @@ public :
 	};
 
     void doDialog(bool isRTL = false) {
-    	if (!isCreated())
-		{
+    	if (!isCreated())	{
+
 			create(IDD_PREFERENCE_BOX, isRTL);
 			goToCenter();
 		}

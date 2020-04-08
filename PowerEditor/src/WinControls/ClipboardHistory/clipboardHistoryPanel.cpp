@@ -44,35 +44,35 @@ ClipboardData ClipboardHistoryPanel::getClipboadData()
 		return clipboardData;
 	 
 	HGLOBAL hglb = GetClipboardData(CLIPBOARD_TEXTFORMAT); 
-	if (hglb != NULL) 
-	{ 
+	if (hglb != NULL)	{ 
+ 
 		char *lpchar = (char *)GlobalLock(hglb);
 		wchar_t *lpWchar = (wchar_t *)GlobalLock(hglb);
 		
-		if (lpchar != NULL) 
-		{
+		if (lpchar != NULL)	{ 
+
 			UINT cf_nppTextLen = RegisterClipboardFormat(CF_NPPTEXTLEN);
-			if (IsClipboardFormatAvailable(cf_nppTextLen))
-			{
+			if (IsClipboardFormatAvailable(cf_nppTextLen))	{
+
 				HGLOBAL hglbLen = GetClipboardData(cf_nppTextLen); 
-				if (hglbLen != NULL) 
-				{ 
+				if (hglbLen != NULL)	{ 
+ 
 					unsigned long *lpLen = (unsigned long *)GlobalLock(hglbLen); 
-					if (lpLen != NULL) 
-					{
-						for (size_t i = 0 ; i < (*lpLen) ; ++i)
-						{
+					if (lpLen != NULL)	{ 
+
+						for (size_t i = 0 ; i < (*lpLen) ; ++i)	{
+
 							clipboardData.push_back(static_cast<unsigned char>(lpchar[i]));
 						}
 						GlobalUnlock(hglbLen); 
 					}
 				}
 			}
-			else
-			{
+			else	{
+
 				int nbBytes = (lstrlenW(lpWchar) + 1) * sizeof(wchar_t);
-				for (int i = 0 ; i < nbBytes ; ++i)
-				{
+				for (int i = 0 ; i < nbBytes ; ++i)	{
+
 					clipboardData.push_back(static_cast<unsigned char>(lpchar[i]));
 				}
 			}
@@ -87,22 +87,22 @@ ClipboardData ClipboardHistoryPanel::getClipboadData()
 ByteArray::ByteArray(ClipboardData cd)
 {
 	_length = cd.size();
-	if (!_length)
-	{
+	if (!_length)	{
+
 		_pBytes = NULL;
 		return;
 	}
 	_pBytes = new unsigned char[_length];
-	for (size_t i = 0 ; i < _length ; ++i)
-	{
+	for (size_t i = 0 ; i < _length ; ++i)	{
+
 		_pBytes[i] = cd[i];
 	}
 }
 
 StringArray::StringArray(ClipboardData cd, size_t maxLen)
 {
-	if (!cd.size())
-	{
+	if (!cd.size())	{
+
 		_pBytes = NULL;
 		return;
 	}
@@ -113,8 +113,8 @@ StringArray::StringArray(ClipboardData cd, size_t maxLen)
 	
 	_pBytes = new unsigned char[_length+(isCompleted?0:2)];
 	size_t i = 0;
-	for ( ; i < _length ; ++i)
-	{
+	for ( ; i < _length ; ++i)	{
+
 		if (!isCompleted && (i == _length-5 || i == _length-3 || i == _length-1))
 			_pBytes[i] = 0;
 		else if (!isCompleted && (i == _length-6 || i == _length-4 || i == _length-2))
@@ -123,8 +123,8 @@ StringArray::StringArray(ClipboardData cd, size_t maxLen)
 			_pBytes[i] = cd[i];
 	}
 
-	if (!isCompleted)
-	{
+	if (!isCompleted)	{
+
 		_pBytes[i++] = 0;
 		_pBytes[i] = 0;
 	}
@@ -132,27 +132,27 @@ StringArray::StringArray(ClipboardData cd, size_t maxLen)
 
 // Search clipboard data in internal storage
 // return -1 if not found, else return the index of internal array
-int ClipboardHistoryPanel::getClipboardDataIndex(ClipboardData cbd)
-{
+int ClipboardHistoryPanel::getClipboardDataIndex(ClipboardData cbd)	{
+
 	int iFound = -1;
 	bool found = false; 
-	for (size_t i = 0, len = _clipboardDataVector.size() ; i < len ; ++i)
-	{
-		if (cbd.size() == _clipboardDataVector[i].size())
-		{
-			for (size_t j = 0, len2 = cbd.size(); j < len2 ; ++j)
-			{
+	for (size_t i = 0, len = _clipboardDataVector.size() ; i < len ; ++i)	{
+
+		if (cbd.size() == _clipboardDataVector[i].size())	{
+
+			for (size_t j = 0, len2 = cbd.size(); j < len2 ; ++j)	{
+
 				if (cbd[j] == _clipboardDataVector[i][j])
 					found = true;
-				else
-				{
+				else	{
+
 					found = false;
 					break;
 				}
 			}
 
-			if (found)
-			{
+			if (found)	{
+
 				iFound = static_cast<int32_t>(i);
 				break;
 			}
@@ -161,12 +161,12 @@ int ClipboardHistoryPanel::getClipboardDataIndex(ClipboardData cbd)
 	return iFound;
 }
 
-void ClipboardHistoryPanel::addToClipboadHistory(ClipboardData cbd)
-{
+void ClipboardHistoryPanel::addToClipboadHistory(ClipboardData cbd)	{
+
 	int i = getClipboardDataIndex(cbd);
 	if (i == 0) return;
-	if (i != -1)
-	{
+	if (i != -1)	{
+
 		_clipboardDataVector.erase(_clipboardDataVector.begin() + i);
 		::SendDlgItemMessage(_hSelf, IDC_LIST_CLIPBOARD, LB_DELETESTRING, i, 0);
 	}
@@ -178,8 +178,8 @@ void ClipboardHistoryPanel::addToClipboadHistory(ClipboardData cbd)
 }
 
 
-void ClipboardHistoryPanel::drawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
-{
+void ClipboardHistoryPanel::drawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)	{
+
 	if (lpDrawItemStruct->itemID >= _clipboardDataVector.size())
 		return;
 
@@ -199,10 +199,10 @@ void ClipboardHistoryPanel::drawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 
 INT_PTR CALLBACK ClipboardHistoryPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-    switch (message)
-    {
-        case WM_INITDIALOG :
-        {
+    switch (message)	{
+
+        case WM_INITDIALOG :	{
+
 			_hwndNextCbViewer = ::SetClipboardViewer(_hSelf);
             return TRUE;
         }
@@ -214,8 +214,8 @@ INT_PTR CALLBACK ClipboardHistoryPanel::run_dlgProc(UINT message, WPARAM wParam,
 				::SendMessage(_hwndNextCbViewer, message, wParam, lParam);
 			return TRUE;
 
-		case WM_DRAWCLIPBOARD :
-		{
+		case WM_DRAWCLIPBOARD :	{
+
 			ClipboardData clipboardData = getClipboadData();
 			if (clipboardData.size())
 				addToClipboadHistory(clipboardData);
@@ -228,20 +228,20 @@ INT_PTR CALLBACK ClipboardHistoryPanel::run_dlgProc(UINT message, WPARAM wParam,
 			::ChangeClipboardChain(_hSelf, _hwndNextCbViewer);
 			break;
 
-		case WM_COMMAND : 
-		{
-			switch (LOWORD(wParam))
-            {
-                case IDC_LIST_CLIPBOARD:
-				{
-					if (HIWORD(wParam) == LBN_DBLCLK)
-					{
+		case WM_COMMAND :	{ 
+
+			switch (LOWORD(wParam))	{
+
+                case IDC_LIST_CLIPBOARD:	{
+
+					if (HIWORD(wParam) == LBN_DBLCLK)	{
+
 						auto i = ::SendDlgItemMessage(_hSelf, IDC_LIST_CLIPBOARD, LB_GETCURSEL, 0, 0);
-						if (i != LB_ERR)
-						{
+						if (i != LB_ERR)	{
+
 							int codepage = (*_ppEditView)->getCurrentBuffer()->getEncoding();
-							if (codepage == -1)
-							{
+							if (codepage == -1)	{
+
 								auto cp = (*_ppEditView)->execute(SCI_GETCODEPAGE);
 								codepage = cp == SC_CP_UTF8 ? SC_CP_UTF8 : 0;
 							}
@@ -274,23 +274,23 @@ INT_PTR CALLBACK ClipboardHistoryPanel::run_dlgProc(UINT message, WPARAM wParam,
 		}
 		break;
 		
-        case WM_SIZE:
-        {
+        case WM_SIZE:	{
+
             int width = LOWORD(lParam);
             int height = HIWORD(lParam);
 			::MoveWindow(::GetDlgItem(_hSelf, IDC_LIST_CLIPBOARD), 0, 0, width, height, TRUE);
             break;
         }
 
-		case WM_CTLCOLORLISTBOX:
-		{
+		case WM_CTLCOLORLISTBOX:	{
+
 			if (_lbBgColor != -1)
 				return reinterpret_cast<LRESULT>(::CreateSolidBrush(_lbBgColor));
 			break;
 		}
 
-		case WM_DRAWITEM:
-		{
+		case WM_DRAWITEM:	{
+
 			drawItem(reinterpret_cast<DRAWITEMSTRUCT *>(lParam));
 			break;
 		}

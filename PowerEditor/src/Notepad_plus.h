@@ -91,8 +91,8 @@ enum spaceTab {
 struct TaskListInfo;
 
 
-struct VisibleGUIConf final
-{
+struct VisibleGUIConf final	{
+
 	bool isPostIt = false;
 	bool isFullScreen = false;
 
@@ -150,8 +150,8 @@ class DocumentMap;
 class FunctionListPanel;
 class FileBrowser;
 
-class Notepad_plus final
-{
+class Notepad_plus final	{
+
 friend class Notepad_plus_Window;
 friend class FileManager;
 
@@ -261,13 +261,11 @@ public:
 	};
 
 	// static int rB;
-	// BufferID _recBuf[16] ={nullptr};
-	BufferID _recBuf =nullptr;
+//	// BufferID _recBuf[16] ={nullptr};
+//	BufferID _recBuf =nullptr;
 
-	void recBufIsCurrentB(){
-	// _recBuf[rB++] = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
-		_recBuf = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
-	}
+/* 	void recBufIsCurrentB(){ _recBuf[rB++] = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());		_recBuf = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
+	} */
 
 private:
 	Notepad_plus_Window *_pPublicInterface = nullptr;
@@ -365,8 +363,8 @@ private:
 	Sci_CharacterRange _prevSelectedRange;
 
 	//Synchronized Scolling
-	struct SyncInfo final
-	{
+	struct SyncInfo final	{
+
 		int _line = 0;
 		int _column = 0;
 		bool _isSynScollV = false;

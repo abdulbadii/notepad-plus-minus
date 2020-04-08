@@ -142,8 +142,8 @@ protected:
 	void setFileExtFilter(FileDialog & fDlg);
 };
 
-class FileRelocalizerDlg : public StaticDialog
-{
+class FileRelocalizerDlg : public StaticDialog	{
+
 public :
 	FileRelocalizerDlg() = default;
 	void init(HINSTANCE hInst, HWND parent) {

@@ -80,8 +80,8 @@ bool sortXML(const xmlname & x1, const xmlname & x2) {
 
 void merge(TiXmlElement * n1, TiXmlElement * n2);
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[])	{
+
 	const char * file = NULL;
 
 	if (argc < 2) {
@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
 	else
 		sort(words.begin(), words.end(), sortXMLCase);
 
-	for(size_t i = 1; i < words.size(); i++) {
+	for(size_t i = 1; i < words.size(); ++i ) {
 		//merge duplicates
 		if (!strcmp(words[i].name, words[i-1].name)) {
 			merge(words[i-1].node, words[i].node);
@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
 	if (envNode)
 		element2->LinkEndChild(envNode);
 	
-	for(size_t i = 0; i < words.size(); i++) {
+	for(size_t i = 0; i < words.size(); ++i ) {
 		element2->LinkEndChild(words[i].node);
 	}
 

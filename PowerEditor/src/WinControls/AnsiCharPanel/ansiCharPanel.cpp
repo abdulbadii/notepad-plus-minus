@@ -30,18 +30,18 @@
 #include "ScintillaEditView.h"
 #include "localization.h"
 
-void AnsiCharPanel::switchEncoding()
-{
+void AnsiCharPanel::switchEncoding()	{
+
 	int codepage = (*_ppEditView)->getCurrentBuffer()->getEncoding();
 	_listView.resetValues(codepage);
 }
 
 INT_PTR CALLBACK AnsiCharPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-    switch (message)
-    {
-        case WM_INITDIALOG :
-        {
+    switch (message)	{
+
+        case WM_INITDIALOG :	{
+
 			NppParameters& nppParam = NppParameters::getInstance();
 			NativeLangSpeaker *pNativeSpeaker = nppParam.getNativeLangSpeaker();
 			generic_string valStr = pNativeSpeaker->getAttrNameStr(L"Value", "AsciiInsertion", "ColumnVal");
@@ -64,12 +64,12 @@ INT_PTR CALLBACK AnsiCharPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM 
             return TRUE;
         }
 
-		case WM_NOTIFY:
-		{
-			switch (((LPNMHDR)lParam)->code)
-			{
-				case NM_DBLCLK:
-				{
+		case WM_NOTIFY:	{
+
+			switch (((LPNMHDR)lParam)->code)	{
+
+				case NM_DBLCLK:	{
+
 					LPNMITEMACTIVATE lpnmitem = (LPNMITEMACTIVATE) lParam;
 					LVHITTESTINFO pInfo;
 					pInfo.pt = lpnmitem->ptAction;
@@ -97,12 +97,12 @@ INT_PTR CALLBACK AnsiCharPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM 
 					return TRUE;
 				}
 
-				case LVN_KEYDOWN:
-				{
-					switch (((LPNMLVKEYDOWN)lParam)->wVKey)
-					{
-						case VK_RETURN:
-						{
+				case LVN_KEYDOWN:	{
+
+					switch (((LPNMLVKEYDOWN)lParam)->wVKey)	{
+
+						case VK_RETURN:	{
+
 							int i = _listView.getSelectedIndex();
 
 							if (i == -1)
@@ -123,8 +123,8 @@ INT_PTR CALLBACK AnsiCharPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM 
 		}
 		return TRUE;
 
-        case WM_SIZE:
-        {
+        case WM_SIZE:	{
+
             int width = LOWORD(lParam);
             int height = HIWORD(lParam);
 			::MoveWindow(_listView.getHSelf(), 0, 0, width, height, TRUE);
@@ -145,22 +145,22 @@ void AnsiCharPanel::insertChar(unsigned char char2insert) const
     wchar_t wCharStr[10];
     char multiByteStr[10];
 	int codepage = (*_ppEditView)->getCurrentBuffer()->getEncoding();
-	if (codepage == -1)
-	{
+	if (codepage == -1)	{
+
 		bool isUnicode = ((*_ppEditView)->execute(SCI_GETCODEPAGE) == SC_CP_UTF8);
-		if (isUnicode)
-		{
+		if (isUnicode)	{
+
 			MultiByteToWideChar(0, 0, charStr, -1, wCharStr, _countof(wCharStr));
 			WideCharToMultiByte(CP_UTF8, 0, wCharStr, -1, multiByteStr, sizeof(multiByteStr), NULL, NULL);
 		}
-		else // ANSI
-		{
+		else	{ // ANSI
+
 			multiByteStr[0] = charStr[0];
 			multiByteStr[1] = charStr[1];
 		}
 	}
-	else
-	{
+	else	{
+
 		MultiByteToWideChar(codepage, 0, charStr, -1, wCharStr, _countof(wCharStr));
 		WideCharToMultiByte(CP_UTF8, 0, wCharStr, -1, multiByteStr, sizeof(multiByteStr), NULL, NULL);
 	}
@@ -174,20 +174,20 @@ void AnsiCharPanel::insertString(LPWSTR string2insert) const
 {
 	char multiByteStr[10];
 	int codepage = (*_ppEditView)->getCurrentBuffer()->getEncoding();
-	if (codepage == -1)
-	{
+	if (codepage == -1)	{
+
 		bool isUnicode = ((*_ppEditView)->execute(SCI_GETCODEPAGE) == SC_CP_UTF8);
-		if (isUnicode)
-		{
+		if (isUnicode)	{
+
 			WideCharToMultiByte(CP_UTF8, 0, string2insert, -1, multiByteStr, sizeof(multiByteStr), NULL, NULL);
 		}
-		else // ANSI
-		{
+		else	{ // ANSI
+
 			wcstombs(multiByteStr, string2insert, 10);
 		}
 	}
-	else
-	{
+	else	{
+
 		WideCharToMultiByte(CP_UTF8, 0, string2insert, -1, multiByteStr, sizeof(multiByteStr), NULL, NULL);
 	}
 

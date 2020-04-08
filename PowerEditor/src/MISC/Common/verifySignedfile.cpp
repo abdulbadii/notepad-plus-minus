@@ -60,8 +60,8 @@ SecurityGard::SecurityGard()
 	_pluginListSha256.push_back(L"1c404fd3578273f5ecde585af82179ff3b63c635fb4fa24be21ebde708e403e4"); // v1.0.8 64 bit (unsigned)
 }
 
-bool SecurityGard::checkModule(const std::wstring& filePath, NppModule module2check)
-{
+bool SecurityGard::checkModule(const std::wstring& filePath, NppModule module2check)	{
+
 #ifndef _DEBUG
 	if (_securityMode == sm_certif)
 		return verifySignedLibrary(filePath, module2check);
@@ -79,8 +79,8 @@ bool SecurityGard::checkModule(const std::wstring& filePath, NppModule module2ch
 #endif
 }
 
-bool SecurityGard::checkSha256(const std::wstring& filePath, NppModule module2check)
-{
+bool SecurityGard::checkSha256(const std::wstring& filePath, NppModule module2check)	{
+
 	// Uncomment the following code if the components are rebuilt for testing
 	// It should be stay in commenting out
 	/*
@@ -94,7 +94,7 @@ bool SecurityGard::checkSha256(const std::wstring& filePath, NppModule module2ch
 	calc_sha_256(sha2hash, reinterpret_cast<const uint8_t*>(content.c_str()), content.length());
 
 	wchar_t sha2hashStr[65] = { '\0' };
-	for (size_t i = 0; i < 32; i++)
+	for (size_t i = 0; i < 32; ++i )
 		wsprintf(sha2hashStr + i * 2, L"%02x", sha2hash[i]);
 
 	std::vector<std::wstring>* moduleSha256 = nullptr;
@@ -107,10 +107,10 @@ bool SecurityGard::checkSha256(const std::wstring& filePath, NppModule module2ch
 	else
 		return false;
 
-	for (auto i : *moduleSha256)
-	{
-		if (i == sha2hashStr)
-		{
+	for (auto i : *moduleSha256)	{
+
+		if (i == sha2hashStr)	{
+
 			//::MessageBox(NULL, filePath.c_str(), L"OK", MB_OK);
 			return true;
 		}
@@ -120,8 +120,8 @@ bool SecurityGard::checkSha256(const std::wstring& filePath, NppModule module2ch
 	return false;
 }
 
-bool SecurityGard::verifySignedLibrary(const std::wstring& filepath, NppModule module2check)
-{
+bool SecurityGard::verifySignedLibrary(const std::wstring& filepath, NppModule module2check)	{
+
 	wstring display_name;
 	wstring key_id_hex;
 	wstring subject;
@@ -151,13 +151,13 @@ bool SecurityGard::verifySignedLibrary(const std::wstring& filepath, NppModule m
 	winTEXTrust_data.fdwRevocationChecks = WTD_REVOKE_WHOLECHAIN;  // verify the whole certificate chain
 	winTEXTrust_data.pFile = &file_data;
 
-	if (!_doCheckRevocation)
-	{
+	if (!_doCheckRevocation)	{
+
 		winTEXTrust_data.fdwRevocationChecks = WTD_REVOKE_NONE;
 		OutputDebugString(L"VerifyLibrary: certificate revocation checking is disabled\n");
 	}
-	else
-	{
+	else	{
+
 		// if offline, revocation is not checked
 		// depending of windows version, this may introduce a latency on offline systems
 		DWORD netstatus;
@@ -168,15 +168,15 @@ bool SecurityGard::verifySignedLibrary(const std::wstring& filepath, NppModule m
 		online = (0 != IsNetworkAlive(&netstatus));
 		online = online && (0 == GetLastError());
 		online = online && (0 == IsDestinationReachable(msftTEXTest_site, &oci));
-		if (!online)
-		{
+		if (!online)	{
+
 			winTEXTrust_data.fdwRevocationChecks = WTD_REVOKE_NONE;
 			OutputDebugString(L"VerifyLibrary: system is offline - certificate revocation wont be checked\n");
 		}
 	}
 
-	if (_doCheckChainOfTrust)
-	{
+	if (_doCheckChainOfTrust)	{
+
 		// Verify signature and cert-chain validity
 		GUID policy = WINTRUST_ACTION_GENERIC_VERIFY_V2;
 		LONG vtrust = ::WinVerifyTrust(NULL, &policy, &winTEXTrust_data);
@@ -185,14 +185,14 @@ bool SecurityGard::verifySignedLibrary(const std::wstring& filepath, NppModule m
 		winTEXTrust_data.dwStateAction = WTD_STATEACTION_CLOSE;
 		LONG t2 = ::WinVerifyTrust(NULL, &policy, &winTEXTrust_data);
 
-		if (vtrust)
-		{
+		if (vtrust)	{
+
 			OutputDebugString(L"VerifyLibrary: trust verification failed\n");
 			return false;
 		}
 
-		if (t2)
-		{
+		if (t2)	{
+
 			OutputDebugString(L"VerifyLibrary: error encountered while cleaning up after WinVerifyTrust\n");
 			return false;
 		}
@@ -214,28 +214,28 @@ bool SecurityGard::verifySignedLibrary(const std::wstring& filepath, NppModule m
 			&dwEncoding, &dwContentType, &dwFormatType,
 			&hStore, &hMsg, NULL);
 
-		if (!result)
-		{
+		if (!result)	{
+
 			throw wstring(L"Checking certificate of ") + filepath + L" : "+ GetLastErrorAsString(GetLastError());
 		}
 
 		// Get signer information size.
 		result = ::CryptMsgGetParam(hMsg, CMSG_SIGNER_INFO_PARAM, 0, NULL, &dwSignerInfo);
-		if (!result)
-		{
+		if (!result)	{
+
 			throw wstring(L"CryptMsgGetParam first call: ") + GetLastErrorAsString(GetLastError());
 		}
 
 		// Get Signer Information.
 		pSignerInfo = (PCMSG_SIGNER_INFO)LocalAlloc(LPTR, dwSignerInfo);
-		if (NULL == pSignerInfo)
-		{
+		if (NULL == pSignerInfo)	{
+
 			throw wstring(L"Failed to allocate memory for signature processing");
 		}
 
 		result = ::CryptMsgGetParam(hMsg, CMSG_SIGNER_INFO_PARAM, 0, (PVOID)pSignerInfo, &dwSignerInfo);
-		if (!result)
-		{
+		if (!result)	{
+
 			throw wstring(L"CryptMsgGetParam: ") + GetLastErrorAsString(GetLastError());
 		}
 
@@ -244,41 +244,41 @@ bool SecurityGard::verifySignedLibrary(const std::wstring& filepath, NppModule m
 		cert_info.Issuer = pSignerInfo->Issuer;
 		cert_info.SerialNumber = pSignerInfo->SerialNumber;
 		PCCERT_CONTEXT context = ::CertFindCertificateInStore(hStore, X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, 0, CERT_FIND_SUBJECT_CERT, (PVOID)&cert_info, NULL);
-		if (!context)
-		{
+		if (!context)	{
+
 			throw wstring(L"Certificate context: ") + GetLastErrorAsString(GetLastError());
 		}
 
 		// Getting the full subject				
 		auto subject_sze = ::CertNameToStr(X509_ASN_ENCODING, &context->pCertInfo->Subject, CERT_X500_NAME_STR, NULL, 0);
-		if (subject_sze <= 1)
-		{
+		if (subject_sze <= 1)	{
+
 			throw wstring(L"Getting x509 field size problem.");
 		}
 
 		std::unique_ptr<TCHAR[]> subject_buffer(new TCHAR[subject_sze]);
-		if (::CertNameToStr(X509_ASN_ENCODING, &context->pCertInfo->Subject, CERT_X500_NAME_STR, subject_buffer.get(), subject_sze) <= 1)
-		{
+		if (::CertNameToStr(X509_ASN_ENCODING, &context->pCertInfo->Subject, CERT_X500_NAME_STR, subject_buffer.get(), subject_sze) <= 1)	{
+
 			throw wstring(L"Failed to get x509 filed infos from certificate.");
 		}
 		subject = subject_buffer.get();
 
 		// Getting key_id 
 		DWORD key_id_sze = 0;
-		if (!::CertGetCertificateContextProperty(context, CERT_KEY_IDENTIFIER_PROP_ID, NULL, &key_id_sze))
-		{
+		if (!::CertGetCertificateContextProperty(context, CERT_KEY_IDENTIFIER_PROP_ID, NULL, &key_id_sze))	{
+
 			throw wstring(L"x509 property not found") + GetLastErrorAsString(GetLastError());
 		}
 
 		std::unique_ptr<BYTE[]> key_id_buff(new BYTE[key_id_sze]);
-		if (!::CertGetCertificateContextProperty(context, CERT_KEY_IDENTIFIER_PROP_ID, key_id_buff.get(), &key_id_sze))
-		{
+		if (!::CertGetCertificateContextProperty(context, CERT_KEY_IDENTIFIER_PROP_ID, key_id_buff.get(), &key_id_sze))	{
+
 			throw wstring(L"Getting certificate property problem.") + GetLastErrorAsString(GetLastError());
 		}
 
 		wstringstream ss;
-		for (unsigned i = 0; i < key_id_sze; i++)
-		{
+		for (unsigned i = 0; i < key_id_sze; ++i )	{
+
 			ss << std::uppercase << std::setfill(TCHAR('0')) << std::setw(2) << std::hex
 				<< key_id_buff[i];
 		}
@@ -288,15 +288,15 @@ bool SecurityGard::verifySignedLibrary(const std::wstring& filepath, NppModule m
 
 		// Getting the display name			
 		auto sze = ::CertGetNameString(context, CERT_NAME_SIMPLE_DISPLAY_TYPE, 0, NULL, NULL, 0);
-		if (sze <= 1)
-		{
+		if (sze <= 1)	{
+
 			throw wstring(L"Getting data size problem.") + GetLastErrorAsString(GetLastError());
 		}
 
 		// Get display name.
 		std::unique_ptr<TCHAR[]> display_name_buffer(new TCHAR[sze]);
-		if (::CertGetNameString(context, CERT_NAME_SIMPLE_DISPLAY_TYPE, 0, NULL, display_name_buffer.get(), sze) <= 1)
-		{
+		if (::CertGetNameString(context, CERT_NAME_SIMPLE_DISPLAY_TYPE, 0, NULL, display_name_buffer.get(), sze) <= 1)	{
+
 			throw wstring(L"Cannot get certificate info.") + GetLastErrorAsString(GetLastError());
 		}
 		display_name = display_name_buffer.get();
@@ -311,8 +311,8 @@ bool SecurityGard::verifySignedLibrary(const std::wstring& filepath, NppModule m
 	catch (...) {
 		// Unknown error
 		OutputDebugString(L"VerifyLibrary: error while getting certificate informations\n");
-		if (module2check == nm_scilexer)
-		{
+		if (module2check == nm_scilexer)	{
+
 			wstring errMsg(L"Unknown exception occurred. ");
 			errMsg += GetLastErrorAsString(GetLastError());
 			::MessageBox(NULL, errMsg.c_str(), L"DLL signature verification failed", MB_ICONERROR);
@@ -323,20 +323,20 @@ bool SecurityGard::verifySignedLibrary(const std::wstring& filepath, NppModule m
 	//
 	// fields verifications - if status is true, and string to compare (from the parameter) is not empty, then do compare
 	//
-	if (status &&  _signer_display_name != display_name)
-	{
+	if (status &&  _signer_display_name != display_name)	{
+
 		status = false;
 		OutputDebugString(L"VerifyLibrary: Invalid certificate display name\n");
 	}
 
-	if (status && _signer_subject != subject)
-	{
+	if (status && _signer_subject != subject)	{
+
 		status = false;
 		OutputDebugString(L"VerifyLibrary: Invalid certificate subject\n");
 	}
 
-	if (status && _signer_key_id != key_id_hex)
-	{
+	if (status && _signer_key_id != key_id_hex)	{
+
 		status = false;
 		OutputDebugString(L"VerifyLibrary: Invalid certificate key id\n");
 	}

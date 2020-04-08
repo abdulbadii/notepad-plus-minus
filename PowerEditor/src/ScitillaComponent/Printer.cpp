@@ -30,16 +30,16 @@
 #include "RunDlg.h"
 //#include "Parameters.h"
 
-void replaceStr(generic_string & str, generic_string str2BeReplaced, generic_string replacement)
-{
+void replaceStr(generic_string & str, generic_string str2BeReplaced, generic_string replacement)	{
+
 	size_t pos = str.find(str2BeReplaced);
 
 	if (pos != str.npos)
 		str.replace(pos, str2BeReplaced.length(), replacement);
 }
 
-void Printer::init(HINSTANCE hInst, HWND hwnd, ScintillaEditView *pSEView, bool showDialog, int startPos, int endPos, bool isRTL)
-{
+void Printer::init(HINSTANCE hInst, HWND hwnd, ScintillaEditView *pSEView, bool showDialog, int startPos, int endPos, bool isRTL)	{
+
 	_pSEView = pSEView;
 	_startPos = startPos;
 	_endPos = endPos;
@@ -67,8 +67,8 @@ void Printer::init(HINSTANCE hInst, HWND hwnd, ScintillaEditView *pSEView, bool 
 	// See if a range has been selected
 	_pdlg.Flags |= (_startPos != _endPos)?PD_SELECTION:PD_NOSELECTION;
 
-	if (!showDialog) 
-	{
+	if (!showDialog)	{ 
+
 		// Don't display dialog box, just use the default printer and options
 		_pdlg.Flags |= PD_RETURNDEFAULT;
 	}
@@ -115,8 +115,8 @@ size_t Printer::doPrint(bool justDoIt)
 	rectPhysMargins.bottom = ptPage.y						// total paper height
 	                         - GetDeviceCaps(_pdlg.hDC, VERTRES)	// printable height
 	                         - rectPhysMargins.top;				// right unprintable margin
-	if (nppGUI._printSettings.isUserMargePresent())
-	{
+	if (nppGUI._printSettings.isUserMargePresent())	{
+
 		userMargins.left  = MulDiv(nppGUI._printSettings._marge.left*100, ptDpi.x, 2540);
 		userMargins.top  = MulDiv(nppGUI._printSettings._marge.top*100, ptDpi.y, 2540);
 		userMargins.right  = MulDiv(nppGUI._printSettings._marge.right*100, ptDpi.x, 2540);
@@ -127,8 +127,8 @@ size_t Printer::doPrint(bool justDoIt)
 		rectMargins.right	= max(rectPhysMargins.right, userMargins.right);
 		rectMargins.bottom	= max(rectPhysMargins.bottom, userMargins.bottom);
 	}
-	else
-	{
+	else	{
+
 	rectMargins.left	= rectPhysMargins.left;
 	rectMargins.top		= rectPhysMargins.top;
 	rectMargins.right	= rectPhysMargins.right;
@@ -194,8 +194,8 @@ size_t Printer::doPrint(bool justDoIt)
 	docInfo.lpszOutput = NULL;
 	docInfo.lpszDatatype = NULL;
 
-	if (::StartDoc(_pdlg.hDC, &docInfo) < 0) 
-	{
+	if (::StartDoc(_pdlg.hDC, &docInfo) < 0)	{ 
+
 		MessageBox(NULL, L"Can not start printer document.", 0, MB_OK);
 		return 0;
 	}
@@ -207,15 +207,15 @@ size_t Printer::doPrint(bool justDoIt)
 
 	// In the case that the print dialog was launched and that there's a range of selection
 	// We print the range of selection
-	if ((!(_pdlg.Flags & PD_RETURNDEFAULT)) && (_pdlg.Flags & PD_SELECTION))
-	{
-		if (_startPos > _endPos) 
-		{
+	if ((!(_pdlg.Flags & PD_RETURNDEFAULT)) && (_pdlg.Flags & PD_SELECTION))	{
+
+		if (_startPos > _endPos)	{ 
+
 			lengthPrinted = static_cast<long>(_endPos);
 			lengthDoc = static_cast<long>(_startPos);
 		}
-		else 
-		{
+		else	{ 
+
 			lengthPrinted = static_cast<long>(_startPos);
 			lengthDoc = static_cast<long>(_endPos);
 		}
@@ -267,13 +267,13 @@ size_t Printer::doPrint(bool justDoIt)
 	::GetDateFormat(LOCALE_USER_DEFAULT, DATE_LONGDATE, &st, NULL, longDate, bufferSize);
 	::GetTimeFormat(LOCALE_USER_DEFAULT, TIME_NOSECONDS, &st, NULL, time, bufferSize);
 
-	if (nppGUI._printSettings.isHeaderPresent())
-	{
+	if (nppGUI._printSettings.isHeaderPresent())	{
+
 		frPrint.rc.top += headerLineHeight + headerLineHeight / 2;
 
 		generic_string headerLeftPart = nppGUI._printSettings._headerLeft;
-		if (headerLeftPart != L"")
-		{
+		if (headerLeftPart != L"")	{
+
 			replaceStr(headerLeftPart, shortDateVar, shortDate);
 			replaceStr(headerLeftPart, longDateVar, longDate);
 			replaceStr(headerLeftPart, timeVar, time);
@@ -281,8 +281,8 @@ size_t Printer::doPrint(bool justDoIt)
 		}
 
 		generic_string headerMiddlePart = nppGUI._printSettings._headerMiddle;
-		if (headerMiddlePart != L"")
-		{
+		if (headerMiddlePart != L"")	{
+
 			replaceStr(headerMiddlePart, shortDateVar, shortDate);
 			replaceStr(headerMiddlePart, longDateVar, longDate);
 			replaceStr(headerMiddlePart, timeVar, time);
@@ -290,8 +290,8 @@ size_t Printer::doPrint(bool justDoIt)
 		}
 
 		generic_string headerRightPart = nppGUI._printSettings._headerRight;
-		if (headerRightPart != L"")
-		{
+		if (headerRightPart != L"")	{
+
 			replaceStr(headerRightPart, shortDateVar, shortDate);
 			replaceStr(headerRightPart, longDateVar, longDate);
 			replaceStr(headerRightPart, timeVar, time);
@@ -300,13 +300,13 @@ size_t Printer::doPrint(bool justDoIt)
 
 	}
 
-	if (nppGUI._printSettings.isFooterPresent())
-	{
+	if (nppGUI._printSettings.isFooterPresent())	{
+
 		frPrint.rc.bottom -= footerLineHeight + footerLineHeight / 2;
 
 		generic_string footerLeftPart = nppGUI._printSettings._footerLeft;
-		if (footerLeftPart != L"")
-		{
+		if (footerLeftPart != L"")	{
+
 			replaceStr(footerLeftPart, shortDateVar, shortDate);
 			replaceStr(footerLeftPart, longDateVar, longDate);
 			replaceStr(footerLeftPart, timeVar, time);
@@ -314,8 +314,8 @@ size_t Printer::doPrint(bool justDoIt)
 		}
 
 		generic_string footerMiddlePart = nppGUI._printSettings._footerMiddle;
-		if (footerMiddlePart != L"")
-		{
+		if (footerMiddlePart != L"")	{
+
 			replaceStr(footerMiddlePart, shortDateVar, shortDate);
 			replaceStr(footerMiddlePart, longDateVar, longDate);
 			replaceStr(footerMiddlePart, timeVar, time);
@@ -323,8 +323,8 @@ size_t Printer::doPrint(bool justDoIt)
 		}
 
 		generic_string footerRightPart = nppGUI._printSettings._footerRight;
-		if (footerRightPart != L"")
-		{
+		if (footerRightPart != L"")	{
+
 			replaceStr(footerRightPart, shortDateVar, shortDate);
 			replaceStr(footerRightPart, longDateVar, longDate);
 			replaceStr(footerRightPart, timeVar, time);
@@ -341,8 +341,8 @@ size_t Printer::doPrint(bool justDoIt)
 	const TCHAR pageVar[] = L"$(CURRENT_PRINTING_PAGE)";
 
 	_pSEView->execute(SCI_SETPRINTCOLOURMODE, nppGUI._printSettings._printOption); // setting mode once is enough
-	while (lengthPrinted < lengthDoc) 
-	{
+	while (lengthPrinted < lengthDoc)	{ 
+
 		bool printPage = (!(_pdlg.Flags & PD_PAGENUMS) ||
 		             (pageNum >= _pdlg.nFromPage) && (pageNum <= _pdlg.nToPage));
 					 
@@ -352,12 +352,12 @@ size_t Printer::doPrint(bool justDoIt)
 		TCHAR pageString[32];
 		wsprintf(pageString, L"%0d", pageNum);
 		
-		if (printPage) 
-		{
+		if (printPage)	{ 
+
 			::StartPage(_pdlg.hDC);
 
-			if (nppGUI._printSettings.isHeaderPresent())
-			{
+			if (nppGUI._printSettings.isHeaderPresent())	{
+
 				::SelectObject(_pdlg.hDC, fontHeader);
 
 				::SetTextColor(_pdlg.hDC, RGB(0, 0, 0));
@@ -372,8 +372,8 @@ size_t Printer::doPrint(bool justDoIt)
 				SIZE size;
 				
 				// Left part
-				if (headerL[0] != '\0')
-				{
+				if (headerL[0] != '\0')	{
+
 					generic_string headerLeft(headerL);
 					size_t pos = headerLeft.find(pageVar);
 
@@ -385,8 +385,8 @@ size_t Printer::doPrint(bool justDoIt)
 				}
 
 				// Middle part
-				if (headerM[0] != '\0')
-				{
+				if (headerM[0] != '\0')	{
+
 					generic_string headerMiddle(headerM);
 					size_t pos = headerMiddle.find(pageVar);
 					if (pos != headerMiddle.npos)
@@ -397,8 +397,8 @@ size_t Printer::doPrint(bool justDoIt)
 						ETO_CLIPPED, &rcw, headerMiddle.c_str(), static_cast<int>(headerMiddle.length()), NULL);
 				}
 				// Right part
-				if (headerR[0] != '\0')
-				{
+				if (headerR[0] != '\0')	{
+
 					generic_string headerRight(headerR);
 					size_t pos = headerRight.find(pageVar);
 					if (pos != headerRight.npos)
@@ -423,10 +423,10 @@ size_t Printer::doPrint(bool justDoIt)
 		frPrint.chrg.cpMax = lengthDoc;
 		lengthPrinted = long(_pSEView->execute(SCI_FORMATRANGE, printPage, reinterpret_cast<LPARAM>(&frPrint)));
 
-		if (printPage) 
-		{
-			if (nppGUI._printSettings.isFooterPresent())
-			{
+		if (printPage)	{ 
+
+			if (nppGUI._printSettings.isFooterPresent())	{
+
 				::SelectObject(_pdlg.hDC, fontFooter);
 				
 				::SetTextColor(_pdlg.hDC, RGB(0, 0, 0));
@@ -439,8 +439,8 @@ size_t Printer::doPrint(bool justDoIt)
 				SIZE size;
 				
 				// Left part
-				if (footerL[0] != '\0')
-				{
+				if (footerL[0] != '\0')	{
+
 					generic_string footerLeft(footerL);
 					size_t pos = footerLeft.find(pageVar);
 					if (pos != footerLeft.npos)
@@ -451,8 +451,8 @@ size_t Printer::doPrint(bool justDoIt)
 				}
 
 				// Middle part
-				if (footerM[0] != '\0')
-				{
+				if (footerM[0] != '\0')	{
+
 					generic_string footerMiddle(footerM);
 					size_t pos = footerMiddle.find(pageVar);
 					if (pos != footerMiddle.npos)
@@ -463,8 +463,8 @@ size_t Printer::doPrint(bool justDoIt)
 									ETO_CLIPPED, &rcw, footerMiddle.c_str(), static_cast<int>(footerMiddle.length()), NULL);
 				}
 				// Right part
-				if (footerR[0] != '\0')
-				{
+				if (footerR[0] != '\0')	{
+
 					generic_string footerRight(footerR);
 					size_t pos = footerRight.find(pageVar);
 					if (pos != footerRight.npos)

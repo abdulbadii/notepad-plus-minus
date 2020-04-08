@@ -51,8 +51,8 @@ private :
 	void extractArgs(TCHAR *cmd2Exec, size_t cmd2ExecLen, TCHAR *args, size_t argsLen, const TCHAR *cmdEntier);
 };
 
-class RunDlg : public Command, public StaticDialog
-{
+class RunDlg : public Command, public StaticDialog	{
+
 public :
 	RunDlg() = default;
 

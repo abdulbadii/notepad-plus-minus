@@ -35,8 +35,8 @@ class ScintillaEditView;
 const bool activeText = true;
 const bool activeNumeric = false;
 
-class ColumnEditorDlg : public StaticDialog
-{
+class ColumnEditorDlg : public StaticDialog	{
+
 public :
 	ColumnEditorDlg() = default;
 	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView);

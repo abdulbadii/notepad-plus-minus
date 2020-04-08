@@ -48,15 +48,15 @@
 //hiragana frequency category table
 extern const PRUint8 jp2CharContext[83][83];
 
-class JapaneseContextAnalysis
-{
+class JapaneseContextAnalysis	{
+
 public:
   JapaneseContextAnalysis() {Reset(PR_FALSE);}
 
   void HandleData(const char* aBuf, PRUint32 aLen);
 
-  void HandleOneChar(const char* aStr, PRUint32 aCharLen)
-  {
+  void HandleOneChar(const char* aStr, PRUint32 aCharLen)	{
+
     PRInt32 order;
 
     //if we received enough data, stop here   
@@ -65,8 +65,8 @@ public:
      
     //Only 2-bytes characters are of our interest
     order = (aCharLen == 2) ? GetOrder(aStr) : -1;
-    if (order != -1 && mLastCharOrder != -1)
-    {
+    if (order != -1 && mLastCharOrder != -1)	{
+
       mTotalRel++;
       //count this sequence to its category counter
       mRelSample[jp2CharContext[mLastCharOrder][order]]++;
@@ -104,8 +104,8 @@ protected:
 };
 
 
-class SJISContextAnalysis : public JapaneseContextAnalysis
-{
+class SJISContextAnalysis : public JapaneseContextAnalysis	{
+
   //SJISContextAnalysis(){};
 protected:
   PRInt32 GetOrder(const char* str, PRUint32 *charLen);
@@ -121,8 +121,8 @@ protected:
   }
 };
 
-class EUCJPContextAnalysis : public JapaneseContextAnalysis
-{
+class EUCJPContextAnalysis : public JapaneseContextAnalysis	{
+
 protected:
   PRInt32 GetOrder(const char* str, PRUint32 *charLen);
   PRInt32 GetOrder(const char* str)

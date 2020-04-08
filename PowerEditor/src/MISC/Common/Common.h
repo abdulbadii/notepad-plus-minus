@@ -93,8 +93,8 @@ generic_string relativeFilePathToFullFilePath(const TCHAR *relativeFilePath);
 void writeFileContent(const TCHAR *file2write, const char *content2write);
 bool matchInList(const TCHAR *fileName, const std::vector<generic_string> & patterns);
 
-class WcharMbcsConvertor final
-{
+class WcharMbcsConvertor final	{
+
 public:
 	static WcharMbcsConvertor& getInstance() {
 		static WcharMbcsConvertor instance;
@@ -106,8 +106,8 @@ public:
 	const char * wchar2char(const wchar_t *wcStr, UINT codepage, int lenIn = -1, int *pLenOut = NULL);
 	const char * wchar2char(const wchar_t *wcStr, UINT codepage, long *mstart, long *mend);
 
-	const char * encode(UINT fromCodepage, UINT toCodepage, const char *txt2Encode, int lenIn=-1, int *pLenOut=NULL, int *pBytesNotProcessed=NULL)
-	{
+	const char * encode(UINT fromCodepage, UINT toCodepage, const char *txt2Encode, int lenIn=-1, int *pLenOut=NULL, int *pBytesNotProcessed=NULL)	{
+
 		int lenWc = 0;
         const wchar_t * strW = char2wchar(txt2Encode, fromCodepage, lenIn, &lenWc, pBytesNotProcessed);
         return wchar2char(strW, toCodepage, lenWc, pLenOut);
@@ -127,15 +127,15 @@ protected:
 	WcharMbcsConvertor& operator= (WcharMbcsConvertor&&) = delete;
 
 	template <class T>
-	class StringBuffer final
-	{
+	class StringBuffer final	{
+
 	public:
 		~StringBuffer() { if (_allocLen) delete[] _str; }
 
-		void sizeTo(size_t size)
-		{
-			if (_allocLen < size)
-			{
+		void sizeTo(size_t size)	{
+
+			if (_allocLen < size)	{
+
 				if (_allocLen)
 					delete[] _str;
 				_allocLen = max(size, initSize);
@@ -143,8 +143,8 @@ protected:
 			}
 		}
 
-		void empty()
-		{
+		void empty()	{
+
 			static T nullStr = 0; // routines may return an empty string, with null terminator, without allocating memory; a pointer to this null character will be returned in that case
 			if (_allocLen == 0)
 				_str = &nullStr;

@@ -46,8 +46,8 @@ struct SwitcherFileInfo {
 	SwitcherFileInfo(BufferID buf, int view) : _bufID(buf), _iView(view){};
 };
 
-class VerticalFileSwitcherListView : public Window
-{
+class VerticalFileSwitcherListView : public Window	{
+
 public:
 	VerticalFileSwitcherListView() = default;
 	virtual ~VerticalFileSwitcherListView() = default;

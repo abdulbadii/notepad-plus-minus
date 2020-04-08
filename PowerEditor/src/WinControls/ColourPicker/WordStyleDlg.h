@@ -65,8 +65,8 @@ private :
 	LRESULT CALLBACK colourStaticProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
 };
 
-class WordStyleDlg : public StaticDialog
-{
+class WordStyleDlg : public StaticDialog	{
+
 public :
 	WordStyleDlg() = default;
 
@@ -77,14 +77,14 @@ public :
 	virtual void create(int dialogID, bool isRTL = false, bool msgDestParent = true);
 
     void doDialog(bool isRTL = false) {
-    	if (!isCreated())
-		{
+    	if (!isCreated())	{
+
 			create(IDD_STYLER_DLG, isRTL);
 			prepare2Cancel();
 		}
 
-		if (!::IsWindowVisible(_hSelf))
-		{
+		if (!::IsWindowVisible(_hSelf))	{
+
 			prepare2Cancel();
 		}
 	    display();
@@ -161,12 +161,12 @@ private :
 		if (styleIndex == LB_ERR)
 			styleIndex = 0;
 
-        if (_currentLexerIndex == 0)
-		{
+        if (_currentLexerIndex == 0)	{
+
             return _globalStyles.getStyler(styleIndex);
 		}
-        else
-        {
+        else	{
+
 		    LexerStyler & lexerStyler = _lsArray.getLexerFromIndex(_currentLexerIndex - 1);
 		    return lexerStyler.getStyler(styleIndex);
         }
@@ -222,8 +222,8 @@ private :
 	void updateGlobalOverrideCtrls();
 
 	void showGlobalOverrideCtrls(bool show)	{
-		if (show)
-		{
+		if (show)	{
+
 			updateGlobalOverrideCtrls();
 		}
 		::ShowWindow(::GetDlgItem(_hSelf, IDC_GLOBAL_FG_CHECK), show?SW_SHOW:SW_HIDE);

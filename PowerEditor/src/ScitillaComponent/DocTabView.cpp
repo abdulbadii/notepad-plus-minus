@@ -37,8 +37,8 @@
 
 bool DocTabView::_hideTabBarStatus = false;
 
-void DocTabView::addBuffer(BufferID buffer)
-{
+void DocTabView::addBuffer(BufferID buffer)	{
+
 	if (buffer == BUFFER_INVALID)	//valid only
 		return;
 	if (this->getIndexByBuffer(buffer) != -1)	//no duplicates
@@ -60,16 +60,16 @@ void DocTabView::addBuffer(BufferID buffer)
 }
 
 
-void DocTabView::closeBuffer(BufferID buffer)
-{
+void DocTabView::closeBuffer(BufferID buffer)	{
+
 	int indexToClose = getIndexByBuffer(buffer);
 	deletItemAt((size_t)indexToClose);
 	::SendMessage(_hParent, WM_SIZE, 0, 0);
 }
 
 
-bool DocTabView::activateBuffer(BufferID buffer)
-{
+bool DocTabView::activateBuffer(BufferID buffer)	{
+
 	int indexToActivate = getIndexByBuffer(buffer);
 	if (indexToActivate == -1)
 		return false;	//cannot activate
@@ -91,13 +91,13 @@ BufferID DocTabView::findBufferByName(const TCHAR * fullfilename) //-1 if not fo
 	TCITEM tie;
 	tie.lParam = -1;
 	tie.mask = TCIF_PARAM;
-	for (size_t i = 0; i < _nbItem; ++i)
-	{
+	for (size_t i = 0; i < _nbItem; ++i)	{
+
 		::SendMessage(_hSelf, TCM_GETITEM, i, reinterpret_cast<LPARAM>(&tie));
 		BufferID id = reinterpret_cast<BufferID>(tie.lParam);
 		Buffer * buf = MainFileManager.getBufferByID(id);
-		if (OrdinalIgnoreCaseCompareStrings(fullfilename, buf->getFullPathName()) == 0)
-		{
+		if (OrdinalIgnoreCaseCompareStrings(fullfilename, buf->getFullPathName()) == 0)	{
+
 			return id;
 		}
 	}
@@ -105,13 +105,13 @@ BufferID DocTabView::findBufferByName(const TCHAR * fullfilename) //-1 if not fo
 }
 
 
-int DocTabView::getIndexByBuffer(BufferID id)
-{
+int DocTabView::getIndexByBuffer(BufferID id)	{
+
 	TCITEM tie;
 	tie.lParam = -1;
 	tie.mask = TCIF_PARAM;
-	for (size_t i = 0; i < _nbItem; ++i)
-	{
+	for (size_t i = 0; i < _nbItem; ++i)	{
+
 		::SendMessage(_hSelf, TCM_GETITEM, i, reinterpret_cast<LPARAM>(&tie));
 		if (reinterpret_cast<BufferID>(tie.lParam) == id)
 			return static_cast<int>(i);
@@ -131,8 +131,8 @@ BufferID DocTabView::getBufferByIndex(size_t index)
 }
 
 
-void DocTabView::bufferUpdated(Buffer * buffer, int mask)
-{
+void DocTabView::bufferUpdated(Buffer * buffer, int mask)	{
+
 	int index = getIndexByBuffer(buffer->getID());
 	if (index == -1)
 		return;
@@ -141,16 +141,16 @@ void DocTabView::bufferUpdated(Buffer * buffer, int mask)
 	tie.lParam = -1;
 	tie.mask = 0;
 
-	if (mask & BufferChangeReadonly || mask & BufferChangeDirty)
-	{
+	if (mask & BufferChangeReadonly || mask & BufferChangeDirty)	{
+
 		tie.mask |= TCIF_IMAGE;
 		tie.iImage = buffer->isDirty()?UNSAVED_IMG_INDEX:SAVED_IMG_INDEX;
-		if (buffer->isMonitoringOn())
-		{
+		if (buffer->isMonitoringOn())	{
+
 			tie.iImage = MONITORING_IMG_INDEX;
 		}
-		else if (buffer->isReadOnly())
-		{
+		else if (buffer->isReadOnly())	{
+
 			tie.iImage = REDONLY_IMG_INDEX;
 		}
 	}
@@ -158,8 +158,8 @@ void DocTabView::bufferUpdated(Buffer * buffer, int mask)
 	//We must make space for the added ampersand characters.
 	TCHAR encodedLabel[2 * MAX_PATH];
 
-	if (mask & BufferChangeFilename)
-	{
+	if (mask & BufferChangeFilename)	{
+
 		tie.mask |= TCIF_TEXT;
 		tie.pszText = const_cast<TCHAR *>(encodedLabel);
 
@@ -172,8 +172,8 @@ void DocTabView::bufferUpdated(Buffer * buffer, int mask)
 			//Tab's caption must be encoded like this because otherwise tab control would make tab too small or too big for the text.
 
 			while (*in != 0)
-			if (*in == '&')
-			{
+			if (*in == '&')	{
+
 				*out++ = '&';
 				*out++ = '&';
 				while (*(++in) == '&')
@@ -194,8 +194,8 @@ void DocTabView::bufferUpdated(Buffer * buffer, int mask)
 }
 
 
-void DocTabView::setBuffer(size_t index, BufferID id)
-{
+void DocTabView::setBuffer(size_t index, BufferID id)	{
+
 	if (index < 0 || index >= _nbItem)
 		return;
 
@@ -210,17 +210,17 @@ void DocTabView::setBuffer(size_t index, BufferID id)
 }
 
 
-void DocTabView::reSizeTo(RECT & rc)
-{
+void DocTabView::reSizeTo(RECT & rc)	{
+
 	int borderWidth = ((NppParameters::getInstance()).getSVP())._borderWidth;
-	if (_hideTabBarStatus)
-	{
+	if (_hideTabBarStatus)	{
+
 		RECT rcTmp = rc;
 		TabBar::reSizeTo(rcTmp);
 		_pView->reSizeTo(rc);
 	}
-	else
-	{
+	else	{
+
 		TabBar::reSizeTo(rc);
 		rc.left	 += borderWidth;
 		rc.right -= borderWidth * 2;

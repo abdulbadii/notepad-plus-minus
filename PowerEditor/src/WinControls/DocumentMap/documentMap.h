@@ -50,8 +50,8 @@ enum moveMode {
 	perPage
 };
 
-class ViewZoneDlg : public StaticDialog
-{
+class ViewZoneDlg : public StaticDialog	{
+
 public :
 	ViewZoneDlg() : StaticDialog(), _viewZoneCanvas(NULL), _canvasDefaultProc(nullptr), _higherY(0), _lowerY(0) {}
 

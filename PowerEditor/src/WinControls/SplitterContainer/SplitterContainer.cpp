@@ -36,8 +36,8 @@ bool SplitterContainer::_isRegistered = false;
 
 
 
-void SplitterContainer::create(Window *pWin0, Window *pWin1, int splitterSize, SplitterMode mode, int ratio, bool isVertical)
-{
+void SplitterContainer::create(Window *pWin0, Window *pWin1, int splitterSize, SplitterMode mode, int ratio, bool isVertical)	{
+
 	//Window::init(hInst, parent);
 	_pWin0 = pWin0;
 	_pWin1 = pWin1;
@@ -46,13 +46,13 @@ void SplitterContainer::create(Window *pWin0, Window *pWin1, int splitterSize, S
 	_ratio = ratio;
 	_dwSplitterStyle |= isVertical?SV_VERTICAL:SV_HORIZONTAL;
 
-	if (_splitterMode != SplitterMode::DYNAMIC)
-	{
+	if (_splitterMode != SplitterMode::DYNAMIC)	{
+
 		_dwSplitterStyle |= SV_FIXED;
 		_dwSplitterStyle &= ~SV_RESIZEWTHPERCNT;
 	}
-	if (!_isRegistered)
-	{
+	if (!_isRegistered)	{
+
 		WNDCLASS splitterContainerClass;
 
 		splitterContainerClass.style = CS_DBLCLKS;
@@ -86,8 +86,8 @@ void SplitterContainer::create(Window *pWin0, Window *pWin1, int splitterSize, S
 }
 
 
-void SplitterContainer::destroy()
-{
+void SplitterContainer::destroy()	{
+
 	if (_hPopupMenu)
 		::DestroyMenu(_hPopupMenu);
 
@@ -96,8 +96,8 @@ void SplitterContainer::destroy()
 }
 
 
-void SplitterContainer::reSizeTo(RECT & rc)
-{
+void SplitterContainer::reSizeTo(RECT & rc)	{
+
 	_x = rc.left;
 	_y = rc.top;
 	::MoveWindow(_hSelf, _x, _y, rc.right, rc.bottom, FALSE);
@@ -127,23 +127,23 @@ void SplitterContainer::redraw(bool forceUpdate) const
 }
 
 
-void SplitterContainer::rotateTo(DIRECTION direction)
-{
+void SplitterContainer::rotateTo(DIRECTION direction)	{
+
 	bool doSwitchWindow = false;
-	if (_dwSplitterStyle & SV_VERTICAL)
-	{
+	if (_dwSplitterStyle & SV_VERTICAL)	{
+
 		_dwSplitterStyle ^= SV_VERTICAL;
 		_dwSplitterStyle |= SV_HORIZONTAL;
 		doSwitchWindow = (direction == DIRECTION::LEFT);
 	}
-	else
-	{
+	else	{
+
 		_dwSplitterStyle ^= SV_HORIZONTAL;
 		_dwSplitterStyle |= SV_VERTICAL;
 		doSwitchWindow = (direction == DIRECTION::RIGHT);
 	}
-	if (doSwitchWindow)
-	{
+	if (doSwitchWindow)	{
+
 		Window *tmp = _pWin0;
 		_pWin0 = _pWin1;
 		_pWin1 = tmp;
@@ -155,10 +155,10 @@ void SplitterContainer::rotateTo(DIRECTION direction)
 LRESULT CALLBACK SplitterContainer::staticWinProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	SplitterContainer *pSplitterContainer = NULL;
-	switch (message)
-	{
-		case WM_NCCREATE:
-		{
+	switch (message)	{
+
+		case WM_NCCREATE:	{
+
 			pSplitterContainer = reinterpret_cast<SplitterContainer *>(reinterpret_cast<LPCREATESTRUCT>(lParam)->lpCreateParams);
 			pSplitterContainer->_hSelf = hwnd;
 			::SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pSplitterContainer));
@@ -176,27 +176,27 @@ LRESULT CALLBACK SplitterContainer::staticWinProc(HWND hwnd, UINT message, WPARA
 }
 
 
-LRESULT SplitterContainer::runProc(UINT message, WPARAM wParam, LPARAM lParam)
-{
-	switch (message)
-	{
-		case WM_CREATE:
-		{
+LRESULT SplitterContainer::runProc(UINT message, WPARAM wParam, LPARAM lParam)	{
+
+	switch (message)	{
+
+		case WM_CREATE:	{
+
 			_splitter.init(_hInst, _hSelf, _splitterSize, _ratio, _dwSplitterStyle);
 			return TRUE;
 		}
 
-		case WM_COMMAND:
-		{
-			switch (LOWORD(wParam))
-			{
-				case ROTATION_A_GAUCHE:
-				{
+		case WM_COMMAND:	{
+
+			switch (LOWORD(wParam))	{
+
+				case ROTATION_A_GAUCHE:	{
+
 					rotateTo(DIRECTION::LEFT);
 					break;
 				}
-				case ROTATION_A_DROITE:
-				{
+				case ROTATION_A_DROITE:	{
+
 					rotateTo(DIRECTION::RIGHT);
 					break;
 				}
@@ -204,8 +204,8 @@ LRESULT SplitterContainer::runProc(UINT message, WPARAM wParam, LPARAM lParam)
 			return TRUE;
 		}
 
-		case WM_RESIZE_CONTAINER:
-		{
+		case WM_RESIZE_CONTAINER:	{
+
 			RECT rc0, rc1;
 			getClientRect(rc0);
 
@@ -214,20 +214,20 @@ LRESULT SplitterContainer::runProc(UINT message, WPARAM wParam, LPARAM lParam)
 			rc1.left = rc0.left += _x;
 			rc1.right = rc0.right;
 
-			if (_dwSplitterStyle & SV_VERTICAL)
-			{
-				if (wParam != 0)
-				{
+			if (_dwSplitterStyle & SV_VERTICAL)	{
+
+				if (wParam != 0)	{
+
 					rc0.right = int(wParam);
 
 					rc1.left = int(wParam) + _x + _splitter.getPhisicalSize();
 					rc1.right = rc1.right - rc1.left + _x;
 				}
 			}
-			else //SV_HORIZONTAL
-			{
-				if (lParam != 0)
-				{
+			else	{ //SV_HORIZONTAL
+
+				if (lParam != 0)	{
+
 					rc0.bottom = int(lParam);
 
 					rc1.top   = int(lParam) + _y + _splitter.getPhisicalSize();
@@ -241,15 +241,15 @@ LRESULT SplitterContainer::runProc(UINT message, WPARAM wParam, LPARAM lParam)
 			return TRUE;
 		}
 
-		case WM_DOPOPUPMENU:
-		{
-			if ((_splitterMode != SplitterMode::LEFT_FIX) && (_splitterMode != SplitterMode::RIGHT_FIX) )
-			{
+		case WM_DOPOPUPMENU:	{
+
+			if ((_splitterMode != SplitterMode::LEFT_FIX) && (_splitterMode != SplitterMode::RIGHT_FIX) )	{
+
 				POINT p;
 				::GetCursorPos(&p);
 
-				if (!_hPopupMenu)
-				{
+				if (!_hPopupMenu)	{
+
 					_hPopupMenu = ::CreatePopupMenu();
 					::InsertMenu(_hPopupMenu, 1, MF_BYPOSITION, ROTATION_A_GAUCHE, L"Rotate to left");
 					::InsertMenu(_hPopupMenu, 0, MF_BYPOSITION, ROTATION_A_DROITE, L"Rotate to right");
@@ -260,10 +260,10 @@ LRESULT SplitterContainer::runProc(UINT message, WPARAM wParam, LPARAM lParam)
 			return TRUE;
 		}
 
-		case WM_GETSPLITTER_X:
-		{
-			switch (_splitterMode)
-			{
+		case WM_GETSPLITTER_X:	{
+
+			switch (_splitterMode)	{
+
 				case SplitterMode::LEFT_FIX:
 				{
 					return MAKELONG(_pWin0->getWidth(), static_cast<std::uint8_t>(SplitterMode::LEFT_FIX));
@@ -282,10 +282,10 @@ LRESULT SplitterContainer::runProc(UINT message, WPARAM wParam, LPARAM lParam)
 			return MAKELONG(0, static_cast<std::uint8_t>(SplitterMode::DYNAMIC));
 		}
 
-		case WM_GETSPLITTER_Y:
-		{
-			switch (_splitterMode)
-			{
+		case WM_GETSPLITTER_Y:	{
+
+			switch (_splitterMode)	{
+
 				case SplitterMode::LEFT_FIX:
 				{
 					return MAKELONG(_pWin0->getHeight(), static_cast<std::uint8_t>(SplitterMode::LEFT_FIX));
@@ -303,8 +303,8 @@ LRESULT SplitterContainer::runProc(UINT message, WPARAM wParam, LPARAM lParam)
 			return MAKELONG(0, static_cast<std::uint8_t>(SplitterMode::DYNAMIC));
 		}
 
-		case WM_LBUTTONDBLCLK:
-		{
+		case WM_LBUTTONDBLCLK:	{
+
 			POINT pt;
 			::GetCursorPos(&pt);
 			::ScreenToClient(_splitter.getHSelf(), &pt);

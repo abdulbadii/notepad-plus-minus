@@ -44,8 +44,8 @@
  
 #define MINIMUM_DATA_THRESHOLD  4
 
-class CharDistributionAnalysis
-{
+class CharDistributionAnalysis	{
+
 public:
   CharDistributionAnalysis() {Reset(PR_FALSE);}
 
@@ -53,19 +53,19 @@ public:
   void HandleData(const char*, PRUint32) {}
   
   //Feed a character with known length
-  void HandleOneChar(const char* aStr, PRUint32 aCharLen)
-  {
+  void HandleOneChar(const char* aStr, PRUint32 aCharLen)	{
+
     PRInt32 order;
 
     //we only care about 2-bytes character in our distribution analysis
     order = (aCharLen == 2) ? GetOrder(aStr) : -1;
 
-    if (order >= 0)
-    {
+    if (order >= 0)	{
+
       mTotalChars++;
       //order is valid
-      if ((PRUint32)order < mTableSize)
-      {
+      if ((PRUint32)order < mTableSize)	{
+
         if (512 > mCharToFreqOrder[order])
           mFreqChars++;
       }
@@ -76,8 +76,8 @@ public:
   float GetConfidence(void);
 
   //Reset analyser, clear any state 
-  void      Reset(PRBool aIsPreferredLanguage) 
-  {
+  void      Reset(PRBool aIsPreferredLanguage)	{ 
+
     mDone = PR_FALSE;
     mTotalChars = 0;
     mFreqChars = 0;
@@ -122,8 +122,8 @@ protected:
 };
 
 
-class EUCTWDistributionAnalysis: public CharDistributionAnalysis
-{
+class EUCTWDistributionAnalysis: public CharDistributionAnalysis	{
+
 public:
   EUCTWDistributionAnalysis();
 protected:
@@ -141,8 +141,8 @@ protected:
 };
 
 
-class EUCKRDistributionAnalysis : public CharDistributionAnalysis
-{
+class EUCKRDistributionAnalysis : public CharDistributionAnalysis	{
+
 public:
   EUCKRDistributionAnalysis();
 protected:
@@ -158,8 +158,8 @@ protected:
   }
 };
 
-class GB2312DistributionAnalysis : public CharDistributionAnalysis
-{
+class GB2312DistributionAnalysis : public CharDistributionAnalysis	{
+
 public:
   GB2312DistributionAnalysis();
 protected:
@@ -176,8 +176,8 @@ protected:
 };
 
 
-class Big5DistributionAnalysis : public CharDistributionAnalysis
-{
+class Big5DistributionAnalysis : public CharDistributionAnalysis	{
+
 public:
   Big5DistributionAnalysis();
 protected:
@@ -196,8 +196,8 @@ protected:
   }
 };
 
-class SJISDistributionAnalysis : public CharDistributionAnalysis
-{
+class SJISDistributionAnalysis : public CharDistributionAnalysis	{
+
 public:
   SJISDistributionAnalysis();
 protected:
@@ -221,8 +221,8 @@ protected:
   }
 };
 
-class EUCJPDistributionAnalysis : public CharDistributionAnalysis
-{
+class EUCJPDistributionAnalysis : public CharDistributionAnalysis	{
+
 public:
   EUCJPDistributionAnalysis();
 protected:

@@ -42,8 +42,8 @@ trayIconControler::trayIconControler(HWND hwnd, UINT uID, UINT uCBMsg, HICON hic
   _isIconShowed = false;
 }
 
-int trayIconControler::doTrayIcon(DWORD op)
-{
+int trayIconControler::doTrayIcon(DWORD op)	{
+
   if ((op != ADD)&&(op != REMOVE)) return INCORRECT_OPERATION;
   if (((_isIconShowed)&&(op == ADD))||((!_isIconShowed)&&(op == REMOVE)))
     return OPERATION_INCOHERENT;

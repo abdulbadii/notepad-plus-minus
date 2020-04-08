@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252" ?>
 <NotepadPlus>
-    <FindHistory nbMaxFindHistoryPath="10" nbMaxFindHistoryFilter="10" nbMaxFindHistoryFind="131" nbMaxFindHistoryReplace="30" matchWord="no" matchCase="yes" wrap="yes" directionDown="yes" fifRecuisive="yes" fifInHiddenFolder="no" dlgAlwaysVisible="no" fifFilterFollowsDoc="no" fifFolderFollowsDoc="yes" searchMode="2" transparencyMode="1" transparency="64" dotMatchesNewline="no" isSearch2ButtonsMode="no">
+    <FindHistory nbMaxFindHistoryPath="10" nbMaxFindHistoryFilter="10" nbMaxFindHistoryFind="131" nbMaxFindHistoryReplace="30" matchWord="no" matchCase="yes" wrap="yes" directionDown="yes" fifRecuisive="yes" fifInHiddenFolder="no" dlgAlwaysVisible="no" fifFilterFollowsDoc="no" fifFolderFollowsDoc="no" searchMode="2" transparencyMode="1" transparency="64" dotMatchesNewline="no" isSearch2ButtonsMode="no">
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src" />
+        <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\TaskList" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src\" />
-        <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent" />
         <Path name="X:\T\" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master\" />
         <Path name="D:\MSYS\usr\src\notepadpp\" />
@@ -21,6 +21,17 @@
         <Filter name="*.vc* *.sln" />
         <Filter name="*.c *.cpp *.cc *.h" />
         <Filter name="*.xml" />
+        <Find name="VK_NULL" />
+        <Find name="IDM_MACRO_RUNMULTIMACRODLG" />
+        <Find name="_mainEditView" />
+        <Find name="showWSAndTab" />
+        <Find name="ShellExecute" />
+        <Find name="NPPM_SHOWDOCSWITCHER" />
+        <Find name="_hParent" />
+        <Find name="_pDocMap" />
+        <Find name="reload" />
+        <Find name="Notepad_plus_Window" />
+        <Find name="SC_FOLDLEVELHEADERFLAG" />
         <Find name="nbMainFiles" />
         <Find name="sessionFileInfo" />
         <Find name="_fileName" />
@@ -31,7 +42,6 @@
         <Find name="Buffer" />
         <Find name="Notepad_plus" />
         <Find name="checkClipboard" />
-        <Find name="Notepad_plus_Window" />
         <Find name="lParam" />
         <Find name="L_SEARCHRESULT" />
         <Find name="_pMainM" />
@@ -201,9 +211,6 @@
         <File filename="D:\MSYS\usr\src\notepadpp\Release\config.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.rc" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\DocTabView.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\menuCmdID.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\MISC\PluginsManager\PluginInterface.h" />
     </History>
     <GUIConfigs>
         <GUIConfig name="ToolBar" visible="no">standard</GUIConfig>
@@ -212,7 +219,7 @@
         <GUIConfig name="ScintillaViewsSplitter">vertical</GUIConfig>
         <GUIConfig name="UserDefineDlg" position="undocked">hide</GUIConfig>
         <GUIConfig name="TabSetting" replaceBySpace="no" size="3" />
-        <GUIConfig name="AppPosition" x="206" y="-9" width="1296" height="1087" isMaximized="no" />
+        <GUIConfig name="AppPosition" x="163" y="-12" width="1296" height="1087" isMaximized="no" />
         <GUIConfig name="noUpdate" intervalDays="15" nextUpdateDate="20171218">no</GUIConfig>
         <GUIConfig name="Auto-detection">auto</GUIConfig>
         <GUIConfig name="CheckHistoryFiles">no</GUIConfig>
@@ -236,7 +243,7 @@
         <GUIConfig name="MenuBar">show</GUIConfig>
         <GUIConfig name="Caret" width="3" blinkRate="707" />
         <GUIConfig name="ScintillaGlobalSettings" enableMultiSelection="yes" />
-        <GUIConfig name="openSaveDir" value="2" defaultDirPath="D:\MSYS\usr\src" />
+        <GUIConfig name="openSaveDir" value="0" defaultDirPath="D:\MSYS\usr\src" />
         <GUIConfig name="titleBar" short="no" />
         <GUIConfig name="stylerTheme" path="D:\MSYS\usr\src\notepadpp\Release\stylers.xml" />
         <GUIConfig name="wordCharList" useDefault="yes" charsAdded="" />

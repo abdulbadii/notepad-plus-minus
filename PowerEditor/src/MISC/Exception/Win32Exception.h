@@ -38,8 +38,8 @@
 
 typedef const void* ExceptionAddress; // OK on Win32 platform
 
-class Win32Exception : public std::exception
-{
+class Win32Exception : public std::exception	{
+
 public:
     static void			installHandler();
     static void			removeHandler();
@@ -61,8 +61,8 @@ private:
 };
 
 
-class Win32AccessViolation: public Win32Exception
-{
+class Win32AccessViolation: public Win32Exception	{
+
 public:
     bool				isWrite()    const { return _isWrite;    }
     ExceptionAddress	badAddress() const { return _badAddress; }

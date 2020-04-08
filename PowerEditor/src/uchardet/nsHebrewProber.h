@@ -42,8 +42,8 @@
 
 // This prober doesn't actually recognize a language or a charset.
 // It is a helper prober for the use of the Hebrew model probers
-class nsHebrewProber: public nsCharSetProber
-{
+class nsHebrewProber: public nsCharSetProber	{
+
 public:
   nsHebrewProber(void) :mLogicalProb(0), mVisualProb(0) { Reset(); }
 
@@ -57,8 +57,8 @@ public:
   virtual float     GetConfidence(void) { return (float)0.0; }
   virtual void      SetOpion() {}
 
-  void SetModelProbers(nsCharSetProber *logicalPrb, nsCharSetProber *visualPrb) 
-  { mLogicalProb = logicalPrb; mVisualProb = visualPrb; }
+  void SetModelProbers(nsCharSetProber *logicalPrb, nsCharSetProber *visualPrb)	{ 
+ mLogicalProb = logicalPrb; mVisualProb = visualPrb; }
 
 #ifdef DEBUG_chardet
   virtual void  DumpStatus();

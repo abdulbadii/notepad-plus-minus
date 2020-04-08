@@ -32,8 +32,8 @@
 #include "ScintillaEditView.h"
 #include "Notepad_plus_msgs.h"
 
-void RunMacroDlg::initMacroList()
-{
+void RunMacroDlg::initMacroList()	{
+
 	if (!isCreated()) return;
 
 	NppParameters& nppParam = NppParameters::getInstance();
@@ -53,14 +53,14 @@ void RunMacroDlg::initMacroList()
 
 INT_PTR CALLBACK RunMacroDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 {	
-	switch (message) 
-	{
-		case WM_INITDIALOG :
-		{
+	switch (message)	{ 
+
+		case WM_INITDIALOG :	{
+
 			initMacroList();
 			::SetDlgItemInt(_hSelf, IDC_M_RUN_TIMES, _times, FALSE);
-			switch (_mode)
-			{
+			switch (_mode)	{
+
 				case RM_RUN_MULTI:
 					check(IDC_M_RUN_MULTI);
 					break;
@@ -74,12 +74,12 @@ INT_PTR CALLBACK RunMacroDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 			return TRUE;
 		}
 		
-		case WM_COMMAND : 
-		{
-			if (HIWORD(wParam) == EN_CHANGE)
-			{
-				switch (LOWORD(wParam))
-				{	
+		case WM_COMMAND :	{ 
+
+			if (HIWORD(wParam) == EN_CHANGE)	{
+
+				switch (LOWORD(wParam))	{
+	
 					case IDC_M_RUN_TIMES:
 						check(IDC_M_RUN_MULTI);
 						return TRUE;
@@ -89,20 +89,20 @@ INT_PTR CALLBACK RunMacroDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 				}
 			}
 			
-			switch (wParam)
-			{
+			switch (wParam)	{
+
 				case IDCANCEL :
 					::ShowWindow(_hSelf, SW_HIDE);
 					return TRUE;
 
 				case IDOK :
-					if ( isCheckedOrNot(IDC_M_RUN_MULTI) )
-					{
+					if ( isCheckedOrNot(IDC_M_RUN_MULTI) )	{
+
 						_mode = RM_RUN_MULTI;
 						_times = ::GetDlgItemInt(_hSelf, IDC_M_RUN_TIMES, NULL, FALSE);
 					}
-					else if ( isCheckedOrNot(IDC_M_RUN_EOF) )
-					{
+					else if ( isCheckedOrNot(IDC_M_RUN_EOF) )	{
+
 						_mode = RM_RUN_EOF;
 					}
 
@@ -112,8 +112,8 @@ INT_PTR CALLBACK RunMacroDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 					return TRUE;
 
 				default:
-					if ((HIWORD(wParam) == CBN_SELCHANGE) && (LOWORD(wParam) == IDC_MACRO_COMBO))
-					{
+					if ((HIWORD(wParam) == CBN_SELCHANGE) && (LOWORD(wParam) == IDC_MACRO_COMBO))	{
+
 						_macroIndex = static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_MACRO_COMBO, CB_GETCURSEL, 0, 0));
 						return TRUE;
 					}
@@ -123,8 +123,8 @@ INT_PTR CALLBACK RunMacroDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 	return FALSE;
 }
 
-void RunMacroDlg::check(int id)
-{
+void RunMacroDlg::check(int id)	{
+
 	// IDC_M_RUN_MULTI
 	if ( id == IDC_M_RUN_MULTI )
 		::SendDlgItemMessage(_hSelf, IDC_M_RUN_MULTI, BM_SETCHECK, BST_CHECKED, 0);

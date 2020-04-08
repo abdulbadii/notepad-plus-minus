@@ -34,8 +34,8 @@
 #include "ScintillaEditView.h"
 
 
-void ColumnEditorDlg::init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView) 
-{
+void ColumnEditorDlg::init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView)	{ 
+
 	Window::init(hInst, hPere);
 	if (!ppEditView)
 		throw std::runtime_error("StaticDialog::init : ppEditView is null.");
@@ -51,33 +51,33 @@ void ColumnEditorDlg::display(bool toShow) const
 
 INT_PTR CALLBACK ColumnEditorDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 {
-	switch (message) 
-	{
-		case WM_INITDIALOG :
-		{
+	switch (message)	{ 
+
+		case WM_INITDIALOG :	{
+
 			switchTo(activeText);
 			::SendDlgItemMessage(_hSelf, IDC_COL_DEC_RADIO, BM_SETCHECK, TRUE, 0);
 			goToCenter();
 
 			NppParameters& nppParam = NppParameters::getInstance();
 			ETDTProc enableDlgTheme = (ETDTProc)nppParam.getEnableThemeDlgTexture();
-			if (enableDlgTheme)
-			{
+			if (enableDlgTheme)	{
+
 				enableDlgTheme(_hSelf, ETDT_ENABLETAB);
 				redraw();
 			}
 			return TRUE;
 		}
-		case WM_COMMAND : 
-		{
-			switch (wParam)
-			{
+		case WM_COMMAND :	{ 
+
+			switch (wParam)	{
+
 				case IDCANCEL : // Close
 					display(false);
 					return TRUE;
 
-				case IDOK :
-                {
+				case IDOK :	{
+
 					(*_ppEditView)->execute(SCI_BEGINUNDOACTION);
 					
 					const int stringSize = 1024;
@@ -85,22 +85,22 @@ INT_PTR CALLBACK ColumnEditorDlg::run_dlgProc(UINT message, WPARAM wParam, LPARA
 					
 					bool isTextMode = (BST_CHECKED == ::SendDlgItemMessage(_hSelf, IDC_COL_TEXT_RADIO, BM_GETCHECK, 0, 0));
 					
-					if (isTextMode)
-					{
+					if (isTextMode)	{
+
 						::SendDlgItemMessage(_hSelf, IDC_COL_TEXT_EDIT, WM_GETTEXT, stringSize, reinterpret_cast<LPARAM>(str));
 
 						display(false);
 						
-						if ((*_ppEditView)->execute(SCI_SELECTIONISRECTANGLE) || (*_ppEditView)->execute(SCI_GETSELECTIONS) > 1)
-						{
+						if ((*_ppEditView)->execute(SCI_SELECTIONISRECTANGLE) || (*_ppEditView)->execute(SCI_GETSELECTIONS) > 1)	{
+
 							ColumnModeInfos colInfos = (*_ppEditView)->getColumnModeSelectInfo();
 							std::sort(colInfos.begin(), colInfos.end(), SortInPositionOrder());
 							(*_ppEditView)->columnReplace(colInfos, str);
 							std::sort(colInfos.begin(), colInfos.end(), SortInSelectOrder());
 							(*_ppEditView)->setMultiSelections(colInfos);
 						}
-						else
-						{
+						else	{
+
 							auto cursorPos = (*_ppEditView)->execute(SCI_GETCURRENTPOS);
 							auto cursorCol = (*_ppEditView)->execute(SCI_GETCOLUMN, cursorPos);
 							auto cursorLine = (*_ppEditView)->execute(SCI_LINEFROMPOSITION, cursorPos);
@@ -110,30 +110,30 @@ INT_PTR CALLBACK ColumnEditorDlg::run_dlgProc(UINT message, WPARAM wParam, LPARA
 							int lineAllocatedLen = 1024;
 							TCHAR *line = new TCHAR[lineAllocatedLen];
 
-							for (size_t i = cursorLine ; i <= static_cast<size_t>(endLine); ++i)
-							{
+							for (size_t i = cursorLine ; i <= static_cast<size_t>(endLine); ++i)	{
+
 								auto lineBegin = (*_ppEditView)->execute(SCI_POSITIONFROMLINE, i);
 								auto lineEnd = (*_ppEditView)->execute(SCI_GETLINEENDPOSITION, i);
 
 								auto lineEndCol = (*_ppEditView)->execute(SCI_GETCOLUMN, lineEnd);
 								auto lineLen = lineEnd - lineBegin + 1;
 
-								if (lineLen > lineAllocatedLen)
-								{
+								if (lineLen > lineAllocatedLen)	{
+
 									delete [] line;
 									line = new TCHAR[lineLen];
 								}
 								(*_ppEditView)->getGenericText(line, lineLen, lineBegin, lineEnd);
 								generic_string s2r(line);
 
-								if (lineEndCol < cursorCol)
-								{
+								if (lineEndCol < cursorCol)	{
+
 									generic_string s_space(cursorCol - lineEndCol, ' ');
 									s2r.append(s_space);
 									s2r.append(str);
 								}
-								else
-								{
+								else	{
+
 									auto posAbs2Start = (*_ppEditView)->execute(SCI_FINDCOLUMN, i, cursorCol);
 									auto posRelative2Start = posAbs2Start - lineBegin;
 									if (posRelative2Start > static_cast<long long>(s2r.length()))
@@ -146,34 +146,34 @@ INT_PTR CALLBACK ColumnEditorDlg::run_dlgProc(UINT message, WPARAM wParam, LPARA
 							delete [] line;
 						}
 					}
-					else
-					{
+					else	{
+
 						int initialNumber = ::GetDlgItemInt(_hSelf, IDC_COL_INITNUM_EDIT, NULL, TRUE);
 						int increaseNumber = ::GetDlgItemInt(_hSelf, IDC_COL_INCREASENUM_EDIT, NULL, TRUE);
 						int repeat = ::GetDlgItemInt(_hSelf, IDC_COL_REPEATNUM_EDIT, NULL, TRUE);
-						if (repeat == 0)
-						{
+						if (repeat == 0)	{
+
 							repeat = 1; // Without this we might get an infinite loop while calculating the set "numbers" below.
 						}
 						UCHAR format = getFormat();
 						display(false);
 						
-						if ((*_ppEditView)->execute(SCI_SELECTIONISRECTANGLE) || (*_ppEditView)->execute(SCI_GETSELECTIONS) > 1)
-						{
+						if ((*_ppEditView)->execute(SCI_SELECTIONISRECTANGLE) || (*_ppEditView)->execute(SCI_GETSELECTIONS) > 1)	{
+
 							ColumnModeInfos colInfos = (*_ppEditView)->getColumnModeSelectInfo();
 
 							// If there is no column mode info available, no need to do anything
 							// If required a message can be shown to user, that select column properly or something similar
-							if (colInfos.size() > 0)
-							{
+							if (colInfos.size() > 0)	{
+
 								std::sort(colInfos.begin(), colInfos.end(), SortInPositionOrder());
 								(*_ppEditView)->columnReplace(colInfos, initialNumber, increaseNumber, repeat, format);
 								std::sort(colInfos.begin(), colInfos.end(), SortInSelectOrder());
 								(*_ppEditView)->setMultiSelections(colInfos);
 							}
 						}
-						else
-						{
+						else	{
+
 							auto cursorPos = (*_ppEditView)->execute(SCI_GETCURRENTPOS);
 							auto cursorCol = (*_ppEditView)->execute(SCI_GETCOLUMN, cursorPos);
 							auto cursorLine = (*_ppEditView)->execute(SCI_LINEFROMPOSITION, cursorPos);
@@ -185,13 +185,13 @@ INT_PTR CALLBACK ColumnEditorDlg::run_dlgProc(UINT message, WPARAM wParam, LPARA
 							{
 								int curNumber = initialNumber;
 								const size_t kiMaxSize = 1 + (size_t)endLine - (size_t)cursorLine;
-								while (numbers.size() < kiMaxSize)
-								{
-									for (int i = 0; i < repeat; i++)
-									{
+								while (numbers.size() < kiMaxSize)	{
+
+									for (int i = 0; i < repeat; ++i )	{
+
 										numbers.push_back(curNumber);
-										if (numbers.size() >= kiMaxSize)
-										{
+										if (numbers.size() >= kiMaxSize)	{
+
 											break;
 										}
 									}
@@ -221,16 +221,16 @@ INT_PTR CALLBACK ColumnEditorDlg::run_dlgProc(UINT message, WPARAM wParam, LPARA
 							int nb = max(nbInit, nbEnd);
 
 
-							for (size_t i = cursorLine ; i <= size_t(endLine) ; ++i)
-							{
+							for (size_t i = cursorLine ; i <= size_t(endLine) ; ++i)	{
+
 								auto lineBegin = (*_ppEditView)->execute(SCI_POSITIONFROMLINE, i);
 								auto lineEnd = (*_ppEditView)->execute(SCI_GETLINEENDPOSITION, i);
 
 								auto lineEndCol = (*_ppEditView)->execute(SCI_GETCOLUMN, lineEnd);
 								auto lineLen = lineEnd - lineBegin + 1;
 
-								if (lineLen > lineAllocatedLen)
-								{
+								if (lineLen > lineAllocatedLen)	{
+
 									delete [] line;
 									line = new TCHAR[lineLen];
 								}
@@ -242,14 +242,14 @@ INT_PTR CALLBACK ColumnEditorDlg::run_dlgProc(UINT message, WPARAM wParam, LPARA
 								//
 								int2str(str, stringSize, numbers.at(i - cursorLine), base, nb, isZeroLeading);
 
-								if (lineEndCol < cursorCol)
-								{
+								if (lineEndCol < cursorCol)	{
+
 									generic_string s_space(cursorCol - lineEndCol, ' ');
 									s2r.append(s_space);
 									s2r.append(str);
 								}
-								else
-								{
+								else	{
+
 									auto posAbs2Start = (*_ppEditView)->execute(SCI_FINDCOLUMN, i, cursorCol);
 									auto posRelative2Start = posAbs2Start - lineBegin;
 									if (posRelative2Start > static_cast<long long>(s2r.length()))
@@ -268,16 +268,16 @@ INT_PTR CALLBACK ColumnEditorDlg::run_dlgProc(UINT message, WPARAM wParam, LPARA
                     return TRUE;
                 }
 				case IDC_COL_TEXT_RADIO :
-				case IDC_COL_NUM_RADIO :
-				{
+				case IDC_COL_NUM_RADIO :	{
+
 					switchTo((wParam == IDC_COL_TEXT_RADIO)? activeText : activeNumeric);
 					return TRUE;
 				}
 
 				default :
 				{
-					switch (HIWORD(wParam))
-					{
+					switch (HIWORD(wParam))	{
+
 						case EN_SETFOCUS :
 						case BN_SETFOCUS :
 							//updateLinesNumbers();
@@ -296,8 +296,8 @@ INT_PTR CALLBACK ColumnEditorDlg::run_dlgProc(UINT message, WPARAM wParam, LPARA
 	//return FALSE;
 }
 
-void ColumnEditorDlg::switchTo(bool toText)
-{
+void ColumnEditorDlg::switchTo(bool toText)	{
+
 	HWND hText = ::GetDlgItem(_hSelf, IDC_COL_TEXT_EDIT);
 	::EnableWindow(hText, toText);
 	::EnableWindow(::GetDlgItem(_hSelf, IDC_COL_TEXT_GRP_STATIC), toText);
@@ -322,8 +322,8 @@ void ColumnEditorDlg::switchTo(bool toText)
 	::SetFocus(toText?hText:hNum);
 }
 
-UCHAR ColumnEditorDlg::getFormat() 
-{
+UCHAR ColumnEditorDlg::getFormat()	{ 
+
 	bool isLeadingZeros = (BST_CHECKED == ::SendDlgItemMessage(_hSelf, IDC_COL_LEADZERO_CHECK, BM_GETCHECK, 0, 0));
 	UCHAR f = 0; // Dec by default
 	if (BST_CHECKED == ::SendDlgItemMessage(_hSelf, IDC_COL_HEX_RADIO, BM_GETCHECK, 0, 0))

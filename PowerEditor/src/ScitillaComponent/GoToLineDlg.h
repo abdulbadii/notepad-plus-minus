@@ -30,8 +30,8 @@
 #include "resource.h"
 #include "ScintillaEditView.h"
 
-class GoToLineDlg : public StaticDialog
-{
+class GoToLineDlg : public StaticDialog	{
+
 public :
 	GoToLineDlg() = default;
 

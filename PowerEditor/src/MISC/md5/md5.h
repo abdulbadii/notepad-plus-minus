@@ -111,8 +111,8 @@ typedef unsigned long int UINT4;
 
 // convenient object that wraps
 // the C-functions for use in C++ only
-class MD5
-{
+class MD5	{
+
 private:
   struct __context_t {
     UINT4 state[4];                                   /* state (ABCD) */
@@ -216,7 +216,7 @@ private:
   {
     unsigned int i, j;
 
-    for (i = 0, j = 0; j < len; i++, j += 4) {
+    for (i = 0, j = 0; j < len; ++i , j += 4) {
       output[j] = (unsigned char)(input[i] & 0xff);
       output[j+1] = (unsigned char)((input[i] >> 8) & 0xff);
       output[j+2] = (unsigned char)((input[i] >> 16) & 0xff);
@@ -230,7 +230,7 @@ private:
   {
     unsigned int i, j;
 
-    for (i = 0, j = 0; j < len; i++, j += 4)
+    for (i = 0, j = 0; j < len; ++i , j += 4)
       output[i] = ((UINT4)input[j]) | (((UINT4)input[j+1]) << 8) |
       (((UINT4)input[j+2]) << 16) | (((UINT4)input[j+3]) << 24);
   }
@@ -245,8 +245,8 @@ public:
   }
 
   // MD5 initialization. Begins an MD5 operation, writing a new context.
-  void Init()
-  {
+  void Init()	{
+
     context.count[0] = context.count[1] = 0;
   
     // Load magic initialization constants.
@@ -296,8 +296,8 @@ public:
   // MD5 finalization. Ends an MD5 message-digest operation, writing the
   // the message digest and zeroizing the context.
   // Writes to digestRaw
-  void Final()
-  {
+  void Final()	{
+
     unsigned char bits[8];
     unsigned int index, padLen;
 
@@ -322,11 +322,11 @@ public:
   }
 
   /// Buffer must be 32+1 (nul) = 33 chars long at least 
-  void writeToString()
-  {
+  void writeToString()	{
+
     int pos ;
 
-    for ( pos = 0 ; pos < 16 ; pos++ )
+    for ( pos = 0 ; pos < 16 ; ++pos  )
       sprintf( digestChars+(pos*2), "%02x", digestRaw[pos] ) ;
   }
 
@@ -341,8 +341,8 @@ public:
 
   /// Load a file from disk and digest it
   // Digests a file and returns the result.
-  char* digestFile(const char *filename)
-  {
+  char* digestFile(const char *filename)	{
+
     Init() ;
 
     FILE *file;
@@ -350,13 +350,13 @@ public:
     int len;
     unsigned char buffer[1024] ;
 
-	if ((file = fopen(filename, "rb")) == NULL)
-	{
+	if ((file = fopen(filename, "rb")) == NULL)	{
+
 		//printf("%s can't be opened\n", filename);
 		return NULL;
 	}
-    else
-    {
+    else	{
+
       while ((len = static_cast<int>(fread( buffer, 1, 1024, file )) ) != 0)
         Update( buffer, len ) ;
       Final();
@@ -368,8 +368,8 @@ public:
   }
 
   /// Digests a byte-array already in memory
-  char* digestMemory( BYTE *memchunk, int len )
-  {
+  char* digestMemory( BYTE *memchunk, int len )	{
+
     Init() ;
     Update( memchunk, len ) ;
     Final() ;
@@ -378,8 +378,8 @@ public:
   }
 
   // Digests a string and prints the result.
-  char* digestString(const char *string )
-  {
+  char* digestString(const char *string )	{
+
     Init() ;
     Update( (unsigned char*)string, static_cast<unsigned int>(strlen(string)) ) ;
     Final() ;

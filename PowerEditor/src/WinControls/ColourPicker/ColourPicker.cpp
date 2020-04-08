@@ -32,8 +32,8 @@
 
 
 
-void ColourPicker::init(HINSTANCE hInst, HWND parent)
-{
+void ColourPicker::init(HINSTANCE hInst, HWND parent)	{
+
 	Window::init(hInst, parent);
 
 	_hSelf = ::CreateWindowEx(
@@ -52,16 +52,16 @@ void ColourPicker::init(HINSTANCE hInst, HWND parent)
 }
 
 
-void ColourPicker::destroy()
-{
+void ColourPicker::destroy()	{
+
 	delete _pColourPopup;
 	_pColourPopup = NULL;
 	::DestroyWindow(_hSelf);
 }
 
 
-void ColourPicker::drawBackground(HDC hDC)
-{
+void ColourPicker::drawBackground(HDC hDC)	{
+
 	RECT rc;
 	HBRUSH hbrush;
 
@@ -78,8 +78,8 @@ void ColourPicker::drawBackground(HDC hDC)
 }
 
 
-void ColourPicker::drawForeground(HDC hDC)
-{
+void ColourPicker::drawForeground(HDC hDC)	{
+
 	RECT rc;
 	HBRUSH hbrush = NULL;
 
@@ -104,13 +104,13 @@ void ColourPicker::drawForeground(HDC hDC)
 }
 
 
-LRESULT ColourPicker::runProc(UINT Message, WPARAM wParam, LPARAM lParam)
-{
-	switch (Message)
-	{
+LRESULT ColourPicker::runProc(UINT Message, WPARAM wParam, LPARAM lParam)	{
+
+	switch (Message)	{
+
 		case WM_LBUTTONDBLCLK:
-		case WM_LBUTTONDOWN:
-		{
+		case WM_LBUTTONDOWN:	{
+
 			RECT rc;
 			POINT p;
 			Window::getClientRect(rc);
@@ -119,14 +119,14 @@ LRESULT ColourPicker::runProc(UINT Message, WPARAM wParam, LPARAM lParam)
 			p.y = rc.top + rc.bottom;
 			::ClientToScreen(_hSelf, &p);
 
-			if (!_pColourPopup)
-			{
+			if (!_pColourPopup)	{
+
 				_pColourPopup = new ColourPopup(_currentColour);
 				_pColourPopup->init(_hInst, _hSelf);
 				_pColourPopup->doDialog(p);
 			}
-			else
-			{
+			else	{
+
 				_pColourPopup->setColour(_currentColour);
 				_pColourPopup->doDialog(p);
 				_pColourPopup->display(true);
@@ -134,23 +134,23 @@ LRESULT ColourPicker::runProc(UINT Message, WPARAM wParam, LPARAM lParam)
 			return TRUE;
 		}
 
-		case WM_RBUTTONDOWN:
-		{
+		case WM_RBUTTONDOWN:	{
+
 			_isEnabled = !_isEnabled;
 			redraw();
 			::SendMessage(_hParent, WM_COMMAND, MAKELONG(0, CPN_COLOURPICKED), reinterpret_cast<LPARAM>(_hSelf));
 			break;
 		}
 
-		case WM_ERASEBKGND:
-		{
+		case WM_ERASEBKGND:	{
+
 			HDC dc = (HDC)wParam;
 			drawBackground(dc);
 			return TRUE;
 		}
 
-		case WM_PAINT:
-		{
+		case WM_PAINT:	{
+
 			PAINTSTRUCT ps;
 			HDC dc = ::BeginPaint(_hSelf, &ps);
 			drawForeground(dc);
@@ -158,8 +158,8 @@ LRESULT ColourPicker::runProc(UINT Message, WPARAM wParam, LPARAM lParam)
 			return TRUE;
 		}
 
-		case WM_PICKUP_COLOR:
-		{
+		case WM_PICKUP_COLOR:	{
+
 			_currentColour = (COLORREF)wParam;
 			redraw();
 
@@ -168,18 +168,18 @@ LRESULT ColourPicker::runProc(UINT Message, WPARAM wParam, LPARAM lParam)
 			return TRUE;
 		}
 
-		case WM_ENABLE:
-		{
-			if ((BOOL)wParam == FALSE)
-			{
+		case WM_ENABLE:	{
+
+			if ((BOOL)wParam == FALSE)	{
+
 				_currentColour = ::GetSysColor(COLOR_3DFACE);
 				redraw();
 			}
 			return TRUE;
 		}
 
-		case WM_PICKUP_CANCEL:
-		{
+		case WM_PICKUP_CANCEL:	{
+
 			_pColourPopup->display(false);
 			return TRUE;
 		}

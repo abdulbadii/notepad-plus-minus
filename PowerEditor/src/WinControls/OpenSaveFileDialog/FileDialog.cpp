@@ -81,8 +81,8 @@ FileDialog::~FileDialog()
 // example : 
 // FileDialog.setExtFilter(L"c/c++ src file", L".c", L".cpp", L".cxx", L".h", NULL);
 // FileDialog.setExtFilter(L"Makefile", L"makefile", L"GNUmakefile", NULL);
-void FileDialog::setExtFilter(const TCHAR *extText, const TCHAR *ext, ...)
-{
+void FileDialog::setExtFilter(const TCHAR *extText, const TCHAR *ext, ...)	{
+
     // fill out the ext array for save as file dialog
 	generic_string exts;
 
@@ -108,8 +108,8 @@ void FileDialog::setExtFilter(const TCHAR *extText, const TCHAR *ext, ...)
 	setExtsFilter(extText, exts.c_str());
 }
 
-int FileDialog::setExtsFilter(const TCHAR *extText, const TCHAR *exts)
-{
+int FileDialog::setExtsFilter(const TCHAR *extText, const TCHAR *exts)	{
+
     // fill out the ext array for save as file dialog
     generic_string extFilter = extText;
 	TCHAR *oldFilter = NULL;
@@ -120,8 +120,8 @@ int FileDialog::setExtsFilter(const TCHAR *extText, const TCHAR *exts)
 	
 	// Resize filter buffer
 	int nbCharAdditional = static_cast<int32_t>(extFilter.length() + _tcsclen(exts) + 3); // 3 additional for nulls
-	if (_fileExt)
-	{
+	if (_fileExt)	{
+
 		oldFilter = new TCHAR[_nbCharFileExt];
 		memcpy(oldFilter, _fileExt, _nbCharFileExt * sizeof(TCHAR));
 
@@ -134,8 +134,8 @@ int FileDialog::setExtsFilter(const TCHAR *extText, const TCHAR *exts)
 	memset(_fileExt, 0, nbCharNewFileExt * sizeof(TCHAR));
 
 	// Restore previous filters
-	if (oldFilter)
-	{		
+	if (oldFilter)	{
+		
 		memcpy(_fileExt, oldFilter, _nbCharFileExt * sizeof(TCHAR));
 		delete[] oldFilter;
 		oldFilter = NULL;
@@ -158,8 +158,8 @@ int FileDialog::setExtsFilter(const TCHAR *extText, const TCHAR *exts)
 	return _nbExt;
 }
 
-TCHAR* FileDialog::doOpenSingleFileDlg()
-{
+TCHAR* FileDialog::doOpenSingleFileDlg()	{
+
 	TCHAR dir[MAX_PATH];
 	::GetCurrentDirectory(MAX_PATH, dir);
 	NppParameters& params = NppParameters::getInstance();
@@ -167,8 +167,8 @@ TCHAR* FileDialog::doOpenSingleFileDlg()
 
 	_ofn.Flags |= OFN_FILEMUSTEXIST;
 
-	if (!params.useNewStyleSaveDlg())
-	{
+	if (!params.useNewStyleSaveDlg())	{
+
 		_ofn.Flags |= OFN_ENABLEHOOK | OFN_NOVALIDATE;
 		_ofn.lpfnHook = OFNHookProc;
 	}
@@ -178,8 +178,8 @@ TCHAR* FileDialog::doOpenSingleFileDlg()
 	{
 		fn = ::GetOpenFileName(&_ofn) ? _fileName : NULL;
 
-		if (params.getNppGUI()._openSaveDir == dir_last)
-		{
+		if (params.getNppGUI()._openSaveDir == dir_last)	{
+
 			::GetCurrentDirectory(MAX_PATH, dir);
 			params.setWorkingDir(dir, 0);
 		}
@@ -213,32 +213,32 @@ stringVector * FileDialog::doOpenMultiFilesDlg()
 
 	_ofn.Flags |= OFN_FILEMUSTEXIST | OFN_ALLOWMULTISELECT | OFN_ENABLESIZING;
 
-	if (!params.useNewStyleSaveDlg())
-	{
+	if (!params.useNewStyleSaveDlg())	{
+
 		_ofn.Flags |= OFN_ENABLEHOOK | OFN_NOVALIDATE;
 		_ofn.lpfnHook = OFNHookProc;
 	}
 
 	BOOL res = ::GetOpenFileName(&_ofn);
-	if (params.getNppGUI()._openSaveDir == dir_last)
-	{
+	if (params.getNppGUI()._openSaveDir == dir_last)	{
+
 		::GetCurrentDirectory(MAX_PATH, dir);
 		params.setWorkingDir(dir, 0);
 	}
 	::SetCurrentDirectory(dir);
 
-	if (res)
-	{
+	if (res)	{
+
 		TCHAR* pFn = _fileName + lstrlen(_fileName) + 1;
 		TCHAR fn[MAX_PATH*8];
 		memset(fn, 0x0, sizeof(fn));
 
-		if (!(*pFn))
-		{
+		if (!(*pFn))	{
+
 			_fileNames.push_back(generic_string(_fileName));
 		}
-		else
-		{
+		else	{
+
 			wcscpy_s(fn, _fileName);
 			if (fn[lstrlen(fn) - 1] != '\\')
 				wcscat_s(fn, L"\\");
@@ -246,8 +246,8 @@ stringVector * FileDialog::doOpenMultiFilesDlg()
 
 		int term = lstrlen(fn);
 
-		while (*pFn)
-		{
+		while (*pFn)	{
+
 			fn[term] = '\0';
 			wcscat_s(fn, pFn);
 			_fileNames.push_back(generic_string(fn));
@@ -260,8 +260,8 @@ stringVector * FileDialog::doOpenMultiFilesDlg()
 }
 
 
-TCHAR * FileDialog::doSaveDlg()
-{
+TCHAR * FileDialog::doSaveDlg()	{
+
 	TCHAR dir[MAX_PATH];
 	::GetCurrentDirectory(MAX_PATH, dir);
 
@@ -270,8 +270,8 @@ TCHAR * FileDialog::doSaveDlg()
 
 	_ofn.Flags |= OFN_OVERWRITEPROMPT | OFN_HIDEREADONLY | OFN_ENABLESIZING;
 
-	if (!params.useNewStyleSaveDlg())
-	{
+	if (!params.useNewStyleSaveDlg())	{
+
 		_ofn.Flags |= OFN_ENABLEHOOK | OFN_NOVALIDATE;
 		_ofn.lpfnHook = OFNHookProc;
 	}
@@ -280,8 +280,8 @@ TCHAR * FileDialog::doSaveDlg()
 	try
 	{
 		fn = ::GetSaveFileName(&_ofn) ? _fileName : NULL;
-		if (params.getNppGUI()._openSaveDir == dir_last)
-		{
+		if (params.getNppGUI()._openSaveDir == dir_last)	{
+
 			::GetCurrentDirectory(MAX_PATH, dir);
 			params.setWorkingDir(dir, 0);
 		}
@@ -312,14 +312,14 @@ static generic_string currentExt = L"";
 
 static LRESULT CALLBACK fileDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	switch (message)
-    {
-		case WM_COMMAND :
-		{
-			switch (wParam)
-			{	
-				case IDOK :
-				{
+	switch (message)	{
+
+		case WM_COMMAND :	{
+
+			switch (wParam)	{
+	
+				case IDOK :	{
+
 					HWND fnControl = ::GetDlgItem(hwnd, FileDialog::_dialogFileBoxId);
 					TCHAR fn[MAX_PATH];
 					::GetWindowText(fnControl, fn, MAX_PATH);
@@ -331,8 +331,8 @@ static LRESULT CALLBACK fileDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
 						return oldProc(hwnd, message, wParam, lParam);
 
 					// Process
-					if (currentExt != L"")
-					{
+					if (currentExt != L"")	{
+
 						generic_string fnExt = changeExt(fn, currentExt, false);
 						::SetWindowText(fnControl, fnExt.c_str());
 					}
@@ -352,7 +352,7 @@ static TCHAR * get1stExt(TCHAR *ext)
 {
 	// precondition : ext should be under the format : Batch (*.bat;*.cmd;*.nt)
 	TCHAR *begin = ext;
-	for ( ; *begin != '.' ; begin++);
+	for ( ; *begin != '.' ; ++begin );
 	TCHAR *end = ++begin;
 	for ( ; *end != ';' && *end != ')' ; end++);
 	*end = '\0';
@@ -373,8 +373,8 @@ static generic_string addExt(HWND textCtrl, HWND typeCtrl)
 	::SendMessage(typeCtrl, CB_GETLBTEXT, i, reinterpret_cast<LPARAM>(ext));
 	
 	TCHAR *pExt = get1stExt(ext);
-	if (*fn != '\0')
-	{
+	if (*fn != '\0')	{
+
 		generic_string fnExt = changeExt(fn, pExt);
 		::SetWindowText(textCtrl, fnExt.c_str());
 	}
@@ -386,10 +386,10 @@ static generic_string addExt(HWND textCtrl, HWND typeCtrl)
 
 UINT_PTR CALLBACK FileDialog::OFNHookProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    switch(uMsg)
-    {
-        case WM_INITDIALOG :
-        {
+    switch(uMsg)	{
+
+        case WM_INITDIALOG :	{
+
 			NppParameters& nppParam = NppParameters::getInstance();
 			int index = nppParam.getFileSaveDlgFilterIndex();
 
@@ -397,8 +397,8 @@ UINT_PTR CALLBACK FileDialog::OFNHookProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
 			hFileDlg = ::GetParent(hWnd);
 			goToCenter(hFileDlg);
 
-			if (index != -1)
-			{
+			if (index != -1)	{
+
 				HWND typeControl = ::GetDlgItem(hFileDlg, cmb1);
 				::SendMessage(typeControl, CB_SETCURSEL, index, 0);
 			}
@@ -413,8 +413,8 @@ UINT_PTR CALLBACK FileDialog::OFNHookProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
 		default :
 		{
 			FileDialog *pFileDialog = reinterpret_cast<FileDialog *>(::GetWindowLongPtr(hWnd, GWLP_USERDATA));
-			if (!pFileDialog)
-			{
+			if (!pFileDialog)	{
+
 				return FALSE;
 			}
 			return pFileDialog->run(hWnd, uMsg, wParam, lParam);
@@ -424,15 +424,15 @@ UINT_PTR CALLBACK FileDialog::OFNHookProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
 
 BOOL APIENTRY FileDialog::run(HWND hWnd, UINT uMsg, WPARAM, LPARAM lParam)
 {
-    switch (uMsg)
-    {
-        case WM_NOTIFY :
-		{
+    switch (uMsg)	{
+
+        case WM_NOTIFY :	{
+
 			LPNMHDR pNmhdr = (LPNMHDR)lParam;
-			switch(pNmhdr->code)
-			{
-                case CDN_INITDONE :
-                {
+			switch(pNmhdr->code)	{
+
+                case CDN_INITDONE :	{
+
                     if (_extTypeIndex == -1)
                         return TRUE;
 
@@ -444,16 +444,16 @@ BOOL APIENTRY FileDialog::run(HWND hWnd, UINT uMsg, WPARAM, LPARAM lParam)
                     return TRUE;
                 }
 
-				case CDN_TYPECHANGE :
-				{
+				case CDN_TYPECHANGE :	{
+
 					HWND fnControl = ::GetDlgItem(::GetParent(hWnd), _dialogFileBoxId);
 					HWND typeControl = ::GetDlgItem(::GetParent(hWnd), cmb1);
 					currentExt = addExt(fnControl, typeControl);
 					return TRUE;
 				}
 
-				case CDN_FILEOK :
-				{
+				case CDN_FILEOK :	{
+
 					HWND typeControl = ::GetDlgItem(::GetParent(hWnd), cmb1);
 					int index = static_cast<int32_t>(::SendMessage(typeControl, CB_GETCURSEL, 0, 0));
 					NppParameters& nppParam = NppParameters::getInstance();
@@ -470,8 +470,8 @@ BOOL APIENTRY FileDialog::run(HWND hWnd, UINT uMsg, WPARAM, LPARAM lParam)
 						(*(fileName + lstrlen(fileName) + 1) != '\0'))
 						return FALSE;
 
-					if (::PathIsDirectory(fileName))
-					{
+					if (::PathIsDirectory(fileName))	{
+
 						// change to backslash, and insert trailing '\' to indicate directory
 						hFileDlg = ::GetParent(hWnd);
 						std::wstring filePath(fileName);
@@ -503,15 +503,15 @@ BOOL APIENTRY FileDialog::run(HWND hWnd, UINT uMsg, WPARAM, LPARAM lParam)
     }
 }
 
-void goToCenter(HWND hwnd)
-{
+void goToCenter(HWND hwnd)	{
+
     RECT rc;
 	HWND hParent = ::GetParent(hwnd);
 	::GetClientRect(hParent, &rc);
 	
 	//If window coordinates are all zero(ie,window is minimised),then assign desktop as the parent window.
- 	if (rc.left == 0 && rc.right == 0 && rc.top == 0 && rc.bottom == 0)
- 	{
+ 	if (rc.left == 0 && rc.right == 0 && rc.top == 0 && rc.bottom == 0)	{
+
  		//hParent = ::GetDesktopWindow();
 		::ShowWindow(hParent, SW_SHOWNORMAL);
  		::GetClientRect(hParent,&rc);
@@ -530,8 +530,8 @@ void goToCenter(HWND hwnd)
 	::SetWindowPos(hwnd, HWND_TOP, x, y, _rc.right - _rc.left, _rc.bottom - _rc.top, SWP_SHOWWINDOW);
 }
 
-generic_string changeExt(generic_string fn, generic_string ext, bool forceReplaced)
-{
+generic_string changeExt(generic_string fn, generic_string ext, bool forceReplaced)	{
+
 	if (ext == L"")
 		return fn;
 
@@ -540,12 +540,12 @@ generic_string changeExt(generic_string fn, generic_string ext, bool forceReplac
 	auto index = fnExt.find_last_of(L".");
 	generic_string extension = L".";
 	extension += ext;
-	if (index == generic_string::npos)
-	{
+	if (index == generic_string::npos)	{
+
 		fnExt += extension;
 	}
-	else if (forceReplaced)
-	{
+	else if (forceReplaced)	{
+
 		auto len = (extension.length() > fnExt.length() - index + 1)?extension.length():fnExt.length() - index + 1;
 		fnExt.replace(index, len, extension);
 	}

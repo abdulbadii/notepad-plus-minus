@@ -29,8 +29,8 @@
 #pragma once
 #include <windows.h>
 
-class Window
-{
+class Window	{
+
 public:
 	//! \name Constructors & Destructor
 	//@{

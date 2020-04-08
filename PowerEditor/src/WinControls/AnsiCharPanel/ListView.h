@@ -40,8 +40,8 @@ struct columnInfo {
 	columnInfo(const generic_string & label, size_t width) : _width(width), _label(label) {};
 };
 
-class ListView : public Window
-{
+class ListView : public Window	{
+
 public:
 	ListView() = default;
 	virtual ~ListView() = default;

@@ -50,8 +50,8 @@ public:
 
 	void destroy() {};
 	void doDialog(bool isRTL = false) {
-		if (isRTL)
-		{
+		if (isRTL)	{
+
 			DLGTEMPLATE *pMyDlgTemplate = NULL;
 			HGLOBAL hMyDlgTemplate = makeRTLResource(IDD_SHORTCUTMAPPER_DLG, &pMyDlgTemplate);
 			::DialogBoxIndirectParam(_hInst, pMyDlgTemplate, _hParent, dlgProc, reinterpret_cast<LPARAM>(this));

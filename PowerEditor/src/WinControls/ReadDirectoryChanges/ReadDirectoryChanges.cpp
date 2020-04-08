@@ -49,8 +49,8 @@ CReadDirectoryChanges::~CReadDirectoryChanges()
 	delete m_pServer;
 }
 
-void CReadDirectoryChanges::Init()
-{
+void CReadDirectoryChanges::Init()	{
+
 	//
 	// Kick off the worker thread, which will be
 	// managed by CReadChangesServer.
@@ -64,10 +64,10 @@ void CReadDirectoryChanges::Init()
 		);
 }
 
-void CReadDirectoryChanges::Terminate()
-{
-	if (m_hThread)
-	{
+void CReadDirectoryChanges::Terminate()	{
+
+	if (m_hThread)	{
+
 		::QueueUserAPC(CReadChangesServer::TerminateProc, m_hThread, (ULONG_PTR)m_pServer);
 		::WaitForSingleObjectEx(m_hThread, 10000, true);
 		::CloseHandle(m_hThread);
@@ -77,8 +77,8 @@ void CReadDirectoryChanges::Terminate()
 	}
 }
 
-void CReadDirectoryChanges::AddDirectory( LPCTSTR szDirectory, BOOL bWatchSubtree, DWORD dwNotifyFilter, DWORD dwBufferSize )
-{
+void CReadDirectoryChanges::AddDirectory( LPCTSTR szDirectory, BOOL bWatchSubtree, DWORD dwNotifyFilter, DWORD dwBufferSize )	{
+
 	if (!m_hThread)
 		Init();
 
@@ -86,14 +86,14 @@ void CReadDirectoryChanges::AddDirectory( LPCTSTR szDirectory, BOOL bWatchSubtre
 	QueueUserAPC(CReadChangesServer::AddDirectoryProc, m_hThread, (ULONG_PTR)pRequest);
 }
 
-void CReadDirectoryChanges::Push(DWORD dwAction, std::wstring& wstrFilename)
-{
+void CReadDirectoryChanges::Push(DWORD dwAction, std::wstring& wstrFilename)	{
+
 	TDirectoryChangeNotification dirChangeNotif = TDirectoryChangeNotification(dwAction, wstrFilename);
 	m_Notifications.push(dirChangeNotif);
 }
 
-bool  CReadDirectoryChanges::Pop(DWORD& dwAction, std::wstring& wstrFilename)
-{
+bool  CReadDirectoryChanges::Pop(DWORD& dwAction, std::wstring& wstrFilename)	{
+
 	TDirectoryChangeNotification pair;
 	if (!m_Notifications.pop(pair))
 		return false;

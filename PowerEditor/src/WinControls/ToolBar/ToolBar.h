@@ -63,8 +63,8 @@ class ReBar;
 class TiXmlDocument;
 class TiXmlNode;
 
-class ToolBar : public Window
-{
+class ToolBar : public Window	{
+
 public :
 	ToolBar() = default;
 	virtual ~ToolBar() = default;
@@ -146,8 +146,8 @@ private :
 	
 };
 
-class ReBar : public Window
-{
+class ReBar : public Window	{
+
 public :
 	ReBar():Window() { usedIDs.clear(); };
 

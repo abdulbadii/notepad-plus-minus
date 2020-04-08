@@ -49,8 +49,8 @@ const TCHAR *ARCH_ERR_MSG = L"Cannot load 64-bit plugin.";
 
 
 
-bool PluginsManager::unloadPlugin(int index, HWND nppHandle)
-{
+bool PluginsManager::unloadPlugin(int index, HWND nppHandle)	{
+
     SCNotification scnN;
 	scnN.nmhdr.code = NPPN_SHUTDOWN;
 	scnN.nmhdr.hwndFrom = nppHandle;
@@ -60,8 +60,8 @@ bool PluginsManager::unloadPlugin(int index, HWND nppHandle)
     //::DestroyMenu(_pluginInfos[index]->_pluginMenu);
     //_pluginInfos[index]->_pluginMenu = NULL;
 
-	if (::FreeLibrary(_pluginInfos[index]->_hLib))
-	{
+	if (::FreeLibrary(_pluginInfos[index]->_hLib))	{
+
 		_pluginInfos[index]->_hLib = nullptr;
 		printStr(L"we're good");
 	}
@@ -79,21 +79,21 @@ bool PluginsManager::unloadPlugin(int index, HWND nppHandle)
 static WORD getBinaryArchitectureType(const TCHAR *filePath)
 {
 	HANDLE hFile = CreateFile(filePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL);
-	if (hFile == INVALID_HANDLE_VALUE)
-	{
+	if (hFile == INVALID_HANDLE_VALUE)	{
+
 		return IMAGE_FILE_MACHINE_UNKNOWN;
 	}
 
 	HANDLE hMapping = CreateFileMapping(hFile, NULL, PAGE_READONLY | SEC_IMAGE, 0, 0, NULL);
-	if (hMapping == NULL)
-	{
+	if (hMapping == NULL)	{
+
 		CloseHandle(hFile);
 		return IMAGE_FILE_MACHINE_UNKNOWN;
 	}
 
 	LPVOID addrHeader = MapViewOfFile(hMapping, FILE_MAP_READ, 0, 0, 0);
-	if (addrHeader == NULL) // couldn't memory map the file
-	{
+	if (addrHeader == NULL)	{ // couldn't memory map the file
+
 		CloseHandle(hFile);
 		CloseHandle(hMapping);
 		return IMAGE_FILE_MACHINE_UNKNOWN;
@@ -119,8 +119,8 @@ static WORD getBinaryArchitectureType(const TCHAR *filePath)
 	#define	LOAD_LIBRARY_SEARCH_DEFAULT_DIRS	0x00001000
 #endif
 
-int PluginsManager::loadPlugin(const TCHAR *pluginFilePath)
-{
+int PluginsManager::loadPlugin(const TCHAR *pluginFilePath)	{
+
 	const TCHAR *pluginFileName = ::PathFindFileName(pluginFilePath);
 	if (isInLoadedDlls(pluginFileName))
 		return 0;
@@ -137,8 +137,8 @@ int PluginsManager::loadPlugin(const TCHAR *pluginFilePath)
 
         const DWORD dwFlags = GetProcAddress(GetModuleHandle(L"kernel32.dll"), "AddDllDirectory") != NULL ? LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR | LOAD_LIBRARY_SEARCH_DEFAULT_DIRS : 0;
         pi->_hLib = ::LoadLibraryEx(pluginFilePath, NULL, dwFlags);
-        if (!pi->_hLib)
-        {
+        if (!pi->_hLib)	{
+
 			generic_string lastErrorMsg = GetLastErrorAsString();
             if (lastErrorMsg.empty())
                 throw generic_string(L"Load Library has failed.\nChanging the project's \"Runtime Library\" setting to \"Multi-threaded(/MT)\" might solve this problem.");
@@ -183,8 +183,8 @@ int PluginsManager::loadPlugin(const TCHAR *pluginFilePath)
 
 		GetLexerCountFn GetLexerCount = (GetLexerCountFn)::GetProcAddress(pi->_hLib, "GetLexerCount");
 		// it's a lexer plugin
-		if (GetLexerCount)
-		{
+		if (GetLexerCount)	{
+
 			GetLexerNameFn GetLexerName = (GetLexerNameFn)::GetProcAddress(pi->_hLib, "GetLexerName");
 			if (!GetLexerName)
 				throw generic_string(L"Loading GetLexerName function failed.");
@@ -205,8 +205,8 @@ int PluginsManager::loadPlugin(const TCHAR *pluginFilePath)
 			ExternalLangContainer *containers[30];
 
 			WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
-			for (int x = 0; x < numLexers; ++x)
-			{
+			for (int x = 0; x < numLexers; ++x)	{
+
 				GetLexerName(x, lexName, MAX_EXTERNAL_LEXER_NAME_LEN);
 				GetLexerStatusText(x, lexDesc, MAX_EXTERNAL_LEXER_DESC_LEN);
 				const TCHAR *pLexerName = wmc.char2wchar(lexName, CP_ACP);
@@ -223,8 +223,8 @@ int PluginsManager::loadPlugin(const TCHAR *pluginFilePath)
 			PathRemoveExtension(xmlPath);
 			PathAddExtension(xmlPath, L".xml");
 
-			if (!PathFileExists(xmlPath))
-			{
+			if (!PathFileExists(xmlPath))	{
+
 				lstrcpyn(xmlPath, L"\0", MAX_PATH );
 				wcscpy_s(xmlPath, nppParams.getAppDataNppDir() );
 				PathAppend(xmlPath, L"plugins\\Config");
@@ -232,23 +232,23 @@ int PluginsManager::loadPlugin(const TCHAR *pluginFilePath)
 				PathRemoveExtension( xmlPath );
 				PathAddExtension( xmlPath, L".xml");
 
-				if (! PathFileExists( xmlPath ) )
-				{
+				if (! PathFileExists( xmlPath ) )	{
+
 					throw generic_string(generic_string(xmlPath) + L" is missing.");
 				}
 			}
 
 			TiXmlDocument *pXmlDoc = new TiXmlDocument(xmlPath);
 
-			if (!pXmlDoc->LoadFile())
-			{
+			if (!pXmlDoc->LoadFile())	{
+
 				delete pXmlDoc;
 				pXmlDoc = NULL;
 				throw generic_string(generic_string(xmlPath) + L" failed to load.");
 			}
 
-			for (int x = 0; x < numLexers; ++x) // postpone adding in case the xml is missing/corrupt
-			{
+			for (int x = 0; x < numLexers; ++x)	{ // postpone adding in case the xml is missing/corrupt
+
 				if (containers[x] != NULL)
 					nppParams.addExternalLangToEnd(containers[x]);
 			}
@@ -273,8 +273,8 @@ int PluginsManager::loadPlugin(const TCHAR *pluginFilePath)
 		s += L"\n\n";
 		s += pluginFileName;
 		s += USERMSG;
-		if (::MessageBox(NULL, s.c_str(), pluginFilePath, MB_YESNO) == IDYES)
-		{
+		if (::MessageBox(NULL, s.c_str(), pluginFilePath, MB_YESNO) == IDYES)	{
+
 			::DeleteFile(pluginFilePath);
 		}
 		delete pi;
@@ -286,8 +286,8 @@ int PluginsManager::loadPlugin(const TCHAR *pluginFilePath)
 		msg += L"\n\n";
 		msg += pluginFileName;
 		msg += USERMSG;
-		if (::MessageBox(NULL, msg.c_str(), pluginFilePath, MB_YESNO) == IDYES)
-		{
+		if (::MessageBox(NULL, msg.c_str(), pluginFilePath, MB_YESNO) == IDYES)	{
+
 			::DeleteFile(pluginFilePath);
 		}
 		delete pi;
@@ -295,8 +295,8 @@ int PluginsManager::loadPlugin(const TCHAR *pluginFilePath)
 	}
 }
 
-bool PluginsManager::loadPluginsV2(const TCHAR* dir)
-{
+bool PluginsManager::loadPluginsV2(const TCHAR* dir)	{
+
 	if (_isDisabled)
 		return false;
 
@@ -306,12 +306,12 @@ bool PluginsManager::loadPluginsV2(const TCHAR* dir)
 	generic_string nppPath = nppParams.getNppPath();
 	
 	generic_string pluginsFolder;
-	if (dir && dir[0])
-	{
+	if (dir && dir[0])	{
+
 		pluginsFolder = dir;
 	}
-	else
-	{
+	else	{
+
 		pluginsFolder = nppPath;
 		PathAppend(pluginsFolder, L"plugins");
 	}
@@ -323,11 +323,11 @@ bool PluginsManager::loadPluginsV2(const TCHAR* dir)
 	HANDLE hFindDll = INVALID_HANDLE_VALUE;
 
 	// get plugin folder
-	if (hFindFolder != INVALID_HANDLE_VALUE && (foundData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
-	{
+	if (hFindFolder != INVALID_HANDLE_VALUE && (foundData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))	{
+
 		generic_string foundFileName = foundData.cFileName;
-		if (foundFileName != L"." && foundFileName != L".." && generic_stricmp(foundFileName.c_str(), L"Config") != 0)
-		{
+		if (foundFileName != L"." && foundFileName != L".." && generic_stricmp(foundFileName.c_str(), L"Config") != 0)	{
+
 			generic_string pluginsFullPathFilter = pluginsFolder;
 			PathAppend(pluginsFullPathFilter, foundFileName);
 			generic_string  dllName = foundFileName;
@@ -336,8 +336,8 @@ bool PluginsManager::loadPluginsV2(const TCHAR* dir)
 
 			// get plugin
 			hFindDll = ::FindFirstFile(pluginsFullPathFilter.c_str(), &foundData);
-			if (hFindDll != INVALID_HANDLE_VALUE && !(foundData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
-			{
+			if (hFindDll != INVALID_HANDLE_VALUE && !(foundData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))	{
+
 				dllNames.push_back(pluginsFullPathFilter);
 
 				PluginList & pl = nppParams.getPluginList();
@@ -345,11 +345,11 @@ bool PluginsManager::loadPluginsV2(const TCHAR* dir)
 			}
 		}
 		// get plugin folder
-		while (::FindNextFile(hFindFolder, &foundData))
-		{
+		while (::FindNextFile(hFindFolder, &foundData))	{
+
 			generic_string foundFileName2 = foundData.cFileName;
-			if (foundFileName2 != L"." && foundFileName2 != L".." && generic_stricmp(foundFileName2.c_str(), L"Config") != 0)
-			{
+			if (foundFileName2 != L"." && foundFileName2 != L".." && generic_stricmp(foundFileName2.c_str(), L"Config") != 0)	{
+
 				generic_string pluginsFullPathFilter2 = pluginsFolder;
 				PathAppend(pluginsFullPathFilter2, foundFileName2);
 				generic_string pluginsFolderPath2 = pluginsFullPathFilter2;
@@ -358,14 +358,14 @@ bool PluginsManager::loadPluginsV2(const TCHAR* dir)
 				PathAppend(pluginsFullPathFilter2, dllName2);
 
 				// get plugin
-				if (hFindDll)
-				{
+				if (hFindDll)	{
+
 					::FindClose(hFindDll);
 					hFindDll = INVALID_HANDLE_VALUE;
 				}
 				hFindDll = ::FindFirstFile(pluginsFullPathFilter2.c_str(), &foundData);
-				if (hFindDll != INVALID_HANDLE_VALUE && !(foundData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
-				{
+				if (hFindDll != INVALID_HANDLE_VALUE && !(foundData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))	{
+
 					dllNames.push_back(pluginsFullPathFilter2);
 
 					PluginList & pl = nppParams.getPluginList();
@@ -378,8 +378,8 @@ bool PluginsManager::loadPluginsV2(const TCHAR* dir)
 	::FindClose(hFindFolder);
 	::FindClose(hFindDll);
 
-	for (size_t i = 0, len = dllNames.size(); i < len; ++i)
-	{
+	for (size_t i = 0, len = dllNames.size(); i < len; ++i)	{
+
 		loadPlugin(dllNames[i].c_str());
 	}
 
@@ -388,17 +388,17 @@ bool PluginsManager::loadPluginsV2(const TCHAR* dir)
 
 // return true if cmdID found and its shortcut is enable
 // false otherwise
-bool PluginsManager::getShortcutByCmdID(int cmdID, ShortcutKey *sk)
-{
+bool PluginsManager::getShortcutByCmdID(int cmdID, ShortcutKey *sk)	{
+
 	if (cmdID == 0 || !sk)
 		return false;
 
 	const vector<PluginCmdShortcut> & pluginCmdSCList = (NppParameters::getInstance()).getPluginCommandList();
 
-	for (size_t i = 0, len = pluginCmdSCList.size(); i < len ; ++i)
-	{
-		if (pluginCmdSCList[i].getID() == (unsigned long)cmdID)
-		{
+	for (size_t i = 0, len = pluginCmdSCList.size(); i < len ; ++i)	{
+
+		if (pluginCmdSCList[i].getID() == (unsigned long)cmdID)	{
+
 			const KeyCombo & kc = pluginCmdSCList[i].getKeyCombo();
 			if (kc._key == 0x00)
 				return false;
@@ -414,18 +414,18 @@ bool PluginsManager::getShortcutByCmdID(int cmdID, ShortcutKey *sk)
 }
 
 // returns false if cmdID not provided, true otherwise
-bool PluginsManager::removeShortcutByCmdID(int cmdID)
-{
+bool PluginsManager::removeShortcutByCmdID(int cmdID)	{
+
 	if (cmdID == 0)
 		return false;
 
 	NppParameters& nppParam = NppParameters::getInstance();
 	vector<PluginCmdShortcut> & pluginCmdSCList = nppParam.getPluginCommandList();
 
-	for (size_t i = 0, len = pluginCmdSCList.size(); i < len; ++i)
-	{
-		if (pluginCmdSCList[i].getID() == (unsigned long)cmdID)
-		{
+	for (size_t i = 0, len = pluginCmdSCList.size(); i < len; ++i)	{
+
+		if (pluginCmdSCList[i].getID() == (unsigned long)cmdID)	{
+
 			//remove shortcut
 			pluginCmdSCList[i].clear();
 
@@ -440,16 +440,16 @@ bool PluginsManager::removeShortcutByCmdID(int cmdID)
 	return true;
 }
 
-void PluginsManager::addInMenuFromPMIndex(int i)
-{
+void PluginsManager::addInMenuFromPMIndex(int i)	{
+
     vector<PluginCmdShortcut> & pluginCmdSCList = (NppParameters::getInstance()).getPluginCommandList();
 	::InsertMenu(_hPluginsMenu, i, MF_BYPOSITION | MF_POPUP, (UINT_PTR)_pluginInfos[i]->_pluginMenu, _pluginInfos[i]->_funcName.c_str());
 
     unsigned short j = 0;
-	for ( ; j < _pluginInfos[i]->_nbFuncItem ; ++j)
-	{
-		if (_pluginInfos[i]->_funcItems[j]._pFunc == NULL)
-		{
+	for ( ; j < _pluginInfos[i]->_nbFuncItem ; ++j)	{
+
+		if (_pluginInfos[i]->_funcItems[j]._pFunc == NULL)	{
+
 			::InsertMenu(_pluginInfos[i]->_pluginMenu, j, MF_BYPOSITION | MF_SEPARATOR, 0, L"");
 			continue;
 		}
@@ -460,16 +460,16 @@ void PluginsManager::addInMenuFromPMIndex(int i)
 		_pluginInfos[i]->_funcItems[j]._cmdID = cmdID;
 		generic_string itemName = _pluginInfos[i]->_funcItems[j]._itemName;
 
-		if (_pluginInfos[i]->_funcItems[j]._pShKey)
-		{
+		if (_pluginInfos[i]->_funcItems[j]._pShKey)	{
+
 			ShortcutKey & sKey = *(_pluginInfos[i]->_funcItems[j]._pShKey);
             PluginCmdShortcut pcs(Shortcut(itemName.c_str(), sKey._isCtrl, sKey._isAlt, sKey._isShift, sKey._key), cmdID, _pluginInfos[i]->_moduleName.c_str(), j);
 			pluginCmdSCList.push_back(pcs);
 			itemName += L"\t";
 			itemName += pcs.toString();
 		}
-		else
-		{	//no ShortcutKey is provided, add an disabled shortcut (so it can still be mapped, Paramaters class can still index any changes and the toolbar wont funk out
+		else	{
+	//no ShortcutKey is provided, add an disabled shortcut (so it can still be mapped, Paramaters class can still index any changes and the toolbar wont funk out
             Shortcut sc(itemName.c_str(), false, false, false, 0x00);
             PluginCmdShortcut pcs(sc, cmdID, _pluginInfos[i]->_moduleName.c_str(), j);	//VK_NULL and everything disabled, the menu name is left alone
 			pluginCmdSCList.push_back(pcs);
@@ -481,13 +481,13 @@ void PluginsManager::addInMenuFromPMIndex(int i)
 	}
 }
 
-HMENU PluginsManager::setMenu(HMENU hMenu, const TCHAR *menuName, bool enablePluginAdmin)
-{
+HMENU PluginsManager::setMenu(HMENU hMenu, const TCHAR *menuName, bool enablePluginAdmin)	{
+
 	const TCHAR *nom_menu = (menuName && menuName[0])?menuName:L"Plugins";
 	size_t nbPlugin = _pluginInfos.size();
 
-	if (!_hPluginsMenu)
-	{
+	if (!_hPluginsMenu)	{
+
 		_hPluginsMenu = ::CreateMenu();
 		::InsertMenu(hMenu,  MENUINDEX_PLUGINS, MF_BYPOSITION | MF_POPUP, (UINT_PTR)_hPluginsMenu, nom_menu);
 
@@ -496,8 +496,8 @@ HMENU PluginsManager::setMenu(HMENU hMenu, const TCHAR *menuName, bool enablePlu
 		if (nbPlugin > 0)
 			::InsertMenu(_hPluginsMenu, 0, MF_BYPOSITION | MF_SEPARATOR, 0, L"");
 
-		if (enablePluginAdmin)
-		{
+		if (enablePluginAdmin)	{
+
 			::InsertMenu(_hPluginsMenu, i++, MF_BYPOSITION, IDM_SETTING_PLUGINADM, L"Plugins Admin...");
 			::InsertMenu(_hPluginsMenu, i++, MF_BYPOSITION | MF_SEPARATOR, 0, L"");
 		}
@@ -505,20 +505,20 @@ HMENU PluginsManager::setMenu(HMENU hMenu, const TCHAR *menuName, bool enablePlu
 		::InsertMenu(_hPluginsMenu, i, MF_BYPOSITION, IDM_SETTING_OPENPLUGINSDIR, L"Open Plugins Folder...");
 	}
 
-	for (size_t i = 0; i < nbPlugin; ++i)
-	{
+	for (size_t i = 0; i < nbPlugin; ++i)	{
+
 		addInMenuFromPMIndex(static_cast<int32_t>(i));
 	}
 	return _hPluginsMenu;
 }
 
 
-void PluginsManager::runPluginCommand(size_t i)
-{
-	if (i < _pluginsCommands.size())
-	{
-		if (_pluginsCommands[i]._pFunc != NULL)
-		{
+void PluginsManager::runPluginCommand(size_t i)	{
+
+	if (i < _pluginsCommands.size())	{
+
+		if (_pluginsCommands[i]._pFunc != NULL)	{
+
 			try
 			{
 				_pluginsCommands[i]._pFunc();
@@ -538,14 +538,14 @@ void PluginsManager::runPluginCommand(size_t i)
 }
 
 
-void PluginsManager::runPluginCommand(const TCHAR *pluginName, int commandID)
-{
-	for (size_t i = 0, len = _pluginsCommands.size() ; i < len ; ++i)
-	{
-		if (!generic_stricmp(_pluginsCommands[i]._pluginName.c_str(), pluginName))
-		{
-			if (_pluginsCommands[i]._funcID == commandID)
-			{
+void PluginsManager::runPluginCommand(const TCHAR *pluginName, int commandID)	{
+
+	for (size_t i = 0, len = _pluginsCommands.size() ; i < len ; ++i)	{
+
+		if (!generic_stricmp(_pluginsCommands[i]._pluginName.c_str(), pluginName))	{
+
+			if (_pluginsCommands[i]._funcID == commandID)	{
+
 				try
 				{
 					_pluginsCommands[i]._pFunc();
@@ -566,13 +566,13 @@ void PluginsManager::runPluginCommand(const TCHAR *pluginName, int commandID)
 }
 
 // send the notification to a specific plugin
-void PluginsManager::notify(size_t indexPluginInfo, const SCNotification *notification)
-{
+void PluginsManager::notify(size_t indexPluginInfo, const SCNotification *notification)	{
+
 	if (indexPluginInfo >= _pluginInfos.size())
 		return;
 
-	if (_pluginInfos[indexPluginInfo]->_hLib)
-	{
+	if (_pluginInfos[indexPluginInfo]->_hLib)	{
+
 		// To avoid the plugin change the data in SCNotification
 		// Each notification to pass to a plugin is a copy of SCNotification instance
 		SCNotification scNotif = *notification;
@@ -595,25 +595,25 @@ void PluginsManager::notify(size_t indexPluginInfo, const SCNotification *notifi
 }
 
 // broadcast the notification to all plugins
-void PluginsManager::notify(const SCNotification *notification)
-{
+void PluginsManager::notify(const SCNotification *notification)	{
+
 	if (_noMoreNotification) // this boolean should be enabled after NPPN_SHUTDOWN has been sent
 		return;
 	_noMoreNotification = notification->nmhdr.code == NPPN_SHUTDOWN;
 
-	for (size_t i = 0, len = _pluginInfos.size() ; i < len ; ++i)
-	{
+	for (size_t i = 0, len = _pluginInfos.size() ; i < len ; ++i)	{
+
 		notify(i, notification);
 	}
 }
 
 
-void PluginsManager::relayNppMessages(UINT Message, WPARAM wParam, LPARAM lParam)
-{
-	for (size_t i = 0, len = _pluginInfos.size(); i < len ; ++i)
-	{
-        if (_pluginInfos[i]->_hLib)
-		{
+void PluginsManager::relayNppMessages(UINT Message, WPARAM wParam, LPARAM lParam)	{
+
+	for (size_t i = 0, len = _pluginInfos.size(); i < len ; ++i)	{
+
+        if (_pluginInfos[i]->_hLib)	{
+
 			try
 			{
 				_pluginInfos[i]->_pMessageProc(Message, wParam, lParam);
@@ -633,18 +633,18 @@ void PluginsManager::relayNppMessages(UINT Message, WPARAM wParam, LPARAM lParam
 }
 
 
-bool PluginsManager::relayPluginMessages(UINT Message, WPARAM wParam, LPARAM lParam)
-{
+bool PluginsManager::relayPluginMessages(UINT Message, WPARAM wParam, LPARAM lParam)	{
+
 	const TCHAR * moduleName = (const TCHAR *)wParam;
 	if (!moduleName || !moduleName[0] || !lParam)
 		return false;
 
-	for (size_t i = 0, len = _pluginInfos.size() ; i < len ; ++i)
-	{
-        if (_pluginInfos[i]->_moduleName == moduleName)
-		{
-            if (_pluginInfos[i]->_hLib)
-			{
+	for (size_t i = 0, len = _pluginInfos.size() ; i < len ; ++i)	{
+
+        if (_pluginInfos[i]->_moduleName == moduleName)	{
+
+            if (_pluginInfos[i]->_hLib)	{
+
 				try
 				{
 					_pluginInfos[i]->_pMessageProc(Message, wParam, lParam);
@@ -667,26 +667,26 @@ bool PluginsManager::relayPluginMessages(UINT Message, WPARAM wParam, LPARAM lPa
 }
 
 
-bool PluginsManager::allocateCmdID(int numberRequired, int *start)
-{
+bool PluginsManager::allocateCmdID(int numberRequired, int *start)	{
+
 	bool retVal = true;
 
 	*start = _dynamicIDAlloc.allocate(numberRequired);
 
-	if (-1 == *start)
-	{
+	if (-1 == *start)	{
+
 		*start = 0;
 		retVal = false;
 	}
 	return retVal;
 }
 
-bool PluginsManager::allocateMarker(int numberRequired, int *start)
-{
+bool PluginsManager::allocateMarker(int numberRequired, int *start)	{
+
 	bool retVal = true;
 	*start = _markerAlloc.allocate(numberRequired);
-	if (-1 == *start)
-	{
+	if (-1 == *start)	{
+
 		*start = 0;
 		retVal = false;
 	}
@@ -696,8 +696,8 @@ bool PluginsManager::allocateMarker(int numberRequired, int *start)
 generic_string PluginsManager::getLoadedPluginNames() const
 {
 	generic_string pluginPaths;
-	for (size_t i = 0; i < _loadedDlls.size(); ++i)
-	{
+	for (size_t i = 0; i < _loadedDlls.size(); ++i)	{
+
 		pluginPaths += _loadedDlls[i]._fileName;
 		pluginPaths += L" ";
 	}

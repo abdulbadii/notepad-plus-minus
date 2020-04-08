@@ -37,12 +37,12 @@ IDAllocator::IDAllocator(int start, int maximumID)
 {
 }
 
-int IDAllocator::allocate(int quantity)
-{
+int IDAllocator::allocate(int quantity)	{
+
 	int retVal = -1;
 
-	if (_nextID + quantity <= _maximumID && quantity > 0)
-	{
+	if (_nextID + quantity <= _maximumID && quantity > 0)	{
+
 		retVal = _nextID;
 		_nextID += quantity;
 	}

@@ -154,8 +154,8 @@ public:
 	virtual generic_string toString() const;					//the hotkey part
 	generic_string toMenuItemString() const {					//generic_string suitable for menu
 		generic_string str = _menuName;
-		if (isEnabled())
-		{
+		if (isEnabled())	{
+
 			str += L"\t";
 			str += toString();
 		}
@@ -247,8 +247,8 @@ public:
 		if (!equal)
 			return false;
 		size_t i = 0;
-		while (equal && (i < a._size))
-		{
+		while (equal && (i < a._size))	{
+
 			equal = 
 				(a._keyCombos[i]._isCtrl	== b._keyCombos[i]._isCtrl) && 
 				(a._keyCombos[i]._isAlt		== b._keyCombos[i]._isAlt) && 

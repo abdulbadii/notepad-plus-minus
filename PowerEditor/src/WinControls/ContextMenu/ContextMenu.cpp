@@ -44,8 +44,8 @@ MenuItemUnit::MenuItemUnit(unsigned long cmdID, const TCHAR *itemName, const TCH
 
 ContextMenu::~ContextMenu()
 {
-	if (isCreated())
-	{
+	if (isCreated())	{
+
 		for (size_t i = 0, len = _subMenus.size(); i < len; ++i)
 			::DestroyMenu(_subMenus[i]);
 		::DestroyMenu(_hMenu);
@@ -53,8 +53,8 @@ ContextMenu::~ContextMenu()
 }
 
 	
-void ContextMenu::create(HWND hParent, const std::vector<MenuItemUnit> & menuItemArray, const HMENU mainMenuHandle)
-{ 
+void ContextMenu::create(HWND hParent, const std::vector<MenuItemUnit> & menuItemArray, const HMENU mainMenuHandle)	{
+ 
 	_hParent = hParent;
 	_hMenu = ::CreatePopupMenu();
 	bool lastIsSep = false;
@@ -62,19 +62,19 @@ void ContextMenu::create(HWND hParent, const std::vector<MenuItemUnit> & menuIte
 	generic_string currentParentFolderStr;
 	int j = 0;
 
-	for (size_t i = 0, len = menuItemArray.size(); i < len; ++i)
-	{
+	for (size_t i = 0, len = menuItemArray.size(); i < len; ++i)	{
+
 		const MenuItemUnit & item = menuItemArray[i];
-		if (item._parentFolderName.empty())
-		{
+		if (item._parentFolderName.empty())	{
+
 			currentParentFolderStr.clear();
 			hParentFolder = NULL;
 			j = 0;
 		}
-		else
-		{
-			if (item._parentFolderName != currentParentFolderStr)
-			{
+		else	{
+
+			if (item._parentFolderName != currentParentFolderStr)	{
+
 				currentParentFolderStr = item._parentFolderName;
 				hParentFolder = ::CreateMenu();
 				j = 0;
@@ -85,33 +85,33 @@ void ContextMenu::create(HWND hParent, const std::vector<MenuItemUnit> & menuIte
 		}
 
 		unsigned int flag = MF_BYPOSITION | ((item._cmdID == 0)?MF_SEPARATOR:0);
-		if (hParentFolder)
-		{
+		if (hParentFolder)	{
+
 			::InsertMenu(hParentFolder, j++, flag, item._cmdID, item._itemName.c_str());
 			lastIsSep = false;
 		}
-		else if ((i == 0 || i == menuItemArray.size() - 1) && item._cmdID == 0)
-		{
+		else if ((i == 0 || i == menuItemArray.size() - 1) && item._cmdID == 0)	{
+
 			lastIsSep = true;
 		}
-		else if (item._cmdID != 0)
-		{
+		else if (item._cmdID != 0)	{
+
 			::InsertMenu(_hMenu, static_cast<UINT>(i), flag, item._cmdID, item._itemName.c_str());
 			lastIsSep = false;
 		}
-		else if (item._cmdID == 0 && !lastIsSep)
-		{
+		else if (item._cmdID == 0 && !lastIsSep)	{
+
 			::InsertMenu(_hMenu, static_cast<int32_t>(i), flag, item._cmdID, item._itemName.c_str());
 			lastIsSep = true;
 		}
-		else // last item is separator and current item is separator
-		{
+		else	{ // last item is separator and current item is separator
+
 			lastIsSep = true;
 		}
 
 		
-		if (mainMenuHandle)
-		{
+		if (mainMenuHandle)	{
+
 			bool isEnabled = (::GetMenuState(mainMenuHandle, item._cmdID, MF_BYCOMMAND)&(MF_DISABLED|MF_GRAYED)) == 0;
 			bool isChecked = (::GetMenuState(mainMenuHandle, item._cmdID, MF_BYCOMMAND)&(MF_CHECKED)) != 0;
 			if (!isEnabled)

@@ -29,8 +29,8 @@
 #include "asciiListView.h"
 #include "Parameters.h"
 
-void AsciiListView::resetValues(int codepage)
-{
+void AsciiListView::resetValues(int codepage)	{
+
 	if (codepage == -1)
 		codepage = 0;
 
@@ -41,10 +41,10 @@ void AsciiListView::resetValues(int codepage)
 	setValues(codepage);
 }
 
-generic_string AsciiListView::getAscii(unsigned char value)
-{
-	switch (value)
-	{
+generic_string AsciiListView::getAscii(unsigned char value)	{
+
+	switch (value)	{
+
 		case 0:
 			return L"NULL";
 		case 1:
@@ -126,10 +126,10 @@ generic_string AsciiListView::getAscii(unsigned char value)
 	}
 }
 
-generic_string AsciiListView::getHtmlName(unsigned char value)
-{
-	switch (value)
-	{
+generic_string AsciiListView::getHtmlName(unsigned char value)	{
+
+	switch (value)	{
+
 		case 34:
 			return L"&quot;";
 		case 38:
@@ -340,10 +340,10 @@ generic_string AsciiListView::getHtmlName(unsigned char value)
 	}
 }
 
-int AsciiListView::getHtmlNumber(unsigned char value)
-{
-	switch (value)
-	{
+int AsciiListView::getHtmlNumber(unsigned char value)	{
+
+	switch (value)	{
+
 		case 128:
 			return 8364;
 		case 130:
@@ -394,12 +394,12 @@ int AsciiListView::getHtmlNumber(unsigned char value)
 	}
 }
 
-void AsciiListView::setValues(int codepage)
-{
+void AsciiListView::setValues(int codepage)	{
+
 	_codepage = codepage;
 
-	for (int i = 0 ; i < 256 ; ++i)
-	{
+	for (int i = 0 ; i < 256 ; ++i)	{
+
 		TCHAR dec[8];
 		TCHAR hex[8];
 		TCHAR htmlNumber[8];
@@ -408,29 +408,29 @@ void AsciiListView::setValues(int codepage)
 		generic_sprintf(hex, L"%02X", i);
 		generic_string s = getAscii(static_cast<unsigned char>(i));
 
-		if (codepage == 0 || codepage == 1252)
-		{
-			if ((i >= 32 && i <= 126) || (i >= 160 && i <= 255))
-			{
+		if (codepage == 0 || codepage == 1252)	{
+
+			if ((i >= 32 && i <= 126) || (i >= 160 && i <= 255))	{
+
 				generic_sprintf(htmlNumber, L"&#%d", i);
 			}
-			else
-			{
+			else	{
+
 				int n = getHtmlNumber(static_cast<unsigned char>(i));
-				if (n > -1)
-				{
+				if (n > -1)	{
+
 					generic_sprintf(htmlNumber, L"&#%d", n);
 				}
-				else
-				{
+				else	{
+
 					generic_sprintf(htmlNumber, L"");
 				}
 			}
 
 			htmlName = getHtmlName(static_cast<unsigned char>(i));
 		}
-		else
-		{
+		else	{
+
 			generic_sprintf(htmlNumber, L"");
 			htmlName = L"";
 		}

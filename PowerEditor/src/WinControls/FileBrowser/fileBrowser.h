@@ -48,8 +48,8 @@ class TiXmlNode;
 class FileBrowser;
 class FolderInfo;
 
-class FileInfo final
-{
+class FileInfo final	{
+
 friend class FileBrowser;
 friend class FolderInfo;
 
@@ -65,8 +65,8 @@ private:
 };
 
 
-class FolderInfo final
-{
+class FolderInfo final	{
+
 friend class FileBrowser;
 friend class FolderUpdater;
 

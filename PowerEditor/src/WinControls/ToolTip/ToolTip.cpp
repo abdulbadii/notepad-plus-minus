@@ -30,16 +30,16 @@
 #include <stdexcept>
 #include "ToolTip.h"
 
-void ToolTip::init(HINSTANCE hInst, HWND hParent)
-{
-	if (_hSelf == NULL)
-	{
+void ToolTip::init(HINSTANCE hInst, HWND hParent)	{
+
+	if (_hSelf == NULL)	{
+
 		Window::init(hInst, hParent);
 
 		_hSelf = CreateWindowEx( 0, TOOLTIPS_CLASS, NULL, WS_POPUP | TTS_NOPREFIX | TTS_ALWAYSTIP, 
              CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, NULL, NULL );
-		if (!_hSelf)
-		{
+		if (!_hSelf)	{
+
 			throw std::runtime_error("ToolTip::init : CreateWindowEx() function return null");
 		}
 
@@ -49,8 +49,8 @@ void ToolTip::init(HINSTANCE hInst, HWND hParent)
 }
 
 
-void ToolTip::Show(RECT rectTitle, const TCHAR * pszTitle, int iXOff, int iWidthOff)
-{
+void ToolTip::Show(RECT rectTitle, const TCHAR * pszTitle, int iXOff, int iWidthOff)	{
+
 	if (isVisible())
 		destroy();
 
@@ -80,8 +80,8 @@ void ToolTip::Show(RECT rectTitle, const TCHAR * pszTitle, int iXOff, int iWidth
 }
 
 
-LRESULT ToolTip::runProc(UINT message, WPARAM wParam, LPARAM lParam)
-{
+LRESULT ToolTip::runProc(UINT message, WPARAM wParam, LPARAM lParam)	{
+
 	return ::CallWindowProc(_defaultProc, _hSelf, message, wParam, lParam);
 }
 

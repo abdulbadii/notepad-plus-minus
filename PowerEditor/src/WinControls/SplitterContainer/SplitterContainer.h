@@ -44,8 +44,8 @@ enum class DIRECTION
 
 
 
-class SplitterContainer : public Window
-{
+class SplitterContainer : public Window	{
+
 public :
 	virtual ~SplitterContainer() = default;
 
@@ -60,13 +60,13 @@ public :
 
 	virtual void redraw(bool forceUpdate = false) const;
 
-	void setWin0(Window* pWin)
-	{
+	void setWin0(Window* pWin)	{
+
 		_pWin0 = pWin;
 	}
 
-	void setWin1(Window* pWin)
-	{
+	void setWin1(Window* pWin)	{
+
 		_pWin1 = pWin;
 	}
 
