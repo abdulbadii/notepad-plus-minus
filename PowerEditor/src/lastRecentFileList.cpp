@@ -66,7 +66,7 @@ void LastRecentFileList::switchMode()	{
 		::RemoveMenu(_hMenu, _lrfl.at(i)._id, MF_BYCOMMAND);
 	}
 
-	if (_hParentMenu == NULL)	{ // mode main menu
+	if (!_hParentMenu)	{ // mode main menu
 	if (_size > 0)	{
 
 			::RemoveMenu(_hMenu, _posBase, MF_BYPOSITION);
@@ -130,7 +130,7 @@ void LastRecentFileList::updateMenu()	{
 			::InsertMenu(_hParentMenu, _posBase + 1, MF_BYPOSITION, static_cast<UINT_PTR>(-1), 0);
 		}
 	}
-	else if (_hasSeparators && _size == 0)	{ 	//remove separators
+	else if (_hasSeparators && !_size)	{ 	//remove separators
 
 		::RemoveMenu(_hMenu, _posBase + 4, MF_BYPOSITION);
 		::RemoveMenu(_hMenu, IDM_CLEAN_RECENT_FILE_LIST, MF_BYCOMMAND);
@@ -168,7 +168,7 @@ void LastRecentFileList::updateMenu()	{
 
 void LastRecentFileList::add(const TCHAR *fn)	{ 
 
-	if (_userMax == 0 || _locked)
+	if (!_userMax || _locked)
 		return;
 
 	RecentItem itemToAdd(fn);
@@ -203,7 +203,7 @@ void LastRecentFileList::remove(const TCHAR *fn)	{
 
 void LastRecentFileList::remove(size_t index)	{ 
 
-	if (_size == 0 || _locked)
+	if (!_size || _locked)
 		return;
 	if (index < _lrfl.size())	{
 
@@ -218,7 +218,7 @@ void LastRecentFileList::remove(size_t index)	{
 
 void LastRecentFileList::clear()	{ 
 
-	if (_size == 0)
+	if (!_size)
 		return;
 
 	for (int i = (_size-1); i >= 0; --i )	{ 

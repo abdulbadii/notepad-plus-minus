@@ -40,8 +40,8 @@
 
 using namespace std;
 
-DWORD WINAPI Notepad_plus::monitorFileOnChange(void * params)
-{
+DWORD WINAPI Notepad_plus::monitorFileOnChange(void * params)	{
+
 	MonitorInfo *monitorInfo = static_cast<MonitorInfo *>(params);
 	Buffer *buf = monitorInfo->_buffer;
 	HWND h = monitorInfo->_nppHandle;
@@ -130,7 +130,7 @@ BufferID Notepad_plus::doOpen(const generic_string& fileName, bool isRecursive, 
 	TCHAR longFileName[longFileNameBufferSize];
 
 	const DWORD getFullPathNameResult = ::GetFullPathName(fileName.c_str(), longFileNameBufferSize, longFileName, NULL);
-	if (getFullPathNameResult == 0)	{
+	if (!getFullPathNameResult)	{
 
 		return BUFFER_INVALID;
 	}
@@ -2042,7 +2042,7 @@ bool Notepad_plus::fileLoadSession(const TCHAR *fn)	{
 
 	bool result = false;
 	const TCHAR *sessionFileName = NULL;
-	if (fn == NULL)	{
+	if (!fn)	{
 
 		FileDialog fDlg(_pPublicInterface->getHSelf(), _pPublicInterface->getHinst());
 		const TCHAR *ext = NppParameters::getInstance().getNppGUI()._definedSessionExt.c_str();

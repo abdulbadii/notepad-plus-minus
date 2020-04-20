@@ -345,10 +345,10 @@ void TabBarPlus::init(HINSTANCE hInst, HWND parent, bool isVertical, bool isMult
 
 	_hFont = (HFONT)::SendMessage(_hSelf, WM_GETFONT, 0, 0);
 
-	if (_hFont == NULL)
+	if (!_hFont)
 		_hFont = (HFONT)::GetStockObject(DEFAULT_GUI_FONT);
 
-	if (_hLargeFont == NULL)
+	if (!_hLargeFont)
 		_hLargeFont = (HFONT)::GetStockObject(SYSTEM_FONT);
 
 	if (::GetObject(_hFont, sizeof(LOGFONT), &LogFont) != 0)	{

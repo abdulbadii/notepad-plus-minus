@@ -163,8 +163,8 @@ void StaticDialog::create(int dialogID, bool isRTL, bool msgDestParent)	{
 	::SendMessage(msgDestParent ? _hParent : (::GetParent(_hParent)), NPPM_MODELESSDIALOG, MODELESSDIALOGADD, reinterpret_cast<WPARAM>(_hSelf));
 }
 
-INT_PTR CALLBACK StaticDialog::dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK StaticDialog::dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)	{
+
 	switch (message)	{
 
 		case WM_INITDIALOG:	{

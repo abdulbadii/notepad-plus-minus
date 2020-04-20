@@ -142,7 +142,7 @@ public:
 
 				long long compareResult = 0;
 				size_t i = 0;
-				while (compareResult == 0)	{
+				while (!compareResult)	{
 
 					if (i >= a.length() || i >= b.length())	{
 
@@ -197,7 +197,7 @@ public:
 			{
 				long long compareResult = 0;
 				size_t i = 0;
-				while (compareResult == 0)	{
+				while (!compareResult)	{
 
 					if (i >= a.length() || i >= b.length())	{
 

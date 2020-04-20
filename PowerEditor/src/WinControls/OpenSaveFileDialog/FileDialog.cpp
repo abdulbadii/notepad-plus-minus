@@ -181,7 +181,7 @@ TCHAR* FileDialog::doOpenSingleFileDlg()	{
 		if (params.getNppGUI()._openSaveDir == dir_last)	{
 
 			::GetCurrentDirectory(MAX_PATH, dir);
-			params.setWorkingDir(dir, 0);
+			params.setDefOpenSaveDir(dir, 0);
 		}
 	}
 	catch (std::exception& e)
@@ -203,8 +203,8 @@ TCHAR* FileDialog::doOpenSingleFileDlg()	{
 	return (fn);
 }
 
-stringVector * FileDialog::doOpenMultiFilesDlg()
-{
+stringVector * FileDialog::doOpenMultiFilesDlg()	{
+
 	TCHAR dir[MAX_PATH];
 	::GetCurrentDirectory(MAX_PATH, dir);
 
@@ -223,7 +223,7 @@ stringVector * FileDialog::doOpenMultiFilesDlg()
 	if (params.getNppGUI()._openSaveDir == dir_last)	{
 
 		::GetCurrentDirectory(MAX_PATH, dir);
-		params.setWorkingDir(dir, 0);
+		params.setDefOpenSaveDir(dir, 0);
 	}
 	::SetCurrentDirectory(dir);
 
@@ -283,7 +283,7 @@ TCHAR * FileDialog::doSaveDlg()	{
 		if (params.getNppGUI()._openSaveDir == dir_last)	{
 
 			::GetCurrentDirectory(MAX_PATH, dir);
-			params.setWorkingDir(dir, 0);
+			params.setDefOpenSaveDir(dir, 0);
 		}
 	}
 	catch (std::exception& e)
@@ -384,8 +384,8 @@ static generic_string addExt(HWND textCtrl, HWND typeCtrl)
 	return returnExt;
 };
 
-UINT_PTR CALLBACK FileDialog::OFNHookProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
+UINT_PTR CALLBACK FileDialog::OFNHookProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)	{
+
     switch(uMsg)	{
 
         case WM_INITDIALOG :	{
@@ -422,8 +422,8 @@ UINT_PTR CALLBACK FileDialog::OFNHookProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
     }
 }
 
-BOOL APIENTRY FileDialog::run(HWND hWnd, UINT uMsg, WPARAM, LPARAM lParam)
-{
+BOOL APIENTRY FileDialog::run(HWND hWnd, UINT uMsg, WPARAM, LPARAM lParam)	{
+
     switch (uMsg)	{
 
         case WM_NOTIFY :	{
@@ -510,7 +510,7 @@ void goToCenter(HWND hwnd)	{
 	::GetClientRect(hParent, &rc);
 	
 	//If window coordinates are all zero(ie,window is minimised),then assign desktop as the parent window.
- 	if (rc.left == 0 && rc.right == 0 && rc.top == 0 && rc.bottom == 0)	{
+ 	if (!rc.left &&!rc.right &&!rc.top &&!rc.bottom)	{
 
  		//hParent = ::GetDesktopWindow();
 		::ShowWindow(hParent, SW_SHOWNORMAL);

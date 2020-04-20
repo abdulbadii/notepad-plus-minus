@@ -721,7 +721,7 @@ bool TiXmlDocument::LoadFile( const TCHAR* filename )	{
 		fseek( file, 0, SEEK_SET );
 
 		// Strange case, but good to handle up front.
-		if ( length == 0 )	{
+		if ( !length )	{
 
 			fclose( file );
 			return false;

@@ -246,7 +246,7 @@ const TCHAR* TiXmlBase::GetEntity( const TCHAR* p, TCHAR* value )	{
 	// Now try to match it.
 	for (i=0; i<NUM_ENTITY; ++i)	{
 
-		if ( generic_strncmp( entity[i].str, p, entity[i].strLength ) == 0 )	{
+		if ( !generic_strncmp( entity[i].str, p, entity[i].strLength ) )	{
 
 			assert(static_cast<unsigned int>(lstrlen(entity[i].str)) == entity[i].strLength );
 			*value = entity[i].chr;

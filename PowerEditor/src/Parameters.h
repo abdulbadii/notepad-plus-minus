@@ -1247,8 +1247,8 @@ public:
 	}
 
 
-	std::pair<generic_string, generic_string> & getElementFromIndex(size_t index)
-	{
+	std::pair<generic_string, generic_string> & getElementFromIndex(size_t index)	{
+
 		assert(index < _themeList.size());
 		return _themeList[index];
 	}
@@ -1530,7 +1530,7 @@ public:
 		return _currentWDir.c_str();	}
 	const TCHAR * getDefOpenSaveDir() const{
 		return _currentDirectory.c_str();	}
-	void setWorkingDir(const TCHAR * =nullptr, bool noLast=1);
+	void setDefOpenSaveDir(const TCHAR * =nullptr, bool noLast=1);
 
 	void setWorkSpaceFilePath(int i, const TCHAR *wsFile);
 	void setStartWithLocFileName(const generic_string& locPath) {

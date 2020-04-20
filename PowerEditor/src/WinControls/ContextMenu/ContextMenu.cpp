@@ -84,13 +84,13 @@ void ContextMenu::create(HWND hParent, const std::vector<MenuItemUnit> & menuIte
 			}
 		}
 
-		unsigned int flag = MF_BYPOSITION | ((item._cmdID == 0)?MF_SEPARATOR:0);
+		unsigned int flag = MF_BYPOSITION | ((!item._cmdID)?MF_SEPARATOR:0);
 		if (hParentFolder)	{
 
 			::InsertMenu(hParentFolder, j++, flag, item._cmdID, item._itemName.c_str());
 			lastIsSep = false;
 		}
-		else if ((i == 0 || i == menuItemArray.size() - 1) && item._cmdID == 0)	{
+		else if ((!i || i == menuItemArray.size() - 1) && !item._cmdID)	{
 
 			lastIsSep = true;
 		}
@@ -99,7 +99,7 @@ void ContextMenu::create(HWND hParent, const std::vector<MenuItemUnit> & menuIte
 			::InsertMenu(_hMenu, static_cast<UINT>(i), flag, item._cmdID, item._itemName.c_str());
 			lastIsSep = false;
 		}
-		else if (item._cmdID == 0 && !lastIsSep)	{
+		else if (!item._cmdID && !lastIsSep)	{
 
 			::InsertMenu(_hMenu, static_cast<int32_t>(i), flag, item._cmdID, item._itemName.c_str());
 			lastIsSep = true;

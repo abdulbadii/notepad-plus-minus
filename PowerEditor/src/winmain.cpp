@@ -96,7 +96,7 @@ ParamVector parseCommandLine(const TCHAR* commandLine)
 ParamVector convertParamsToNotepadStyle(PWSTR pCmdLine)
 {
 	ParamVector params;
-	if ( _tcsnicmp(L"/p", pCmdLine, 2) == 0 )	{ // Notepad accepts both /p and /P, so compare case insensitively
+	if ( !_tcsnicmp(L"/p", pCmdLine, 2) )	{ // Notepad accepts both /p and /P, so compare case insensitively
 
 		params.emplace_back(L"-quickPrint");
 		pCmdLine += 2; // Length of "/p"
@@ -162,7 +162,7 @@ bool getParamValFromString(const TCHAR *str, ParamVector & params, generic_strin
 		const TCHAR * token = params.at(i).c_str();
 		generic_string tokenStr = token;
 		size_t pos = tokenStr.find(str);
-		if (pos != generic_string::npos && pos == 0)	{
+		if (pos != generic_string::npos && !pos)	{
 
 			value = (token + lstrlen(str));
 			params.erase(params.begin() + i);
@@ -285,7 +285,7 @@ PWSTR advanceCmdLine(PWSTR pCmdLine, const generic_string& string)	{
 	while (true)	{
 
 		PWSTR ignoredString = wcsstr(pCmdLine, string.c_str());
-		if (ignoredString == nullptr)	{
+		if (!ignoredString)	{
 
 			// Should never happen - tokenized parameters contain string somewhere, so it HAS to match
 			// This is there just in case

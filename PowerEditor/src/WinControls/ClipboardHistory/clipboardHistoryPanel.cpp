@@ -164,7 +164,7 @@ int ClipboardHistoryPanel::getClipboardDataIndex(ClipboardData cbd)	{
 void ClipboardHistoryPanel::addToClipboadHistory(ClipboardData cbd)	{
 
 	int i = getClipboardDataIndex(cbd);
-	if (i == 0) return;
+	if (!i) return;
 	if (i != -1)	{
 
 		_clipboardDataVector.erase(_clipboardDataVector.begin() + i);
@@ -197,8 +197,8 @@ void ClipboardHistoryPanel::drawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)	{
 	::DrawText(lpDrawItemStruct->hDC, ptStr, lstrlen(ptStr), &(lpDrawItemStruct->rcItem), DT_SINGLELINE | DT_VCENTER | DT_LEFT);
 }
 
-INT_PTR CALLBACK ClipboardHistoryPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK ClipboardHistoryPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)	{
+
     switch (message)	{
 
         case WM_INITDIALOG :	{

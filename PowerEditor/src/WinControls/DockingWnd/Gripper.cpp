@@ -168,8 +168,8 @@ void Gripper::startGrip(DockingCont* pCont, DockingManager* pDockMgr)	{
 }
 
 
-LRESULT CALLBACK Gripper::staticWinProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
+LRESULT CALLBACK Gripper::staticWinProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)	{
+
 	Gripper *pDlgMoving = NULL;
 	switch (message)	{
 
@@ -343,13 +343,13 @@ void Gripper::onButtonUp()	{
 	// look if current position is within dockable area
 	DockingCont*	pDockCont = contHitTest(pt);
 
-	if (pDockCont == NULL)	{
+	if (!pDockCont)	{
 
 		pDockCont = workHitTest(pt);
 	}
 
 	/* add dependency to other container class */
-	if (pDockCont == NULL)	{
+	if (!pDockCont)	{
 
 		/* calculate new position */
 		rc = _pCont->getDataOfActiveTb()->rcFloat;
@@ -383,7 +383,7 @@ void Gripper::onButtonUp()	{
 		}
 
 		/* set moving container */
-		if (pContMove == NULL)	{
+		if (!pContMove)	{
 
 			pContMove = _pCont;
 		}
@@ -434,7 +434,7 @@ void Gripper::doTabReordering(POINT pt)	{
 
 				TCHITTESTINFO	info	= {0};
 
-				if (_hTab == NULL)	{
+				if (!_hTab)	{
 
 					initTabInformation();
 					hTabOld  = _hTab;
@@ -534,7 +534,7 @@ void Gripper::doTabReordering(POINT pt)	{
 // inconsistencies while erasing our drag-rectangle (because it could already have been erased
 // on some places).
 //
-// Parameter pPt==NULL says that only erasing is wanted and the drag-rectangle is no more needed,
+// Parameter !pPt says that only erasing is wanted and the drag-rectangle is no more needed,
 // thatswhy this also leads to a call of ::LockWindowUpdate(NULL) to enable drawing by others again.
 // The previously drawn rectangle is memoried within _rectPrev (and _bPtOldValid says if it already
 // is valid - did not change this members name because didn't want change too much at once).
@@ -650,7 +650,7 @@ void Gripper::drawRectangle(const POINT* pPt)	{
 	DeleteObject(hBm);
 	DeleteDC(hdcMem);
 
-	if (pPt == NULL)	{
+	if (!pPt)	{
 
 		#if defined(USE_LOCKWINDOWUPDATE)
 		::LockWindowUpdate(NULL);
@@ -704,7 +704,7 @@ void Gripper::getMovingRect(POINT pt, RECT *rc)	{
 		pContHit = workHitTest(pt, rc);
 
 		/* calcutlates the rect and its position */
-		if (pContHit == NULL)	{
+		if (!pContHit)	{
 
 			/* calcutlates the rect and draws it */
 			if (!_pCont->isFloating())

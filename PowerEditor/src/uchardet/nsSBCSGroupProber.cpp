@@ -144,7 +144,7 @@ nsProbingState nsSBCSGroupProber::HandleData(const char* aBuf, PRUint32 aLen)
   if (!FilterWithoutEnglishLetters(aBuf, aLen, &newBuf1, newLen1))
     goto done;
   
-  if (newLen1 == 0)
+  if (!newLen1)
     goto done; // Nothing to see here, move on.
 
   for (i = 0; i < NUM_OF_SBCS_PROBERS; ++i )	{

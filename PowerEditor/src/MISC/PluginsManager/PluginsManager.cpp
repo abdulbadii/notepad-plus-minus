@@ -85,14 +85,14 @@ static WORD getBinaryArchitectureType(const TCHAR *filePath)
 	}
 
 	HANDLE hMapping = CreateFileMapping(hFile, NULL, PAGE_READONLY | SEC_IMAGE, 0, 0, NULL);
-	if (hMapping == NULL)	{
+	if (!hMapping)	{
 
 		CloseHandle(hFile);
 		return IMAGE_FILE_MACHINE_UNKNOWN;
 	}
 
 	LPVOID addrHeader = MapViewOfFile(hMapping, FILE_MAP_READ, 0, 0, 0);
-	if (addrHeader == NULL)	{ // couldn't memory map the file
+	if (!addrHeader)	{ // couldn't memory map the file
 
 		CloseHandle(hFile);
 		CloseHandle(hMapping);
@@ -102,7 +102,7 @@ static WORD getBinaryArchitectureType(const TCHAR *filePath)
 	PIMAGE_NT_HEADERS peHdr = ImageNtHeader(addrHeader);
 
 	// Found the binary and architecture type, if peHdr is !NULL
-	WORD machine_type = (peHdr == NULL) ? IMAGE_FILE_MACHINE_UNKNOWN : peHdr->FileHeader.Machine;
+	WORD machine_type = (!peHdr) ? IMAGE_FILE_MACHINE_UNKNOWN : peHdr->FileHeader.Machine;
 
 	// release all of our handles
 	UnmapViewOfFile(addrHeader);
@@ -390,7 +390,7 @@ bool PluginsManager::loadPluginsV2(const TCHAR* dir)	{
 // false otherwise
 bool PluginsManager::getShortcutByCmdID(int cmdID, ShortcutKey *sk)	{
 
-	if (cmdID == 0 || !sk)
+	if (!cmdID || !sk)
 		return false;
 
 	const vector<PluginCmdShortcut> & pluginCmdSCList = (NppParameters::getInstance()).getPluginCommandList();
@@ -416,7 +416,7 @@ bool PluginsManager::getShortcutByCmdID(int cmdID, ShortcutKey *sk)	{
 // returns false if cmdID not provided, true otherwise
 bool PluginsManager::removeShortcutByCmdID(int cmdID)	{
 
-	if (cmdID == 0)
+	if (!cmdID)
 		return false;
 
 	NppParameters& nppParam = NppParameters::getInstance();
@@ -448,7 +448,7 @@ void PluginsManager::addInMenuFromPMIndex(int i)	{
     unsigned short j = 0;
 	for ( ; j < _pluginInfos[i]->_nbFuncItem ; ++j)	{
 
-		if (_pluginInfos[i]->_funcItems[j]._pFunc == NULL)	{
+		if (!_pluginInfos[i]->_funcItems[j]._pFunc)	{
 
 			::InsertMenu(_pluginInfos[i]->_pluginMenu, j, MF_BYPOSITION | MF_SEPARATOR, 0, L"");
 			continue;

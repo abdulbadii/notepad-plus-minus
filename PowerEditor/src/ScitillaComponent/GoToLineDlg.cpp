@@ -29,8 +29,8 @@
 #include "GoToLineDlg.h"
 
 
-INT_PTR CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
-{
+INT_PTR CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)	{
+
 	switch (message)	{ 
 
 		case WM_INITDIALOG :	{

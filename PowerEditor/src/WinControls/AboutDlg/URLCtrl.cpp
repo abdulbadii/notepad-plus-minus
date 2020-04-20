@@ -216,7 +216,7 @@ LRESULT URLCtrl::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)	
             ::SetBkColor(hdc, getCtrlBgColor(GetParent(hwnd))); ///*::GetSysColor(COLOR_3DFACE)*/);
 
 		    // Create an underline font
-		    if (_hfUnderlined == 0)	{
+		    if (!_hfUnderlined)	{
 
 			    // Get the default GUI font
 			    LOGFONT lf;
@@ -254,7 +254,7 @@ LRESULT URLCtrl::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)	
 	    //case WM_SETCURSOR:
         case WM_MOUSEMOVE:	{
 
-            if (_hCursor == 0)
+            if (!_hCursor)
                 _hCursor = ::CreateCursor(::GetModuleHandle(0), 5, 2, 32, 32, XORMask, ANDMask);
 
             SetCursor(_hCursor);

@@ -157,7 +157,7 @@ HTREEITEM TreeView::addItem(const TCHAR *itemName, HTREEITEM hParentItem, int iI
 	tvi.iSelectedImage = iImage;//isNode?INDEX_OPEN_NODE:INDEX_LEAF;
 
 	// Save the full path of file in the item's application-defined data area.
-	tvi.lParam = (filePath == NULL ? 0 : reinterpret_cast<LPARAM>(new generic_string(filePath)));
+	tvi.lParam = (!filePath ? 0 : reinterpret_cast<LPARAM>(new generic_string(filePath)));
 
 	TVINSERTSTRUCT tvInsertStruct;
 	tvInsertStruct.item = tvi;
@@ -239,7 +239,7 @@ HTREEITEM TreeView::searchSubItemByName(const TCHAR *itemName, HTREEITEM hParent
 		tvItem.mask = TVIF_TEXT;
 		SendMessage(_hSelf, TVM_GETITEM, 0, reinterpret_cast<LPARAM>(&tvItem));
 
-		if (lstrcmp(itemName, tvItem.pszText) == 0)	{
+		if (!lstrcmp(itemName, tvItem.pszText))	{
 
 			return hItem;
 		}
@@ -398,7 +398,7 @@ bool TreeView::dropItem()	{
 
 bool TreeView::canBeDropped(HTREEITEM draggedItem, HTREEITEM targetItem)	{
 
-	if (targetItem == NULL)
+	if (!targetItem)
 		return false;
 	if (draggedItem == targetItem)
 		return false;
@@ -417,7 +417,7 @@ bool TreeView::canBeDropped(HTREEITEM draggedItem, HTREEITEM targetItem)	{
 
 bool TreeView::isDescendant(HTREEITEM targetItem, HTREEITEM draggedItem)	{
 
-	if (targetItem == NULL)
+	if (!targetItem)
 		return false;
 
 	if (TreeView_GetRoot(_hSelf) == targetItem)

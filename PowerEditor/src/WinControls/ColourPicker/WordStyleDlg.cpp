@@ -34,8 +34,8 @@
 
 using namespace std;
 
-LRESULT CALLBACK ColourStaticTextHooker::colourStaticProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
-{
+LRESULT CALLBACK ColourStaticTextHooker::colourStaticProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)	{
+
 	switch(Message)	{
 
 		case WM_PAINT:	{
@@ -79,8 +79,8 @@ void WordStyleDlg::updateGlobalOverrideCtrls()	{
 	::SendDlgItemMessage(_hSelf, IDC_GLOBAL_UNDERLINE_CHECK, BM_SETCHECK, nppGUI._globalOverride.enableUnderLine, 0);
 }
 
-INT_PTR CALLBACK WordStyleDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK WordStyleDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam)	{
+
 	switch (Message)	{
 
 		case WM_INITDIALOG :	{
@@ -502,16 +502,16 @@ int WordStyleDlg::whichTabColourIndex()	{
 
 	::SendDlgItemMessage(_hSelf, IDC_STYLES_LIST, LB_GETTEXT, i, reinterpret_cast<LPARAM>(styleName));
 
-	if (lstrcmp(styleName, TABBAR_ACTIVEFOCUSEDINDCATOR) == 0)
+	if (!lstrcmp(styleName, TABBAR_ACTIVEFOCUSEDINDCATOR))
 		return TabBarPlus::activeFocusedTop;
 
-	if (lstrcmp(styleName, TABBAR_ACTIVEUNFOCUSEDINDCATOR) == 0)
+	if (!lstrcmp(styleName, TABBAR_ACTIVEUNFOCUSEDINDCATOR))
 		return TabBarPlus::activeUnfocusedTop;
 
-	if (lstrcmp(styleName, TABBAR_ACTIVETEXT) == 0)
+	if (!lstrcmp(styleName, TABBAR_ACTIVETEXT))
 		return TabBarPlus::activeText;
 
-	if (lstrcmp(styleName, TABBAR_INACTIVETEXT) == 0)
+	if (!lstrcmp(styleName, TABBAR_INACTIVETEXT))
 		return TabBarPlus::inactiveText;
 
 	return -1;
@@ -712,13 +712,13 @@ void WordStyleDlg::setVisualFromStyleList()	{
 	Style & style = getCurrentStyler();
 
 	// Global override style
-	if (style._styleDesc && lstrcmp(style._styleDesc, L"Global override") == 0)	{
+	if (style._styleDesc && !lstrcmp(style._styleDesc, L"Global override"))	{
 
 		showGlobalOverrideCtrls(true);
 	}
 
 	//--Warning text
-	//bool showWarning = ((_currentLexerIndex == 0) && (style._styleID == STYLE_DEFAULT));//?SW_SHOW:SW_HIDE;
+	//bool showWarning = ((!_currentLexerIndex) && (style._styleID == STYLE_DEFAULT));//?SW_SHOW:SW_HIDE;
 
 	COLORREF c = RGB(0x00, 0x00, 0xFF);
 	const size_t strLen = 256;

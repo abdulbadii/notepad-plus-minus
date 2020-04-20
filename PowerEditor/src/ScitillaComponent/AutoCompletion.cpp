@@ -99,7 +99,7 @@ bool AutoCompletion::showApiAndWordComplete()	{
 	bool canStop = false;
 	for (size_t i = 0, kwlen = _keyWordArray.size(); i < kwlen; ++i)	{
 
-		if (_keyWordArray[i].compare(0, len, beginChars) == 0)	{
+		if (!_keyWordArray[i].compare(0, len, beginChars))	{
 
 			if (!isInList(_keyWordArray[i], wordArray))
 				wordArray.push_back(_keyWordArray[i]);
@@ -212,7 +212,7 @@ static bool getRawPath(const generic_string& input, generic_string &rawPath_out)
 	size_t lastOccurrence = input.rfind(L":");
 	if (lastOccurrence == std::string::npos) // No match.
 		return false;
-	else if (lastOccurrence == 0)
+	else if (!lastOccurrence)
 		return false;
 	else if (!std::isalpha(input[lastOccurrence - 1], loc))
 		return false;
@@ -430,7 +430,7 @@ void AutoCompletion::getCloseTag(char *closeTag, size_t closeTagSize, size_t car
 	if (tagHead[1] == '?') // "<?" (Processing Instructions) will be ignored
 		return;
 
-	if (strncmp(tagHead, "<!--", 4) == 0) // Comments will be ignored
+	if (!strncmp(tagHead, "<!--", 4)) // Comments will be ignored
 		return;
 
 	if (isHTML)	{ // for HTML: ignore void elements

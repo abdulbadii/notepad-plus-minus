@@ -141,7 +141,7 @@ tTbData* DockingCont::createToolbar(tTbData data)
 	::SetWindowLongPtr(pTbData->hClient, GWL_EXSTYLE, CHILD_EXSTYLES);
 
 	// restore position if plugin is in floating state
-	if ((_isFloating) && (::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0) == 0))	{
+	if ((_isFloating) && (!::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0)))	{
 
 		reSizeToWH(pTbData->rcFloat);
 	}
@@ -201,7 +201,7 @@ tTbData* DockingCont::findToolbarByName(TCHAR* pszName)
 	// find entry by handle
 	for (size_t iTb = 0, len = _vTbData.size(); iTb < len; ++iTb)	{
 
-		if (lstrcmp(pszName, _vTbData[iTb]->pszName) == 0)	{
+		if (!lstrcmp(pszName, _vTbData[iTb]->pszName))	{
 
 			pTbData = _vTbData[iTb];
 		}
@@ -689,7 +689,7 @@ LRESULT DockingCont::runProcTab(HWND hwnd, UINT Message, WPARAM wParam, LPARAM l
 				return FALSE;
 
 			// notify child windows
-			if (NotifyParent(DMM_CLOSE) == 0)	{
+			if (!NotifyParent(DMM_CLOSE))	{
 
 				hideToolbar((tTbData*)tcItem.lParam);
 			}
@@ -909,8 +909,8 @@ void DockingCont::drawTabItem(DRAWITEMSTRUCT *pDrawItemStruct)	{
 //----------------------------------------------
 //    Process function of dialog
 //
-INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam)	{
+
 	switch (Message)	{ 
 
 		case WM_NCACTIVATE:	{
@@ -1151,7 +1151,7 @@ void DockingCont::doClose()	{
 			continue;
 
 		// notify child windows
-		if (NotifyParent(DMM_CLOSE) == 0)	{
+		if (!NotifyParent(DMM_CLOSE))	{
 
 			// delete tab
 			hideToolbar((tTbData*)tcItem.lParam);
@@ -1162,7 +1162,7 @@ void DockingCont::doClose()	{
 		}
 	}
 
-	if (iItemOff == 0)	{
+	if (!iItemOff)	{
 
 		// hide dialog first
 		this->doDialog(false);
@@ -1452,7 +1452,7 @@ void DockingCont::focusClient()	{
 			return;
 
 		tTbData *tbData = (tTbData *)tcItem.lParam;
-		if (tbData->pszAddInfo && lstrcmp(tbData->pszAddInfo, DM_NOFOCUSWHILECLICKINGCAPTION) == 0)
+		if (tbData->pszAddInfo && !lstrcmp(tbData->pszAddInfo, DM_NOFOCUSWHILECLICKINGCAPTION))
 			return;
 		
 		::SetFocus(tbData->hClient);

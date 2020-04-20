@@ -348,8 +348,8 @@ void ScintillaEditView::init(HINSTANCE hInst, HWND hPere)	{
 	attachDefaultDoc();
 }
 
-LRESULT CALLBACK ScintillaEditView::scintillaStatic_Proc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
-{
+LRESULT CALLBACK ScintillaEditView::scintillaStatic_Proc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)	{
+
 	ScintillaEditView *pScint = (ScintillaEditView *)(::GetWindowLongPtr(hwnd, GWLP_USERDATA));
 
 	if (Message == WM_MOUSEWHEEL || Message == WM_MOUSEHWHEEL)	{
@@ -443,14 +443,14 @@ LRESULT ScintillaEditView::scintillaNew_Proc(HWND hwnd, UINT Message, WPARAM wPa
 
 				// does nothing if still no luck with the selection
 
-				if (selectSize == 0)
+				if (!selectSize)
 					return 0;
 
 				if (selectSize + 1 > sizeof(smallTextBuffer))
 					selectedStr = new char[selectSize + 1];
 				getText(selectedStr, range.cpMin, range.cpMax);
 
-				if (reconvert == NULL)	{
+				if (!reconvert)	{
 
 					// convert the selection to Unicode, and get the number
 					// of bytes required for the converted text
@@ -2770,7 +2770,7 @@ void ScintillaEditView::currentLinesDown() const
 
 void ScintillaEditView::changeCase(__inout wchar_t * const strWToConvert, const int & nbChars, const TextCase & caseToConvert) const
 {
-	if (strWToConvert == nullptr || nbChars == NULL)
+	if (!strWToConvert ||!nbChars)
 		return;
 
 	switch (caseToConvert)	{
@@ -3522,7 +3522,7 @@ void ScintillaEditView::insertNewLineAboveCurrentLine()	{
 
 	generic_string newline = getEOLString();
 	const auto current_line = getCurrentLineNumber();
-	if (current_line == 0)	{
+	if (!current_line)	{
 
 		// Special handling if caret is at first line.
 		insertGenericTextFrom(0, newline.c_str());

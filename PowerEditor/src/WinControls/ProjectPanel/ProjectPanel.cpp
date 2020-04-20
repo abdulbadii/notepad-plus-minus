@@ -45,8 +45,8 @@
 #define INDEX_LEAF           5
 #define INDEX_LEAF_INVALID   6
 
-INT_PTR CALLBACK ProjectPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK ProjectPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)	{
+
     switch (message)	{
 
         case WM_INITDIALOG :	{
@@ -295,43 +295,43 @@ BOOL ProjectPanel::setImageList(int root_clean_id, int root_dirty_id, int projec
 
 	// Add the bmp in the list
 	hbmp = LoadBitmap(_hInst, MAKEINTRESOURCE(root_clean_id));
-	if (hbmp == NULL)
+	if (!hbmp)
 		return FALSE;
 	ImageList_AddMasked(_hImaLst, hbmp, maskColour);
 	DeleteObject(hbmp);
 
 	hbmp = LoadBitmap(_hInst, MAKEINTRESOURCE(root_dirty_id));
-	if (hbmp == NULL)
+	if (!hbmp)
 		return FALSE;
 	ImageList_AddMasked(_hImaLst, hbmp, maskColour);
 	DeleteObject(hbmp);
 
 	hbmp = LoadBitmap(_hInst, MAKEINTRESOURCE(project_id));
-	if (hbmp == NULL)
+	if (!hbmp)
 		return FALSE;
 	ImageList_AddMasked(_hImaLst, hbmp, maskColour);
 	DeleteObject(hbmp);
 
 	hbmp = LoadBitmap(_hInst, MAKEINTRESOURCE(open_node_id));
-	if (hbmp == NULL)
+	if (!hbmp)
 		return FALSE;
 	ImageList_AddMasked(_hImaLst, hbmp, maskColour);
 	DeleteObject(hbmp);
 
 	hbmp = LoadBitmap(_hInst, MAKEINTRESOURCE(closed_node_id));
-	if (hbmp == NULL)
+	if (!hbmp)
 		return FALSE;
 	ImageList_AddMasked(_hImaLst, hbmp, maskColour);
 	DeleteObject(hbmp);
 
 	hbmp = LoadBitmap(_hInst, MAKEINTRESOURCE(leaf_id));
-	if (hbmp == NULL)
+	if (!hbmp)
 		return FALSE;
 	ImageList_AddMasked(_hImaLst, hbmp, maskColour);
 	DeleteObject(hbmp);
 
 	hbmp = LoadBitmap(_hInst, MAKEINTRESOURCE(ivalid_leaf_id));
-	if (hbmp == NULL)
+	if (!hbmp)
 		return FALSE;
 	ImageList_AddMasked(_hImaLst, hbmp, maskColour);
 	DeleteObject(hbmp);
@@ -514,7 +514,7 @@ bool ProjectPanel::buildTreeFrom(TiXmlNode *projectRoot, HTREEITEM hParentItem)	
 		childNode = childNode->NextSibling())
 	{
 		const TCHAR *v = childNode->Value();
-		if (lstrcmp(L"Folder", v) == 0)	{
+		if (!lstrcmp(L"Folder", v))	{
 
 			HTREEITEM addedItem = _treeView.addItem((childNode->ToElement())->Attribute(L"name"), hParentItem, INDEX_CLOSED_NODE);
 			if (!childNode->NoChildren())	{
@@ -524,7 +524,7 @@ bool ProjectPanel::buildTreeFrom(TiXmlNode *projectRoot, HTREEITEM hParentItem)	
 					return false;
 			}
 		}
-		else if (lstrcmp(L"File", v) == 0)	{
+		else if (!lstrcmp(L"File", v))	{
 
 			const TCHAR *strValue = (childNode->ToElement())->Attribute(L"name");
 			generic_string fullPath = getAbsoluteFilePath(strValue);
@@ -757,7 +757,7 @@ NodeType ProjectPanel::getNodeType(HTREEITEM hItem)
 		return nodeType_project;
 	}
 	// Folder
-	else if (tvItem.lParam == NULL)	{
+	else if (!tvItem.lParam)	{
 
 		return nodeType_folder;
 	}
@@ -1277,8 +1277,8 @@ void ProjectPanel::addFilesFromDirectory(HTREEITEM hTreeItem)	{
 	}
 }
 
-INT_PTR CALLBACK FileRelocalizerDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM) 
-{
+INT_PTR CALLBACK FileRelocalizerDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)	{ 
+
 	switch (Message)	{
 
 		case WM_INITDIALOG :	{

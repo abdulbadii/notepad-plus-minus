@@ -49,8 +49,8 @@ void ColumnEditorDlg::display(bool toShow) const
         ::SetFocus(::GetDlgItem(_hSelf, ID_GOLINE_EDIT));
 }
 
-INT_PTR CALLBACK ColumnEditorDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
-{
+INT_PTR CALLBACK ColumnEditorDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)	{
+
 	switch (message)	{ 
 
 		case WM_INITDIALOG :	{
@@ -151,7 +151,7 @@ INT_PTR CALLBACK ColumnEditorDlg::run_dlgProc(UINT message, WPARAM wParam, LPARA
 						int initialNumber = ::GetDlgItemInt(_hSelf, IDC_COL_INITNUM_EDIT, NULL, TRUE);
 						int increaseNumber = ::GetDlgItemInt(_hSelf, IDC_COL_INCREASENUM_EDIT, NULL, TRUE);
 						int repeat = ::GetDlgItemInt(_hSelf, IDC_COL_REPEATNUM_EDIT, NULL, TRUE);
-						if (repeat == 0)	{
+						if (!repeat)	{
 
 							repeat = 1; // Without this we might get an infinite loop while calculating the set "numbers" below.
 						}

@@ -410,8 +410,8 @@ void ShortcutMapper::fillOutBabyGrid()	{
 	_babygrid.setInitialContent(false);
 }
 
-INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)	{
+
 	switch (message)	{ 
 
 		case WM_INITDIALOG :	{
@@ -967,7 +967,7 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
                         // All menu items are shifted up. So we delete the last item
 						::RemoveMenu(hMenu, posBase + static_cast<int32_t>(nbElem), MF_BYPOSITION);
 
-                        if (nbElem == 0)	{ 
+                        if (!nbElem)	{ 
 
                             ::RemoveMenu(hMenu, modifCmd, MF_BYCOMMAND);
                             
@@ -1130,7 +1130,7 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 bool ShortcutMapper::findKeyConflicts(__inout_opt generic_string * const keyConflictLocation,
 										const KeyCombo & itemKeyComboToTest, const size_t & itemIndexToTest) const
 {
-	if (itemKeyComboToTest._key == NULL) //no key assignment
+	if (!itemKeyComboToTest._key) //no key assignment
 		return false;
 
 	bool retIsConflict = false; //returns true when a conflict is found
@@ -1155,7 +1155,7 @@ bool ShortcutMapper::findKeyConflicts(__inout_opt generic_string * const keyConf
 					if (isConflict(vShortcuts[itemIndex].getKeyCombo(), itemKeyComboToTest))	{
 
 						retIsConflict = true;
-						if (keyConflictLocation == nullptr)
+						if (!keyConflictLocation)
 							return retIsConflict;
 						else	{
 
@@ -1189,7 +1189,7 @@ bool ShortcutMapper::findKeyConflicts(__inout_opt generic_string * const keyConf
 					if (isConflict(vShortcuts[itemIndex].getKeyCombo(), itemKeyComboToTest))	{
 
 						retIsConflict = true;
-						if (keyConflictLocation == nullptr)
+						if (!keyConflictLocation)
 							return retIsConflict;
 						else	{
 
@@ -1223,7 +1223,7 @@ bool ShortcutMapper::findKeyConflicts(__inout_opt generic_string * const keyConf
 					if (isConflict(vShortcuts[itemIndex].getKeyCombo(), itemKeyComboToTest))	{
 
 						retIsConflict = true;
-						if (keyConflictLocation == nullptr)
+						if (!keyConflictLocation)
 							return retIsConflict;
 						else	{
 
@@ -1257,7 +1257,7 @@ bool ShortcutMapper::findKeyConflicts(__inout_opt generic_string * const keyConf
 					if (isConflict(vShortcuts[itemIndex].getKeyCombo(), itemKeyComboToTest))	{
 
 						retIsConflict = true;
-						if (keyConflictLocation == nullptr)
+						if (!keyConflictLocation)
 							return retIsConflict;
 						else	{
 
@@ -1294,7 +1294,7 @@ bool ShortcutMapper::findKeyConflicts(__inout_opt generic_string * const keyConf
 						if (isConflict(vShortcuts[itemIndex].getKeyComboByIndex(sciIndex), itemKeyComboToTest))	{
 
 							retIsConflict = true;
-							if (keyConflictLocation == nullptr)
+							if (!keyConflictLocation)
 								return retIsConflict;
 							else	{
 

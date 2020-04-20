@@ -257,7 +257,7 @@ bool TiXmlString::operator == (const TiXmlString & compare) const
 
 		assert( cstring );
 		assert( compare.cstring );
-		return ( lstrcmp( cstring, compare.cstring ) == 0 );
+		return ( !lstrcmp( cstring, compare.cstring ) );
  	}
 	return false;
 }

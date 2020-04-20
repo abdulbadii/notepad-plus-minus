@@ -65,7 +65,7 @@ struct Version	{
 	};
 
 	bool operator == (const Version& v2c) const {
-		return compareTo(v2c) == 0;
+		return !compareTo(v2c);
 	};
 
 	bool operator != (const Version& v2c) const {

@@ -79,8 +79,8 @@ int ValueDlg::reSizeValueBox()	{
 	return extraSize;
 }
 
-INT_PTR CALLBACK ValueDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM) 
-{
+INT_PTR CALLBACK ValueDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)	{ 
+
 	switch (Message)	{
 
 		case WM_INITDIALOG :	{
@@ -122,8 +122,8 @@ INT_PTR CALLBACK ValueDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 
 
 
-INT_PTR CALLBACK ButtonDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM) 
-{
+INT_PTR CALLBACK ButtonDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)	{ 
+
 	switch (Message)	{
 
 		case WM_INITDIALOG :	{

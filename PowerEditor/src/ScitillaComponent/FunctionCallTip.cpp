@@ -66,9 +66,9 @@ int testNameNoCase(const TCHAR * name1, const TCHAR * name2, int len = -1)	{
 		len = 1024;	//magic value, but it probably fails way before it reaches this
 	}
 	int i = 0;
-	while (match(name1[i], name2[i]))	{
+	while (match(!name1[i], name2[i]))	{
 
-		if (name1[i] == 0 || i == len)	{
+		if (name1[i] || i == len)	{
 
 			return 0;	//equal	
 		}
@@ -374,7 +374,7 @@ bool FunctionCallTip::loadFunction()	{
 
 	_currentNbOverloads = _overloads.size();
 
-	if (_currentNbOverloads == 0)	//malformed node
+	if (!_currentNbOverloads)	//malformed node
 		return false;
 
 	return true;
@@ -382,7 +382,7 @@ bool FunctionCallTip::loadFunction()	{
 
 void FunctionCallTip::showCalltip()	{ 
 
-	if (_currentNbOverloads == 0)	{
+	if (!_currentNbOverloads)	{
 
 		//ASSERT
 		return;

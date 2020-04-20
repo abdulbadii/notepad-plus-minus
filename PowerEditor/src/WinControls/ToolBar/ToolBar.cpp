@@ -346,7 +346,7 @@ void ToolBar::reset(bool create)	{
 void ToolBar::registerDynBtn(UINT messageID, toolbarIcons* tIcon)	{
 
 	// Note: Register of buttons only possible before init!
-	if ((_hSelf == NULL) && (messageID != 0) && (tIcon->hToolbarBmp != NULL))	{
+	if ((!_hSelf) && (messageID != 0) && (tIcon->hToolbarBmp != NULL))	{
 
 		tDynamicList		dynList;
 		dynList.message		= messageID;

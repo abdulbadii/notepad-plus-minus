@@ -239,8 +239,8 @@ HINSTANCE Command::run(HWND hWnd, const TCHAR* cwd)	{
 	return res;
 }
 
-INT_PTR CALLBACK RunDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK RunDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)	{
+
 	switch (message)	{ 
 
 		case NPPM_INTERNAL_FINDKEYCONFLICTS:	{
@@ -293,14 +293,14 @@ INT_PTR CALLBACK RunDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 						HMENU hRunMenu = ::GetSubMenu(mainMenu, MENUINDEX_RUN);
 						int const posBase = 2;
 						
-						if (nbCmd == 0)
+						if (!nbCmd)
 							::InsertMenu(hRunMenu, posBase - 1, MF_BYPOSITION, static_cast<unsigned int>(-1), 0);
 						
 						theUserCmds.push_back(uc);
 						::InsertMenu(hRunMenu, posBase + nbCmd, MF_BYPOSITION, cmdID, uc.toMenuItemString().c_str());
 
 						NppParameters& nppParams = NppParameters::getInstance();
-                        if (nbCmd == 0)	{
+                        if (!nbCmd)	{
 
                             // Insert the separator and modify/delete command
 							::InsertMenu(hRunMenu, posBase + nbCmd + 1, MF_BYPOSITION, static_cast<unsigned int>(-1), 0);

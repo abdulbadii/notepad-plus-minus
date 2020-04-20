@@ -102,8 +102,8 @@ bool isRelatedRootFolder(const generic_string & relatedRoot, const generic_strin
 	return relatedRootArray[index2Compare] == subFolderArray[index2Compare];
 }
 
-INT_PTR CALLBACK FileBrowser::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK FileBrowser::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)	{
+
     switch (message)	{
 
         case WM_INITDIALOG :	{
@@ -415,31 +415,31 @@ BOOL FileBrowser::setImageList(int root_clean_id, int root_dirty_id, int open_no
 
 	// Add the bmp in the list
 	hbmp = LoadBitmap(_hInst, MAKEINTRESOURCE(root_clean_id));
-	if (hbmp == NULL)
+	if (!hbmp)
 		return FALSE;
 	ImageList_AddMasked(_hImaLst, hbmp, maskColour);
 	DeleteObject(hbmp);
 
 	hbmp = LoadBitmap(_hInst, MAKEINTRESOURCE(root_dirty_id));
-	if (hbmp == NULL)
+	if (!hbmp)
 		return FALSE;
 	ImageList_AddMasked(_hImaLst, hbmp, maskColour);
 	DeleteObject(hbmp);
 
 	hbmp = LoadBitmap(_hInst, MAKEINTRESOURCE(open_node_id));
-	if (hbmp == NULL)
+	if (!hbmp)
 		return FALSE;
 	ImageList_AddMasked(_hImaLst, hbmp, maskColour);
 	DeleteObject(hbmp);
 
 	hbmp = LoadBitmap(_hInst, MAKEINTRESOURCE(closed_node_id));
-	if (hbmp == NULL)
+	if (!hbmp)
 		return FALSE;
 	ImageList_AddMasked(_hImaLst, hbmp, maskColour);
 	DeleteObject(hbmp);
 
 	hbmp = LoadBitmap(_hInst, MAKEINTRESOURCE(leaf_id));
-	if (hbmp == NULL)
+	if (!hbmp)
 		return FALSE;
 	ImageList_AddMasked(_hImaLst, hbmp, maskColour);
 	DeleteObject(hbmp);
@@ -476,10 +476,10 @@ generic_string FileBrowser::getNodePath(HTREEITEM node) const
 		generic_string folderName = _treeView.getItemDisplayName(parent);
 	
 		HTREEITEM temp = _treeView.getParent(parent);
-		if (temp == nullptr)	{
+		if (!temp)	{
 
 			LPARAM param = _treeView.getItemParam(parent);
-			folderName = (param == 0) ? L"": *((generic_string *)param);
+			folderName = (!param) ? L"": *((generic_string *)param);
 		}
 		parent = temp;
 		fullPathArray.push_back(folderName);
@@ -725,7 +725,7 @@ void FileBrowser::showContextMenu(int x, int y)	{
 	ScreenToClient(_treeView.getHSelf(), &(tvHitInfo.pt));
 	hTreeItem = TreeView_HitTest(_treeView.getHSelf(), &tvHitInfo);
 
-	if (tvHitInfo.hItem == nullptr)	{
+	if (!tvHitInfo.hItem)	{
 
 		TrackPopupMenu(_hGlobalMenu, TPM_LEFTALIGN, x, y, 0, _hSelf, NULL);
 	}
@@ -763,7 +763,7 @@ void FileBrowser::popupMenuCmd(int cmdID)	{
 			if (not selectedNode) return;
 
 			generic_string *rootPath = (generic_string *)_treeView.getItemParam(selectedNode);
-			if (_treeView.getParent(selectedNode) != nullptr || rootPath == nullptr)
+			if (_treeView.getParent(selectedNode) != nullptr || !rootPath)
 				return;
 
 			size_t nbFolderUpdaters = _folderUpdaters.size();
@@ -887,7 +887,7 @@ void FileBrowser::popupMenuCmd(int cmdID)	{
 
 void FileBrowser::getDirectoryStructure(const TCHAR *dir, const std::vector<generic_string> & patterns, FolderInfo & directoryStructure, bool isRecursive, bool isInHiddenDir)	{
 
-	if (directoryStructure._parent == nullptr) // Root!
+	if (!directoryStructure._parent) // Root!
 		directoryStructure.setRootPath(dir);
 
 	generic_string dirFilter(dir);
@@ -1035,7 +1035,7 @@ void FileBrowser::addRootFolder(generic_string rootFolderPath)	{
 HTREEITEM FileBrowser::createFolderItemsFromDirStruct(HTREEITEM hParentItem, const FolderInfo & directoryStructure)	{
 
 	HTREEITEM hFolderItem = nullptr;
-	if (directoryStructure._parent == nullptr && hParentItem == nullptr)	{
+	if (!directoryStructure._parent && !hParentItem)	{
 
 		TCHAR rootPath[MAX_PATH];
 		wcscpy_s(rootPath, directoryStructure._rootPath.c_str());
@@ -1068,7 +1068,7 @@ HTREEITEM FileBrowser::getRootFromFullPath(const generic_string & rootPath) cons
 {
 	HTREEITEM node = nullptr;
 	for (HTREEITEM hItemNode = _treeView.getRoot();
-		hItemNode != nullptr && node == nullptr;
+		hItemNode != nullptr && !node;
 		hItemNode = _treeView.getNextSibling(hItemNode))
 	{
 		TVITEM tvItem;
@@ -1088,7 +1088,7 @@ HTREEITEM FileBrowser::findChildNodeFromName(HTREEITEM parent, const generic_str
 	HTREEITEM childNodeFound = nullptr;
 
 	for (HTREEITEM hItemNode = _treeView.getChildFrom(parent);
-		hItemNode != NULL && childNodeFound == nullptr;
+		hItemNode != NULL && !childNodeFound;
 		hItemNode = _treeView.getNextSibling(hItemNode))
 	{
 		TCHAR textBuffer[MAX_PATH];
@@ -1139,7 +1139,7 @@ generic_string FileBrowser::getSelectedItemPath() const
 
 bool FileBrowser::addInTree(const generic_string& rootPath, const generic_string& addItemFullPath, HTREEITEM node, vector<generic_string> linarPathArray)	{
 
-	if (node == nullptr)	{ // it's a root. Search the right root with rootPath
+	if (!node)	{ // it's a root. Search the right root with rootPath
 
 		// Search
 		if ((node = getRootFromFullPath(rootPath)) == nullptr)
@@ -1195,7 +1195,7 @@ bool FileBrowser::addInTree(const generic_string& rootPath, const generic_string
 
 HTREEITEM FileBrowser::findInTree(const generic_string& rootPath, HTREEITEM node, std::vector<generic_string> linarPathArray) const
 {
-	if (node == nullptr)	{ // it's a root. Search the right root with rootPath
+	if (!node)	{ // it's a root. Search the right root with rootPath
 
 		// Search
 		if ((node = getRootFromFullPath(rootPath)) == nullptr)
@@ -1235,7 +1235,7 @@ HTREEITEM FileBrowser::findInTree(const generic_string& rootPath, HTREEITEM node
 bool FileBrowser::deleteFromTree(const generic_string& rootPath, HTREEITEM node, const std::vector<generic_string>& linarPathArray)	{
 
 	HTREEITEM foundItem = findInTree(rootPath, node, linarPathArray);
-	if (foundItem == nullptr)
+	if (!foundItem)
 			return false;
 
 	// found it, delete it
@@ -1246,7 +1246,7 @@ bool FileBrowser::deleteFromTree(const generic_string& rootPath, HTREEITEM node,
 bool FileBrowser::renameInTree(const generic_string& rootPath, HTREEITEM node, const std::vector<generic_string>& linarPathArrayFrom, const generic_string & renameTo)	{
 
 	HTREEITEM foundItem = findInTree(rootPath, node, linarPathArrayFrom);
-	if (foundItem == nullptr)
+	if (!foundItem)
 			return false;
 
 	// found it, rename it
@@ -1411,8 +1411,8 @@ LPCWSTR explainAction(DWORD dwAction)	{
 };
 
 
-DWORD WINAPI FolderUpdater::watching(void *params)
-{
+DWORD WINAPI FolderUpdater::watching(void *params)	{
+
 	FolderUpdater *thisFolderUpdater = (FolderUpdater *)params;
 
 	generic_string dir2Watch = (thisFolderUpdater->_rootFolder)._rootPath;

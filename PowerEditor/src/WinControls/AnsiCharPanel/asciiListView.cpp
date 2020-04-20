@@ -408,7 +408,7 @@ void AsciiListView::setValues(int codepage)	{
 		generic_sprintf(hex, L"%02X", i);
 		generic_string s = getAscii(static_cast<unsigned char>(i));
 
-		if (codepage == 0 || codepage == 1252)	{
+		if (!codepage || codepage == 1252)	{
 
 			if ((i >= 32 && i <= 126) || (i >= 160 && i <= 255))	{
 

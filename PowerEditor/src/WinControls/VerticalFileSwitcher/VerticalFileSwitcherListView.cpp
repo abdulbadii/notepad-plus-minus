@@ -112,7 +112,7 @@ void VerticalFileSwitcherListView::initList()	{
 		::GetClientRect(_hParent, &rc);
 		int totalWidth = rc.right - rc.left;
 		
-		if (columnCount == 0)	{
+		if (!columnCount)	{
 
 			generic_string nameStr = pNativeSpeaker->getAttrNameStr(L"Name", FS_ROOTNODE, FS_CLMNNAME);
 			insertColumn(nameStr.c_str(), (isExtColumn ? totalWidth - 50 : totalWidth), 0);

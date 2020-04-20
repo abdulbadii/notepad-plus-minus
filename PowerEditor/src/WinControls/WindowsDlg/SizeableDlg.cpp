@@ -59,8 +59,8 @@ LRESULT SizeableDlg::onWinMgr(WPARAM, LPARAM)	{
 	return 0;
 }
 
-INT_PTR CALLBACK SizeableDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK SizeableDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)	{
+
 	switch (message)	{
 
 		case WM_INITDIALOG:	{

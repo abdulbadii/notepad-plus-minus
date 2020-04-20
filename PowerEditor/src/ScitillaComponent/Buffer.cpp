@@ -47,7 +47,7 @@ namespace // anonymous
 {
 	static EolType getEOLFormatForm(const char* const data, size_t length, EolType defvalue = EolType::osdefault)
 	{
-		assert(length == 0 or data != nullptr && "invalid buffer for getEOLFormatForm()");
+		assert(!length or data != nullptr && "invalid buffer for getEOLFormatForm()");
 
 		for (size_t i = 0; i != length; ++i)	{
 
@@ -196,13 +196,13 @@ void Buffer::setFileName(const TCHAR *fn, LangType defaultLang)	{
 
 	if (newLang == defaultLang || newLang == L_TEXT)	{	//language can probably be refined
 
-		if ((OrdinalIgnoreCaseCompareStrings(_fileName, L"makefile") == 0) || (OrdinalIgnoreCaseCompareStrings(_fileName, L"GNUmakefile") == 0))
+		if ((!OrdinalIgnoreCaseCompareStrings(_fileName, L"makefile")) || (!OrdinalIgnoreCaseCompareStrings(_fileName, L"GNUmakefile")))
 			newLang = L_MAKEFILE;
-		else if (OrdinalIgnoreCaseCompareStrings(_fileName, L"CmakeLists.txt") == 0)
+		else if (!OrdinalIgnoreCaseCompareStrings(_fileName, L"CmakeLists.txt"))
 			newLang = L_CMAKE;
-		else if ((OrdinalIgnoreCaseCompareStrings(_fileName, L"SConstruct") == 0) || (OrdinalIgnoreCaseCompareStrings(_fileName, L"SConscript") == 0) || (OrdinalIgnoreCaseCompareStrings(_fileName, L"wscript") == 0))
+		else if ((!OrdinalIgnoreCaseCompareStrings(_fileName, L"SConstruct")) || (!OrdinalIgnoreCaseCompareStrings(_fileName, L"SConscript")) || (!OrdinalIgnoreCaseCompareStrings(_fileName, L"wscript")))
 			newLang = L_PYTHON;
-		else if ((OrdinalIgnoreCaseCompareStrings(_fileName, L"Rakefile") == 0) || (OrdinalIgnoreCaseCompareStrings(_fileName, L"Vagrantfile") == 0))
+		else if ((!OrdinalIgnoreCaseCompareStrings(_fileName, L"Rakefile")) || (!OrdinalIgnoreCaseCompareStrings(_fileName, L"Vagrantfile")))
 			newLang = L_RUBY;
 	}
 
@@ -523,7 +523,7 @@ void FileManager::checkFilesystemChanges(bool bCheckOnlyCurrentBuffer)	{
 
 			if (i >= int(_nbBufs))	{
 
-				if (_nbBufs == 0)
+				if (!_nbBufs)
 					return;
 
 				i = int(_nbBufs) - 1;
@@ -596,7 +596,7 @@ void FileManager::closeBuffer(BufferID id, ScintillaEditView * identifier)	{
 BufferID FileManager::loadFile(const TCHAR * filename, Document doc, int encoding, const TCHAR *backupFileName, FILETIME fileNameTimestamp)
 {
 	bool ownDoc = false;
-	if (doc == NULL)	{
+	if (!doc)	{
 
 		doc = (Document)_pscratchTilla->execute(SCI_CREATEDOCUMENT);
 		ownDoc = true;
@@ -885,7 +885,7 @@ bool FileManager::backupCurrentBuffer()	{
 				if (encoding == -1)	{ //no special encoding; can be handled directly by Utf8_16_Write
 
 					items_written = UnicodeConvertor.fwrite(buf, lengthDoc);
-					if (lengthDoc == 0)
+					if (!lengthDoc)
 						items_written = 1;
 				}
 				else	{
@@ -904,7 +904,7 @@ bool FileManager::backupCurrentBuffer()	{
 						grabSize -= incompleteMultibyteChar;
 						items_written = UnicodeConvertor.fwrite(newData, newDataLen);
 					}
-					if (lengthDoc == 0)
+					if (!lengthDoc)
 						items_written = 1;
 				}
 				UnicodeConvertor.fclose();
@@ -1012,7 +1012,7 @@ bool FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool isCopy, g
 		if (encoding == -1)	{ //no special encoding; can be handled directly by Utf8_16_Write
 
 			items_written = UnicodeConvertor.fwrite(buf, lengthDoc);
-			if (lengthDoc == 0)
+			if (!lengthDoc)
 				items_written = 1;
 		}
 		else	{
@@ -1031,7 +1031,7 @@ bool FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool isCopy, g
 				grabSize -= incompleteMultibyteChar;
 				items_written = UnicodeConvertor.fwrite(newData, newDataLen);
 			}
-			if (lengthDoc == 0)
+			if (!lengthDoc)
 				items_written = 1;
 		}
 
@@ -1229,7 +1229,7 @@ LangType FileManager::detectLanguageFromTextBegining(const unsigned char *data, 
 	std::string shebang = "#!";
 
 	size_t foundPos = buf2Test.find(shebang);
-	if (foundPos == 0)	{
+	if (!foundPos)	{
 
 		// Make a list of the most commonly used languages
 		const size_t NB_SHEBANG_LANGUAGES = 6;
@@ -1268,7 +1268,7 @@ LangType FileManager::detectLanguageFromTextBegining(const unsigned char *data, 
 	for (i = 0; i < NB_FIRST_LINE_LANGUAGES; ++i)	{
 
 		foundPos = buf2Test.find(languages[i].pattern);
-		if (foundPos == 0)	{
+		if (!foundPos)	{
 
 			return languages[i].lang;
 		}
@@ -1348,7 +1348,7 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, char* data,
 		do
 		{
 			lenFile = fread(data+incompleteMultibyteChar, 1, blockSize-incompleteMultibyteChar, fp) + incompleteMultibyteChar;
-			if (lenFile == 0) break;
+			if (!lenFile) break;
 
             if (isFirstTime)	{
 
@@ -1433,7 +1433,7 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, char* data,
 		fileFormat._eolFormat = ndds._format;
 
 		//for empty files, if the default for new files is UTF8, and "Apply to opened ANSI files" is set, apply it
-		if (fileSize == 0)	{
+		if (!fileSize)	{
 
 			if (ndds._unicodeMode == uniCookie && ndds._openAnsiAsUtf8)
 				fileFormat._encoding = SC_CP_UTF8;

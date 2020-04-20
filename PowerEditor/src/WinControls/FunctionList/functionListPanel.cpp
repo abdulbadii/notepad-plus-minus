@@ -569,19 +569,19 @@ BOOL FunctionListPanel::setTreeViewImageList(int root_id, int node_id, int leaf_
 
 	// Add the bmp in the list
 	hbmp = LoadBitmap(_hInst, MAKEINTRESOURCE(root_id));
-	if (hbmp == NULL)
+	if (!hbmp)
 		return FALSE;
 	ImageList_AddMasked(_hTreeViewImaLst, hbmp, maskColour);
 	DeleteObject(hbmp);
 
 	hbmp = LoadBitmap(_hInst, MAKEINTRESOURCE(node_id));
-	if (hbmp == NULL)
+	if (!hbmp)
 		return FALSE;
 	ImageList_AddMasked(_hTreeViewImaLst, hbmp, maskColour);
 	DeleteObject(hbmp);
 
 	hbmp = LoadBitmap(_hInst, MAKEINTRESOURCE(leaf_id));
-	if (hbmp == NULL)
+	if (!hbmp)
 		return FALSE;
 	ImageList_AddMasked(_hTreeViewImaLst, hbmp, maskColour);
 	DeleteObject(hbmp);
@@ -663,8 +663,8 @@ void FunctionListPanel::setSort(bool isEnabled)	{
 	::SendMessage(_hToolbarMenu, TB_SETBUTTONINFO, IDC_SORTBUTTON_FUNCLIST, reinterpret_cast<LPARAM>(&tbbuttonInfo));
 }
 
-INT_PTR CALLBACK FunctionListPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK FunctionListPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)	{
+
     switch (message)	{
 
 		// Make edit field red if not found

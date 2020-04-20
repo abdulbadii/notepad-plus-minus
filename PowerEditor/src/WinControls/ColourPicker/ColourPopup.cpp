@@ -53,8 +53,8 @@ void ColourPopup::create(int dialogID)	{
 	display();
 }
 
-INT_PTR CALLBACK ColourPopup::dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
-{
+INT_PTR CALLBACK ColourPopup::dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)	{ 
+
 	switch (message)	{ 
 
 		case WM_MEASUREITEM:	{
@@ -86,8 +86,8 @@ INT_PTR CALLBACK ColourPopup::dlgProc(HWND hwnd, UINT message, WPARAM wParam, LP
 	}
 }
 
-INT_PTR CALLBACK ColourPopup::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK ColourPopup::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)	{
+
 
 	switch (message)	{
 

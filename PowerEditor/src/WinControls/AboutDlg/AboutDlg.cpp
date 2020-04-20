@@ -35,8 +35,8 @@
 
 
 
-INT_PTR CALLBACK AboutDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK AboutDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)	{
+
 	switch (message)	{
 
         case WM_INITDIALOG :	{
@@ -121,8 +121,8 @@ void AboutDlg::doDialog()	{
 }
 
 
-INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /*lParam*/)
-{
+INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /*lParam*/)	{
+
 	switch (message)	{
 
 		case WM_INITDIALOG:	{
@@ -337,8 +337,8 @@ void DoSaveOrNotBox::changeLang()	{
 	::SetDlgItemText(_hSelf, IDC_DOSAVEORNOTTEX, msg.c_str());
 }
 
-INT_PTR CALLBACK DoSaveOrNotBox::run_dlgProc(UINT message, WPARAM wParam, LPARAM /*lParam*/)
-{
+INT_PTR CALLBACK DoSaveOrNotBox::run_dlgProc(UINT message, WPARAM wParam, LPARAM /*lParam*/)	{
+
 	switch (message)	{
 
 		case WM_INITDIALOG :	{

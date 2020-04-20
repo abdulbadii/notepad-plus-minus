@@ -111,7 +111,7 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
         // for retrieve it in Notepad_plus_Proc from
         // the CREATESTRUCT.lpCreateParams afterward.
 
-	if (NULL == _hSelf)
+	if (!_hSelf)
 		throw std::runtime_error("Notepad_plus_Window::init : CreateWindowEx() function return null");
 
 
@@ -255,7 +255,7 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 
 /* 	if (!cmdLineParams->_easterEggName.empty())
 	{
-		if (cmdLineParams->_quoteType == 0)	{ // Easter Egg Name
+		if (!cmdLineParams->_quoteType)	{ // Easter Egg Name
 
 			int iQuote = _notepad_plus_plus_core.getQuoteIndexFrom(cmdLineParams->_easterEggName.c_str());
 			if (iQuote != -1)	{

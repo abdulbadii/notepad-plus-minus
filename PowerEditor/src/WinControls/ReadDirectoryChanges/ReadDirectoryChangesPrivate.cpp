@@ -62,7 +62,7 @@ CReadChangesRequest::CReadChangesRequest(CReadChangesServer* pServer, LPCTSTR sz
 CReadChangesRequest::~CReadChangesRequest()
 {
 	// RequestTermination() must have been called successfully.
-	assert(m_hDirectory == NULL);
+	assert(!m_hDirectory);
 }
 
 
@@ -125,7 +125,7 @@ VOID CALLBACK CReadChangesRequest::NotificationCompletion(
 
 	// Can't use sizeof(FILE_NOTIFY_INFORMATION) because
 	// the structure is padded to 16 bytes.
-	assert((dwNumberOfBytesTransfered == 0) ||
+	assert((!dwNumberOfBytesTransfered) ||
 		(dwNumberOfBytesTransfered >= offsetof(FILE_NOTIFY_INFORMATION, FileName) + sizeof(WCHAR)));
 
 	pBlock->BackupBuffer(dwNumberOfBytesTransfered);

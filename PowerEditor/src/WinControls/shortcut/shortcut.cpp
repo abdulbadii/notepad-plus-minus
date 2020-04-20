@@ -234,7 +234,7 @@ KeyCombo ScintillaKeyMap::getKeyComboByIndex(size_t index) const
 
 void ScintillaKeyMap::setKeyComboByIndex(int index, KeyCombo combo)	{
 
-	if (combo._key == 0 && (_size > 1))	{
+	if (!combo._key && (_size > 1))	{
 	//remove the item if possible
 		_keyCombos.erase(_keyCombos.begin() + index);
 	}
@@ -252,7 +252,7 @@ void ScintillaKeyMap::removeKeyComboByIndex(size_t index)	{
 
 int ScintillaKeyMap::addKeyCombo(KeyCombo combo)	{
 	//returns index where key is added, or -1 when invalid
-	if (combo._key == 0)	//do not allow to add disabled keycombos
+	if (!combo._key)	//do not allow to add disabled keycombos
 		return -1;
 	if (!isEnabled())	{
 	//disabled, override current combo with new enabled one
@@ -380,8 +380,8 @@ void Shortcut::updateConflictState(const bool endSession) const
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_CONFLICT_STATIC), isConflict ? SW_SHOW : SW_HIDE);
 }
 
-INT_PTR CALLBACK Shortcut::run_dlgProc(UINT Message, WPARAM wParam, LPARAM) 
-{
+INT_PTR CALLBACK Shortcut::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)	{ 
+
 	switch (Message)	{
 
 		case WM_INITDIALOG :	{
@@ -907,7 +907,7 @@ void ScintillaAccelerator::updateKeys()	{
 
 				updateMenuItemByID(skm, skm.getMenuCmdID());
 			}
-			if (j == 0)	//j is unsigned, so default method doesnt work
+			if (!j)	//j is unsigned, so default method doesnt work
 				break;
 		}
 	}
@@ -954,7 +954,7 @@ void ScintillaKeyMap::applyToCurrentIndex()	{
 void ScintillaKeyMap::validateDialog()	{
 
 	bool valid = isValid();	//current combo valid?
-	bool isDisabling = _keyCombo._key == 0;	//true if this keycombo were to disable the shortcut
+	bool isDisabling = !_keyCombo._key;	//true if this keycombo were to disable the shortcut
 	bool isDisabled = !isEnabled();	//true if this shortcut already is 
 	bool isDuplicate = false; //true if already in the list
 
@@ -998,8 +998,8 @@ void ScintillaKeyMap::updateListItem(int index)	{
 	::SendDlgItemMessage(_hSelf, IDC_LIST_KEYS, LB_DELETESTRING, index+1, 0);
 }
 
-INT_PTR CALLBACK ScintillaKeyMap::run_dlgProc(UINT Message, WPARAM wParam, LPARAM) 
-{
+INT_PTR CALLBACK ScintillaKeyMap::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)	{ 
+
 	
 	switch (Message)	{
 

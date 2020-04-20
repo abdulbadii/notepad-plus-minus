@@ -24,8 +24,8 @@
 #include "Parameters.h"
 #include <shlwapi.h>
 
-INT_PTR CALLBACK HashFromFilesDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /*lParam*/)
-{
+INT_PTR CALLBACK HashFromFilesDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /*lParam*/)	{
+
 	switch (message)	{ 
 
 		case WM_INITDIALOG:	{
@@ -292,8 +292,8 @@ void HashFromTextDlg::generateHashPerLine()	{
 	}
 }
 
-INT_PTR CALLBACK HashFromTextDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /*lParam*/)
-{
+INT_PTR CALLBACK HashFromTextDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /*lParam*/)	{
+
 	switch (message)	{ 
 
 		case WM_INITDIALOG:	{

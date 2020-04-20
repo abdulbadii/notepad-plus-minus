@@ -111,7 +111,7 @@ public:
 	Shortcut & operator=(const Shortcut & sc) {
 		//Do not allow setting empty names
 		//So either we have an empty name or the other name has to be set
-		if (_name[0] == 0 || sc._name[0] != 0) {
+		if (!_name[0] || sc._name[0] != 0) {
 			setName(sc.getMenuName());
 		}
 		_keyCombo = sc._keyCombo;
@@ -137,7 +137,7 @@ public:
     };
 
 	virtual bool isValid() const { //valid should only be used in cases where the shortcut isEnabled().
-		if (_keyCombo._key == 0)
+		if (!_keyCombo._key)
 			return true;	//disabled _keyCombo always valid, just disabled
 
 		//These keys need a modifier, else invalid
@@ -147,7 +147,7 @@ public:
 		// the remaining keys are always valid
 		return true;
 	};
-	virtual bool isEnabled() const {	//true if _keyCombo != 0, false if _keyCombo == 0, in which case no accelerator should be made
+	virtual bool isEnabled() const {	//true if _keyCombo != 0, false if !_keyCombo, in which case no accelerator should be made
 		return (_keyCombo._key != 0);
 	};
 
@@ -236,8 +236,8 @@ public:
 	generic_string toString() const;
 	generic_string toString(size_t index) const;
 
-	INT_PTR doDialog()
-	{
+	INT_PTR doDialog()	{
+
 		return ::DialogBoxParam(_hInst, MAKEINTRESOURCE(IDD_SHORTCUTSCINT_DLG), _hParent, dlgProc, reinterpret_cast<LPARAM>(this));
     };
 

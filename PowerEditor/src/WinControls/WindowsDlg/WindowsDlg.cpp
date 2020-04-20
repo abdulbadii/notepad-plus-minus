@@ -111,7 +111,7 @@ struct NumericStringEquivalence	{
 			if (_istdigit(*str1) && _istdigit(*str2))	{
 
 				lcmp = generic_strtol(str1, &p1, 10) - generic_strtol(str2, &p2, 10);
-				if ( lcmp == 0 )
+				if ( !lcmp )
 					lcmp = static_cast<int32_t>((p2 - str2) - (p1 - str1));
 				if ( lcmp != 0 )
 					break;
@@ -163,7 +163,7 @@ struct BufferEquivalent	{
 			Buffer * b1 = MainFileManager.getBufferByID(bid1);
 			Buffer * b2 = MainFileManager.getBufferByID(bid2);
 			
-			if (_iColumn == 0)	{
+			if (!_iColumn)	{
 
 				const TCHAR *s1 = b1->getFileName();
 				const TCHAR *s2 = b2->getFileName();
@@ -238,8 +238,8 @@ void WindowsDlg::init(HINSTANCE hInst, HWND parent)	{
 	_pTab = NULL;
 }
 
-INT_PTR CALLBACK WindowsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK WindowsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)	{
+
 	switch (message)	{
 
 		case WM_INITDIALOG :	{
@@ -323,7 +323,7 @@ INT_PTR CALLBACK WindowsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPa
 						//const Buffer& buffer = _pView->getBufferAt(index);
 						BufferID bufID = _pTab->getBufferByIndex(index);
 						Buffer * buf = MainFileManager.getBufferByID(bufID);
-						if (pLvdi->item.iSubItem == 0)	{ // file name
+						if (!pLvdi->item.iSubItem)	{ // file name
 
 							int len = pLvdi->item.cchTextMax;
 							const TCHAR *fileName = buf->getFileName();
@@ -450,7 +450,7 @@ void WindowsDlg::doColumnSort()	{
 void WindowsDlg::updateButtonState()	{
 
 	int nSelection = ListView_GetSelectedCount(_hList);
-	if (nSelection == 0)	{
+	if (!nSelection)	{
 
 		EnableWindow(GetDlgItem(_hSelf, IDOK), FALSE);
 		EnableWindow(GetDlgItem(_hSelf, IDC_WINDOWS_SAVE), FALSE);

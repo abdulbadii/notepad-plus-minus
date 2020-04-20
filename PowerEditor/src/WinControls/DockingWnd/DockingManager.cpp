@@ -45,8 +45,8 @@ static	HHOOK			gWinCallHook = NULL;
 LRESULT CALLBACK focusWndProc(int nCode, WPARAM wParam, LPARAM lParam);
 
 // Callback function that handles messages (to test focus)
-LRESULT CALLBACK focusWndProc(int nCode, WPARAM wParam, LPARAM lParam)
-{
+LRESULT CALLBACK focusWndProc(int nCode, WPARAM wParam, LPARAM lParam)	{
+
 	if (nCode == HC_ACTION && hWndServer)	{
 
 		DockingManager *pDockingManager = (DockingManager *)::GetWindowLongPtr(hWndServer, GWLP_USERDATA);
@@ -181,8 +181,8 @@ void DockingManager::destroy()	{
 	::DestroyWindow(_hSelf);
 }
 
-LRESULT CALLBACK DockingManager::staticWinProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
+LRESULT CALLBACK DockingManager::staticWinProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)	{
+
 	DockingManager *pDockingManager = NULL;
 	switch (message)	{
 
@@ -361,7 +361,7 @@ LRESULT DockingManager::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 
 			tTbData	TbData	= *(reinterpret_cast<DockingCont*>(lParam))->getDataOfActiveTb();
 			LRESULT res = SendNotify(TbData.hClient, DMN_CLOSE);	// Be sure the active item is OK with closing
-			if (res == 0)	// Item will be closing?
+			if (!res)	// Item will be closing?
 				::PostMessage(_hParent, WM_ACTIVATE, WA_ACTIVE, 0);	// Tell editor to take back focus
 			return res;
 		}
@@ -569,7 +569,7 @@ void DockingManager::createDockableDlg(tTbData data, int iCont, bool isVisible)	
 	if ((data.uMask & DWS_ICONTAB) && data.hIconTab != NULL)	{
 
 		// create image list if not exist
-		if (_hImageList == NULL)	{
+		if (!_hImageList)	{
 
 			int iconDpiDynamicalSize = NppParameters::getInstance()._dpiManager.scaleY(14);
 			_hImageList = ::ImageList_Create(iconDpiDynamicalSize,iconDpiDynamicalSize,ILC_COLOR8, 0, 0);

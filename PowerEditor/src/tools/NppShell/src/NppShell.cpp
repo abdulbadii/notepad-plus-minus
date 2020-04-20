@@ -83,7 +83,7 @@ int APIENTRY DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 // DllCanUnloadNow
 //---------------------------------------------------------------------------
 STDAPI DllCanUnloadNow(void) {
-	return (_cRef == 0 ? S_OK : S_FALSE);
+	return (!_cRef ? S_OK : S_FALSE);
 }
 
 //---------------------------------------------------------------------------
@@ -340,7 +340,7 @@ INT_PTR CALLBACK DlgProcSettings(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 							result = RegSetValueEx(settingKey, NULL, 0,REG_SZ, (LPBYTE)szGUID, (lstrlen(szGUID)+1)*sizeof(TCHAR));
 							RegCloseKey(settingKey);
 						}
-					} else if (showMenu == 0) {
+					} else if (!showMenu) {
 						RegDeleteKey(HKEY_CLASSES_ROOT, szShellExtensionKey);
 					}
 
@@ -350,7 +350,7 @@ INT_PTR CALLBACK DlgProcSettings(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 							result = RegSetValueEx(settingKey, NULL, 0,REG_SZ, (LPBYTE)szGUID, (lstrlen(szGUID)+1)*sizeof(TCHAR));
 							RegCloseKey(settingKey);
 						}
-					} else if (showIcon == 0) {
+					} else if (!showIcon) {
 						RegDeleteKey(HKEY_CLASSES_ROOT, L"Notepad++_file\\shellex\\IconHandler");
 						RegDeleteKey(HKEY_CLASSES_ROOT, L"Notepad++_file\\shellex");
 					}
@@ -700,7 +700,7 @@ STDMETHODIMP CShellExt::HandleMenuMsg2(UINT uMsg, WPARAM /*wParam*/, LPARAM lPar
 		case WM_MEASUREITEM: {	//for owner drawn menu
 			MEASUREITEMSTRUCT * lpdis = (MEASUREITEMSTRUCT*) lParam;
 
-			if (lpdis == NULL)// || lpdis->itemID != m_menuID)
+			if (!lpdis)// || lpdis->itemID != m_menuID)
 				break;
 
 			if (m_showIcon) {
@@ -715,7 +715,7 @@ STDMETHODIMP CShellExt::HandleMenuMsg2(UINT uMsg, WPARAM /*wParam*/, LPARAM lPar
 		case WM_DRAWITEM: {		//for owner drawn menu
 			//Assumes proper font already been set
 			DRAWITEMSTRUCT * lpdis = (DRAWITEMSTRUCT*) lParam;
-			if ((lpdis == NULL) || (lpdis->CtlType != ODT_MENU))
+			if ((!lpdis) || (lpdis->CtlType != ODT_MENU))
 				break;
 
 			if (m_showIcon) {
@@ -764,7 +764,7 @@ HRESULT STDMETHODCALLTYPE CShellExt::Load(LPCOLESTR pszFileName, DWORD /*dwMode*
 // *** IExtractIcon methods ***
 STDMETHODIMP CShellExt::GetIconLocation(UINT uFlags, LPTSTR szIconFile, UINT cchMax, int * piIndex, UINT * pwFlags) {
 	*pwFlags = 0;
-	if (uFlags & GIL_DEFAULTICON || m_szFilePath[0] == 0 || !m_isDynamic) {	//return regular N++ icon if requested OR the extension is bad OR static icon
+	if (uFlags & GIL_DEFAULTICON || !m_szFilePath[0] || !m_isDynamic) {	//return regular N++ icon if requested OR the extension is bad OR static icon
 		if (!m_useCustom) {
 			lstrcpyn(szIconFile, m_szModule, cchMax);
 			*piIndex = 0;
@@ -1083,11 +1083,11 @@ STDMETHODIMP CShellExt::LoadShellIcon(int cx, int cy, HICON * phicon) {
 	}
 
 	//Either no custom defined, or failed and use fallback
-	if (hicon == NULL) {
+	if (!hicon) {
 		hicon = (HICON)LoadImage(_hModule, MAKEINTRESOURCE(IDI_ICON_NPP), IMAGE_ICON, cx, cy, LR_DEFAULTCOLOR);
 	}
 
-	if (hicon == NULL) {
+	if (!hicon) {
 		hr = E_OUTOFMEMORY;
 		*phicon = NULL;
 	} else {

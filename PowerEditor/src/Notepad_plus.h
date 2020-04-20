@@ -568,7 +568,7 @@ private:
 
 	void getMatchedFileNames(const TCHAR *dir, const std::vector<generic_string> & patterns, std::vector<generic_string> & fileNames, bool isRecursive, bool isInHiddenDir);
 	void doSynScorll(HWND hW);
-	void setWorkingDir(const TCHAR *dir);
+	void setDefOpenSaveDir(const TCHAR *dir);
 	bool str2Cliboard(const generic_string & str2cpy);
 
 	bool getIntegralDockingData(tTbData & dockData, int & iCont, bool & isVisible);
@@ -581,8 +581,8 @@ private:
 	bool dumpFiles(const TCHAR * outdir, const TCHAR * fileprefix = L"");	//helper func
 	void drawTabbarColoursFromStylerArray();
 
-	std::vector<generic_string> loadCommandlineParams(const TCHAR * commandLine, const CmdLineParams * pCmdParams)
-	{
+	std::vector<generic_string> loadCommandlineParams(const TCHAR * commandLine, const CmdLineParams * pCmdParams)	{
+
 		const CmdLineParamsDTO dto = CmdLineParamsDTO::FromCmdLineParams(*pCmdParams);
 		return loadCommandlineParams(commandLine, &dto);
 	}

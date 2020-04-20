@@ -65,9 +65,9 @@ struct SortTaskListPred final	{
 };
 
 
-LRESULT CALLBACK Notepad_plus_Window::Notepad_plus_Proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	if (hwnd == NULL)
+LRESULT CALLBACK Notepad_plus_Window::Notepad_plus_Proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)	{
+
+	if (!hwnd)
 		return FALSE;
 
 	switch(message)	{
@@ -498,7 +498,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 			RECT rc;
 			_pPublicInterface->getClientRect(rc);
-			if (lParam == 0)
+			if (!lParam)
 				lParam = MAKELPARAM(rc.right - rc.left, rc.bottom - rc.top);
 
 			::MoveWindow(_rebarTop.getHSelf(), 0, 0, rc.right, _rebarTop.getHeight(), TRUE);
@@ -1204,7 +1204,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 						deltaLastLine = static_cast<int32_t>(_pEditView->execute(SCI_GETLINECOUNT)) - 1 - lastLine;
 						deltaCurrLine = static_cast<int32_t>(_pEditView->getCurrentLineNumber()) - currLine;
 
-						if (( deltaCurrLine == 0 )	// line no. not changed?
+						if ((!deltaCurrLine )	// line no. not changed?
 							&& (deltaLastLine >= 0))  // and no lines removed?
 							break; // exit
 
@@ -1218,7 +1218,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 						// eof?
 						if ((currLine >= lastLine) || (currLine < 0)
-							|| ((deltaCurrLine == 0) && (currLine == 0) && ((deltaLastLine >= 0) || cursorMovedUp)))
+							|| ((!deltaCurrLine) && (!currLine) && ((deltaLastLine >= 0) || cursorMovedUp)))
 						{
 							break;
 						}
@@ -1231,7 +1231,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case NPPM_CREATESCINTILLAHANDLE:	{
 
-			return (LRESULT)_scintillaCtrls4Plugins.createSintilla((lParam == NULL?hwnd:reinterpret_cast<HWND>(lParam)));
+			return (LRESULT)_scintillaCtrls4Plugins.createSintilla((!lParam?hwnd:reinterpret_cast<HWND>(lParam)));
 		}
 
 		case NPPM_INTERNAL_GETSCINTEDTVIEW:	{
@@ -1367,10 +1367,10 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				return TRUE;
 			}
 
-			if (_pShortcutMapper == nullptr)	{ // Begin new session
+			if (!_pShortcutMapper)	{ // Begin new session
 
 				_pShortcutMapper = new ShortcutMapper;
-				if (_pShortcutMapper == nullptr)
+				if (!_pShortcutMapper)
 					break;
 			}
 
@@ -1402,7 +1402,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case NPPM_SETSMOOTHFONT:	{
 
-			int param = (lParam == 0 ? SC_EFF_QUALITY_DEFAULT : SC_EFF_QUALITY_LCD_OPTIMIZED);
+			int param = (!lParam ? SC_EFF_QUALITY_DEFAULT : SC_EFF_QUALITY_LCD_OPTIMIZED);
 			_mainEditView.execute(SCI_SETFONTQUALITY, param);
 			_subEditView.execute(SCI_SETFONTQUALITY, param);
 			return TRUE;
@@ -1875,7 +1875,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			const NppGUI & nppgui = (nppParam.getNppGUI());
 			if (((nppgui._isMinimizedToTray && !_isAdministrator) || _pPublicInterface->isPrelaunch()) && (wParam == SC_MINIMIZE))	{
 
-				if (nullptr == _pTrayIco)
+				if (!_pTrayIco)
 					_pTrayIco = new trayIconControler(hwnd, IDI_M30ICON, IDC_MINIMIZED_TRAY, ::LoadIcon(_pPublicInterface->getHinst(), MAKEINTRESOURCE(IDI_M30ICON)), L"");
 
 				_pTrayIco->doTrayIcon(ADD);
@@ -1991,12 +1991,12 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				std::vector<tTbData *> tbData = dockContainer[i]->getDataOfAllTb();
 				for (size_t j = 0, len2 = tbData.size() ; j < len2 ; ++j)	{
 
-					if (generic_stricmp(moduleName, tbData[j]->pszModuleName) == 0)	{
+					if (!generic_stricmp(moduleName, tbData[j]->pszModuleName))	{
 
 						if (!windowName)
 							return (LRESULT)tbData[j]->hClient;
 
-						if (generic_stricmp(windowName, tbData[j]->pszName) == 0)
+						if (!generic_stricmp(windowName, tbData[j]->pszName))
 							return (LRESULT)tbData[j]->hClient;
 					}
 				}
@@ -2140,7 +2140,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case NPPM_ISMENUHIDDEN:	{
 
-			return (::GetMenu(hwnd) == NULL);
+			return (!::GetMenu(hwnd));
 		}
 
 		case NPPM_HIDESTATUSBAR:	{

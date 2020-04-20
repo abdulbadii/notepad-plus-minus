@@ -161,7 +161,7 @@ private :
 		if (styleIndex == LB_ERR)
 			styleIndex = 0;
 
-        if (_currentLexerIndex == 0)	{
+        if (!_currentLexerIndex)	{
 
             return _globalStyles.getStyler(styleIndex);
 		}

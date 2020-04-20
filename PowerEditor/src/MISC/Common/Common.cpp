@@ -270,8 +270,8 @@ void ClientRectToScreenRect(HWND hWnd, RECT* rect)	{
 }
 
 
-std::vector<generic_string> tokenizeString(const generic_string & tokenString, const char delim)
-{
+std::vector<generic_string> tokenizeString(const generic_string & tokenString, const char delim)	{
+
 	//Vector is created on stack and copied on return
 	std::vector<generic_string> tokens;
 
@@ -321,7 +321,7 @@ int filter(unsigned int code, struct _EXCEPTION_POINTERS *)	{
 
 bool isInList(const TCHAR *token, const TCHAR *list)	{
 
-	if ((!token) || (!list))
+	if (!token || !list)
 		return false;
 
 	const size_t wordLen = 64;
@@ -333,11 +333,11 @@ bool isInList(const TCHAR *token, const TCHAR *list)	{
 
 	for (; i <= listLen; ++i)	{
 
-		if ((list[i] == ' ')||(list[i] == '\0'))	{
+		if (list[i] == ' ' ||!list[i])	{
 
-			if (j != 0)	{
+			if (j)	{
 
-				word[j] = '\0';
+				word[j] = 0;
 				j = 0;
 
 				if (!generic_stricmp(token, word))
@@ -398,7 +398,7 @@ const wchar_t * WcharMbcsConvertor::char2wchar(const char * mbcs2Convert, UINT c
 		return nullptr;
 
 	// Do not process empty strings
-	if (lenMbcs == 0 || lenMbcs == -1 && mbcs2Convert[0] == 0)	{
+	if (!lenMbcs || lenMbcs == -1 &&!mbcs2Convert[0])	{
 
 		_wideCharStr.empty();
 		return _wideCharStr;
@@ -425,11 +425,11 @@ const wchar_t * WcharMbcsConvertor::char2wchar(const char * mbcs2Convert, UINT c
 	else	{ // For other encodings, ask system if there are any invalid characters; note that it will not correctly know if last character is cut when there are invalid characters inside the text
 
 		lenWc = MultiByteToWideChar(codepage, (lenMbcs == -1) ? 0 : MB_ERR_INVALID_CHARS, mbcs2Convert, lenMbcs, NULL, 0);
-		if (lenWc == 0 && GetLastError() == ERROR_NO_UNICODE_TRANSLATION)	{
+		if (!lenWc && GetLastError() == ERROR_NO_UNICODE_TRANSLATION)	{
 
 			// Test without last byte
 			if (lenMbcs > 1) lenWc = MultiByteToWideChar(codepage, MB_ERR_INVALID_CHARS, mbcs2Convert, lenMbcs-1, NULL, 0);
-			if (lenWc == 0)	{ // don't have to check that the error is still ERROR_NO_UNICODE_TRANSLATION, since only the length parameter changed
+			if (!lenWc)	{ // don't have to check that the error is still ERROR_NO_UNICODE_TRANSLATION, since only the length parameter changed
 
 				// TODO: should warn user about incorrect loading due to invalid characters
 				// We still load the file, but the system will either strip or replace invalid characters (including the last character, if cut in half)
@@ -496,7 +496,7 @@ const wchar_t * WcharMbcsConvertor::char2wchar(const char * mbcs2Convert, UINT c
 
 const char* WcharMbcsConvertor::wchar2char(const wchar_t * wcharStr2Convert, UINT codepage, int lenWc, int *pLenMbcs)	{
 
-	if (nullptr == wcharStr2Convert)
+	if (!wcharStr2Convert)
 		return nullptr;
 
 	int lenMbcs = WideCharToMultiByte(codepage, 0, wcharStr2Convert, lenWc, NULL, 0, NULL, NULL);
@@ -516,7 +516,7 @@ const char* WcharMbcsConvertor::wchar2char(const wchar_t * wcharStr2Convert, UIN
 
 const char * WcharMbcsConvertor::wchar2char(const wchar_t * wcharStr2Convert, UINT codepage, long *mstart, long *mend)	{
 
-	if (nullptr == wcharStr2Convert)
+	if (!wcharStr2Convert)
 		return nullptr;
 
 	int len = WideCharToMultiByte(codepage, 0, wcharStr2Convert, -1, NULL, 0, NULL, NULL);
@@ -654,7 +654,7 @@ generic_string BuildMenuFileName(int filenameLen, unsigned int pos, const generi
 		// (filenameLen < 0)
 		generic_string::const_iterator it = filename.begin();
 
-		if (filenameLen == 0)
+		if (!filenameLen)
 			it += PathFindFileName(filename.c_str()) - filename.c_str();
 
 		// MAX_PATH is still here to keep old trimming behaviour.
@@ -688,7 +688,7 @@ generic_string PathRemoveFileSpec(generic_string& path)	{
 
         if (lastBackslash == 2 && path[1] == L':' && path.size() >= 3)  // "C:\foo.exe" becomes "C:\"
             path.erase(3);
-        else if (lastBackslash == 0 && path.size() > 1) // "\foo.exe" becomes "\"
+        else if (!lastBackslash && path.size() > 1) // "\foo.exe" becomes "\"
             path.erase(1);
         else
             path.erase(lastBackslash);
@@ -799,8 +799,8 @@ generic_string stringReplace(generic_string subject, const generic_string& searc
 }
 
 
-std::vector<generic_string> stringSplit(const generic_string& input, const generic_string& delimiter)
-{
+std::vector<generic_string> stringSplit(const generic_string& input, const generic_string& delimiter)	{
+
 	size_t start = 0U;
 	size_t end = input.find(delimiter);
 	std::vector<generic_string> output;
@@ -873,7 +873,7 @@ static TCHAR ToUpperInvariant(TCHAR input)
 {
 	TCHAR result;
 	LONG lres = LCMapString(LOCALE_INVARIANT, LCMAP_UPPERCASE, &input, 1, &result, 1);
-	if (lres == 0)	{
+	if (!lres)	{
 
 		assert(false and "LCMapString failed to convert a character to upper case");
 		result = input;
@@ -890,8 +890,8 @@ int OrdinalIgnoreCaseCompareStrings(LPCTSTR sz1, LPCTSTR sz2)	{
 		return 0;
 	}
 
-	if (sz1 == nullptr) sz1 = _T("");
-	if (sz2 == nullptr) sz2 = _T("");
+	if (!sz1) sz1 = _T("");
+	if (!sz2) sz2 = _T("");
 
 	for (;; ++sz1, ++sz2)	{
 
@@ -901,14 +901,14 @@ int OrdinalIgnoreCaseCompareStrings(LPCTSTR sz1, LPCTSTR sz2)	{
 		// check for binary equality first
 		if (c1 == c2)	{
 
-			if (c1 == 0)	{
+			if (!c1)	{
 
 				return 0; // We have reached the end of both strings. No difference found.
 			}
 		}
 		else	{
 
-			if (c1 == 0 || c2 == 0)	{
+			if (!c1 ||!c2)	{
 
 				return (c1-c2); // We have reached the end of one string
 			}
@@ -929,7 +929,7 @@ bool str2Clipboard(const generic_string &str2cpy, HWND hwnd)	{
 
 	size_t len2Allocate = (str2cpy.size() + 1) * sizeof(TCHAR);
 	HGLOBAL hglbCopy = ::GlobalAlloc(GMEM_MOVEABLE, len2Allocate);
-	if (hglbCopy == NULL)	{
+	if (!hglbCopy)	{
 
 		return false;
 	}
@@ -947,7 +947,7 @@ bool str2Clipboard(const generic_string &str2cpy, HWND hwnd)	{
 	}
 	// Lock the handle and copy the text to the buffer.
 	TCHAR *pStr = (TCHAR *)::GlobalLock(hglbCopy);
-	if (pStr == NULL)	{
+	if (!pStr)	{
 
 		::GlobalUnlock(hglbCopy);
 		::GlobalFree(hglbCopy);
@@ -958,7 +958,7 @@ bool str2Clipboard(const generic_string &str2cpy, HWND hwnd)	{
 	::GlobalUnlock(hglbCopy);
 	// Place the handle on the clipboard.
 	unsigned int clipBoardFormat = CF_UNICODETEXT;
-	if (::SetClipboardData(clipBoardFormat, hglbCopy) == NULL)	{
+	if (!::SetClipboardData(clipBoardFormat, hglbCopy))	{
 
 		::GlobalFree(hglbCopy);
 		::CloseClipboard();
@@ -995,9 +995,9 @@ generic_string GetLastErrorAsString(DWORD errorCode)	{
 	generic_string errorMsg(_T(""));
 	// Get the error message, if any.
 	// If both error codes (passed error n GetLastError) are 0, then return empty
-	if (errorCode == 0)
+	if (!errorCode)
 		errorCode = GetLastError();
-	if (errorCode == 0)
+	if (!errorCode)
 		return errorMsg; //No error message has been recorded
 
 	LPWSTR messageBuffer = nullptr;
@@ -1209,7 +1209,7 @@ bool isAssoCommandExisting(LPCTSTR FullPathName)	{
         
         isAssoCommandExisting = (hres == S_OK)                  // check if association exist and no error
 			&& (buffer != NULL)                                 // check if buffer is not NULL
-			&& (wcsstr(buffer, L"notepad++.exe") == NULL); // check association with notepad++
+			&& (!wcsstr(buffer, L"notepad++.exe")); // check association with notepad++
         
 	}
 	return isAssoCommandExisting;
@@ -1252,7 +1252,7 @@ bool deleteFileOrFolder(const generic_string& f2delete)	{
 	int res = SHFileOperation(&fileOpStruct);
 
 	delete[] actionFolder;
-	return (res == 0);
+	return (!res);
 }
 
 // Get a vector of full file paths in a given folder. File extension type filter should be *.*, *.xml, *.dll... according the type of file you want to get.  

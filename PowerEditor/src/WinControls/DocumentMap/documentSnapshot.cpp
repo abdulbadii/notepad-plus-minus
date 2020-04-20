@@ -29,8 +29,8 @@
 #include "documentSnapshot.h"
 #include "ScintillaEditView.h"
 
-INT_PTR CALLBACK DocumentPeeker::run_dlgProc(UINT message, WPARAM /*wParam*/, LPARAM /*lParam*/)
-{
+INT_PTR CALLBACK DocumentPeeker::run_dlgProc(UINT message, WPARAM /*wParam*/, LPARAM /*lParam*/)	{
+
 	switch (message)	{
 
         case WM_INITDIALOG :	{

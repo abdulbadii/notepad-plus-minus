@@ -125,8 +125,8 @@ public:
 	WORD Type() const			{ return flags & WRCF_TYPEMASK; }
 	WORD GroupType() const	{ return flags & WRCF_GROUPMASK; }
 	BOOL IsGroup() const		{ return GroupType() && GroupType()!=WRCF_ENDGROUP; }
-	BOOL IsEndGroup() const { return flags==0 || flags==WRCF_ENDGROUP; }
-	BOOL IsEnd() const		{ return flags==0; }
+	BOOL IsEndGroup() const { return !flags || flags==WRCF_ENDGROUP; }
+	BOOL IsEnd() const		{ return !flags; }
 	BOOL IsWindow() const	{ return nID>0; }
 	BOOL IsRowGroup()	const { return (flags & WRCF_GROUPMASK)==WRCF_ROWGROUP; }
 	void SetHeight(LONG h)	{ rc.bottom = rc.top + h; }

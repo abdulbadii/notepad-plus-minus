@@ -264,7 +264,7 @@ const char* TiXmlBaseA::GetEntity( const char* p, char* value )	{
 	// Now try to match it.
 	for ( i=0; i<NUM_ENTITY; ++i )	{
 
-		if ( strncmp( entity[i].str, p, entity[i].strLength ) == 0 )	{
+		if ( !strncmp( entity[i].str, p, entity[i].strLength ) )	{
 
 			assert( strlen( entity[i].str ) == entity[i].strLength );
 			*value = entity[i].chr;

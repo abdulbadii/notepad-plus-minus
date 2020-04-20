@@ -245,7 +245,7 @@ void DocumentMap::scrollMap()	{
 			auto lowerPos = _pMapView->execute(SCI_POSITIONFROMLINE, lastVisibleDocLine);
 			higherY = _pMapView->execute(SCI_POINTYFROMPOSITION, 0, higherPos);
 			lowerY = _pMapView->execute(SCI_POINTYFROMPOSITION, 0, lowerPos);
-			if (lowerY == 0)	{
+			if (!lowerY)	{
 
 				auto lineHeight = _pMapView->execute(SCI_TEXTHEIGHT, firstVisibleDocLine);
 				lowerY = nbLine * lineHeight + higherY;
@@ -303,7 +303,7 @@ void DocumentMap::scrollMapWith(const MapPosition & mapPos)	{
 			auto lowerPos = _pMapView->execute(SCI_POSITIONFROMLINE, mapPos._lastVisibleDocLine);
 			higherY = _pMapView->execute(SCI_POINTYFROMPOSITION, 0, higherPos);
 			lowerY = _pMapView->execute(SCI_POINTYFROMPOSITION, 0, lowerPos);
-			if (lowerY == 0)	{
+			if (!lowerY)	{
 
 				auto lineHeight = _pMapView->execute(SCI_TEXTHEIGHT, mapPos._firstVisibleDocLine);
 				lowerY = mapPos._nbLine * lineHeight + mapPos._firstVisibleDocLine;
@@ -358,8 +358,8 @@ void DocumentMap::redraw(bool) const
 	_pMapView->execute(SCI_COLOURISE, 0, -1);
 }
 
-INT_PTR CALLBACK DocumentMap::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK DocumentMap::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)	{
+
     switch (message)	{
 
         case WM_INITDIALOG :	{
@@ -461,7 +461,7 @@ INT_PTR CALLBACK DocumentMap::run_dlgProc(UINT message, WPARAM wParam, LPARAM lP
 		case DOCUMENTMAP_SCROLL:	{
 
 			bool dir = (wParam != 0);
-			moveMode mode = (lParam == 0)?perLine:perPage;
+			moveMode mode = (!lParam)?perLine:perPage;
 			scrollMap(dir, mode);
 		}
 		return TRUE;
@@ -516,8 +516,8 @@ void ViewZoneDlg::doDialog()	{
 	display();
 };
 
-INT_PTR CALLBACK ViewZoneDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK ViewZoneDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)	{
+
 	switch (message)	{ 
 
         case WM_INITDIALOG :	{
@@ -577,16 +577,16 @@ INT_PTR CALLBACK ViewZoneDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lP
 	return FALSE;
 }
 
-LRESULT CALLBACK ViewZoneDlg::canvasStaticProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
-{
+LRESULT CALLBACK ViewZoneDlg::canvasStaticProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)	{ 
+
 	ViewZoneDlg *pViewZoneDlg = reinterpret_cast<ViewZoneDlg *>(::GetWindowLongPtr(hwnd, GWLP_USERDATA));
 	if (!pViewZoneDlg)
 		return FALSE;
 	return pViewZoneDlg->canvas_runProc(hwnd, message, wParam, lParam);
 }
 
-LRESULT CALLBACK ViewZoneDlg::canvas_runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
+LRESULT CALLBACK ViewZoneDlg::canvas_runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)	{
+
 	switch (message)	{
 
 		case WM_DESTROY:	{

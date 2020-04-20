@@ -59,7 +59,7 @@ void convertTo(TCHAR *dest, int destLen, const TCHAR *toConvert, TCHAR *prefix)	
 
 	for (size_t i = 0, len = lstrlen(toConvert); i < len && index < destLen - 7; ++i)	{
 
-		if (i == 0 && toConvert[i] == '(' && toConvert[i + 1] == '(')	{
+		if (!i && toConvert[i] == '(' && toConvert[i + 1] == '(')	{
 
 			inGroup = true;
 		}
@@ -107,8 +107,8 @@ bool SharedParametersDialog::setPropertyByCheck(HWND hwnd, WPARAM id, bool & boo
     return TRUE;
 }
 
-INT_PTR CALLBACK SharedParametersDialog::run_dlgProc(UINT Message, WPARAM wParam, LPARAM /*lParam*/)
-{
+INT_PTR CALLBACK SharedParametersDialog::run_dlgProc(UINT Message, WPARAM wParam, LPARAM /*lParam*/)	{
+
     switch (Message)	{
 
         case WM_INITDIALOG :	{
@@ -134,8 +134,8 @@ INT_PTR CALLBACK SharedParametersDialog::run_dlgProc(UINT Message, WPARAM wParam
     return FALSE;
 }
 
-INT_PTR CALLBACK FolderStyleDialog::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK FolderStyleDialog::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam)	{
+
     switch (Message)	{
 
         case WM_INITDIALOG :	{
@@ -231,7 +231,7 @@ void FolderStyleDialog::retrieve(TCHAR *dest, const TCHAR *toRetrieve, TCHAR *pr
 
     for (size_t i = 0, len = lstrlen(toRetrieve); i < len ; ++i)	{
 
-        if ((i == 0 || (toRetrieve[i-1] == ' ')) && (toRetrieve[i] == prefix[0] && toRetrieve[i+1] == prefix[1]))	{
+        if ((!i || (toRetrieve[i-1] == ' ')) && (toRetrieve[i] == prefix[0] && toRetrieve[i+1] == prefix[1]))	{
 
             if (j > 0)
                 dest[j++] = ' ';
@@ -251,8 +251,8 @@ void FolderStyleDialog::retrieve(TCHAR *dest, const TCHAR *toRetrieve, TCHAR *pr
     dest[j++] = '\0';
 }
 
-INT_PTR CALLBACK KeyWordsStyleDialog::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK KeyWordsStyleDialog::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam)	{
+
     switch (Message)	{
 
         case WM_INITDIALOG :	{
@@ -392,8 +392,8 @@ void KeyWordsStyleDialog::updateDlg()	{
     ::SendDlgItemMessage(_hSelf, IDC_KEYWORD8_PREFIX_CHECK, BM_SETCHECK, _pUserLang->_isPrefix[7], 0);
 }
 
-INT_PTR CALLBACK CommentStyleDialog::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK CommentStyleDialog::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam)	{
+
     switch (Message)	{
 
         case WM_ACTIVATE :
@@ -536,7 +536,7 @@ void CommentStyleDialog::retrieve(TCHAR *dest, const TCHAR *toRetrieve, TCHAR *p
 
     for (size_t i = 0, len = lstrlen(toRetrieve); i < len ; ++i)	{
 
-        if ((i == 0 || (toRetrieve[i-1] == ' ')) && (toRetrieve[i] == prefix[0] && toRetrieve[i+1] == prefix[1]))	{
+        if ((!i || (toRetrieve[i-1] == ' ')) && (toRetrieve[i] == prefix[0] && toRetrieve[i+1] == prefix[1]))	{
 
             if (j > 0)
                 dest[j++] = ' ';
@@ -649,8 +649,8 @@ void SymbolsStyleDialog::updateDlg()	{
     ::SendDlgItemMessage(_hSelf, IDC_OPERATOR2_EDIT, WM_SETTEXT, 0, reinterpret_cast<LPARAM>(_pUserLang->_keywordLists[SCE_USER_KWLIST_OPERATORS2]));
 }
 
-INT_PTR CALLBACK SymbolsStyleDialog::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK SymbolsStyleDialog::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam)	{
+
     switch (Message)	{
 
         case WM_COMMAND :	{
@@ -729,7 +729,7 @@ void SymbolsStyleDialog::retrieve(TCHAR *dest, const TCHAR *toRetrieve, TCHAR *p
 
     for (size_t i = 0, len = lstrlen(toRetrieve); i < len ; ++i)	{
 
-        if ((i == 0 || (toRetrieve[i-1] == ' ')) && (toRetrieve[i] == prefix[0] && toRetrieve[i+1] == prefix[1]))	{
+        if ((!i || (toRetrieve[i-1] == ' ')) && (toRetrieve[i] == prefix[0] && toRetrieve[i+1] == prefix[1]))	{
 
             if (j > 0)
                 dest[j++] = ' ';
@@ -918,14 +918,14 @@ void UserDefineDialog::changeStyle()	{
 
 void UserDefineDialog::enableLangAndControlsBy(size_t index)	{
 
-    _pUserLang = (index == 0)?_pCurrentUserLang:&((NppParameters::getInstance()).getULCFromIndex(index - 1));
+    _pUserLang = (!index)?_pCurrentUserLang:&((NppParameters::getInstance()).getULCFromIndex(index - 1));
     if (index != 0)
         ::SetWindowText(::GetDlgItem(_hSelf, IDC_EXT_EDIT), _pUserLang->_ext.c_str());
 
-    ::ShowWindow(::GetDlgItem(_hSelf, IDC_EXT_STATIC), (index == 0)?SW_HIDE:SW_SHOW);
-    ::ShowWindow(::GetDlgItem(_hSelf, IDC_EXT_EDIT), (index == 0)?SW_HIDE:SW_SHOW);
-    ::ShowWindow(::GetDlgItem(_hSelf, IDC_RENAME_BUTTON), (index == 0)?SW_HIDE:SW_SHOW);
-    ::ShowWindow(::GetDlgItem(_hSelf, IDC_REMOVELANG_BUTTON), (index == 0)?SW_HIDE:SW_SHOW);
+    ::ShowWindow(::GetDlgItem(_hSelf, IDC_EXT_STATIC), (!index)?SW_HIDE:SW_SHOW);
+    ::ShowWindow(::GetDlgItem(_hSelf, IDC_EXT_EDIT), (!index)?SW_HIDE:SW_SHOW);
+    ::ShowWindow(::GetDlgItem(_hSelf, IDC_RENAME_BUTTON), (!index)?SW_HIDE:SW_SHOW);
+    ::ShowWindow(::GetDlgItem(_hSelf, IDC_REMOVELANG_BUTTON), (!index)?SW_HIDE:SW_SHOW);
 }
 
 void UserDefineDialog::updateDlg()	{
@@ -945,8 +945,8 @@ void UserDefineDialog::updateDlg()	{
 }
 
 
-INT_PTR CALLBACK UserDefineDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK UserDefineDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)	{
+
     NppParameters& nppParam = NppParameters::getInstance();
 	NativeLangSpeaker * pNativeSpeaker = nppParam.getNativeLangSpeaker();
 
@@ -1222,7 +1222,7 @@ INT_PTR CALLBACK UserDefineDialog::run_dlgProc(UINT message, WPARAM wParam, LPAR
                     case IDC_SAVEAS_BUTTON :	{
 
                         auto i = ::SendDlgItemMessage(_hSelf, IDC_LANGNAME_COMBO, CB_GETCURSEL, 0, 0);
-                        if (i == 0)
+                        if (!i)
                             wParam = IDC_ADDNEW_BUTTON;
 
 
@@ -1295,7 +1295,7 @@ INT_PTR CALLBACK UserDefineDialog::run_dlgProc(UINT message, WPARAM wParam, LPAR
                     case IDC_EXPORT_BUTTON :	{
 
 						auto i2Export = ::SendDlgItemMessage(_hSelf, IDC_LANGNAME_COMBO, CB_GETCURSEL, 0, 0);
-                        if (i2Export == 0)	{
+                        if (!i2Export)	{
 
                             // maybe a better option would be to simply send IDC_SAVEAS_BUTTON message, and display "Save As..." dialog?
                             printStr(L"Before exporting, save your language definition by clicking \"Save As...\" button");
@@ -1444,8 +1444,8 @@ INT_PTR CALLBACK UserDefineDialog::run_dlgProc(UINT message, WPARAM wParam, LPAR
     return FALSE;
 }
 
-INT_PTR CALLBACK StringDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
-{
+INT_PTR CALLBACK StringDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)	{
+
     switch (Message)	{
 
         case WM_INITDIALOG :	{
@@ -1583,8 +1583,8 @@ void StringDlg::HandlePaste(HWND hEdit)	{
 	}
 }
 
-INT_PTR CALLBACK StylerDlg::dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK StylerDlg::dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)	{
+
     StylerDlg * dlg = (StylerDlg *)::GetProp(hwnd, L"Styler dialog prop");
     NppParameters& nppParam = NppParameters::getInstance();
 
@@ -1688,7 +1688,7 @@ INT_PTR CALLBACK StylerDlg::dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
 
         case WM_COMMAND :	{
 
-			if (dlg == nullptr)
+			if (!dlg)
 				return FALSE;
 
             Style & style = SharedParametersDialog::_pUserLang->_styleArray.getStyler(dlg->_stylerIndex);

@@ -152,8 +152,8 @@ void SplitterContainer::rotateTo(DIRECTION direction)	{
 
 }
 
-LRESULT CALLBACK SplitterContainer::staticWinProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
+LRESULT CALLBACK SplitterContainer::staticWinProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)	{
+
 	SplitterContainer *pSplitterContainer = NULL;
 	switch (message)	{
 

@@ -120,14 +120,14 @@ void NativeLangSpeaker::init(TiXmlDocumentA *nativeLangDocRootA, bool loadIfEngl
 				TiXmlElementA *element = _nativeLangA->ToElement();
 				const char *rtl = element->Attribute("RTL");
 				if (rtl)
-					_isRTL = (strcmp(rtl, "yes") == 0);
+					_isRTL = (!strcmp(rtl, "yes"));
                 else
                     _isRTL = false;
 
                 // get original file name (defined by Notpad++) from the attribute
                 _fileName = element->Attribute("filename");
 
-				if (!loadIfEnglish && _fileName && stricmp("english.xml", _fileName) == 0)	{
+				if (!loadIfEnglish && _fileName && !stricmp("english.xml", _fileName))	{
 
 					_nativeLangA = NULL;
 					return;
@@ -243,7 +243,7 @@ MenuPosition & getMenuPosition(const char *id)
 
 	for (int i = 0; i < nbSubMenuPos; ++i)	{ 
 
-		if (strcmp(menuPos[i]._id, id) == 0)
+		if (!strcmp(menuPos[i]._id, id))
 			return menuPos[i];
 	}
 	return menuPos[nbSubMenuPos-1];
@@ -251,19 +251,19 @@ MenuPosition & getMenuPosition(const char *id)
 
 void NativeLangSpeaker::changeMenuLang(HMENU menuHandle, generic_string & pluginsTrans, generic_string & windowTrans)	{
 
-	if (nullptr == _nativeLangA)
+	if (!_nativeLangA)
 		return;
 
 	TiXmlNodeA *mainMenu = _nativeLangA->FirstChild("Menu");
-	if (nullptr == mainMenu)
+	if (!mainMenu)
 		return;
 
 	mainMenu = mainMenu->FirstChild("Main");
-	if (nullptr == mainMenu)
+	if (!mainMenu)
 		return;
 
 	TiXmlNodeA *entriesRoot = mainMenu->FirstChild("Entries");
-	if (nullptr == entriesRoot)
+	if (!entriesRoot)
 		return;
 
 	const char* idName = nullptr;
@@ -331,7 +331,7 @@ void NativeLangSpeaker::changeMenuLang(HMENU menuHandle, generic_string & plugin
 		const char* subMenuIdStr = element->Attribute("subMenuId");
 		const char* name = element->Attribute("name");
 
-		if (nullptr == subMenuIdStr or nullptr == name)
+		if (!subMenuIdStr or !name)
 			continue;
 
 		MenuPosition& menuPos = getMenuPosition(subMenuIdStr);
@@ -485,7 +485,7 @@ void NativeLangSpeaker::changeLangTabDrapContextMenu(HMENU hCM)	{
 
 void NativeLangSpeaker::changeConfigLang(HWND hDlg)	{
 
-	if (nullptr == _nativeLangA)
+	if (!_nativeLangA)
 		return;
 
 	TiXmlNodeA *styleConfDlgNode = _nativeLangA->FirstChild("Dialog");

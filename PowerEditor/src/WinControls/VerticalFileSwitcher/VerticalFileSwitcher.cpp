@@ -68,8 +68,8 @@ void VerticalFileSwitcher::startColumnSort()	{
 	updateHeaderArrow();
 }
 
-INT_PTR CALLBACK VerticalFileSwitcher::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK VerticalFileSwitcher::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)	{
+
     switch (message)	{
 
         case WM_INITDIALOG :	{

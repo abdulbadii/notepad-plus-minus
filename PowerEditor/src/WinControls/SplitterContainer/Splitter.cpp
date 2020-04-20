@@ -39,7 +39,7 @@ bool Splitter::_isVerticalFixedRegistered = false;
 
 void Splitter::init( HINSTANCE hInst, HWND hPere, int splitterSize, double iSplitRatio, DWORD dwFlags)	{
 
-	if (hPere == NULL)
+	if (!hPere)
 		throw std::runtime_error("Splitter::init : Parameter hPere is null");
 
 	if (iSplitRatio < 0)
@@ -222,8 +222,8 @@ int Splitter::getClickZone(WH which)	{
 }
 
 
-LRESULT CALLBACK Splitter::staticWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
+LRESULT CALLBACK Splitter::staticWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)	{
+
 	switch(uMsg)	{
 
 		case WM_NCCREATE:	{
@@ -245,8 +245,8 @@ LRESULT CALLBACK Splitter::staticWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 }
 
 
-LRESULT CALLBACK Splitter::spliterWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
+LRESULT CALLBACK Splitter::spliterWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)	{
+
 	switch (uMsg)	{
 
 		case WM_LBUTTONDOWN:	{

@@ -9,12 +9,12 @@ FN_EndBufferedPaint pfnEndBufferedPaint = NULL;
 
 bool InitTheming() {
 	hUxTheme = ::LoadLibrary(L"UxTheme.dll");
-	if (hUxTheme == NULL)
+	if (!hUxTheme)
 		return false;
 	pfnGetBufferedPaintBits = (FN_GetBufferedPaintBits)::GetProcAddress(hUxTheme, "GetBufferedPaintBits");
 	pfnBeginBufferedPaint = (FN_BeginBufferedPaint)::GetProcAddress(hUxTheme, "BeginBufferedPaint");
 	pfnEndBufferedPaint = (FN_EndBufferedPaint)::GetProcAddress(hUxTheme, "EndBufferedPaint");
-	if ((pfnGetBufferedPaintBits == NULL) || (pfnBeginBufferedPaint == NULL) || (pfnEndBufferedPaint == NULL)) {
+	if ((!pfnGetBufferedPaintBits) || (!pfnBeginBufferedPaint) || (!pfnEndBufferedPaint)) {
 		pfnGetBufferedPaintBits = NULL;
 		pfnBeginBufferedPaint = NULL;
 		pfnEndBufferedPaint = NULL;
@@ -253,7 +253,7 @@ HICON LoadIconEx(HINSTANCE hInstance, LPCTSTR lpszName, int cx, int cy, int dept
 	for (i=0;i<pGrpIconDir->idCount;++i )	{
 
 		GRPICONDIRENTRY & entry = pGrpIconDir->idEntries[i];
-		int iconColors = (entry.bColorCount==0)?1 << (entry.wPlanes*entry.wBitCount) : entry.bColorCount;
+		int iconColors = (!entry.bColorCount)?1 << (entry.wPlanes*entry.wBitCount) : entry.bColorCount;
 		if (iconColors < bestDepth);
 
 		if ((entry.bWidth==cx) && (entry.bHeight==cy))	{ // Do the size match?

@@ -251,7 +251,7 @@ bool XmlMatchedTagsHighlighter::getXmlMatchedTagsPos(XmlMatchedTagsPos &xmlTags)
 							// If we didn't find any close tags between the open and our close,
 							// and there's no open tags remaining to find
 							// then the open we found was the right one, and we can return it
-							if (0 == closeTagsFound && 0 == openTagsRemaining)	{
+							if (!closeTagsFound && !openTagsRemaining)	{
 
 								xmlTags.tagOpenStart = nextOpenTag.start;
 								xmlTags.tagOpenEnd = nextOpenTag.end + 1;
@@ -356,7 +356,7 @@ bool XmlMatchedTagsHighlighter::getXmlMatchedTagsPos(XmlMatchedTagsPos &xmlTags)
 									// If we didn't find any open tags between our open and the close,
 									// and there's no close tags remaining to find
 									// then the close we found was the right one, and we can return it
-									if (0 == openTagsFound && 0 == closeTagsRemaining)	{
+									if (!openTagsFound && !closeTagsRemaining)	{
 
 										xmlTags.tagCloseStart = nextCloseTag.start;
 										xmlTags.tagCloseEnd = nextCloseTag.end + 1;

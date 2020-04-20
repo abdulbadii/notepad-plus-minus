@@ -130,7 +130,7 @@ nsProbingState nsLatin1Prober::HandleData(const char* aBuf, PRUint32 aLen)
 
     charClass = Latin1_CharToClass[(unsigned char)newBuf1[i]];
     freq = Latin1ClassModel[mLastCharClass*CLASS_NUM + charClass];
-    if (freq == 0) {
+    if (!freq) {
       mState = eNotMe;
       break;
     }

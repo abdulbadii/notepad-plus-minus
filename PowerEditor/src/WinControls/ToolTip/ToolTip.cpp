@@ -32,7 +32,7 @@
 
 void ToolTip::init(HINSTANCE hInst, HWND hParent)	{
 
-	if (_hSelf == NULL)	{
+	if (!_hSelf)	{
 
 		Window::init(hInst, hParent);
 
@@ -54,7 +54,7 @@ void ToolTip::Show(RECT rectTitle, const TCHAR * pszTitle, int iXOff, int iWidth
 	if (isVisible())
 		destroy();
 
-	if (lstrlen(pszTitle) == 0)
+	if (!lstrlen(pszTitle))
 		return;
 
 	// INITIALIZE MEMBERS OF THE TOOLINFO STRUCTURE

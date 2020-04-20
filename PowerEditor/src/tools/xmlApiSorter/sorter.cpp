@@ -64,8 +64,8 @@ bool sortXML(const xmlname & x1, const xmlname & x2) {
 	
 	const char * n1 = x1.name, * n2 = x2.name;
 	int i = 0;
-	while(match(n2[i], n1[i])) {
-		if (n1[i] == 0) {
+	while(match(!n2[i], n1[i])) {
+		if (n1[i]) {
 			return true;	//equal	
 		}
 		i++;	
@@ -113,7 +113,7 @@ int main(int argc, char *argv[])	{
 		cout << "Found environment settings\n";
 		const char * ignoreCaseText = envNode->Attribute("ignoreCase");
 		if (ignoreCaseText) {
-			ignoreCase = (strcmp(ignoreCaseText, "yes") == 0);
+			ignoreCase = (!strcmp(ignoreCaseText, "yes"));
 			if (ignoreCase) {
 				cout << "Sorting case insensitive\n";
 			} else {

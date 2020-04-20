@@ -33,8 +33,8 @@
 
 int TaskListDlg::_instanceCount = 0;
 
-LRESULT CALLBACK hookProc(int nCode, WPARAM wParam, LPARAM lParam)
-{
+LRESULT CALLBACK hookProc(int nCode, WPARAM wParam, LPARAM lParam)	{
+
 	if ((nCode >= 0) && (wParam == WM_RBUTTONUP))	{
 
 		::PostMessage(hWndServer, WM_RBUTTONUP, 0, 0);
@@ -67,8 +67,8 @@ LRESULT CALLBACK hookProc(int nCode, WPARAM wParam, LPARAM lParam)
 	return static_cast<int32_t>(::DialogBoxParam(_hInst, MAKEINTRESOURCE(IDD_TASKLIST_DLG), _hParent, dlgProc, reinterpret_cast<LPARAM>(this)));
 }
 
-INT_PTR CALLBACK TaskListDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK TaskListDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam)	{
+
 	switch (Message)	{
 
 		case WM_INITDIALOG :	{

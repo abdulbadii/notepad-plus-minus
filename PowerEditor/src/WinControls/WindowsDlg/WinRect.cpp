@@ -82,7 +82,7 @@ WINRECT* WINRECT::InitMap(WINRECT* pWinMap, WINRECT* parent)	{
 	// safety checks
 	assert(pwrc->IsEndGroup());
 	assert(prev);
-	assert(prev->next==NULL);
+	assert(!prev->next);
 	return parent ? pwrc : NULL;
 }
 

@@ -172,7 +172,7 @@ CWinMgr::CalcGroup(WINRECT* pGroup, HWND hWnd)
 	for (it=pGroup; it; it.Next()) {
 		WINRECT* wrc = it;
 		if (wrc->Type()==WRCT_REST) {
-			assert(pRestRect==NULL);		 // can only be one REST rect!
+			assert(!pRestRect);		 // can only be one REST rect!
 			pRestRect = wrc;					 // remember it
 		} else {
 			AdjustSize(wrc, bRow, hwRemaining, hWnd);
@@ -183,7 +183,7 @@ CWinMgr::CalcGroup(WINRECT* pGroup, HWND hWnd)
 	// Adjust REST rect if any
 	if (pRestRect) {
 		AdjustSize(pRestRect, bRow, hwRemaining, hWnd);
-		assert(hwRemaining==0);
+		assert(!hwRemaining);
 	}
 
 	// All the sizes of the entries have been calculated, including

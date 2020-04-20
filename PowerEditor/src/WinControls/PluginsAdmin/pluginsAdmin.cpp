@@ -106,22 +106,22 @@ void Version::setVersionFrom(const generic_string& filePath)	{
 
 generic_string Version::toString()	{
 
-	if (_build == 0 && _patch == 0 && _minor == 0 && _major == 0)	{ // ""
+	if (!_build && !_patch && !_minor && !_major)	{ // ""
 
 		return L"";
 	}	
-	else if (_build == 0 && _patch == 0 && _minor == 0)	{ // "major"
+	else if (!_build && !_patch && !_minor)	{ // "major"
 
 		return std::to_wstring(_major);
 	}
-	else if (_build == 0 && _patch == 0)	{ // "major.minor"
+	else if (!_build && !_patch)	{ // "major.minor"
 
 		std::wstring v = std::to_wstring(_major);
 		v += L".";
 		v += std::to_wstring(_minor);
 		return v;
 	}
-	else if (_build == 0)	{ // "major.minor.patch"
+	else if (!_build)	{ // "major.minor.patch"
 
 		std::wstring v = std::to_wstring(_major);
 		v += L".";
@@ -400,7 +400,7 @@ void PluginsAdminDlg::collectNppCurrentStatusInfos()	{
 	_nppCurrentStatus._isAppDataPluginsAllowed = ::SendMessage(_hParent, NPPM_GETAPPDATAPLUGINSALLOWED, 0, 0) == TRUE;
 	_nppCurrentStatus._appdataPath = nppParam.getAppDataNppDir();
 	generic_string programFilesPath = NppParameters::getSpecialFolderLocation(CSIDL_PROGRAM_FILES);
-	_nppCurrentStatus._isInProgramFiles = (_nppCurrentStatus._nppInstallPath.find(programFilesPath) == 0);
+	_nppCurrentStatus._isInProgramFiles = (!_nppCurrentStatus._nppInstallPath.find(programFilesPath));
 
 }
 
@@ -1107,8 +1107,8 @@ void PluginsAdminDlg::switchDialog(int indexToSwitch)	{
 	::EnableWindow(hRemoveButton, showInstalled);
 }
 
-INT_PTR CALLBACK PluginsAdminDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
-{
+INT_PTR CALLBACK PluginsAdminDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)	{
+
 	switch (message)	{
 
         case WM_INITDIALOG :	{

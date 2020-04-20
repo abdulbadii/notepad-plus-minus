@@ -146,7 +146,7 @@ protected:
 		void empty()	{
 
 			static T nullStr = 0; // routines may return an empty string, with null terminator, without allocating memory; a pointer to this null character will be returned in that case
-			if (_allocLen == 0)
+			if (!_allocLen)
 				_str = &nullStr;
 			else
 				_str[0] = 0;
