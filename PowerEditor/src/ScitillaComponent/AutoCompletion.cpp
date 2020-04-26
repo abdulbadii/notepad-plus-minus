@@ -68,10 +68,10 @@ bool AutoCompletion::showApiComplete()	{
 	if (len >= _keyWordMaxLen)
 		return false;
 
-	_pEditView->execute(SCI_AUTOCSETSEPARATOR, WPARAM(' '));
+	// _pEditView->execute(SCI_AUTOCSETSEPARATOR, WPARAM('\n'));
 	_pEditView->execute(SC_CASEINSENSITIVEBEHAVIOUR_IGNORECASE,1);
-	_pEditView->execute(SCI_AUTOCSETIGNORECASE, 1/* nppGUI._autocIgnoreCase) */);
-	_pEditView->execute(SCI_AUTOCCOMPLETE);
+	_pEditView->execute(SCI_AUTOCSETIGNORECASE, nppGUI._autocIgnoreCase);
+	// _pEditView->execute(SC_ORDER_CUSTOM,2);
 	_pEditView->showAutoComletion(curPos - startPos, _keyWords.c_str());
 	return true;
 }
@@ -125,10 +125,10 @@ bool AutoCompletion::showApiAndWordComplete()	{
 			words += L" ";
 	}
 
-	_pEditView->execute(SCI_AUTOCSETSEPARATOR, WPARAM(' '));
+	// _pEditView->execute(SCI_AUTOCSETSEPARATOR, WPARAM('\n'));
 	_pEditView->execute(SC_CASEINSENSITIVEBEHAVIOUR_IGNORECASE,1);
-	_pEditView->execute(SCI_AUTOCSETIGNORECASE, 1/* nppGUI._autocIgnoreCase */);
-	_pEditView->execute(SCI_AUTOCCOMPLETE);
+	_pEditView->execute(SCI_AUTOCSETIGNORECASE, nppGUI._autocIgnoreCase);
+	// _pEditView->execute(SC_ORDER_CUSTOM,2);
 	_pEditView->showAutoComletion(curPos - startPos, words.c_str());
 	return true;
 }
@@ -367,10 +367,10 @@ bool AutoCompletion::showWordComplete(bool autoInsert)	{
 			words += L" ";
 	}
 
-	_pEditView->execute(SCI_AUTOCSETSEPARATOR, WPARAM(' '));
+	// _pEditView->execute(SCI_AUTOCSETSEPARATOR, WPARAM('\n'));
 	_pEditView->execute(SC_CASEINSENSITIVEBEHAVIOUR_IGNORECASE,1);
-	_pEditView->execute(SCI_AUTOCSETIGNORECASE, 1/*nppGUI._autocIgnoreCase*/);
-	_pEditView->execute(SCI_AUTOCCOMPLETE);
+	_pEditView->execute(SCI_AUTOCSETIGNORECASE, nppGUI._autocIgnoreCase);
+	// _pEditView->execute(SC_ORDER_CUSTOM,2);
 	_pEditView->showAutoComletion(curPos - startPos, words.c_str());
 	return true;
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="Windows-1252" ?>
 <NotepadPlus>
-    <FindHistory nbMaxFindHistoryPath="10" nbMaxFindHistoryFilter="10" nbMaxFindHistoryFind="131" nbMaxFindHistoryReplace="30" matchWord="yes" matchCase="yes" wrap="yes" directionDown="yes" fifRecuisive="yes" fifInHiddenFolder="no" dlgAlwaysVisible="no" fifFilterFollowsDoc="no" fifFolderFollowsDoc="no" searchMode="0" transparencyMode="1" transparency="64" dotMatchesNewline="no" isSearch2ButtonsMode="yes">
+    <FindHistory nbMaxFindHistoryPath="10" nbMaxFindHistoryFilter="10" nbMaxFindHistoryFind="233" nbMaxFindHistoryReplace="30" matchWord="yes" matchCase="yes" wrap="yes" directionDown="yes" fifRecuisive="yes" fifInHiddenFolder="no" dlgAlwaysVisible="no" fifFilterFollowsDoc="no" fifFolderFollowsDoc="no" searchMode="0" transparencyMode="1" transparency="64" dotMatchesNewline="no" isSearch2ButtonsMode="yes">
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src" />
         <Path name="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent" />
         <Path name="D:\MSYS\usr\src\notepadpp\Release" />
@@ -21,6 +21,8 @@
         <Filter name="*.vc* *.sln" />
         <Filter name="*.c *.cpp *.cc *.h" />
         <Filter name="*.xml" />
+        <Find name="BufferID" />
+        <Find name="nbIntervalTime" />
         <Find name="_autoCompleteMain" />
         <Find name="Notepad_plus" />
         <Find name="_subEditView" />
@@ -35,7 +37,6 @@
         <Find name="static_cast" />
         <Find name="GetLastErrorAsString" />
         <Find name="retResult" />
-        <Find name="BufferID" />
         <Find name="_pEditView" />
         <Find name="enableItem" />
         <Find name="isUserReadOnly" />
@@ -183,7 +184,7 @@
         <Replace name='&quot;' />
         <Replace name='L&quot;\1&quot;\2' />
     </FindHistory>
-    <History nbMaxFile="127" inSubMenu="no" customLength="35">
+    <History nbMaxFile="256" inSubMenu="no" customLength="35">
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\DockingWnd\DockingManager.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\DockingWnd\DockingCont.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\Preference\preference_rc.h" />
@@ -253,7 +254,7 @@
         <GUIConfig name="MRU">yes</GUIConfig>
         <GUIConfig name="URL">1</GUIConfig>
         <GUIConfig name="globalOverride" fg="no" bg="no" font="yes" fontSize="no" bold="no" italic="no" underline="no" />
-        <GUIConfig name="auto-completion" autoCAction="3" triggerFromNbChar="2" autoCIgnoreNumbers="no" autoCCase="yes" funcParams="no" />
+        <GUIConfig name="auto-completion" autoCAction="1" triggerFromNbChar="2" autoCIgnoreNumbers="no" autoCCase="yes" funcParams="no" />
         <GUIConfig name="auto-insert" parentheses="no" brackets="no" curlyBrackets="no" quotes="no" doubleQuotes="no" htmlXmlTag="no" />
         <GUIConfig name="sessionExt"></GUIConfig>
         <GUIConfig name="workspaceExt"></GUIConfig>
@@ -289,6 +290,7 @@
             <ActiveTabs cont="1" activeTab="-1" />
             <ActiveTabs cont="2" activeTab="-1" />
             <ActiveTabs cont="3" activeTab="-1" />
+            <ActiveTabs cont="4" activeTab="-1" />
         </GUIConfig>
     </GUIConfigs>
     <ProjectPanels>

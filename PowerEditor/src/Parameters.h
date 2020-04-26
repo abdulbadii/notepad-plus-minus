@@ -913,30 +913,26 @@ struct ScintillaViewParams	{
 	int _zoom2 = 0;
 	bool _whiteSpaceShow = false;
 	bool _eolShow = false;
-	int _borderWidth = 2;
-	bool _scrollBeyondLastLine = false;
+	int _borderWidth = 1;
+	bool _scrollBeyondLastLine = true;
 	bool _disableAdvancedScrolling = false;
-	bool _doSmoothFont = false;
+	bool _doSmoothFont = true;
 	bool _showBorderEdge = true;
 };
 
 constexpr int NB_LIST = 20;
-constexpr int NB_MAX_LRF_FILE = 127;
+constexpr int NB_MAX_LRF_FILE = 256;
 constexpr int NB_MAX_USER_LANG = 30;
 constexpr int NB_MAX_EXTERNAL_LANG = 30;
-constexpr int NB_MAX_IMPORTED_UDL = 50;
+constexpr int NB_MAX_IMPORTED_UDL = 30;
 
-constexpr int NB_MAX_FINDHISTORY_FIND	= 256;
+constexpr int NB_MAX_FINDHISTORY_FIND	= 512;
 constexpr int NB_MAX_FINDHISTORY_REPLACE = 30;
 constexpr int NB_MAX_FINDHISTORY_PATH	= 30;
 constexpr int NB_MAX_FINDHISTORY_FILTER  = 20;
 
-
 constexpr int MASK_ReplaceBySpc = 0x80;
 constexpr int MASK_TabSize = 0x7F;
-
-
-
 
 struct Lang final	{
 

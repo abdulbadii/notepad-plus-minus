@@ -2663,15 +2663,14 @@ INT_PTR CALLBACK AutoCompletionDlg::run_dlgProc(UINT message, WPARAM wParam, LPA
 				selectedID = IDD_AUTOC_FUNCRADIO;
 			else if (nppGUI._autocStatus == nppGUI.autoc_word)
 				selectedID = IDD_AUTOC_WORDRADIO;
-			else// if (nppGUI._autocStatus == nppGUI.autoc_both)
+			else
 				selectedID = IDD_AUTOC_BOTHRADIO;
 			
 			::SendDlgItemMessage(_hSelf, selectedID, BM_SETCHECK, BST_CHECKED, 0);
 
-			if (nppGUI._autocStatus == nppGUI.autoc_word || nppGUI._autocStatus == nppGUI.autoc_both)	{
-				::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORENUMBERS, BM_SETCHECK, nppGUI._autocIgnoreNumbers ? BST_CHECKED : BST_UNCHECKED, 0);
 				::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORECASE, BM_SETCHECK, nppGUI._autocIgnoreCase ? BST_CHECKED : BST_UNCHECKED, 0);
-			}
+			if (nppGUI._autocStatus == nppGUI.autoc_word || nppGUI._autocStatus == nppGUI.autoc_both)
+				::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORENUMBERS, BM_SETCHECK, nppGUI._autocIgnoreNumbers ? BST_CHECKED : BST_UNCHECKED, 0);
 
 			if (!isEnableAutoC)	{
 
