@@ -332,7 +332,7 @@
 	#define    IDM_VIEW_PROJECT_PANEL_3           (IDM_VIEW + 83)
 
 	#define    IDM_VIEW_LINENUMBER                (IDM_VIEW + 77)
-	#define    IDM_SHOW_HIDE_FIND_RESULTS      (IDM_VIEW +78)
+	#define    IDM_VIEW_FIND_RESULT      (IDM_VIEW +78)
 	#define    IDM_VIEW_FUNC_LIST                 (IDM_VIEW + 84)
 	#define    IDM_VIEW_CHAR_PANEL                  (IDM_VIEW + 79)
 

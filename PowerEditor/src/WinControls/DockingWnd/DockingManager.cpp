@@ -571,7 +571,7 @@ void DockingManager::createDockableDlg(tTbData data, int iCont, bool isVisible)	
 		// create image list if not exist
 		if (!_hImageList)	{
 
-			int iconDpiDynamicalSize = NppParameters::getInstance()._dpiManager.scaleY(14);
+			int iconDpiDynamicalSize = param._dpiManager.scaleY(14);
 			_hImageList = ::ImageList_Create(iconDpiDynamicalSize,iconDpiDynamicalSize,ILC_COLOR8, 0, 0);
 		}
 

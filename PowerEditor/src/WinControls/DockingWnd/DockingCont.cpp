@@ -86,13 +86,13 @@ DockingCont::DockingCont()
 	_bDrawOgLine		= TRUE;
 	_vTbData.clear();
 
-	_captionHeightDynamic = NppParameters::getInstance()._dpiManager.scaleY(_captionHeightDynamic);
-	_captionGapDynamic = NppParameters::getInstance()._dpiManager.scaleY(_captionGapDynamic);
-	_closeButtonPosLeftDynamic = NppParameters::getInstance()._dpiManager.scaleX(_closeButtonPosLeftDynamic);
-	_closeButtonPosTopDynamic = NppParameters::getInstance()._dpiManager.scaleY(_closeButtonPosTopDynamic);
+	_captionHeightDynamic = param._dpiManager.scaleY(_captionHeightDynamic);
+	_captionGapDynamic = param._dpiManager.scaleY(_captionGapDynamic);
+	_closeButtonPosLeftDynamic = param._dpiManager.scaleX(_closeButtonPosLeftDynamic);
+	_closeButtonPosTopDynamic = param._dpiManager.scaleY(_closeButtonPosTopDynamic);
 
-	_closeButtonWidth = NppParameters::getInstance()._dpiManager.scaleX(12); // bitmap image is 12x12
-	_closeButtonHeight = NppParameters::getInstance()._dpiManager.scaleY(12);
+	_closeButtonWidth = param._dpiManager.scaleX(12); // bitmap image is 12x12
+	_closeButtonHeight = param._dpiManager.scaleY(12);
 }
 
 DockingCont::~DockingCont()
@@ -881,7 +881,7 @@ void DockingCont::drawTabItem(DRAWITEMSTRUCT *pDrawItemStruct)	{
 			
 			ImageList_GetImageInfo(hImageList, iPosImage, &info);
 
-			int iconDpiDynamicalY = NppParameters::getInstance()._dpiManager.scaleY(7);
+			int iconDpiDynamicalY = param._dpiManager.scaleY(7);
 			ImageList_Draw(hImageList, iPosImage, hDc, rc.left + 3, iconDpiDynamicalY, ILD_NORMAL);
 
 			if (isSelected)	{
@@ -936,7 +936,7 @@ INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 			_hDefaultTabProc = reinterpret_cast<WNDPROC>(::SetWindowLongPtr(_hContTab, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(wndTabProc)));
 
 			// set min tab width
-			int tabDpiDynamicalMinWidth = NppParameters::getInstance()._dpiManager.scaleY(24);
+			int tabDpiDynamicalMinWidth = param._dpiManager.scaleY(24);
 			::SendMessage(_hContTab, TCM_SETMINTABWIDTH, 0, tabDpiDynamicalMinWidth);
 
 			break;
@@ -1026,7 +1026,7 @@ void DockingCont::onSize()	{
 	if (iItemCnt >= 1)	{
 
 		// resize to docked window
-		int tabDpiDynamicalHeight = NppParameters::getInstance()._dpiManager.scaleY(24);
+		int tabDpiDynamicalHeight = param._dpiManager.scaleY(24);
 		if (_isFloating == false)	{
 
 			// draw caption

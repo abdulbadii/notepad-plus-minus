@@ -43,7 +43,7 @@ class LastRecentFileList	{
 
 public:
 	LastRecentFileList() {
-		_userMax = (NppParameters::getInstance()).getNbMaxRecentFile();
+		_userMax = param.getNbMaxRecentFile();
 	};
 
 	void initMenu(HMENU hMenu, int idBase, int posBase, Accelerator *accelerator, bool doSubMenu = false);

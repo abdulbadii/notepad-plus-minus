@@ -57,20 +57,17 @@ void SmartHighlighter::highlightViewWithWord(ScintillaEditView * pHighlightView,
 	bool isWordOnly = true;
 	bool isCaseSensentive = true;
 
-	const NppGUI & nppGUI = NppParameters::getInstance().getNppGUI();
-
-	if (nppGUI._smartHiliteUseFindSettings)	{
+	if (nGUI._smartHiliteUseFindSettings)	{
 
 		// fetch find dialog's setting
-		NppParameters& nppParams = NppParameters::getInstance();
-		FindHistory &findHistory = nppParams.getFindHistory();
+		FindHistory &findHistory = param.getFindHistory();
 		isWordOnly = findHistory._isMatchWord;
 		isCaseSensentive = findHistory._isMatchCase;
 	}
 	else	{
 
-		isWordOnly = nppGUI._smartHiliteWordOnly;
-		isCaseSensentive = nppGUI._smartHiliteCaseSensitive;
+		isWordOnly = nGUI._smartHiliteWordOnly;
+		isCaseSensentive = nGUI._smartHiliteCaseSensitive;
 	}
 
 	FindOption fo;
@@ -112,12 +109,10 @@ void SmartHighlighter::highlightView(ScintillaEditView * pHighlightView, Scintil
 	// Clear marks
 	pHighlightView->clearIndicator(SCE_UNIVERSAL_FOUND_STYLE_SMART);
 
-	const NppGUI & nppGUI = NppParameters::getInstance().getNppGUI();
-
 	// If nothing selected or smart highlighting disabled, don't mark anything
-	if ((!nppGUI._enableSmartHilite) || (pHighlightView->execute(SCI_GETSELECTIONEMPTY) == 1))	{
+	if ((!nGUI._enableSmartHilite) || (pHighlightView->execute(SCI_GETSELECTIONEMPTY) == 1))	{
 
-		if (nppGUI._smartHiliteOnAnotherView && unfocusView && unfocusView->isVisible()
+		if (nGUI._smartHiliteOnAnotherView && unfocusView && unfocusView->isVisible()
 			&& unfocusView->getCurrentBufferID() != pHighlightView->getCurrentBufferID())
 		{
 			unfocusView->clearIndicator(SCE_UNIVERSAL_FOUND_STYLE_SMART);
@@ -132,16 +127,15 @@ void SmartHighlighter::highlightView(ScintillaEditView * pHighlightView, Scintil
 	// Determine mode for SmartHighlighting
 	bool isWordOnly = true;
 
-	if (nppGUI._smartHiliteUseFindSettings)	{
+	if (nGUI._smartHiliteUseFindSettings)	{
 
 		// fetch find dialog's setting
-		NppParameters& nppParams = NppParameters::getInstance();
-		FindHistory &findHistory = nppParams.getFindHistory();
+		FindHistory &findHistory = param.getFindHistory();
 		isWordOnly = findHistory._isMatchWord;
 	}
 	else	{
 
-		isWordOnly = nppGUI._smartHiliteWordOnly;
+		isWordOnly = nGUI._smartHiliteWordOnly;
 	}
 
 	// additional checks for wordOnly mode
@@ -171,7 +165,7 @@ void SmartHighlighter::highlightView(ScintillaEditView * pHighlightView, Scintil
 
 	highlightViewWithWord(pHighlightView, text2FindW);
 
-	if (nppGUI._smartHiliteOnAnotherView && unfocusView && unfocusView->isVisible()
+	if (nGUI._smartHiliteOnAnotherView && unfocusView && unfocusView->isVisible()
 		&& unfocusView->getCurrentBufferID() != pHighlightView->getCurrentBufferID())
 	{
 		// Clear marks

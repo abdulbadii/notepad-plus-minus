@@ -230,7 +230,7 @@ public :
 	static Notepad_plus *pNpp;
 	FindReplaceDlg() {
 		_uniFileName = new char[(_fileNameLenMax + 3) * 2];
-		_winVer = (NppParameters::getInstance()).getWinVersion();
+		_winVer = param.getWinVersion();
 		_env = &_options;
 	};
 	~FindReplaceDlg();
@@ -321,18 +321,14 @@ return _pFinder->_canBeVolatiled;}
 			_pFinder->setFinderStyle();
 		}
 	};
-	
 	void openSwFinder(){
 		if (::GetFocus() == _pFinder->_scintView.getHSelf())
 			_pFinder->_scintView.focus();
 		else		openFinder();
 	}
-	void clearAllFinder()	{
-		if (_pFinder)	{
-		_pFinder->removeAll();
-		::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
-		}
-	}
+	
+	void clearAllFinder();
+
 	void openFinder()	{
 		if (_pFinder)	{
 			::SendMessage(_hParent, NPPM_DMMSHOW, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));

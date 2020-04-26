@@ -24,19 +24,17 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-
 #include <time.h>
 #include <shlwapi.h>
 #include <shlobj.h>
+#include <tchar.h>
+#include <unordered_set>
 #include "Notepad_plus_Window.h"
 #include "FileDialog.h"
 #include "EncodingMapper.h"
 #include "VerticalFileSwitcher.h"
 #include "functionListPanel.h"
 #include "ReadDirectoryChanges.h"
-#include <tchar.h>
-#include <unordered_set>
 
 using namespace std;
 
@@ -126,8 +124,7 @@ BufferID Notepad_plus::doOpen(const generic_string& fileName, bool isRecursive, 
 	//If the lpBuffer buffer is too small to contain the path, the return value [of GetFullPathName] is the size, in TCHARs, of the buffer that is required to hold the path and the terminating null character.
 	//If [GetFullPathName] fails for any other reason, the return value is zero.
 
-	NppParameters& nppParam = NppParameters::getInstance();
-	TCHAR longFileName[longFileNameBufferSize];
+		TCHAR longFileName[longFileNameBufferSize];
 
 	const DWORD getFullPathNameResult = ::GetFullPathName(fileName.c_str(), longFileNameBufferSize, longFileName, NULL);
 	if (!getFullPathNameResult)	{
@@ -196,7 +193,7 @@ BufferID Notepad_plus::doOpen(const generic_string& fileName, bool isRecursive, 
 
 	if (isFileWorkspace(longFileName) && PathFileExists(longFileName))	{
 
-		nppParam.setWorkSpaceFilePath(0, longFileName);
+		param.setWorkSpaceFilePath(0, longFileName);
 		command(IDM_VIEW_PROJECT_PANEL_1);
 		return BUFFER_INVALID;
 	}
@@ -204,7 +201,7 @@ BufferID Notepad_plus::doOpen(const generic_string& fileName, bool isRecursive, 
 	bool isWow64Off = false;
 	if (!PathFileExists(longFileName))	{
 
-		nppParam.safeWow64EnableWow64FsRedirection(FALSE);
+		param.safeWow64EnableWow64FsRedirection(FALSE);
 		isWow64Off = true;
 	}
 
@@ -261,7 +258,7 @@ BufferID Notepad_plus::doOpen(const generic_string& fileName, bool isRecursive, 
 
 				if (isWow64Off)	{
 
-					nppParam.safeWow64EnableWow64FsRedirection(TRUE);
+					param.safeWow64EnableWow64FsRedirection(TRUE);
 					isWow64Off = false;
 				}
 				return BUFFER_INVALID;
@@ -416,7 +413,7 @@ BufferID Notepad_plus::doOpen(const generic_string& fileName, bool isRecursive, 
 
 	if (isWow64Off)	{
 
-		nppParam.safeWow64EnableWow64FsRedirection(TRUE);
+		param.safeWow64EnableWow64FsRedirection(TRUE);
 		//isWow64Off = false;
 	}
 	return buffer;
@@ -516,7 +513,7 @@ bool Notepad_plus::doSave(BufferID id, const TCHAR * filename, bool isCopy)	{
 		// try to open Notepad++ in admin mode
 		if (!_isAdministrator)	{
 
-			bool isSnapshotMode = NppParameters::getInstance().getNppGUI().isSnapshotMode();
+			bool isSnapshotMode = nppGUI.isSnapshotMode();
 			if (isSnapshotMode)	{ // if both rememberSession && backup mode are enabled
                    // Open the 2nd Notepad++ instance in Admin mode, then close the 1st instance.
 				int openInAdminModeRes = _nativeLangSpeaker.messageBox("OpenInAdminMode",
@@ -641,11 +638,10 @@ void Notepad_plus::doClose(BufferID id, int whichOne, bool doDeleteBackup){
 		// if the file doesn't exist, it could be redirected
 		// So we turn Wow64 off
 		bool isWow64Off = false;
-		NppParameters& nppParam = NppParameters::getInstance();
-		const TCHAR *fn = buf->getFullPathName();
+				const TCHAR *fn = buf->getFullPathName();
 		if (!PathFileExists(fn))	{
 
-			nppParam.safeWow64EnableWow64FsRedirection(FALSE);
+			param.safeWow64EnableWow64FsRedirection(FALSE);
 			isWow64Off = true;
 		}
 
@@ -655,7 +651,7 @@ void Notepad_plus::doClose(BufferID id, int whichOne, bool doDeleteBackup){
 		// We enable Wow64 system, if it was disabled
 		if (isWow64Off)	{
 
-			nppParam.safeWow64EnableWow64FsRedirection(TRUE);
+			param.safeWow64EnableWow64FsRedirection(TRUE);
 			//isWow64Off = false;
 		}
 	}
@@ -700,7 +696,7 @@ void Notepad_plus::doClose(BufferID id, int whichOne, bool doDeleteBackup){
 
 	command(IDM_VIEW_REFRESHTABAR);
 	// the user closed the last open tab
-	if ((NppParameters::getInstance().getNppGUI()._tabStatus & TAB_QUITONEMPTY) && numInitialOpenBuffers == 1 && isEmpty() && !_isAttemptingCloseOnQuit)		command(IDM_FILE_EXIT);
+	if ((nppGUI._tabStatus & TAB_QUITONEMPTY) && numInitialOpenBuffers == 1 && isEmpty() && !_isAttemptingCloseOnQuit)		command(IDM_FILE_EXIT);
 	return;
 }
 
@@ -756,11 +752,8 @@ generic_string Notepad_plus::exts2Filters(const generic_string& exts) const
 
 int Notepad_plus::setFileOpenSaveDlgFilters(FileDialog & fDlg, int langType)	{
 
-	NppParameters& nppParam = NppParameters::getInstance();
-	NppGUI & nppGUI = (NppGUI & )nppParam.getNppGUI();
-
 	int i = 0;
-	Lang *l = NppParameters::getInstance().getLangFromIndex(i++);
+	Lang *l = param.getLangFromIndex(i++);
 
 	int ltIndex = 0;
 	bool ltFound = false;
@@ -784,7 +777,7 @@ int Notepad_plus::setFileOpenSaveDlgFilters(FileDialog & fDlg, int langType)	{
 			const TCHAR *defList = l->getDefaultExtList();
 			const TCHAR *userList = NULL;
 
-			LexerStylerArray &lsa = (NppParameters::getInstance()).getLStylerArray();
+			LexerStylerArray &lsa = param.getLStylerArray();
 			const TCHAR *lName = l->getLangName();
 			LexerStyler *pLS = lsa.getLexerStylerByName(lName);
 
@@ -820,7 +813,7 @@ int Notepad_plus::setFileOpenSaveDlgFilters(FileDialog & fDlg, int langType)	{
 
 			}
 		}
-		l = (NppParameters::getInstance()).getLangFromIndex(i++);
+		l = param.getLangFromIndex(i++);
 	}
 	if (!ltFound)     return -1;
 	return ltIndex;
@@ -840,7 +833,7 @@ bool Notepad_plus::fileClose(BufferID id, int curView)	{
 		else if (res == IDYES && !fileSave(id))	return false; // the cancel button of savedialog is pressed, aborts closing
 	}
 	
-	doClose(bufferID, curView==-1? currentView(): curView, NppParameters::getInstance().getNppGUI().isSnapshotMode());
+	doClose(bufferID, curView==-1? currentView(): curView, nppGUI.isSnapshotMode());
 	return true;
 }
 
@@ -1118,7 +1111,7 @@ bool Notepad_plus::fileCloseAllGiven(const std::vector<int>& krvecBufferIndexes)
 	}
 
 	// Now we close.
-	bool isSnapshotMode = NppParameters::getInstance().getNppGUI().isSnapshotMode();
+	bool isSnapshotMode = nppGUI.isSnapshotMode();
 	for (const auto& index : bufferIndexesToClose)	{
 
 		doClose(_pDocTab->getBufferByIndex(index), currentView(), isSnapshotMode);
@@ -1180,7 +1173,7 @@ bool Notepad_plus::fileCloseAllButCurrent()	{
 	bool saveToAll = false;
 	std::vector<unsigned int> mainSaveOpIndex, subSaveOpIndex;
 
-	bool isSnapshotMode = NppParameters::getInstance().getNppGUI().isSnapshotMode();
+	bool isSnapshotMode = nppGUI.isSnapshotMode();
 
 	//closes all documents, makes the current view the only one visible
 
@@ -1375,8 +1368,7 @@ bool Notepad_plus::fileSave(BufferID id)	{
 			return fileSaveAs(bufferID);
 		}
 
-		const NppGUI & nppgui = NppParameters::getInstance().getNppGUI();
-		BackupFeature backup = nppgui._backup;
+		BackupFeature backup = nGUI._backup;
 
 		if (backup != bak_none)	{
 
@@ -1384,10 +1376,10 @@ bool Notepad_plus::fileSave(BufferID id)	{
 			TCHAR *name = ::PathFindFileName(fn);
 			generic_string fn_bak;
 
-			if (nppgui._useDir && not nppgui._backupDir.empty())	{
+			if (nGUI._useDir && not nGUI._backupDir.empty())	{
 
 				// Get the custom directory, make sure it has a trailing slash
-				fn_bak = nppgui._backupDir;
+				fn_bak = nGUI._backupDir;
 				if (fn_bak.back() != L'\\')
 					fn_bak += L"\\";
 			}
@@ -1521,14 +1513,13 @@ bool Notepad_plus::fileSaveAs(BufferID id, bool isSaveCopy)	{
 	fDlg.setExtIndex(langTypeIndex+1); // +1 for "All types"
 
 	// Disable file autodetection before opening save dialog to prevent use-after-delete bug.
-	NppParameters& nppParam = NppParameters::getInstance();
-	auto cdBefore = nppParam.getNppGUI()._fileAutoDetection;
-	(const_cast<NppGUI &>(nppParam.getNppGUI()))._fileAutoDetection = cdDisabled;
+		auto cdBefore = nppGUI._fileAutoDetection;
+	nppGUI._fileAutoDetection = cdDisabled;
 
 	TCHAR *pfn = fDlg.doSaveDlg();
 
 	// Enable file autodetection again.
-	(const_cast<NppGUI &>(nppParam.getNppGUI()))._fileAutoDetection = cdBefore;
+	nppGUI._fileAutoDetection = cdBefore;
 
 	if (pfn)	{
 
@@ -1609,7 +1600,7 @@ bool Notepad_plus::fileRename(BufferID id)	{
 
 			success = true;
 			buf->setFileName(tabNewName);
-			bool isSnapshotMode = NppParameters::getInstance().getNppGUI().isSnapshotMode();
+			bool isSnapshotMode = nppGUI.isSnapshotMode();
 			if (isSnapshotMode)	{
 
 				generic_string oldBackUpFile = buf->getBackupFileName();
@@ -1644,7 +1635,7 @@ bool Notepad_plus::fileDelete(BufferID id)	{
 	Buffer * buf = MainFileManager.getBufferByID(bufferID);
 	const TCHAR *fileNamePath = buf->getFullPathName();
 
-	winVer winVersion = (NppParameters::getInstance()).getWinVersion();
+	winVer winVersion = param.getWinVersion();
 	bool goAhead = true;
 	if (winVersion >= WV_WIN8 || winVersion == WV_UNKNOWN)	{
 
@@ -1673,7 +1664,7 @@ bool Notepad_plus::fileDelete(BufferID id)	{
 
 			return false;
 		}
-		bool isSnapshotMode = NppParameters::getInstance().getNppGUI().isSnapshotMode();
+		bool isSnapshotMode = nppGUI.isSnapshotMode();
 		doClose(bufferID, MAIN_VIEW, isSnapshotMode);
 		doClose(bufferID, SUB_VIEW, isSnapshotMode);
 
@@ -1732,7 +1723,7 @@ bool Notepad_plus::fileReload()	{
 bool Notepad_plus::isFileSession(const TCHAR * filename)	{
 
 	// if file2open matches the ext of user defined session file ext, then it'll be opened as a session
-	const TCHAR *definedSessionExt = NppParameters::getInstance().getNppGUI()._definedSessionExt.c_str();
+	const TCHAR *definedSessionExt = nppGUI._definedSessionExt.c_str();
 	if (*definedSessionExt != '\0')	{
 
 		generic_string fncp = filename;
@@ -1755,7 +1746,7 @@ bool Notepad_plus::isFileSession(const TCHAR * filename)	{
 
 bool Notepad_plus::isFileWorkspace(const TCHAR * filename) {
 	// if filename matches the ext of user defined workspace file ext, then it'll be opened as a workspace
-	const TCHAR *definedWorkspaceExt = NppParameters::getInstance().getNppGUI()._definedWorkspaceExt.c_str();
+	const TCHAR *definedWorkspaceExt = nppGUI._definedWorkspaceExt.c_str();
 	if (*definedWorkspaceExt != '\0')	{
 
 		generic_string fncp = filename;
@@ -1778,10 +1769,8 @@ bool Notepad_plus::isFileWorkspace(const TCHAR * filename) {
 
 void Notepad_plus::loadLastSession()	{
 
-	NppParameters& nppParams = NppParameters::getInstance();
-	const NppGUI & nppGui = nppParams.getNppGUI();
-	Session lastSession = nppParams.getSession();
-	bool isSnapshotMode = nppGui.isSnapshotMode();
+	Session lastSession = param.getSession();
+	bool isSnapshotMode = nGUI.isSnapshotMode();
 	_isFolding = true;
 	loadSession(lastSession, isSnapshotMode);
 	_isFolding = false;
@@ -1789,8 +1778,7 @@ void Notepad_plus::loadLastSession()	{
 
 bool Notepad_plus::loadSession(Session & session, bool isSnapshotMode)	{
 
-	NppParameters& nppParam = NppParameters::getInstance();
-	bool allSessionFilesLoaded = true;
+		bool allSessionFilesLoaded = true;
 	BufferID lastOpened = BUFFER_INVALID;
 	//size_t i = 0;
 	showView(MAIN_VIEW);
@@ -1812,7 +1800,7 @@ bool Notepad_plus::loadSession(Session & session, bool isSnapshotMode)	{
 		bool isWow64Off = false;
 		if (!PathFileExists(pFn))	{
 
-			nppParam.safeWow64EnableWow64FsRedirection(FALSE);
+			param.safeWow64EnableWow64FsRedirection(FALSE);
 			isWow64Off = true;
 		}
 		if (PathFileExists(pFn))	{
@@ -1832,7 +1820,7 @@ bool Notepad_plus::loadSession(Session & session, bool isSnapshotMode)	{
 		}
 		if (isWow64Off)	{
 
-			nppParam.safeWow64EnableWow64FsRedirection(TRUE);
+			param.safeWow64EnableWow64FsRedirection(TRUE);
 			isWow64Off = false;
 		}
 
@@ -1914,7 +1902,7 @@ bool Notepad_plus::loadSession(Session & session, bool isSnapshotMode)	{
 		bool isWow64Off = false;
 		if (!PathFileExists(pFn))	{
 
-			nppParam.safeWow64EnableWow64FsRedirection(FALSE);
+			param.safeWow64EnableWow64FsRedirection(FALSE);
 			isWow64Off = true;
 		}
 		if (PathFileExists(pFn))	{
@@ -1940,7 +1928,7 @@ bool Notepad_plus::loadSession(Session & session, bool isSnapshotMode)	{
 		}
 		if (isWow64Off)	{
 
-			nppParam.safeWow64EnableWow64FsRedirection(TRUE);
+			param.safeWow64EnableWow64FsRedirection(TRUE);
 			isWow64Off = false;
 		}
 
@@ -2045,7 +2033,7 @@ bool Notepad_plus::fileLoadSession(const TCHAR *fn)	{
 	if (!fn)	{
 
 		FileDialog fDlg(_pPublicInterface->getHSelf(), _pPublicInterface->getHinst());
-		const TCHAR *ext = NppParameters::getInstance().getNppGUI()._definedSessionExt.c_str();
+		const TCHAR *ext = nppGUI._definedSessionExt.c_str();
 		generic_string sessionExt = L"";
 		if (*ext != '\0')	{
 
@@ -2064,8 +2052,6 @@ bool Notepad_plus::fileLoadSession(const TCHAR *fn)	{
 	}
 
 
-	NppParameters& nppParam = NppParameters::getInstance();
-	const NppGUI & nppGUI = nppParam.getNppGUI();
 	if (sessionFileName)	{
 
 		bool isEmptyNpp = false;
@@ -2075,7 +2061,7 @@ bool Notepad_plus::fileLoadSession(const TCHAR *fn)	{
 			Buffer * buf2 = MainFileManager.getBufferByID(_subDocTab.getBufferByIndex(0));
 			isEmptyNpp = (!buf1->isDirty() && buf1->isUntitled() && !buf2->isDirty() && buf2->isUntitled());
 		}
-		if (!isEmptyNpp && (nppGUI._multiInstSetting == multiInstOnSession || nppGUI._multiInstSetting == multiInst))	{
+		if (!isEmptyNpp && (nGUI._multiInstSetting == multiInstOnSession || nGUI._multiInstSetting == multiInst))	{
 
 			TCHAR nppFullPath[MAX_PATH];
 			::GetModuleFileName(NULL, nppFullPath, MAX_PATH);
@@ -2093,13 +2079,13 @@ bool Notepad_plus::fileLoadSession(const TCHAR *fn)	{
 			bool isAllSuccessful = true;
 			Session session2Load;
 
-			if ((NppParameters::getInstance()).loadSession(session2Load, sessionFileName))	{
+			if (param.loadSession(session2Load, sessionFileName))	{
 
 				isAllSuccessful = loadSession(session2Load);
 				result = true;
 			}
 			if (!isAllSuccessful)
-				(NppParameters::getInstance()).writeSession(session2Load, sessionFileName);
+				param.writeSession(session2Load, sessionFileName);
 		}
 		if (result == false)	{
 
@@ -2129,7 +2115,7 @@ const TCHAR * Notepad_plus::fileSaveSession(size_t nbFile, TCHAR ** fileNames, c
 		else
 			getCurrentOpenedFiles(currentSession);
 
-		(NppParameters::getInstance()).writeSession(currentSession, sessionFile2save);
+		param.writeSession(currentSession, sessionFile2save);
 		return sessionFile2save;
 	}
 	return NULL;
@@ -2140,7 +2126,7 @@ const TCHAR * Notepad_plus::fileSaveSession(size_t nbFile, TCHAR ** fileNames)	{
 	const TCHAR *sessionFileName = NULL;
 
 	FileDialog fDlg(_pPublicInterface->getHSelf(), _pPublicInterface->getHinst());
-	const TCHAR *ext = NppParameters::getInstance().getNppGUI()._definedSessionExt.c_str();
+	const TCHAR *ext = nppGUI._definedSessionExt.c_str();
 
 	generic_string sessionExt = L"";
 	if (*ext != '\0')	{
@@ -2160,7 +2146,7 @@ const TCHAR * Notepad_plus::fileSaveSession(size_t nbFile, TCHAR ** fileNames)	{
 
 void Notepad_plus::saveSession(const Session & session)	{
 
-	(NppParameters::getInstance()).writeSession(session);
+	param.writeSession(session);
 }
 
 

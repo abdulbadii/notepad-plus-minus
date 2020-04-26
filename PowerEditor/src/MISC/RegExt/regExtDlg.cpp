@@ -24,12 +24,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 #include "Common.h"
 #include "regExtDlg.h"
 #include "resource.h"
 #include "Parameters.h"
-
-
 
 const TCHAR* nppName   = L"Notepad++_file";
 const TCHAR* nppBackup = L"Notepad++_backup";
@@ -38,7 +37,6 @@ const TCHAR* nppDoc    = L"Notepad++ Document";
 const int nbSupportedLang = 10;
 const int nbExtMax = 27;
 const int extNameMax = 18;
-
 
 const TCHAR defExtArray[nbSupportedLang][nbExtMax][extNameMax] =
 {
@@ -103,8 +101,7 @@ INT_PTR CALLBACK RegExtDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lPar
 			::EnableWindow(::GetDlgItem(_hSelf, IDC_ADDFROMLANGEXT_BUTTON), false);
 			::EnableWindow(::GetDlgItem(_hSelf, IDC_REMOVEEXT_BUTTON), false);
 
-			NppParameters& nppParam = NppParameters::getInstance();
-			if (!nppParam.isAdmin())	{
+			if (!param.isAdmin())	{
 
 				::EnableWindow(::GetDlgItem(_hSelf, IDC_REGEXT_LANG_LIST), false);
 				::EnableWindow(::GetDlgItem(_hSelf, IDC_REGEXT_LANGEXT_LIST), false);

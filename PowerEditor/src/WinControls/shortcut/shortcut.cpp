@@ -304,19 +304,19 @@ void getNameStrFromCmd(DWORD cmd, generic_string & str)	{
 
 	if ((cmd >= ID_MACRO) && (cmd < ID_MACRO_LIMIT))	{
 
-		vector<MacroShortcut> & theMacros = (NppParameters::getInstance()).getMacroList();
+		vector<MacroShortcut> & theMacros = param.getMacroList();
 		int i = cmd - ID_MACRO;
 		str = theMacros[i].getName();
 	}
 	else if ((cmd >= ID_USER_CMD) && (cmd < ID_USER_CMD_LIMIT))	{
 
-		vector<UserCommand> & userCommands = (NppParameters::getInstance()).getUserCommandList();
+		vector<UserCommand> & userCommands = param.getUserCommandList();
 		int i = cmd - ID_USER_CMD;
 		str = userCommands[i].getName();
 	}
 	else if ((cmd >= ID_PLUGINS_CMD) && (cmd < ID_PLUGINS_CMD_LIMIT))	{
 
-		vector<PluginCmdShortcut> & pluginCmds = (NppParameters::getInstance()).getPluginCommandList();
+		vector<PluginCmdShortcut> & pluginCmds = param.getPluginCommandList();
 		size_t i = 0;
 		for (size_t j = 0, len = pluginCmds.size(); j < len ; ++j)	{
 
@@ -411,7 +411,7 @@ INT_PTR CALLBACK Shortcut::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)	{
 			::ShowWindow(::GetDlgItem(_hSelf, IDC_WARNING_STATIC), SW_HIDE);
 			
 			updateConflictState();
-			NativeLangSpeaker* nativeLangSpeaker = NppParameters::getInstance().getNativeLangSpeaker();
+			NativeLangSpeaker* nativeLangSpeaker = param.getNativeLangSpeaker();
 			nativeLangSpeaker->changeDlgLang(_hSelf, "ShortcutMapperSubDialg");
 			goToCenter();
 			return TRUE;
@@ -494,7 +494,7 @@ void Accelerator::updateShortcuts()	{
 
 	const array<unsigned long, 3> incrFindAccIds = { IDM_SEARCH_FINDNEXT, IDM_SEARCH_FINDPREV, IDM_SEARCH_FINDINCREMENT };
 
-	NppParameters& nppParam = NppParameters::getInstance();
+	NppParameters& nppParam = param;
 
 	vector<CommandShortcut> & shortcuts = nppParam.getUserShortcuts();
 	vector<MacroShortcut> & macros  = nppParam.getMacroList();
@@ -605,7 +605,7 @@ void Accelerator::updateShortcuts()	{
 
 void Accelerator::updateFullMenu()	{
 
-	NppParameters& nppParam = NppParameters::getInstance();
+	NppParameters& nppParam = param;
 	vector<CommandShortcut> commands = nppParam.getUserShortcuts();
 	for (size_t i = 0; i < commands.size(); ++i)	{
 
@@ -886,7 +886,7 @@ void ScintillaAccelerator::init(vector<HWND> * vScintillas, HMENU hMenu, HWND me
 
 void ScintillaAccelerator::updateKeys()	{ 
 
-	NppParameters& nppParam = NppParameters::getInstance();
+	NppParameters& nppParam = param;
 	vector<ScintillaKeyMap> & map = nppParam.getScintillaKeyList();
 	size_t mapSize = map.size();
 	size_t index;
@@ -1025,7 +1025,7 @@ INT_PTR CALLBACK ScintillaKeyMap::run_dlgProc(UINT Message, WPARAM wParam, LPARA
 			// Hide this warning on startup
 			::ShowWindow(::GetDlgItem(_hSelf, IDC_WARNING_STATIC), SW_HIDE);
 
-			NativeLangSpeaker* nativeLangSpeaker = NppParameters::getInstance().getNativeLangSpeaker();
+			NativeLangSpeaker* nativeLangSpeaker = param.getNativeLangSpeaker();
 			nativeLangSpeaker->changeDlgLang(_hSelf, "ShortcutMapperSubDialg");
 			goToCenter();
 			return TRUE;

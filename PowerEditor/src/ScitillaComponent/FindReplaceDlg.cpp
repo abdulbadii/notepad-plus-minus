@@ -41,8 +41,6 @@ FindOption *FindReplaceDlg::_env;
 FindOption FindReplaceDlg::_options;
 Notepad_plus *FindReplaceDlg::pNpp;
 
-extern NppParameters& param;
-
 inline void addText2Combo(const TCHAR * txt2add, HWND hCombo)
 {
 	if (!hCombo || !lstrcmp(txt2add, L"")) return;
@@ -449,6 +447,13 @@ void FindReplaceDlg::updateCombo(int comboID){
 
 	HWND hCombo = ::GetDlgItem(_hSelf, comboID);
 	addText2Combo(getTextFromCombo(hCombo).c_str(), hCombo);
+}
+
+void FindReplaceDlg::clearAllFinder()	{
+		if (_pFinder)
+			_pFinder->removeAll();
+		::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
+		(*_ppEditView)->focus();
 }
 
 FoundInfo Finder::EmptyFoundInfo(0, 0, 0, L"");
@@ -881,7 +886,7 @@ void Finder::setFinderStyle()	{
 	
 	// Set current line background color for the finder
 	const TCHAR * lexerName = ScintillaEditView::langNames[L_SEARCHRESULT].lexerName;
-	LexerStyler *pStyler = param.getLStylerArray()).getLexerStylerByName(lexerName);
+	LexerStyler *pStyler = param.getLStylerArray().getLexerStylerByName(lexerName);
 	if (pStyler)	{
 
 		int i = pStyler->getStylerIndexByID(SCE_SEARCHRESULT_CURRENT_LINE);
@@ -1216,7 +1221,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 		case WM_INITDIALOG :	{
 
-			if param.getNppGUI()._monospacedFontFindDlg)	{
+			if (nGUI._monospacedFontFindDlg)	{
 
 				HWND hFindCombo = ::GetDlgItem(_hSelf, IDFINDWHAT);
 				HWND hReplaceCombo = ::GetDlgItem(_hSelf, IDREPLACEWITH);

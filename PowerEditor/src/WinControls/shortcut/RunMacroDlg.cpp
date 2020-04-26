@@ -36,7 +36,7 @@ void RunMacroDlg::initMacroList()	{
 
 	if (!isCreated()) return;
 
-	NppParameters& nppParam = NppParameters::getInstance();
+	NppParameters& nppParam = param;
 	std::vector<MacroShortcut> & macroList = nppParam.getMacroList();
 
 	::SendDlgItemMessage(_hSelf, IDC_MACRO_COMBO, CB_RESETCONTENT, 0, 0);

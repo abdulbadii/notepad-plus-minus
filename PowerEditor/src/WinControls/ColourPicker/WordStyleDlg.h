@@ -24,14 +24,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-
 #pragma once
 
 #include "ColourPicker.h"
 #include "WordStyleDlgRes.h"
 #include "Parameters.h"
-
 
 #define WM_UPDATESCINTILLAS			(WORDSTYLE_USER + 1) //GlobalStyleDlg's msg 2 send 2 its parent
 
@@ -39,7 +36,6 @@ enum fontStyleType {BOLD_STATUS, ITALIC_STATUS, UNDERLINE_STATUS};
 
 const bool C_FOREGROUND = false;
 const bool C_BACKGROUND = true;
-
 
 class ColourStaticTextHooker {
 public :
@@ -91,9 +87,9 @@ public :
     };
 
 	void prepare2Cancel() {
-		_styles2restored = (NppParameters::getInstance()).getLStylerArray();
-		_gstyles2restored = (NppParameters::getInstance()).getGlobalStylers();
-		_gOverride2restored = (NppParameters::getInstance()).getGlobalOverrideStyle();
+		_styles2restored = param.getLStylerArray();
+		_gstyles2restored = param.getGlobalStylers();
+		_gOverride2restored = param.getGlobalOverrideStyle();
 	};
 
     virtual void redraw(bool forceUpdate = false) const {
@@ -104,15 +100,14 @@ public :
     };
 	
 	void restoreGlobalOverrideValues() {
-		GlobalOverride & gOverride = (NppParameters::getInstance()).getGlobalOverrideStyle();
+		GlobalOverride & gOverride = param.getGlobalOverrideStyle();
 		gOverride = _gOverride2restored;
 	};
 
 	void apply();
 
 	void addLastThemeEntry() {
-        NppParameters& nppParamInst = NppParameters::getInstance();
-        ThemeSwitcher & themeSwitcher = nppParamInst.getThemeSwitcher();
+        ThemeSwitcher & themeSwitcher = param.getThemeSwitcher();
 		std::pair<generic_string, generic_string> & themeInfo = themeSwitcher.getElementFromIndex(themeSwitcher.size() - 1);
 	    ::SendMessage(_hSwitch2ThemeCombo, CB_ADDSTRING, 0, reinterpret_cast<LPARAM>(themeInfo.first.c_str()));
     };

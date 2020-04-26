@@ -25,8 +25,6 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-
-
 #include "lastRecentFileList.h"
 #include "menuCmdID.h"
 #include "localization.h"
@@ -94,12 +92,10 @@ void LastRecentFileList::switchMode()	{
 
 void LastRecentFileList::updateMenu()	{
 
-	NppParameters& nppParam = NppParameters::getInstance();
-
 	if (!_hasSeparators && _size > 0)	{ 
 	
 		//add separators
-		NativeLangSpeaker *pNativeLangSpeaker = nppParam.getNativeLangSpeaker();
+		NativeLangSpeaker *pNativeLangSpeaker = param.getNativeLangSpeaker();
 
 		generic_string recentFileList = pNativeLangSpeaker->getSpecialMenuEntryName("RecentFiles");
 		generic_string openRecentClosedFile = pNativeLangSpeaker->getNativeLangMenuString(IDM_FILE_RESTORELASTCLOSEDFILE);
@@ -160,7 +156,7 @@ void LastRecentFileList::updateMenu()	{
 	//Then readd them, so everything stays in sync
 	for (int j = 0; j < _size; ++j)	{
 
-		generic_string strBuffer(BuildMenuFileName(nppParam.getRecentFileCustomLength(), j, _lrfl.at(j)._name));
+		generic_string strBuffer(BuildMenuFileName(param.getRecentFileCustomLength(), j, _lrfl.at(j)._name));
 		::InsertMenu(_hMenu, _posBase + j, MF_BYPOSITION, _lrfl.at(j)._id, strBuffer.c_str());
 	}
 	
@@ -274,12 +270,11 @@ void LastRecentFileList::setUserMaxNbLRF(int size)	{
 
 void LastRecentFileList::saveLRFL()	{
 
-	NppParameters& nppParams = NppParameters::getInstance();
-	if (nppParams.writeRecentFileHistorySettings(_userMax))	{
+	if (param.writeRecentFileHistorySettings(_userMax))	{
 
 		for (int i = _size - 1; i >= 0; --i )	{	//reverse order: so loading goes in correct order
 
-			nppParams.writeHistory(_lrfl.at(i)._name.c_str());
+			param.writeHistory(_lrfl.at(i)._name.c_str());
 		}
 	}
 }

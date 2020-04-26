@@ -35,7 +35,6 @@
 #include "RunDlg.h"
 #include "ReadDirectoryChanges.h"
 #include "menuCmdID.h"
-#include "Parameters.h"
 
 #define CX_BITMAP         16
 #define CY_BITMAP         16
@@ -108,7 +107,6 @@ INT_PTR CALLBACK FileBrowser::run_dlgProc(UINT message, WPARAM wParam, LPARAM lP
 
         case WM_INITDIALOG :	{
 
-			NppParameters& nppParam = NppParameters::getInstance();
 			int style = WS_CHILD | WS_VISIBLE | CCS_ADJUSTABLE | TBSTYLE_AUTOSIZE | TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TRANSPARENT | BTNS_AUTOSIZE | BTNS_SEP | TBSTYLE_TOOLTIPS;
 			_hToolbarMenu = CreateWindowEx(WS_EX_LAYOUTRTL, TOOLBARCLASSNAME, NULL, style, 0, 0, 0, 0, _hSelf, nullptr, _hInst, NULL);
 			TBBUTTON tbButtons[3];
@@ -137,7 +135,7 @@ INT_PTR CALLBACK FileBrowser::run_dlgProc(UINT message, WPARAM wParam, LPARAM lP
 			tbButtons[2].iString = reinterpret_cast<INT_PTR>(L"");
 
 			::SendMessage(_hToolbarMenu, TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
-			::SendMessage(_hToolbarMenu, TB_SETBUTTONSIZE, 0, MAKELONG(nppParam._dpiManager.scaleX(20), nppParam._dpiManager.scaleY(20)));
+			::SendMessage(_hToolbarMenu, TB_SETBUTTONSIZE, 0, MAKELONG(param._dpiManager.scaleX(20), param._dpiManager.scaleY(20)));
 			::SendMessage(_hToolbarMenu, TB_SETPADDING, 0, MAKELONG(20, 0));
 			::SendMessage(_hToolbarMenu, TB_ADDBUTTONS, sizeof(tbButtons) / sizeof(TBBUTTON), reinterpret_cast<LPARAM>(&tbButtons));
 			::SendMessage(_hToolbarMenu, TB_AUTOSIZE, 0, 0);
@@ -188,7 +186,7 @@ INT_PTR CALLBACK FileBrowser::run_dlgProc(UINT message, WPARAM wParam, LPARAM lP
 
             int width = LOWORD(lParam);
             int height = HIWORD(lParam);
-			int extraValue = NppParameters::getInstance()._dpiManager.scaleX(4);
+			int extraValue = param._dpiManager.scaleX(4);
 
 			RECT toolbarMenuRect;
 			::GetClientRect(_hToolbarMenu, &toolbarMenuRect);
@@ -333,7 +331,7 @@ INT_PTR CALLBACK FileBrowser::run_dlgProc(UINT message, WPARAM wParam, LPARAM lP
 
 void FileBrowser::initPopupMenus()	{
 
-	NativeLangSpeaker* pNativeSpeaker = NppParameters::getInstance().getNativeLangSpeaker();
+	NativeLangSpeaker* pNativeSpeaker = param.getNativeLangSpeaker();
 
 	generic_string addRoot = pNativeSpeaker->getFileBrowserLangMenuStr(IDM_FILEBROWSER_ADDROOT, FB_ADDROOT);
 	generic_string removeAllRoot = pNativeSpeaker->getFileBrowserLangMenuStr(IDM_FILEBROWSER_REMOVEALLROOTS, FB_REMOVEALLROOTS);
@@ -808,7 +806,7 @@ void FileBrowser::popupMenuCmd(int cmdID)	{
 			generic_string path = getNodePath(selectedNode);
 			if (::PathFileExists(path.c_str()))	{
 
-				Command cmd(NppParameters::getInstance().getNppGUI()._commandLineInterpreter.c_str());
+				Command cmd(nGUI._commandLineInterpreter.c_str());
 				cmd.run(nullptr, path.c_str());
 			}
 		}
@@ -861,7 +859,7 @@ void FileBrowser::popupMenuCmd(int cmdID)	{
 
 		case IDM_FILEBROWSER_ADDROOT:	{
 
-			NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+			NativeLangSpeaker *pNativeSpeaker = param.getNativeLangSpeaker();
 			generic_string openWorkspaceStr = pNativeSpeaker->getAttrNameStr(L"Select a folder to add in Folder as Workspace panel", "FolderAsWorkspace", "SelectFolderFromBrowserString");
 			generic_string folderPath = folderBrowser(_hParent, openWorkspaceStr.c_str());
 			if (!folderPath.empty())	{
@@ -1002,7 +1000,7 @@ void FileBrowser::addRootFolder(generic_string rootFolderPath)	{
 			
 			if (isRelatedRootFolder(rootFolderPath, f->_rootFolder._rootPath))	{
 
-				NppParameters::getInstance().getNativeLangSpeaker()->messageBox("FolderAsWorspaceSubfolderExists",
+				param.getNativeLangSpeaker()->messageBox("FolderAsWorspaceSubfolderExists",
 					_hParent,
 					L"A sub-folder of the folder you want to add exists.\rPlease remove its root from the panel before you add folder \"$STR_REPLACE$\".",
 					L"Folder as Worspace adding folder problem",

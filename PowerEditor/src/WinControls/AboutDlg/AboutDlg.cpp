@@ -33,8 +33,6 @@
 
 #pragma warning(disable : 4996) // for GetVersion()
 
-
-
 INT_PTR CALLBACK AboutDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)	{
 
 	switch (message)	{
@@ -49,8 +47,7 @@ INT_PTR CALLBACK AboutDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 			buildTime += L" - ";
 			buildTime +=  wmc.char2wchar(__TIME__, CP_ACP);
 
-			NppParameters& nppParam = NppParameters::getInstance();
-			LPCTSTR bitness = nppParam.isx64() ? L"(64-bit)" : L"(32-bit)";
+			LPCTSTR bitness = param.isx64() ? L"(64-bit)" : L"(32-bit)";
 			::SetDlgItemText(_hSelf, IDC_VERSION_BIT, bitness);
 
 			::SendMessage(compileDateHandle, WM_SETTEXT, 0, reinterpret_cast<LPARAM>(buildTime.c_str()));
@@ -68,7 +65,7 @@ INT_PTR CALLBACK AboutDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 
 			getClientRect(_rc);
 
-			ETDTProc enableDlgTheme = (ETDTProc)nppParam.getEnableThemeDlgTexture();
+			ETDTProc enableDlgTheme = (ETDTProc)param.getEnableThemeDlgTexture();
 			if (enableDlgTheme)	{
 
 				enableDlgTheme(_hSelf, ETDT_ENABLETAB);
@@ -126,12 +123,9 @@ INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /
 	switch (message)	{
 
 		case WM_INITDIALOG:	{
-
-			NppParameters& nppParam = NppParameters::getInstance();
-
 			// Notepad++ version
 			_debugInfoStr = NOTEPAD_PLUS_VERSION;
-			_debugInfoStr += nppParam.isx64() ? L"   (64-bit)" : L"   (32-bit)";
+			_debugInfoStr += param.isx64() ? L"   (64-bit)" : L"   (32-bit)";
 			_debugInfoStr += L"\r\n";
 
 			// Build time
@@ -158,7 +152,7 @@ INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /
 
 			// local conf
 			_debugInfoStr += L"Local Conf mode : ";
-			bool doLocalConf = (NppParameters::getInstance()).isLocal();
+			bool doLocalConf = param.isLocal();
 			_debugInfoStr += (doLocalConf ? L"ON" : L"OFF");
 			_debugInfoStr += L"\r\n";
 
@@ -199,7 +193,7 @@ INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /
 			// Get alternative OS information
 			if (szProductName[0] == '\0')	{
 
-				generic_sprintf(szProductName, L"%s", (NppParameters::getInstance()).getWinVersionStr().c_str());
+				generic_sprintf(szProductName, L"%s", param.getWinVersionStr().c_str());
 			}
 			if (szCurrentBuildNumber[0] == '\0')	{
 
@@ -213,7 +207,7 @@ INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /
 			_debugInfoStr += L"OS Name : ";
 			_debugInfoStr += szProductName;
 			_debugInfoStr += L" (";
-			_debugInfoStr += (NppParameters::getInstance()).getWinVerBitStr();
+			_debugInfoStr += param.getWinVerBitStr();
 			_debugInfoStr += L") ";
 			_debugInfoStr += L"\r\n";
 			
@@ -320,7 +314,7 @@ void DoSaveOrNotBox::changeLang()	{
 
 	generic_string msg;
 	generic_string defaultMessage = L"Save file \"$STR_REPLACE$\" ?";
-	NativeLangSpeaker* nativeLangSpeaker = NppParameters::getInstance().getNativeLangSpeaker();
+	NativeLangSpeaker* nativeLangSpeaker = param.getNativeLangSpeaker();
 
 	if (nativeLangSpeaker->changeDlgLang(_hSelf, "DoSaveOrNot"))	{
 

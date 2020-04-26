@@ -25,15 +25,12 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-
 #include "Notepad_plus.h"
 #include "ShortcutMapper.h"
 #include "EncodingMapper.h"
 #include "localization.h"
 
 using namespace std;
-
-
 
 MenuPosition menuPos[] = {
 //==============================================
@@ -718,7 +715,6 @@ void NativeLangSpeaker::changeFindReplaceDlgLang(FindReplaceDlg & findReplaceDlg
 		TiXmlNodeA *dlgNode = _nativeLangA->FirstChild("Dialog");
 		if (dlgNode)	{
 
-			NppParameters& nppParam = NppParameters::getInstance();
 			dlgNode = searchDlgNode(dlgNode, "Find");
 			if (dlgNode)	{
 
@@ -732,26 +728,26 @@ void NativeLangSpeaker::changeFindReplaceDlgLang(FindReplaceDlg & findReplaceDlg
 /* 				if (titre1 && titre1[0])
 				{
 					basic_string<wchar_t> nameW = wmc.char2wchar(titre1, _nativeLangEncoding);
-					nppParam.getFindDlgTabTitiles()._find = nameW;
-					findReplaceDlg.changeTabName(FIND_DLG, nppParam.getFindDlgTabTitiles()._find.c_str());
+					param.getFindDlgTabTitiles()._find = nameW;
+					findReplaceDlg.changeTabName(FIND_DLG, param.getFindDlgTabTitiles()._find.c_str());
 				} */
 				if (titre2  && titre2[0])	{
 
 					basic_string<wchar_t> nameW = wmc.char2wchar(titre2, _nativeLangEncoding);
-					nppParam.getFindDlgTabTitiles()._replace = nameW;
-					findReplaceDlg.changeTabName(REPLACE_DLG, nppParam.getFindDlgTabTitiles()._replace.c_str());
+					param.getFindDlgTabTitiles()._replace = nameW;
+					findReplaceDlg.changeTabName(REPLACE_DLG, param.getFindDlgTabTitiles()._replace.c_str());
 				}
 				if (titre3 && titre3[0])	{
 
 					basic_string<wchar_t> nameW = wmc.char2wchar(titre3, _nativeLangEncoding);
-					nppParam.getFindDlgTabTitiles()._findInFiles = nameW;
-					findReplaceDlg.changeTabName(FINDINFILES_DLG, nppParam.getFindDlgTabTitiles()._findInFiles.c_str());
+					param.getFindDlgTabTitiles()._findInFiles = nameW;
+					findReplaceDlg.changeTabName(FINDINFILES_DLG, param.getFindDlgTabTitiles()._findInFiles.c_str());
 				}
 				if (titre4 && titre4[0])	{
 
 					basic_string<wchar_t> nameW = wmc.char2wchar(titre4, _nativeLangEncoding);
-					nppParam.getFindDlgTabTitiles()._mark = nameW;
-					findReplaceDlg.changeTabName(MARK_DLG, nppParam.getFindDlgTabTitiles()._mark.c_str());
+					param.getFindDlgTabTitiles()._mark = nameW;
+					findReplaceDlg.changeTabName(MARK_DLG, param.getFindDlgTabTitiles()._mark.c_str());
 				}
 			}
 		}
@@ -943,9 +939,8 @@ void NativeLangSpeaker::changeShortcutLang()	{
 
 	if (!_nativeLangA) return;
 
-	NppParameters& nppParam = NppParameters::getInstance();
-	vector<CommandShortcut> & mainshortcuts = nppParam.getUserShortcuts();
-	vector<ScintillaKeyMap> & scinshortcuts = nppParam.getScintillaKeyList();
+	vector<CommandShortcut> & mainshortcuts = param.getUserShortcuts();
+	vector<ScintillaKeyMap> & scinshortcuts = param.getScintillaKeyList();
 
 	TiXmlNodeA *shortcuts = _nativeLangA->FirstChild("Shortcuts");
 	if (!shortcuts) return;

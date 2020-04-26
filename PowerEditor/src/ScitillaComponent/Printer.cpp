@@ -83,8 +83,6 @@ size_t Printer::doPrint(bool justDoIt)
 			return 0;
 */
 
-	const NppGUI & nppGUI = (NppParameters::getInstance()).getNppGUI();
-
 	POINT ptPage;
 	POINT ptDpi;
 
@@ -115,12 +113,12 @@ size_t Printer::doPrint(bool justDoIt)
 	rectPhysMargins.bottom = ptPage.y						// total paper height
 	                         - GetDeviceCaps(_pdlg.hDC, VERTRES)	// printable height
 	                         - rectPhysMargins.top;				// right unprintable margin
-	if (nppGUI._printSettings.isUserMargePresent())	{
+	if (nGUI._printSettings.isUserMargePresent())	{
 
-		userMargins.left  = MulDiv(nppGUI._printSettings._marge.left*100, ptDpi.x, 2540);
-		userMargins.top  = MulDiv(nppGUI._printSettings._marge.top*100, ptDpi.y, 2540);
-		userMargins.right  = MulDiv(nppGUI._printSettings._marge.right*100, ptDpi.x, 2540);
-		userMargins.bottom  = MulDiv(nppGUI._printSettings._marge.bottom*100, ptDpi.y, 2540);
+		userMargins.left  = MulDiv(nGUI._printSettings._marge.left*100, ptDpi.x, 2540);
+		userMargins.top  = MulDiv(nGUI._printSettings._marge.top*100, ptDpi.y, 2540);
+		userMargins.right  = MulDiv(nGUI._printSettings._marge.right*100, ptDpi.x, 2540);
+		userMargins.bottom  = MulDiv(nGUI._printSettings._marge.bottom*100, ptDpi.y, 2540);
 	
 		rectMargins.left	= max(rectPhysMargins.left, userMargins.left);
 		rectMargins.top		= max(rectPhysMargins.top, userMargins.top);
@@ -143,10 +141,10 @@ size_t Printer::doPrint(bool justDoIt)
 
 	TEXTMETRIC tm;
 
-	int fontSize = nppGUI._printSettings._headerFontSize?nppGUI._printSettings._headerFontSize:9;
-	int fontWeight = (nppGUI._printSettings._headerFontStyle & FONTSTYLE_BOLD) ? FW_BOLD : FW_NORMAL;
-	int isFontItalic = (nppGUI._printSettings._headerFontStyle & FONTSTYLE_ITALIC) ? TRUE : FALSE;
-	const TCHAR *fontFace = (nppGUI._printSettings._headerFontName != L"")?nppGUI._printSettings._headerFontName.c_str():L"Arial";
+	int fontSize = nGUI._printSettings._headerFontSize?nGUI._printSettings._headerFontSize:9;
+	int fontWeight = (nGUI._printSettings._headerFontStyle & FONTSTYLE_BOLD) ? FW_BOLD : FW_NORMAL;
+	int isFontItalic = (nGUI._printSettings._headerFontStyle & FONTSTYLE_ITALIC) ? TRUE : FALSE;
+	const TCHAR *fontFace = (nGUI._printSettings._headerFontName != L"")?nGUI._printSettings._headerFontName.c_str():L"Arial";
 
 	int headerLineHeight = ::MulDiv(fontSize, ptDpi.y, 72);
 
@@ -163,10 +161,10 @@ size_t Printer::doPrint(bool justDoIt)
 	::GetTextMetrics(_pdlg.hDC, &tm);
 	headerLineHeight = tm.tmHeight + tm.tmExternalLeading;
 
-	fontSize = nppGUI._printSettings._footerFontSize?nppGUI._printSettings._footerFontSize:9;
-	fontWeight = (nppGUI._printSettings._footerFontStyle & FONTSTYLE_BOLD) ? FW_BOLD : FW_NORMAL;
-	isFontItalic = (nppGUI._printSettings._footerFontStyle & FONTSTYLE_ITALIC) ? TRUE : FALSE;
-	fontFace = (nppGUI._printSettings._footerFontName != L"")?nppGUI._printSettings._footerFontName.c_str():L"Arial";
+	fontSize = nGUI._printSettings._footerFontSize?nGUI._printSettings._footerFontSize:9;
+	fontWeight = (nGUI._printSettings._footerFontStyle & FONTSTYLE_BOLD) ? FW_BOLD : FW_NORMAL;
+	isFontItalic = (nGUI._printSettings._footerFontStyle & FONTSTYLE_ITALIC) ? TRUE : FALSE;
+	fontFace = (nGUI._printSettings._footerFontName != L"")?nGUI._printSettings._footerFontName.c_str():L"Arial";
 
 	int footerLineHeight = ::MulDiv(fontSize, ptDpi.y, 72);
 	HFONT fontFooter = ::CreateFont(footerLineHeight,
@@ -267,11 +265,11 @@ size_t Printer::doPrint(bool justDoIt)
 	::GetDateFormat(LOCALE_USER_DEFAULT, DATE_LONGDATE, &st, NULL, longDate, bufferSize);
 	::GetTimeFormat(LOCALE_USER_DEFAULT, TIME_NOSECONDS, &st, NULL, time, bufferSize);
 
-	if (nppGUI._printSettings.isHeaderPresent())	{
+	if (nGUI._printSettings.isHeaderPresent())	{
 
 		frPrint.rc.top += headerLineHeight + headerLineHeight / 2;
 
-		generic_string headerLeftPart = nppGUI._printSettings._headerLeft;
+		generic_string headerLeftPart = nGUI._printSettings._headerLeft;
 		if (headerLeftPart != L"")	{
 
 			replaceStr(headerLeftPart, shortDateVar, shortDate);
@@ -280,7 +278,7 @@ size_t Printer::doPrint(bool justDoIt)
 			expandNppEnvironmentStrs(headerLeftPart.c_str(), headerL, headerSize, _pdlg.hwndOwner);
 		}
 
-		generic_string headerMiddlePart = nppGUI._printSettings._headerMiddle;
+		generic_string headerMiddlePart = nGUI._printSettings._headerMiddle;
 		if (headerMiddlePart != L"")	{
 
 			replaceStr(headerMiddlePart, shortDateVar, shortDate);
@@ -289,7 +287,7 @@ size_t Printer::doPrint(bool justDoIt)
 			expandNppEnvironmentStrs(headerMiddlePart.c_str(), headerM, headerSize, _pdlg.hwndOwner);
 		}
 
-		generic_string headerRightPart = nppGUI._printSettings._headerRight;
+		generic_string headerRightPart = nGUI._printSettings._headerRight;
 		if (headerRightPart != L"")	{
 
 			replaceStr(headerRightPart, shortDateVar, shortDate);
@@ -300,11 +298,11 @@ size_t Printer::doPrint(bool justDoIt)
 
 	}
 
-	if (nppGUI._printSettings.isFooterPresent())	{
+	if (nGUI._printSettings.isFooterPresent())	{
 
 		frPrint.rc.bottom -= footerLineHeight + footerLineHeight / 2;
 
-		generic_string footerLeftPart = nppGUI._printSettings._footerLeft;
+		generic_string footerLeftPart = nGUI._printSettings._footerLeft;
 		if (footerLeftPart != L"")	{
 
 			replaceStr(footerLeftPart, shortDateVar, shortDate);
@@ -313,7 +311,7 @@ size_t Printer::doPrint(bool justDoIt)
 			expandNppEnvironmentStrs(footerLeftPart.c_str(), footerL, headerSize, _pdlg.hwndOwner);
 		}
 
-		generic_string footerMiddlePart = nppGUI._printSettings._footerMiddle;
+		generic_string footerMiddlePart = nGUI._printSettings._footerMiddle;
 		if (footerMiddlePart != L"")	{
 
 			replaceStr(footerMiddlePart, shortDateVar, shortDate);
@@ -322,7 +320,7 @@ size_t Printer::doPrint(bool justDoIt)
 			expandNppEnvironmentStrs(footerMiddlePart.c_str(), footerM, headerSize, _pdlg.hwndOwner);
 		}
 
-		generic_string footerRightPart = nppGUI._printSettings._footerRight;
+		generic_string footerRightPart = nGUI._printSettings._footerRight;
 		if (footerRightPart != L"")	{
 
 			replaceStr(footerRightPart, shortDateVar, shortDate);
@@ -334,13 +332,13 @@ size_t Printer::doPrint(bool justDoIt)
 
 	
 	bool isShown = _pSEView->hasMarginShowed(ScintillaEditView::_SC_MARGE_LINENUMBER);
-	if (!nppGUI._printSettings._printLineNumber)
+	if (!nGUI._printSettings._printLineNumber)
 		_pSEView->showMargin(ScintillaEditView::_SC_MARGE_LINENUMBER, false);
 
 	size_t pageNum = 1;
 	const TCHAR pageVar[] = L"$(CURRENT_PRINTING_PAGE)";
 
-	_pSEView->execute(SCI_SETPRINTCOLOURMODE, nppGUI._printSettings._printOption); // setting mode once is enough
+	_pSEView->execute(SCI_SETPRINTCOLOURMODE, nGUI._printSettings._printOption); // setting mode once is enough
 	while (lengthPrinted < lengthDoc)	{ 
 
 		bool printPage = (!(_pdlg.Flags & PD_PAGENUMS) ||
@@ -356,7 +354,7 @@ size_t Printer::doPrint(bool justDoIt)
 
 			::StartPage(_pdlg.hDC);
 
-			if (nppGUI._printSettings.isHeaderPresent())	{
+			if (nGUI._printSettings.isHeaderPresent())	{
 
 				::SelectObject(_pdlg.hDC, fontHeader);
 
@@ -425,7 +423,7 @@ size_t Printer::doPrint(bool justDoIt)
 
 		if (printPage)	{ 
 
-			if (nppGUI._printSettings.isFooterPresent())	{
+			if (nGUI._printSettings.isFooterPresent())	{
 
 				::SelectObject(_pdlg.hDC, fontFooter);
 				
@@ -493,7 +491,7 @@ size_t Printer::doPrint(bool justDoIt)
 			break;
 	}
 
-	if (!nppGUI._printSettings._printLineNumber)
+	if (!nGUI._printSettings._printLineNumber)
 		_pSEView->showMargin(ScintillaEditView::_SC_MARGE_LINENUMBER, isShown);
 
 	_pSEView->execute(SCI_FORMATRANGE, FALSE, 0);

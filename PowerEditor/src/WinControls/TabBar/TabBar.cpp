@@ -25,8 +25,6 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-
-
 #include <stdexcept>
 #include "TabBar.h"
 #include "Parameters.h"
@@ -37,7 +35,6 @@
 #define	IDC_DRAG_OUT_TAB 1407
 
 bool TabBarPlus::_doDragNDrop = false;
-
 bool TabBarPlus::_drawTopBar = true;
 bool TabBarPlus::_drawInactiveTab = true;
 bool TabBarPlus::_drawTabCloseButton = false;
@@ -379,8 +376,8 @@ void TabBarPlus::doOwnerDrawTab()	{
 			::SetWindowLongPtr(_hwndArray[i], GWL_STYLE, style);
 			::InvalidateRect(_hwndArray[i], NULL, TRUE);
 
-			const int paddingSizeDynamicW = NppParameters::getInstance()._dpiManager.scaleX(6);
-			const int paddingSizePlusClosebuttonDynamicW = NppParameters::getInstance()._dpiManager.scaleX(9);
+			const int paddingSizeDynamicW = param._dpiManager.scaleX(6);
+			const int paddingSizePlusClosebuttonDynamicW = param._dpiManager.scaleX(9);
 			::SendMessage(_hwndArray[i], TCM_SETPADDING, 0, MAKELPARAM(_drawTabCloseButton ? paddingSizePlusClosebuttonDynamicW : paddingSizeDynamicW, 0));
 		}
 	}
@@ -548,7 +545,7 @@ LRESULT TabBarPlus::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPara
 
 				// get index of the first visible tab
 				TC_HITTESTINFO hti;
-				LONG xy = NppParameters::getInstance()._dpiManager.scaleX(12); // an arbitrary coordinate inside the first visible tab
+				LONG xy = param._dpiManager.scaleX(12); // an arbitrary coordinate inside the first visible tab
 				hti.pt = { xy, xy };
 				int scrollTabIndex = static_cast<int32_t>(::SendMessage(_hSelf, TCM_HITTEST, 0, reinterpret_cast<LPARAM>(&hti)));
 
@@ -557,7 +554,7 @@ LRESULT TabBarPlus::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPara
 
 				// maximal width/height of the msctls_updown32 class (arrow box in the tab bar), 
 				// this area may hide parts of the last tab and needs to be excluded
-				LONG maxLengthUpDownCtrl = NppParameters::getInstance()._dpiManager.scaleX(44); // sufficient static value
+				LONG maxLengthUpDownCtrl = param._dpiManager.scaleX(44); // sufficient static value
 
 				// scroll forward as long as the last tab is hidden; scroll backward till the first tab
 				if ((_isVertical ? ((rcTabCtrl.bottom - rcLastTab.bottom) < maxLengthUpDownCtrl) : ((rcTabCtrl.right - rcLastTab.right) < maxLengthUpDownCtrl)) || not isForward)	{
@@ -901,8 +898,8 @@ void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)	{
 	::DeleteObject((HGDIOBJ)hBrush);
 	
 	// equalize drawing areas of active and inactive tabs
-	int paddingDynamicTwoX = NppParameters::getInstance()._dpiManager.scaleX(2);
-	int paddingDynamicTwoY = NppParameters::getInstance()._dpiManager.scaleY(2);
+	int paddingDynamicTwoX = param._dpiManager.scaleX(2);
+	int paddingDynamicTwoY = param._dpiManager.scaleY(2);
 	if (isSelected)	{
 
 		// the drawing area of the active tab extends on all borders by default
@@ -959,15 +956,15 @@ void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)	{
 
 		if (_drawTopBar)	{
 
-			int topBarHeight = NppParameters::getInstance()._dpiManager.scaleX(4);
+			int topBarHeight = param._dpiManager.scaleX(4);
 			if (_isVertical)	{
 
-				barRect.left -= NppParameters::getInstance()._dpiManager.scaleX(2);
+				barRect.left -= param._dpiManager.scaleX(2);
 				barRect.right = barRect.left + topBarHeight;
 			}
 			else	{
 
-				barRect.top -= NppParameters::getInstance()._dpiManager.scaleY(2);
+				barRect.top -= param._dpiManager.scaleY(2);
 				barRect.bottom = barRect.top + topBarHeight;
 			}
 
@@ -1010,8 +1007,8 @@ void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)	{
 		BITMAP bmp;
 		::GetObject(hBmp, sizeof(bmp), &bmp);
 
-		int bmDpiDynamicalWidth = NppParameters::getInstance()._dpiManager.scaleX(bmp.bmWidth);
-		int bmDpiDynamicalHeight = NppParameters::getInstance()._dpiManager.scaleY(bmp.bmHeight);
+		int bmDpiDynamicalWidth = param._dpiManager.scaleX(bmp.bmWidth);
+		int bmDpiDynamicalHeight = param._dpiManager.scaleY(bmp.bmHeight);
 
 		RECT buttonRect = _closeButtonZone.getButtonRectFrom(rect, _isVertical);
 
@@ -1246,8 +1243,8 @@ void TabBarPlus::exchangeItemData(POINT point)	{
 CloseButtonZone::CloseButtonZone()
 {
 	// TODO: get width/height of close button dynamically
-	_width = NppParameters::getInstance()._dpiManager.scaleX(11);
-	_height = NppParameters::getInstance()._dpiManager.scaleY(11);
+	_width = param._dpiManager.scaleX(11);
+	_height = param._dpiManager.scaleY(11);
 }
 
 bool CloseButtonZone::isHit(int x, int y, const RECT & tabRect, bool isVertical) const

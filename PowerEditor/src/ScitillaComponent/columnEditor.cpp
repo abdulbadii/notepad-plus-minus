@@ -59,8 +59,7 @@ INT_PTR CALLBACK ColumnEditorDlg::run_dlgProc(UINT message, WPARAM wParam, LPARA
 			::SendDlgItemMessage(_hSelf, IDC_COL_DEC_RADIO, BM_SETCHECK, TRUE, 0);
 			goToCenter();
 
-			NppParameters& nppParam = NppParameters::getInstance();
-			ETDTProc enableDlgTheme = (ETDTProc)nppParam.getEnableThemeDlgTexture();
+			ETDTProc enableDlgTheme = (ETDTProc)param.getEnableThemeDlgTexture();
 			if (enableDlgTheme)	{
 
 				enableDlgTheme(_hSelf, ETDT_ENABLETAB);

@@ -21,13 +21,66 @@
         <Filter name="*.vc* *.sln" />
         <Filter name="*.c *.cpp *.cc *.h" />
         <Filter name="*.xml" />
+        <Find name="_autoCompleteMain" />
+        <Find name="Notepad_plus" />
+        <Find name="_subEditView" />
+        <Find name="_dockingManager" />
+        <Find name="_scintillaCtrls4Plugins" />
+        <Find name="_pPublicInterface" />
+        <Find name="LoadImage" />
+        <Find name="HICON" />
+        <Find name="setForegroundColor" />
+        <Find name="_pFileBrowser" />
+        <Find name="nullptr" />
+        <Find name="static_cast" />
+        <Find name="GetLastErrorAsString" />
+        <Find name="retResult" />
+        <Find name="BufferID" />
+        <Find name="_pEditView" />
+        <Find name="enableItem" />
+        <Find name="isUserReadOnly" />
+        <Find name="checkItem" />
+        <Find name="CheckMenuItem" />
+        <Find name="getMenuHandle" />
+        <Find name="ContextMenu" />
+        <Find name="doEnable" />
+        <Find name="EnableMenuItem" />
+        <Find name="doCheck" />
+        <Find name="MIIM_FTYPE" />
+        <Find name="IDM_VIEW_SYNSCROLLH" />
+        <Find name="_playingBackMacro" />
+        <Find name="execSavedCommand" />
+        <Find name="messageBox" />
+        <Find name="_nativeLangSpeaker" />
+        <Find name="changeUserDefineLang" />
+        <Find name="doDialog" />
+        <Find name="isFirstTime" />
+        <Find name="IDM_SEARCH_GOTOMATCHINGBRACE" />
+        <Find name="braceAtCaret" />
+        <Find name="findMatchingBracePos" />
+        <Find name="braceOpposite" />
+        <Find name="_definedSessionExt" />
+        <Find name="IDC_EDIT_SESSIONFILEEXT" />
+        <Find name="VK_NULL" />
+        <Find name="NPPM_ISDOCSWITCHERSHOWN" />
+        <Find name="SendMessage" />
+        <Find name="process" />
+        <Find name="NppParameters" />
+        <Find name="SCE_UNIVERSAL_FOUND_STYLE_EXT4" />
+        <Find name="styleID" />
+        <Find name="element" />
+        <Find name="_styleArray" />
+        <Find name="result" />
+        <Find name="currentlineNumberVis" />
+        <Find name="firstVisibleLineVis" />
+        <Find name="FindOption" />
+        <Find name="FindReplaceDlg" />
+        <Find name="enableFindInFilesControls" />
+        <Find name="IDC_UNDO" />
+        <Find name="IDC_CLEAR_FINDALL_CURRENTFILE" />
         <Find name="_toolBar" />
-        <Find name="checkMenuItem" />
         <Find name="IDM_VIEW_FILEBROWSER" />
         <Find name="case" />
-        <Find name="_pFileBrowser" />
-        <Find name="_nativeLangSpeaker" />
-        <Find name="messageBox" />
         <Find name="loadOkay" />
         <Find name="_nppGUI" />
         <Find name="workspaceExt" />
@@ -38,7 +91,6 @@
         <Find name="setClosed" />
         <Find name="getFileBrowserRoots" />
         <Find name="nppParam" />
-        <Find name="Notepad_plus" />
         <Find name="Notepad+-" />
         <Find name="WM_FINDINFILES" />
         <Find name="include" />
@@ -50,7 +102,6 @@
         <Find name="GetSystemInfo" />
         <Find name="xmlFullPath" />
         <Find name="VK_N" />
-        <Find name="VK_NULL" />
         <Find name="IDM_MACRO_RUNMULTIMACRODLG" />
         <Find name="_mainEditView" />
         <Find name="showWSAndTab" />
@@ -77,10 +128,8 @@
         <Find name="NPPM_DMMSHOW" />
         <Find name="findInFiles" />
         <Find name="scintillaContextmenu" />
-        <Find name="ContextMenu" />
         <Find name="IDD_FIND_REPLACE" />
         <Find name="NPPM_DMMREGASDCKDLG" />
-        <Find name="_dockingManager" />
         <Find name="IDD_FIND_REPLACE_" />
         <Find name="IDD_FIND_REPLACE_DLG" />
         <Find name="direction" />
@@ -103,55 +152,6 @@
         <Find name="tabBarStatus" />
         <Find name="IDM_MACRO_STOPRECORDINGMACRO" />
         <Find name="omma" />
-        <Find name="break" />
-        <Find name="fileNew" />
-        <Find name="fileOpen" />
-        <Find name="IDM_FILE_OPEN_FOLDER" />
-        <Find name="Command" />
-        <Find name="NppGUI" />
-        <Find name="NppGUIP" />
-        <Find name="Line" />
-        <Find name="LRESULT" />
-        <Find name="IDC_EDIT_TOGGLEMACRORECORDING" />
-        <Find name="IDM_VIEW_WRAP" />
-        <Find name="DocTabView" />
-        <Find name="_str2Search" />
-        <Find name="function list" />
-        <Find name="SCNotification" />
-        <Find name="getTextFromCombo" />
-        <Find name="currentVIEW" />
-        <Find name="MAIN_VIEW" />
-        <Find name="_views" />
-        <Find name="SortTaskListPred" />
-        <Find name="final" />
-        <Find name="struct" />
-        <Find name="SendMessage" />
-        <Find name="FINDREPLACE_MAXLENGTH];" />
-        <Find name="REPLACE_DLG" />
-        <Find name="IDM_VIEW_CHAR_PANEL" />
-        <Find name="IDC_CHECK_SMOOTHFONT" />
-        <Find name="return" />
-        <Find name="IDM_VIEW_LINENUMBER" />
-        <Find name="IDC_CHECK_LINENUMBERMARGE" />
-        <Find name="display line num" />
-        <Find name="enum" />
-        <Find name="IDFINDWHAT" />
-        <Find name="::GetFocus" />
-        <Find name="define" />
-        <Find name="NativeLangSpeaker" />
-        <Find name="_stopFillingFindField" />
-        <Find name="Switch to next document" />
-        <Find name="_statusbarFindStatus" />
-        <Find name="status" />
-        <Find name="STopReached || statu" />
-        <Find name="Visible" />
-        <Find name="Visible(o]" />
-        <Find name="Visible(o)" />
-        <Find name="Visible(o)?" />
-        <Find name="Visible(o]?" />
-        <Find name="Vosible" />
-        <Find name="with filter speci" />
-        <Find name="with speci" />
         <Replace name="constexpr" />
         <Replace name="constexpr " />
         <Replace name="$0" />
@@ -214,7 +214,6 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_m\Notepad_plus.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\localization.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\AboutDlg\AboutDlg.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\AnsiCharPanel\ansiCharPanel.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\Release\contextMenu.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\Release\shortcuts.xml" />
@@ -225,6 +224,10 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\MISC\PluginsManager\PluginInterface.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\Release\config.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\FindReplaceDlg.rc" />
+        <File filename="D:\MSYS\usr\src\notepadpp\Release\autoCompletion\cpp.xml" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\AnsiCharPanel\ansiCharPanel.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\contextMenu.xml" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\NppBigSwitch.cpp" />
     </History>
     <GUIConfigs>
         <GUIConfig name="ToolBar" visible="no">standard</GUIConfig>
@@ -233,7 +236,7 @@
         <GUIConfig name="ScintillaViewsSplitter">vertical</GUIConfig>
         <GUIConfig name="UserDefineDlg" position="undocked">hide</GUIConfig>
         <GUIConfig name="TabSetting" replaceBySpace="no" size="3" />
-        <GUIConfig name="AppPosition" x="163" y="-12" width="1296" height="1087" isMaximized="no" />
+        <GUIConfig name="AppPosition" x="246" y="-4" width="1296" height="1087" isMaximized="no" />
         <GUIConfig name="noUpdate" intervalDays="15" nextUpdateDate="20171218">no</GUIConfig>
         <GUIConfig name="Auto-detection">auto</GUIConfig>
         <GUIConfig name="CheckHistoryFiles">no</GUIConfig>
@@ -250,7 +253,7 @@
         <GUIConfig name="MRU">yes</GUIConfig>
         <GUIConfig name="URL">1</GUIConfig>
         <GUIConfig name="globalOverride" fg="no" bg="no" font="yes" fontSize="no" bold="no" italic="no" underline="no" />
-        <GUIConfig name="auto-completion" autoCAction="1" triggerFromNbChar="2" autoCIgnoreNumbers="no" funcParams="no" />
+        <GUIConfig name="auto-completion" autoCAction="3" triggerFromNbChar="2" autoCIgnoreNumbers="no" autoCCase="yes" funcParams="no" />
         <GUIConfig name="auto-insert" parentheses="no" brackets="no" curlyBrackets="no" quotes="no" doubleQuotes="no" htmlXmlTag="no" />
         <GUIConfig name="sessionExt"></GUIConfig>
         <GUIConfig name="workspaceExt"></GUIConfig>
@@ -269,7 +272,7 @@
         <GUIConfig name="ScintillaPrimaryView" lineNumberMargin="show" bookMarkMargin="hide" indentGuideLine="show" folderMarkStyle="box" lineWrapMethod="indent" currentLineHilitingShow="show" scrollBeyondLastLine="yes" disableAdvancedScrolling="no" wrapSymbolShow="hide" Wrap="yes" borderEdge="no" edge="no" edgeNbColumn="80" zoom="1" zoom2="0" whiteSpaceShow="hide" eolShow="hide" borderWidth="0" smoothFont="yes" />
         <GUIConfig name="DockingManager" leftWidth="155" rightWidth="494" topHeight="200" bottomHeight="310">
             <FloatingWindow cont="4" x="642" y="-8" width="1250" height="439" />
-            <PluginDlg pluginName="Notepad++::InternalFunction" id="0" curr="1" prev="4" isVisible="yes" />
+            <PluginDlg pluginName="Notepad++::InternalFunction" id="0" curr="1" prev="4" isVisible="no" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="44084" curr="1" prev="-1" isVisible="no" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="44079" curr="1" prev="-1" isVisible="no" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="44070" curr="1" prev="-1" isVisible="no" />

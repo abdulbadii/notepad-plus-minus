@@ -25,7 +25,6 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-
 #include <functional>
 #include <algorithm>
 #include "WindowsDlg.h"
@@ -55,7 +54,6 @@ const UINT WDN_NOTIFY = RegisterWindowMessage(L"WDN_NOTIFY");
 inline static DWORD GetStyle(HWND hWnd) {
 	return (DWORD)GetWindowLongPtr(hWnd, GWL_STYLE);
 }
-
 inline static DWORD GetExStyle(HWND hWnd) {
 	return (DWORD)GetWindowLongPtr(hWnd, GWL_EXSTYLE);
 }
@@ -244,7 +242,7 @@ INT_PTR CALLBACK WindowsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPa
 
 		case WM_INITDIALOG :	{
 
-			NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+			NativeLangSpeaker *pNativeSpeaker = param.getNativeLangSpeaker();
 			pNativeSpeaker->changeDlgLang(_hSelf, "Window");
 			return MyBaseClass::run_dlgProc(message, wParam, lParam);
 		}
@@ -362,8 +360,7 @@ INT_PTR CALLBACK WindowsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPa
 						else if (pLvdi->item.iSubItem == 2)	{ // Type
 
 							int len = pLvdi->item.cchTextMax;
-							NppParameters& nppParameters = NppParameters::getInstance();
-							Lang *lang = nppParameters.getLangFromID(buf->getLangType());
+							Lang *lang = param.getLangFromID(buf->getLangType());
 							if (NULL != lang)	{
 
 								generic_strncpy(pLvdi->item.pszText, lang->getLangName(), len-1);
@@ -503,7 +500,7 @@ BOOL WindowsDlg::onInitDialog()	{
 	lvColumn.fmt = LVCFMT_LEFT;
 	
 	generic_string columnText;
-	NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+	NativeLangSpeaker *pNativeSpeaker = param.getNativeLangSpeaker();
 
 	columnText = L"\u21F5 " + pNativeSpeaker->getAttrNameStr(L"Name", WD_ROOTNODE, WD_CLMNNAME);
 	lvColumn.pszText = const_cast<TCHAR *>(columnText.c_str());
@@ -545,7 +542,7 @@ void WindowsDlg::updateColumnNames()	{
 	lvColumn.fmt = LVCFMT_LEFT;
 
 	generic_string columnText;
-	NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+	NativeLangSpeaker *pNativeSpeaker = param.getNativeLangSpeaker();
 	
 	columnText = pNativeSpeaker->getAttrNameStr(L"Name", WD_ROOTNODE, WD_CLMNNAME);
 	if (_currentColumn != 0)	{

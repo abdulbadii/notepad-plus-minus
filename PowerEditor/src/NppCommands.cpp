@@ -44,7 +44,6 @@
 using namespace std;
 
 std::mutex command_mutex;
-NppParameters& nParam = NppParameters::getInstance();
 
 void Notepad_plus::macroPlayback(Macro macro)	{
 
@@ -90,7 +89,7 @@ void Notepad_plus::command(int id)	{
 
 		case IDM_FILE_OPEN_CMD:	{
 
-			Command cmd(nParam.getNppGUI()._commandLineInterpreter.c_str());
+			Command cmd(nppGUI._commandLineInterpreter.c_str());
 			cmd.run(_pPublicInterface->getHSelf(), L"$(CURRENT_DIRECTORY)");
 		}
 		break;
@@ -128,7 +127,7 @@ void Notepad_plus::command(int id)	{
 			generic_string folderPath = folderBrowser(_pPublicInterface->getHSelf(), L"Select a folder to add in Folder as Workspace panel");
 			if (not folderPath.empty())	{
 
-				if (!_pFileBrowser)	{ // first launch, check in params to open folders
+				if (!_pFileBrowser)	{ // first launch, check in Params to open folders
 
 					vector<generic_string> dummy;
 					launchFileBrowser(dummy);
@@ -193,7 +192,7 @@ void Notepad_plus::command(int id)	{
 
 		case IDM_FILE_CLOSEALL:	{
 
-			bool isSnapshotMode = nParam.getNppGUI().isSnapshotMode();
+			bool isSnapshotMode = nGUI.isSnapshotMode();
 			fileCloseAll(isSnapshotMode, false);
 				checkDocState();
 			break;
@@ -458,7 +457,7 @@ void Notepad_plus::command(int id)	{
 			if (_pEditView->execute(SCI_GETSELECTIONS) != 1) // Multi-Selection || Column mode || no selection
 				return;
 
-			const NppGUI & nppGui = (nParam).getNppGUI();
+			const NppGUI & nppGui = (param).getNppGUI();
 			generic_string url;
 			if (nppGui._searchEngineChoice == nppGui.se_custom)	{
 
@@ -687,9 +686,9 @@ void Notepad_plus::command(int id)	{
 
 		case IDM_VIEW_FILEBROWSER:	{
 
-			if (!_pFileBrowser)	{ // first launch, check in params to open folders
+			if (!_pFileBrowser)	{ // first launch, check in Params to open folders
 
-				NppParameters& nppParam = nParam;
+				NppParameters& nppParam = param;
 				launchFileBrowser(nppParam.getFileBrowserRoots());
 				if (_pFileBrowser != nullptr)	{
 
@@ -1025,9 +1024,9 @@ void Notepad_plus::command(int id)	{
 			std::lock_guard<std::mutex> lock(command_mutex);
 			if (!_findReplaceDlg.isCreated())		return;
 
-			nParam._isFindReplacing = true;
+			param._isFindReplacing = true;
 			_findReplaceDlg.processReplc1();
-			nParam._isFindReplacing = false;
+			param._isFindReplacing = false;
 			}
 			break;
 
@@ -1079,13 +1078,13 @@ void Notepad_plus::command(int id)	{
 		}
 		break;
 
-		case IDM_SHOW_HIDE_FIND_RESULTS:
+		case IDM_VIEW_FIND_RESULT:
 			if (IsWindowVisible(_findReplaceDlg.getHFindResults())) {
 				_findReplaceDlg.closeFinder();
 				switchEditViewTo(MAIN_VIEW);
 			}
 			else
-				// checkMenuItem(IDM_SHOW_HIDE_FIND_RESULTS, true);
+				// checkMenuItem(IDM_VIEW_FIND_RESULT, true);
 				_findReplaceDlg.openFinder();
 		break;
 
@@ -1702,11 +1701,11 @@ void Notepad_plus::command(int id)	{
 			_toReduceTabBar = !_toReduceTabBar;
 
 			//Resize the  icon
-			int iconDpiDynamicalSize = nParam._dpiManager.scaleY(_toReduceTabBar?12:18);
+			int iconDpiDynamicalSize = param._dpiManager.scaleY(_toReduceTabBar?12:18);
 
 			//Resize the tab height
-			int tabDpiDynamicalWidth = nParam._dpiManager.scaleX(45);
-			int tabDpiDynamicalHeight = nParam._dpiManager.scaleY(_toReduceTabBar?22:25);
+			int tabDpiDynamicalWidth = param._dpiManager.scaleX(45);
+			int tabDpiDynamicalHeight = param._dpiManager.scaleY(_toReduceTabBar?22:25);
 			TabCtrl_SetItemSize(_mainDocTab.getHSelf(), tabDpiDynamicalWidth, tabDpiDynamicalHeight);
 			TabCtrl_SetItemSize(_subDocTab.getHSelf(), tabDpiDynamicalWidth, tabDpiDynamicalHeight);
 			_docTabIconList.setIconSize(iconDpiDynamicalSize);
@@ -1754,8 +1753,8 @@ void Notepad_plus::command(int id)	{
 			TabBarPlus::setDrawTabCloseButton(!TabBarPlus::drawTabCloseButton());
 
 			// This part is just for updating (redraw) the tabs
-			int tabDpiDynamicalHeight = nParam._dpiManager.scaleY(22);
-			int tabDpiDynamicalWidth = nParam._dpiManager.scaleX(TabBarPlus::drawTabCloseButton() ? 60 : 45);
+			int tabDpiDynamicalHeight = param._dpiManager.scaleY(22);
+			int tabDpiDynamicalWidth = param._dpiManager.scaleX(TabBarPlus::drawTabCloseButton() ? 60 : 45);
 			TabCtrl_SetItemSize(_mainDocTab.getHSelf(), tabDpiDynamicalWidth, tabDpiDynamicalHeight);
 			TabCtrl_SetItemSize(_subDocTab.getHSelf(), tabDpiDynamicalWidth, tabDpiDynamicalHeight);
 
@@ -1869,7 +1868,7 @@ void Notepad_plus::command(int id)	{
 			_subEditView.showEOL(false);
 			_subEditView.showWSAndTab(isChecked);
 
-				ScintillaViewParams & svp1 = (ScintillaViewParams &)(nParam).getSVP();
+				ScintillaViewParams & svp1 = (ScintillaViewParams &)(param).getSVP();
 				svp1._whiteSpaceShow = isChecked;
 				svp1._eolShow = false;
 			break;
@@ -1886,7 +1885,7 @@ void Notepad_plus::command(int id)	{
 			_mainEditView.showWSAndTab(false);
 			_subEditView.showWSAndTab(false);
 
-				ScintillaViewParams & svp1 = (ScintillaViewParams &)(nParam).getSVP();
+				ScintillaViewParams & svp1 = (ScintillaViewParams &)(param).getSVP();
 				svp1._whiteSpaceShow = false;
 				svp1._eolShow = isChecked;
 			break;
@@ -1901,7 +1900,7 @@ void Notepad_plus::command(int id)	{
 			_subEditView.showInvisibleChars(isChecked);
 			_toolBar.setCheck(IDM_VIEW_ALL_CHARACTERS, isChecked);
 
-				ScintillaViewParams & svp1 = (ScintillaViewParams &)(nParam).getSVP();
+				ScintillaViewParams & svp1 = (ScintillaViewParams &)(param).getSVP();
 				svp1._whiteSpaceShow = isChecked;
 				svp1._eolShow = isChecked;
 			break;
@@ -1914,7 +1913,7 @@ void Notepad_plus::command(int id)	{
 				_toolBar.setCheck(IDM_VIEW_INDENT_GUIDE, _pEditView->isShownIndentGuide());
 			checkMenuItem(IDM_VIEW_INDENT_GUIDE, _pEditView->isShownIndentGuide());
 
-				ScintillaViewParams & svp1 = (ScintillaViewParams &)(nParam).getSVP();
+				ScintillaViewParams & svp1 = (ScintillaViewParams &)(param).getSVP();
 				svp1._indentGuideLineShow = _pEditView->isShownIndentGuide();
 			break;
 		}
@@ -1935,7 +1934,7 @@ void Notepad_plus::command(int id)	{
 			_toolBar.setCheck(IDM_VIEW_WRAP, isWraped);
 			checkMenuItem(IDM_VIEW_WRAP, isWraped);
 
-			ScintillaViewParams & svp1 = (ScintillaViewParams &)(nParam).getSVP();
+			ScintillaViewParams & svp1 = (ScintillaViewParams &)(param).getSVP();
 			svp1._doWrap = isWraped;
 
 			if (_pDocMap)	{
@@ -1951,7 +1950,7 @@ void Notepad_plus::command(int id)	{
 			_subEditView.showWrapSymbol(!_pEditView->isWrapSymbolVisible());
 			checkMenuItem(IDM_VIEW_WRAP_SYMBOL, _pEditView->isWrapSymbolVisible());
 
-				ScintillaViewParams & svp1 = (ScintillaViewParams &)(nParam).getSVP();
+				ScintillaViewParams & svp1 = (ScintillaViewParams &)(param).getSVP();
 				svp1._wrapSymbolShow = _pEditView->isWrapSymbolVisible();
 			break;
 		}
@@ -2023,7 +2022,7 @@ void Notepad_plus::command(int id)	{
 			int64_t fileLen = curBuf->getFileLength();
 
 			// localization for summary date
-			NativeLangSpeaker *pNativeSpeaker = (nParam).getNativeLangSpeaker();
+			NativeLangSpeaker *pNativeSpeaker = (param).getNativeLangSpeaker();
 			if (pNativeSpeaker)	{
 
 
@@ -2529,7 +2528,7 @@ void Notepad_plus::command(int id)	{
 				// Tell users to restart Notepad++ to load plugin
 			if (copiedFiles.size())	{
 
-				NativeLangSpeaker *pNativeSpeaker = (nParam).getNativeLangSpeaker();
+				NativeLangSpeaker *pNativeSpeaker = (param).getNativeLangSpeaker();
 				pNativeSpeaker->messageBox("NeedToRestartToLoadPlugins",
 					NULL,
 					L"You have to restart Notepad++ to load plugins you installed.",
@@ -2547,7 +2546,7 @@ void Notepad_plus::command(int id)	{
 				const TCHAR *destDir = L"themes";
 
 				// load styler
-				NppParameters& nppParams = nParam;
+				NppParameters& nppParams = param;
 				ThemeSwitcher & themeSwitcher = nppParams.getThemeSwitcher();
 
 				vector<generic_string> copiedFiles = addNppComponents(destDir, extFilterName, extFilter);
@@ -2580,7 +2579,7 @@ void Notepad_plus::command(int id)	{
 
 		case IDM_SETTING_OPENPLUGINSDIR:	{
 
-			const TCHAR* pluginHomePath = nParam.getPluginRootDir();
+			const TCHAR* pluginHomePath = param.getPluginRootDir();
 			if (pluginHomePath && pluginHomePath[0])	{
 
 				::ShellExecute(NULL, NULL, pluginHomePath, NULL, NULL, SW_SHOWNORMAL);
@@ -2619,7 +2618,7 @@ void Notepad_plus::command(int id)	{
 				L"Editing contextMenu",
 				MB_OK|MB_APPLMODAL);
 
-				NppParameters& nppParams = nParam;
+				NppParameters& nppParams = param;
 				BufferID bufID = doOpen((nppParams.getContextMenuPath()));
 			switchToFile(bufID);
 				break;
@@ -2778,7 +2777,7 @@ void Notepad_plus::command(int id)	{
 				}
 				else if (iQuote == -2)	{
 
-					generic_string noEasterEggsPath((nParam).getNppPath());
+					generic_string noEasterEggsPath((param).getNppPath());
 					noEasterEggsPath.append(L"\\noEasterEggs.xml");
 					if (!::PathFileExists(noEasterEggsPath.c_str()))
 						showAllQuotes();
@@ -2786,7 +2785,7 @@ void Notepad_plus::command(int id)	{
 				}
 				if (iQuote != -1)	{
 
-					generic_string noEasterEggsPath((nParam).getNppPath());
+					generic_string noEasterEggsPath((param).getNppPath());
 					noEasterEggsPath.append(L"\\noEasterEggs.xml");
 					if (!::PathFileExists(noEasterEggsPath.c_str()))
 						showQuoteFromIndex(iQuote);
@@ -2818,7 +2817,7 @@ void Notepad_plus::command(int id)	{
 
 		case IDM_HELP :	{
 
-			generic_string tmp((nParam).getNppPath());
+			generic_string tmp((param).getNppPath());
 			generic_string nppHelpPath = tmp.c_str();
 
 			nppHelpPath += L"\\user.manual\\documentation\\notepad-online-document.html";
@@ -2841,12 +2840,12 @@ void Notepad_plus::command(int id)	{
 
 		case IDM_HOMESWEETHOME :	{
 
-			::ShellExecute(NULL, L"open", L"https://notepad-plus-plus.org/", NULL, NULL, SW_SHOWNORMAL);
+			::ShellExecute(NULL, L"open", L"https://github.com/abdulbadii/notepad-plus-minus/", NULL, NULL, SW_SHOWNORMAL);
 			break;
 		}
 		case IDM_PROJECTPAGE :	{
 
-			::ShellExecute(NULL, L"open", L"https://github.com/notepad-plus-plus/notepad-plus-plus/", NULL, NULL, SW_SHOWNORMAL);
+			::ShellExecute(NULL, L"open", L"https://https://github.com/abdulbadii/notepad-plus-minus/", NULL, NULL, SW_SHOWNORMAL);
 			break;
 		}
 
@@ -2871,7 +2870,7 @@ void Notepad_plus::command(int id)	{
 
 		case IDM_ONLINESUPPORT:	{
 
-			::ShellExecute(NULL, L"open", L"https://gitter.im/notepad-plus-plus/notepad-plus-plus", NULL, NULL, SW_SHOWNORMAL);
+			::ShellExecute(NULL, L"open", L"https://https://github.com/abdulbadii/notepad-plus-minus", NULL, NULL, SW_SHOWNORMAL);
 			break;
 		}
 
@@ -2879,23 +2878,23 @@ void Notepad_plus::command(int id)	{
 		case IDM_CONFUPDATERPROXY :	{
 
 			// wingup doesn't work with the obsolete security layer (API) under xp since downloadings are secured with SSL on notepad_plus_plus.org
-			winVer ver = nParam.getWinVersion();
+			winVer ver = param.getWinVersion();
 			if (ver <= WV_XP)	{
 
 				long res = _nativeLangSpeaker.messageBox("XpUpdaterProblem",
 					_pPublicInterface->getHSelf(),
-					L"Notepad++ updater is not compatible with XP due to the obsolete security layer under XP.\rDo you want to go to Notepad++ page to download the latest version?",
-					L"Notepad++ Updater",
+					L"Updater is not compatible with XP due to the obsolete security layer under XP.\rDo you want to go to page to download the latest version?",
+					L"The Updater",
 					MB_YESNO);
 
 				if (res == IDYES)	{
 
-					::ShellExecute(NULL, L"open", L"https://notepad-plus-plus.org/downloads/", NULL, NULL, SW_SHOWNORMAL);
+					::ShellExecute(NULL, L"open", L"https://https://github.com/abdulbadii/notepad-plus-minus/tree/master/Release/", NULL, NULL, SW_SHOWNORMAL);
 				}
 			}
 			else	{
 
-				generic_string updaterDir = (nParam).getNppPath();
+				generic_string updaterDir = (param).getNppPath();
 				PathAppend(updaterDir, L"updater");
 
 				generic_string updaterFullPath = updaterDir;
@@ -2911,7 +2910,7 @@ void Notepad_plus::command(int id)	{
 #endif
 				if (isCertifVerified)	{
 
-					generic_string param;
+					generic_string mParam;
 					if (id == IDM_CONFUPDATERPROXY)	{
 
 						if (!_isAdministrator)	{
@@ -2923,19 +2922,19 @@ void Notepad_plus::command(int id)	{
 								MB_OK | MB_APPLMODAL);
 							return;
 						}
-						param = L"-options";
+						mParam = L"-options";
 					}
 					else	{
 
-						param = L"-verbose -v";
-						param += VERSION_VALUE;
+						mParam = L"-verbose -v";
+						mParam += VERSION_VALUE;
 
-						if (nParam.isx64())	{
+						if (param.isx64())	{
 
-							param += L" -px64";
+							mParam += L" -px64";
 						}
 					}
-					Process updater(updaterFullPath.c_str(), param.c_str(), updaterDir.c_str());
+					Process updater(updaterFullPath.c_str(), mParam.c_str(), updaterDir.c_str());
 
 					updater.run();
 				}
@@ -3065,7 +3064,7 @@ void Notepad_plus::command(int id)	{
 		
 		case IDM_LANG_OPENUDLDIR:	{
 
-			generic_string userDefineLangFolderPath = nParam.getUserDefineLangFolderPath();
+			generic_string userDefineLangFolderPath = param.getUserDefineLangFolderPath();
 			::ShellExecute(_pPublicInterface->getHSelf(), L"open", userDefineLangFolderPath.c_str(), NULL, NULL, SW_SHOW);
 			break;
 		}
@@ -3078,7 +3077,7 @@ void Notepad_plus::command(int id)	{
 			}
 			size_t nbDoc = viewVisible(MAIN_VIEW) ? _mainDocTab.nbItem() : viewVisible(SUB_VIEW) ? _subDocTab.nbItem() : 0;
 
-			bool doTaskList = nParam.getNppGUI()._doTaskList;
+			bool doTaskList = nGUI._doTaskList;
 			_isFolding = true;
 			if (nbDoc > 1)	{
 
@@ -3156,7 +3155,6 @@ void Notepad_plus::command(int id)	{
 
 		case IDM_SYSTRAYPOPUP_NEWDOC:	{
 
-			NppGUI & nppGUI = const_cast<NppGUI &>((nParam).getNppGUI());
 			::ShowWindow(_pPublicInterface->getHSelf(), nppGUI._isMaximized?SW_MAXIMIZE:SW_SHOW);
 			fileNew();
 		}
@@ -3164,7 +3162,6 @@ void Notepad_plus::command(int id)	{
 
 		case IDM_SYSTRAYPOPUP_ACTIVATE :	{
 
-			NppGUI & nppGUI = const_cast<NppGUI &>((nParam).getNppGUI());
 			::ShowWindow(_pPublicInterface->getHSelf(), nppGUI._isMaximized?SW_MAXIMIZE:SW_SHOW);
 
 			// Send sizing info to make window fit (specially to show tool bar. Fixed issue #2600)
@@ -3174,7 +3171,6 @@ void Notepad_plus::command(int id)	{
 
 		case IDM_SYSTRAYPOPUP_NEW_AND_PASTE:	{
 
-			NppGUI & nppGUI = const_cast<NppGUI &>((nParam).getNppGUI());
 			::ShowWindow(_pPublicInterface->getHSelf(), nppGUI._isMaximized?SW_MAXIMIZE:SW_SHOW);
 			BufferID bufferID = _pEditView->getCurrentBufferID();
 			Buffer * buf = MainFileManager.getBufferByID(bufferID);
@@ -3188,7 +3184,6 @@ void Notepad_plus::command(int id)	{
 
 		case IDM_SYSTRAYPOPUP_OPENFILE:	{
 
-			NppGUI & nppGUI = const_cast<NppGUI &>((nParam).getNppGUI());
 			::ShowWindow(_pPublicInterface->getHSelf(), nppGUI._isMaximized?SW_MAXIMIZE:SW_SHOW);
 
 			// Send sizing info to make window fit (specially to show tool bar. Fixed issue #2600)
@@ -3259,7 +3254,7 @@ void Notepad_plus::command(int id)	{
 
 		case IDM_VIEW_CURLINE_HILITING:	{
 
-			COLORREF colour = nParam.getCurLineHilitingColour();
+			COLORREF colour = param.getCurLineHilitingColour();
 			_mainEditView.setCurrentLineHiLiting(!_pEditView->isCurrentLineHiLiting(), colour);
 			_subEditView.setCurrentLineHiLiting(!_pEditView->isCurrentLineHiLiting(), colour);
 		}
@@ -3325,13 +3320,13 @@ void Notepad_plus::command(int id)	{
 			else if (id >= ID_MACRO && (id < ID_MACRO_LIMIT))	{
 
 				int i = id - ID_MACRO;
-				vector<MacroShortcut> & theMacros = (nParam).getMacroList();
+				vector<MacroShortcut> & theMacros = (param).getMacroList();
 				macroPlayback(theMacros[i].getMacro());
 			}
 			else if ((id >= ID_USER_CMD) && (id < ID_USER_CMD_LIMIT))	{
 
 				int i = id - ID_USER_CMD;
-				vector<UserCommand> & theUserCommands = (nParam).getUserCommandList();
+				vector<UserCommand> & theUserCommands = (param).getUserCommandList();
 				UserCommand ucmd = theUserCommands[i];
 
 				Command cmd(ucmd.getCmd());

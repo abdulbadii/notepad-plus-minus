@@ -56,7 +56,7 @@ void ShortcutMapper::initTabs()	{
 	::GetWindowPlacement(hTab, &wp);
 	::SendMessage(hTab, TCM_GETITEMRECT, 0, reinterpret_cast<LPARAM>(&rcTab));
 
-	wp.rcNormalPosition.bottom = NppParameters::getInstance()._dpiManager.scaleY(30);
+	wp.rcNormalPosition.bottom = param._dpiManager.scaleY(30);
 	wp.rcNormalPosition.top = wp.rcNormalPosition.bottom - rcTab.bottom;
 
 	::SetWindowPlacement(hTab, &wp);
@@ -66,10 +66,10 @@ void ShortcutMapper::getClientRect(RECT & rc) const
 {
 		Window::getClientRect(rc);
 
-		rc.top += NppParameters::getInstance()._dpiManager.scaleY(30);
-		rc.bottom -= NppParameters::getInstance()._dpiManager.scaleY(108);
-		rc.left += NppParameters::getInstance()._dpiManager.scaleX(5);
-		rc.right -= NppParameters::getInstance()._dpiManager.scaleX(5);
+		rc.top += param._dpiManager.scaleY(30);
+		rc.bottom -= param._dpiManager.scaleY(108);
+		rc.left += param._dpiManager.scaleX(5);
+		rc.right -= param._dpiManager.scaleX(5);
 }
 
 generic_string ShortcutMapper::getTabString(size_t i) const
@@ -77,7 +77,7 @@ generic_string ShortcutMapper::getTabString(size_t i) const
 	if (i >= _nbTab)
 		return L"";
 
-	NativeLangSpeaker* nativeLangSpeaker = NppParameters::getInstance().getNativeLangSpeaker();
+	NativeLangSpeaker* nativeLangSpeaker = param.getNativeLangSpeaker();
 	switch (i)	{
 
 		case 1:
@@ -108,11 +108,11 @@ void ShortcutMapper::initBabyGrid()	{
 
 	_hGridFonts.resize(MAX_GRID_FONTS);
 	_hGridFonts.at(GFONT_HEADER) = ::CreateFont(
-		NppParameters::getInstance()._dpiManager.scaleY(18), 0, 0, 0, FW_BOLD,
+		param._dpiManager.scaleY(18), 0, 0, 0, FW_BOLD,
 		FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH,
 		L"MS Shell Dlg");
 	_hGridFonts.at(GFONT_ROWS) = ::CreateFont(
-		NppParameters::getInstance()._dpiManager.scaleY(16), 0, 0, 0, FW_NORMAL,
+		param._dpiManager.scaleY(16), 0, 0, 0, FW_NORMAL,
 		FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH,
 		L"MS Shell Dlg");
 	
@@ -126,16 +126,16 @@ void ShortcutMapper::initBabyGrid()	{
 	_babygrid.makeColAutoWidth(true);
 	_babygrid.setAutoRow(true);
 	_babygrid.setColsNumbered(false);
-	_babygrid.setColWidth(0, NppParameters::getInstance()._dpiManager.scaleX(30));  // Force the first col to be small, others col will be automatically sized
-	_babygrid.setHeaderHeight(NppParameters::getInstance()._dpiManager.scaleY(21));
-	_babygrid.setRowHeight(NppParameters::getInstance()._dpiManager.scaleY(21));
+	_babygrid.setColWidth(0, param._dpiManager.scaleX(30));  // Force the first col to be small, others col will be automatically sized
+	_babygrid.setHeaderHeight(param._dpiManager.scaleY(21));
+	_babygrid.setRowHeight(param._dpiManager.scaleY(21));
 
 	_babygrid.setHighlightColorNoFocus(RGB(200,200,210));
 	_babygrid.setProtectColor(RGB(255,130,120));
 	_babygrid.setHighlightColorProtect(RGB(244,10,20));
 	_babygrid.setHighlightColorProtectNoFocus(RGB(230,194,190));
 
-	NativeLangSpeaker* nativeLangSpeaker = NppParameters::getInstance().getNativeLangSpeaker();
+	NativeLangSpeaker* nativeLangSpeaker = param.getNativeLangSpeaker();
 	nativeLangSpeaker->changeDlgLang(_hSelf, "ShortcutMapper");
 	_conflictInfoOk = nativeLangSpeaker->getShortcutMapperLangStr("ConflictInfoOk", L"No shortcut conflicts for this item.");
 	_conflictInfoEditing = nativeLangSpeaker->getShortcutMapperLangStr("ConflictInfoEditing", L"No conflicts . . .");
@@ -185,13 +185,12 @@ bool ShortcutMapper::isFilterValid(PluginCmdShortcut sc)	{
 
 void ShortcutMapper::fillOutBabyGrid()	{
 
-	NppParameters& nppParam = NppParameters::getInstance();
 	_babygrid.clear();
 	_babygrid.setInitialContent(true);
 	_shortcutIndex.clear();
 
 	size_t nbItems = 0;
-	NativeLangSpeaker* nativeLangSpeaker = nppParam.getNativeLangSpeaker();
+	NativeLangSpeaker* nativeLangSpeaker = param.getNativeLangSpeaker();
 	generic_string nameStr = nativeLangSpeaker->getShortcutMapperLangStr("ColumnName", L"Name");
 	generic_string shortcutStr = nativeLangSpeaker->getShortcutMapperLangStr("ColumnShortcut", L"Shortcut");
 
@@ -202,7 +201,7 @@ void ShortcutMapper::fillOutBabyGrid()	{
 
 		case STATE_MENU:	{
 
-			nbItems = nppParam.getUserShortcuts().size();
+			nbItems = param.getUserShortcuts().size();
 			_babygrid.setLineColNumber(nbItems, 3);
 			generic_string categoryStr = nativeLangSpeaker->getShortcutMapperLangStr("ColumnCategory", L"Category");
 			_babygrid.setText(0, 3, categoryStr.c_str());
@@ -211,21 +210,21 @@ void ShortcutMapper::fillOutBabyGrid()	{
 
 		case STATE_MACRO:	{
 
-			nbItems = nppParam.getMacroList().size();
+			nbItems = param.getMacroList().size();
 			_babygrid.setLineColNumber(nbItems, 2);
 		}
 		break;
 
 		case STATE_USER:	{
 
-			nbItems = nppParam.getUserCommandList().size();
+			nbItems = param.getUserCommandList().size();
 			_babygrid.setLineColNumber(nbItems, 2);
 		}
 		break;
 
 		case STATE_PLUGIN:	{
 
-			nbItems = nppParam.getPluginCommandList().size();
+			nbItems = param.getPluginCommandList().size();
 			_babygrid.setLineColNumber(nbItems, 3);
 			generic_string pluginStr = nativeLangSpeaker->getShortcutMapperLangStr("ColumnPlugin", L"Plugin");
 			_babygrid.setText(0, 3, pluginStr.c_str());
@@ -234,7 +233,7 @@ void ShortcutMapper::fillOutBabyGrid()	{
 
 		case STATE_SCINTILLA:	{
 
-			nbItems = nppParam.getScintillaKeyList().size();
+			nbItems = param.getScintillaKeyList().size();
 			_babygrid.setLineColNumber(nbItems, 2);
 		}
 		break;
@@ -248,7 +247,7 @@ void ShortcutMapper::fillOutBabyGrid()	{
 
 		case STATE_MENU:	{
 
-			vector<CommandShortcut> & cshortcuts = nppParam.getUserShortcuts();
+			vector<CommandShortcut> & cshortcuts = param.getUserShortcuts();
 			cs_index = 1;
 			for (size_t i = 0; i < nbItems; ++i)	{
 
@@ -276,7 +275,7 @@ void ShortcutMapper::fillOutBabyGrid()	{
 
 		case STATE_MACRO:	{
 
-			vector<MacroShortcut> & cshortcuts = nppParam.getMacroList();
+			vector<MacroShortcut> & cshortcuts = param.getMacroList();
 			cs_index = 1;
 			for (size_t i = 0; i < nbItems; ++i)	{
 
@@ -305,7 +304,7 @@ void ShortcutMapper::fillOutBabyGrid()	{
 
 		case STATE_USER:	{
 
-			vector<UserCommand> & cshortcuts = nppParam.getUserCommandList();
+			vector<UserCommand> & cshortcuts = param.getUserCommandList();
 			cs_index = 1;
 			for (size_t i = 0; i < nbItems; ++i)	{
 
@@ -335,7 +334,7 @@ void ShortcutMapper::fillOutBabyGrid()	{
 
 		case STATE_PLUGIN:	{
 
-			vector<PluginCmdShortcut> & cshortcuts = nppParam.getPluginCommandList();
+			vector<PluginCmdShortcut> & cshortcuts = param.getPluginCommandList();
 			cs_index = 1;
 			for (size_t i = 0; i < nbItems; ++i)	{
 
@@ -365,7 +364,7 @@ void ShortcutMapper::fillOutBabyGrid()	{
 
 		case STATE_SCINTILLA:	{
 
-			vector<ScintillaKeyMap> & cshortcuts = nppParam.getScintillaKeyList();
+			vector<ScintillaKeyMap> & cshortcuts = param.getScintillaKeyList();
 			cs_index=1;
 			for (size_t i = 0; i < nbItems; ++i)	{
 
@@ -583,7 +582,6 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					if (_babygrid.getNumberRows() < 1)
 						return TRUE;
 
-					NppParameters& nppParam = NppParameters::getInstance();
 					int row = _babygrid.getSelectedRow();
 					size_t shortcutIndex = _shortcutIndex[row-1];
 					bool isModified = false;
@@ -593,12 +591,12 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						case STATE_MENU:	{
 
 							//Get CommandShortcut corresponding to row
-							vector<CommandShortcut> & shortcuts = nppParam.getUserShortcuts();
+							vector<CommandShortcut> & shortcuts = param.getUserShortcuts();
 							CommandShortcut csc = shortcuts[shortcutIndex];
 							csc.clear();
 							shortcuts[shortcutIndex] = csc;
 							//shortcut was altered
-							nppParam.addUserModifiedIndex(shortcutIndex);
+							param.addUserModifiedIndex(shortcutIndex);
 
 							//save the current view
 							_lastHomeRow[_currentState] = _babygrid.getHomeRow();
@@ -608,15 +606,15 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 							isModified = true;
 
 							//Notify current Accelerator class to update everything
-							nppParam.getAccelerator()->updateShortcuts();
-							nppParam.setShortcutDirty();
+							param.getAccelerator()->updateShortcuts();
+							param.setShortcutDirty();
 						}
 						break;
 
 						case STATE_MACRO:	{ 
 
 							//Get MacroShortcut corresponding to row
-							vector<MacroShortcut> & shortcuts = nppParam.getMacroList();
+							vector<MacroShortcut> & shortcuts = param.getMacroList();
 							MacroShortcut msc = shortcuts[shortcutIndex];
 							msc.clear();
 							shortcuts[shortcutIndex] = msc;
@@ -628,15 +626,15 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 							isModified = true;
 
 							//Notify current Accelerator class to update everything
-							nppParam.getAccelerator()->updateShortcuts();
-							nppParam.setShortcutDirty();
+							param.getAccelerator()->updateShortcuts();
+							param.setShortcutDirty();
 						}
 						break;
 
 						case STATE_USER:	{ 
 
 							//Get UserCommand corresponding to row
-							vector<UserCommand> & shortcuts = nppParam.getUserCommandList();
+							vector<UserCommand> & shortcuts = param.getUserCommandList();
 							UserCommand ucmd = shortcuts[shortcutIndex];
 							ucmd.clear();
 
@@ -651,19 +649,19 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 							isModified = true;
 
 							//Notify current Accelerator class to update everything
-							nppParam.getAccelerator()->updateShortcuts();
-							nppParam.setShortcutDirty();
+							param.getAccelerator()->updateShortcuts();
+							param.setShortcutDirty();
 						}
 						break;
 
 						case STATE_PLUGIN:	{ 
 
 							//Get PluginCmdShortcut corresponding to row
-							vector<PluginCmdShortcut> & shortcuts = nppParam.getPluginCommandList();
+							vector<PluginCmdShortcut> & shortcuts = param.getPluginCommandList();
 							PluginCmdShortcut pcsc = shortcuts[shortcutIndex];
 							pcsc.clear();
 							//shortcut was altered
-							nppParam.addPluginModifiedIndex(shortcutIndex);
+							param.addPluginModifiedIndex(shortcutIndex);
 							shortcuts[shortcutIndex] = pcsc;
 
 							//save the current view
@@ -674,7 +672,7 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 							isModified = true;
 
 							//Notify current Accelerator class to update everything
-							nppParam.getAccelerator()->updateShortcuts();
+							param.getAccelerator()->updateShortcuts();
 							unsigned long cmdID = pcsc.getID();
 							ShortcutKey shortcut;
 							shortcut._isAlt = FALSE;
@@ -683,7 +681,7 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 							shortcut._key = '\0';
 
 							::SendMessage(_hParent, NPPM_INTERNAL_PLUGINSHORTCUTMOTIFIED, cmdID, reinterpret_cast<LPARAM>(&shortcut));
-							nppParam.setShortcutDirty();
+							param.setShortcutDirty();
 						}
 						break;
 
@@ -706,7 +704,6 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					if (_babygrid.getNumberRows() < 1)
 						return TRUE;
 
-					NppParameters& nppParam = NppParameters::getInstance();
 					int row = _babygrid.getSelectedRow();
 					size_t shortcutIndex = _shortcutIndex[row-1];
 					bool isModified = false;
@@ -716,13 +713,13 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						case STATE_MENU:	{
 
 							//Get CommandShortcut corresponding to row
-							vector<CommandShortcut> & shortcuts = nppParam.getUserShortcuts();
+							vector<CommandShortcut> & shortcuts = param.getUserShortcuts();
 							CommandShortcut csc = shortcuts[shortcutIndex], prevcsc = shortcuts[shortcutIndex];
 							csc.init(_hInst, _hSelf);
 							if (csc.doDialog() != -1 && prevcsc != csc)	{
 
 								//shortcut was altered
-								nppParam.addUserModifiedIndex(shortcutIndex);
+								param.addUserModifiedIndex(shortcutIndex);
 								shortcuts[shortcutIndex] = csc;
 
 								//save the current view
@@ -733,8 +730,8 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 								isModified = true;
 
 								//Notify current Accelerator class to update everything
-								nppParam.getAccelerator()->updateShortcuts();
-								nppParam.setShortcutDirty();
+								param.getAccelerator()->updateShortcuts();
+								param.setShortcutDirty();
 							}
 						}
 						break;
@@ -742,7 +739,7 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						case STATE_MACRO:	{ 
 
 							//Get MacroShortcut corresponding to row
-							vector<MacroShortcut> & shortcuts = nppParam.getMacroList();
+							vector<MacroShortcut> & shortcuts = param.getMacroList();
 							MacroShortcut msc = shortcuts[shortcutIndex], prevmsc = shortcuts[shortcutIndex];
 							msc.init(_hInst, _hSelf);
 							if (msc.doDialog() != -1 && prevmsc != msc)	{
@@ -758,8 +755,8 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 								isModified = true;
 
 								//Notify current Accelerator class to update everything
-								nppParam.getAccelerator()->updateShortcuts();
-								nppParam.setShortcutDirty();
+								param.getAccelerator()->updateShortcuts();
+								param.setShortcutDirty();
 							}
 						}
 						break; 
@@ -767,7 +764,7 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						case STATE_USER:	{ 
 
 							//Get UserCommand corresponding to row
-							vector<UserCommand> & shortcuts = nppParam.getUserCommandList();
+							vector<UserCommand> & shortcuts = param.getUserCommandList();
 							UserCommand ucmd = shortcuts[shortcutIndex];
 							ucmd.init(_hInst, _hSelf);
 							UserCommand prevucmd = ucmd;
@@ -784,8 +781,8 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 								isModified = true;
 
 								//Notify current Accelerator class to update everything
-								nppParam.getAccelerator()->updateShortcuts();
-								nppParam.setShortcutDirty();
+								param.getAccelerator()->updateShortcuts();
+								param.setShortcutDirty();
 							}
 						}
 						break; 
@@ -793,14 +790,14 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						case STATE_PLUGIN:	{
 
 							//Get PluginCmdShortcut corresponding to row
-							vector<PluginCmdShortcut> & shortcuts = nppParam.getPluginCommandList();
+							vector<PluginCmdShortcut> & shortcuts = param.getPluginCommandList();
 							PluginCmdShortcut pcsc = shortcuts[shortcutIndex];
 							pcsc.init(_hInst, _hSelf);
 							PluginCmdShortcut prevpcsc = pcsc;
 							if (pcsc.doDialog() != -1 && prevpcsc != pcsc)	{
 
 								//shortcut was altered
-								nppParam.addPluginModifiedIndex(shortcutIndex);
+								param.addPluginModifiedIndex(shortcutIndex);
 								shortcuts[shortcutIndex] = pcsc;
 
 								//save the current view
@@ -811,7 +808,7 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 								isModified = true;
 
 								//Notify current Accelerator class to update everything
-								nppParam.getAccelerator()->updateShortcuts();
+								param.getAccelerator()->updateShortcuts();
 								unsigned long cmdID = pcsc.getID();
 								ShortcutKey shortcut;
 								shortcut._isAlt = pcsc.getKeyCombo()._isAlt;
@@ -820,7 +817,7 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 								shortcut._key = pcsc.getKeyCombo()._key;
 
 								::SendMessage(_hParent, NPPM_INTERNAL_PLUGINSHORTCUTMOTIFIED, cmdID, reinterpret_cast<LPARAM>(&shortcut));
-								nppParam.setShortcutDirty();
+								param.setShortcutDirty();
 							}
 						}
 						break;
@@ -828,13 +825,13 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						case STATE_SCINTILLA:	{
 
 							//Get ScintillaKeyMap corresponding to row
-							vector<ScintillaKeyMap> & shortcuts = nppParam.getScintillaKeyList();
+							vector<ScintillaKeyMap> & shortcuts = param.getScintillaKeyList();
 							ScintillaKeyMap skm = shortcuts[shortcutIndex], prevskm = shortcuts[shortcutIndex];
 							skm.init(_hInst, _hSelf);
 							if (skm.doDialog() != -1 && prevskm != skm)	{
 
 								//shortcut was altered
-								nppParam.addScintillaModifiedIndex((int)shortcutIndex);
+								param.addScintillaModifiedIndex((int)shortcutIndex);
 								shortcuts[shortcutIndex] = skm;
 
 								//save the current view
@@ -846,8 +843,8 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 								isModified = true;
 
 								//Notify current Accelerator class to update key
-								nppParam.getScintillaAccelerator()->updateKeys();
-								nppParam.setShortcutDirty();
+								param.getScintillaAccelerator()->updateKeys();
+								param.setShortcutDirty();
 							}
 						}
 						break;  
@@ -864,8 +861,7 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					if (_babygrid.getNumberRows() < 1)
 						return TRUE;
 
-					NppParameters& nppParam = NppParameters::getInstance();
-					int res = nppParam.getNativeLangSpeaker()->messageBox("SCMapperDoDeleteOrNot",
+					int res = param.getNativeLangSpeaker()->messageBox("SCMapperDoDeleteOrNot",
 						_hSelf,
 						L"Are you sure you want to delete this shortcut?",
 						L"Are you sure?",
@@ -893,7 +889,7 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 							case STATE_MACRO:	{ 
 
-								vector<MacroShortcut> & theMacros = nppParam.getMacroList();
+								vector<MacroShortcut> & theMacros = param.getMacroList();
 								vector<MacroShortcut>::iterator it = theMacros.begin();
 								cmdID = theMacros[shortcutIndex].getID();
 								theMacros.erase(it + shortcutIndex);
@@ -927,7 +923,7 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 							case STATE_USER:	{ 
 
-								vector<UserCommand> & theUserCmds = nppParam.getUserCommandList();
+								vector<UserCommand> & theUserCmds = param.getUserCommandList();
 								vector<UserCommand>::iterator it = theUserCmds.begin();
 								cmdID = theUserCmds[shortcutIndex].getID();
 								theUserCmds.erase(it + shortcutIndex);
@@ -961,8 +957,8 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						}
 
                         // updateShortcuts() will update all menu item - the menu items will be shifted
-						nppParam.getAccelerator()->updateShortcuts();
-						nppParam.setShortcutDirty();
+						param.getAccelerator()->updateShortcuts();
+						param.setShortcutDirty();
 
                         // All menu items are shifted up. So we delete the last item
 						::RemoveMenu(hMenu, posBase + static_cast<int32_t>(nbElem), MF_BYPOSITION);
@@ -1055,7 +1051,6 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 							if (_babygrid.getNumberRows() < 1)
 								return TRUE;
 
-							NppParameters& nppParam = NppParameters::getInstance();
 							const size_t currentIndex = LOWORD(lParam) - 1;
 							generic_string conflictInfo;
 
@@ -1063,35 +1058,35 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 								case STATE_MENU:	{
 
-									vector<CommandShortcut> & vShortcuts = nppParam.getUserShortcuts();
+									vector<CommandShortcut> & vShortcuts = param.getUserShortcuts();
 									findKeyConflicts(&conflictInfo, vShortcuts[currentIndex].getKeyCombo(), currentIndex);
 								}
 								break;
 
 								case STATE_MACRO:	{
 
-									vector<MacroShortcut> & vShortcuts = nppParam.getMacroList();
+									vector<MacroShortcut> & vShortcuts = param.getMacroList();
 									findKeyConflicts(&conflictInfo, vShortcuts[currentIndex].getKeyCombo(), currentIndex);
 								}
 								break;
 
 								case STATE_USER:	{
 
-									vector<UserCommand> & vShortcuts = nppParam.getUserCommandList();
+									vector<UserCommand> & vShortcuts = param.getUserCommandList();
 									findKeyConflicts(&conflictInfo, vShortcuts[currentIndex].getKeyCombo(), currentIndex);
 								}
 								break;
 
 								case STATE_PLUGIN:	{
 
-									vector<PluginCmdShortcut> & vShortcuts = nppParam.getPluginCommandList();
+									vector<PluginCmdShortcut> & vShortcuts = param.getPluginCommandList();
 									findKeyConflicts(&conflictInfo, vShortcuts[currentIndex].getKeyCombo(), currentIndex);
 								}
 								break;
 
 								case STATE_SCINTILLA:	{
 
-									vector<ScintillaKeyMap> & vShortcuts = nppParam.getScintillaKeyList();
+									vector<ScintillaKeyMap> & vShortcuts = param.getScintillaKeyList();
 									size_t sciCombos = vShortcuts[currentIndex].getSize();
 									for (size_t sciIndex = 0; sciIndex < sciCombos; ++sciIndex)
 										findKeyConflicts(&conflictInfo, vShortcuts[currentIndex].getKeyComboByIndex(sciIndex), currentIndex);
@@ -1134,7 +1129,6 @@ bool ShortcutMapper::findKeyConflicts(__inout_opt generic_string * const keyConf
 		return false;
 
 	bool retIsConflict = false; //returns true when a conflict is found
-	NppParameters& nppParam = NppParameters::getInstance();
 
 	for (size_t gridState = STATE_MENU; gridState <= STATE_SCINTILLA; ++gridState)	{
 
@@ -1142,7 +1136,7 @@ bool ShortcutMapper::findKeyConflicts(__inout_opt generic_string * const keyConf
 
 			case STATE_MENU:	{
 
-				vector<CommandShortcut> & vShortcuts = nppParam.getUserShortcuts();
+				vector<CommandShortcut> & vShortcuts = param.getUserShortcuts();
 				size_t nbItems = vShortcuts.size();
 				for (size_t itemIndex = 0; itemIndex < nbItems; ++itemIndex)	{
 
@@ -1176,7 +1170,7 @@ bool ShortcutMapper::findKeyConflicts(__inout_opt generic_string * const keyConf
 			} //case STATE_MENU
 			case STATE_MACRO:	{
 
-				vector<MacroShortcut> & vShortcuts = nppParam.getMacroList();
+				vector<MacroShortcut> & vShortcuts = param.getMacroList();
 				size_t nbItems = vShortcuts.size();
 				for (size_t itemIndex = 0; itemIndex < nbItems; ++itemIndex)	{
 
@@ -1210,7 +1204,7 @@ bool ShortcutMapper::findKeyConflicts(__inout_opt generic_string * const keyConf
 			} //case STATE_MACRO
 			case STATE_USER:	{
 
-				vector<UserCommand> & vShortcuts = nppParam.getUserCommandList();
+				vector<UserCommand> & vShortcuts = param.getUserCommandList();
 				size_t nbItems = vShortcuts.size();
 				for (size_t itemIndex = 0; itemIndex < nbItems; ++itemIndex)	{
 
@@ -1244,7 +1238,7 @@ bool ShortcutMapper::findKeyConflicts(__inout_opt generic_string * const keyConf
 			} //case STATE_USER
 			case STATE_PLUGIN:	{
 
-				vector<PluginCmdShortcut> & vShortcuts = nppParam.getPluginCommandList();
+				vector<PluginCmdShortcut> & vShortcuts = param.getPluginCommandList();
 				size_t nbItems = vShortcuts.size();
 				for (size_t itemIndex = 0; itemIndex < nbItems; ++itemIndex)	{
 
@@ -1278,7 +1272,7 @@ bool ShortcutMapper::findKeyConflicts(__inout_opt generic_string * const keyConf
 			} //case STATE_PLUGIN
 			case STATE_SCINTILLA:	{
 
-				vector<ScintillaKeyMap> & vShortcuts = nppParam.getScintillaKeyList();
+				vector<ScintillaKeyMap> & vShortcuts = param.getScintillaKeyList();
 				size_t nbItems = vShortcuts.size();
 				for (size_t itemIndex = 0; itemIndex < nbItems; ++itemIndex)	{
 

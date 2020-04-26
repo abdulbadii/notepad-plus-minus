@@ -187,7 +187,6 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_SPACE,       IDM_SEARCH_REPLACE,                           true, false, false, nullptr },
 	{ VK_SPACE,       IDM_SEARCH_FINDINFILES,                       false, true, false,  nullptr },
 	{ VK_I,       IDM_SEARCH_FINDINCREMENT,                     true,  true,  false, nullptr },
-	{ VK_SPACE,      IDM_SHOW_HIDE_FIND_RESULTS,                  true,  true, false, nullptr },
 	{ VK_F4,      IDM_SEARCH_GOTOPREVFOUND,                     false, false, true,  nullptr },
 	{ VK_F4,      IDM_SEARCH_GOTONEXTFOUND,                     false, false, false, nullptr },
 	{ VK_G,       IDM_SEARCH_GOTOLINE,                          true,  false, false, nullptr },
@@ -298,6 +297,7 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_NULL,    IDM_VIEW_PROJECT_PANEL_3,                     false, false, false, nullptr },
 	{ VK_NULL,    IDM_VIEW_FILEBROWSER,                         false, false, false, nullptr },
 	{ VK_NULL,    IDM_VIEW_DOC_MAP,                             false, false, false, nullptr },
+	{ VK_SPACE,      IDM_VIEW_FIND_RESULT,                  true,  true, false, nullptr },
 	{ VK_BACK,    IDM_VIEW_FUNC_LIST,                           false, false, true, nullptr },
 	{ VK_F6,    IDM_VIEW_CHAR_PANEL,                          false, false, false, nullptr },
 	{ VK_L,    IDM_VIEW_LINENUMBER,                false, true, true, L"Display line number" },
@@ -835,7 +835,7 @@ winVer NppParameters::getWindowsVersion()
    return WV_UNKNOWN;
 }
 
-int FileDialog::_dialogFileBoxId = (NppParameters::getInstance()).getWinVersion() < WV_W2K?edt1:cmb13;
+int FileDialog::_dialogFileBoxId = param.getWinVersion() < WV_W2K?edt1:cmb13;
 
 
 NppParameters::NppParameters()
@@ -1389,8 +1389,7 @@ bool NppParameters::load()	{
 	PathAppend(_sessionPath, L"session.xml");
 
 	// Don't load session.xml if not required in order to speed up!!
-	const NppGUI & nppGUI = (NppParameters::getInstance()).getNppGUI();
-	if (nppGUI._rememberLastSession)	{
+	if (_nppGUI._rememberLastSession)	{
 
 		_pXmlSessionDoc = new TiXmlDocument(_sessionPath);
 
@@ -3759,7 +3758,7 @@ LangType NppParameters::getLangIDFromStr(const TCHAR *langName)
 	LangType l = (LangType)lang;
 	if (l == L_EXTERNAL)	{ //try find external lexer
 
-		int id = NppParameters::getInstance().getExternalLangIndexFromName(langName);
+		int id = getInstance().getExternalLangIndexFromName(langName);
 		if (id != -1) return (LangType)(id + L_EXTERNAL);
 	}
 
@@ -4892,6 +4891,10 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			if (optName)
 				_nppGUI._autocIgnoreNumbers = (!lstrcmp(optName, L"yes"));
 
+			optName = element->Attribute(L"autoCCase");
+			if (optName)
+				_nppGUI._autocIgnoreCase = (!lstrcmp(optName, L"yes"));
+
 			optName = element->Attribute(L"funcParams");
 			if (optName)
 				_nppGUI._funcParams = (!lstrcmp(optName, L"yes"));
@@ -5724,15 +5727,15 @@ void NppParameters::createXmlTreeFromGUIParams()	{
 		GUIConfigElement->SetAttribute(L"underline", _nppGUI._globalOverride.enableUnderLine ? L"yes" : L"no");
 	}
 
-	// <GUIConfig name = "auto-completion" autoCAction = "3" triggerFromNbChar = "1" funcParams = "yes" autoCIgnoreNumbers = "yes" / >
+	// <GUIConfig name = "auto-completion" autoCAction = "3" triggerFromNbChar = "1" funcParams = "yes" autoCIgnoreNumbers = "yes" autoCCase = "yes" / >
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"auto-completion");
 		GUIConfigElement->SetAttribute(L"autoCAction", _nppGUI._autocStatus);
 		GUIConfigElement->SetAttribute(L"triggerFromNbChar", static_cast<int32_t>(_nppGUI._autocFromLen));
-
 		const TCHAR * pStr = _nppGUI._autocIgnoreNumbers ? L"yes" : L"no";
 		GUIConfigElement->SetAttribute(L"autoCIgnoreNumbers", pStr);
+		GUIConfigElement->SetAttribute(L"autoCCase", _nppGUI._autocIgnoreCase ? L"yes" : L"no");
 
 		pStr = _nppGUI._funcParams ? L"yes" : L"no";
 		GUIConfigElement->SetAttribute(L"funcParams", pStr);

@@ -26,6 +26,8 @@
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 #pragma once
+#include <assert.h>
+#include <tchar.h>
 
 #include "tinyxmlA.h"
 #include "tinyxml.h"
@@ -37,8 +39,6 @@
 #include "shortcut.h"
 #include "ContextMenu.h"
 #include "dpiManager.h"
-#include <assert.h>
-#include <tchar.h>
 
 class NativeLangSpeaker;
 
@@ -846,7 +846,8 @@ struct NppGUI final	{
 	enum AutocStatus{autoc_none, autoc_func, autoc_word, autoc_both};
 	AutocStatus _autocStatus = autoc_both;
 	size_t  _autocFromLen = 1;
-	bool _autocIgnoreNumbers = true;
+	bool _autocIgnoreNumbers = false;
+	bool _autocIgnoreCase = false;
 	bool _funcParams = true;
 	MatchedPairConf _matchedPairConf;
 
@@ -1866,3 +1867,5 @@ private:
 	winVer getWindowsVersion();
 
 };
+
+extern NppParameters& param;	extern NppGUI& nppGUI;	extern const NppGUI& nGUI;

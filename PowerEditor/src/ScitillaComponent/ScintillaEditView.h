@@ -24,10 +24,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-
 #pragma once
-
 
 #include "Scintilla.h"
 #include "ScintillaRef.h"
@@ -36,7 +33,6 @@
 #include "colors.h"
 #include "UserDefineDialog.h"
 #include "rgba_icons.h"
-
 
 #ifndef WM_MOUSEWHEEL
 #define WM_MOUSEWHEEL 0x020A
@@ -53,8 +49,6 @@
 #define FAPPCOMMAND_MASK  0xF000
 #define GET_APPCOMMAND_LPARAM(lParam) ((short)(HIWORD(lParam) & ~FAPPCOMMAND_MASK))
 #endif //WM_APPCOMMAND
-
-class NppParameters;
 
 #define NB_WORD_LIST 4
 #define WORD_LIST_LEN 256
@@ -98,9 +92,9 @@ const int CP_GREEK = 1253;
 #define LIST_7 128
 #define LIST_8 256
 
+#define MAX_FOLD_COLLAPSE_LEVEL	8
 const bool fold_uncollapse = true;
 const bool fold_collapse = false;
-#define MAX_FOLD_COLLAPSE_LEVEL	8
 
 enum TextCase : UCHAR
 {
@@ -330,9 +324,9 @@ public:
 
 			int width = 3;
 			if (whichMarge == _SC_MARGE_SYBOLE)
-				width = NppParameters::getInstance()._dpiManager.scaleX(100) >= 150 ? 20 : 16;
+				width = param._dpiManager.scaleX(100) >= 150 ? 20 : 16;
 			else if (whichMarge == _SC_MARGE_FOLDER)
-				width = NppParameters::getInstance()._dpiManager.scaleX(100) >= 150 ? 18 : 14;
+				width = param._dpiManager.scaleX(100) >= 150 ? 18 : 14;
 			execute(SCI_SETMARGINWIDTHN, whichMarge, willBeShowed ? width : 0);
 		}
     };
@@ -536,7 +530,7 @@ public:
 
     void convertSelectedTextToLowerCase() {
 		// if system is w2k or xp
-		if ((NppParameters::getInstance()).isTransparentAvailable())
+		if (param.isTransparentAvailable())
 			convertSelectedTextTo(LOWERCASE);
 		else
 			execute(SCI_LOWERCASE);
@@ -544,7 +538,7 @@ public:
 
     void convertSelectedTextToUpperCase() {
 		// if system is w2k or xp
-		if ((NppParameters::getInstance()).isTransparentAvailable())
+		if (param.isTransparentAvailable())
 			convertSelectedTextTo(UPPERCASE);
 		else
 			execute(SCI_UPPERCASE);
@@ -552,7 +546,7 @@ public:
 
 	void convertSelectedTextToNewerCase(const TextCase & caseToConvert) {
 		// if system is w2k or xp
-		if ((NppParameters::getInstance()).isTransparentAvailable())
+		if (param.isTransparentAvailable())
 			convertSelectedTextTo(caseToConvert);
 		else
 			::MessageBox(_hSelf, L"This function needs a newer OS version.", L"Change Case Error", MB_OK | MB_ICONHAND);
@@ -725,7 +719,7 @@ protected:
 
 
 	void setSqlLexer() {
-		const bool kbBackSlash = NppParameters::getInstance().getNppGUI()._backSlashIsEscapeCharacterForSql;
+		const bool kbBackSlash = nGUI._backSlashIsEscapeCharacterForSql;
 		setLexer(SCLEX_SQL, L_SQL, LIST_0 | LIST_1 | LIST_4);
 		execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("sql.backslash.escapes"), reinterpret_cast<LPARAM>(kbBackSlash ? "1" : "0"));
 	};

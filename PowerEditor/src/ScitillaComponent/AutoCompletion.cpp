@@ -69,9 +69,10 @@ bool AutoCompletion::showApiComplete()	{
 		return false;
 
 	_pEditView->execute(SCI_AUTOCSETSEPARATOR, WPARAM(' '));
-	_pEditView->execute(SCI_AUTOCSETIGNORECASE, _ignoreCase);
+	_pEditView->execute(SC_CASEINSENSITIVEBEHAVIOUR_IGNORECASE,1);
+	_pEditView->execute(SCI_AUTOCSETIGNORECASE, 1/* nppGUI._autocIgnoreCase) */);
+	_pEditView->execute(SCI_AUTOCCOMPLETE);
 	_pEditView->showAutoComletion(curPos - startPos, _keyWords.c_str());
-
 	return true;
 }
 
@@ -125,7 +126,9 @@ bool AutoCompletion::showApiAndWordComplete()	{
 	}
 
 	_pEditView->execute(SCI_AUTOCSETSEPARATOR, WPARAM(' '));
-	_pEditView->execute(SCI_AUTOCSETIGNORECASE, _ignoreCase);
+	_pEditView->execute(SC_CASEINSENSITIVEBEHAVIOUR_IGNORECASE,1);
+	_pEditView->execute(SCI_AUTOCSETIGNORECASE, 1/* nppGUI._autocIgnoreCase */);
+	_pEditView->execute(SCI_AUTOCCOMPLETE);
 	_pEditView->showAutoComletion(curPos - startPos, words.c_str());
 	return true;
 }
@@ -134,9 +137,8 @@ bool AutoCompletion::showApiAndWordComplete()	{
 void AutoCompletion::getWordArray(vector<generic_string> & wordArray, TCHAR *beginChars)	{
 
 	const size_t bufSize = 256;
-	const NppGUI & nppGUI = NppParameters::getInstance().getNppGUI();
 
-	if (nppGUI._autocIgnoreNumbers && isAllDigits(beginChars))
+	if (nGUI._autocIgnoreNumbers && isAllDigits(beginChars))
 		return;
 
 	generic_string expr(L"\\<");
@@ -366,7 +368,9 @@ bool AutoCompletion::showWordComplete(bool autoInsert)	{
 	}
 
 	_pEditView->execute(SCI_AUTOCSETSEPARATOR, WPARAM(' '));
-	_pEditView->execute(SCI_AUTOCSETIGNORECASE, _ignoreCase);
+	_pEditView->execute(SC_CASEINSENSITIVEBEHAVIOUR_IGNORECASE,1);
+	_pEditView->execute(SCI_AUTOCSETIGNORECASE, 1/*nppGUI._autocIgnoreCase*/);
+	_pEditView->execute(SCI_AUTOCCOMPLETE);
 	_pEditView->showAutoComletion(curPos - startPos, words.c_str());
 	return true;
 }
@@ -724,11 +728,10 @@ void AutoCompletion::update(int character)	{
 	if (!character)
 		return;
 
-	const NppGUI & nppGUI = NppParameters::getInstance().getNppGUI();
-	if (!_funcCompletionActive && nppGUI._autocStatus == nppGUI.autoc_func)
+	if (!_funcCompletionActive && nGUI._autocStatus == nGUI.autoc_func)
 		return;
 
-	if (nppGUI._funcParams || _funcCalltip.isVisible())	{
+	if (nGUI._funcParams || _funcCalltip.isVisible())	{
 
 		if (_funcCalltip.updateCalltip(character))	{ //calltip visible because triggered by autocomplete, set mode
 
@@ -744,13 +747,13 @@ void AutoCompletion::update(int character)	{
 	TCHAR s[wordSize];
 	_pEditView->getWordToCurrentPos(s, wordSize);
 
-	if (lstrlen(s) >= int(nppGUI._autocFromLen))	{
+	if (lstrlen(s) >= int(nGUI._autocFromLen))	{
 
-		if (nppGUI._autocStatus == nppGUI.autoc_word)
+		if (nGUI._autocStatus == nGUI.autoc_word)
 			showWordComplete(false);
-		else if (nppGUI._autocStatus == nppGUI.autoc_func)
+		else if (nGUI._autocStatus == nGUI.autoc_func)
 			showApiComplete();
-		else if (nppGUI._autocStatus == nppGUI.autoc_both)
+		else if (nGUI._autocStatus == nGUI.autoc_both)
 			showApiAndWordComplete();
 	}
 }
@@ -816,18 +819,17 @@ bool AutoCompletion::setLanguage(LangType language)	{
 		_funcCalltip._param = ',';
 		_funcCalltip._terminal = ';';
 		_funcCalltip._ignoreCase = true;
-        _funcCalltip._additionalWordChar.clear();
+      _funcCalltip._additionalWordChar.clear();
 
 		TiXmlElement * pElem = pAutoNode->FirstChildElement(L"Environment");
 		if (pElem)	{
 
-			const TCHAR * val = 0;
+			const TCHAR * val;
 			val = pElem->Attribute(L"ignoreCase");
-			if (val && !lstrcmp(val, L"no"))	{
-
-				_ignoreCase = false;
+			if (val && !lstrcmp(val, L"no"))
+				// _ignoreCase = false;
 				_funcCalltip._ignoreCase = false;
-			}
+				
 			val = pElem->Attribute(L"startFunc");
 			if (val && val[0])
 				_funcCalltip._start = val[0];
@@ -901,8 +903,8 @@ const TCHAR * AutoCompletion::getApiFileName()	{
 		}
 	}
 
-	if (_curLang >= L_EXTERNAL && _curLang < NppParameters::getInstance().L_END)
-		return NppParameters::getInstance().getELCFromIndex(_curLang - L_EXTERNAL)._name;
+	if (_curLang >= L_EXTERNAL && _curLang < param.L_END)
+		return param.getELCFromIndex(_curLang - L_EXTERNAL)._name;
 
 	if (_curLang > L_EXTERNAL)
         _curLang = L_TEXT;

@@ -127,7 +127,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 			}
 
 			bool isDirty = notification->nmhdr.code == SCN_SAVEPOINTLEFT;
-			bool isSnapshotMode = NppParameters::getInstance().getNppGUI().isSnapshotMode();
+			bool isSnapshotMode = nppGUI.isSnapshotMode();
 			if (isSnapshotMode && !isDirty)	{
 
 				bool canUndo = _pEditView->execute(SCI_CANUNDO) == TRUE;
@@ -152,9 +152,8 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 		case TCN_MOUSEHOVERING:
 		case TCN_MOUSEHOVERSWITCHING:	{
 
-			NppParameters& nppParam = NppParameters::getInstance();
-			bool doPeekOnTab = nppParam.getNppGUI()._isDocPeekOnTab;
-			bool doPeekOnMap = nppParam.getNppGUI()._isDocPeekOnMap;
+			bool doPeekOnTab = nppGUI._isDocPeekOnTab;
+			bool doPeekOnMap = nppGUI._isDocPeekOnMap;
 
 			if (doPeekOnTab)	{
 
@@ -218,9 +217,8 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 
 		case TCN_MOUSELEAVING:	{
 
-			NppParameters& nppParam = NppParameters::getInstance();
-			bool doPeekOnTab = nppParam.getNppGUI()._isDocPeekOnTab;
-			bool doPeekOnMap = nppParam.getNppGUI()._isDocPeekOnMap;
+			bool doPeekOnTab = nppGUI._isDocPeekOnTab;
+			bool doPeekOnMap = nppGUI._isDocPeekOnMap;
 
 			if (doPeekOnTab)	{
 
@@ -388,7 +386,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 			}
 			else if (notification->nmhdr.hwndFrom == _mainDocTab.getHSelf() && _activeView == SUB_VIEW)	{
 
-				bool isSnapshotMode = NppParameters::getInstance().getNppGUI().isSnapshotMode();
+				bool isSnapshotMode = nppGUI.isSnapshotMode();
 				if (isSnapshotMode)	{
 
 					// Before switching off, synchronize backup file
@@ -399,7 +397,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 			}
 			else if (notification->nmhdr.hwndFrom == _subDocTab.getHSelf() && _activeView == MAIN_VIEW)	{
 
-				bool isSnapshotMode = NppParameters::getInstance().getNppGUI().isSnapshotMode();
+				bool isSnapshotMode = nppGUI.isSnapshotMode();
 				if (isSnapshotMode)	{
 
 					// Before switching off, synchronize backup file
@@ -611,7 +609,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 
 				if (!_isFolding)	{
 
-					int urlAction = (NppParameters::getInstance()).getNppGUI()._styleURL;
+					int urlAction = nppGUI._styleURL;
 					if ((urlAction == 1) || (urlAction == 2))
 						addHotSpot();
 				}
@@ -626,15 +624,14 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 
 			if (!_recordingMacro && !_playingBackMacro)	{ // No macro recording or playing back
 
-				const NppGUI & nppGui = NppParameters::getInstance().getNppGUI();
-				bool indentMaintain = nppGui._maitainIndent;
+				bool indentMaintain = nGUI._maitainIndent;
 				if (indentMaintain)
 					maintainIndentation(static_cast<TCHAR>(notification->ch));
 
 				AutoCompletion * autoC = isFromPrimary ? &_autoCompleteMain : &_autoCompleteSub;
 				bool isColumnMode = _pEditView->execute(SCI_GETSELECTIONS) > 1; // Multi-Selection || Column mode)
-				if (nppGui._matchedPairConf.hasAnyPairsPair() && !isColumnMode)
-					autoC->insertMatchedChars(notification->ch, nppGui._matchedPairConf);
+				if (nGUI._matchedPairConf.hasAnyPairsPair() && !isColumnMode)
+					autoC->insertMatchedChars(notification->ch, nGUI._matchedPairConf);
 				autoC->update(notification->ch);
 			}
 			break;
@@ -646,8 +643,6 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 				return FALSE;
 
 			if (notification->modifiers == SCMOD_CTRL)	{
-
-				const NppGUI & nppGUI = NppParameters::getInstance().getNppGUI();
 
 				std::string bufstring;
 
@@ -663,7 +658,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 				{
 					char *buf;
 
-					if (nppGUI._delimiterSelectionOnEntireDocument)	{
+					if (nGUI._delimiterSelectionOnEntireDocument)	{
 
 						// Get entire document.
 						auto length = notifyView->execute(SCI_GETLENGTH);
@@ -689,16 +684,16 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 				int leftmost_position = -1;
 				int rightmost_position = -1;
 
-				if (nppGUI._rightmostDelimiter == nppGUI._leftmostDelimiter)	{
+				if (nGUI._rightmostDelimiter == nGUI._leftmostDelimiter)	{
 
 					// If the delimiters are the same (e.g. they are both a quotation mark), choose the ones
 					// which are closest to the clicked position.
 					for (int32_t i = static_cast<int32_t>(position_of_click); i >= 0; --i)	{
 
-						if (bufstring.at(i) == nppGUI._leftmostDelimiter)	{
+						if (bufstring.at(i) == nGUI._leftmostDelimiter)	{
 
 							// Respect escaped quotation marks.
-							if (nppGUI._leftmostDelimiter == '"')	{
+							if (nGUI._leftmostDelimiter == '"')	{
 
 								if (! (i > 0 && bufstring.at(i - 1) == '\\'))	{
 
@@ -720,10 +715,10 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 					// Scan for right delimiter.
 					for (size_t i = position_of_click; i < bufstring.length(); ++i)	{
 
-						if (bufstring.at(i) == nppGUI._rightmostDelimiter)	{
+						if (bufstring.at(i) == nGUI._rightmostDelimiter)	{
 
 							// Respect escaped quotation marks.
-							if (nppGUI._rightmostDelimiter == '"')	{
+							if (nGUI._rightmostDelimiter == '"')	{
 
 								if (! (i > 0 && bufstring.at(i - 1) == '\\'))	{
 
@@ -752,9 +747,9 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 
 					for (unsigned int i = 0; i < bufstring.length(); ++i)	{
 
-						if (bufstring.at(i) == nppGUI._leftmostDelimiter)
+						if (bufstring.at(i) == nGUI._leftmostDelimiter)
 							leftmost_delimiter_positions.push(i);
-						else if (bufstring.at(i) == nppGUI._rightmostDelimiter && ! leftmost_delimiter_positions.empty())	{
+						else if (bufstring.at(i) == nGUI._rightmostDelimiter && ! leftmost_delimiter_positions.empty())	{
 
 							unsigned int matching_leftmost = leftmost_delimiter_positions.top();
 							leftmost_delimiter_positions.pop();
@@ -776,7 +771,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 				// Set selection to the position we found (if any).
 				if (rightmost_position != -1 && leftmost_position != -1)	{
 
-					if (nppGUI._delimiterSelectionOnEntireDocument)	{
+					if (nGUI._delimiterSelectionOnEntireDocument)	{
 
 						notifyView->execute(SCI_SETCURRENTPOS, rightmost_position);
 						notifyView->execute(SCI_SETANCHOR, leftmost_position + 1);
@@ -798,25 +793,22 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 			if (not notifyView)
 				return FALSE;
 
-			NppParameters& nppParam = NppParameters::getInstance();
-			NppGUI & nppGui = const_cast<NppGUI &>(nppParam.getNppGUI());
-
 			// replacement for obsolete custom SCN_SCROLLED
 			if (notification->updated & SC_UPDATE_V_SCROLL)	{
 
-				int urlAction = (NppParameters::getInstance()).getNppGUI()._styleURL;
+				int urlAction = nppGUI._styleURL;
 				if ((urlAction == 1) || (urlAction == 2))
 					addHotSpot();
 			}
 
 			// if it's searching/replacing, then do nothing
-			if (nppParam._isFindReplacing)
+			if (param._isFindReplacing)
 				break;
 
 			if (notification->nmhdr.hwndFrom != _pEditView->getHSelf())	{ // notification come from unfocus view - both views ae visible
 
 				//ScintillaEditView * unfocusView = isFromPrimary ? &_subEditView : &_mainEditView;
-				if (nppGui._smartHiliteOnAnotherView &&
+				if (nppGUI._smartHiliteOnAnotherView &&
 					_pEditView->getCurrentBufferID() != notifyView->getCurrentBufferID())
 				{
 					TCHAR selectedText[1024];
@@ -828,16 +820,16 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 
 			braceMatch();
 
-			if (nppGui._enableTagsMatchHilite)	{
+			if (nppGUI._enableTagsMatchHilite)	{
 
 				XmlMatchedTagsHighlighter xmlTagMatchHiliter(_pEditView);
-				xmlTagMatchHiliter.tagMatch(nppGui._enableTagAttrsHilite);
+				xmlTagMatchHiliter.tagMatch(nppGUI._enableTagAttrsHilite);
 			}
 
-			if (nppGui._enableSmartHilite)	{
+			if (nppGUI._enableSmartHilite)	{
 
-				if (nppGui._disableSmartHiliteTmp)
-					nppGui._disableSmartHiliteTmp = false;
+				if (nppGUI._disableSmartHiliteTmp)
+					nppGUI._disableSmartHiliteTmp = false;
 				else	{
 
 					ScintillaEditView * anbotherView = isFromPrimary ? &_subEditView : &_mainEditView;
@@ -968,12 +960,11 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 			if (_syncInfo.doSync())
 				doSynScorll(HWND(notification->nmhdr.hwndFrom));
 
-			NppParameters& nppParam = NppParameters::getInstance();
 
 			// if it's searching/replacing, then do nothing
-			if ((_linkTriggered && !nppParam._isFindReplacing) || notification->wParam == LINKTRIGGERED)	{
+			if ((_linkTriggered && !param._isFindReplacing) || notification->wParam == LINKTRIGGERED)	{
 
-				int urlAction = (NppParameters::getInstance()).getNppGUI()._styleURL;
+				int urlAction = nppGUI._styleURL;
 				if ((urlAction == 1) || (urlAction == 2))
 					addHotSpot();
 				_linkTriggered = false;

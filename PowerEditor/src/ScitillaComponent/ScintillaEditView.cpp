@@ -271,7 +271,7 @@ void ScintillaEditView::init(HINSTANCE hInst, HWND hPere)	{
 	execute(SCI_MARKERDEFINE, MARK_HIDELINESUNDERLINE, SC_MARK_UNDERLINE);
 	execute(SCI_MARKERSETBACK, MARK_HIDELINESUNDERLINE, 0x77CC77);
 
-	if (NppParameters::getInstance()._dpiManager.scaleX(100) >= 150)	{
+	if (param._dpiManager.scaleX(100) >= 150)	{
 
 		execute(SCI_RGBAIMAGESETWIDTH, 18);
 		execute(SCI_RGBAIMAGESETHEIGHT, 18);
@@ -363,7 +363,7 @@ LRESULT CALLBACK ScintillaEditView::scintillaStatic_Proc(HWND hwnd, UINT Message
 		char synapticsHack[26];
 		GetClassNameA(hwndOnMouse, (LPSTR)&synapticsHack, 26);
 		bool isSynpnatic = string(synapticsHack) == "SynTrackCursorWindowClass";
-		bool makeTouchPadCompetible = ((NppParameters::getInstance()).getSVP())._disableAdvancedScrolling;
+		bool makeTouchPadCompetible = (param.getSVP())._disableAdvancedScrolling;
 
 		if (pScint && (isSynpnatic || makeTouchPadCompetible))
 			return (pScint->scintillaNew_Proc(hwnd, Message, wParam, lParam));
@@ -527,7 +527,7 @@ void ScintillaEditView::setSpecialStyle(const Style & styleToSet)	{
 
 		WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 
-		if (!NppParameters::getInstance().isInFontList(styleToSet._fontName))	{
+		if (!param.isInFontList(styleToSet._fontName))	{
 
 			execute(SCI_STYLESETFONT, styleID, reinterpret_cast<LPARAM>(DEFAULT_FONT_NAME));
 		}
@@ -564,11 +564,11 @@ void ScintillaEditView::setHotspotStyle(Style& styleToSet)	{
 
 void ScintillaEditView::setStyle(Style styleToSet)	{
 
-	GlobalOverride & go = NppParameters::getInstance().getGlobalOverrideStyle();
+	GlobalOverride & go = param.getGlobalOverrideStyle();
 
 	if (go.isEnable())	{
 
-		StyleArray & stylers = NppParameters::getInstance().getMiscStylerArray();
+		StyleArray & stylers = param.getMiscStylerArray();
 		int i = stylers.getStylerIndexByName(L"Global override");
 		if (i != -1)	{
 
@@ -655,7 +655,7 @@ void ScintillaEditView::setXmlLexer(LangType type)	{
 	else if ((type == L_HTML) || (type == L_PHP) || (type == L_ASP) || (type == L_JSP))	{
 
 		execute(SCI_SETLEXER, SCLEX_HTML);
-		const TCHAR *htmlKeyWords_generic = NppParameters::getInstance().getWordList(L_HTML, LANG_INDEX_INSTR);
+		const TCHAR *htmlKeyWords_generic = param.getWordList(L_HTML, LANG_INDEX_INSTR);
 
 		WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 		const char *htmlKeyWords = wmc.wchar2char(htmlKeyWords_generic, CP_ACP);
@@ -765,7 +765,7 @@ void ScintillaEditView::setUserLexer(const TCHAR *userLangName)	{
 	int setKeywordsCounter = 0;
 	execute(SCI_SETLEXER, SCLEX_USER);
 
-	UserLangContainer * userLangContainer = userLangName? NppParameters::getInstance().getULCFromName(userLangName):_userDefineDlg._pCurrentUserLang;
+	UserLangContainer * userLangContainer = userLangName? param.getULCFromName(userLangName):_userDefineDlg._pCurrentUserLang;
 
 	if (!userLangContainer)
 		return;
@@ -893,14 +893,14 @@ void ScintillaEditView::setUserLexer(const TCHAR *userLangName)	{
 void ScintillaEditView::setExternalLexer(LangType typeDoc)	{
 
 	int id = typeDoc - L_EXTERNAL;
-	TCHAR * name = NppParameters::getInstance().getELCFromIndex(id)._name;
+	TCHAR * name = param.getELCFromIndex(id)._name;
 
 	WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 	const char *pName = wmc.wchar2char(name, CP_ACP);
 
 	execute(SCI_SETLEXERLANGUAGE, 0, reinterpret_cast<LPARAM>(pName));
 
-	LexerStyler *pStyler = (NppParameters::getInstance().getLStylerArray()).getLexerStylerByName(name);
+	LexerStyler *pStyler = (param.getLStylerArray()).getLexerStylerByName(name);
 	if (pStyler)	{
 
 		for (int i = 0 ; i < pStyler->getNbStyler() ; ++i)	{
@@ -926,7 +926,7 @@ void ScintillaEditView::setCppLexer(LangType langType)	{
 
 	const char *cppInstrs;
 	const char *cppTypes;
-	const TCHAR *doxygenKeyWords  = NppParameters::getInstance().getWordList(L_CPP, LANG_INDEX_TYPE2);
+	const TCHAR *doxygenKeyWords  = param.getWordList(L_CPP, LANG_INDEX_TYPE2);
 
 	execute(SCI_SETLEXER, SCLEX_CPP);
 
@@ -975,7 +975,7 @@ void ScintillaEditView::setCppLexer(LangType langType)	{
 
 void ScintillaEditView::setJsLexer()	{
 
-	const TCHAR *doxygenKeyWords = NppParameters::getInstance().getWordList(L_CPP, LANG_INDEX_TYPE2);
+	const TCHAR *doxygenKeyWords = param.getWordList(L_CPP, LANG_INDEX_TYPE2);
 
 	execute(SCI_SETLEXER, SCLEX_CPP);
 	const TCHAR *pKwArray[10] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
@@ -989,7 +989,7 @@ void ScintillaEditView::setJsLexer()	{
 	}
 
 	const TCHAR *newLexerName = ScintillaEditView::langNames[L_JAVASCRIPT].lexerName;
-	LexerStyler *pNewStyler = (NppParameters::getInstance().getLStylerArray()).getLexerStylerByName(newLexerName);
+	LexerStyler *pNewStyler = (param.getLStylerArray()).getLexerStylerByName(newLexerName);
 	if (pNewStyler)	{ // New js styler is available, so we can use it do more modern styling
 
 		for (int i = 0, nb = pNewStyler->getNbStyler(); i < nb; ++i)	{
@@ -1030,7 +1030,7 @@ void ScintillaEditView::setJsLexer()	{
 	else	{ // New js styler is not available, we use the old styling for the sake of retro-compatibility
 
 		const TCHAR *lexerName = ScintillaEditView::langNames[L_JS].lexerName;
-		LexerStyler *pOldStyler = (NppParameters::getInstance().getLStylerArray()).getLexerStylerByName(lexerName);
+		LexerStyler *pOldStyler = (param.getLStylerArray()).getLexerStylerByName(lexerName);
 
 		if (pOldStyler)	{
 
@@ -1157,7 +1157,7 @@ void ScintillaEditView::setObjCLexer(LangType langType)	{
 
 
 	basic_string<char> doxygenKeyWordsString("");
-	const TCHAR *doxygenKeyWordsW = NppParameters::getInstance().getWordList(L_CPP, LANG_INDEX_TYPE2);
+	const TCHAR *doxygenKeyWordsW = param.getWordList(L_CPP, LANG_INDEX_TYPE2);
 	if (doxygenKeyWordsW)	{
 
 		doxygenKeyWordsString = wstring2string(doxygenKeyWordsW, CP_ACP);
@@ -1256,7 +1256,7 @@ void ScintillaEditView::setLexer(int lexerID, LangType langType, int whichList)	
 void ScintillaEditView::makeStyle(LangType language, const TCHAR **keywordArray)	{
 
 	const TCHAR * lexerName = ScintillaEditView::langNames[language].lexerName;
-	LexerStyler *pStyler = (NppParameters::getInstance().getLStylerArray()).getLexerStylerByName(lexerName);
+	LexerStyler *pStyler = (param.getLStylerArray()).getLexerStylerByName(lexerName);
 	if (pStyler)	{
 
 		for (int i = 0, nb = pStyler->getNbStyler(); i < nb ; ++i)	{
@@ -1279,17 +1279,14 @@ void ScintillaEditView::restoreDefaultWordChars()	{
 
 void ScintillaEditView::addCustomWordChars()	{
 
-	NppParameters& nppParam = NppParameters::getInstance();
-	const NppGUI & nppGUI = nppParam.getNppGUI();
-
-	if (nppGUI._customWordChars.empty())
+	if (nGUI._customWordChars.empty())
 		return;
 
 	string chars2addStr;
-	for (size_t i = 0; i < nppGUI._customWordChars.length(); ++i)	{
+	for (size_t i = 0; i < nGUI._customWordChars.length(); ++i)	{
 
 		bool found = false;
-		char char2check = nppGUI._customWordChars[i];
+		char char2check = nGUI._customWordChars[i];
 		for (size_t j = 0; j < _defaultCharList.length(); ++j)	{
 
 			char wordChar = _defaultCharList[j];
@@ -1315,9 +1312,7 @@ void ScintillaEditView::addCustomWordChars()	{
 
 void ScintillaEditView::setWordChars()	{
 
-	NppParameters& nppParam = NppParameters::getInstance();
-	const NppGUI & nppGUI = nppParam.getNppGUI();
-	if (nppGUI._isWordCharDefault)
+	if (nGUI._isWordCharDefault)
 		restoreDefaultWordChars();
 	else
 		addCustomWordChars();
@@ -1325,7 +1320,7 @@ void ScintillaEditView::setWordChars()	{
 
 void ScintillaEditView::defineDocType(LangType typeDoc)	{
 
-	StyleArray & stylers = NppParameters::getInstance().getMiscStylerArray();
+	StyleArray & stylers = param.getMiscStylerArray();
 	int iStyleDefault = stylers.getStylerIndexByID(STYLE_DEFAULT);
 	if (iStyleDefault != -1)	{
 
@@ -1453,7 +1448,7 @@ void ScintillaEditView::defineDocType(LangType typeDoc)	{
 		}
 	}
 
-	ScintillaViewParams & svp = (ScintillaViewParams &)NppParameters::getInstance().getSVP();
+	ScintillaViewParams & svp = (ScintillaViewParams &)param.getSVP();
 	if (svp._folderStyle != FOLDER_STYLE_NONE)
 		showMargin(_SC_MARGE_FOLDER, isNeededFolderMarge(typeDoc));
 
@@ -1511,7 +1506,7 @@ void ScintillaEditView::defineDocType(LangType typeDoc)	{
 
 		case L_ASCII :	{
 
-			LexerStyler *pStyler = (NppParameters::getInstance().getLStylerArray()).getLexerStylerByName(L"nfo");
+			LexerStyler *pStyler = (param.getLStylerArray()).getLexerStylerByName(L"nfo");
 
 			Style nfoStyle;
 			nfoStyle._styleID = STYLE_DEFAULT;
@@ -1724,7 +1719,7 @@ void ScintillaEditView::defineDocType(LangType typeDoc)	{
 
 		case L_TEXT :
 		default :
-			if (typeDoc >= L_EXTERNAL && typeDoc < NppParameters::getInstance().L_END)
+			if (typeDoc >= L_EXTERNAL && typeDoc < param.L_END)
 				setExternalLexer(typeDoc);
 			else
 				execute(SCI_SETLEXER, (_codepage == CP_CHINESE_TRADITIONAL)?SCLEX_MAKEFILE:SCLEX_NULL);
@@ -1757,7 +1752,7 @@ void ScintillaEditView::defineDocType(LangType typeDoc)	{
 		Style & styleLN = stylers.getStyler(indexLineNumber);
 		setSpecialStyle(styleLN);
 	}
-	setTabSettings(NppParameters::getInstance().getLangFromID(typeDoc));
+	setTabSettings(param.getLangFromID(typeDoc));
 	
 	if (svp._indentGuideLineShow)	{
 
@@ -2556,7 +2551,7 @@ void ScintillaEditView::expand(size_t& line, bool doExpand, bool force, int visL
 
 void ScintillaEditView::performGlobalStyles()	{
 
-	StyleArray & stylers = NppParameters::getInstance().getMiscStylerArray();
+	StyleArray & stylers = param.getMiscStylerArray();
 
 	int i = stylers.getStylerIndexByName(L"Current line background colour");
 	if (i != -1)	{
@@ -2608,7 +2603,7 @@ void ScintillaEditView::performGlobalStyles()	{
 	COLORREF foldfgColor = white, foldbgColor = grey, activeFoldFgColor = red;
 	getFoldColor(foldfgColor, foldbgColor, activeFoldFgColor);
 
-	ScintillaViewParams & svp = (ScintillaViewParams &)NppParameters::getInstance().getSVP();
+	ScintillaViewParams & svp = (ScintillaViewParams &)param.getSVP();
 	for (int j = 0 ; j < NB_FOLDER_STATE ; ++j)
 		defineMarker(_markersArray[FOLDER_TYPE][j], _markersArray[svp._folderStyle][j], foldfgColor, foldbgColor, activeFoldFgColor);
 
@@ -2709,7 +2704,7 @@ void ScintillaEditView::updateLineNumberWidth(){
 const char * ScintillaEditView::getCompleteKeywordList(basic_string<char> & kwl, LangType langType, int keywordIndex)	{
 
 	kwl += " ";
-	const TCHAR *defKwl_generic = NppParameters::getInstance().getWordList(langType, keywordIndex);
+	const TCHAR *defKwl_generic = param.getWordList(langType, keywordIndex);
 
 	WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 	const char * defKwl = wmc.wchar2char(defKwl_generic, CP_ACP);
@@ -3502,7 +3497,7 @@ void ScintillaEditView::setTabSettings(Lang *lang)	{
 
 		if (lang->_langID == L_JAVASCRIPT)	{
 
-			Lang *ljs = NppParameters::getInstance().getLangFromID(L_JS);
+			Lang *ljs = param.getLangFromID(L_JS);
 			execute(SCI_SETTABWIDTH, ljs->_tabSize > 0 ? ljs->_tabSize : lang->_tabSize);
 			execute(SCI_SETUSETABS, !ljs->_isTabReplacedBySpace);
 			return;
@@ -3512,9 +3507,8 @@ void ScintillaEditView::setTabSettings(Lang *lang)	{
 	}
 	else	{
 
-		const NppGUI & nppgui = NppParameters::getInstance().getNppGUI();
-		execute(SCI_SETTABWIDTH, nppgui._tabSize  > 0 ? nppgui._tabSize : lang->_tabSize);
-		execute(SCI_SETUSETABS, !nppgui._tabReplacedBySpace);
+		execute(SCI_SETTABWIDTH, nGUI._tabSize  > 0 ? nGUI._tabSize : lang->_tabSize);
+		execute(SCI_SETUSETABS, !nGUI._tabReplacedBySpace);
 	}
 }
 
@@ -3636,7 +3630,7 @@ void ScintillaEditView::setBorderEdge(bool doWithBorderEdge)	{
 
 void ScintillaEditView::getFoldColor(COLORREF& fgColor, COLORREF& bgColor, COLORREF& activeFgColor)	{
 
-	StyleArray & stylers = NppParameters::getInstance().getMiscStylerArray();
+	StyleArray & stylers = param.getMiscStylerArray();
 
 	int i = stylers.getStylerIndexByName(L"Fold");
 	if (i != -1)	{

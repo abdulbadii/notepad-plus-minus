@@ -149,11 +149,11 @@ private:
 	size_t _nbBufs = 0;
 };
 
-#define MainFileManager FileManager::getInstance()
+extern FileManager& MainFileManager;
 
 class Buffer final	{
 
-	friend class FileManager;
+friend class FileManager;
 public:
 	//Loading a document:
 	//constructor with ID.

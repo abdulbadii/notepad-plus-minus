@@ -553,7 +553,7 @@ BEGIN
 				END
 		MENUITEM "Folder as Workspace",   IDM_VIEW_FILEBROWSER
 		MENUITEM "Document Map",          IDM_VIEW_DOC_MAP
-		MENUITEM "Show/Hide Find Result",       IDM_SHOW_HIDE_FIND_RESULTS
+		MENUITEM "Show/Hide Find Result",       IDM_VIEW_FIND_RESULT
 		MENUITEM "Function List",         IDM_VIEW_FUNC_LIST
 		MENUITEM "Character Panel",        IDM_VIEW_CHAR_PANEL
 		MENUITEM "Display line number",IDM_VIEW_LINENUMBER

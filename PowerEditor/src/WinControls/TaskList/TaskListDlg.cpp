@@ -24,9 +24,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-
-
 #include "TaskListDlg.h"
 #include "Parameters.h"
 #include "resource.h"
@@ -85,7 +82,7 @@ INT_PTR CALLBACK TaskListDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 				i2set = 0;
 
 			_taskList.init(_hInst, _hSelf, _hImalist, nbTotal, i2set);
-			_taskList.setFont(L"Segoe UI", NppParameters::getInstance()._dpiManager.scaleY(16));
+			_taskList.setFont(L"Segoe UI", param._dpiManager.scaleY(16));
 			_rc = _taskList.adjustSize();
 
 			reSizeTo(_rc);
@@ -93,7 +90,7 @@ INT_PTR CALLBACK TaskListDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 
 			_taskList.display(true);
 			hWndServer = _hSelf;
-			windowsVersion = NppParameters::getInstance().getWinVersion();
+			windowsVersion = param.getWinVersion();
 
 #ifndef WH_MOUSE_LL
 #define WH_MOUSE_LL 14

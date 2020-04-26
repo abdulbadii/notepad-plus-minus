@@ -2156,25 +2156,22 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				t=GetColOfMouse(SelfIndex,x+10);
 				z=GetColOfMouse(SelfIndex,x-10);
 
-				if(BGHS[SelfIndex].COLUMNSIZING)
+				if(BGHS[SelfIndex].COLUMNSIZING)	{
+					int dx,nx,cr;
+					dx=x-BGHS[SelfIndex].columntoresizeinitx;
+					nx=BGHS[SelfIndex].columntoresizeinitsize + dx;
+					if(nx<=0){nx=0;}
+					cr=BGHS[SelfIndex].columntoresize;
+					SendMessage(hWnd,BGM_SETCOLWIDTH,cr,nx);
+				}
+				if((!r)&&(c>=-1)&&((t!=c)||(z!=c))&&(!BGHS[SelfIndex].COLUMNSIZING))	{
+					if((BGHS[SelfIndex].cursortype != 2)&&(BGHS[SelfIndex].ALLOWCOLUMNRESIZING))
 						{
-						int dx,nx,cr;
-						dx=x-BGHS[SelfIndex].columntoresizeinitx;
-						nx=BGHS[SelfIndex].columntoresizeinitsize + dx;
-						if(nx<=0){nx=0;}
-						cr=BGHS[SelfIndex].columntoresize;
-						SendMessage(hWnd,BGM_SETCOLWIDTH,cr,nx);
-
+							BGHS[SelfIndex].cursortype = 2;
+							SetCursor(LoadCursor(NULL, IDC_SIZEWE));
 						}
-				if((!r)&&(c>=-1)&&((t!=c)||(z!=c))&&(!BGHS[SelfIndex].COLUMNSIZING))
-						{
-						if((BGHS[SelfIndex].cursortype != 2)&&(BGHS[SelfIndex].ALLOWCOLUMNRESIZING))
-							{
-								BGHS[SelfIndex].cursortype = 2;
-								SetCursor(LoadCursor(NULL, IDC_SIZEWE));
-							}
 
-						}
+					}
 				else
 						{
 						if((BGHS[SelfIndex].cursortype != 1)&&(!BGHS[SelfIndex].COLUMNSIZING))
