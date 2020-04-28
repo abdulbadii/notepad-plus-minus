@@ -210,8 +210,8 @@ public:
 		}
 	};
 
-	virtual void destroy()
-	{
+	virtual void destroy()	{
+
 		::DestroyWindow(_hSelf);
 		_hSelf = NULL;
 	};
@@ -258,7 +258,7 @@ public:
 	void addGenericText(const TCHAR * text2Append, long *mstart, long *mend) const;
 	int replaceTarget(const TCHAR * str2replace, int fromTargetPos = -1, int toTargetPos = -1) const;
 	int replaceTargetRegExMode(const TCHAR * re, int fromTargetPos = -1, int toTargetPos = -1) const;
-	void showAutoComletion(size_t lenEntered, const TCHAR * list);
+	void showAutoC(size_t lenEntered, const TCHAR * list);
 	void showCallTip(int startPos, const TCHAR * def);
 	generic_string getLine(size_t lineNumber);
 	void getLine(size_t lineNumber, TCHAR * line, int lineBufferLen);
@@ -332,7 +332,7 @@ public:
     };
 
     bool hasMarginShowed(int witchMarge) {
-		return (execute(SCI_GETMARGINWIDTHN, witchMarge, 0) != 0);
+		return (execute(SCI_GETMARGINWIDTHN, witchMarge, 0));
     };
 
     void updateBeginEndSelectPosition(bool is_insert, size_t position, size_t length);
@@ -376,7 +376,7 @@ public:
 	};
 
 	bool isEolVisible() {
-		return (execute(SCI_GETVIEWEOL) != 0);
+		return (execute(SCI_GETVIEWEOL));
 	};
 	void showInvisibleChars(bool willBeShowed = true) {
 		showWSAndTab(willBeShowed);
@@ -384,13 +384,13 @@ public:
 	};
 
 	bool isInvisibleCharsShown() {
-		return (execute(SCI_GETVIEWWS) != 0);
+		return (execute(SCI_GETVIEWWS));
 	};
 
 	void showIndentGuideLine(bool willBeShowed = true);
 
 	bool isShownIndentGuide() const {
-		return (execute(SCI_GETINDENTATIONGUIDES) != 0);
+		return (execute(SCI_GETINDENTATIONGUIDES));
 	};
 
     void wrap(bool willBeWrapped = true) {
@@ -469,8 +469,8 @@ public:
 		return true;
 	};
 
-	long getUnicodeSelectedLength() const
-	{
+	long getUnicodeSelectedLength() const	{
+
 		// return -1 if it's multi-selection or rectangle selection
 		if ((execute(SCI_GETSELECTIONS) > 1) || execute(SCI_SELECTIONISRECTANGLE))
 			return -1;
@@ -513,7 +513,7 @@ public:
 	};
 
 	bool isCurrentLineHiLiting() const {
-		return (execute(SCI_GETCARETLINEVISIBLE) != 0);
+		return (execute(SCI_GETCARETLINEVISIBLE));
 	};
 
 	void performGlobalStyles();
@@ -558,7 +558,7 @@ public:
 	void foldAll(bool mode);
 	void fold(size_t line, bool mode);
 	bool isFolded(size_t line) {
-		return (execute(SCI_GETFOLDEXPANDED, line) != 0);
+		return (execute(SCI_GETFOLDEXPANDED, line));
 	};
 	void foldCurrentPos(bool mode);
 	int getCodepage() const {return _codepage;};

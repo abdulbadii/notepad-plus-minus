@@ -545,7 +545,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 				_nativeLangSpeaker.changeLangTabContextMenu(_tabPopupMenu.getMenuHandle());
 			}
 
-			bool isEnable = ((::GetMenuState(_mainMenuHandle, IDM_FILE_SAVE, MF_BYCOMMAND)&MF_DISABLED) == 0);
+			bool isEnable = !(::GetMenuState(_mainMenuHandle, IDM_FILE_SAVE, MF_BYCOMMAND)&MF_DISABLED);
 			_tabPopupMenu.enableItem(IDM_FILE_SAVE, isEnable);
 
 			Buffer * buf = _pEditView->getCurrentBuffer();

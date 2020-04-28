@@ -1018,8 +1018,8 @@ public:
 		StringToBuffer f( filename );
 		return ( f.buffer && LoadFile( f.buffer ));
 	}
-	bool SaveFile( const generic_string& filename ) const		///< STL string version.
-	{
+	bool SaveFile( const generic_string& filename ) const	{		///< STL string version.
+
 		StringToBuffer f( filename );
 		return ( f.buffer && SaveFile( f.buffer ));
 	}

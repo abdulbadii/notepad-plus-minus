@@ -40,8 +40,8 @@ private:
 	size_t _fromColumn, _toColumn;
 
 protected:
-	bool isDescending() const
-	{
+	bool isDescending() const	{
+
 		return _isDescending;
 	}
 
@@ -65,7 +65,7 @@ protected:
 
 	bool isSortingSpecificColumns()	{
 
-		return _fromColumn != 0 && _toColumn != 0;
+		return _fromColumn && _toColumn;
 	}
 
 public:
@@ -157,7 +157,7 @@ public:
 					if (aChunkIsNum != bChunkIsNum)	{
 
 						compareResult = a[i] - b[i];
-						// No need to update i; compareResult != 0
+						// No need to update i; compareResult
 					}
 					// Both are numbers
 					else if (aChunkIsNum)	{
@@ -212,7 +212,7 @@ public:
 					if (aChunkIsNum != bChunkIsNum)	{
 
 						compareResult = a[i] - b[i];
-						// No need to update i; compareResult != 0
+						// No need to update i; compareResult
 					}
 					// Both are numbers
 					else if (aChunkIsNum)	{

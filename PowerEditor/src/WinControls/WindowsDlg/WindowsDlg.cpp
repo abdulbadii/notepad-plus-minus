@@ -79,13 +79,13 @@ inline static BOOL ModifyStyleEx(HWND hWnd, DWORD dwRemove, DWORD dwAdd) {
 
 struct NumericStringEquivalence	{
 
-	int operator()(const TCHAR* s1, const TCHAR* s2) const
-	{
+	int operator()(const TCHAR* s1, const TCHAR* s2) const	{
+
 		return numstrcmp(s1, s2);
 	}
 
-	static inline int numstrcmp_get(const TCHAR **str, int *length)
-	{
+	static inline int numstrcmp_get(const TCHAR **str, int *length)	{
+
 		const TCHAR *p = *str;
 		int value = 0;
 		for (*length = 0; isdigit(*p); ++(*length))
@@ -94,8 +94,8 @@ struct NumericStringEquivalence	{
 		return (value);
 	}
 
-	static int numstrcmp(const TCHAR *str1, const TCHAR *str2)
-	{
+	static int numstrcmp(const TCHAR *str1, const TCHAR *str2)	{
+
 		TCHAR *p1, *p2;
 		int c1, c2, lcmp = 0;
 		for (;;)	{
@@ -111,7 +111,7 @@ struct NumericStringEquivalence	{
 				lcmp = generic_strtol(str1, &p1, 10) - generic_strtol(str2, &p2, 10);
 				if ( !lcmp )
 					lcmp = static_cast<int32_t>((p2 - str2) - (p1 - str1));
-				if ( lcmp != 0 )
+				if ( lcmp )
 					break;
 				str1 = p1, str2 = p2;
 			}
@@ -126,7 +126,7 @@ struct NumericStringEquivalence	{
 				else
 					c2 = *str2;
 				lcmp = (c1 - c2);
-				if (lcmp != 0)
+				if (lcmp)
 					break;
 				++str1, ++str2;
 			}
@@ -145,15 +145,15 @@ struct BufferEquivalent	{
 		: _pTab(pTab), _iColumn(iColumn), _reverse(reverse)
 	{}
 
-	bool operator()(int i1, int i2) const
-	{
+	bool operator()(int i1, int i2) const	{
+
 		if (i1 == i2) return false; // equivalence test not equality
 		if (_reverse) std::swap(i1, i2);
 		return compare(i1, i2);
 	}
 
-	bool compare(int i1, int i2) const
-	{
+	bool compare(int i1, int i2) const	{
+
 		if (_iColumn >= 0 && _iColumn <= 2)	{
 
 			BufferID bid1 = _pTab->getBufferByIndex(i1);
@@ -167,7 +167,7 @@ struct BufferEquivalent	{
 				const TCHAR *s2 = b2->getFileName();
 				int result = _strequiv(s1, s2);
 				
-				if (result != 0) // default to filepath sorting when equivalent
+				if (result) // default to filepath sorting when equivalent
 					return result < 0;
 			}
 			else if (_iColumn == 2)	{
@@ -545,7 +545,7 @@ void WindowsDlg::updateColumnNames()	{
 	NativeLangSpeaker *pNativeSpeaker = param.getNativeLangSpeaker();
 	
 	columnText = pNativeSpeaker->getAttrNameStr(L"Name", WD_ROOTNODE, WD_CLMNNAME);
-	if (_currentColumn != 0)	{
+	if (_currentColumn)	{
 
 		columnText = L"\u21F5 "+ columnText;
 	}

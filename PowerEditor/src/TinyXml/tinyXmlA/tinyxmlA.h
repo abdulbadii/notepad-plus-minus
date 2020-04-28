@@ -1022,8 +1022,8 @@ public:
 		StringToBuffer f( filename );
 		return ( f.buffer && LoadFile( f.buffer ));
 	}
-	bool SaveFile( const std::string& filename ) const		///< STL std::string version.
-	{
+	bool SaveFile( const std::string& filename ) const	{		///< STL std::string version.
+
 		StringToBuffer f( filename );
 		return ( f.buffer && SaveFile( f.buffer ));
 	}

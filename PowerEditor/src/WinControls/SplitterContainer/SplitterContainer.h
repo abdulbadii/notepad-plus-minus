@@ -70,8 +70,8 @@ public :
 		_pWin1 = pWin;
 	}
 
-	bool isVertical() const
-	{
+	bool isVertical() const	{
+
 		return ((_dwSplitterStyle & SV_VERTICAL) != 0);
 	}
 

@@ -234,8 +234,8 @@ struct CmdLineParams	{
 		_point.y = 0;
 	}
 
-inline	bool isPointValid() const
-	{
+inline	bool isPointValid() const	{
+
 		return _isPointXValid && _isPointYValid;
 	}
 };
@@ -255,8 +255,8 @@ struct CmdLineParamsDTO	{
 
 	LangType _langType = L_EXTERNAL;
 
-	static CmdLineParamsDTO FromCmdLineParams(const CmdLineParams& params)
-	{
+	static CmdLineParamsDTO FromCmdLineParams(const CmdLineParams& params)	{
+
 		CmdLineParamsDTO dto;
 		dto._isReadOnly = params._isReadOnly;
 		dto._isNoSession = params._isNoSession;
@@ -330,8 +330,8 @@ struct DockingManagerData final	{
 	std::vector<PluginDlgDockingInfo> _pluginDockInfo;
 	std::vector<ContainerTabInfo> _containerTabInfo;
 
-	bool getFloatingRCFrom(int floatCont, RECT& rc) const
-	{
+	bool getFloatingRCFrom(int floatCont, RECT& rc) const	{
+
 		for (size_t i = 0, fwiLen = _flaotingWindowInfo.size(); i < fwiLen; ++i)	{
 
 			if (_flaotingWindowInfo[i]._cont == floatCont)	{
@@ -402,8 +402,8 @@ struct Style	{
 	}
 
 
-	Style& operator = (const Style & style)
-	{
+	Style& operator = (const Style & style)	{
+
 		if (this != &style)	{
 
 			_styleID	  = style._styleID;
@@ -456,8 +456,8 @@ struct GlobalOverride final	{
 struct StyleArray	{
 
 public:
-	StyleArray & operator=(const StyleArray & sa)
-	{
+	StyleArray & operator=(const StyleArray & sa)	{
+
 		if (this != &sa)	{
 
 			this->_nbStyler = sa._nbStyler;
@@ -472,8 +472,8 @@ public:
 	int getNbStyler() const {return _nbStyler;};
 	void setNbStyler(int nb) {_nbStyler = nb;};
 
-	Style& getStyler(size_t index)
-	{
+	Style& getStyler(size_t index)	{
+
 		assert(index < SCE_STYLE_ARRAY_SIZE);
 		return _styleArray[index];
 	}
@@ -497,8 +497,8 @@ public:
 		return -1;
 	}
 
-	int getStylerIndexByName(const TCHAR *name) const
-	{
+	int getStylerIndexByName(const TCHAR *name) const	{
+
 		if (name)	{
 
 		for (int i = 0 ; i < _nbStyler ; ++i)
@@ -517,8 +517,8 @@ protected:
 struct LexerStyler : public StyleArray	{
 
 public:
-	LexerStyler & operator=(const LexerStyler & ls)
-	{
+	LexerStyler & operator=(const LexerStyler & ls)	{
+
 		if (this != &ls)	{
 
 			*(static_cast<StyleArray *>(this)) = ls;
@@ -562,8 +562,8 @@ struct LexerStylerArray	{
 public :
 	LexerStylerArray() : _nbLexerStyler(0){};
 
-	LexerStylerArray & operator=(const LexerStylerArray & lsa)
-	{
+	LexerStylerArray & operator=(const LexerStylerArray & lsa)	{
+
 		if (this != &lsa)	{
 
 			this->_nbLexerStyler = lsa._nbLexerStyler;
@@ -575,8 +575,8 @@ public :
 
 	int getNbLexer() const {return _nbLexerStyler;};
 
-	LexerStyler & getLexerFromIndex(int index)
-	{
+	LexerStyler & getLexerFromIndex(int index)	{
+
 		return _lexerStylerArray[index];
 	};
 
@@ -687,15 +687,15 @@ public:
 
 	void now();
 
-	generic_string toString() const // Return Notepad++ date format : YYYYMMDD
-	{
+	generic_string toString() const	{ // Return Notepad++ date format : YYYYMMDD
+
 		TCHAR dateStr[16];
 		wsprintf(dateStr, L"%04u%02u%02u", _year, _month, _day);
 		return dateStr;
 	}
 
-	bool operator < (const Date & compare) const
-	{
+	bool operator < (const Date & compare) const	{
+
 		if (this->_year != compare._year)
 			return (this->_year < compare._year);
 		if (this->_month != compare._month)
@@ -703,8 +703,8 @@ public:
 		return (this->_day < compare._day);
 	}
 
-	bool operator > (const Date & compare) const
-	{
+	bool operator > (const Date & compare) const	{
+
 		if (this->_year != compare._year)
 			return (this->_year > compare._year);
 		if (this->_month != compare._month)
@@ -999,8 +999,8 @@ struct Lang final	{
 	LangType getLangID() const {return _langID;};
 	const TCHAR * getLangName() const {return _langName.c_str();};
 
-	int getTabInfo() const
-	{
+	int getTabInfo() const	{
+
 		if (_tabSize == -1) return -1;
 		return (_isTabReplacedBySpace?0x80:0x00) | _tabSize;
 	}
@@ -1021,8 +1021,8 @@ public:
 		init();
 	}
 
-	UserLangContainer & operator = (const UserLangContainer & ulc)
-	{
+	UserLangContainer & operator = (const UserLangContainer & ulc)	{
+
 		if (this != &ulc)	{
 
 			this->_name = ulc._name;
@@ -1173,8 +1173,8 @@ public:
 	std::wstring getXmlFilePathFromLangName(const wchar_t *langName) const;
 	bool switchToLang(const wchar_t *lang2switch) const;
 
-	size_t size() const
-	{
+	size_t size() const	{
+
 		return _localizationList.size();
 	}
 
@@ -1220,8 +1220,8 @@ public:
 
 	generic_string getThemeFromXmlFileName(const TCHAR *fn) const;
 
-	generic_string getXmlFilePathFromThemeName(const TCHAR *themeName) const
-	{
+	generic_string getXmlFilePathFromThemeName(const TCHAR *themeName) const	{
+
 		if (!themeName || themeName[0])
 			return generic_string();
 		generic_string themePath = _stylesXmlPath;
@@ -1238,8 +1238,8 @@ public:
 		return false;
 	}
 
-	size_t size() const
-	{
+	size_t size() const	{
+
 		return _themeList.size();
 	}
 
@@ -1313,8 +1313,8 @@ public:
 		return _nppGUI;
 	}
 
-	const TCHAR * getWordList(LangType langID, int typeIndex) const
-	{
+	const TCHAR * getWordList(LangType langID, int typeIndex) const	{
+
 		Lang *pLang = getLangFromID(langID);
 		if (!pLang) return nullptr;
 
@@ -1322,8 +1322,8 @@ public:
 	}
 
 
-	Lang * getLangFromID(LangType langID) const
-	{
+	Lang * getLangFromID(LangType langID) const	{
+
 		for (int i = 0 ; i < _nbLang ; ++i)	{
 
 			if ( _langList[i] && _langList[i]->_langID == langID )
@@ -1340,8 +1340,8 @@ public:
 
 	LangType getLangFromExt(const TCHAR *ext);
 
-	const TCHAR * getLangExtFromName(const TCHAR *langName) const
-	{
+	const TCHAR * getLangExtFromName(const TCHAR *langName) const	{
+
 		for (int i = 0 ; i < _nbLang ; ++i)	{
 
 			if (_langList[i]->_langName == langName)
@@ -1350,8 +1350,8 @@ public:
 		return nullptr;
 	}
 
-	const TCHAR * getLangExtFromLangType(LangType langType) const
-	{
+	const TCHAR * getLangExtFromLangType(LangType langType) const	{
+
 		for (int i = 0 ; i < _nbLang ; ++i)	{
 
 			if (_langList[i]->_langID == langType)
@@ -1439,8 +1439,8 @@ public:
 	void writeSession(const Session & session, const TCHAR *fileName = NULL);
 	bool writeFindHistory();
 
-	bool isExistingUserLangName(const TCHAR *newName) const
-	{
+	bool isExistingUserLangName(const TCHAR *newName) const	{
+
 		if ((!newName) || (!newName[0]))
 			return true;
 
@@ -1585,8 +1585,8 @@ public:
 	}
 
 	std::vector<generic_string> & getBlackList() { return _blacklist; };
-	bool isInBlackList(TCHAR *fn) const
-	{
+	bool isInBlackList(TCHAR *fn) const	{
+
 		for (auto& element: _blacklist)	{
 
 			if (element == fn)
@@ -1865,3 +1865,4 @@ private:
 };
 
 extern NppParameters& param;	extern NppGUI& nppGUI;	extern const NppGUI& nGUI;
+extern WcharMbcsConvertor& wmc;

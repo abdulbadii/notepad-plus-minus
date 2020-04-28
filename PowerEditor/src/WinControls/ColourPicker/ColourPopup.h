@@ -42,8 +42,8 @@ public :
 	explicit ColourPopup(COLORREF defaultColor) : _colour(defaultColor) {}
 	virtual ~ColourPopup() {}
 
-	bool isCreated() const
-	{
+	bool isCreated() const	{
+
 		return (_hSelf != NULL);
 	}
 
@@ -56,8 +56,8 @@ public :
 		::SetWindowPos(_hSelf, HWND_TOP, p.x, p.y, _rc.right - _rc.left, _rc.bottom - _rc.top, SWP_SHOWWINDOW);
 	}
 
-	virtual void destroy()
-	{
+	virtual void destroy()	{
+
 		::DestroyWindow(_hSelf);
 	}
 

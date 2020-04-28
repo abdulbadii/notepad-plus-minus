@@ -51,8 +51,8 @@ static HWND		hWndServer		= NULL;
 static HHOOK	hookMouse		= NULL;
 static HHOOK	hookKeyboard	= NULL;
 
-static LRESULT CALLBACK hookProcMouse(int nCode, WPARAM wParam, LPARAM lParam)
-{
+static LRESULT CALLBACK hookProcMouse(int nCode, WPARAM wParam, LPARAM lParam)	{
+
     if (nCode >= 0)	{
 
 		switch (wParam)	{
@@ -74,8 +74,8 @@ static LRESULT CALLBACK hookProcMouse(int nCode, WPARAM wParam, LPARAM lParam)
 	return ::CallNextHookEx(hookMouse, nCode, wParam, lParam);
 }
 
-static LRESULT CALLBACK hookProcKeyboard(int nCode, WPARAM wParam, LPARAM lParam)
-{
+static LRESULT CALLBACK hookProcKeyboard(int nCode, WPARAM wParam, LPARAM lParam)	{
+
     if (nCode >= 0)	{
 
 		if (wParam == VK_ESCAPE)	{

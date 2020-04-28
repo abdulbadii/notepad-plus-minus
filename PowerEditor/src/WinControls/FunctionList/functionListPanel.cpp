@@ -212,7 +212,7 @@ void FunctionListPanel::sortOrUnsort()	{
 
 			reload();
 
-			if (_treeView.getRoot() == NULL)
+			if (!_treeView.getRoot())
 				return;
 
 			_treeViewSearchResult.removeAllItems();
@@ -259,7 +259,6 @@ bool FunctionListPanel::serialize(const generic_string & outputFilename)	{
 	const char* leavesLabel = "leaves";
 	const char* nameLabel = "name";
 
-	WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 	json j;
 	j[rootLabel] = wmc.wchar2char(fileNameLabel, CP_ACP);
 
@@ -564,8 +563,8 @@ BOOL FunctionListPanel::setTreeViewImageList(int root_id, int node_id, int leaf_
 	const int nbBitmaps = 3;
 
 	// Creation of image list
-	if ((_hTreeViewImaLst = ImageList_Create(CX_BITMAP, CY_BITMAP, ILC_COLOR32 | ILC_MASK, nbBitmaps, 0)) == NULL)
-		return FALSE;
+	_hTreeViewImaLst = ImageList_Create(CX_BITMAP, CY_BITMAP, ILC_COLOR32 | ILC_MASK, nbBitmaps, 0);
+	if (!_hTreeViewImaLst)		return FALSE;
 
 	// Add the bmp in the list
 	hbmp = LoadBitmap(_hInst, MAKEINTRESOURCE(root_id));
@@ -610,7 +609,7 @@ void FunctionListPanel::searchFuncAndSwitchView()	{
 	}
 	else	{
 
-		if (_treeView.getRoot() == NULL)
+		if (!_treeView.getRoot())
 			return;
 
 		_treeViewSearchResult.removeAllItems();
@@ -631,8 +630,8 @@ void FunctionListPanel::searchFuncAndSwitchView()	{
 }
 
 static WNDPROC oldFunclstToolbarProc = NULL;
-static LRESULT CALLBACK funclstToolbarProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
+static LRESULT CALLBACK funclstToolbarProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)	{
+
 	switch (message)	{
 
 		case WM_CTLCOLOREDIT :	{

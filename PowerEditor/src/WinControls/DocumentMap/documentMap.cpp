@@ -460,7 +460,7 @@ INT_PTR CALLBACK DocumentMap::run_dlgProc(UINT message, WPARAM wParam, LPARAM lP
 
 		case DOCUMENTMAP_SCROLL:	{
 
-			bool dir = (wParam != 0);
+			bool dir = (wParam);
 			moveMode mode = (!lParam)?perLine:perPage;
 			scrollMap(dir, mode);
 		}

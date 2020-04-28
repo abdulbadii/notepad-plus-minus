@@ -73,8 +73,8 @@ public:
 	void init(HINSTANCE hInst, HWND hPere, int splitterSize, double iSplitRatio, DWORD dwFlags);
 	void rotate();
 
-	int getPhisicalSize() const
-	{
+	int getPhisicalSize() const	{
+
 		return _splitterSize;
 	}
 
@@ -105,30 +105,30 @@ private:
 	void gotoTopLeft();
 	void gotoRightBottom();
 
-	bool isInLeftTopZone(const POINT& p) const
-	{
+	bool isInLeftTopZone(const POINT& p) const	{
+
 		return ((p.x >= _clickZone2TL.left)
 			and (p.x <= _clickZone2TL.left + _clickZone2TL.right)
 			and (p.y >= _clickZone2TL.top)
 			and (p.y <= _clickZone2TL.top + _clickZone2TL.bottom));
 	}
 
-	bool isInRightBottomZone(const POINT& p) const
-	{
+	bool isInRightBottomZone(const POINT& p) const	{
+
 		return ((p.x >= _clickZone2BR.left)
 			and (p.x <= _clickZone2BR.left + _clickZone2BR.right)
 			and (p.y >= _clickZone2BR.top)
 			and (p.y <= _clickZone2BR.top + _clickZone2BR.bottom));
 	}
 
-	int getSplitterFixPosX() const
-	{
+	int getSplitterFixPosX() const	{
+
 		long result = long(::SendMessage(_hParent, WM_GETSPLITTER_X, 0, 0));
 		return (LOWORD(result) - ((HIWORD(result) == static_cast<std::uint8_t>(SplitterMode::RIGHT_FIX)) ? _splitterSize : 0));
 	}
 
-	int getSplitterFixPosY() const
-	{
+	int getSplitterFixPosY() const	{
+
 		long result = long(::SendMessage(_hParent, WM_GETSPLITTER_Y, 0, 0));
 		return (LOWORD(result) - ((HIWORD(result) == static_cast<std::uint8_t>(SplitterMode::RIGHT_FIX)) ? _splitterSize : 0));
 	}

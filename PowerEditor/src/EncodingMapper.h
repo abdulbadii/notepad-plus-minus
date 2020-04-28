@@ -56,3 +56,4 @@ private:
 	EncodingMapper& operator=(EncodingMapper&&) = delete;
 };
 
+extern EncodingMapper& em;

@@ -57,19 +57,19 @@ public:
     virtual ~HandleUniversalDetector()
     {}
 
-    virtual void Report(const char* charset)
-    {
+    virtual void Report(const char* charset)	{
+
         m_charset = charset;
     }
 
-    virtual void Reset()
-    {
+    virtual void Reset()	{
+
         nsUniversalDetector::Reset();
         m_charset = "";
     }
 
-    const char* GetCharset() const
-    {
+    const char* GetCharset() const	{
+
         return m_charset.c_str();
     }
 };

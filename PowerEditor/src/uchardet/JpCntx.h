@@ -110,8 +110,8 @@ class SJISContextAnalysis : public JapaneseContextAnalysis	{
 protected:
   PRInt32 GetOrder(const char* str, PRUint32 *charLen);
 
-  PRInt32 GetOrder(const char* str)
-  {
+  PRInt32 GetOrder(const char* str)	{
+
     //We only interested in Hiragana, so first byte is '\202'
     if (*str == '\202' && 
           (unsigned char)*(str+1) >= (unsigned char)0x9f && 

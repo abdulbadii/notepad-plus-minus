@@ -160,8 +160,7 @@ private:
 	ScintillaEditView _scintView;
 	uint32_t _nbFoundFiles = 0, _nbOpenedFiles = 0;
 
-	int _lastFileHeaderPos = 0;
-	int _lastSearchHeaderPos = 0;
+	int _FileHeaderLastPos = 0,	_lastSearchHeaderPos = 0;
 
 	bool _canBeVolatiled = true;
 
@@ -465,15 +464,15 @@ public:
 	HWND open(HWND hCallerWnd = NULL, const TCHAR* header = NULL);
 	void close();
 
-	bool isCancelled() const
-	{
+	bool isCancelled() const	{
+
 		if (_hwnd)
 			return (::WaitForSingleObject(_hActiveState, 0) != WAIT_OBJECT_0);
 		return false;
 	}
 
-	void setInfo(const TCHAR *info) const
-	{
+	void setInfo(const TCHAR *info) const	{
+
 		if (_hwnd)
 			::SendMessage(_hPText, WM_SETTEXT, 0, reinterpret_cast<LPARAM>(info));
 	}

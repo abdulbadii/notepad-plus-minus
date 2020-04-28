@@ -41,8 +41,8 @@ using namespace std;
 static HWND		hWndServer		= NULL;
 static HHOOK	hookMouse		= NULL;
 
-static LRESULT CALLBACK hookProcMouse(int nCode, WPARAM wParam, LPARAM lParam)
-{
+static LRESULT CALLBACK hookProcMouse(int nCode, WPARAM wParam, LPARAM lParam)	{
+
 	if (nCode >= 0)	{
 
 		switch (wParam)	{
@@ -1191,7 +1191,7 @@ int DockingCont::hideToolbar(tTbData *pTbData, BOOL hideClient)	{
 
 		auto iItemCnt = ::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0);
 
-		if (iItemCnt != 0)	{
+		if (iItemCnt)	{
 
 			TCITEM		tcItem = {0};
 
@@ -1419,7 +1419,7 @@ bool DockingCont::updateCaption()	{
 
 	// test if additional information are available
 	if ((((tTbData*)tcItem.lParam)->uMask & DWS_ADDINFO) && 
-		(lstrlen(((tTbData*)tcItem.lParam)->pszAddInfo) != 0))
+		(lstrlen(((tTbData*)tcItem.lParam)->pszAddInfo)))
 	{
 		_pszCaption += L" - ";
 		_pszCaption += ((tTbData*)tcItem.lParam)->pszAddInfo; 

@@ -493,32 +493,32 @@ private:
 
 	void addHotSpot();
 
-	void bookmarkAdd(int lineno) const
-	{
+	void bookmarkAdd(int lineno) const	{
+
 		if (lineno == -1)
 			lineno = static_cast<int32_t>(_pEditView->getCurrentLineNumber());
 		if (!bookmarkPresent(lineno))
 			_pEditView->execute(SCI_MARKERADD, lineno, MARK_BOOKMARK);
 	}
 
-	void bookmarkDelete(int lineno) const
-	{
+	void bookmarkDelete(int lineno) const	{
+
 		if (lineno == -1)
 			lineno = static_cast<int32_t>(_pEditView->getCurrentLineNumber());
 		while (bookmarkPresent(lineno))
 			_pEditView->execute(SCI_MARKERDELETE, lineno, MARK_BOOKMARK);
 	}
 
-	bool bookmarkPresent(int lineno) const
-	{
+	bool bookmarkPresent(int lineno) const	{
+
 		if (lineno == -1)
 			lineno = static_cast<int32_t>(_pEditView->getCurrentLineNumber());
 		LRESULT state = _pEditView->execute(SCI_MARKERGET, lineno);
 		return ((state & (1 << MARK_BOOKMARK)) != 0);
 	}
 
-	void bookmarkToggle(int lineno) const
-	{
+	void bookmarkToggle(int lineno) const	{
+
 		if (lineno == -1)
 			lineno = static_cast<int32_t>(_pEditView->getCurrentLineNumber());
 
@@ -529,8 +529,8 @@ private:
 	}
 
 	void bookmarkNext(bool forwardScan);
-	void bookmarkClearAll() const
-	{
+	void bookmarkClearAll() const	{
+
 		_pEditView->execute(SCI_MARKERDELETEALL, MARK_BOOKMARK);
 	}
 
@@ -611,8 +611,8 @@ private:
 	static bool deleteForward(ScintillaEditView *pCurrentView, BufferID targetBufID);
 	static bool selectBack(ScintillaEditView *pCurrentView, BufferID targetBufID);
 
-	static int getRandomNumber(int rangeMax = -1)
-	{
+	static int getRandomNumber(int rangeMax = -1)	{
+
 		int randomNumber = rand();
 		if (rangeMax == -1)
 			return randomNumber;

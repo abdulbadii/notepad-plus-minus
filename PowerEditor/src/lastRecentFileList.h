@@ -72,7 +72,7 @@ public:
 	generic_string & getIndex(int index);	//use menu id
 
 	generic_string getFirstItem() const {
-		if (_lrfl.size() == 0)
+		if (!_lrfl.size())
 			return L"";
 		return _lrfl.front()._name;
 	};

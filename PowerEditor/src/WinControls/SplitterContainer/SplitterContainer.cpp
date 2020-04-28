@@ -216,7 +216,7 @@ LRESULT SplitterContainer::runProc(UINT message, WPARAM wParam, LPARAM lParam)	{
 
 			if (_dwSplitterStyle & SV_VERTICAL)	{
 
-				if (wParam != 0)	{
+				if (wParam)	{
 
 					rc0.right = int(wParam);
 
@@ -226,7 +226,7 @@ LRESULT SplitterContainer::runProc(UINT message, WPARAM wParam, LPARAM lParam)	{
 			}
 			else	{ //SV_HORIZONTAL
 
-				if (lParam != 0)	{
+				if (lParam)	{
 
 					rc0.bottom = int(lParam);
 

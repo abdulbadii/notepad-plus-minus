@@ -64,8 +64,8 @@ public :
 
 	POINT getTopPoint(HWND hwnd, bool isLeft = true) const;
 
-	bool isCheckedOrNot(int checkControlID) const
-	{
+	bool isCheckedOrNot(int checkControlID) const	{
+
 		return (BST_CHECKED == ::SendMessage(::GetDlgItem(_hSelf, checkControlID), BM_GETCHECK, 0, 0));
 	}
 

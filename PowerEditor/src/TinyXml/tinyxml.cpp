@@ -463,8 +463,8 @@ TiXmlElement::~TiXmlElement()
 	}
 }
 
-const TCHAR * TiXmlElement::Attribute( const TCHAR * name ) const
-{
+const TCHAR * TiXmlElement::Attribute( const TCHAR * name ) const	{
+
 	TiXmlAttribute* node = attributeSet.Find( name );
 
 	if ( node )
@@ -474,8 +474,8 @@ const TCHAR * TiXmlElement::Attribute( const TCHAR * name ) const
 }
 
 
-const TCHAR * TiXmlElement::Attribute( const TCHAR * name, int* i ) const
-{
+const TCHAR * TiXmlElement::Attribute( const TCHAR * name, int* i ) const	{
+
 	const TCHAR * s = Attribute( name );
 	if ( i )	{
 
@@ -488,8 +488,8 @@ const TCHAR * TiXmlElement::Attribute( const TCHAR * name, int* i ) const
 }
 
 
-const TCHAR * TiXmlElement::Attribute( const TCHAR * name, double* d ) const
-{
+const TCHAR * TiXmlElement::Attribute( const TCHAR * name, double* d ) const	{
+
 	const TCHAR * s = Attribute( name );
 	if ( d )	{
 
@@ -891,13 +891,13 @@ void TiXmlAttribute::SetDoubleValue( double _value )	{
 	SetValue (buf);
 }
 
-const int TiXmlAttribute::IntValue() const
-{
+const int TiXmlAttribute::IntValue() const	{
+
 	return generic_atoi (value.c_str ());
 }
 
-const double  TiXmlAttribute::DoubleValue() const
-{
+const double  TiXmlAttribute::DoubleValue() const	{
+
 	return generic_atof (value.c_str ());
 }
 

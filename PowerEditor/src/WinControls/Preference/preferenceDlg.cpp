@@ -1174,7 +1174,6 @@ INT_PTR CALLBACK DefaultNewDocDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 
 			int selIndex = -1;
 			generic_string str;
-			EncodingMapper& em = EncodingMapper::getInstance();
 			for (size_t i = 0, encodingArraySize = sizeof(encodings)/sizeof(int) ; i < encodingArraySize ; ++i)	{
 
 				int cmdID = em.getIndexFromEncoding(encodings[i]);
@@ -2658,19 +2657,18 @@ INT_PTR CALLBACK AutoCompletionDlg::run_dlgProc(UINT message, WPARAM wParam, LPA
 
 			::SendDlgItemMessage(_hSelf, IDD_AUTOC_ENABLECHECK, BM_SETCHECK, isEnableAutoC?BST_CHECKED:BST_UNCHECKED, 0);
 			
-			int selectedID;// = IDD_AUTOC_BOTHRADIO;
-			if (nppGUI._autocStatus == nppGUI.autoc_func)
-				selectedID = IDD_AUTOC_FUNCRADIO;
-			else if (nppGUI._autocStatus == nppGUI.autoc_word)
-				selectedID = IDD_AUTOC_WORDRADIO;
-			else
-				selectedID = IDD_AUTOC_BOTHRADIO;
-			
-			::SendDlgItemMessage(_hSelf, selectedID, BM_SETCHECK, BST_CHECKED, 0);
+			::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORENUMBERS, BM_SETCHECK, nppGUI._autocIgnoreNumbers ? BST_CHECKED : BST_UNCHECKED, 0);
 
-				::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORECASE, BM_SETCHECK, nppGUI._autocIgnoreCase ? BST_CHECKED : BST_UNCHECKED, 0);
-			if (nppGUI._autocStatus == nppGUI.autoc_word || nppGUI._autocStatus == nppGUI.autoc_both)
-				::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORENUMBERS, BM_SETCHECK, nppGUI._autocIgnoreNumbers ? BST_CHECKED : BST_UNCHECKED, 0);
+			if (nppGUI._autocStatus == nppGUI.autoc_func)
+				::SendDlgItemMessage(_hSelf, IDD_AUTOC_FUNCRADIO, BM_SETCHECK, BST_CHECKED, 0);
+			else {
+				if (nppGUI._autocStatus == nppGUI.autoc_word)
+					::SendDlgItemMessage(_hSelf, IDD_AUTOC_WORDRADIO, BM_SETCHECK, BST_CHECKED, 0);
+				else
+					::SendDlgItemMessage(_hSelf, IDD_AUTOC_BOTHRADIO, BM_SETCHECK, BST_CHECKED, 0);
+			}
+			::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORECASE, BM_SETCHECK, nppGUI._autocIgnoreCase ? BST_CHECKED : BST_UNCHECKED, 0);
+				
 
 			if (!isEnableAutoC)	{
 

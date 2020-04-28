@@ -1065,8 +1065,7 @@ bool NppParameters::load()	{
 
 		// Read cloud choice
 		std::string cloudChoiceStr = getFileContent(cloudChoicePath.c_str());
-		WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
-		std::wstring cloudChoiceStrW = wmc.char2wchar(cloudChoiceStr.c_str(), SC_CP_UTF8);
+				std::wstring cloudChoiceStrW = wmc.char2wchar(cloudChoiceStr.c_str(), SC_CP_UTF8);
 
 		if (not cloudChoiceStrW.empty() and ::PathFileExists(cloudChoiceStrW.c_str()))	{
 
@@ -1496,8 +1495,8 @@ bool NppParameters::isExistingExternalLangName(const TCHAR *newName) const
 }
 
 
-const TCHAR* NppParameters::getUserDefinedLangNameFromExt(TCHAR *ext, TCHAR *fullName) const
-{
+const TCHAR* NppParameters::getUserDefinedLangNameFromExt(TCHAR *ext, TCHAR *fullName) const	{
+
 	if ((!ext) || (!ext[0]))
 		return nullptr;
 
@@ -1563,8 +1562,8 @@ void NppParameters::setCurLineHilitingColour(COLORREF colour2Set)	{
 
 
 
-static int CALLBACK EnumFontFamExProc(const LOGFONT* lpelfe, const TEXTMETRIC*, DWORD, LPARAM lParam)
-{
+static int CALLBACK EnumFontFamExProc(const LOGFONT* lpelfe, const TEXTMETRIC*, DWORD, LPARAM lParam)	{
+
 	std::vector<generic_string>& strVect = *(std::vector<generic_string> *)lParam;
 	const int32_t vectSize = static_cast<int32_t>(strVect.size());
 	const TCHAR* lfFaceName = ((ENUMLOGFONTEX*)lpelfe)->elfLogFont.lfFaceName;
@@ -1835,7 +1834,7 @@ int NppParameters::getCmdIdFromMenuEntryItemName(HMENU mainMenuHadle, const gene
 
 		TCHAR menuEntryString[64];
 		::GetMenuString(mainMenuHadle, i, menuEntryString, 64, MF_BYPOSITION);
-		if (generic_stricmp(menuEntryName.c_str(), purgeMenuItemString(menuEntryString).c_str()) == 0)	{
+		if (!generic_stricmp(menuEntryName.c_str(), purgeMenuItemString(menuEntryString).c_str()))	{
 
 			vector< pair<HMENU, int> > parentMenuPos;
 			HMENU topMenu = ::GetSubMenu(mainMenuHadle, i);
@@ -1860,7 +1859,7 @@ int NppParameters::getCmdIdFromMenuEntryItemName(HMENU mainMenuHadle, const gene
 					//  Check current menu position.
 					TCHAR cmdStr[256];
 					::GetMenuString(currMenu, currMenuPos, cmdStr, 256, MF_BYPOSITION);
-					if (generic_stricmp(menuItemName.c_str(), purgeMenuItemString(cmdStr).c_str()) == 0)	{
+					if (!generic_stricmp(menuItemName.c_str(), purgeMenuItemString(cmdStr).c_str()))	{
 
 						return ::GetMenuItemID(currMenu, currMenuPos);
 					}
@@ -1895,7 +1894,7 @@ int NppParameters::getPluginCmdIdFromMenuEntryItemName(HMENU pluginsMenu, const 
 
 		TCHAR menuItemString[256];
 		::GetMenuString(pluginsMenu, i, menuItemString, 256, MF_BYPOSITION);
-		if (generic_stricmp(pluginName.c_str(), purgeMenuItemString(menuItemString).c_str()) == 0)	{
+		if (!generic_stricmp(pluginName.c_str(), purgeMenuItemString(menuItemString).c_str()))	{
 
 			HMENU pluginMenu = ::GetSubMenu(pluginsMenu, i);
 			int nbPluginCmd = ::GetMenuItemCount(pluginMenu);
@@ -1903,7 +1902,7 @@ int NppParameters::getPluginCmdIdFromMenuEntryItemName(HMENU pluginsMenu, const 
 
 				TCHAR pluginCmdStr[256];
 				::GetMenuString(pluginMenu, j, pluginCmdStr, 256, MF_BYPOSITION);
-				if (generic_stricmp(pluginCmdName.c_str(), purgeMenuItemString(pluginCmdStr).c_str()) == 0)	{
+				if (!generic_stricmp(pluginCmdName.c_str(), purgeMenuItemString(pluginCmdStr).c_str()))	{
 
 					return ::GetMenuItemID(pluginMenu, j);
 				}
@@ -1921,8 +1920,7 @@ bool NppParameters::getContextMenuFromXmlTree(HMENU mainMenuHadle, HMENU plugins
 	if (!root)
 		return false;
 
-	WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
-
+	
 	TiXmlNodeA *contextMenuRoot = root->FirstChildElement("ScintillaContextMenu");
 	if (contextMenuRoot)	{
 
@@ -2124,7 +2122,7 @@ bool NppParameters::getSessionFromXmlTree(TiXmlDocument *pSessionDoc, Session *p
 					bool isUserReadOnly = false;
 					const TCHAR *boolStrReadOnly = (childNode->ToElement())->Attribute(L"userReadOnly");
 					if (boolStrReadOnly)
-						isUserReadOnly = _wcsicmp(L"yes", boolStrReadOnly) == 0;
+						isUserReadOnly = !_wcsicmp(L"yes", boolStrReadOnly);
 
 					sessionFileInfo sfi(fileName, langName, encStr ? encoding : -1, isUserReadOnly, position, backupFilePath, fileModifiedTimestamp, mapPosition);
 
@@ -2759,8 +2757,7 @@ void NppParameters::setCloudChoice(const TCHAR *pathChoice)	{
 	}
 	cloudChoicePath += L"choice";
 
-	WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
-	std::string cloudPathA = wmc.wchar2char(pathChoice, SC_CP_UTF8);
+		std::string cloudPathA = wmc.wchar2char(pathChoice, SC_CP_UTF8);
 
 	writeFileContent(cloudChoicePath.c_str(), cloudPathA.c_str());
 }
@@ -5036,8 +5033,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			const TCHAR *charsAddedW = element->Attribute(L"charsAdded");
 			if (charsAddedW)	{
 
-				WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
-				_nppGUI._customWordChars = wmc.wchar2char(charsAddedW, SC_CP_UTF8);
+								_nppGUI._customWordChars = wmc.wchar2char(charsAddedW, SC_CP_UTF8);
 			}
 		}
 		else if (!lstrcmp(nm, L"delimiterSelection"))	{
@@ -5830,8 +5826,7 @@ void NppParameters::createXmlTreeFromGUIParams()	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"wordCharList");
 		GUIConfigElement->SetAttribute(L"useDefault", _nppGUI._isWordCharDefault ? L"yes" : L"no");
-		WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
-		const wchar_t* charsAddStr = wmc.char2wchar(_nppGUI._customWordChars.c_str(), SC_CP_UTF8);
+				const wchar_t* charsAddStr = wmc.char2wchar(_nppGUI._customWordChars.c_str(), SC_CP_UTF8);
 		GUIConfigElement->SetAttribute(L"charsAdded", charsAddStr);
 	}
 

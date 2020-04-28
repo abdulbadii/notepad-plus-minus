@@ -119,7 +119,7 @@ public:
 		return *this;
 	}
 	friend inline const bool operator==(const Shortcut & a, const Shortcut & b) {
-		return ((lstrcmp(a.getMenuName(), b.getMenuName()) == 0) && 
+		return (!lstrcmp(a.getMenuName(), b.getMenuName()) && 
 			(a._keyCombo._isCtrl == b._keyCombo._isCtrl) && 
 			(a._keyCombo._isAlt == b._keyCombo._isAlt) && 
 			(a._keyCombo._isShift == b._keyCombo._isShift) && 

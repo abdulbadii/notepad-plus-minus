@@ -587,7 +587,7 @@ void DockingManager::createDockableDlg(tTbData data, int iCont, bool isVisible)	
 	DockingCont*		pCont		= NULL;
 
 	// if floated rect not set
-	if (memcmp(&data.rcFloat, &rc, sizeof(RECT)) == 0)	{
+	if (!memcmp(&data.rcFloat, &rc, sizeof(RECT)))	{
 
 		// set default rect state
 		::GetWindowRect(data.hClient, &data.rcFloat);

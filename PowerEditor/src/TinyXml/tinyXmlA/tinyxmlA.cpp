@@ -466,8 +466,8 @@ TiXmlElementA::~TiXmlElementA()
 	}
 }
 
-const char * TiXmlElementA::Attribute( const char * name ) const
-{
+const char * TiXmlElementA::Attribute( const char * name ) const	{
+
 	TiXmlAttributeA* node = attributeSet.Find( name );
 
 	if ( node )
@@ -477,8 +477,8 @@ const char * TiXmlElementA::Attribute( const char * name ) const
 }
 
 
-const char * TiXmlElementA::Attribute( const char * name, int* i ) const
-{
+const char * TiXmlElementA::Attribute( const char * name, int* i ) const	{
+
 	const char * s = Attribute( name );
 	if ( i )	{
 
@@ -491,8 +491,8 @@ const char * TiXmlElementA::Attribute( const char * name, int* i ) const
 }
 
 
-const char * TiXmlElementA::Attribute( const char * name, double* d ) const
-{
+const char * TiXmlElementA::Attribute( const char * name, double* d ) const	{
+
 	const char * s = Attribute( name );
 	if ( d )	{
 
@@ -964,13 +964,13 @@ void TiXmlAttributeA::SetDoubleValue( double _value )	{
 	SetValue (buf);
 }
 
-const int TiXmlAttributeA::IntValue() const
-{
+const int TiXmlAttributeA::IntValue() const	{
+
 	return atoi (value.c_str ());
 }
 
-const double  TiXmlAttributeA::DoubleValue() const
-{
+const double  TiXmlAttributeA::DoubleValue() const	{
+
 	return atof (value.c_str ());
 }
 

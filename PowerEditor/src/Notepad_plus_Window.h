@@ -71,8 +71,8 @@ public:
 
 	bool isDlgsMsg(MSG *msg) const;
 
-	HACCEL getAccTable() const
-	{
+	HACCEL getAccTable() const	{
+
 		return _notepad_plus_plus_core.getAccTable();
 	}
 
@@ -81,8 +81,8 @@ public:
 		return _notepad_plus_plus_core.emergency(emergencySavedDir);
 	}
 
-	bool isPrelaunch() const
-	{
+	bool isPrelaunch() const	{
+
 		return _isPrelaunch;
 	}
 
@@ -91,18 +91,18 @@ public:
 		_isPrelaunch = val;
 	}
 
-	generic_string getPluginListVerStr() const
-	{
+	generic_string getPluginListVerStr() const	{
+
 		return _notepad_plus_plus_core.getPluginListVerStr();
 	}
 
-	virtual void destroy()
-	{
+	virtual void destroy()	{
+
 		::DestroyWindow(_hSelf);
 	}
 
-	static const TCHAR * getClassName()
-	{
+	static const TCHAR * getClassName()	{
+
 		return _className;
 	}
 

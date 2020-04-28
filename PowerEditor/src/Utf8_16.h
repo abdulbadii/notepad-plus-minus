@@ -125,7 +125,7 @@ private:
 	ubyte*          m_pNewBuf;
 	// size of the new buffer
 	size_t          m_nNewBufSize;
-	// size of the previously allocated buffer (if != 0)
+	// size of the previously allocated buffer (if)
 	size_t          m_nAllocatedBufSize;
 	size_t			m_nSkip;
 	bool            m_bFirstRead;

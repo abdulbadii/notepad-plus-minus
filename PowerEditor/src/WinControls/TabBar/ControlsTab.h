@@ -50,8 +50,8 @@ public :
 	ControlsTab() = default;
 	virtual ~ControlsTab() = default;
 
-	virtual void init(HINSTANCE hInst, HWND hwnd, bool isVertical = false, bool isMultiLine = false)
-	{
+	virtual void init(HINSTANCE hInst, HWND hwnd, bool isVertical = false, bool isMultiLine = false)	{
+
 		_isVertical = isVertical;
 		TabBar::init(hInst, hwnd, false, isMultiLine);
 	}

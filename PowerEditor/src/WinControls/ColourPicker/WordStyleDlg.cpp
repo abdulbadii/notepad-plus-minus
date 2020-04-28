@@ -536,7 +536,7 @@ void WordStyleDlg::updateFontSize()	{
 	Style & style = getCurrentStyler();
 	auto iFontSizeSel = ::SendMessage(_hFontSizeCombo, CB_GETCURSEL, 0, 0);
 
-	if (iFontSizeSel != 0)	{
+	if (iFontSizeSel)	{
 
 		const size_t intStrLen = 3;
 		TCHAR intStr[intStrLen];
@@ -746,7 +746,7 @@ void WordStyleDlg::setVisualFromStyleList()	{
 
 	//-- 2 couleurs : fg et bg
 	bool isEnable = false;
-	if (HIBYTE(HIWORD(style._fgColor)) != 0xFF)	{
+ 	if (HIBYTE(HIWORD(style._fgColor)) != 0xFF)	{
 
 		_pFgColour->setColour(style._fgColor);
 		_pFgColour->setEnabled((style._colorStyle & COLORSTYLE_FOREGROUND) != 0);
@@ -755,7 +755,7 @@ void WordStyleDlg::setVisualFromStyleList()	{
 	enableFg(isEnable);
 
 	isEnable = false;
-	if (HIBYTE(HIWORD(style._bgColor)) != 0xFF)	{
+ 	if (HIBYTE(HIWORD(style._bgColor)) != 0xFF)	{
 
 		_pBgColour->setColour(style._bgColor);
 		_pBgColour->setEnabled((style._colorStyle & COLORSTYLE_BACKGROUND) != 0);

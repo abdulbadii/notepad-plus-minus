@@ -631,8 +631,6 @@ bool loadFromJson(PluginViewList & pl, const json& j)	{
 	if (j.empty())
 		return false;
 
-	WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
-
 	json jArray = j["npp-plugins"];
 	if (jArray.empty() || jArray.type() != json::value_t::array)
 		return false;

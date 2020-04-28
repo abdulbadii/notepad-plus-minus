@@ -39,8 +39,8 @@
 
 #include <stdlib.h>
 
-inline void* PR_Malloc(size_t len)
-{
+inline void* PR_Malloc(size_t len)	{
+
     return malloc(len);
 }
 

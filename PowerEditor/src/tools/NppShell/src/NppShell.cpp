@@ -502,7 +502,7 @@ CShellExt::CShellExt() :
 
 		size = sizeof(DWORD);
 		result = RegQueryValueEx(settingKey, L"Dynamic", NULL, NULL, (BYTE*)(&dyn), &size);
-		if (result == ERROR_SUCCESS && dyn != 0) {
+		if (result == ERROR_SUCCESS && dyn) {
 			m_isDynamic = true;
 		}
 
@@ -515,7 +515,7 @@ CShellExt::CShellExt() :
 		size = sizeof(DWORD);
 		result = RegQueryValueEx(settingKey, L"ShowIcon", NULL, NULL, (BYTE*)(&showicon), &size);
 		if (result == ERROR_SUCCESS) {
-			m_showIcon = (showicon != 0);
+			m_showIcon = (showicon);
 		}
 
 		result = RegQueryValueEx(settingKey, L"CustomIcon", NULL, NULL, NULL, NULL);

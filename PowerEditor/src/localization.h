@@ -30,8 +30,6 @@
 #include "tinyxmlA.h"
 #include "Parameters.h"
 
-extern NppParameters& param;	extern NppGUI& nppGUI;	extern const NppGUI& nGUI;
-
 class FindReplaceDlg;
 class PreferenceDlg;
 class ShortcutMapper;

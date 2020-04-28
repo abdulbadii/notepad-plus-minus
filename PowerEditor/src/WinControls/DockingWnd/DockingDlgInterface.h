@@ -42,8 +42,8 @@ public:
 	DockingDlgInterface() = default;
 	explicit DockingDlgInterface(int dlgID): _dlgID(dlgID) {}
 
-	virtual void init(HINSTANCE hInst, HWND parent)
-	{
+	virtual void init(HINSTANCE hInst, HWND parent)	{
+
 		Window::init(hInst, parent);
 		TCHAR temp[MAX_PATH];
 		::GetModuleFileName(reinterpret_cast<HMODULE>(hInst), temp, MAX_PATH);
@@ -69,8 +69,8 @@ public:
 		data->pszAddInfo	= NULL;
 	}
 
-	virtual void updateDockingDlg()
-	{
+	virtual void updateDockingDlg()	{
+
 		::SendMessage(_hParent, NPPM_DMMUPDATEDISPINFO, 0, reinterpret_cast<LPARAM>(_hSelf));
 	}
 

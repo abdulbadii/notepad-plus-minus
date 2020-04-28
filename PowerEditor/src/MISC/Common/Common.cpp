@@ -391,8 +391,8 @@ generic_string purgeMenuItemString(const TCHAR * menuItemStr, bool keepAmpersand
 }
 
 
-const wchar_t * WcharMbcsConvertor::char2wchar(const char * mbcs2Convert, UINT codepage, int lenMbcs, int *pLenWc, int *pBytesNotProcessed)
-{
+const wchar_t * WcharMbcsConvertor::char2wchar(const char * mbcs2Convert, UINT codepage, int lenMbcs, int *pLenWc, int *pBytesNotProcessed)	{
+
 	// Do not process NULL pointer
 	if (!mbcs2Convert)
 		return nullptr;
@@ -462,8 +462,8 @@ const wchar_t * WcharMbcsConvertor::char2wchar(const char * mbcs2Convert, UINT c
 
 // "mstart" and "mend" are pointers to indexes in mbcs2Convert,
 // which are converted to the corresponding indexes in the returned wchar_t string.
-const wchar_t * WcharMbcsConvertor::char2wchar(const char * mbcs2Convert, UINT codepage, int *mstart, int *mend)
-{
+const wchar_t * WcharMbcsConvertor::char2wchar(const char * mbcs2Convert, UINT codepage, int *mstart, int *mend)	{
+
 	// Do not process NULL pointer
 	if (!mbcs2Convert) return NULL;
 
@@ -869,8 +869,8 @@ double stodLocale(const generic_string& str, _locale_t loc, size_t* idx)	{
 
 // Source: https://blogs.msdn.microsoft.com/greggm/2005/09/21/comparing-file-names-in-native-code/
 // Modified to use TCHAR's instead of assuming Unicode and reformatted to conform with Notepad++ code style
-static TCHAR ToUpperInvariant(TCHAR input)
-{
+static TCHAR ToUpperInvariant(TCHAR input)	{
+
 	TCHAR result;
 	LONG lres = LCMapString(LOCALE_INVARIANT, LCMAP_UPPERCASE, &input, 1, &result, 1);
 	if (!lres)	{

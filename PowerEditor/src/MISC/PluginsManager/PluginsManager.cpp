@@ -75,8 +75,8 @@ bool PluginsManager::unloadPlugin(int index, HWND nppHandle)	{
     return true;
 }
 
-static WORD getBinaryArchitectureType(const TCHAR *filePath)
-{
+static WORD getBinaryArchitectureType(const TCHAR *filePath)	{
+
 	HANDLE hFile = CreateFile(filePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL);
 	if (hFile == INVALID_HANDLE_VALUE)	{
 
@@ -201,8 +201,7 @@ int PluginsManager::loadPlugin(const TCHAR *pluginFilePath)	{
 
 			ExternalLangContainer *containers[30];
 
-			WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
-			for (int x = 0; x < numLexers; ++x)	{
+						for (int x = 0; x < numLexers; ++x)	{
 
 				GetLexerName(x, lexName, MAX_EXTERNAL_LEXER_NAME_LEN);
 				GetLexerStatusText(x, lexDesc, MAX_EXTERNAL_LEXER_DESC_LEN);
@@ -322,7 +321,7 @@ bool PluginsManager::loadPluginsV2(const TCHAR* dir)	{
 	if (hFindFolder != INVALID_HANDLE_VALUE && (foundData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))	{
 
 		generic_string foundFileName = foundData.cFileName;
-		if (foundFileName != L"." && foundFileName != L".." && generic_stricmp(foundFileName.c_str(), L"Config") != 0)	{
+		if (foundFileName != L"." && foundFileName != L".." && generic_stricmp(foundFileName.c_str(), L"Config"))	{
 
 			generic_string pluginsFullPathFilter = pluginsFolder;
 			PathAppend(pluginsFullPathFilter, foundFileName);
@@ -344,7 +343,7 @@ bool PluginsManager::loadPluginsV2(const TCHAR* dir)	{
 		while (::FindNextFile(hFindFolder, &foundData))	{
 
 			generic_string foundFileName2 = foundData.cFileName;
-			if (foundFileName2 != L"." && foundFileName2 != L".." && generic_stricmp(foundFileName2.c_str(), L"Config") != 0)	{
+			if (foundFileName2 != L"." && foundFileName2 != L".." && generic_stricmp(foundFileName2.c_str(), L"Config"))	{
 
 				generic_string pluginsFullPathFilter2 = pluginsFolder;
 				PathAppend(pluginsFullPathFilter2, foundFileName2);

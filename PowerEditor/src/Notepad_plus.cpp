@@ -948,6 +948,7 @@ void Notepad_plus::saveFindHistory()	{
 	(param).writeFindHistory();
 }
 
+EncodingMapper& em = EncodingMapper::getInstance();
 
 int Notepad_plus::getHtmlXmlEncoding(const TCHAR *fileName) const
 {
@@ -1017,7 +1018,6 @@ int Notepad_plus::getHtmlXmlEncoding(const TCHAR *fileName) const
 				char encodingStr[encodingStrLen];
 				_invisibleEditView.getText(encodingStr, startPos, endPos);
 
-			EncodingMapper& em = EncodingMapper::getInstance();
 				int enc = em.getEncodingFromString(encodingStr);
 				return (enc == CP_ACP ? -1 : enc);
 		}
@@ -1061,7 +1061,6 @@ int Notepad_plus::getHtmlXmlEncoding(const TCHAR *fileName) const
 		char encodingStr[encodingStrLen];
 		_invisibleEditView.getText(encodingStr, startPos, endPos);
 
-		EncodingMapper& em = EncodingMapper::getInstance();
 		int enc = em.getEncodingFromString(encodingStr);
 		return (enc == CP_ACP ? -1 : enc);
 	}
@@ -1520,7 +1519,7 @@ bool Notepad_plus::replaceInFiles()	{
 
 	vector<generic_string> patterns2Match;
 	_findReplaceDlg.getPatterns(patterns2Match);
-	if (patterns2Match.size() == 0)	{
+	if (!patterns2Match.size())	{
 
 		_findReplaceDlg.setFindInFilesDirFilter(NULL, L"*.*");
 		_findReplaceDlg.getPatterns(patterns2Match);
@@ -1607,7 +1606,7 @@ bool Notepad_plus::findInFinderFiles(FindersInfo *findInFolderInfo)	{
 
 	vector<generic_string> patterns2Match;
 	_findReplaceDlg.getPatterns(patterns2Match);
-	if (patterns2Match.size() == 0)	{
+	if (!patterns2Match.size())	{
 
 		_findReplaceDlg.setFindInFilesDirFilter(NULL, L"*.*");
 		_findReplaceDlg.getPatterns(patterns2Match);
@@ -2420,7 +2419,6 @@ void Notepad_plus::setUniModeText()	{
 	}
 	else	{
 
-		EncodingMapper& em = EncodingMapper::getInstance();
 		int cmdID = em.getIndexFromEncoding(encoding);
 		if (cmdID == -1)	{
 
@@ -2515,7 +2513,6 @@ void Notepad_plus::addHotSpot()	{
 			constexpr size_t generic_fontnameLen = 128;
 			TCHAR *generic_fontname = new TCHAR[generic_fontnameLen];
 
-			WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 			const wchar_t * fontNameW = wmc.char2wchar(fontNameA, _nativeLangSpeaker.getLangEncoding());
 			wcscpy_s(generic_fontname, generic_fontnameLen, fontNameW);
 			hotspotStyle._fontName = generic_fontname;
@@ -3119,8 +3116,8 @@ size_t Notepad_plus::getSelectedCharNumber(UniMode u)
 #ifdef _OPENMP
 #include <omp.h>
 #endif
-static inline size_t countUtf8Characters(unsigned char *buf, size_t pos, size_t endpos)
-{
+static inline size_t countUtf8Characters(unsigned char *buf, size_t pos, size_t endpos)	{
+
 	size_t result = 0;
 	while (pos < endpos)	{
 
@@ -3141,7 +3138,7 @@ size_t Notepad_plus::getCurrentDocCharCount(UniMode u)
 
 		size_t numLines = _pEditView->execute(SCI_GETLINECOUNT);
 		auto result = _pEditView->execute(SCI_GETLENGTH);
-		size_t lines = numLines==0?0:numLines-1;
+		size_t lines = !numLines?0:numLines-1;
 		if (_pEditView->execute(SCI_GETEOLMODE) == SC_EOL_CRLF) lines *= 2;
 		result -= lines;
 		return (result < 0) ? 0 : result;
@@ -3296,7 +3293,7 @@ void Notepad_plus::dropFiles(HDROP hdrop)	{
 		
 				bool isOldMode = nppGUI._isFolderDroppedOpenFiles;
 
-		if (isOldMode || folderPaths.size() == 0)	{ // old mode or new mode + only files
+		if (isOldMode || !folderPaths.size())	{ // old mode or new mode + only files
 
 			BufferID lastOpened = BUFFER_INVALID;
 			for (int i = 0; i < filesDropped; ++i)	{
@@ -3322,7 +3319,7 @@ void Notepad_plus::dropFiles(HDROP hdrop)	{
 				L"Invalid action",
 				MB_OK | MB_APPLMODAL);
 		}
-		else if (not isOldMode && (folderPaths.size() != 0 && filePaths.size() == 0))	{ // new mode && only folders
+		else if (not isOldMode && (folderPaths.size() != 0 && !filePaths.size()))	{ // new mode && only folders
 
 			// process new mode
 			launchFileBrowser(folderPaths);
@@ -3946,7 +3943,6 @@ void Notepad_plus::checkUnicodeMenuItems() const
 	}
 	else	{
 
-		EncodingMapper& em = EncodingMapper::getInstance();
 		int cmdID = em.getIndexFromEncoding(encoding);
 		if (cmdID == -1)	{
 
@@ -3993,8 +3989,8 @@ void Notepad_plus::showFunctionComp()	{
 	autoC->showFunctionComplete();
 }
 
-static generic_string extractSymbol(TCHAR firstChar, TCHAR secondChar, const TCHAR *str2extract)
-{
+static generic_string extractSymbol(TCHAR firstChar, TCHAR secondChar, const TCHAR *str2extract)	{
+
 	bool found = false;
 	constexpr size_t extractedLen = 128;
 	TCHAR extracted[extractedLen] = {'\0'};
@@ -4994,8 +4990,8 @@ void Notepad_plus::getCurrentOpenedFiles(Session & session, bool includUntitledD
 		for (size_t i = 0, len = docTab[k]->nbItem(); i < len ; ++i)	{
 
 			BufferID bufID = docTab[k]->getBufferByIndex(i);
-			ScintillaEditView *editView = k == 0?&_mainEditView:&_subEditView;
-			size_t activeIndex = k == 0 ? session._activeMainIndex : session._activeSubIndex;
+			ScintillaEditView *editView = !k?&_mainEditView:&_subEditView;
+			size_t activeIndex = !k ? session._activeMainIndex : session._activeSubIndex;
 			vector<sessionFileInfo> *viewFiles = (vector<sessionFileInfo> *)(!k?&(session._mainViewFiles):&(session._subViewFiles));
 
 			Buffer * buf = MainFileManager.getBufferByID(bufID);
@@ -6931,7 +6927,7 @@ bool Notepad_plus::undoStreamComment(bool tryBlockComment)	{
 		//-- First delete end-comment, so that posStartCommentBefore does not change!
 		//-- Get character before end-comment to decide, if there is a white character before the end-comment, which will be removed too!
 		_pEditView->getGenericText(charbuf, charbufLen, posEndComment-1, posEndComment);
-		if (generic_strncmp(charbuf, white_space.c_str(), white_space.length()) == 0)	{
+		if (!generic_strncmp(charbuf, white_space.c_str(), white_space.length()))	{
 
 			endCommentLength +=1;
 			posEndComment-=1;
@@ -6943,7 +6939,7 @@ bool Notepad_plus::undoStreamComment(bool tryBlockComment)	{
 
 		//-- Get character after start-comment to decide, if there is a white character after the start-comment, which will be removed too!
 		_pEditView->getGenericText(charbuf, charbufLen, posStartComment+startCommentLength, posStartComment+startCommentLength+1);
-		if (generic_strncmp(charbuf, white_space.c_str(), white_space.length()) == 0)
+		if (!generic_strncmp(charbuf, white_space.c_str(), white_space.length()))
 			startCommentLength +=1;
 
 		//-- Delete starting stream-comment string ---------

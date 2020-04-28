@@ -159,7 +159,6 @@ void SmartHighlighter::highlightView(ScintillaEditView * pHighlightView, Scintil
 	char * text2Find = new char[textlen];
 	pHighlightView->getSelectedText(text2Find, textlen, false); //do not expand selection (false)
 
-	WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 	UINT cp = static_cast<UINT>(pHighlightView->execute(SCI_GETCODEPAGE));
 	const TCHAR * text2FindW = wmc.char2wchar(text2Find, cp);
 

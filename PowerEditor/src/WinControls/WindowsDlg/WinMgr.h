@@ -141,7 +141,7 @@ public:
 
 	// For TOFIT types, param is the TOFIT size, if nonzero. Used in dialogs,
 	// with CWinMgr::InitToFitSizeFromCurrent.
-	BOOL HasToFitSize()			{ return param != 0; }
+	BOOL HasToFitSize()			{ return param; }
 	SIZE GetToFitSize()			{ SIZE sz = {LOWORD(param),HIWORD(param)}; return sz; }
 	void SetToFitSize(SIZE sz)	{ param = MAKELONG(sz.cx,sz.cy); }
 };

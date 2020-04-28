@@ -90,7 +90,7 @@ bool isRelatedRootFolder(const generic_string & relatedRoot, const generic_strin
 		return false;
 
 	size_t pos = subFolder.find(relatedRoot);
-	if (pos != 0) // pos == 0 is the necessary condition, but not enough
+	if (pos) // pos == 0 is the necessary condition, but not enough
 		return false;
 
 	vector<generic_string> relatedRootArray = split(relatedRoot, '\\');
@@ -408,8 +408,8 @@ BOOL FileBrowser::setImageList(int root_clean_id, int root_dirty_id, int open_no
 	const int nbBitmaps = 5;
 
 	// Creation of image list
-	if ((_hImaLst = ImageList_Create(CX_BITMAP, CY_BITMAP, ILC_COLOR32 | ILC_MASK, nbBitmaps, 0)) == NULL) 
-		return FALSE;
+	_hImaLst = ImageList_Create(CX_BITMAP, CY_BITMAP, ILC_COLOR32 | ILC_MASK, nbBitmaps, 0);
+	if (!_hImaLst)	return FALSE;
 
 	// Add the bmp in the list
 	hbmp = LoadBitmap(_hInst, MAKEINTRESOURCE(root_clean_id));
@@ -487,7 +487,7 @@ generic_string FileBrowser::getNodePath(HTREEITEM node) const
 	for (int i = int(fullPathArray.size()) - 1; i >= 0; --i)	{
 
 		fullPath += fullPathArray[i];
-		if (i != 0)
+		if (i)
 			fullPath += L"\\";
 	}
 
@@ -907,7 +907,7 @@ void FileBrowser::getDirectoryStructure(const TCHAR *dir, const std::vector<gene
 			}
 			else if (isRecursive)	{
 
-				if ((OrdinalIgnoreCaseCompareStrings(foundData.cFileName, L".") != 0) && (OrdinalIgnoreCaseCompareStrings(foundData.cFileName, L"..") != 0))	{
+				if ((OrdinalIgnoreCaseCompareStrings(foundData.cFileName, L".") != 0) && (OrdinalIgnoreCaseCompareStrings(foundData.cFileName, L"..")))	{
 
 					generic_string pathDir(dir);
 					if (pathDir[pathDir.length() - 1] != '\\')
@@ -940,7 +940,7 @@ void FileBrowser::getDirectoryStructure(const TCHAR *dir, const std::vector<gene
 			}
 			else if (isRecursive)	{
 
-				if ((OrdinalIgnoreCaseCompareStrings(foundData.cFileName, L".") != 0) && (OrdinalIgnoreCaseCompareStrings(foundData.cFileName, L"..") != 0))	{
+				if ((OrdinalIgnoreCaseCompareStrings(foundData.cFileName, L".") != 0) && (OrdinalIgnoreCaseCompareStrings(foundData.cFileName, L"..")))	{
 
 					generic_string pathDir(dir);
 					if (pathDir[pathDir.length() - 1] != '\\')
@@ -1140,8 +1140,8 @@ bool FileBrowser::addInTree(const generic_string& rootPath, const generic_string
 	if (!node)	{ // it's a root. Search the right root with rootPath
 
 		// Search
-		if ((node = getRootFromFullPath(rootPath)) == nullptr)
-			return false;
+		node = getRootFromFullPath(rootPath);
+		if (!node)		return false;
 	}
 
 	if (linarPathArray.size() == 1)	{
@@ -1196,8 +1196,8 @@ HTREEITEM FileBrowser::findInTree(const generic_string& rootPath, HTREEITEM node
 	if (!node)	{ // it's a root. Search the right root with rootPath
 
 		// Search
-		if ((node = getRootFromFullPath(rootPath)) == nullptr)
-			return nullptr;
+		node = getRootFromFullPath(rootPath);
+		if (!node)		return nullptr;
 	}
 
 	if (linarPathArray.size() == 1)	{

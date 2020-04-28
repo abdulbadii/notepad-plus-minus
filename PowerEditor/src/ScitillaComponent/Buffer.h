@@ -259,42 +259,42 @@ public:
 	void setHeaderLineState(const std::vector<size_t> & folds, ScintillaEditView * identifier);
 	const std::vector<size_t> & getHeaderLineState(const ScintillaEditView * identifier) const;
 
-	bool isUserDefineLangExt() const
-	{
+	bool isUserDefineLangExt() const	{
+
 		return (_userLangExt[0] != '\0');
 	}
 
-	const TCHAR * getUserDefineLangName() const
-	{
+	const TCHAR * getUserDefineLangName() const	{
+
 		return _userLangExt.c_str();
 	}
 
-	const TCHAR * getCommentLineSymbol() const
-	{
+	const TCHAR * getCommentLineSymbol() const	{
+
 		Lang *l = getCurrentLang();
 		if (!l)
 			return NULL;
 		return l->_pCommentLineSymbol;
 	}
 
-	const TCHAR * getCommentStart() const
-	{
+	const TCHAR * getCommentStart() const	{
+
 		Lang *l = getCurrentLang();
 		if (!l)
 			return NULL;
 		return l->_pCommentStart;
 	}
 
-	const TCHAR * getCommentEnd() const
-	{
+	const TCHAR * getCommentEnd() const	{
+
 		Lang *l = getCurrentLang();
 		if (!l)
 			return NULL;
 		return l->_pCommentEnd;
 	}
 
-	bool getNeedsLexing() const
-	{
+	bool getNeedsLexing() const	{
+
 		return _needLexer;
 	}
 
@@ -322,8 +322,8 @@ public:
 		_needReloading = reload;
 	}
 
-	int docLength() const
-	{
+	int docLength() const	{
+
 		assert(_pManager != nullptr);
 		return _pManager->docLength(_id);
 	}
@@ -341,8 +341,8 @@ public:
 	void setBackupFileName(const generic_string& fileName) { _backupFileName = fileName; }
 	FILETIME getLastModifiedTimestamp() const { return _timeStamp; }
 
-	bool isLoadedDirty() const
-	{
+	bool isLoadedDirty() const	{
+
 		return _isLoadedDirty;
 	}
 

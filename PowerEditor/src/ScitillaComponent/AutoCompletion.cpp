@@ -33,16 +33,16 @@
 
 using namespace std;
 
-static bool isInList(const generic_string& word, const vector<generic_string> & wordArray)
-{
+static bool isInList(const generic_string& word, const vector<generic_string> & wordArray)	{
+
 	for (size_t i = 0, len = wordArray.size(); i < len; ++i)
 		if (wordArray[i] == word)
 			return true;
 	return false;
 }
 
-static bool isAllDigits(const generic_string &str)
-{
+static bool isAllDigits(const generic_string &str)	{
+
 	for (const auto& i : str)	{
 
 		if (i < 48 || i > 57)
@@ -68,11 +68,11 @@ bool AutoCompletion::showApiComplete()	{
 	if (len >= _keyWordMaxLen)
 		return false;
 
-	// _pEditView->execute(SCI_AUTOCSETSEPARATOR, WPARAM('\n'));
+	// _pEditView->execute(SCI_AUTOCSETSEPARATOR, WPARAM(' '));
 	_pEditView->execute(SC_CASEINSENSITIVEBEHAVIOUR_IGNORECASE,1);
 	_pEditView->execute(SCI_AUTOCSETIGNORECASE, nppGUI._autocIgnoreCase);
 	// _pEditView->execute(SC_ORDER_CUSTOM,2);
-	_pEditView->showAutoComletion(curPos - startPos, _keyWords.c_str());
+	_pEditView->showAutoC(curPos - startPos, _keyWords.c_str());
 	return true;
 }
 
@@ -129,7 +129,7 @@ bool AutoCompletion::showApiAndWordComplete()	{
 	_pEditView->execute(SC_CASEINSENSITIVEBEHAVIOUR_IGNORECASE,1);
 	_pEditView->execute(SCI_AUTOCSETIGNORECASE, nppGUI._autocIgnoreCase);
 	// _pEditView->execute(SC_ORDER_CUSTOM,2);
-	_pEditView->showAutoComletion(curPos - startPos, words.c_str());
+	_pEditView->showAutoC(curPos - startPos, words.c_str());
 	return true;
 }
 
@@ -170,42 +170,42 @@ void AutoCompletion::getWordArray(vector<generic_string> & wordArray, TCHAR *beg
 	}
 }
 
-static generic_string addTrailingSlash(const generic_string& path)
-{
+static generic_string addTrailingSlash(const generic_string& path)	{
+
 	if (path.length() >=1 && path[path.length() - 1] == '\\')
 		return path;
 	else
 		return path + L"\\";
 }
 
-static generic_string removeTrailingSlash(const generic_string& path)
-{
+static generic_string removeTrailingSlash(const generic_string& path)	{
+
 	if (path.length() >= 1 && path[path.length() - 1] == '\\')
 		return path.substr(0, path.length() - 1);
 	else
 		return path;
 }
 
-static bool isDirectory(const generic_string& path)
-{
+static bool isDirectory(const generic_string& path)	{
+
 	DWORD type = ::GetFileAttributes(path.c_str());
 	return type != INVALID_FILE_ATTRIBUTES && (type & FILE_ATTRIBUTE_DIRECTORY);
 }
 
-static bool isFile(const generic_string& path)
-{
+static bool isFile(const generic_string& path)	{
+
 	DWORD type = ::GetFileAttributes(path.c_str());
 	return type != INVALID_FILE_ATTRIBUTES && ! (type & FILE_ATTRIBUTE_DIRECTORY);
 }
 
-static bool isAllowedBeforeDriveLetter(TCHAR c)
-{
+static bool isAllowedBeforeDriveLetter(TCHAR c)	{
+
 	locale loc;
 	return c == '\'' || c == '"' || c == '(' || std::isspace(c, loc);
 }
 
-static bool getRawPath(const generic_string& input, generic_string &rawPath_out)
-{
+static bool getRawPath(const generic_string& input, generic_string &rawPath_out)	{
+
 	// Try to find a path in the given input.
 	// Algorithm: look for a colon. The colon must be preceded by an alphabetic character.
 	// The alphabetic character must, in turn, be preceded by nothing, or by whitespace, or by
@@ -225,8 +225,8 @@ static bool getRawPath(const generic_string& input, generic_string &rawPath_out)
 	return true;
 }
 
-static bool getPathsForPathCompletion(const generic_string& input, generic_string &rawPath_out, generic_string &pathToMatch_out)
-{
+static bool getPathsForPathCompletion(const generic_string& input, generic_string &rawPath_out, generic_string &pathToMatch_out)	{
+
 	generic_string rawPath;
 	if (! getRawPath(input, rawPath))	{
 
@@ -321,7 +321,7 @@ void AutoCompletion::showPathCompletion()	{
 	// Show autocompletion box.
 	_pEditView->execute(SCI_AUTOCSETSEPARATOR, WPARAM('\n'));
 	_pEditView->execute(SCI_AUTOCSETIGNORECASE, true);
-	_pEditView->showAutoComletion(rawPath.length(), autoCompleteEntries.c_str());
+	_pEditView->showAutoC(rawPath.length(), autoCompleteEntries.c_str());
 	return;
 }
 
@@ -346,7 +346,7 @@ bool AutoCompletion::showWordComplete(bool autoInsert)	{
 
 	getWordArray(wordArray, beginChars);
 
-	if (wordArray.size() == 0) return false;
+	if (!wordArray.size()) return false;
 
 	if (wordArray.size() == 1 && autoInsert)	{
 
@@ -371,7 +371,7 @@ bool AutoCompletion::showWordComplete(bool autoInsert)	{
 	_pEditView->execute(SC_CASEINSENSITIVEBEHAVIOUR_IGNORECASE,1);
 	_pEditView->execute(SCI_AUTOCSETIGNORECASE, nppGUI._autocIgnoreCase);
 	// _pEditView->execute(SC_ORDER_CUSTOM,2);
-	_pEditView->showAutoComletion(curPos - startPos, words.c_str());
+	_pEditView->showAutoC(curPos - startPos, words.c_str());
 	return true;
 }
 

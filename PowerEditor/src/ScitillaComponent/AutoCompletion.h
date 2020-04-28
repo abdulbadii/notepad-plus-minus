@@ -45,7 +45,7 @@ public:
 	void init(ScintillaEditView * pEditView) { _pEditView = pEditView; };
 	void removeInvalidElements(MatchedCharInserted mci);
 	void add(MatchedCharInserted mci);
-	bool isEmpty() const { return _insertedMatchedChars.size() == 0; };
+	bool isEmpty() const { return !_insertedMatchedChars.size(); };
 	int search(char startChar, char endChar, int posToDetect);
 
 private:

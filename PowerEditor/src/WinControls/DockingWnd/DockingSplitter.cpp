@@ -42,8 +42,8 @@ static HHOOK	hookMouse		= NULL;
 #define WH_MOUSE_LL 14
 #endif
 
-static LRESULT CALLBACK hookProcMouse(int nCode, WPARAM wParam, LPARAM lParam)
-{
+static LRESULT CALLBACK hookProcMouse(int nCode, WPARAM wParam, LPARAM lParam)	{
+
     if (nCode >= 0)	{
 
 		switch (wParam)	{

@@ -158,10 +158,10 @@ private:
 		::MessageBox(NULL, msg.c_str(), L"Plugin Exception", MB_OK);
 	}
 
-	bool isInLoadedDlls(const TCHAR *fn) const
-	{
+	bool isInLoadedDlls(const TCHAR *fn) const	{
+
 		for (size_t i = 0; i < _loadedDlls.size(); ++i)
-			if (generic_stricmp(fn, _loadedDlls[i]._fileName.c_str()) == 0)
+			if (!generic_stricmp(fn, _loadedDlls[i]._fileName.c_str()))
 				return true;
 		return false;
 	}

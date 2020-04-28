@@ -21,18 +21,18 @@
 // These notices must be retained in any copies of any part of this
 // documentation and/or software.
 
-
-
 // The original md5 implementation avoids external libraries.
 // This version has dependency on stdio.h for file input and
 // string.h for memcpy.
 
-// 
 // http://www.ietf.org/ietf-ftp/IPR/RSA-MD-all
 
 
 #include <stdio.h>
 #include <string.h>
+
+#pragma warning(push)
+#pragma warning(disable:4706) // assignment within conditional expression
 
 #pragma region MD5 defines
 // Constants for MD5Transform routine.
@@ -123,8 +123,8 @@ private:
   #pragma region static helper functions
   // The core of the MD5 algorithm is here.
   // MD5 basic transformation. Transforms state based on block.
-  static void MD5Transform( UINT4 state[4], unsigned char block[64] )
-  {
+  static void MD5Transform( UINT4 state[4], unsigned char block[64] )	{
+
     UINT4 a = state[0], b = state[1], c = state[2], d = state[3], x[16];
 
     Decode (x, block, 64);
@@ -212,8 +212,8 @@ private:
 
   // Encodes input (UINT4) into output (unsigned char). Assumes len is
   // a multiple of 4.
-  static void Encode( unsigned char *output, UINT4 *input, unsigned int len )
-  {
+  static void Encode( unsigned char *output, UINT4 *input, unsigned int len )	{
+
     unsigned int i, j;
 
     for (i = 0, j = 0; j < len; ++i , j += 4) {
@@ -226,8 +226,8 @@ private:
 
   // Decodes input (unsigned char) into output (UINT4). Assumes len is
   // a multiple of 4.
-  static void Decode( UINT4 *output, unsigned char *input, unsigned int len )
-  {
+  static void Decode( UINT4 *output, unsigned char *input, unsigned int len )	{
+
     unsigned int i, j;
 
     for (i = 0, j = 0; j < len; ++i , j += 4)
@@ -349,7 +349,7 @@ public:
     int len;
     unsigned char buffer[1024] ;
 
-	if ((file = fopen(filename, "rb")) == NULL)	{
+	if (!(file = fopen(filename, "rb")))	{
 
 		//printf("%s can't be opened\n", filename);
 		return NULL;

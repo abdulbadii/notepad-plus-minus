@@ -65,16 +65,16 @@ class TiXmlString	{
     }
 
     // Convert a TiXmlString into a classical TCHAR *
-    const TCHAR * c_str () const
-    {
+    const TCHAR * c_str () const	{
+
         if (allocated)
             return cstring;
         return L"";
     }
 
     // Return the length of a TiXmlString
-    unsigned length () const
-	{
+    unsigned length () const	{
+
 		return ( allocated ) ? current_length : 0;
 	}
 
@@ -109,8 +109,8 @@ class TiXmlString	{
     bool operator > (const TiXmlString & compare) const;
 
     // Checks if a TiXmlString is empty
-    bool empty () const
-    {
+    bool empty () const	{
+
         return length () ? false : true;
     }
 
@@ -120,15 +120,15 @@ class TiXmlString	{
 //    bool isblank () const;
 
     // single TCHAR extraction
-    const TCHAR& at (unsigned index) const
-    {
+    const TCHAR& at (unsigned index) const	{
+
         assert( index < length ());
         return cstring [index];
     }
 
     // find a TCHAR in a generic_string. Return TiXmlString::notfound if not found
-    unsigned find (TCHAR lookup) const
-    {
+    unsigned find (TCHAR lookup) const	{
+
         return find (lookup, 0);
     }
 

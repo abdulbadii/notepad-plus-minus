@@ -42,8 +42,8 @@ public :
         _initVal = initVal;
     };
 
-    unsigned short calculate(unsigned char *data, unsigned short count)
-    {
+    unsigned short calculate(unsigned char *data, unsigned short count)	{
+
         unsigned short fcs = _initVal;
         unsigned short d, i, k;
         for (i=0; i<count; ++i )	{
@@ -75,10 +75,10 @@ class CRC16 : public CRC16_ISO_3309	{
 public:
     CRC16(){};
     ~CRC16(){};
-    unsigned short calculate(const unsigned char *data, unsigned short count)
-    {
+    unsigned short calculate(const unsigned char *data, unsigned short count)	{
+
         assert(data != NULL);
-        assert(count != 0);
+        assert(count);
 
         //unsigned short wordResult;
         unsigned char *pBuffer = new unsigned char[count];
@@ -106,8 +106,8 @@ public:
 
 private:
     template <class IntType>
-    IntType reverseByte(IntType val2Reverses)
-    {
+    IntType reverseByte(IntType val2Reverses)	{
+
         IntType reversedValue = 0;
         long mask = 1;
         int nBits = sizeof(val2Reverses) * 8;

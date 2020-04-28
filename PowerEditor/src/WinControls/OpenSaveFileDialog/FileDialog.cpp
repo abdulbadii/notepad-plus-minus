@@ -307,8 +307,8 @@ static WNDPROC oldProc = NULL;
 static generic_string currentExt = L"";
 
 
-static LRESULT CALLBACK fileDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
+static LRESULT CALLBACK fileDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)	{
+
 	switch (message)	{
 
 		case WM_COMMAND :	{
@@ -345,8 +345,8 @@ static LRESULT CALLBACK fileDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
 };
 
 
-static TCHAR * get1stExt(TCHAR *ext)
-{
+static TCHAR * get1stExt(TCHAR *ext)	{
+
 	// precondition : ext should be under the format : Batch (*.bat;*.cmd;*.nt)
 	TCHAR *begin = ext;
 	for ( ; *begin != '.' ; ++begin );
@@ -358,8 +358,8 @@ static TCHAR * get1stExt(TCHAR *ext)
 	return begin;
 };
 
-static generic_string addExt(HWND textCtrl, HWND typeCtrl)
-{
+static generic_string addExt(HWND textCtrl, HWND typeCtrl)	{
+
 	TCHAR fn[MAX_PATH];
 	::GetWindowText(textCtrl, fn, MAX_PATH);
 	

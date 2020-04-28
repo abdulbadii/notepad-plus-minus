@@ -66,16 +66,16 @@ class TiXmlStringA	{
     }
 
     // Convert a TiXmlStringA into a classical char *
-    const char * c_str () const
-    {
+    const char * c_str () const	{
+
         if (allocated)
             return cstring;
         return "";
     }
 
     // Return the length of a TiXmlStringA
-    unsigned length () const
-	{
+    unsigned length () const	{
+
 		return ( allocated ) ? current_length : 0;
 	}
 
@@ -110,8 +110,8 @@ class TiXmlStringA	{
     bool operator > (const TiXmlStringA & compare) const;
 
     // Checks if a TiXmlStringA is empty
-    bool empty () const
-    {
+    bool empty () const	{
+
         return length () ? false : true;
     }
 
@@ -121,15 +121,15 @@ class TiXmlStringA	{
 //    bool isblank () const;
 
     // single char extraction
-    const char& at (unsigned index) const
-    {
+    const char& at (unsigned index) const	{
+
         assert( index < length ());
         return cstring [index];
     }
 
     // find a char in a string. Return TiXmlStringA::notfound if not found
-    unsigned find (char lookup) const
-    {
+    unsigned find (char lookup) const	{
+
         return find (lookup, 0);
     }
 

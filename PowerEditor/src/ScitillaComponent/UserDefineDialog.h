@@ -343,8 +343,8 @@ public :
             create(IDD_GLOBAL_USERDEFINE_DLG, isRTL);
         display(willBeShown);
     };
-    virtual void reSizeTo(RECT & rc) // should NEVER be const !!!
-    {
+    virtual void reSizeTo(RECT & rc) 	{// should NEVER be const !!!
+
         Window::reSizeTo(rc);
         display(false);
         display();

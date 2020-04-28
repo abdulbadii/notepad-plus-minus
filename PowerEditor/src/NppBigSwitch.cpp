@@ -571,7 +571,6 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 					char *fileNamesA = static_cast<char *>(pCopyData->lpData);
 					const CmdLineParamsDTO & cmdLineParams = param.getCmdLineParams();
-					WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 					const wchar_t *fileNamesW = wmc.char2wchar(fileNamesA, CP_ACP);
 					loadCommandlineParams(fileNamesW, &cmdLineParams);
 					break;
@@ -694,7 +693,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 			// For the compability reason, if wParam is 0, then we assume the size of generic_string buffer (lParam) is large enough.
 			// otherwise we check if the generic_string buffer size is enough for the generic_string to copy.
-			if (wParam != 0)	{
+			if (wParam)	{
 
 				if (lstrlen(fileStr) >= int(wParam))	{
 
@@ -714,7 +713,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			_pEditView->getGenericSelectedText(str, strSize);
 			// For the compability reason, if wParam is 0, then we assume the size of generic_string buffer (lParam) is large enough.
 			// otherwise we check if the generic_string buffer size is enough for the generic_string to copy.
-			if (wParam != 0)	{
+			if (wParam)	{
 
 				if (lstrlen(str) >= int(wParam))	{	//buffer too small
 
@@ -795,7 +794,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 			// For the compability reason, if wParam is 0, then we assume the size of generic_string buffer (lParam) is large enough.
 			// otherwise we check if the generic_string buffer size is enough for the generic_string to copy.
-			if (wParam != 0)	{
+			if (wParam)	{
 
 				if (lstrlen(str) >= int(wParam))	{
 
@@ -894,7 +893,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			TaskListInfo * tli = reinterpret_cast<TaskListInfo *>(wParam);
 			getTaskListInfo(tli);
 
-			if (lParam != 0)	{
+			if (lParam)	{
 
 				for (size_t idx = 0; idx < tli->_tlfsLst.size(); ++idx)	{
 
@@ -2024,7 +2023,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		case NPPM_GETPLUGINSCONFIGDIR:	{
 
 			generic_string userPluginConfDir = param.getUserPluginConfDir();
-			if (lParam != 0)	{
+			if (lParam)	{
 
 				if (userPluginConfDir.length() >= static_cast<size_t>(wParam))	{
 
@@ -2041,7 +2040,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		case NPPM_GETPLUGINHOMEPATH:	{
 
 			generic_string pluginHomePath = param.getPluginRootDir();
-			if (lParam != 0)	{
+			if (lParam)	{
 
 				if (pluginHomePath.length() >= static_cast<size_t>(wParam))	{
 
@@ -2074,7 +2073,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case NPPM_HIDETABBAR:	{
 
-			bool hide = (lParam != 0);
+			bool hide = (lParam);
 			bool oldVal = DocTabView::getHideTabBarStatus();
 			if (hide == oldVal) return oldVal;
 
@@ -2111,7 +2110,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		case NPPM_HIDEMENU:	{
 
 			bool hide = (lParam == TRUE);
-			bool isHidden = ::GetMenu(hwnd) == NULL;
+			bool isHidden = !::GetMenu(hwnd);
 			if (hide == isHidden)
 				return isHidden;
 

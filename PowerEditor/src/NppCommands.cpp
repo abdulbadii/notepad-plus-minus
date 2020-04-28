@@ -467,7 +467,7 @@ void Notepad_plus::command(int id)	{
 				auto httpPos = url.find(L"http://");
 				auto httpsPos = url.find(L"https://");
 
-				if (url.empty() || (httpPos != 0 && httpsPos != 0))	{ // if string is not a url (for launching only browser)
+				if (url.empty() || (httpPos && httpsPos))	{ // if string is not a url (for launching only browser)
 
 					url = L"https://www.google.com/search?q=$(CURRENT_WORD)";
 				}
@@ -2303,7 +2303,6 @@ void Notepad_plus::command(int id)	{
 
 			int index = id - IDM_FORMAT_ENCODE;
 
-			EncodingMapper& em = EncodingMapper::getInstance();
 			int encoding = em.getEncodingFromIndex(index);
 			if (encoding == -1)	{
 
@@ -2755,65 +2754,9 @@ void Notepad_plus::command(int id)	{
 			break;
 		}
 
-		case IDM_ABOUT:	{
-
-			bool doAboutDlg = false;
-			const int maxSelLen = 32;
-			auto textLen = _pEditView->execute(SCI_GETSELTEXT, 0, 0) - 1;
-			if (!textLen || textLen > maxSelLen)
-				doAboutDlg = true;
-
-/* 			if (!doAboutDlg)
-			{
-				char author[maxSelLen+1] = "";
-				_pEditView->getSelectedText(author, maxSelLen + 1);
-				WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
-				const wchar_t * authorW = wmc.char2wchar(author, _nativeLangSpeaker.getLangEncoding());
-				int iQuote = getQuoteIndexFrom(authorW);
-
-				if (iQuote == -1)	{
-
-					doAboutDlg = true;
-				}
-				else if (iQuote == -2)	{
-
-					generic_string noEasterEggsPath((param).getNppPath());
-					noEasterEggsPath.append(L"\\noEasterEggs.xml");
-					if (!::PathFileExists(noEasterEggsPath.c_str()))
-						showAllQuotes();
-					return;
-				}
-				if (iQuote != -1)	{
-
-					generic_string noEasterEggsPath((param).getNppPath());
-					noEasterEggsPath.append(L"\\noEasterEggs.xml");
-					if (!::PathFileExists(noEasterEggsPath.c_str()))
-						showQuoteFromIndex(iQuote);
-					return;
-				}
-			}
-*/
-			if (doAboutDlg)	{
-
-				//bool isFirstTime = !_aboutDlg.isCreated();
-				_aboutDlg.doDialog();
-				/*
-				if (isFirstTime && _nativeLangSpeaker.getNativeLangA())	{
-
-					if (_nativeLangSpeaker.getLangEncoding() == NPP_CP_BIG5)	{
-
-						const char *authorName = "«J¤µ§^";
-						HWND hItem = ::GetDlgItem(_aboutDlg.getHSelf(), IDC_AUTHOR_NAME);
-
-						WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
-						const wchar_t *authorNameW = wmc.char2wchar(authorName, NPP_CP_BIG5);
-						::SetWindowText(hItem, authorNameW);
-					}
-				}
-				*/
-			}
-			break;
-		}
+		case IDM_ABOUT:
+			_aboutDlg.doDialog();
+		break;
 
 		case IDM_HELP :	{
 

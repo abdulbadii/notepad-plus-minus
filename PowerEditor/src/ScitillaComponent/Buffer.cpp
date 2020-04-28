@@ -45,8 +45,8 @@ long Buffer::_recentTagCtr = 0;
 
 namespace // anonymous
 {
-	static EolType getEOLFormatForm(const char* const data, size_t length, EolType defvalue = EolType::osdefault)
-	{
+	static EolType getEOLFormatForm(const char* const data, size_t length, EolType defvalue = EolType::osdefault)	{
+
 		assert(!length or data != nullptr && "invalid buffer for getEOLFormatForm()");
 
 		for (size_t i = 0; i != length; ++i)	{
@@ -143,12 +143,12 @@ void Buffer::updateTimeStamp()	{
 
 	FILETIME timeStamp = {};
 	WIN32_FILE_ATTRIBUTE_DATA attributes;
-	if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes) != 0)	{
+	if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes))	{
 
 		timeStamp = attributes.ftLastWriteTime;
 	}
 
-	if (CompareFileTime(&_timeStamp, &timeStamp) != 0)	{
+	if (CompareFileTime(&_timeStamp, &timeStamp))	{
 
 		_timeStamp = timeStamp;
 		doNotify(BufferChangeTimestamp);
@@ -246,7 +246,7 @@ bool Buffer::checkFileState()	{ // returns true if the status has been changed (
 	}
 	else if (_currentStatus == DOC_DELETED && PathFileExists(_fullPathName.c_str()))	{
 	//document has returned from its grave
-		if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes) != 0)	{
+		if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes))	{
 
 			_isFileReadOnly = attributes.dwFileAttributes & FILE_ATTRIBUTE_READONLY;
 
@@ -261,7 +261,7 @@ bool Buffer::checkFileState()	{ // returns true if the status has been changed (
 			isOK = true;
 		}
 	}
-	else if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes) != 0)	{
+	else if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes))	{
 
 		int mask = 0;	//status always 'changes', even if from modified to modified
 		bool isFileReadOnly = attributes.dwFileAttributes & FILE_ATTRIBUTE_READONLY;
@@ -270,7 +270,7 @@ bool Buffer::checkFileState()	{ // returns true if the status has been changed (
 			_isFileReadOnly = isFileReadOnly;
 			mask |= BufferChangeReadonly;
 		}
-		if (CompareFileTime(&_timeStamp, &attributes.ftLastWriteTime) != 0)	{
+		if (CompareFileTime(&_timeStamp, &attributes.ftLastWriteTime))	{
 
 			_timeStamp = attributes.ftLastWriteTime;
 			mask |= BufferChangeTimestamp;
@@ -278,7 +278,7 @@ bool Buffer::checkFileState()	{ // returns true if the status has been changed (
 			mask |= BufferChangeStatus;	//status always 'changes', even if from modified to modified
 		}
 
-		if (mask != 0)	{
+		if (mask)	{
 
 			if (_reloadFromDiskRequestGuard.try_lock())	{
 
@@ -303,7 +303,7 @@ bool Buffer::checkFileState()	{ // returns true if the status has been changed (
 void Buffer::reload()	{
 
 	WIN32_FILE_ATTRIBUTE_DATA attributes;
-	if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes) != 0)	{
+	if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes))	{
 
 		_timeStamp = attributes.ftLastWriteTime;
 		_currentStatus = DOC_NEEDRELOAD;
@@ -317,7 +317,7 @@ int64_t Buffer::getFileLength() const
 		return -1;
 
 	WIN32_FILE_ATTRIBUTE_DATA attributes;
-	if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes) != 0)	{
+	if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes))	{
 
 		LARGE_INTEGER size;
 		size.LowPart = attributes.nFileSizeLow;
@@ -335,7 +335,7 @@ generic_string Buffer::getFileTime(fileTimeType ftt) const
 	if (_currentStatus != DOC_UNNAMED)	{
 
 		WIN32_FILE_ATTRIBUTE_DATA attributes;
-		if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes) != 0)	{
+		if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes))	{
 
 			FILETIME rawtime;
 			switch (ftt)	{
@@ -401,8 +401,8 @@ void Buffer::setHeaderLineState(const std::vector<size_t> & folds, ScintillaEdit
 }
 
 
-const std::vector<size_t> & Buffer::getHeaderLineState(const ScintillaEditView * identifier) const
-{
+const std::vector<size_t> & Buffer::getHeaderLineState(const ScintillaEditView * identifier) const	{
+
 	int index = indexOfReference(identifier);
 	return _foldStates.at(index);
 }
@@ -635,7 +635,7 @@ BufferID FileManager::loadFile(const TCHAR * filename, Document doc, int encodin
 		}
 
 		const FILETIME zeroTime = {};
-		if (CompareFileTime(&fileNameTimestamp, &zeroTime) != 0)
+		if (CompareFileTime(&fileNameTimestamp, &zeroTime))
 			newBuf->_timeStamp = fileNameTimestamp;
 
 		_buffers.push_back(newBuf);
@@ -744,7 +744,7 @@ bool FileManager::deleteFile(BufferID id)	{
 	fileOpStruct.hNameMappings         = NULL;
 	fileOpStruct.lpszProgressTitle     = NULL;
 
-	return SHFileOperation(&fileOpStruct) == 0;
+	return !SHFileOperation(&fileOpStruct);
 }
 
 
@@ -752,7 +752,7 @@ bool FileManager::moveFile(BufferID id, const TCHAR * newFileName)	{
 
 	Buffer* buf = getBufferByID(id);
 	const TCHAR *fileNamePath = buf->getFullPathName();
-	if (::MoveFileEx(fileNamePath, newFileName, MOVEFILE_REPLACE_EXISTING | MOVEFILE_COPY_ALLOWED) == 0)
+	if (!::MoveFileEx(fileNamePath, newFileName, MOVEFILE_REPLACE_EXISTING | MOVEFILE_COPY_ALLOWED))
 		return false;
 
 	buf->setFileName(newFileName);
@@ -885,8 +885,7 @@ bool FileManager::backupCurrentBuffer()	{
 				}
 				else	{
 
-					WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
-					int grabSize;
+										int grabSize;
 					for (int i = 0; i < lengthDoc; i += grabSize)	{
 
 						grabSize = lengthDoc - i;
@@ -1012,8 +1011,7 @@ bool FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool isCopy, g
 		}
 		else	{
 
-			WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
-			int grabSize;
+						int grabSize;
 			for (int i = 0; i < lengthDoc; i += grabSize)	{
 
 				grabSize = lengthDoc - i;
@@ -1177,7 +1175,7 @@ int FileManager::detectCodepage(char* buf, size_t len)	{
 	uchardet_handle_data(ud, buf, len);
 	uchardet_data_end(ud);
 	const char* cs = uchardet_get_charset(ud);
-	int codepage = EncodingMapper::getInstance().getEncodingFromString(cs);
+	int codepage = em.getEncodingFromString(cs);
 	uchardet_delete(ud);
 	return codepage;
 }
@@ -1318,8 +1316,7 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, char* data,
 
 		int id = fileFormat._language - L_EXTERNAL;
 		TCHAR * name = param.getELCFromIndex(id)._name;
-		WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
-		const char *pName = wmc.wchar2char(name, CP_ACP);
+				const char *pName = wmc.wchar2char(name, CP_ACP);
 		_pscratchTilla->execute(SCI_SETLEXERLANGUAGE, 0, reinterpret_cast<LPARAM>(pName));
 	}
 
@@ -1378,8 +1375,7 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, char* data,
 				}
 				else	{
 
-					WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
-					int newDataLen = 0;
+										int newDataLen = 0;
 					const char *newData = wmc.encode(fileFormat._encoding, SC_CP_UTF8, data, static_cast<int32_t>(lenFile), &newDataLen, &incompleteMultibyteChar);
 					_pscratchTilla->execute(SCI_APPENDTEXT, newDataLen, reinterpret_cast<LPARAM>(newData));
 				}
@@ -1398,7 +1394,7 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, char* data,
 			if (_pscratchTilla->execute(SCI_GETSTATUS) != SC_STATUS_OK)
 				throw;
 
-			if (incompleteMultibyteChar != 0)	{
+			if (incompleteMultibyteChar)	{
 
 				// copy bytes to next buffer
 				memcpy(data, data + blockSize - incompleteMultibyteChar, incompleteMultibyteChar);

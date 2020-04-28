@@ -128,7 +128,7 @@ bool ToolBar::init( HINSTANCE hInst, HWND hPere, toolBarStatusType type, ToolBar
 	for (; i < _nbButtons ; ++i)	{
 
 		cmd = buttonUnitArray[i]._cmdID;
-		if (cmd != 0)	{
+		if (cmd)	{
 
 			++bmpIndex;
 			style = BTNS_BUTTON;
@@ -138,7 +138,7 @@ bool ToolBar::init( HINSTANCE hInst, HWND hPere, toolBarStatusType type, ToolBar
 			style = BTNS_SEP;
 		}
 
-		_pTBB[i].iBitmap = (cmd != 0?bmpIndex:0);
+		_pTBB[i].iBitmap = (cmd?bmpIndex:0);
 		_pTBB[i].idCommand = cmd;
 		_pTBB[i].fsState = TBSTATE_ENABLED;
 		_pTBB[i].fsStyle = (BYTE)style; 
@@ -346,7 +346,7 @@ void ToolBar::reset(bool create)	{
 void ToolBar::registerDynBtn(UINT messageID, toolbarIcons* tIcon)	{
 
 	// Note: Register of buttons only possible before init!
-	if ((!_hSelf) && (messageID != 0) && (tIcon->hToolbarBmp != NULL))	{
+	if ((!_hSelf) && (messageID) && (tIcon->hToolbarBmp != NULL))	{
 
 		tDynamicList		dynList;
 		dynList.message		= messageID;
@@ -507,7 +507,7 @@ bool ReBar::getIDVisible(int id)	{
 
 	rbBand.fMask = RBBIM_STYLE;
 	::SendMessage(_hSelf, RB_GETBANDINFO, index, reinterpret_cast<LPARAM>(&rbBand));
-	return ((rbBand.fStyle & RBBS_HIDDEN) == 0);
+	return !(rbBand.fStyle & RBBS_HIDDEN);
 }
 
 

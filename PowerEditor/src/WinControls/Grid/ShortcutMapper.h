@@ -110,8 +110,8 @@ private:
 	void fillOutBabyGrid();
 	generic_string getTabString(size_t i) const;
 
-	bool isConflict(const KeyCombo & lhs, const KeyCombo & rhs) const
-	{
+	bool isConflict(const KeyCombo & lhs, const KeyCombo & rhs) const	{
+
 		return ( (lhs._isCtrl  == rhs._isCtrl ) &&
 				 (lhs._isAlt   == rhs._isAlt  ) &&
 				 (lhs._isShift == rhs._isShift) &&

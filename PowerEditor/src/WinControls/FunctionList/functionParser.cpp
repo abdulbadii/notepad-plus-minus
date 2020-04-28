@@ -314,7 +314,7 @@ void FunctionParser::funcParse(std::vector<foundInfo> & foundInfos, size_t begin
 	if (begin >= end)
 		return;
 
-	if (_functionExpr.length() == 0)
+	if (!_functionExpr.length())
 		return;
 
 	int flags = SCFIND_REGEXP | SCFIND_POSIX | SCFIND_REGEXP_DOTMATCHESNL;
@@ -589,7 +589,7 @@ bool FunctionParser::isInZones(int pos2Test, const std::vector< std::pair<int, i
 
 void FunctionParser::getInvertZones(vector< pair<int, int> > &  destZones, vector< pair<int, int> > &  sourceZones, size_t begin, size_t end)	{
 
-	if (sourceZones.size() == 0)	{
+	if (!sourceZones.size())	{
 
 		destZones.push_back(pair<int, int>(static_cast<int>(begin), static_cast<int>(end)));
 	}

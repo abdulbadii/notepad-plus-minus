@@ -41,8 +41,8 @@ FindOption *FindReplaceDlg::_env;
 FindOption FindReplaceDlg::_options;
 Notepad_plus *FindReplaceDlg::pNpp;
 
-inline void addText2Combo(const TCHAR * txt2add, HWND hCombo)
-{
+inline void addText2Combo(const TCHAR * txt2add, HWND hCombo)	{
+
 	if (!hCombo || !lstrcmp(txt2add, L"")) return;
 
 	auto i = ::SendMessage(hCombo, CB_FINDSTRINGEXACT, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(txt2add));
@@ -55,8 +55,8 @@ inline void addText2Combo(const TCHAR * txt2add, HWND hCombo)
 	::SendMessage(hCombo, CB_SETCURSEL, i, 0);
 };
 
-inline generic_string getTextFromCombo(HWND hCombo)
-{
+inline generic_string getTextFromCombo(HWND hCombo)	{
+
 	TCHAR str[FINDREPLACE_MAXLENGTH];
 	::SendMessage(hCombo, WM_GETTEXT, FINDREPLACE_MAXLENGTH - 1, reinterpret_cast<LPARAM>(str));
 	return generic_string(str);
@@ -640,7 +640,7 @@ void Finder::gotoNextFoundResult(int direction)	{
 		if (lno == init_lno) break;
 	}
 
-	if ((_scintView.execute(SCI_GETFOLDLEVEL, lno) & SC_FOLDLEVELHEADERFLAG) == 0)	{
+	if (!(_scintView.execute(SCI_GETFOLDLEVEL, lno) & SC_FOLDLEVELHEADERFLAG))	{
 
 		auto start = _scintView.execute(SCI_POSITIONFROMLINE, lno);
 		_scintView.execute(SCI_SETSEL, start, start);
@@ -668,19 +668,18 @@ void Finder::addSearchLine(const TCHAR *searchName)	{
 
 void Finder::addFileNameTitle(const TCHAR * fileName)	{
 
-	generic_string str = L" ";
+	// generic_string str = L" ";str += fileName;str += L"\r\n";
+	generic_string fn, str = L" ";
 	str += fileName;
-	str += L"\r\n";
-	// generic_string str = fileName, fn;
-	// fn = str.substr(str.find_last_of('\\'));
-	// fn += L"\r\n"; 
-	// str = str.substr(0,str.find_first_of('\\',3));
-	// str += L"\\...";
-	// str += fn;											  
+	fn = str.substr(str.find_last_of('\\'));
+	str = str.substr(0,str.find_first_of('\\',4)+5);
+	str += L"...";
+	str += fn;											  
+	str += L"\r\n"; 
+	_FileHeader1stPos = int(_scintView.execute(SCI_GETCURRENTPOS));
 	setFinderReadOnly(false);
 	_scintView.addGenericText(str.c_str());
 	setFinderReadOnly(true);
-	_lastFileHeaderPos = static_cast<int32_t>(_scintView.execute(SCI_GETCURRENTPOS) - 2);
 
 	_pMainFoundInfos->push_back(EmptyFoundInfo);
 	_pMainMarkings->push_back(EmptySearchResultMarking);
@@ -690,9 +689,9 @@ void Finder::addFileHitCount(int count)	{
 
 	TCHAR text[8];
 	if (count>1) {
-		wsprintf(text, L" (%i)", count);													
+		wsprintf(text, L" %i  ", count);													
 		setFinderReadOnly(false);
-		_scintView.insertGenericTextFrom(_lastFileHeaderPos, text);
+		_scintView.insertGenericTextFrom(_FileHeader1stPos, text);
 		setFinderReadOnly(true);
 	}							  
 	++_nbFoundFiles;
@@ -2667,14 +2666,14 @@ int FindReplaceDlg::processRange(ProcessOperation op, FindReplaceInfo & findRepl
 				return nbProcessed;
 			}
 			
-		}	
+		}
 		++nbProcessed;
 
 		// After the processing of the last string occurence the search loop should be stopped
 		// This helps to avoid the endless replacement during the EOL ("$") searching
 		if (targetStart + foundTextLen == findReplaceInfo._endRange)
 				break;
-		
+
 		findReplaceInfo._startRange = targetStart + foundTextLen + replaceDelta;		//search from result onwards
 		findReplaceInfo._endRange += replaceDelta;									//adjust end of range in case of replace
 	}
@@ -3837,7 +3836,7 @@ Progress::~Progress()
 {
 	close();
 
-	if (::InterlockedDecrement(&refCount) == 0)
+	if (!::InterlockedDecrement(&refCount))
 		::UnregisterClass(cClassName, _hInst);
 }
 

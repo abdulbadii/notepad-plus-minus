@@ -112,8 +112,8 @@ void ContextMenu::create(HWND hParent, const std::vector<MenuItemUnit> & menuIte
 		
 		if (mainMenuHandle)	{
 
-			bool isEnabled = (::GetMenuState(mainMenuHandle, item._cmdID, MF_BYCOMMAND)&(MF_DISABLED|MF_GRAYED)) == 0;
-			bool isChecked = (::GetMenuState(mainMenuHandle, item._cmdID, MF_BYCOMMAND)&(MF_CHECKED)) != 0;
+			bool isEnabled = !(::GetMenuState(mainMenuHandle, item._cmdID, MF_BYCOMMAND)&(MF_DISABLED|MF_GRAYED));
+			bool isChecked = ::GetMenuState(mainMenuHandle, item._cmdID, MF_BYCOMMAND)&(MF_CHECKED);
 			if (!isEnabled)
 				enableItem(item._cmdID, isEnabled);
 			if (isChecked)

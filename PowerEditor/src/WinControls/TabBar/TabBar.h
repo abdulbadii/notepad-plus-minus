@@ -283,8 +283,8 @@ protected:
 		return static_cast<int32_t>(::SendMessage(_hSelf, TCM_HITTEST, 0, reinterpret_cast<LPARAM>(&hitInfo)));
 	}
 
-	bool isPointInParentZone(POINT screenPoint) const
-	{
+	bool isPointInParentZone(POINT screenPoint) const	{
+
         RECT parentZone;
         ::GetWindowRect(_hParent, &parentZone);
 	    return (((screenPoint.x >= parentZone.left) && (screenPoint.x <= parentZone.right)) &&

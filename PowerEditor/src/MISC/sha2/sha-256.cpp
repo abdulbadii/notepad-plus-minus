@@ -38,8 +38,8 @@ struct buffer_state {
 	int total_len_delivered; /* bool */
 };
 
-static inline uint32_t right_rot(uint32_t value, unsigned int count)
-{
+static inline uint32_t right_rot(uint32_t value, unsigned int count)	{
+
 	/*
 	 * Defined behaviour in standard C for all count where 0 < count < 32,
 	 * which is what we need here.
@@ -47,8 +47,8 @@ static inline uint32_t right_rot(uint32_t value, unsigned int count)
 	return value >> count | value << (32 - count);
 }
 
-static void init_buf_state(struct buffer_state * state, const void * input, size_t len)
-{
+static void init_buf_state(struct buffer_state * state, const void * input, size_t len)	{
+
 	state->p = static_cast<const uint8_t*>(input);
 	state->len = len;
 	state->total_len = len;
@@ -57,8 +57,8 @@ static void init_buf_state(struct buffer_state * state, const void * input, size
 }
 
 /* Return value: bool */
-static int calc_chunk(uint8_t chunk[CHUNK_SIZE], struct buffer_state * state)
-{
+static int calc_chunk(uint8_t chunk[CHUNK_SIZE], struct buffer_state * state)	{
+
 	size_t space_in_chunk;
 
 	if (state->total_len_delivered) {

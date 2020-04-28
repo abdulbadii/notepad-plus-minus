@@ -916,7 +916,7 @@ void UserDefineDialog::changeStyle()	{
 void UserDefineDialog::enableLangAndControlsBy(size_t index)	{
 
     _pUserLang = (!index)?_pCurrentUserLang:&(param.getULCFromIndex(index - 1));
-    if (index != 0)
+    if (index)
         ::SetWindowText(::GetDlgItem(_hSelf, IDC_EXT_EDIT), _pUserLang->_ext.c_str());
 
     ::ShowWindow(::GetDlgItem(_hSelf, IDC_EXT_STATIC), (!index)?SW_HIDE:SW_SHOW);
@@ -1691,7 +1691,7 @@ INT_PTR CALLBACK StylerDlg::dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
                 auto i = ::SendDlgItemMessage(hwnd, LOWORD(wParam), CB_GETCURSEL, 0, 0);
                 if (LOWORD(wParam) == IDC_STYLER_COMBO_FONT_SIZE)	{
 
-                    if (i != 0)	{
+                    if (i)	{
 
 						const size_t intStrLen = 3;
 						TCHAR intStr[intStrLen];
