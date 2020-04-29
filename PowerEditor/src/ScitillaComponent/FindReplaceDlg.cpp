@@ -232,7 +232,7 @@ FindReplaceDlg::~FindReplaceDlg()
 {
 	_tab.destroy();
 	delete _pFinder;
-	for (int n = static_cast<int32_t>(_findersOfFinder.size()) - 1; n >= 0; --n)	{
+	for (int n = int(_findersOfFinder.size()) - 1; n >= 0; --n)	{
 
 		delete _findersOfFinder[n];
 		_findersOfFinder.erase(_findersOfFinder.begin() + n);
@@ -410,7 +410,7 @@ int FindReplaceDlg::saveComboHistory(int id, int maxcount, vector<generic_string
 
 	TCHAR text[FINDREPLACE_MAXLENGTH];
 	HWND hCombo = ::GetDlgItem(_hSelf, id);
-	int count = static_cast<int32_t>(::SendMessage(hCombo, CB_GETCOUNT, 0, 0));
+	int count = int(::SendMessage(hCombo, CB_GETCOUNT, 0, 0));
 	count = min(count, maxcount);
 
 	if (count == CB_ERR) return 0;
@@ -482,7 +482,7 @@ bool Finder::notify(SCNotification *notification)	{
 			isDoubleClicked = true;
 			size_t pos = notification->position;
 			if (pos == INVALID_POSITION)
-				pos = static_cast<int32_t>(_scintView.execute(SCI_GETLINEENDPOSITION, notification->line));
+				pos = int(_scintView.execute(SCI_GETLINEENDPOSITION, notification->line));
 			_scintView.execute(SCI_SETSEL, pos, pos);
 
 			gotoFoundLine();
@@ -660,22 +660,24 @@ void Finder::addSearchLine(const TCHAR *searchName)	{
 	setFinderReadOnly(false);
 	_scintView.addGenericText(str.c_str());
 	setFinderReadOnly(true);
-	_lastSearchHeaderPos = static_cast<int32_t>(_scintView.execute(SCI_GETCURRENTPOS) - 2);
+	_lastSearchHeaderPos = int(_scintView.execute(SCI_GETCURRENTPOS) - 2);
 
 	_pMainFoundInfos->push_back(EmptyFoundInfo);
 	_pMainMarkings->push_back(EmptySearchResultMarking);
 }
 
-void Finder::addFileNameTitle(const TCHAR * fileName)	{
+void Finder::addFileNameTitle(const TCHAR *fullName, const TCHAR *dir)	{
 
-	// generic_string str = L" ";str += fileName;str += L"\r\n";
 	generic_string fn, str = L" ";
-	str += fileName;
-	fn = str.substr(str.find_last_of('\\'));
-	str = str.substr(0,str.find_first_of('\\',4)+5);
-	str += L"...";
-	str += fn;											  
-	str += L"\r\n"; 
+	str += fullName;
+	if (dir){
+		fn = str.substr(lstrlen(dir));											  
+		str = str.substr(0,str.find_first_of('\\')+5);
+		str += L"..";
+		str += fn;
+	}
+	str += L"\r\n";
+	
 	_FileHeader1stPos = int(_scintView.execute(SCI_GETCURRENTPOS));
 	setFinderReadOnly(false);
 	_scintView.addGenericText(str.c_str());
@@ -714,7 +716,8 @@ void Finder::addSearchHitCount(int count, const TCHAR *dir, bool isMatchLines){
 				wsprintf(text, L"  : %i in current/opened file below%s", count, moreInfo);
 	else
 		if (dir)	wsprintf(text, L" was not found under %s", dir);
-		else		wsprintf(text, L" was not found in %i opened files", _nbOpenedFiles);
+		else if(_nbOpenedFiles)		wsprintf(text, L" was'nt found in any of %i opened files", _nbOpenedFiles);
+		else		wsprintf(text, L" was not found in current file");
 	
 	setFinderReadOnly(false);
 	_scintView.insertGenericTextFrom(_lastSearchHeaderPos, text);
@@ -727,12 +730,11 @@ void Finder::add(FoundInfo fi, SearchResultMarking mi, const TCHAR* foundline)	{
 	_pMainFoundInfos->push_back(fi);
 
 	TCHAR lnb[16];
-	wsprintf(lnb, L"%d", fi._lineNumber);
+	wsprintf(lnb, L"%d: ", fi._lineNumber);
 	generic_string str = L"Line ";
 	str += lnb;
-	str += L": ";
-	mi._start += static_cast<int32_t>(str.length());
-	mi._end += static_cast<int32_t>(str.length());
+	mi._start += int(str.length());
+	mi._end += int(str.length());
 	str += foundline;
 
 	if (str.length() >= SC_SEARCHRESULT_LINEBUFFERMAXLENGTH)	{
@@ -860,7 +862,7 @@ void Finder::finishFilesSearch(int count, bool isfold,const TCHAR *dir, bool isM
 	_pMainMarkings->clear();
 	_pMainFoundInfos = _pOldFoundInfos;
 	_pMainMarkings = _pOldMarkings;
-	
+
 	if ((_markingsStruct._length = static_cast<long>(_pMainMarkings->size())) > 0)
 		_markingsStruct._markings = &((*_pMainMarkings)[0]);
 
@@ -874,8 +876,10 @@ void Finder::finishFilesSearch(int count, bool isfold,const TCHAR *dir, bool isM
 
 	_scintView.execute(SCI_SETLEXER, SCLEX_SEARCHRESULT);
 	_scintView.execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>( isfold? "1" : "0"));
-	_scintView.execute(SCI_SETWRAPMODE, 2);_scintView.execute(SCI_SETWRAPVISUALFLAGS,SC_WRAPVISUALFLAG_END);
-
+	_scintView.execute(SCI_SETWRAPMODE, 2);
+	_scintView.execute(SCI_SETWRAPVISUALFLAGS,SC_WRAPVISUALFLAG_START);
+	_scintView.execute(SCI_SETWRAPSTARTINDENT,5);
+	_scintView.execute(SCI_SETWRAPINDENTMODE,SC_WRAPINDENT_FIXED);
 }
 
 void Finder::setFinderStyle()	{
@@ -1322,7 +1326,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 			if (reinterpret_cast<HWND>(lParam) == ::GetDlgItem(_hSelf, IDC_PERCENTAGE_SLIDER))	{
 
-				int percent = static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_PERCENTAGE_SLIDER, TBM_GETPOS, 0, 0));
+				int percent = int(::SendDlgItemMessage(_hSelf, IDC_PERCENTAGE_SLIDER, TBM_GETPOS, 0, 0));
 				FindHistory & findHistory = param.getFindHistory();
 				findHistory._transparency = percent;
 				if (isCheckedOrNot(IDC_TRANSPARENT_ALWAYS_RADIO))	{
@@ -1393,7 +1397,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 				if (LOWORD(wParam) == WA_INACTIVE && isVisible())	{
 
-					int percent = static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_PERCENTAGE_SLIDER, TBM_GETPOS, 0, 0));
+					int percent = int(::SendDlgItemMessage(_hSelf, IDC_PERCENTAGE_SLIDER, TBM_GETPOS, 0, 0));
 					param.SetTransparent(_hSelf, percent);
 				}
 				else	{
@@ -1954,7 +1958,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 				case IDC_TRANSPARENT_ALWAYS_RADIO :	{
 
-					int percent = static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_PERCENTAGE_SLIDER, TBM_GETPOS, 0, 0));
+					int percent = int(::SendDlgItemMessage(_hSelf, IDC_PERCENTAGE_SLIDER, TBM_GETPOS, 0, 0));
 					param.SetTransparent(_hSelf, percent);
 					findHistory._transparencyMode = FindHistory::persistant;
 				}
@@ -2441,9 +2445,9 @@ int FindReplaceDlg::processRange(ProcessOperation op, FindReplaceInfo & findRepl
 
 	if (pOptions->_searchType == FindExtended)	{
 
-		stringSizeFind = Searching::convertExtendedToString(pTextFind, pTextFind, static_cast<int32_t>(stringSizeFind));
+		stringSizeFind = Searching::convertExtendedToString(pTextFind, pTextFind, int(stringSizeFind));
 		if (op == ProcessReplaceAll)
-			stringSizeReplace = Searching::convertExtendedToString(pTextReplace, pTextReplace, static_cast<int32_t>(stringSizeReplace));
+			stringSizeReplace = Searching::convertExtendedToString(pTextReplace, pTextReplace, int(stringSizeReplace));
 	}
 
 	bool isRegExp = pOptions->_searchType == FindRegex;
@@ -2470,8 +2474,8 @@ int FindReplaceDlg::processRange(ProcessOperation op, FindReplaceInfo & findRepl
 	//Initial range for searching
 	pEditView->execute(SCI_SETSEARCHFLAGS, flags);
 	
-	
 	bool findAllFileNameAdded = false;
+	
 
 	while (targetStart != -1 && targetStart != -2)	{
 
@@ -2495,21 +2499,19 @@ int FindReplaceDlg::processRange(ProcessOperation op, FindReplaceInfo & findRepl
 				
 		switch (op)	{
 
-			case ProcessFindAll:	{ 
+			case ProcessFindAll:	{
 
-				const TCHAR *pFileName = L"";
-				if (pFindersInfo && pFindersInfo->_pFileName)
-					pFileName = pFindersInfo->_pFileName;
+				const TCHAR *pFileName = pFindersInfo && pFindersInfo->_pFileName? pFindersInfo->_pFileName : L"";
 
-				if (!findAllFileNameAdded)	{	//add new filetitle in hits if we haven't already
+				if (!findAllFileNameAdded)	{	//add new filetitle only if not already
 
-					_pFinder->addFileNameTitle(pFileName);
+					_pFinder->addFileNameTitle(pFileName, pFindersInfo->_unDir);
 					findAllFileNameAdded = true;
 				}
 
 				auto lineNumber = pEditView->execute(SCI_LINEFROMPOSITION, targetStart);
-				int lend = static_cast<int32_t>(pEditView->execute(SCI_GETLINEENDPOSITION, lineNumber));
-				int lstart = static_cast<int32_t>(pEditView->execute(SCI_POSITIONFROMLINE, lineNumber));
+				int lend = int(pEditView->execute(SCI_GETLINEENDPOSITION, lineNumber));
+				int lstart = int(pEditView->execute(SCI_POSITIONFROMLINE, lineNumber));
 				int nbChar = lend - lstart;
 
 				// use the static buffer
@@ -2542,13 +2544,13 @@ int FindReplaceDlg::processRange(ProcessOperation op, FindReplaceInfo & findRepl
 
 				if (!findAllFileNameAdded)	{	//add new filetitle in hits if we haven't already
 
-					pFindersInfo->_pDestFinder->addFileNameTitle(pFileName);
+					pFindersInfo->_pDestFinder->addFileNameTitle(pFileName, pFindersInfo->_unDir);
 					findAllFileNameAdded = true;
 				}
 
 				auto lineNumber = pEditView->execute(SCI_LINEFROMPOSITION, targetStart);
-				int lend = static_cast<int32_t>(pEditView->execute(SCI_GETLINEENDPOSITION, lineNumber));
-				int lstart = static_cast<int32_t>(pEditView->execute(SCI_POSITIONFROMLINE, lineNumber));
+				int lend = int(pEditView->execute(SCI_GETLINEENDPOSITION, lineNumber));
+				int lstart = int(pEditView->execute(SCI_POSITIONFROMLINE, lineNumber));
 				int nbChar = lend - lstart;
 
 				// use the static buffer
@@ -3557,7 +3559,7 @@ void FindReplaceDlg::drawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)	{
 	else	{
 
 		fgColor = RGB(0xCF,0xCF,0xCF);
-		ptStr = L"Hit Alt<underlined character> to set/do each job, Tab to walk through them, Shift-Tab to do so backward";
+		ptStr = L" Hit ALT<underlined character> to set/do a job, TAB to walk over each, SHIFT-TAB to do so backward";
 	}
 	::SetTextColor(lpDrawItemStruct->hDC, fgColor);
 	::SetBkColor(lpDrawItemStruct->hDC, RGB(0,0,0));//getCtrlBgColor(_statusBar.getHSelf())

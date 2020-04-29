@@ -54,7 +54,7 @@ INT_PTR CALLBACK FindCharsInRangeDlg::run_dlgProc(UINT message, WPARAM wParam, L
 
 				case ID_FINDCHAR_NEXT:	{
 
-					int currentPos = static_cast<int32_t>((*_ppEditView)->execute(SCI_GETCURRENTPOS));
+					int currentPos = int((*_ppEditView)->execute(SCI_GETCURRENTPOS));
 					unsigned char startRange = 0;
 					unsigned char endRange = 255;
 					bool direction = dirDown;

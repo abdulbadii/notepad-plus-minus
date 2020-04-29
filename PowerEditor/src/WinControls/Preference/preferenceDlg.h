@@ -248,7 +248,7 @@ public :
 	bool renameDialogTitle(const TCHAR *internalName, const TCHAR *newName);
 	
 	int getListSelectedIndex() const {
-		return static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_LIST_DLGTITLE, LB_GETCURSEL, 0, 0));
+		return int(::SendDlgItemMessage(_hSelf, IDC_LIST_DLGTITLE, LB_GETCURSEL, 0, 0));
 	};
 
 	void showDialogByName(const TCHAR *name) const;

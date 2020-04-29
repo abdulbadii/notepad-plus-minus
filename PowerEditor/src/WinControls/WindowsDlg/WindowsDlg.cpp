@@ -110,7 +110,7 @@ struct NumericStringEquivalence	{
 
 				lcmp = generic_strtol(str1, &p1, 10) - generic_strtol(str2, &p2, 10);
 				if ( !lcmp )
-					lcmp = static_cast<int32_t>((p2 - str2) - (p1 - str1));
+					lcmp = int((p2 - str2) - (p1 - str1));
 				if ( lcmp )
 					break;
 				str1 = p1, str2 = p2;
@@ -883,7 +883,7 @@ void WindowsMenu::initPopupMenu(HMENU hMenu, DocTabView *pTab)	{
 		nDoc = min(nDoc, nMaxDoc);
 		int id;
 		size_t pos;
-		for (id = IDM_WINDOW_MRU_FIRST, pos = 0; id < IDM_WINDOW_MRU_FIRST + static_cast<int32_t>(nDoc); ++id, ++pos)	{
+		for (id = IDM_WINDOW_MRU_FIRST, pos = 0; id < IDM_WINDOW_MRU_FIRST + int(nDoc); ++id, ++pos)	{
 
 			BufferID bufID = pTab->getBufferByIndex(pos);
 			Buffer * buf = MainFileManager.getBufferByID(bufID);
@@ -892,7 +892,7 @@ void WindowsMenu::initPopupMenu(HMENU hMenu, DocTabView *pTab)	{
 			memset(&mii, 0, sizeof(mii));
 			mii.cbSize = sizeof(mii);
 			mii.fMask = MIIM_STRING|MIIM_STATE|MIIM_ID;
-			generic_string strBuffer(BuildMenuFileName(60, static_cast<int32_t>(pos), buf->getFileName()));
+			generic_string strBuffer(BuildMenuFileName(60, int(pos), buf->getFileName()));
 			// Can't make mii.dwTypeData = strBuffer.c_str() because of const cast.
 			// So, making temporary buffer for this.
 			std::vector<TCHAR> vBuffer(strBuffer.begin(), strBuffer.end());

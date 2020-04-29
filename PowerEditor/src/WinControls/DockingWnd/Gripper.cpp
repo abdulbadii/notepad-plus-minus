@@ -457,7 +457,7 @@ void Gripper::doTabReordering(POINT pt)	{
 						return;
 					}
 
-					_iItem = static_cast<int32_t>(iItem);
+					_iItem = int(iItem);
 				}
 				else if (_hTab && ((hTab != _hTab) || (_iItem == -1)))	{
 
@@ -467,7 +467,7 @@ void Gripper::doTabReordering(POINT pt)	{
 					::SendMessage(hTab, TCM_GETITEMRECT, iLastItem, reinterpret_cast<LPARAM>(&rc));
 					if ((rc.left + rc.right) < pt.x)	{
 
-						_iItem = static_cast<int32_t>(iLastItem) + 1;
+						_iItem = int(iLastItem) + 1;
 					}
 				}
 
@@ -870,7 +870,7 @@ void Gripper::initTabInformation()	{
 	else	{
 
 		// get active tab item
-		_iItem = static_cast<int32_t>(::SendMessage(_hTabSource, TCM_GETCURSEL, 0, 0));
+		_iItem = int(::SendMessage(_hTabSource, TCM_GETCURSEL, 0, 0));
 	}
 
 	/* get size of item */

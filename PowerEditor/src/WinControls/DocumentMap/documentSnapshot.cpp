@@ -154,13 +154,13 @@ void DocumentPeeker::saveCurrentSnapshot(ScintillaEditView & editView)	{
 		MapPosition mapPos = buffer->getMapPosition();
 
 		// First visible document line for scrolling to this line
-		mapPos._firstVisibleDisplayLine = static_cast<int32_t>(editView.execute(SCI_GETFIRSTVISIBLELINE));
-		mapPos._firstVisibleDocLine = static_cast<int32_t>(editView.execute(SCI_DOCLINEFROMVISIBLE, mapPos._firstVisibleDisplayLine));
-		mapPos._nbLine = static_cast<int32_t>(editView.execute(SCI_LINESONSCREEN, mapPos._firstVisibleDisplayLine));
-		mapPos._lastVisibleDocLine = static_cast<int32_t>(editView.execute(SCI_DOCLINEFROMVISIBLE, mapPos._firstVisibleDisplayLine + mapPos._nbLine));
+		mapPos._firstVisibleDisplayLine = int(editView.execute(SCI_GETFIRSTVISIBLELINE));
+		mapPos._firstVisibleDocLine = int(editView.execute(SCI_DOCLINEFROMVISIBLE, mapPos._firstVisibleDisplayLine));
+		mapPos._nbLine = int(editView.execute(SCI_LINESONSCREEN, mapPos._firstVisibleDisplayLine));
+		mapPos._lastVisibleDocLine = int(editView.execute(SCI_DOCLINEFROMVISIBLE, mapPos._firstVisibleDisplayLine + mapPos._nbLine));
 
 		auto lineHeight = _pPeekerView->execute(SCI_TEXTHEIGHT, mapPos._firstVisibleDocLine);
-		mapPos._height = static_cast<int32_t>(mapPos._nbLine * lineHeight);
+		mapPos._height = int(mapPos._nbLine * lineHeight);
 
 		// Width
 		RECT editorRect;
@@ -168,17 +168,17 @@ void DocumentPeeker::saveCurrentSnapshot(ScintillaEditView & editView)	{
 		int marginWidths = 0;
 		for (int m = 0; m < 4; ++m)	{
 
-			marginWidths += static_cast<int32_t>(editView.execute(SCI_GETMARGINWIDTHN, m));
+			marginWidths += int(editView.execute(SCI_GETMARGINWIDTHN, m));
 		}
 		double editViewWidth = editorRect.right - editorRect.left - marginWidths;
 		double editViewHeight = editorRect.bottom - editorRect.top;
-		mapPos._width = static_cast<int32_t>((editViewWidth / editViewHeight) * static_cast<double>(mapPos._height));
+		mapPos._width = int((editViewWidth / editViewHeight) * static_cast<double>(mapPos._height));
 
-		mapPos._wrapIndentMode = static_cast<int32_t>(editView.execute(SCI_GETWRAPINDENTMODE));
-		mapPos._isWrap = static_cast<int32_t>(editView.isWrap());
+		mapPos._wrapIndentMode = int(editView.execute(SCI_GETWRAPINDENTMODE));
+		mapPos._isWrap = int(editView.isWrap());
 		if (editView.isWrap())	{
 
-			mapPos._higherPos = static_cast<int32_t>(editView.execute(SCI_POSITIONFROMPOINT, 0, 0));
+			mapPos._higherPos = int(editView.execute(SCI_POSITIONFROMPOINT, 0, 0));
 		}
 
 		// Length of document

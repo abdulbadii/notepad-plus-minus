@@ -655,7 +655,7 @@ void ProjectPanel::notified(LPNMHDR notification)	{
 						return;
 				}
 				lpGetInfoTip->pszText = (LPTSTR)str->c_str();
-				lpGetInfoTip->cchTextMax = static_cast<int32_t>(str->size());
+				lpGetInfoTip->cchTextMax = int(str->size());
 			}
 			break;
 
@@ -1321,10 +1321,10 @@ int FileRelocalizerDlg::doDialog(const TCHAR *fn, bool isRTL)	{
 
 		DLGTEMPLATE *pMyDlgTemplate = NULL;
 		HGLOBAL hMyDlgTemplate = makeRTLResource(IDD_FILERELOCALIZER_DIALOG, &pMyDlgTemplate);
-		int result = static_cast<int32_t>(::DialogBoxIndirectParam(_hInst, pMyDlgTemplate, _hParent, dlgProc, reinterpret_cast<LPARAM>(this)));
+		int result = int(::DialogBoxIndirectParam(_hInst, pMyDlgTemplate, _hParent, dlgProc, reinterpret_cast<LPARAM>(this)));
 		::GlobalFree(hMyDlgTemplate);
 		return result;
 	}
-	return static_cast<int32_t>(::DialogBoxParam(_hInst, MAKEINTRESOURCE(IDD_FILERELOCALIZER_DIALOG), _hParent, dlgProc, reinterpret_cast<LPARAM>(this)));
+	return int(::DialogBoxParam(_hInst, MAKEINTRESOURCE(IDD_FILERELOCALIZER_DIALOG), _hParent, dlgProc, reinterpret_cast<LPARAM>(this)));
 }
 

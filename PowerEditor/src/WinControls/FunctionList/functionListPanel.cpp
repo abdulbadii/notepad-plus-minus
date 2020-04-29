@@ -46,7 +46,7 @@ void FunctionListPanel::addEntry(const TCHAR *nodeName, const TCHAR *displayText
 
 	HTREEITEM itemParent = NULL;
 	TCHAR posStr[32];
-	generic_itoa(static_cast<int32_t>(pos), posStr, 10);
+	generic_itoa(int(pos), posStr, 10);
 	HTREEITEM root = _treeView.getRoot();
 
 	if (nodeName != NULL && *nodeName != '\0')	{
@@ -111,7 +111,7 @@ size_t FunctionListPanel::getBodyClosePos(size_t begin, const TCHAR *bodyOpenSym
 		else	{ // nothing found
 
 			cntOpen = 0; // get me out of here
-			targetEnd = static_cast<int32_t>(begin);
+			targetEnd = int(begin);
 		}
 
 		targetStart = (*_ppEditView)->searchInTarget(exprToSearch.c_str(), exprToSearch.length(), targetEnd, docLen);

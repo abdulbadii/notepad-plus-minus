@@ -1376,7 +1376,7 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, char* data,
 				else	{
 
 										int newDataLen = 0;
-					const char *newData = wmc.encode(fileFormat._encoding, SC_CP_UTF8, data, static_cast<int32_t>(lenFile), &newDataLen, &incompleteMultibyteChar);
+					const char *newData = wmc.encode(fileFormat._encoding, SC_CP_UTF8, data, int(lenFile), &newDataLen, &incompleteMultibyteChar);
 					_pscratchTilla->execute(SCI_APPENDTEXT, newDataLen, reinterpret_cast<LPARAM>(newData));
 				}
 

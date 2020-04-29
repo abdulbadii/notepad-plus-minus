@@ -101,7 +101,7 @@ void ContextMenu::create(HWND hParent, const std::vector<MenuItemUnit> & menuIte
 		}
 		else if (!item._cmdID && !lastIsSep)	{
 
-			::InsertMenu(_hMenu, static_cast<int32_t>(i), flag, item._cmdID, item._itemName.c_str());
+			::InsertMenu(_hMenu, int(i), flag, item._cmdID, item._itemName.c_str());
 			lastIsSep = true;
 		}
 		else	{ // last item is separator and current item is separator

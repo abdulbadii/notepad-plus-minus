@@ -257,7 +257,7 @@ int PluginsManager::loadPlugin(const TCHAR *pluginFilePath)	{
 		}
 		addInLoadedDlls(pluginFilePath, pluginFileName);
 		_pluginInfos.push_back(pi);
-		return static_cast<int32_t>(_pluginInfos.size() - 1);
+		return int(_pluginInfos.size() - 1);
 	}
 	catch (std::exception& e)
 	{
@@ -451,7 +451,7 @@ void PluginsManager::addInMenuFromPMIndex(int i)	{
 
         _pluginsCommands.push_back(PluginCommand(_pluginInfos[i]->_moduleName.c_str(), j, _pluginInfos[i]->_funcItems[j]._pFunc));
 
-		int cmdID = ID_PLUGINS_CMD + static_cast<int32_t>(_pluginsCommands.size() - 1);
+		int cmdID = ID_PLUGINS_CMD + int(_pluginsCommands.size() - 1);
 		_pluginInfos[i]->_funcItems[j]._cmdID = cmdID;
 		generic_string itemName = _pluginInfos[i]->_funcItems[j]._itemName;
 
@@ -502,7 +502,7 @@ HMENU PluginsManager::setMenu(HMENU hMenu, const TCHAR *menuName, bool enablePlu
 
 	for (size_t i = 0; i < nbPlugin; ++i)	{
 
-		addInMenuFromPMIndex(static_cast<int32_t>(i));
+		addInMenuFromPMIndex(int(i));
 	}
 	return _hPluginsMenu;
 }

@@ -846,7 +846,7 @@ INT_PTR CALLBACK MarginsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPa
 
 								case IDC_WIDTH_COMBO:	{
 
-									nppGUI._caretWidth = static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_WIDTH_COMBO, CB_GETCURSEL, 0, 0));
+									nppGUI._caretWidth = int(::SendDlgItemMessage(_hSelf, IDC_WIDTH_COMBO, CB_GETCURSEL, 0, 0));
 									::SendMessage(::GetParent(_hParent), NPPM_INTERNAL_SETCARETWIDTH, 0, 0);
 									return TRUE;			
 								}
@@ -1014,15 +1014,15 @@ INT_PTR CALLBACK SettingsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)	{
 				return TRUE;
 
 				case IDC_CHECK_AUTOUPDATE:
-					nppGUI._autoUpdateOpt._doAutoUpdate = isCheckedOrNot(static_cast<int32_t>(wParam));
+					nppGUI._autoUpdateOpt._doAutoUpdate = isCheckedOrNot(int(wParam));
 					return TRUE;
 
 				case IDC_CHECK_MIN2SYSTRAY:
-					nppGUI._isMinimizedToTray = isCheckedOrNot(static_cast<int32_t>(wParam));
+					nppGUI._isMinimizedToTray = isCheckedOrNot(int(wParam));
 					return TRUE;
 
 				case IDC_CHECK_DETECTENCODING:
-					nppGUI._detectEncoding = isCheckedOrNot(static_cast<int32_t>(wParam));
+					nppGUI._detectEncoding = isCheckedOrNot(int(wParam));
 					return TRUE;
 				case IDC_CHECK_ENABLEDOCSWITCHER :	{
 
@@ -1181,7 +1181,7 @@ INT_PTR CALLBACK DefaultNewDocDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 
 					cmdID += IDM_FORMAT_ENCODE;
 					getNameStrFromCmd(cmdID, str);
-					int index = static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_COMBO_OTHERCP, CB_ADDSTRING, 0, reinterpret_cast<LPARAM>(str.c_str())));
+					int index = int(::SendDlgItemMessage(_hSelf, IDC_COMBO_OTHERCP, CB_ADDSTRING, 0, reinterpret_cast<LPARAM>(str.c_str())));
 					if (ndds._codepage == encodings[i])
 						selIndex = index;
 					::SendDlgItemMessage(_hSelf, IDC_COMBO_OTHERCP, CB_SETITEMDATA, index, encodings[i]);
@@ -1280,7 +1280,7 @@ INT_PTR CALLBACK DefaultNewDocDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 					makeOpenAnsiAsUtf8(false);
 					::EnableWindow(::GetDlgItem(_hSelf, IDC_COMBO_OTHERCP), true);
 					auto index = ::SendDlgItemMessage(_hSelf, IDC_COMBO_OTHERCP, CB_GETCURSEL, 0, 0);
-					ndds._codepage = static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_COMBO_OTHERCP, CB_GETITEMDATA, index, 0));
+					ndds._codepage = int(::SendDlgItemMessage(_hSelf, IDC_COMBO_OTHERCP, CB_GETITEMDATA, index, 0));
 					return TRUE;
 				}
 
@@ -1313,7 +1313,7 @@ INT_PTR CALLBACK DefaultNewDocDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 						else if (LOWORD(wParam) == IDC_COMBO_OTHERCP)	{
 
 							auto index = ::SendDlgItemMessage(_hSelf, IDC_COMBO_OTHERCP, CB_GETCURSEL, 0, 0);
-							ndds._codepage = static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_COMBO_OTHERCP, CB_GETITEMDATA, index, 0));
+							ndds._codepage = int(::SendDlgItemMessage(_hSelf, IDC_COMBO_OTHERCP, CB_GETITEMDATA, index, 0));
 							return TRUE;
 						}
 					}
@@ -2539,7 +2539,7 @@ INT_PTR CALLBACK BackupDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)	{
 
 						if (!lstrcmp(str, L""))	{
 
-							::SetDlgItemInt(_hSelf, IDC_BACKUPDIR_RESTORESESSION_EDIT, static_cast<int32_t>(nppGUI._snapshotBackupTiming / 1000), FALSE);
+							::SetDlgItemInt(_hSelf, IDC_BACKUPDIR_RESTORESESSION_EDIT, int(nppGUI._snapshotBackupTiming / 1000), FALSE);
 						}
 					}
 				}
@@ -2649,25 +2649,25 @@ INT_PTR CALLBACK AutoCompletionDlg::run_dlgProc(UINT message, WPARAM wParam, LPA
 
 		case WM_INITDIALOG :	{
 
-			::SetDlgItemInt(_hSelf, IDD_AUTOC_STATIC_N,  static_cast<UINT>(nppGUI._autocFromLen), FALSE);
+			::SetDlgItemInt(_hSelf, IDD_AUTOC_STATIC_N,  static_cast<UINT>(nGUI._autocFromLen), FALSE);
 			_nbCharVal.init(_hInst, _hSelf);
 			_nbCharVal.create(::GetDlgItem(_hSelf, IDD_AUTOC_STATIC_N), IDD_AUTOC_STATIC_N);
 
-			bool isEnableAutoC = nppGUI._autocStatus != nppGUI.autoc_none;
+			bool isEnableAutoC = nGUI._autocStatus != nGUI.autoc_none;
 
 			::SendDlgItemMessage(_hSelf, IDD_AUTOC_ENABLECHECK, BM_SETCHECK, isEnableAutoC?BST_CHECKED:BST_UNCHECKED, 0);
 			
-			::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORENUMBERS, BM_SETCHECK, nppGUI._autocIgnoreNumbers ? BST_CHECKED : BST_UNCHECKED, 0);
+			::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORENUMBERS, BM_SETCHECK, nGUI._autocIgnoreNumbers ? BST_CHECKED : BST_UNCHECKED, 0);
 
-			if (nppGUI._autocStatus == nppGUI.autoc_func)
+			if (nGUI._autocStatus == nGUI.autoc_func)
 				::SendDlgItemMessage(_hSelf, IDD_AUTOC_FUNCRADIO, BM_SETCHECK, BST_CHECKED, 0);
 			else {
-				if (nppGUI._autocStatus == nppGUI.autoc_word)
+				if (nGUI._autocStatus == nGUI.autoc_word)
 					::SendDlgItemMessage(_hSelf, IDD_AUTOC_WORDRADIO, BM_SETCHECK, BST_CHECKED, 0);
 				else
 					::SendDlgItemMessage(_hSelf, IDD_AUTOC_BOTHRADIO, BM_SETCHECK, BST_CHECKED, 0);
 			}
-			::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORECASE, BM_SETCHECK, nppGUI._autocIgnoreCase ? BST_CHECKED : BST_UNCHECKED, 0);
+			::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORECASE, BM_SETCHECK, nGUI._autocIgnoreCase ? BST_CHECKED : BST_UNCHECKED, 0);
 				
 
 			if (!isEnableAutoC)	{
@@ -2679,34 +2679,32 @@ INT_PTR CALLBACK AutoCompletionDlg::run_dlgProc(UINT message, WPARAM wParam, LPA
 				::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_IGNORECASE), FALSE);
 				::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_STATIC_FROM), FALSE);
 				::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_STATIC_N), FALSE);
-				::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_STATIC_CHAR), FALSE);
-				::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_STATIC_NOTE), FALSE);
 			}
-			::SendDlgItemMessage(_hSelf, IDC_CHECK_MAINTAININDENT, BM_SETCHECK, nppGUI._maitainIndent, 0);
+			::SendDlgItemMessage(_hSelf, IDC_CHECK_MAINTAININDENT, BM_SETCHECK, nGUI._maitainIndent, 0);
 
-			::SendDlgItemMessage(_hSelf, IDD_FUNC_CHECK, BM_SETCHECK, nppGUI._funcParams ? BST_CHECKED : BST_UNCHECKED, 0);
+			::SendDlgItemMessage(_hSelf, IDD_FUNC_CHECK, BM_SETCHECK, nGUI._funcParams ? BST_CHECKED : BST_UNCHECKED, 0);
 
-			::SendDlgItemMessage(_hSelf, IDD_AUTOCPARENTHESES_CHECK, BM_SETCHECK, nppGUI._matchedPairConf._doParentheses?BST_CHECKED:BST_UNCHECKED, 0);
-			if (nppGUI._matchedPairConf._doParentheses)
+			::SendDlgItemMessage(_hSelf, IDD_AUTOCPARENTHESES_CHECK, BM_SETCHECK, nGUI._matchedPairConf._doParentheses?BST_CHECKED:BST_UNCHECKED, 0);
+			if (nGUI._matchedPairConf._doParentheses)
 				::SendDlgItemMessage(_hSelf, IDD_AUTOCPARENTHESES_CHECK, WM_SETTEXT, 0, reinterpret_cast<LPARAM>(L" (  )"));
 
-			::SendDlgItemMessage(_hSelf, IDD_AUTOCBRACKET_CHECK, BM_SETCHECK, nppGUI._matchedPairConf._doBrackets?BST_CHECKED:BST_UNCHECKED, 0);
-			if (nppGUI._matchedPairConf._doBrackets)
+			::SendDlgItemMessage(_hSelf, IDD_AUTOCBRACKET_CHECK, BM_SETCHECK, nGUI._matchedPairConf._doBrackets?BST_CHECKED:BST_UNCHECKED, 0);
+			if (nGUI._matchedPairConf._doBrackets)
 				::SendDlgItemMessage(_hSelf, IDD_AUTOCBRACKET_CHECK, WM_SETTEXT, 0, reinterpret_cast<LPARAM>(L" [  ]"));
 
-			::SendDlgItemMessage(_hSelf, IDD_AUTOCCURLYBRACKET_CHECK, BM_SETCHECK, nppGUI._matchedPairConf._doCurlyBrackets?BST_CHECKED:BST_UNCHECKED, 0);
-			if (nppGUI._matchedPairConf._doCurlyBrackets)
+			::SendDlgItemMessage(_hSelf, IDD_AUTOCCURLYBRACKET_CHECK, BM_SETCHECK, nGUI._matchedPairConf._doCurlyBrackets?BST_CHECKED:BST_UNCHECKED, 0);
+			if (nGUI._matchedPairConf._doCurlyBrackets)
 				::SendDlgItemMessage(_hSelf, IDD_AUTOCCURLYBRACKET_CHECK, WM_SETTEXT, 0, reinterpret_cast<LPARAM>(L" {  }"));
 			
-			::SendDlgItemMessage(_hSelf, IDD_AUTOC_QUOTESCHECK, BM_SETCHECK, nppGUI._matchedPairConf._doQuotes?BST_CHECKED:BST_UNCHECKED, 0);
-			if (nppGUI._matchedPairConf._doQuotes)
+			::SendDlgItemMessage(_hSelf, IDD_AUTOC_QUOTESCHECK, BM_SETCHECK, nGUI._matchedPairConf._doQuotes?BST_CHECKED:BST_UNCHECKED, 0);
+			if (nGUI._matchedPairConf._doQuotes)
 				::SendDlgItemMessage(_hSelf, IDD_AUTOC_QUOTESCHECK, WM_SETTEXT, 0, reinterpret_cast<LPARAM>(L" '  '"));
 			
-			::SendDlgItemMessage(_hSelf, IDD_AUTOC_DOUBLEQUOTESCHECK, BM_SETCHECK, nppGUI._matchedPairConf._doDoubleQuotes?BST_CHECKED:BST_UNCHECKED, 0);
-			if (nppGUI._matchedPairConf._doDoubleQuotes)
+			::SendDlgItemMessage(_hSelf, IDD_AUTOC_DOUBLEQUOTESCHECK, BM_SETCHECK, nGUI._matchedPairConf._doDoubleQuotes?BST_CHECKED:BST_UNCHECKED, 0);
+			if (nGUI._matchedPairConf._doDoubleQuotes)
 				::SendDlgItemMessage(_hSelf, IDD_AUTOC_DOUBLEQUOTESCHECK, WM_SETTEXT, 0, reinterpret_cast<LPARAM>(L" \"  \""));
 			
-			::SendDlgItemMessage(_hSelf, IDD_AUTOCTAG_CHECK, BM_SETCHECK, nppGUI._matchedPairConf._doHtmlXmlTag?BST_CHECKED:BST_UNCHECKED, 0);
+			::SendDlgItemMessage(_hSelf, IDD_AUTOCTAG_CHECK, BM_SETCHECK, nGUI._matchedPairConf._doHtmlXmlTag?BST_CHECKED:BST_UNCHECKED, 0);
 
 			::SendDlgItemMessage(_hSelf, IDC_MACHEDPAIROPEN_EDIT1, EM_LIMITTEXT, 1, 0);
 			::SendDlgItemMessage(_hSelf, IDC_MACHEDPAIRCLOSE_EDIT1, EM_LIMITTEXT, 1, 0);
@@ -2715,16 +2713,16 @@ INT_PTR CALLBACK AutoCompletionDlg::run_dlgProc(UINT message, WPARAM wParam, LPA
 			::SendDlgItemMessage(_hSelf, IDC_MACHEDPAIROPEN_EDIT3, EM_LIMITTEXT, 1, 0);
 			::SendDlgItemMessage(_hSelf, IDC_MACHEDPAIRCLOSE_EDIT3, EM_LIMITTEXT, 1, 0);
 
-			size_t nbMatchedPair = nppGUI._matchedPairConf._matchedPairsInit.size();
+			size_t nbMatchedPair = nGUI._matchedPairConf._matchedPairsInit.size();
 			if (nbMatchedPair > 3)
 				nbMatchedPair = 3;
 			for (size_t i = 0; i < nbMatchedPair; ++i)	{
 
 				TCHAR openChar[2];
-				openChar[0] = nppGUI._matchedPairConf._matchedPairsInit[i].first;
+				openChar[0] = nGUI._matchedPairConf._matchedPairsInit[i].first;
 				openChar[1] = '\0';
 				TCHAR closeChar[2];
-				closeChar[0] = nppGUI._matchedPairConf._matchedPairsInit[i].second;
+				closeChar[0] = nGUI._matchedPairConf._matchedPairsInit[i].second;
 				closeChar[1] = '\0';
 
 				if (!i)	{
@@ -2796,26 +2794,20 @@ INT_PTR CALLBACK AutoCompletionDlg::run_dlgProc(UINT message, WPARAM wParam, LPA
 
 					bool isEnableAutoC = BST_CHECKED == ::SendDlgItemMessage(_hSelf, IDD_AUTOC_ENABLECHECK, BM_GETCHECK, 0, 0);
 
-					if (isEnableAutoC)	{
+					if (!isEnableAutoC)	{
 
-						// ::SendDlgItemMessage(_hSelf, IDD_AUTOC_BOTHRADIO, BM_SETCHECK, BST_CHECKED, 0);
-						// nppGUI._autocStatus = nppGUI.autoc_both;
-
-						// ::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORENUMBERS, BM_SETCHECK, BST_UNCHECKED, 0);
-						// nppGUI._autocIgnoreNumbers = false;
-					}
-					else	{ 
 
 						::SendDlgItemMessage(_hSelf, IDD_AUTOC_FUNCRADIO, BM_SETCHECK, BST_UNCHECKED, 0);
 						::SendDlgItemMessage(_hSelf, IDD_AUTOC_WORDRADIO, BM_SETCHECK, BST_UNCHECKED, 0);
 						::SendDlgItemMessage(_hSelf, IDD_AUTOC_BOTHRADIO, BM_SETCHECK, BST_UNCHECKED, 0);
-						nppGUI._autocStatus = nppGUI.autoc_none;
+						nppGUI._autocStatus = nGUI.autoc_none;
 
 						::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORENUMBERS, BM_SETCHECK, BST_UNCHECKED, 0);
 						nppGUI._autocIgnoreNumbers = false;
 						::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORECASE, BM_SETCHECK, BST_UNCHECKED, 0);
 						nppGUI._autocIgnoreCase = false;
 					}
+
 					::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_FUNCRADIO), isEnableAutoC);
 					::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_WORDRADIO), isEnableAutoC);
 					::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_BOTHRADIO), isEnableAutoC);
@@ -2823,32 +2815,30 @@ INT_PTR CALLBACK AutoCompletionDlg::run_dlgProc(UINT message, WPARAM wParam, LPA
 					::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_IGNORECASE), isEnableAutoC);
 					::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_STATIC_FROM), isEnableAutoC);
 					::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_STATIC_N), isEnableAutoC);
-					::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_STATIC_CHAR), isEnableAutoC);
-					::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_STATIC_NOTE), isEnableAutoC);
 					return TRUE;
 				}
 
 				case IDD_AUTOC_FUNCRADIO :	{
 
-					nppGUI._autocStatus = nppGUI.autoc_func;
+					nppGUI._autocStatus = nGUI.autoc_func;
 
 					// ::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORENUMBERS, BM_SETCHECK, BST_UNCHECKED, 0);
 					// ::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_IGNORENUMBERS), FALSE);
-					// nppGUI._autocIgnoreNumbers = false;
+					// nGUI._autocIgnoreNumbers = false;
 
 					return TRUE;
 				}
 
 				case IDD_AUTOC_WORDRADIO :	{
 
-					nppGUI._autocStatus = nppGUI.autoc_word;
+					nppGUI._autocStatus = nGUI.autoc_word;
 					::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_IGNORENUMBERS), TRUE);
 					return TRUE;
 				}
 
 				case IDD_AUTOC_BOTHRADIO :	{
 
-					nppGUI._autocStatus = nppGUI.autoc_both;
+					nppGUI._autocStatus = nGUI.autoc_both;
 					::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_IGNORENUMBERS), TRUE);
 					return TRUE;
 				}
@@ -2873,14 +2863,13 @@ INT_PTR CALLBACK AutoCompletionDlg::run_dlgProc(UINT message, WPARAM wParam, LPA
 				
 				case IDD_AUTOC_STATIC_N :	{
 
-					constexpr int NB_MIN_CHAR = 1;
-					constexpr int NB_MAX_CHAR = 9;
+					constexpr int NB_MIN_CHAR = 1, NB_MAX_CHAR = 5;
 
 					NativeLangSpeaker *pNativeSpeaker = param.getNativeLangSpeaker();
 					generic_string strNbChar = pNativeSpeaker->getLocalizedStrFromID("autocomplete-nb-char", L"Nb char : ");
 
 					ValueDlg valDlg;
-					valDlg.init(NULL, _hSelf, static_cast<int32_t>(nppGUI._autocFromLen), strNbChar.c_str());
+					valDlg.init(NULL, _hSelf, int(nGUI._autocFromLen), strNbChar.c_str());
 					valDlg.setNBNumber(1);
 
 					POINT p;
@@ -2889,13 +2878,8 @@ INT_PTR CALLBACK AutoCompletionDlg::run_dlgProc(UINT message, WPARAM wParam, LPA
 					int size = valDlg.doDialog(p);
 					if (size != -1)	{
 
-						if (size > NB_MAX_CHAR)
-							size = NB_MAX_CHAR;
-						else if (size < NB_MIN_CHAR)
-							size = NB_MIN_CHAR;
-						
-						nppGUI._autocFromLen = size;
-						::SetDlgItemInt(_hSelf, IDD_AUTOC_STATIC_N, static_cast<int32_t>(nppGUI._autocFromLen), FALSE);
+						nppGUI._autocFromLen = size > NB_MAX_CHAR? NB_MAX_CHAR : size < NB_MIN_CHAR? NB_MIN_CHAR : size;
+						::SetDlgItemInt(_hSelf, IDD_AUTOC_STATIC_N, int(nGUI._autocFromLen), FALSE);
 					}
 					return TRUE;
 				}
@@ -2906,7 +2890,7 @@ INT_PTR CALLBACK AutoCompletionDlg::run_dlgProc(UINT message, WPARAM wParam, LPA
 				case IDD_AUTOC_DOUBLEQUOTESCHECK :
 				case IDD_AUTOC_QUOTESCHECK :	{
 
-					bool isChecked = (BST_CHECKED == ::SendDlgItemMessage(_hSelf, static_cast<int32_t>(wParam), BM_GETCHECK, 0, 0));
+					bool isChecked = (BST_CHECKED == ::SendDlgItemMessage(_hSelf, int(wParam), BM_GETCHECK, 0, 0));
 					const TCHAR *label;
 					if (wParam == IDD_AUTOCPARENTHESES_CHECK)	{
 
@@ -2933,7 +2917,7 @@ INT_PTR CALLBACK AutoCompletionDlg::run_dlgProc(UINT message, WPARAM wParam, LPA
 						nppGUI._matchedPairConf._doQuotes = isChecked;
 						label = isChecked?L" '  '":L" '";
 					}
-					::SendDlgItemMessage(_hSelf, static_cast<int32_t>(wParam), WM_SETTEXT, 0, reinterpret_cast<LPARAM>(label));
+					::SendDlgItemMessage(_hSelf, int(wParam), WM_SETTEXT, 0, reinterpret_cast<LPARAM>(label));
 					return TRUE;
 				}
 

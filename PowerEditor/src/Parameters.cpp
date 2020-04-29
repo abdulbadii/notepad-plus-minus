@@ -300,7 +300,7 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_SPACE,      IDM_VIEW_FIND_RESULT,                  true,  true, false, nullptr },
 	{ VK_BACK,    IDM_VIEW_FUNC_LIST,                           false, false, true, nullptr },
 	{ VK_F6,    IDM_VIEW_CHAR_PANEL,                          false, false, false, nullptr },
-	{ VK_L,    IDM_VIEW_LINENUMBER,                false, true, true, L"Display line number" },
+	{ VK_L,    IDM_VIEW_LINENUMBER,                false, true, true, nullptr },
 	{ VK_TAB,      IDM_MAIN_FIND_RESULTS,                  true,  false, true, L"Switch Main/Find view" },
 	{ VK_SPACE,      IDM_CLEAR_CLOSE_FINDER,                  true,  true, true, L"Clear,Close Find View" },
 
@@ -1565,7 +1565,7 @@ void NppParameters::setCurLineHilitingColour(COLORREF colour2Set)	{
 static int CALLBACK EnumFontFamExProc(const LOGFONT* lpelfe, const TEXTMETRIC*, DWORD, LPARAM lParam)	{
 
 	std::vector<generic_string>& strVect = *(std::vector<generic_string> *)lParam;
-	const int32_t vectSize = static_cast<int32_t>(strVect.size());
+	const int32_t vectSize = int(strVect.size());
 	const TCHAR* lfFaceName = ((ENUMLOGFONTEX*)lpelfe)->elfLogFont.lfFaceName;
 
 	//Search through all the fonts, EnumFontFamiliesEx never states anything about order
@@ -2399,7 +2399,7 @@ void NppParameters::feedMacros(TiXmlNode *node)	{
 
 			Macro macro;
 			getActions(childNode, macro);
-			int cmdID = ID_MACRO + static_cast<int32_t>(_macros.size());
+			int cmdID = ID_MACRO + int(_macros.size());
 			MacroShortcut ms(sc, macro, cmdID);
 			_macros.push_back(ms);
 		}
@@ -2455,7 +2455,7 @@ void NppParameters::feedUserCmds(TiXmlNode *node)	{
 				const TCHAR *cmdStr = aNode->Value();
 				if (cmdStr)	{
 
-					int cmdID = ID_USER_CMD + static_cast<int32_t>(_userCommands.size());
+					int cmdID = ID_USER_CMD + int(_userCommands.size());
 					UserCommand uc(sc, cmdStr, cmdID);
 					_userCommands.push_back(uc);
 				}
@@ -2520,7 +2520,7 @@ void NppParameters::feedScintKeys(TiXmlNode *node)	{
 
 		//Find the corresponding scintillacommand and alter it, put the index in the list
 		size_t len = _scintillaKeyCommands.size();
-		for (int32_t i = 0; i < static_cast<int32_t>(len); ++i)	{
+		for (int32_t i = 0; i < int(len); ++i)	{
 
 			ScintillaKeyMap & skmOrig = _scintillaKeyCommands[i];
 			if (skmOrig.getScintillaKeyID() == (unsigned long)scintKey && skmOrig.getMenuCmdID() == menuID)	{
@@ -2700,7 +2700,7 @@ bool NppParameters::exportUDLToFile(size_t langIndex2export, const generic_strin
 	if (langIndex2export >= NB_MAX_USER_LANG)
 		return false;
 
-	if (static_cast<int32_t>(langIndex2export) >= _nbUserLang)
+	if (int(langIndex2export) >= _nbUserLang)
 		return false;
 
 	TiXmlDocument *pNewXmlUserLangDoc = new TiXmlDocument(fileName2save);
@@ -3088,7 +3088,7 @@ void NppParameters::writeSession(const Session & session, const TCHAR *fileName)
 	if (root)	{
 
 		TiXmlNode *sessionNode = root->InsertEndChild(TiXmlElement(L"Session"));
-		(sessionNode->ToElement())->SetAttribute(L"activeView", static_cast<int32_t>(session._activeView));
+		(sessionNode->ToElement())->SetAttribute(L"activeView", int(session._activeView));
 
 		struct ViewElem {
 			TiXmlNode *viewNode;
@@ -3106,7 +3106,7 @@ void NppParameters::writeSession(const Session & session, const TCHAR *fileName)
 
 		for (size_t k = 0; k < nbElem ; ++k)	{
 
-			(viewElems[k].viewNode->ToElement())->SetAttribute(L"activeIndex", static_cast<int32_t>(viewElems[k].activeIndex));
+			(viewElems[k].viewNode->ToElement())->SetAttribute(L"activeIndex", int(viewElems[k].activeIndex));
 			vector<sessionFileInfo> & viewSessionFiles = *(viewElems[k].viewFiles);
 
 			for (size_t i = 0, len = viewElems[k].viewFiles->size(); i < len ; ++i)	{
@@ -3126,8 +3126,8 @@ void NppParameters::writeSession(const Session & session, const TCHAR *fileName)
 				(fileNameNode->ToElement())->SetAttribute(L"userReadOnly", (viewSessionFiles[i]._isUserReadOnly && !viewSessionFiles[i]._isMonitoring) ? L"yes" : L"no");
 				(fileNameNode->ToElement())->SetAttribute(L"filename", viewSessionFiles[i]._fileName.c_str());
 				(fileNameNode->ToElement())->SetAttribute(L"backupFilePath", viewSessionFiles[i]._backupFilePath.c_str());
-				(fileNameNode->ToElement())->SetAttribute(L"originalFileLastModifTimestamp", static_cast<int32_t>(viewSessionFiles[i]._originalFileLastModifTimestamp.dwLowDateTime));
-				(fileNameNode->ToElement())->SetAttribute(L"originalFileLastModifTimestampHigh", static_cast<int32_t>(viewSessionFiles[i]._originalFileLastModifTimestamp.dwHighDateTime));
+				(fileNameNode->ToElement())->SetAttribute(L"originalFileLastModifTimestamp", int(viewSessionFiles[i]._originalFileLastModifTimestamp.dwLowDateTime));
+				(fileNameNode->ToElement())->SetAttribute(L"originalFileLastModifTimestampHigh", int(viewSessionFiles[i]._originalFileLastModifTimestamp.dwHighDateTime));
 				
 				// docMap 
 				(fileNameNode->ToElement())->SetAttribute(L"mapFirstVisibleDisplayLine", viewSessionFiles[i]._mapPos._firstVisibleDisplayLine);
@@ -3145,14 +3145,14 @@ void NppParameters::writeSession(const Session & session, const TCHAR *fileName)
 
 					size_t markLine = viewSessionFiles[i]._marks[j];
 					TiXmlNode *markNode = fileNameNode->InsertEndChild(TiXmlElement(L"Mark"));
-					markNode->ToElement()->SetAttribute(L"line", static_cast<int32_t>(markLine));
+					markNode->ToElement()->SetAttribute(L"line", int(markLine));
 				}
 
 				for (size_t j = 0, len = viewSessionFiles[i]._foldStates.size() ; j < len ; ++j)	{
 
 					size_t foldLine = viewSessionFiles[i]._foldStates[j];
 					TiXmlNode *foldNode = fileNameNode->InsertEndChild(TiXmlElement(L"Fold"));
-					foldNode->ToElement()->SetAttribute(L"line", static_cast<int32_t>(foldLine));
+					foldNode->ToElement()->SetAttribute(L"line", int(foldLine));
 				}
 			}
 		}
@@ -3256,11 +3256,11 @@ int NppParameters::addUserLangToEnd(const UserLangContainer & userLang, const TC
 
 void NppParameters::removeUserLang(size_t index)	{
 
-	if (static_cast<int32_t>(index) >= _nbUserLang)
+	if (int(index) >= _nbUserLang)
 		return;
 	delete _userLangArray[index];
 
-	for (int32_t i = static_cast<int32_t>(index); i < (_nbUserLang - 1); ++i)
+	for (int32_t i = int(index); i < (_nbUserLang - 1); ++i)
 		_userLangArray[i] = _userLangArray[i+1];
 	_nbUserLang--;
 
@@ -3740,7 +3740,7 @@ TiXmlNode * NppParameters::getChildElementByAttribut(TiXmlNode *pere, const TCHA
 // 2 restes : L_H, L_USER
 LangType NppParameters::getLangIDFromStr(const TCHAR *langName)
 {
-	int lang = static_cast<int32_t>(L_TEXT);
+	int lang = int(L_TEXT);
 	for (; lang < L_EXTERNAL; ++lang)	{
 
 		const TCHAR * name = ScintillaEditView::langNames[lang].lexerName;
@@ -5653,7 +5653,7 @@ void NppParameters::createXmlTreeFromGUIParams()	{
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"NewDocDefaultSettings");
-		GUIConfigElement->SetAttribute(L"format", static_cast<int32_t>(_nppGUI._newDocDefaultSettings._format));
+		GUIConfigElement->SetAttribute(L"format", int(_nppGUI._newDocDefaultSettings._format));
 		GUIConfigElement->SetAttribute(L"encoding", _nppGUI._newDocDefaultSettings._unicodeMode);
 		GUIConfigElement->SetAttribute(L"lang", _nppGUI._newDocDefaultSettings._lang);
 		GUIConfigElement->SetAttribute(L"codepage", _nppGUI._newDocDefaultSettings._codepage);
@@ -5684,7 +5684,7 @@ void NppParameters::createXmlTreeFromGUIParams()	{
 		GUIConfigElement->SetAttribute(L"dir", _nppGUI._backupDir.c_str());
 
 		GUIConfigElement->SetAttribute(L"isSnapshotMode", _nppGUI._isSnapshotMode ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"snapshotBackupTiming", static_cast<int32_t>(_nppGUI._snapshotBackupTiming));
+		GUIConfigElement->SetAttribute(L"snapshotBackupTiming", int(_nppGUI._snapshotBackupTiming));
 	}
 
 	// <GUIConfig name = "TaskList">yes< / GUIConfig>
@@ -5728,7 +5728,7 @@ void NppParameters::createXmlTreeFromGUIParams()	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"auto-completion");
 		GUIConfigElement->SetAttribute(L"autoCAction", _nppGUI._autocStatus);
-		GUIConfigElement->SetAttribute(L"triggerFromNbChar", static_cast<int32_t>(_nppGUI._autocFromLen));
+		GUIConfigElement->SetAttribute(L"triggerFromNbChar", int(_nppGUI._autocFromLen));
 		const TCHAR * pStr = _nppGUI._autocIgnoreNumbers ? L"yes" : L"no";
 		GUIConfigElement->SetAttribute(L"autoCIgnoreNumbers", pStr);
 		GUIConfigElement->SetAttribute(L"autoCCase", _nppGUI._autocIgnoreCase ? L"yes" : L"no");

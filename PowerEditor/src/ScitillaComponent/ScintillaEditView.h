@@ -416,7 +416,7 @@ public:
 
 	int32_t lastZeroBasedLineNumber() const {
 		auto endPos = execute(SCI_GETLENGTH);
-		return static_cast<int32_t>(execute(SCI_LINEFROMPOSITION, endPos));
+		return int(execute(SCI_LINEFROMPOSITION, endPos));
 	};
 
 	long getCurrentXOffset()const{

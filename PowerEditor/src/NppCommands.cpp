@@ -260,6 +260,7 @@ void Notepad_plus::command(int id)	{
 			_pEditView->execute(WM_UNDO);
 			checkClipboard();
 			checkUndoState();
+			_pEditView->execute(SCI_AUTOCCANCEL);
 			break;
 		}
 
@@ -285,7 +286,7 @@ void Notepad_plus::command(int id)	{
 		case IDM_EDIT_COPY_BINARY:
 		case IDM_EDIT_CUT_BINARY:	{
 
-			int textLen = static_cast<int32_t>(_pEditView->execute(SCI_GETSELTEXT, 0, 0)) - 1;
+			int textLen = int(_pEditView->execute(SCI_GETSELTEXT, 0, 0)) - 1;
 			if (!textLen)
 				return;
 
@@ -1985,8 +1986,8 @@ void Notepad_plus::command(int id)	{
 				_syncInfo._isSynScollV = isSynScollV;
 			if (_syncInfo._isSynScollV)	{
 
-				int mainCurrentLine = static_cast<int32_t>(_mainEditView.execute(SCI_GETFIRSTVISIBLELINE));
-				int subCurrentLine = static_cast<int32_t>(_subEditView.execute(SCI_GETFIRSTVISIBLELINE));
+				int mainCurrentLine = int(_mainEditView.execute(SCI_GETFIRSTVISIBLELINE));
+				int subCurrentLine = int(_subEditView.execute(SCI_GETFIRSTVISIBLELINE));
 				_syncInfo._line = mainCurrentLine - subCurrentLine;
 			}
 
@@ -2002,11 +2003,11 @@ void Notepad_plus::command(int id)	{
 				_syncInfo._isSynScollH = isSynScollH;
 			if (_syncInfo._isSynScollH)	{
 
-				int mxoffset = static_cast<int32_t>(_mainEditView.execute(SCI_GETXOFFSET));
-				int pixel = static_cast<int32_t>(_mainEditView.execute(SCI_TEXTWIDTH, STYLE_DEFAULT, reinterpret_cast<LPARAM>("P")));
+				int mxoffset = int(_mainEditView.execute(SCI_GETXOFFSET));
+				int pixel = int(_mainEditView.execute(SCI_TEXTWIDTH, STYLE_DEFAULT, reinterpret_cast<LPARAM>("P")));
 				int mainColumn = mxoffset/pixel;
 
-				int sxoffset = static_cast<int32_t>(_subEditView.execute(SCI_GETXOFFSET));
+				int sxoffset = int(_subEditView.execute(SCI_GETXOFFSET));
 				pixel = int(_subEditView.execute(SCI_TEXTWIDTH, STYLE_DEFAULT, reinterpret_cast<LPARAM>("P")));
 				int subColumn = sxoffset/pixel;
 				_syncInfo._column = mainColumn - subColumn;
@@ -2479,7 +2480,7 @@ void Notepad_plus::command(int id)	{
 				// Save the current clipboard content
 				::OpenClipboard(_pPublicInterface->getHSelf());
 				HANDLE clipboardData = ::GetClipboardData(CF_TEXT);
-				int len = static_cast<int32_t>(::GlobalSize(clipboardData));
+				int len = int(::GlobalSize(clipboardData));
 				LPVOID clipboardDataPtr = ::GlobalLock(clipboardData);
 
 				HANDLE allocClipboardData = ::GlobalAlloc(GMEM_MOVEABLE, len);
@@ -2683,7 +2684,7 @@ void Notepad_plus::command(int id)	{
 				size_t selectionStart = _pEditView->execute(SCI_GETSELECTIONSTART);
 				size_t selectionEnd = _pEditView->execute(SCI_GETSELECTIONEND);
 
-				int32_t strLen = static_cast<int32_t>(selectionEnd - selectionStart);
+				int32_t strLen = int(selectionEnd - selectionStart);
 				if (strLen)	{
 
 					int strSize = strLen + 1;
@@ -2726,7 +2727,7 @@ void Notepad_plus::command(int id)	{
 				size_t selectionStart = _pEditView->execute(SCI_GETSELECTIONSTART);
 				size_t selectionEnd = _pEditView->execute(SCI_GETSELECTIONEND);
 
-				int32_t strLen = static_cast<int32_t>(selectionEnd - selectionStart);
+				int32_t strLen = int(selectionEnd - selectionStart);
 				if (strLen)	{
 
 					int strSize = strLen + 1;

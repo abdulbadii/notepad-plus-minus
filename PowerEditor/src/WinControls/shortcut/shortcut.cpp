@@ -264,11 +264,11 @@ int ScintillaKeyMap::addKeyCombo(KeyCombo combo)	{
 	//if already in the list do not add it
 		KeyCombo & kc = _keyCombos[i];
 		if (combo._key == kc._key && combo._isCtrl == kc._isCtrl && combo._isAlt == kc._isAlt && combo._isShift == kc._isShift)
-			return static_cast<int32_t>(i);	//already in the list
+			return int(i);	//already in the list
 	}
 	_keyCombos.push_back(combo);
 	++_size;
-	return static_cast<int32_t>(_size - 1);
+	return int(_size - 1);
 }
 
 bool ScintillaKeyMap::isEnabled() const
@@ -401,7 +401,7 @@ INT_PTR CALLBACK Shortcut::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)	{
 				::SendDlgItemMessage(_hSelf, IDC_KEY_COMBO, CB_ADDSTRING, 0, reinterpret_cast<LPARAM>(namedKeyArray[i].name));
 
 				if (_keyCombo._key == namedKeyArray[i].id)
-					iFound = static_cast<int32_t>(i);
+					iFound = int(i);
 			}
 
 			if (iFound != -1)
@@ -423,19 +423,19 @@ INT_PTR CALLBACK Shortcut::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)	{
 			switch (wParam)	{
 
 				case IDC_CTRL_CHECK :
-					_keyCombo._isCtrl = BST_CHECKED == ::SendDlgItemMessage(_hSelf, static_cast<int32_t>(wParam), BM_GETCHECK, 0, 0);
+					_keyCombo._isCtrl = BST_CHECKED == ::SendDlgItemMessage(_hSelf, int(wParam), BM_GETCHECK, 0, 0);
 					::EnableWindow(::GetDlgItem(_hSelf, IDOK), isValid() && (textlen > 0 || !_canModifyName));
 					updateConflictState();
 					return TRUE;
 
 				case IDC_ALT_CHECK :
-					_keyCombo._isAlt = BST_CHECKED == ::SendDlgItemMessage(_hSelf, static_cast<int32_t>(wParam), BM_GETCHECK, 0, 0);
+					_keyCombo._isAlt = BST_CHECKED == ::SendDlgItemMessage(_hSelf, int(wParam), BM_GETCHECK, 0, 0);
 					::EnableWindow(::GetDlgItem(_hSelf, IDOK), isValid() && (textlen > 0 || !_canModifyName));
 					updateConflictState();
 					return TRUE;
 
 				case IDC_SHIFT_CHECK :
-					_keyCombo._isShift = BST_CHECKED == ::SendDlgItemMessage(_hSelf, static_cast<int32_t>(wParam), BM_GETCHECK, 0, 0);
+					_keyCombo._isShift = BST_CHECKED == ::SendDlgItemMessage(_hSelf, int(wParam), BM_GETCHECK, 0, 0);
 					updateConflictState();
 					return TRUE;
 
@@ -583,7 +583,7 @@ void Accelerator::updateShortcuts()	{
 
 		tmpIncrFindAccelArray[i] = incrFindAcc[i];
 	}
-	_hIncFindAccTab = ::CreateAcceleratorTable(tmpIncrFindAccelArray, static_cast<int32_t>(nb));
+	_hIncFindAccTab = ::CreateAcceleratorTable(tmpIncrFindAccelArray, int(nb));
 	delete [] tmpIncrFindAccelArray;
 
 	if (_hIncFindAccTab)
@@ -894,7 +894,7 @@ void ScintillaAccelerator::updateKeys()	{
 	for (size_t i = 0; i < nb; ++i)	{
 
 		::SendMessage(_vScintillas[i], SCI_CLEARALLCMDKEYS, 0, 0);
-		for (int32_t j = static_cast<int32_t>(mapSize) - 1; j >= 0; --j )	{ //reverse order, top of the list has highest priority
+		for (int32_t j = int(mapSize) - 1; j >= 0; --j )	{ //reverse order, top of the list has highest priority
 	
 			ScintillaKeyMap skm = map[j];
 			if (skm.isEnabled())	{ 
@@ -1036,17 +1036,17 @@ INT_PTR CALLBACK ScintillaKeyMap::run_dlgProc(UINT Message, WPARAM wParam, LPARA
 			switch (wParam)	{
 
 				case IDC_CTRL_CHECK :
-					_keyCombo._isCtrl = BST_CHECKED == ::SendDlgItemMessage(_hSelf, static_cast<int32_t>(wParam), BM_GETCHECK, 0, 0);
+					_keyCombo._isCtrl = BST_CHECKED == ::SendDlgItemMessage(_hSelf, int(wParam), BM_GETCHECK, 0, 0);
 					validateDialog();
 					return TRUE;
 
 				case IDC_ALT_CHECK :
-					_keyCombo._isAlt = BST_CHECKED == ::SendDlgItemMessage(_hSelf, static_cast<int32_t>(wParam), BM_GETCHECK, 0, 0);
+					_keyCombo._isAlt = BST_CHECKED == ::SendDlgItemMessage(_hSelf, int(wParam), BM_GETCHECK, 0, 0);
 					validateDialog();
 					return TRUE;
 
 				case IDC_SHIFT_CHECK :
-					_keyCombo._isShift = BST_CHECKED == ::SendDlgItemMessage(_hSelf, static_cast<int32_t>(wParam), BM_GETCHECK, 0, 0);
+					_keyCombo._isShift = BST_CHECKED == ::SendDlgItemMessage(_hSelf, int(wParam), BM_GETCHECK, 0, 0);
 					validateDialog();
 					return TRUE;
 
@@ -1067,7 +1067,7 @@ INT_PTR CALLBACK ScintillaKeyMap::run_dlgProc(UINT Message, WPARAM wParam, LPARA
 					int res = addKeyCombo(_keyCombo);
 					if (res > -1)	{
 
-						if (res == static_cast<int32_t>(oldsize))	{
+						if (res == int(oldsize))	{
 
 							::SendDlgItemMessage(_hSelf, IDC_LIST_KEYS, LB_INSERTSTRING, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(toString(res).c_str()));
 						}

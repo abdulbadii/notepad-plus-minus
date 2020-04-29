@@ -961,7 +961,7 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						param.setShortcutDirty();
 
                         // All menu items are shifted up. So we delete the last item
-						::RemoveMenu(hMenu, posBase + static_cast<int32_t>(nbElem), MF_BYPOSITION);
+						::RemoveMenu(hMenu, posBase + int(nbElem), MF_BYPOSITION);
 
                         if (!nbElem)	{ 
 

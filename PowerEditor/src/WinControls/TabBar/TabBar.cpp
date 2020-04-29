@@ -493,7 +493,7 @@ LRESULT TabBarPlus::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPara
 				return TRUE;
 
 			const bool isForward = ((short)HIWORD(wParam)) < 0; // wheel rotation towards the user will be considered as forward direction
-			const int lastTabIndex = static_cast<int32_t>(::SendMessage(_hSelf, TCM_GETITEMCOUNT, 0, 0) - 1);
+			const int lastTabIndex = int(::SendMessage(_hSelf, TCM_GETITEMCOUNT, 0, 0) - 1);
 
 			if ((wParam & MK_CONTROL) && (wParam & MK_SHIFT))	{
 
@@ -501,7 +501,7 @@ LRESULT TabBarPlus::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPara
 			}
 			else if ((wParam & MK_SHIFT) && _doDragNDrop)	{
 
-				int oldTabIndex = static_cast<int32_t>(::SendMessage(_hSelf, TCM_GETCURSEL, 0, 0));
+				int oldTabIndex = int(::SendMessage(_hSelf, TCM_GETCURSEL, 0, 0));
 				int newTabIndex = oldTabIndex + (isForward ? 1 : -1);
 
 				if (newTabIndex < 0)	{
@@ -520,7 +520,7 @@ LRESULT TabBarPlus::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPara
 			}
 			else if (wParam & (MK_CONTROL | MK_SHIFT))	{
 
-				int tabIndex = static_cast<int32_t>(::SendMessage(_hSelf, TCM_GETCURSEL, 0, 0) + (isForward ? 1 : -1));
+				int tabIndex = int(::SendMessage(_hSelf, TCM_GETCURSEL, 0, 0) + (isForward ? 1 : -1));
 				if (tabIndex < 0)	{
 
 					if (wParam & MK_CONTROL)
@@ -547,7 +547,7 @@ LRESULT TabBarPlus::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPara
 				TC_HITTESTINFO hti;
 				LONG xy = param._dpiManager.scaleX(12); // an arbitrary coordinate inside the first visible tab
 				hti.pt = { xy, xy };
-				int scrollTabIndex = static_cast<int32_t>(::SendMessage(_hSelf, TCM_HITTEST, 0, reinterpret_cast<LPARAM>(&hti)));
+				int scrollTabIndex = int(::SendMessage(_hSelf, TCM_HITTEST, 0, reinterpret_cast<LPARAM>(&hti)));
 
 				if (scrollTabIndex < 1 && (_isVertical ? rcLastTab.bottom < rcTabCtrl.bottom : rcLastTab.right < rcTabCtrl.right)) // nothing to scroll
 					return TRUE;
@@ -586,7 +586,7 @@ LRESULT TabBarPlus::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPara
 			if (::GetWindowLongPtr(_hSelf, GWL_STYLE) & TCS_BUTTONS)	{
 
 				int nTab = getTabIndexAt(LOWORD(lParam), HIWORD(lParam));
-				if (nTab != -1 && nTab != static_cast<int32_t>(::SendMessage(_hSelf, TCM_GETCURSEL, 0, 0)))	{
+				if (nTab != -1 && nTab != int(::SendMessage(_hSelf, TCM_GETCURSEL, 0, 0)))	{
 
 					setActiveTab(nTab);
 				}
@@ -606,7 +606,7 @@ LRESULT TabBarPlus::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPara
 			}
 
             ::CallWindowProc(_tabBarDefaultProc, hwnd, Message, wParam, lParam);
-			int currentTabOn = static_cast<int32_t>(::SendMessage(_hSelf, TCM_GETCURSEL, 0, 0));
+			int currentTabOn = int(::SendMessage(_hSelf, TCM_GETCURSEL, 0, 0));
 
 			if (wParam == 2)
 				return TRUE;
@@ -627,7 +627,7 @@ LRESULT TabBarPlus::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPara
 			if (::GetWindowLongPtr(_hSelf, GWL_STYLE) & TCS_BUTTONS)	{
 
 				int nTab = getTabIndexAt(LOWORD(lParam), HIWORD(lParam));
-				if (nTab != -1 && nTab != static_cast<int32_t>(::SendMessage(_hSelf, TCM_GETCURSEL, 0, 0)))	{
+				if (nTab != -1 && nTab != int(::SendMessage(_hSelf, TCM_GETCURSEL, 0, 0)))	{
 
 					setActiveTab(nTab);
 				}
@@ -649,7 +649,7 @@ LRESULT TabBarPlus::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPara
 				}
 				else if (++_dragCount > 2)	{
 
-					int tabSelected = static_cast<int32_t>(::SendMessage(_hSelf, TCM_GETCURSEL, 0, 0));
+					int tabSelected = int(::SendMessage(_hSelf, TCM_GETCURSEL, 0, 0));
 
 					if (tabSelected >= 0)	{
 

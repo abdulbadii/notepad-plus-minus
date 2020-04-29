@@ -98,7 +98,7 @@ LRESULT VerticalFileSwitcherListView::runProc(HWND hwnd, UINT Message, WPARAM wP
 void VerticalFileSwitcherListView::initList()	{
 
 	HWND colHeader = reinterpret_cast<HWND>(SendMessage(_hSelf, LVM_GETHEADER, 0, 0));
-	int columnCount = static_cast<int32_t>(SendMessage(colHeader, HDM_GETITEMCOUNT, 0, 0));
+	int columnCount = int(SendMessage(colHeader, HDM_GETITEMCOUNT, 0, 0));
 	
 	NativeLangSpeaker *pNativeSpeaker = param.getNativeLangSpeaker();
 	
@@ -162,7 +162,7 @@ void VerticalFileSwitcherListView::initList()	{
 		item.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
 		
 		item.pszText = fn;
-		item.iItem = static_cast<int32_t>(i);
+		item.iItem = int(i);
 		item.iSubItem = 0;
 		item.iImage = fileNameStatus._status;
 		item.lParam = reinterpret_cast<LPARAM>(tl);
@@ -254,7 +254,7 @@ generic_string VerticalFileSwitcherListView::getFullFilePath(size_t i) const
 
 	LVITEM item;
 	item.mask = LVIF_PARAM;
-	item.iItem = static_cast<int32_t>(i);
+	item.iItem = int(i);
 	ListView_GetItem(_hSelf, &item);
 	TaskLstFnStatus *tlfs = (TaskLstFnStatus *)item.lParam;
 

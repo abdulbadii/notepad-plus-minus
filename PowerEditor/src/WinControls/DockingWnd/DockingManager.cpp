@@ -261,7 +261,7 @@ LRESULT DockingManager::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 			}
 
 			// destroy containers
-			for (int32_t i = static_cast<int32_t>(_vContainer.size()); i > 0; --i )	{
+			for (int32_t i = int(_vContainer.size()); i > 0; --i )	{
 
 				_vContainer[i-1]->destroy();
 				delete _vContainer[i-1];
@@ -292,7 +292,7 @@ LRESULT DockingManager::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 
 		case DMM_MOVE_SPLITTER:	{
 
-			int offset = static_cast<int32_t>(wParam);
+			int offset = int(wParam);
 
 			for (int iCont = 0; iCont < DOCKCONT_MAX; ++iCont)	{
 
@@ -610,7 +610,7 @@ void DockingManager::createDockableDlg(tTbData data, int iCont, bool isVisible)	
 
 				// get previous position and set container id
 				data.iPrevCont = (data.uMask & 0x30000000) >> 28;
-				iCont = static_cast<int32_t>(_vContainer.size()) - 1;
+				iCont = int(_vContainer.size()) - 1;
 			}
 			else	{
 
@@ -638,7 +638,7 @@ void DockingManager::createDockableDlg(tTbData data, int iCont, bool isVisible)	
 				// initialize and map container id
 				pCont->init(_hInst, _hSelf);
 				pCont->doDialog(isVisible, true);
-				_iContMap[iCont] = static_cast<int32_t>(_vContainer.size()) - 1;
+				_iContMap[iCont] = int(_vContainer.size()) - 1;
 			}
 
 			// get current container from map
@@ -658,7 +658,7 @@ void DockingManager::createDockableDlg(tTbData data, int iCont, bool isVisible)	
 				pCont->init(_hInst, _hSelf);
 				pCont->doDialog(false, true);
 				pCont->reSizeToWH(data.rcFloat);
-				_iContMap[data.iPrevCont] = static_cast<int32_t>(_vContainer.size()) - 1;
+				_iContMap[data.iPrevCont] = int(_vContainer.size()) - 1;
 			}
 			data.iPrevCont = _iContMap[data.iPrevCont];
 		}
@@ -933,7 +933,7 @@ int DockingManager::GetContainer(DockingCont* pCont)	{
 
 		if (_vContainer[iCont] == pCont)	{
 
-			iRet = static_cast<int32_t>(iCont);
+			iRet = int(iCont);
 			break;
 		}
 	}
@@ -972,7 +972,7 @@ int DockingManager::FindEmptyContainer()	{
             // and test if container is hidden
             if (!_vContainer[iCont]->isVisible())	{
 
-				iRetCont = static_cast<int32_t>(iCont);
+				iRetCont = int(iCont);
                 break;
             }
         }

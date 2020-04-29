@@ -122,7 +122,7 @@ public:
 	};
 
 	void addSearchLine(const TCHAR *searchName);
-	void addFileNameTitle(const TCHAR * fileName);
+	void addFileNameTitle(const TCHAR * fileName, const TCHAR *dir);
 	void addFileHitCount(int count);
 	void addSearchHitCount(int count, const TCHAR* =nullptr, bool isMatchLines = false);
 	void add(FoundInfo fi, SearchResultMarking mi, const TCHAR* foundline);
@@ -158,10 +158,10 @@ private:
 	SearchResultMarkings _markingsStruct;
 
 	ScintillaEditView _scintView;
-	uint32_t _nbFoundFiles = 0, _nbOpenedFiles = 0;
+	uint32_t _nbFoundFiles = 0, _nbOpenedFiles = 0, _unDirLen=0;
 
-	int _FileHeaderLastPos = 0,	_lastSearchHeaderPos = 0;
-
+	int _FileHeader1stPos = 0,	_lastSearchHeaderPos = 0;
+	
 	bool _canBeVolatiled = true;
 
 
@@ -198,6 +198,7 @@ struct FindersInfo	{
 	Finder *_pSourceFinder = nullptr;
 	Finder *_pDestFinder = nullptr;
 	const TCHAR *_pFileName = nullptr;
+	const TCHAR *_unDir = nullptr;
 
 	FindOption _findOption;
 };

@@ -1329,8 +1329,8 @@
         </LexerType>
         <LexerType name="searchResult" desc="Search result" ext="">
             <WordsStyle name="Search Header" styleID="1" fgColor="F5FFB3" bgColor="002000" fontName="" fontStyle="1" fontSize="7" />
-            <WordsStyle name="File Header" styleID="2" fgColor="39FFFF" bgColor="400040" fontName="" fontStyle="0" fontSize="8" />
-            <WordsStyle name="Line Number" styleID="3" fgColor="EBEBEB" bgColor="000000" fontName="" fontStyle="1" fontSize="8" />
+            <WordsStyle name="File Header" styleID="2" fgColor="B0FFFF" bgColor="2D002D" fontName="" fontStyle="0" fontSize="8" />
+            <WordsStyle name="Line Number" styleID="3" fgColor="FF208F" bgColor="000000" fontName="" fontStyle="1" fontSize="8" />
             <WordsStyle name="Hit Word" styleID="4" fgColor="FFFF00" bgColor="000080" fontName="" fontStyle="0" fontSize="" />
             <WordsStyle name="Selected Line" styleID="5" fgColor="000000" bgColor="B900B9" fontName="" fontStyle="0" fontSize="8" />
             <WordsStyle name="Current line background colour" styleID="6" bgColor="9D0004" fontStyle="0" />

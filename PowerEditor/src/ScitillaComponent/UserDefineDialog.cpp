@@ -927,7 +927,7 @@ void UserDefineDialog::enableLangAndControlsBy(size_t index)	{
 
 void UserDefineDialog::updateDlg()	{
 
-	int i = static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_LANGNAME_COMBO, CB_GETCURSEL, 0, 0));
+	int i = int(::SendDlgItemMessage(_hSelf, IDC_LANGNAME_COMBO, CB_GETCURSEL, 0, 0));
 	if (i > 0)	{ // the first menu item is generic UDL
 
 		param.setUdlXmlDirtyFromIndex(i - 1);
@@ -1053,7 +1053,7 @@ INT_PTR CALLBACK UserDefineDialog::run_dlgProc(UINT message, WPARAM wParam, LPAR
 
             if (reinterpret_cast<HWND>(lParam) == ::GetDlgItem(_hSelf, IDC_UD_PERCENTAGE_SLIDER))	{
 
-				int percent = static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_UD_PERCENTAGE_SLIDER, TBM_GETPOS, 0, 0));
+				int percent = int(::SendDlgItemMessage(_hSelf, IDC_UD_PERCENTAGE_SLIDER, TBM_GETPOS, 0, 0));
                 param.SetTransparent(_hSelf, percent);
             }
             return TRUE;
@@ -1106,7 +1106,7 @@ INT_PTR CALLBACK UserDefineDialog::run_dlgProc(UINT message, WPARAM wParam, LPAR
                                 bool isChecked = (BST_CHECKED == ::SendDlgItemMessage(_hSelf, IDC_UD_TRANSPARENT_CHECK, BM_GETCHECK, 0, 0));
                                 if (isChecked)	{
 
-									int percent = static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_UD_PERCENTAGE_SLIDER, TBM_GETPOS, 0, 0));
+									int percent = int(::SendDlgItemMessage(_hSelf, IDC_UD_PERCENTAGE_SLIDER, TBM_GETPOS, 0, 0));
                                     param.SetTransparent(_hSelf, percent);
                                 }
                                 ::ShowWindow(::GetDlgItem(_hSelf, IDC_UD_TRANSPARENT_CHECK), SW_SHOW);
@@ -1324,7 +1324,7 @@ INT_PTR CALLBACK UserDefineDialog::run_dlgProc(UINT message, WPARAM wParam, LPAR
                         bool isChecked = (BST_CHECKED == ::SendDlgItemMessage(_hSelf, IDC_UD_TRANSPARENT_CHECK, BM_GETCHECK, 0, 0));
                         if (isChecked)	{
 
-							int percent = static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_UD_PERCENTAGE_SLIDER, TBM_GETPOS, 0, 0));
+							int percent = int(::SendDlgItemMessage(_hSelf, IDC_UD_PERCENTAGE_SLIDER, TBM_GETPOS, 0, 0));
                             param.SetTransparent(_hSelf, percent);
                         }
                         else

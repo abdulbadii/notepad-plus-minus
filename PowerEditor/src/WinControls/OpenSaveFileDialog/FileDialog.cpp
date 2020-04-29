@@ -119,7 +119,7 @@ int FileDialog::setExtsFilter(const TCHAR *extText, const TCHAR *exts)	{
 	extFilter += L")";	
 	
 	// Resize filter buffer
-	int nbCharAdditional = static_cast<int32_t>(extFilter.length() + _tcsclen(exts) + 3); // 3 additional for nulls
+	int nbCharAdditional = int(extFilter.length() + _tcsclen(exts) + 3); // 3 additional for nulls
 	if (_fileExt)	{
 
 		oldFilter = new TCHAR[_nbCharFileExt];
@@ -145,12 +145,12 @@ int FileDialog::setExtsFilter(const TCHAR *extText, const TCHAR *exts)	{
     TCHAR *pFileExt = _fileExt + _nbCharFileExt;
 	auto curLen = extFilter.length() + 1;
 	wcscpy_s(pFileExt, curLen, extFilter.c_str());
-	_nbCharFileExt += static_cast<int32_t>(curLen);
+	_nbCharFileExt += int(curLen);
     
     pFileExt = _fileExt + _nbCharFileExt;
 	curLen = _tcsclen(exts) + 1;
 	wcscpy_s(pFileExt, curLen, exts);
-	_nbCharFileExt += static_cast<int32_t>(curLen);
+	_nbCharFileExt += int(curLen);
 
 	// Set file dialog pointer
 	_ofn.lpstrFilter = _fileExt;
@@ -451,7 +451,7 @@ BOOL APIENTRY FileDialog::run(HWND hWnd, UINT uMsg, WPARAM, LPARAM lParam)	{
 				case CDN_FILEOK :	{
 
 					HWND typeControl = ::GetDlgItem(::GetParent(hWnd), cmb1);
-					int index = static_cast<int32_t>(::SendMessage(typeControl, CB_GETCURSEL, 0, 0));
+					int index = int(::SendMessage(typeControl, CB_GETCURSEL, 0, 0));
 					param.setFileSaveDlgFilterIndex(index);
 
 					// change forward-slash to back-slash directory paths so dialog can interpret

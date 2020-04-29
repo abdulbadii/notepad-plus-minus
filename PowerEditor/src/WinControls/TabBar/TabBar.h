@@ -77,11 +77,11 @@ public:
 	void getCurrentTitle(TCHAR *title, int titleLen);
 
 	int32_t getCurrentTabIndex() const {
-		return static_cast<int32_t>(SendMessage(_hSelf, TCM_GETCURSEL, 0, 0));
+		return int(SendMessage(_hSelf, TCM_GETCURSEL, 0, 0));
 	};
 
 	int32_t getItemCount() const {
-		return static_cast<int32_t>(::SendMessage(_hSelf, TCM_GETITEMCOUNT, 0, 0));
+		return int(::SendMessage(_hSelf, TCM_GETITEMCOUNT, 0, 0));
 	}
 
 	void deletItemAt(size_t index);
@@ -280,7 +280,7 @@ protected:
 		TCHITTESTINFO hitInfo;
 		hitInfo.pt.x = x;
 		hitInfo.pt.y = y;
-		return static_cast<int32_t>(::SendMessage(_hSelf, TCM_HITTEST, 0, reinterpret_cast<LPARAM>(&hitInfo)));
+		return int(::SendMessage(_hSelf, TCM_HITTEST, 0, reinterpret_cast<LPARAM>(&hitInfo)));
 	}
 
 	bool isPointInParentZone(POINT screenPoint) const	{

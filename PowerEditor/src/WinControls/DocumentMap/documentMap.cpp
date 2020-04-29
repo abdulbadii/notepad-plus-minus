@@ -178,7 +178,7 @@ void DocumentMap::wrapMap(const ScintillaEditView *editView)	{
 
 		// update the wrap needed data
 		_displayWidth = editZoneWidth;
-		_displayZoom = static_cast<int32_t>(pEditView->execute(SCI_GETZOOM));
+		_displayZoom = int(pEditView->execute(SCI_GETZOOM));
 		double zr = zoomRatio[_displayZoom + 10];
 
 		// compute doc map width: dzw/ezw = 1/zoomRatio
@@ -203,7 +203,7 @@ int DocumentMap::getEditorTextZoneWidth(const ScintillaEditView *editView)	{
 	int marginWidths = 0;
 	for (int m = 0; m < 4; ++m)	{
 
-		marginWidths += static_cast<int32_t>(pEditView->execute(SCI_GETMARGINWIDTHN, m));
+		marginWidths += int(pEditView->execute(SCI_GETMARGINWIDTHN, m));
 	}
 	return editorRect.right - editorRect.left - marginWidths;
 }
@@ -257,7 +257,7 @@ void DocumentMap::scrollMap()	{
 			higherPos = (*_ppEditView)->execute(SCI_POSITIONFROMPOINT, 0, 0);
 
 			// Get the map higher Y point from the position in map
-			higherY = _pMapView->execute(SCI_POINTYFROMPOSITION, 0, static_cast<int32_t>(higherPos));
+			higherY = _pMapView->execute(SCI_POINTYFROMPOSITION, 0, int(higherPos));
 
 			// Get line height
 			auto lineHeight = _pMapView->execute(SCI_TEXTHEIGHT, firstVisibleDocLine);
@@ -269,7 +269,7 @@ void DocumentMap::scrollMap()	{
 		//
 		// Mark view zone in map
 		//
-		_vzDlg.drawZone(static_cast<int32_t>(higherY), static_cast<int32_t>(lowerY));
+		_vzDlg.drawZone(int(higherY), int(lowerY));
 	}
 }
 
@@ -311,7 +311,7 @@ void DocumentMap::scrollMapWith(const MapPosition & mapPos)	{
 		}
 		else	{
 
-			higherY = _pMapView->execute(SCI_POINTYFROMPOSITION, 0, static_cast<int32_t>(mapPos._higherPos));
+			higherY = _pMapView->execute(SCI_POINTYFROMPOSITION, 0, int(mapPos._higherPos));
 			auto lineHeight = _pMapView->execute(SCI_TEXTHEIGHT, mapPos._firstVisibleDocLine);
 			lowerY = mapPos._nbLine * lineHeight + higherY;
 		}
@@ -319,7 +319,7 @@ void DocumentMap::scrollMapWith(const MapPosition & mapPos)	{
 		//
 		// Mark view zone in map
 		//
-		_vzDlg.drawZone(static_cast<int32_t>(higherY), static_cast<int32_t>(lowerY));
+		_vzDlg.drawZone(int(higherY), int(lowerY));
 	}
 }
 
@@ -470,7 +470,7 @@ INT_PTR CALLBACK DocumentMap::run_dlgProc(UINT message, WPARAM wParam, LPARAM lP
 
 			int newPosY = HIWORD(lParam);
 			int currentCenterPosY = _vzDlg.getCurrentCenterPosY();
-			int pixelPerLine = static_cast<int32_t>(_pMapView->execute(SCI_TEXTHEIGHT, 0));
+			int pixelPerLine = int(_pMapView->execute(SCI_TEXTHEIGHT, 0));
 			int jumpDistance = newPosY - currentCenterPosY;
 			int nbLine2jump = jumpDistance/pixelPerLine;
 			(*_ppEditView)->execute(SCI_LINESCROLL, 0, nbLine2jump);

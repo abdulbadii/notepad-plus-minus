@@ -247,7 +247,7 @@ bool FunctionParsersManager::getFuncListFromXmlTree()	{
 
 					if (_parsers[i]->_id == id)	{
 
-						_associationMap.push_back(AssociationInfo(static_cast<int32_t>(i), langIDStr ? langID : -1, exts ? exts : L"", userDefinedLangName ? userDefinedLangName : L""));
+						_associationMap.push_back(AssociationInfo(int(i), langIDStr ? langID : -1, exts ? exts : L"", userDefinedLangName ? userDefinedLangName : L""));
 						break;
 					}
 				}
@@ -522,7 +522,7 @@ void FunctionZoneParser::classParse(vector<foundInfo> & foundInfos, vector< pair
 
 		if (not _openSymbole.empty() && not _closeSymbole.empty())	{
 
-			targetEnd = static_cast<int32_t>(getBodyClosePos(targetEnd, _openSymbole.c_str(), _closeSymbole.c_str(), commentZones, ppEditView));
+			targetEnd = int(getBodyClosePos(targetEnd, _openSymbole.c_str(), _closeSymbole.c_str(), commentZones, ppEditView));
 		}
 
 		if (targetEnd > int(end)) //we found a result but outside our range, therefore do not process it

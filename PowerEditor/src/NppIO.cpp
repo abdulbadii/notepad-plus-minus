@@ -385,7 +385,7 @@ BufferID Notepad_plus::doOpen(const generic_string& fileName, bool isRecursive, 
 						L"$INT_REPLACE$ files are about to be opened.\rAre you sure to open them?",
 						L"Amount of files to open is too large",
 						MB_YESNO|MB_APPLMODAL,
-					static_cast<int32_t>(nbFiles2Open));
+					int(nbFiles2Open));
 				}
 
 				if (ok2Open)	{
@@ -1019,14 +1019,14 @@ bool Notepad_plus::fileCloseAll(bool doDeleteBackup, bool isSnapshotMode)	{
 		//first close all docs in non-current view, which gets closed automatically
 		//Set active tab to the last one closed.
 		activateBuffer(_pNonDocTab->getBufferByIndex(0), otherView());
-		for (int32_t i = static_cast<int32_t>(_pNonDocTab->nbItem()) - 1; i >= 0; --i )	{ //close all from right to left
+		for (int32_t i = int(_pNonDocTab->nbItem()) - 1; i >= 0; --i )	{ //close all from right to left
 
 			doClose(_pNonDocTab->getBufferByIndex(i), otherView(), doDeleteBackup);
 		}
 	}
 
 	activateBuffer(_pDocTab->getBufferByIndex(0), currentView());
-	for (int32_t i = static_cast<int32_t>(_pDocTab->nbItem()) - 1; i >= 0; --i )	{
+	for (int32_t i = int(_pDocTab->nbItem()) - 1; i >= 0; --i )	{
 	//close all from right to left
 		doClose(_pDocTab->getBufferByIndex(i), currentView(), doDeleteBackup);
 	}
@@ -1238,7 +1238,7 @@ bool Notepad_plus::fileCloseAllButCurrent()	{
 
 			if (res == IDCANCEL)	{
 
-				for (int32_t j = static_cast<int32_t>(mainSaveOpIndex.size()) - 1; j >= 0; --j )	{ 	//close all from right to left
+				for (int32_t j = int(mainSaveOpIndex.size()) - 1; j >= 0; --j )	{ 	//close all from right to left
 
 					doClose(_mainDocTab.getBufferByIndex(mainSaveOpIndex[j]), MAIN_VIEW, isSnapshotMode);
 				}
@@ -1309,12 +1309,12 @@ bool Notepad_plus::fileCloseAllButCurrent()	{
 			
 			if (res == IDCANCEL)	{
 
-				for (int32_t j = static_cast<int32_t>(mainSaveOpIndex.size()) - 1; j >= 0; --j )	{ 	//close all from right to left
+				for (int32_t j = int(mainSaveOpIndex.size()) - 1; j >= 0; --j )	{ 	//close all from right to left
 
 					doClose(_mainDocTab.getBufferByIndex(mainSaveOpIndex[j]), MAIN_VIEW, isSnapshotMode);
 				}
 
-				for (int32_t j = static_cast<int32_t>(subSaveOpIndex.size()) - 1; j >= 0; --j )	{ 	//close all from right to left
+				for (int32_t j = int(subSaveOpIndex.size()) - 1; j >= 0; --j )	{ 	//close all from right to left
 
 					doClose(_subDocTab.getBufferByIndex(subSaveOpIndex[j]), SUB_VIEW, isSnapshotMode);
 				}
@@ -1335,7 +1335,7 @@ bool Notepad_plus::fileCloseAllButCurrent()	{
 		const int viewNo = otherView();
 		activateBuffer(_pNonDocTab->getBufferByIndex(0), viewNo);
 
-		for (int32_t i = static_cast<int32_t>(_pNonDocTab->nbItem()) - 1; i >= 0; --i )	{ 	//close all from right to left
+		for (int32_t i = int(_pNonDocTab->nbItem()) - 1; i >= 0; --i )	{ 	//close all from right to left
 
 			doClose(_pNonDocTab->getBufferByIndex(i), viewNo, isSnapshotMode);
 		}
@@ -1343,7 +1343,7 @@ bool Notepad_plus::fileCloseAllButCurrent()	{
 
 	const int viewNo = currentView();
 	activateBuffer(_pDocTab->getBufferByIndex(0), viewNo);
-	for (int32_t i = static_cast<int32_t>(_pDocTab->nbItem()) - 1; i >= 0; --i )	{	//close all from right to left
+	for (int32_t i = int(_pDocTab->nbItem()) - 1; i >= 0; --i )	{	//close all from right to left
 
 		if (i == active)	{	//dont close active index
 
@@ -1841,7 +1841,7 @@ bool Notepad_plus::loadSession(Session & session, bool isSnapshotMode)	{
 
 				if (buf == _mainEditView.getCurrentBuffer()) // current document
 					// Set floding state in the current doccument
-					mainIndex2Update = static_cast<int32_t>(i);
+					mainIndex2Update = int(i);
 				else
 					// Set fold states in the buffer
 					buf->setHeaderLineState(session._mainViewFiles[i]._foldStates, &_mainEditView);
@@ -1953,7 +1953,7 @@ bool Notepad_plus::loadSession(Session & session, bool isSnapshotMode)	{
 
 				if (buf == _subEditView.getCurrentBuffer()) // current document
 					// Set floding state in the current doccument
-					subIndex2Update = static_cast<int32_t>(k);
+					subIndex2Update = int(k);
 				else
 					// Set fold states in the buffer
 					buf->setHeaderLineState(session._subViewFiles[k]._foldStates, &_subEditView);
@@ -2011,7 +2011,7 @@ bool Notepad_plus::loadSession(Session & session, bool isSnapshotMode)	{
 		activateBuffer(_subDocTab.getBufferByIndex(session._activeSubIndex), SUB_VIEW);
 
 	if ((session.nbSubFiles() > 0) && (session._activeView == MAIN_VIEW || session._activeView == SUB_VIEW))
-		switchEditViewTo(static_cast<int32_t>(session._activeView));
+		switchEditViewTo(int(session._activeView));
 	else
 		switchEditViewTo(MAIN_VIEW);
 

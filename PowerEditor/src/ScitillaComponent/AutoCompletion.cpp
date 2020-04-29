@@ -64,13 +64,13 @@ bool AutoCompletion::showApiComplete()	{
 	if (curPos == startPos)
 		return false;
 
-	size_t len = (curPos > startPos)?(curPos - startPos):(startPos - curPos);
+	size_t len = (curPos > startPos)? (curPos - startPos) : (startPos - curPos);
 	if (len >= _keyWordMaxLen)
 		return false;
 
 	// _pEditView->execute(SCI_AUTOCSETSEPARATOR, WPARAM(' '));
 	_pEditView->execute(SC_CASEINSENSITIVEBEHAVIOUR_IGNORECASE,1);
-	_pEditView->execute(SCI_AUTOCSETIGNORECASE, nppGUI._autocIgnoreCase);
+	_pEditView->execute(SCI_AUTOCSETIGNORECASE, nGUI._autocIgnoreCase);
 	// _pEditView->execute(SC_ORDER_CUSTOM,2);
 	_pEditView->showAutoC(curPos - startPos, _keyWords.c_str());
 	return true;
@@ -166,7 +166,7 @@ void AutoCompletion::getWordArray(vector<generic_string> & wordArray, TCHAR *beg
 			if (!isInList(w, wordArray))
 				wordArray.push_back(w);
 		}
-		posFind = _pEditView->searchInTarget(expr.c_str(), static_cast<int32_t>(expr.length()), wordEnd, docLength);
+		posFind = _pEditView->searchInTarget(expr.c_str(), int(expr.length()), wordEnd, docLength);
 	}
 }
 
@@ -551,7 +551,7 @@ int InsertedMatchedChars::search(char startChar, char endChar, int posToDetect)	
 void AutoCompletion::insertMatchedChars(int character, const MatchedPairConf & matchedPairConf)	{
 
 	const vector< pair<char, char> > & matchedPairs = matchedPairConf._matchedPairs;
-	int caretPos = static_cast<int32_t>(_pEditView->execute(SCI_GETCURRENTPOS));
+	int caretPos = int(_pEditView->execute(SCI_GETCURRENTPOS));
 	const char *matchedChars = NULL;
 
 	char charPrev = static_cast<char>(_pEditView->execute(SCI_GETCHARAT, caretPos - 2));

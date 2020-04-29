@@ -688,7 +688,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 
 					// If the delimiters are the same (e.g. they are both a quotation mark), choose the ones
 					// which are closest to the clicked position.
-					for (int32_t i = static_cast<int32_t>(position_of_click); i >= 0; --i)	{
+					for (int32_t i = int(position_of_click); i >= 0; --i)	{
 
 						if (bufstring.at(i) == nGUI._leftmostDelimiter)	{
 
@@ -722,13 +722,13 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 
 								if (! (i > 0 && bufstring.at(i - 1) == '\\'))	{
 
-									rightmost_position = static_cast<int32_t>(i);
+									rightmost_position = int(i);
 									break;
 								}
 							}
 							else	{
 
-								rightmost_position = static_cast<int32_t>(i);
+								rightmost_position = int(i);
 								break;
 							}
 						}
@@ -927,7 +927,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 					notification->message,
 					notification->wParam,
 					notification->lParam,
-					static_cast<int32_t>(_pEditView->execute(SCI_GETCODEPAGE))
+					int(_pEditView->execute(SCI_GETCODEPAGE))
 				)
 			);
 			break;
