@@ -52,7 +52,7 @@ void VerticalFileSwitcher::startColumnSort()	{
 
 	// reset sorting if exts column was just disabled
 	HWND colHeader = reinterpret_cast<HWND>(SendMessage(_fileListView.getHSelf(), LVM_GETHEADER, 0, 0));
-	int columnCount = int(SendMessage(colHeader, HDM_GETITEMCOUNT, 0, 0));
+	int columnCount = static_cast<int32_t>(SendMessage(colHeader, HDM_GETITEMCOUNT, 0, 0));
 	if (_lastSortingColumn >= columnCount)	{
 
 		_lastSortingColumn = 0;
@@ -243,7 +243,7 @@ void VerticalFileSwitcher::activateDoc(TaskLstFnStatus *tlfs) const
 	if (bufferID == currentBufID && view == currentView)
 		return;
 	
-	int docPosInfo = int(::SendMessage(_hParent, NPPM_GETPOSFROMBUFFERID, reinterpret_cast<WPARAM>(bufferID), view));
+	int docPosInfo = static_cast<int32_t>(::SendMessage(_hParent, NPPM_GETPOSFROMBUFFERID, reinterpret_cast<WPARAM>(bufferID), view));
 	int view2set = docPosInfo >> 30;
 	int index2Switch = (docPosInfo << 2) >> 2 ;
 
@@ -260,7 +260,7 @@ int VerticalFileSwitcher::setHeaderOrder(int columnIndex)	{
 	if (_lastSortingColumn != columnIndex && _lastSortingDirection != SORT_DIRECTION_NONE)	{
 
 		HWND colHeader = reinterpret_cast<HWND>(SendMessage(hListView, LVM_GETHEADER, 0, 0));
-		int columnCount = int(SendMessage(colHeader, HDM_GETITEMCOUNT, 0, 0));
+		int columnCount = static_cast<int32_t>(SendMessage(colHeader, HDM_GETITEMCOUNT, 0, 0));
 		if (_lastSortingColumn < columnCount)	{
 
 			// Get current fmt

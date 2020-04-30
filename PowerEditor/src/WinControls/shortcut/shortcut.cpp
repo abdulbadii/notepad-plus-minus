@@ -264,11 +264,11 @@ int ScintillaKeyMap::addKeyCombo(KeyCombo combo)	{
 	//if already in the list do not add it
 		KeyCombo & kc = _keyCombos[i];
 		if (combo._key == kc._key && combo._isCtrl == kc._isCtrl && combo._isAlt == kc._isAlt && combo._isShift == kc._isShift)
-			return int(i);	//already in the list
+			return static_cast<int32_t>(i);	//already in the list
 	}
 	_keyCombos.push_back(combo);
 	++_size;
-	return int(_size - 1);
+	return static_cast<int32_t>(_size - 1);
 }
 
 bool ScintillaKeyMap::isEnabled() const
@@ -401,7 +401,7 @@ INT_PTR CALLBACK Shortcut::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)	{
 				::SendDlgItemMessage(_hSelf, IDC_KEY_COMBO, CB_ADDSTRING, 0, reinterpret_cast<LPARAM>(namedKeyArray[i].name));
 
 				if (_keyCombo._key == namedKeyArray[i].id)
-					iFound = int(i);
+					iFound = static_cast<int32_t>(i);
 			}
 
 			if (iFound != -1)
@@ -423,19 +423,19 @@ INT_PTR CALLBACK Shortcut::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)	{
 			switch (wParam)	{
 
 				case IDC_CTRL_CHECK :
-					_keyCombo._isCtrl = BST_CHECKED == ::SendDlgItemMessage(_hSelf, int(wParam), BM_GETCHECK, 0, 0);
+					_keyCombo._isCtrl = BST_CHECKED == ::SendDlgItemMessage(_hSelf, static_cast<int32_t>(wParam), BM_GETCHECK, 0, 0);
 					::EnableWindow(::GetDlgItem(_hSelf, IDOK), isValid() && (textlen > 0 || !_canModifyName));
 					updateConflictState();
 					return TRUE;
 
 				case IDC_ALT_CHECK :
-					_keyCombo._isAlt = BST_CHECKED == ::SendDlgItemMessage(_hSelf, int(wParam), BM_GETCHECK, 0, 0);
+					_keyCombo._isAlt = BST_CHECKED == ::SendDlgItemMessage(_hSelf, static_cast<int32_t>(wParam), BM_GETCHECK, 0, 0);
 					::EnableWindow(::GetDlgItem(_hSelf, IDOK), isValid() && (textlen > 0 || !_canModifyName));
 					updateConflictState();
 					return TRUE;
 
 				case IDC_SHIFT_CHECK :
-					_keyCombo._isShift = BST_CHECKED == ::SendDlgItemMessage(_hSelf, int(wParam), BM_GETCHECK, 0, 0);
+					_keyCombo._isShift = BST_CHECKED == ::SendDlgItemMessage(_hSelf, static_cast<int32_t>(wParam), BM_GETCHECK, 0, 0);
 					updateConflictState();
 					return TRUE;
 
@@ -494,12 +494,11 @@ void Accelerator::updateShortcuts()	{
 
 	const array<unsigned long, 3> incrFindAccIds = { IDM_SEARCH_FINDNEXT, IDM_SEARCH_FINDPREV, IDM_SEARCH_FINDINCREMENT };
 
-	NppParameters& nppParam = param;
-
-	vector<CommandShortcut> & shortcuts = nppParam.getUserShortcuts();
-	vector<MacroShortcut> & macros  = nppParam.getMacroList();
-	vector<UserCommand> & userCommands = nppParam.getUserCommandList();
-	vector<PluginCmdShortcut> & pluginCommands = nppParam.getPluginCommandList();
+	
+	vector<CommandShortcut> & shortcuts = param.getUserShortcuts();
+	vector<MacroShortcut> & macros  = param.getMacroList();
+	vector<UserCommand> & userCommands = param.getUserCommandList();
+	vector<PluginCmdShortcut> & pluginCommands = param.getPluginCommandList();
 
 	size_t nbMenu = shortcuts.size();
 	size_t nbMacro = macros.size();
@@ -583,7 +582,7 @@ void Accelerator::updateShortcuts()	{
 
 		tmpIncrFindAccelArray[i] = incrFindAcc[i];
 	}
-	_hIncFindAccTab = ::CreateAcceleratorTable(tmpIncrFindAccelArray, int(nb));
+	_hIncFindAccTab = ::CreateAcceleratorTable(tmpIncrFindAccelArray, static_cast<int32_t>(nb));
 	delete [] tmpIncrFindAccelArray;
 
 	if (_hIncFindAccTab)
@@ -605,26 +604,25 @@ void Accelerator::updateShortcuts()	{
 
 void Accelerator::updateFullMenu()	{
 
-	NppParameters& nppParam = param;
-	vector<CommandShortcut> commands = nppParam.getUserShortcuts();
+		vector<CommandShortcut> commands = param.getUserShortcuts();
 	for (size_t i = 0; i < commands.size(); ++i)	{
 
 		updateMenuItemByCommand(commands[i]);
 	}
 
-	vector<MacroShortcut> mcommands = nppParam.getMacroList();
+	vector<MacroShortcut> mcommands = param.getMacroList();
 	for (size_t i = 0; i < mcommands.size(); ++i)	{
 
 		updateMenuItemByCommand(mcommands[i]);
 	}
 
-	vector<UserCommand> ucommands = nppParam.getUserCommandList();
+	vector<UserCommand> ucommands = param.getUserCommandList();
 	for (size_t i = 0; i < ucommands.size(); ++i)	{
 
 		updateMenuItemByCommand(ucommands[i]);
 	}
 
-	vector<PluginCmdShortcut> pcommands = nppParam.getPluginCommandList();
+	vector<PluginCmdShortcut> pcommands = param.getPluginCommandList();
 	for (size_t i = 0; i < pcommands.size(); ++i)	{
 
 		updateMenuItemByCommand(pcommands[i]);
@@ -886,15 +884,14 @@ void ScintillaAccelerator::init(vector<HWND> * vScintillas, HMENU hMenu, HWND me
 
 void ScintillaAccelerator::updateKeys()	{ 
 
-	NppParameters& nppParam = param;
-	vector<ScintillaKeyMap> & map = nppParam.getScintillaKeyList();
+		vector<ScintillaKeyMap> & map = param.getScintillaKeyList();
 	size_t mapSize = map.size();
 	size_t index;
 	size_t nb = nbScintillas();
 	for (size_t i = 0; i < nb; ++i)	{
 
 		::SendMessage(_vScintillas[i], SCI_CLEARALLCMDKEYS, 0, 0);
-		for (int32_t j = int(mapSize) - 1; j >= 0; --j )	{ //reverse order, top of the list has highest priority
+		for (int32_t j = static_cast<int32_t>(mapSize) - 1; j >= 0; --j )	{ //reverse order, top of the list has highest priority
 	
 			ScintillaKeyMap skm = map[j];
 			if (skm.isEnabled())	{ 
@@ -1036,17 +1033,17 @@ INT_PTR CALLBACK ScintillaKeyMap::run_dlgProc(UINT Message, WPARAM wParam, LPARA
 			switch (wParam)	{
 
 				case IDC_CTRL_CHECK :
-					_keyCombo._isCtrl = BST_CHECKED == ::SendDlgItemMessage(_hSelf, int(wParam), BM_GETCHECK, 0, 0);
+					_keyCombo._isCtrl = BST_CHECKED == ::SendDlgItemMessage(_hSelf, static_cast<int32_t>(wParam), BM_GETCHECK, 0, 0);
 					validateDialog();
 					return TRUE;
 
 				case IDC_ALT_CHECK :
-					_keyCombo._isAlt = BST_CHECKED == ::SendDlgItemMessage(_hSelf, int(wParam), BM_GETCHECK, 0, 0);
+					_keyCombo._isAlt = BST_CHECKED == ::SendDlgItemMessage(_hSelf, static_cast<int32_t>(wParam), BM_GETCHECK, 0, 0);
 					validateDialog();
 					return TRUE;
 
 				case IDC_SHIFT_CHECK :
-					_keyCombo._isShift = BST_CHECKED == ::SendDlgItemMessage(_hSelf, int(wParam), BM_GETCHECK, 0, 0);
+					_keyCombo._isShift = BST_CHECKED == ::SendDlgItemMessage(_hSelf, static_cast<int32_t>(wParam), BM_GETCHECK, 0, 0);
 					validateDialog();
 					return TRUE;
 
@@ -1067,7 +1064,7 @@ INT_PTR CALLBACK ScintillaKeyMap::run_dlgProc(UINT Message, WPARAM wParam, LPARA
 					int res = addKeyCombo(_keyCombo);
 					if (res > -1)	{
 
-						if (res == int(oldsize))	{
+						if (res == static_cast<int32_t>(oldsize))	{
 
 							::SendDlgItemMessage(_hSelf, IDC_LIST_KEYS, LB_INSERTSTRING, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(toString(res).c_str()));
 						}

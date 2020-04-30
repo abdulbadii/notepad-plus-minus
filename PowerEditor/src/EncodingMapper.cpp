@@ -95,7 +95,7 @@ bool isInListA(const char *token, const char *list)	{
 
 		if ((list[i] == ' ')||(list[i] == '\0'))	{
 
-			if (j != 0)	{
+			if (j)	{
 
 				word[j] = '\0';
 				j = 0;

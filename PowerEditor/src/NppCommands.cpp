@@ -260,7 +260,6 @@ void Notepad_plus::command(int id)	{
 			_pEditView->execute(WM_UNDO);
 			checkClipboard();
 			checkUndoState();
-			_pEditView->execute(SCI_AUTOCCANCEL);
 			break;
 		}
 
@@ -689,8 +688,7 @@ void Notepad_plus::command(int id)	{
 
 			if (!_pFileBrowser)	{ // first launch, check in Params to open folders
 
-				NppParameters& nppParam = param;
-				launchFileBrowser(nppParam.getFileBrowserRoots());
+				launchFileBrowser(param.getFileBrowserRoots());
 				if (_pFileBrowser != nullptr)	{
 
 					checkMenuItem(IDM_VIEW_FILEBROWSER, true);
@@ -1021,8 +1019,9 @@ void Notepad_plus::command(int id)	{
 		}
 		break;
 
-		case IDM_SEARCH_REPLACING1:	{
+		case IDM_SEARCH_REPLACE1:	{
 			std::lock_guard<std::mutex> lock(command_mutex);
+
 			if (!_findReplaceDlg.isCreated())		return;
 
 			param._isFindReplacing = true;
@@ -2546,8 +2545,7 @@ void Notepad_plus::command(int id)	{
 				const TCHAR *destDir = L"themes";
 
 				// load styler
-				NppParameters& nppParams = param;
-				ThemeSwitcher & themeSwitcher = nppParams.getThemeSwitcher();
+				ThemeSwitcher & themeSwitcher = param.getThemeSwitcher();
 
 				vector<generic_string> copiedFiles = addNppComponents(destDir, extFilterName, extFilter);
 				for (size_t i = 0, len = copiedFiles.size(); i < len ; ++i)	{
@@ -2618,8 +2616,7 @@ void Notepad_plus::command(int id)	{
 				L"Editing contextMenu",
 				MB_OK|MB_APPLMODAL);
 
-				NppParameters& nppParams = param;
-				BufferID bufID = doOpen((nppParams.getContextMenuPath()));
+				BufferID bufID = doOpen((param.getContextMenuPath()));
 			switchToFile(bufID);
 				break;
 		}

@@ -279,7 +279,7 @@ INT_PTR CALLBACK RunDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 
 					std::vector<UserCommand> & theUserCmds = param.getUserCommandList();
 
-					int nbCmd = int(theUserCmds.size());
+					int nbCmd = static_cast<int32_t>(theUserCmds.size());
 
 					int cmdID = ID_USER_CMD + nbCmd;
 					TCHAR cmd[MAX_PATH];

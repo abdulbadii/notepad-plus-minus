@@ -46,7 +46,7 @@ void ShortcutMapper::initTabs()	{
 		::SendMessage(hTab, TCM_INSERTITEM, i, reinterpret_cast<LPARAM>(&tie));
 	}
 
-    TabCtrl_SetCurSel(_hTabCtrl, int(_currentState));
+    TabCtrl_SetCurSel(_hTabCtrl, static_cast<int32_t>(_currentState));
 
 	// force alignment to babygrid
 	RECT rcTab;
@@ -864,7 +864,7 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					int res = param.getNativeLangSpeaker()->messageBox("SCMapperDoDeleteOrNot",
 						_hSelf,
 						L"Are you sure you want to delete this shortcut?",
-						L"Are you sure?",
+						L"Macro/Run-Program Shortcut Deletion",
 						MB_OKCANCEL);
 
 					if (res == IDOK)	{
@@ -882,15 +882,12 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 							case STATE_MENU:
 							case STATE_PLUGIN:
-							case STATE_SCINTILLA:	{ 
-
-								return FALSE;			//this is bad
-							}
+							case STATE_SCINTILLA:		return FALSE;
 
 							case STATE_MACRO:	{ 
 
 								vector<MacroShortcut> & theMacros = param.getMacroList();
-								vector<MacroShortcut>::iterator it = theMacros.begin();
+								auto it = theMacros.begin();
 								cmdID = theMacros[shortcutIndex].getID();
 								theMacros.erase(it + shortcutIndex);
 
@@ -961,7 +958,7 @@ INT_PTR CALLBACK ShortcutMapper::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						param.setShortcutDirty();
 
                         // All menu items are shifted up. So we delete the last item
-						::RemoveMenu(hMenu, posBase + int(nbElem), MF_BYPOSITION);
+						::RemoveMenu(hMenu, posBase + static_cast<int32_t>(nbElem), MF_BYPOSITION);
 
                         if (!nbElem)	{ 
 

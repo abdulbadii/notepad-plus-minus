@@ -36,8 +36,7 @@ void RunMacroDlg::initMacroList()	{
 
 	if (!isCreated()) return;
 
-	NppParameters& nppParam = param;
-	std::vector<MacroShortcut> & macroList = nppParam.getMacroList();
+	std::vector<MacroShortcut> & macroList = param.getMacroList();
 
 	::SendDlgItemMessage(_hSelf, IDC_MACRO_COMBO, CB_RESETCONTENT, 0, 0);
 
@@ -114,7 +113,7 @@ INT_PTR CALLBACK RunMacroDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)	{
 				default:
 					if ((HIWORD(wParam) == CBN_SELCHANGE) && (LOWORD(wParam) == IDC_MACRO_COMBO))	{
 
-						_macroIndex = int(::SendDlgItemMessage(_hSelf, IDC_MACRO_COMBO, CB_GETCURSEL, 0, 0));
+						_macroIndex = static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_MACRO_COMBO, CB_GETCURSEL, 0, 0));
 						return TRUE;
 					}
 			}

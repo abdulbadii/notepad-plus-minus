@@ -232,7 +232,7 @@ FindReplaceDlg::~FindReplaceDlg()
 {
 	_tab.destroy();
 	delete _pFinder;
-	for (int n = int(_findersOfFinder.size()) - 1; n >= 0; --n)	{
+	for (int n = static_cast<int32_t>(_findersOfFinder.size()) - 1; n >= 0; --n)	{
 
 		delete _findersOfFinder[n];
 		_findersOfFinder.erase(_findersOfFinder.begin() + n);
@@ -410,7 +410,7 @@ int FindReplaceDlg::saveComboHistory(int id, int maxcount, vector<generic_string
 
 	TCHAR text[FINDREPLACE_MAXLENGTH];
 	HWND hCombo = ::GetDlgItem(_hSelf, id);
-	int count = int(::SendMessage(hCombo, CB_GETCOUNT, 0, 0));
+	int count = static_cast<int32_t>(::SendMessage(hCombo, CB_GETCOUNT, 0, 0));
 	count = min(count, maxcount);
 
 	if (count == CB_ERR) return 0;
@@ -482,7 +482,7 @@ bool Finder::notify(SCNotification *notification)	{
 			isDoubleClicked = true;
 			size_t pos = notification->position;
 			if (pos == INVALID_POSITION)
-				pos = int(_scintView.execute(SCI_GETLINEENDPOSITION, notification->line));
+				pos = static_cast<int32_t>(_scintView.execute(SCI_GETLINEENDPOSITION, notification->line));
 			_scintView.execute(SCI_SETSEL, pos, pos);
 
 			gotoFoundLine();
@@ -655,12 +655,12 @@ void Finder::addSearchLine(const TCHAR *searchName)	{
 
 	generic_string str = L"Search \"";
 	str += searchName;
-	str += L"\"\r\n";
+	str += L"\"  \r\n";
 
 	setFinderReadOnly(false);
 	_scintView.addGenericText(str.c_str());
 	setFinderReadOnly(true);
-	_lastSearchHeaderPos = int(_scintView.execute(SCI_GETCURRENTPOS) - 2);
+	_lastSearchHeaderPos = static_cast<int32_t>(_scintView.execute(SCI_GETCURRENTPOS) - 2);
 
 	_pMainFoundInfos->push_back(EmptyFoundInfo);
 	_pMainMarkings->push_back(EmptySearchResultMarking);
@@ -678,7 +678,7 @@ void Finder::addFileNameTitle(const TCHAR *fullName, const TCHAR *dir)	{
 	}
 	str += L"\r\n";
 	
-	_FileHeader1stPos = int(_scintView.execute(SCI_GETCURRENTPOS));
+	_FileHeader1stPos = static_cast<int32_t>(_scintView.execute(SCI_GETCURRENTPOS));
 	setFinderReadOnly(false);
 	_scintView.addGenericText(str.c_str());
 	setFinderReadOnly(true);
@@ -706,18 +706,18 @@ void Finder::addSearchHitCount(int count, const TCHAR *dir, bool isMatchLines){
 	if(count)
 		if (dir)
 			if(_nbFoundFiles >1)
-				wsprintf(text, L"  : %i in %i %s%s", count, _nbFoundFiles, (L"files under "+generic_string(dir)).c_str(), moreInfo);
+				wsprintf(text, L": %i in %i %s%s", count, _nbFoundFiles, (L"files under "+generic_string(dir)).c_str(), moreInfo);
 			else
-				wsprintf(text, L"  : %i in file below under %s%s", count, dir, moreInfo);
+				wsprintf(text, L": %i in this file under %s%s", count, dir, moreInfo);
 		else
 			if(_nbFoundFiles >1)
-				wsprintf(text, L"  : %i in %i file(s) of %i opened files%s", count, _nbFoundFiles, _nbOpenedFiles, moreInfo);
+				wsprintf(text, L": %i in %i file(s) of %i opened files%s", count, _nbFoundFiles, _nbOpenedFiles, moreInfo);
 			else
-				wsprintf(text, L"  : %i in current/opened file below%s", count, moreInfo);
+				wsprintf(text, L": %i in current/opened file below%s", count, moreInfo);
 	else
-		if (dir)	wsprintf(text, L" was not found under %s", dir);
-		else if(_nbOpenedFiles)		wsprintf(text, L" was'nt found in any of %i opened files", _nbOpenedFiles);
-		else		wsprintf(text, L" was not found in current file");
+		if (dir)	wsprintf(text, L"was not found under %s", dir);
+		else if(_nbOpenedFiles)		wsprintf(text, L" wasn't found in any of %i opened files", _nbOpenedFiles);
+		else		wsprintf(text, L"was not found in current file");
 	
 	setFinderReadOnly(false);
 	_scintView.insertGenericTextFrom(_lastSearchHeaderPos, text);
@@ -733,8 +733,8 @@ void Finder::add(FoundInfo fi, SearchResultMarking mi, const TCHAR* foundline)	{
 	wsprintf(lnb, L"%d: ", fi._lineNumber);
 	generic_string str = L"Line ";
 	str += lnb;
-	mi._start += int(str.length());
-	mi._end += int(str.length());
+	mi._start += static_cast<int32_t>(str.length());
+	mi._end += static_cast<int32_t>(str.length());
 	str += foundline;
 
 	if (str.length() >= SC_SEARCHRESULT_LINEBUFFERMAXLENGTH)	{
@@ -774,7 +774,7 @@ bool Finder::isLineActualSearchResult(const generic_string & s) const{
 	// return (!firstColon);
 }
 
-generic_string & Finder::prepareStringForClipboard(generic_string & s) const
+generic_string& Finder::prepareStringForClipboard(generic_string & s) const
 {
 	// Input: a string like "\tLine 3: search result".
 	// Output: "search result"
@@ -864,22 +864,24 @@ void Finder::finishFilesSearch(int count, bool isfold,const TCHAR *dir, bool isM
 	_pMainMarkings = _pOldMarkings;
 
 	if ((_markingsStruct._length = static_cast<long>(_pMainMarkings->size())) > 0)
-		_markingsStruct._markings = &((*_pMainMarkings)[0]);
+		_markingsStruct._markings = &(*_pMainMarkings)[0];
 
 	addSearchHitCount(count, dir, isMatchLines);
 
+	_scintView.execute(SCI_SETLEXER, SCLEX_SEARCHRESULT);
+	_scintView.execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>( isfold? "1" : "0"));
+
 	auto of = (*_pMainMarkings)[2]._end;
 	_scintView.execute(SCI_GOTOPOS, _scintView.execute(SCI_POSITIONFROMLINE, 2) + of);
-	// _scintView.execute(SCI_SETTARGETRANGE, c, _scintView.execute(SCI_GETLINEENDPOSITION, 2));
+	// _scintView.execute(SCI_SETTARGETRANGE, _scintView.execute(SCI_POSITIONFROMLINE, 2), _scintView.execute(SCI_GETLINEENDPOSITION, 2));
 	// auto of=_scintView.execute(SCI_SEARCHINTARGET, 1, reinterpret_cast<LPARAM>(L":"));
 	// _scintView.execute(SCI_GOTOPOS, of +2);
 
-	_scintView.execute(SCI_SETLEXER, SCLEX_SEARCHRESULT);
-	_scintView.execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>( isfold? "1" : "0"));
 	_scintView.execute(SCI_SETWRAPMODE, 2);
 	_scintView.execute(SCI_SETWRAPVISUALFLAGS,SC_WRAPVISUALFLAG_START);
 	_scintView.execute(SCI_SETWRAPSTARTINDENT,5);
 	_scintView.execute(SCI_SETWRAPINDENTMODE,SC_WRAPINDENT_FIXED);
+	_scintView.execute(SCI_SETYCARETPOLICY, 13, 1);
 }
 
 void Finder::setFinderStyle()	{
@@ -1326,7 +1328,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 			if (reinterpret_cast<HWND>(lParam) == ::GetDlgItem(_hSelf, IDC_PERCENTAGE_SLIDER))	{
 
-				int percent = int(::SendDlgItemMessage(_hSelf, IDC_PERCENTAGE_SLIDER, TBM_GETPOS, 0, 0));
+				int percent = static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_PERCENTAGE_SLIDER, TBM_GETPOS, 0, 0));
 				FindHistory & findHistory = param.getFindHistory();
 				findHistory._transparency = percent;
 				if (isCheckedOrNot(IDC_TRANSPARENT_ALWAYS_RADIO))	{
@@ -1345,7 +1347,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 				HWND tabHandle = _tab.getHSelf();
 				if (nmhdr->hwndFrom == tabHandle)	{
 
-					int indexClicked = int(::SendMessage(tabHandle, TCM_GETCURSEL, 0, 0));
+					int indexClicked = static_cast<int32_t>(::SendMessage(tabHandle, TCM_GETCURSEL, 0, 0));
 					doDialog((DIALOG_TYPE)indexClicked);
 				}
 				return TRUE;
@@ -1397,7 +1399,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 				if (LOWORD(wParam) == WA_INACTIVE && isVisible())	{
 
-					int percent = int(::SendDlgItemMessage(_hSelf, IDC_PERCENTAGE_SLIDER, TBM_GETPOS, 0, 0));
+					int percent = static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_PERCENTAGE_SLIDER, TBM_GETPOS, 0, 0));
 					param.SetTransparent(_hSelf, percent);
 				}
 				else	{
@@ -1428,7 +1430,6 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			FindHistory & findHistory = param.getFindHistory();
 
 			switch (LOWORD(wParam))	{
-//Single actions
 				case IDC_2_BUTTONS_MODE:	{
 
 					bool is2ButtonsMode = isCheckedOrNot(IDC_2_BUTTONS_MODE);
@@ -1448,7 +1449,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 				case IDC_FINDPREV:
 				case IDC_FINDNEXT:
-				case IDOK :	{ //Find Next is only for REPLACE_DLG
+				case IDOK :	{
 
 					setStatusbarMessage(generic_string(), FSNoMessage);
 
@@ -1521,7 +1522,6 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 				case IDREPLACE1 :	{
 					std::lock_guard<std::mutex> lock(findOps_mutex);
-
 					if (_currentStatus == REPLACE_DLG)	{
 						setStatusbarMessage(L"", FSNoMessage);
 						HWND hFindCombo = ::GetDlgItem(_hSelf, IDFINDWHAT);
@@ -1538,8 +1538,6 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					}
 				}
 				return TRUE;
-
-
 
 //Process actions
 				case IDC_CLEAR_FINDALL_OPENEDFILES :
@@ -1958,7 +1956,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 				case IDC_TRANSPARENT_ALWAYS_RADIO :	{
 
-					int percent = int(::SendDlgItemMessage(_hSelf, IDC_PERCENTAGE_SLIDER, TBM_GETPOS, 0, 0));
+					int percent = static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_PERCENTAGE_SLIDER, TBM_GETPOS, 0, 0));
 					param.SetTransparent(_hSelf, percent);
 					findHistory._transparencyMode = FindHistory::persistant;
 				}
@@ -2044,7 +2042,7 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 		stringSizeFind = Searching::convertExtendedToString(txt2find, pText, stringSizeFind);
 	}
 
-	int docLength = int((*_ppEditView)->execute(SCI_GETLENGTH));
+	int docLength = static_cast<int32_t>((*_ppEditView)->execute(SCI_GETLENGTH));
 	Sci_CharacterRange cr = (*_ppEditView)->getSelection();
 
 
@@ -2174,7 +2172,7 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 	}
 
 	start =	posFind;
-	end = int((*_ppEditView)->execute(SCI_GETTARGETEND));
+	end = static_cast<int32_t>((*_ppEditView)->execute(SCI_GETTARGETEND));
 
 	setStatusbarMessage(L"", FSNoMessage);	
 
@@ -2262,29 +2260,27 @@ bool FindReplaceDlg::processReplace(const TCHAR *txt2find, const TCHAR *txt2repl
 		}
 	}
 	else	{
-
 		NativeLangSpeaker *pNativeSpeaker = param.getNativeLangSpeaker();
 		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replace-not-found", L"Replace: no occurrence was found.");
 		setStatusbarMessage(msg, FSNotFound);
 	}
-
 	return moreMatches;	
 }
 
 void FindReplaceDlg::processReplc1(const TCHAR *txt2find, const TCHAR *txt2replace)	{
 
-	if (!txt2find)	{
-		txt2find = _options._str2Search.c_str();
-		txt2replace = _options._str4Replace.c_str();	}
+	if (!txt2find)
+		txt2find = (_options._str2Search = getTextFromCombo( ::GetDlgItem(_hSelf, IDFINDWHAT))).c_str();
 
+	if (!txt2replace)
+		txt2replace = (_options._str4Replace = getTextFromCombo(::GetDlgItem(_hSelf, IDREPLACEWITH))).c_str();
+						
 	FindOption replaceOptions = *_env;
 	replaceOptions._incrementalType = FirstIncremental;
 
 	Sci_CharacterRange currentSelection = (*_ppEditView)->getSelection();
-	// FindStatus status;
-	bool moreMatches = processFindNext(txt2find, &replaceOptions, nullptr, FINDNEXTTYPE_FINDNEXTFORREPLACE);
 
-	if (moreMatches)	{
+	if (processFindNext(txt2find, &replaceOptions, nullptr, FINDNEXTTYPE_FINDNEXTFORREPLACE))	{
 		Sci_CharacterRange nextFind = (*_ppEditView)->getSelection();
 		if (nextFind.cpMin == currentSelection.cpMin && nextFind.cpMax == currentSelection.cpMax)	{
 
@@ -2321,7 +2317,7 @@ int FindReplaceDlg::processAll(ProcessOperation op, const FindOption *opt, bool 
 	const TCHAR *txt2replace = pOptions->_str4Replace.c_str();
 
 	Sci_CharacterRange cr = (*_ppEditView)->getSelection();
-	int docLength = int((*_ppEditView)->execute(SCI_GETLENGTH));
+	int docLength = static_cast<int32_t>((*_ppEditView)->execute(SCI_GETLENGTH));
 
 	// Default : 
 	//        direction : down
@@ -2445,9 +2441,9 @@ int FindReplaceDlg::processRange(ProcessOperation op, FindReplaceInfo & findRepl
 
 	if (pOptions->_searchType == FindExtended)	{
 
-		stringSizeFind = Searching::convertExtendedToString(pTextFind, pTextFind, int(stringSizeFind));
+		stringSizeFind = Searching::convertExtendedToString(pTextFind, pTextFind, static_cast<int32_t>(stringSizeFind));
 		if (op == ProcessReplaceAll)
-			stringSizeReplace = Searching::convertExtendedToString(pTextReplace, pTextReplace, int(stringSizeReplace));
+			stringSizeReplace = Searching::convertExtendedToString(pTextReplace, pTextReplace, static_cast<int32_t>(stringSizeReplace));
 	}
 
 	bool isRegExp = pOptions->_searchType == FindRegex;
@@ -2485,7 +2481,7 @@ int FindReplaceDlg::processRange(ProcessOperation op, FindReplaceInfo & findRepl
 		if (targetStart == -1 || targetStart == -2)
 			break;
 
-		targetEnd = int(pEditView->execute(SCI_GETTARGETEND));
+		targetEnd = static_cast<int32_t>(pEditView->execute(SCI_GETTARGETEND));
 
 		if (targetEnd > findReplaceInfo._endRange)	{
 
@@ -2510,8 +2506,8 @@ int FindReplaceDlg::processRange(ProcessOperation op, FindReplaceInfo & findRepl
 				}
 
 				auto lineNumber = pEditView->execute(SCI_LINEFROMPOSITION, targetStart);
-				int lend = int(pEditView->execute(SCI_GETLINEENDPOSITION, lineNumber));
-				int lstart = int(pEditView->execute(SCI_POSITIONFROMLINE, lineNumber));
+				int lend = static_cast<int32_t>(pEditView->execute(SCI_GETLINEENDPOSITION, lineNumber));
+				int lstart = static_cast<int32_t>(pEditView->execute(SCI_POSITIONFROMLINE, lineNumber));
 				int nbChar = lend - lstart;
 
 				// use the static buffer
@@ -2549,8 +2545,8 @@ int FindReplaceDlg::processRange(ProcessOperation op, FindReplaceInfo & findRepl
 				}
 
 				auto lineNumber = pEditView->execute(SCI_LINEFROMPOSITION, targetStart);
-				int lend = int(pEditView->execute(SCI_GETLINEENDPOSITION, lineNumber));
-				int lstart = int(pEditView->execute(SCI_POSITIONFROMLINE, lineNumber));
+				int lend = static_cast<int32_t>(pEditView->execute(SCI_GETLINEENDPOSITION, lineNumber));
+				int lstart = static_cast<int32_t>(pEditView->execute(SCI_POSITIONFROMLINE, lineNumber));
 				int nbChar = lend - lstart;
 
 				// use the static buffer
@@ -2728,6 +2724,7 @@ void FindReplaceDlg::findAllIn(InWhat op)	{
 		// in this case is DOCKABLE_DEMO_INDEX
 		data.dlgID = 0;
 		::SendMessage(_hParent, NPPM_DMMREGASDCKDLG, 0, reinterpret_cast<LPARAM>(&data));
+		::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
 
 		_pFinder->_scintView.init(_hInst, _pFinder->getHSelf());
 
@@ -2752,7 +2749,6 @@ void FindReplaceDlg::findAllIn(InWhat op)	{
 		_pFinder->_scintView.setMakerStyle(FOLDER_STYLE_SIMPLE);
 		_pFinder->_scintView.display();
 		// _pFinder->display();
-		// ::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
 		::UpdateWindow(_hParent);
 		_pFinder->setFinderStyle();
 
@@ -2761,7 +2757,7 @@ void FindReplaceDlg::findAllIn(InWhat op)	{
 		sprintf(ptrword, "%p", &_pFinder->_markingsStruct);
 		_pFinder->_scintView.execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("@MarkingsStruct"), reinterpret_cast<LPARAM>(ptrword));
 	}
-	// else	_pFinder->setFinderStyle();
+
 	::SendMessage(_pFinder->getHSelf(), WM_SIZE, 0, 0);
 	int cmdid;
 	if (op == ALL_OPEN_DOCS)
@@ -2774,7 +2770,8 @@ void FindReplaceDlg::findAllIn(InWhat op)	{
 
 	if (::SendMessage(_hParent, cmdid, 0, 0))	{
 
-		if (_findAllResult)		openFinder();
+		if (_findAllResult)
+			openFinder();
  		else	{
 			TCHAR s[64];
 			generic_string msg = param.getNativeLangSpeaker()->getLocalizedStrFromID("find-status-cannot-find", L"Find: Can't find the text \"$STR_REPLACE$\" in "),
@@ -2784,7 +2781,7 @@ void FindReplaceDlg::findAllIn(InWhat op)	{
 			else if (op==CURRENT_DOC)
 				wsprintf(s, L"current file");
 			else
-				wsprintf(s, L"%i file(s) as setting/filter specified", _fileTot);
+				wsprintf(s, L"%i file(s) as specified", _fileTot);
 			setStatusbarMessage(ms + generic_string(s), FSNotFound);
 				
 			(*_ppEditView)->focus();	::SetFocus(::GetDlgItem(_hSelf, IDFINDWHAT));
@@ -3558,8 +3555,8 @@ void FindReplaceDlg::drawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)	{
 
 	else	{
 
-		fgColor = RGB(0xCF,0xCF,0xCF);
-		ptStr = L" Hit ALT<underlined character> to set/do a job, TAB to walk over each, SHIFT-TAB to do so backward";
+		fgColor = RGB(0xCF,0xCC,0xCF);
+		ptStr = L" Hit ALT<underlined character> to set/do a job, or TAB to get on one (SHIFT-TAB backwardly) then SPACE";
 	}
 	::SetTextColor(lpDrawItemStruct->hDC, fgColor);
 	::SetBkColor(lpDrawItemStruct->hDC, RGB(0,0,0));//getCtrlBgColor(_statusBar.getHSelf())

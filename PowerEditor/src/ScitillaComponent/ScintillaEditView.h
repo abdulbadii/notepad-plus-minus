@@ -277,7 +277,7 @@ public:
 	};
 
 	int getCurrentDocLen() const {
-		return int(execute(SCI_GETLENGTH));
+		return static_cast<int32_t>(execute(SCI_GETLENGTH));
 	};
 
 	Sci_CharacterRange getSelection() const {
@@ -416,7 +416,7 @@ public:
 
 	int32_t lastZeroBasedLineNumber() const {
 		auto endPos = execute(SCI_GETLENGTH);
-		return int(execute(SCI_LINEFROMPOSITION, endPos));
+		return static_cast<int32_t>(execute(SCI_LINEFROMPOSITION, endPos));
 	};
 
 	long getCurrentXOffset()const{

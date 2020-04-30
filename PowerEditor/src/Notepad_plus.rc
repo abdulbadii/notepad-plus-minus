@@ -388,7 +388,7 @@ BEGIN
 		MENUITEM "Find/Replace in Files",            IDM_SEARCH_FINDINFILES
 		MENUITEM "Find &Next",                  IDM_SEARCH_FINDNEXT
 		MENUITEM "Find &Previous",              IDM_SEARCH_FINDPREV
-		MENUITEM "Replacin&g this Only ",              IDM_SEARCH_REPLACING1
+		MENUITEM "Re&place Only ",              IDM_SEARCH_REPLACE1
 		MENUITEM "Find (Volatile) Next",        IDM_SEARCH_VOLATILE_FINDNEXT
 		MENUITEM "Find (Volatile) Previous",    IDM_SEARCH_VOLATILE_FINDPREV
 		MENUITEM "Select and Find Next",        IDM_SEARCH_SETANDFINDNEXT

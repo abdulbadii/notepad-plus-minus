@@ -140,7 +140,7 @@ INT_PTR CALLBACK ColumnEditorDlg::run_dlgProc(UINT message, WPARAM wParam, LPARA
 										
 									s2r.insert(posRelative2Start, str);
 								}
-								(*_ppEditView)->replaceTarget(s2r.c_str(), int(lineBegin), int(lineEnd));
+								(*_ppEditView)->replaceTarget(s2r.c_str(), static_cast<int32_t>(lineBegin), static_cast<int32_t>(lineEnd));
 							}
 							delete [] line;
 						}
@@ -257,7 +257,7 @@ INT_PTR CALLBACK ColumnEditorDlg::run_dlgProc(UINT message, WPARAM wParam, LPARA
 									s2r.insert(posRelative2Start, str);
 								}
 
-								(*_ppEditView)->replaceTarget(s2r.c_str(), int(lineBegin), int(lineEnd));
+								(*_ppEditView)->replaceTarget(s2r.c_str(), static_cast<int32_t>(lineBegin), static_cast<int32_t>(lineEnd));
 							}
 							delete [] line;
 						}

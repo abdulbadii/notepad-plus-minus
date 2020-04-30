@@ -64,7 +64,7 @@ void TreeView::init(HINSTANCE hInst, HWND pere)	{
                             NULL);
 
 	if (!_hSelf)
-		throw int(56);
+		throw static_cast<int32_t>(56);
 
 	Parent = insertTo(NULL, L"MAOCS30 Command", 0);
 	Root=Parent;

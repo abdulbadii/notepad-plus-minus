@@ -60,8 +60,8 @@ public :
 
 	void setText(size_t row, size_t col, const TCHAR *text) {
 		_BGCELL cell;
-		cell.row = int(row);
-		cell.col = int(col);
+		cell.row = static_cast<int32_t>(row);
+		cell.col = static_cast<int32_t>(col);
 		::SendMessage(_hSelf, BGM_SETCELLDATA, reinterpret_cast<WPARAM>(&cell), reinterpret_cast<LPARAM>(text));
 	};
 

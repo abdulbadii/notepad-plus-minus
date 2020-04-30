@@ -152,7 +152,7 @@ private :
 
 
 	Style & getCurrentStyler() {
-		int32_t styleIndex = int(::SendDlgItemMessage(_hSelf, IDC_STYLES_LIST, LB_GETCURSEL, 0, 0));
+		int32_t styleIndex = static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_STYLES_LIST, LB_GETCURSEL, 0, 0));
 		if (styleIndex == LB_ERR)
 			styleIndex = 0;
 

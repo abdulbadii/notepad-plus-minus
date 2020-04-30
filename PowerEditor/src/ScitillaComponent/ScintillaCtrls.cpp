@@ -44,7 +44,7 @@ int ScintillaCtrls::getIndexFrom(HWND handle2Find)	{
 
 		if (_scintVector[i]->getHSelf() == handle2Find)	{
 
-			return int(i);
+			return static_cast<int32_t>(i);
 		}
 	}
 	return -1;

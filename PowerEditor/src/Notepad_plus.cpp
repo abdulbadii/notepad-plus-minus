@@ -962,16 +962,15 @@ int Notepad_plus::getHtmlXmlEncoding(const TCHAR *fileName) const
 
 		return -1;
 	}
-	NppParameters& nppParamInst = param;
-	LangType langT = nppParamInst.getLangFromExt(ext);
+	LangType langT = param.getLangFromExt(ext);
 
 	if ((langT != L_XML) && (langT != L_HTML))
 		return -1;
 
 	// Get the beginning of file data
 	FILE *f = generic_fopen(fileName, L"rb");
-	if (!f)
-		return -1;
+	if (!f)	return -1;
+
 	constexpr int blockSize = 1024; // To ensure that length is long enough to capture the encoding in html
 	char data[blockSize];
 	size_t lenFile = fread(data, 1, blockSize, f);
@@ -4426,8 +4425,7 @@ void Notepad_plus::saveScintillasZoom()	{
 
 bool Notepad_plus::addCurrentMacro()	{
 
-	NppParameters& nppParams = param;
-	vector<MacroShortcut> & theMacros = nppParams.getMacroList();
+		vector<MacroShortcut> & theMacros = param.getMacroList();
 
 	int nbMacro = int(theMacros.size());
 
@@ -4446,7 +4444,7 @@ bool Notepad_plus::addCurrentMacro()	{
 				// Insert the separator and modify/delete command
 			::InsertMenu(hMacroMenu, posBase + nbMacro + 1, MF_BYPOSITION, static_cast<UINT>(-1), 0);
 
-			NativeLangSpeaker *pNativeLangSpeaker = nppParams.getNativeLangSpeaker();
+			NativeLangSpeaker *pNativeLangSpeaker = param.getNativeLangSpeaker();
 			generic_string nativeLangShortcutMapperMacro = pNativeLangSpeaker->getNativeLangMenuString(IDM_SETTING_SHORTCUT_MAPPER_MACRO);
 			if (nativeLangShortcutMapperMacro == L"")
 				nativeLangShortcutMapperMacro = L"Modify Shortcut/Delete Macro...";
@@ -4456,7 +4454,7 @@ bool Notepad_plus::addCurrentMacro()	{
 		theMacros.push_back(ms);
 		::InsertMenu(hMacroMenu, posBase + nbMacro, MF_BYPOSITION, cmdID, ms.toMenuItemString().c_str());
 		_accelerator.updateShortcuts();
-		nppParams.setShortcutDirty();
+		param.setShortcutDirty();
 		return true;
 	}
 	return false;
@@ -5353,8 +5351,7 @@ std::vector<generic_string> Notepad_plus::loadCommandlineParams(const TCHAR * co
 	if (!commandLine || ! pCmdParams)
 		return std::vector<generic_string>();
 
-	NppParameters& nppParams = param;
-	FileNameStringSplitter fnss(commandLine);
+		FileNameStringSplitter fnss(commandLine);
 
 	// loading file as session file is allowed only when there is only one file
 	if (pCmdParams->_isSessionFile && fnss.size() == 1)	{
@@ -5394,7 +5391,7 @@ std::vector<generic_string> Notepad_plus::loadCommandlineParams(const TCHAR * co
 
 		lastOpened = bufID;
 
-		if (lt != L_EXTERNAL && lt < nppParams.L_END)	{
+		if (lt != L_EXTERNAL && lt < param.L_END)	{
 
 			Buffer * pBuf = MainFileManager.getBufferByID(bufID);
 			pBuf->setLangType(lt);

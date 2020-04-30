@@ -656,7 +656,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case NPPM_GETSHORTCUTBYCMDID:	{
 
-			int cmdID = int(wParam); // cmdID
+			int cmdID = static_cast<int32_t>(wParam); // cmdID
 			ShortcutKey *sk = reinterpret_cast<ShortcutKey *>(lParam); // ShortcutKey structure
 
 			return _pluginsManager.getShortcutByCmdID(cmdID, sk);
@@ -664,7 +664,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case NPPM_MENUCOMMAND:	{
 
-			command(int(lParam));
+			command(static_cast<int32_t>(lParam));
 			return TRUE;
 		}
 
@@ -695,7 +695,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			// otherwise we check if the generic_string buffer size is enough for the generic_string to copy.
 			if (wParam)	{
 
-				if (lstrlen(fileStr) >= int(wParam))	{
+				if (lstrlen(fileStr) >= static_cast<int32_t>(wParam))	{
 
 					return FALSE;
 				}
@@ -715,13 +715,13 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			// otherwise we check if the generic_string buffer size is enough for the generic_string to copy.
 			if (wParam)	{
 
-				if (lstrlen(str) >= int(wParam))	{	//buffer too small
+				if (lstrlen(str) >= static_cast<int32_t>(wParam))	{	//buffer too small
 
 					return FALSE;
 				}
 				else	{ //buffer large enough, perform safe copy
 
-					lstrcpyn(pTchar, str, int(wParam));
+					lstrcpyn(pTchar, str, static_cast<int32_t>(wParam));
 					return TRUE;
 				}
 			}
@@ -770,13 +770,13 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				lstrcpyn(str, &strLine[start], end - start + 1);
 			}
 
-			if (lstrlen(str) >= int(wParam))	{	//buffer too small
+			if (lstrlen(str) >= static_cast<int32_t>(wParam))	{	//buffer too small
 
 				return FALSE;
 			}
 			else	{ //buffer large enough, perform safe copy
 
-				lstrcpyn(pTchar, str, int(wParam));
+				lstrcpyn(pTchar, str, static_cast<int32_t>(wParam));
 				return TRUE;
 			}
 		}
@@ -796,7 +796,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			// otherwise we check if the generic_string buffer size is enough for the generic_string to copy.
 			if (wParam)	{
 
-				if (lstrlen(str) >= int(wParam))	{
+				if (lstrlen(str) >= static_cast<int32_t>(wParam))	{
 
 					return FALSE;
 				}
@@ -1077,8 +1077,8 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		case NPPM_TRIGGERTABBARCONTEXTMENU:	{
 
 			// similar to NPPM_ACTIVEDOC
-			int whichView = (wParam != MAIN_VIEW && wParam != SUB_VIEW) ? currentView() : int(wParam);
-			int index = int(lParam);
+			int whichView = (wParam != MAIN_VIEW && wParam != SUB_VIEW) ? currentView() : static_cast<int32_t>(wParam);
+			int index = static_cast<int32_t>(lParam);
 
 			switchEditViewTo(whichView);
 //			// _recBuf[rB++] = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
@@ -1145,13 +1145,13 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case WM_FRSAVE_INT:	{
 
-			_macro.push_back(recordedMacroStep(int(wParam), 0, static_cast<long>(lParam), NULL, recordedMacroStep::mtSavedSnR));
+			_macro.push_back(recordedMacroStep(static_cast<int32_t>(wParam), 0, static_cast<long>(lParam), NULL, recordedMacroStep::mtSavedSnR));
 			break;
 		}
 
 		case WM_FRSAVE_STR:	{
 
-			_macro.push_back(recordedMacroStep(int(wParam), 0, 0, reinterpret_cast<const TCHAR *>(lParam), recordedMacroStep::mtSavedSnR));
+			_macro.push_back(recordedMacroStep(static_cast<int32_t>(wParam), 0, 0, reinterpret_cast<const TCHAR *>(lParam), recordedMacroStep::mtSavedSnR));
 			break;
 		}
 
@@ -1168,8 +1168,8 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 					break;
 
 				int counter = 0;
-				int lastLine = int(_pEditView->execute(SCI_GETLINECOUNT)) - 1;
-				int currLine = int(_pEditView->getCurrentLineNumber());
+				int lastLine = static_cast<int32_t>(_pEditView->execute(SCI_GETLINECOUNT)) - 1;
+				int currLine = static_cast<int32_t>(_pEditView->getCurrentLineNumber());
 				int indexMacro = _runMacroDlg.getMacro2Exec();
 				int deltaLastLine = 0;
 				int deltaCurrLine = 0;
@@ -1195,8 +1195,8 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 					else	{ // run until eof
 
 						bool cursorMovedUp = deltaCurrLine < 0;
-						deltaLastLine = int(_pEditView->execute(SCI_GETLINECOUNT)) - 1 - lastLine;
-						deltaCurrLine = int(_pEditView->getCurrentLineNumber()) - currLine;
+						deltaLastLine = static_cast<int32_t>(_pEditView->execute(SCI_GETLINECOUNT)) - 1 - lastLine;
+						deltaCurrLine = static_cast<int32_t>(_pEditView->getCurrentLineNumber()) - currLine;
 
 						if ((!deltaCurrLine )	// line no. not changed?
 							&& (deltaLastLine >= 0))  // and no lines removed?
@@ -1289,7 +1289,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				case STATUSBAR_EOF_FORMAT:
 				case STATUSBAR_UNICODE_TYPE:
 				case STATUSBAR_TYPING_MODE:
-					_statusBar.setText(str2set, int(wParam));
+					_statusBar.setText(str2set, static_cast<int32_t>(wParam));
 					return TRUE;
 				default :
 					return FALSE;
@@ -2063,12 +2063,12 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case NPPM_ALLOCATECMDID:	{
 
-			return _pluginsManager.allocateCmdID(int(wParam), reinterpret_cast<int *>(lParam));
+			return _pluginsManager.allocateCmdID(static_cast<int32_t>(wParam), reinterpret_cast<int *>(lParam));
 		}
 
 		case NPPM_ALLOCATEMARKER:	{
 
-			return _pluginsManager.allocateMarker(int(wParam), reinterpret_cast<int *>(lParam));
+			return _pluginsManager.allocateMarker(static_cast<int32_t>(wParam), reinterpret_cast<int *>(lParam));
 		}
 
 		case NPPM_HIDETABBAR:	{
@@ -2289,7 +2289,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case NPPM_REMOVESHORTCUTBYCMDID:	{
 
-			int cmdID = int(wParam);
+			int cmdID = static_cast<int32_t>(wParam);
 			return _pluginsManager.removeShortcutByCmdID(cmdID);
 		}
 

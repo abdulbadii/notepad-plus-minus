@@ -42,7 +42,7 @@ WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 // get full ScinLexer.dll path to avoid hijack
 TCHAR * getSciLexerFullPathName(TCHAR * moduleFileName, size_t len)	{
 
-	::GetModuleFileName(NULL, moduleFileName, int(len));
+	::GetModuleFileName(NULL, moduleFileName, static_cast<int32_t>(len));
 	::PathRemoveFileSpec(moduleFileName);
 	::PathAppend(moduleFileName, L"SciLexer.dll");
 	return moduleFileName;
@@ -524,7 +524,7 @@ void ScintillaEditView::setSpecialStyle(const Style & styleToSet)	{
 	if ( styleToSet._colorStyle & COLORSTYLE_BACKGROUND )
 		execute(SCI_STYLESETBACK, styleID, styleToSet._bgColor);
 
-	if (styleToSet._fontName && lstrcmp(styleToSet._fontName, L"") != 0)	{
+	if (styleToSet._fontName && lstrcmp(styleToSet._fontName, L""))	{
 
 		
 		if (!param.isInFontList(styleToSet._fontName))	{
@@ -1780,10 +1780,10 @@ BufferID ScintillaEditView::attachDefaultDoc()
 void ScintillaEditView::saveCurrentPos()	{
 
 	//Save data so, that the current topline becomes visible again after restoring.
-	int32_t displayedLine = int(execute(SCI_GETFIRSTVISIBLELINE));
-	int32_t docLine = int(execute(SCI_DOCLINEFROMVISIBLE, displayedLine));		//linenumber of the line displayed in the top
-	int32_t offset = displayedLine - int(execute(SCI_VISIBLEFROMDOCLINE, docLine));		//use this to calc offset of wrap. If no wrap this should be zero
-	int wrapCount = int(execute(SCI_WRAPCOUNT, docLine));
+	int32_t displayedLine = static_cast<int32_t>(execute(SCI_GETFIRSTVISIBLELINE));
+	int32_t docLine = static_cast<int32_t>(execute(SCI_DOCLINEFROMVISIBLE, displayedLine));		//linenumber of the line displayed in the top
+	int32_t offset = displayedLine - static_cast<int32_t>(execute(SCI_VISIBLEFROMDOCLINE, docLine));		//use this to calc offset of wrap. If no wrap this should be zero
+	int wrapCount = static_cast<int32_t>(execute(SCI_WRAPCOUNT, docLine));
 
 	Buffer * buf = MainFileManager.getBufferByID(_currentBufferID);
 
@@ -1793,8 +1793,8 @@ void ScintillaEditView::saveCurrentPos()	{
 	pos._startPos = static_cast<int>(execute(SCI_GETANCHOR));
 	pos._endPos = static_cast<int>(execute(SCI_GETCURRENTPOS));
 	pos._xOffset = static_cast<int>(execute(SCI_GETXOFFSET));
-	pos._selMode = int(execute(SCI_GETSELECTIONMODE));
-	pos._scrollWidth = int(execute(SCI_GETSCROLLWIDTH));
+	pos._selMode = static_cast<int32_t>(execute(SCI_GETSELECTIONMODE));
+	pos._scrollWidth = static_cast<int32_t>(execute(SCI_GETSCROLLWIDTH));
 	pos._offset = offset;
 	pos._wrapCount = wrapCount;
 
@@ -1820,7 +1820,7 @@ void ScintillaEditView::restoreCurrentPosPreStep()	{
 		execute(SCI_SETXOFFSET, pos._xOffset);
 	}
 	execute(SCI_CHOOSECARETX); // choose current x position
-	int lineToShow = int(execute(SCI_VISIBLEFROMDOCLINE, pos._firstVisibleLine));
+	int lineToShow = static_cast<int32_t>(execute(SCI_VISIBLEFROMDOCLINE, pos._firstVisibleLine));
 	execute(SCI_SETFIRSTVISIBLELINE, lineToShow);
 	if (isWrap())	{
 
@@ -1855,8 +1855,8 @@ void ScintillaEditView::restoreCurrentPosPostStep()	{
 		return;
 	}
 	
-	int32_t displayedLine = int(execute(SCI_GETFIRSTVISIBLELINE));
-	int32_t docLine = int(execute(SCI_DOCLINEFROMVISIBLE, displayedLine));		//linenumber of the line displayed in the 
+	int32_t displayedLine = static_cast<int32_t>(execute(SCI_GETFIRSTVISIBLELINE));
+	int32_t docLine = static_cast<int32_t>(execute(SCI_DOCLINEFROMVISIBLE, displayedLine));		//linenumber of the line displayed in the 
 	
 
 	// check docLine must equals saved position
@@ -1864,14 +1864,14 @@ void ScintillaEditView::restoreCurrentPosPostStep()	{
 
 		
 		// Scintilla has paint the buffer but the position is not correct.
-		int lineToShow = int(execute(SCI_VISIBLEFROMDOCLINE, pos._firstVisibleLine));
+		int lineToShow = static_cast<int32_t>(execute(SCI_VISIBLEFROMDOCLINE, pos._firstVisibleLine));
 		execute(SCI_SETFIRSTVISIBLELINE, lineToShow);
 	}
 	else if (pos._offset > 0)	{
 
 		// don't scroll anything if the wrap count is different than the saved one.
 		// Buffer update may be in progress (in case wrap is enabled)
-		int wrapCount = int(execute(SCI_WRAPCOUNT, docLine));
+		int wrapCount = static_cast<int32_t>(execute(SCI_WRAPCOUNT, docLine));
 		if (wrapCount == pos._wrapCount)	{
 
 			scroll(0, pos._offset);
@@ -1944,7 +1944,7 @@ void ScintillaEditView::activateBuffer(BufferID buffer)	{
 	bufferUpdated(_currentBuffer, (BufferChangeMask & ~BufferChangeLanguage));	//everything should be updated, but the language (which undoes some operations done here like folding)
 
 	//setup line number margin
-	int numLines = int(execute(SCI_GETLINECOUNT));
+	int numLines = static_cast<int32_t>(execute(SCI_GETLINECOUNT));
 
 	char numLineStr[32];
 	itoa(numLines, numLineStr, 10);
@@ -2053,7 +2053,7 @@ struct FoldLevelStack	{
 
 	void push(int level)	{
 
-		while (levelCount != 0 && level <= levelStack[levelCount - 1])	{
+		while (levelCount && level <= levelStack[levelCount - 1])	{
 
 			--levelCount;
 		}
@@ -2070,12 +2070,12 @@ void ScintillaEditView::collapseFoldIndentationBased(int level2Collapse, bool mo
 	FoldLevelStack levelStack;
 	++level2Collapse; // 1-based level number
 
-	const int maxLine = int(execute(SCI_GETLINECOUNT));
+	const int maxLine = static_cast<int32_t>(execute(SCI_GETLINECOUNT));
 	int line = 0;
 
 	while (line < maxLine)	{
 
-		int level = int(execute(SCI_GETFOLDLEVEL, line));
+		int level = static_cast<int32_t>(execute(SCI_GETFOLDLEVEL, line));
 		if (level & SC_FOLDLEVELHEADERFLAG)	{
 
 			level &= SC_FOLDLEVELNUMBERMASK;
@@ -2088,7 +2088,7 @@ void ScintillaEditView::collapseFoldIndentationBased(int level2Collapse, bool mo
 					fold(line, mode);
 				}
 				// skip all children lines, required to avoid buffer overrun.
-				line = int(execute(SCI_GETLASTCHILD, line, -1));
+				line = static_cast<int32_t>(execute(SCI_GETLASTCHILD, line, -1));
 			}
 		}
 		++line;
@@ -2107,11 +2107,11 @@ void ScintillaEditView::collapse(int level2Collapse, bool mode)	{
 
 	execute(SCI_COLOURISE, 0, -1);
 
-	int maxLine = int(execute(SCI_GETLINECOUNT));
+	int maxLine = static_cast<int32_t>(execute(SCI_GETLINECOUNT));
 
 	for (int line = 0; line < maxLine; ++line)	{
 
-		int level = int(execute(SCI_GETFOLDLEVEL, line));
+		int level = static_cast<int32_t>(execute(SCI_GETFOLDLEVEL, line));
 		if (level & SC_FOLDLEVELHEADERFLAG)	{
 
 			level -= SC_FOLDLEVELBASE;
@@ -2144,10 +2144,10 @@ void ScintillaEditView::fold(size_t line, bool mode)	{
 	auto level = execute(SCI_GETFOLDLEVEL, line);
 
 	if (level & SC_FOLDLEVELHEADERFLAG)
-		headerLine = int(line);
+		headerLine = static_cast<int32_t>(line);
 	else	{
 
-		headerLine = int(execute(SCI_GETFOLDPARENT, line));
+		headerLine = static_cast<int32_t>(execute(SCI_GETFOLDPARENT, line));
 		if (headerLine == -1)
 			return;
 	}
@@ -2240,13 +2240,13 @@ void ScintillaEditView::getVisibleStartAndEndPosition(int * startPos, int * endP
 	assert(startPos != NULL && endPos != NULL);
 
 	auto firstVisibleLine = execute(SCI_GETFIRSTVISIBLELINE);
-	*startPos = int(execute(SCI_POSITIONFROMLINE, execute(SCI_DOCLINEFROMVISIBLE, firstVisibleLine)));
+	*startPos = static_cast<int32_t>(execute(SCI_POSITIONFROMLINE, execute(SCI_DOCLINEFROMVISIBLE, firstVisibleLine)));
 	auto linesOnScreen = execute(SCI_LINESONSCREEN);
 	auto lineCount = execute(SCI_GETLINECOUNT);
 	auto visibleLine = execute(SCI_DOCLINEFROMVISIBLE, firstVisibleLine + min(linesOnScreen, lineCount));
-	*endPos = int(execute(SCI_POSITIONFROMLINE, visibleLine));
+	*endPos = static_cast<int32_t>(execute(SCI_POSITIONFROMLINE, visibleLine));
 	if (*endPos == -1) 
-		*endPos = int(execute(SCI_GETLENGTH));
+		*endPos = static_cast<int32_t>(execute(SCI_GETLENGTH));
 }
 
 char * ScintillaEditView::getWordFromRange(char * txt, int size, int pos1, int pos2)	{
@@ -2313,16 +2313,16 @@ int ScintillaEditView::searchInTarget(const TCHAR * text2Find, size_t lenOfText2
 
 		UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
 	const char *text2FindA = wmc.wchar2char(text2Find, cp);
-	return int(execute(SCI_SEARCHINTARGET, max(lenOfText2Find,strlen(text2FindA)), reinterpret_cast<LPARAM>(text2FindA)));
+	return static_cast<int32_t>(execute(SCI_SEARCHINTARGET, max(lenOfText2Find,strlen(text2FindA)), reinterpret_cast<LPARAM>(text2FindA)));
 }
 
 int ScintillaEditView::searchInTarget(const TCHAR * text2find) const	{
-	execute(SCI_SETTARGETRANGE, 0, int(execute(SCI_GETLENGTH)));
+	execute(SCI_SETTARGETRANGE, 0, static_cast<int32_t>(execute(SCI_GETLENGTH)));
 
 		UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
 
 	const char *text2FindA = wmc.wchar2char(text2find, cp);
-	return int(execute(SCI_SEARCHINTARGET, max(lstrlen(text2find), strlen(text2FindA)), reinterpret_cast<LPARAM>(text2FindA)));
+	return static_cast<int32_t>(execute(SCI_SEARCHINTARGET, max(lstrlen(text2find), strlen(text2FindA)), reinterpret_cast<LPARAM>(text2FindA)));
 }
 
 void ScintillaEditView::appandGenericText(const TCHAR * text2Append) const
@@ -2354,7 +2354,7 @@ int32_t ScintillaEditView::replaceTarget(const TCHAR * str2replace, int fromTarg
 	}
 		UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
 	const char *str2replaceA = wmc.wchar2char(str2replace, cp);
-	return int(execute(SCI_REPLACETARGET, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(str2replaceA)));
+	return static_cast<int32_t>(execute(SCI_REPLACETARGET, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(str2replaceA)));
 }
 
 int ScintillaEditView::replaceTargetRegExMode(const TCHAR * re, int fromTargetPos, int toTargetPos) const
@@ -2365,7 +2365,7 @@ int ScintillaEditView::replaceTargetRegExMode(const TCHAR * re, int fromTargetPo
 	}
 		UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
 	const char *reA = wmc.wchar2char(re, cp);
-	return int(execute(SCI_REPLACETARGETRE, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(reA)));
+	return static_cast<int32_t>(execute(SCI_REPLACETARGETRE, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(reA)));
 }
 
 void ScintillaEditView::showAutoC(size_t lenEntered, const TCHAR* list)	{
@@ -2385,7 +2385,7 @@ void ScintillaEditView::showCallTip(int startPos, const TCHAR * def)	{
 
 generic_string ScintillaEditView::getLine(size_t lineNumber)	{
 
-	int32_t lineLen = int(execute(SCI_LINELENGTH, lineNumber));
+	int32_t lineLen = static_cast<int32_t>(execute(SCI_LINELENGTH, lineNumber));
 	const int bufSize = lineLen + 1;
 	unique_ptr<TCHAR[]> buf = make_unique<TCHAR[]>(bufSize);
 	getLine(lineNumber, buf.get(), bufSize);
@@ -2419,7 +2419,7 @@ void ScintillaEditView::beginOrEndSelect()	{
 
 	if (_beginSelectPosition == -1)	{
 
-		_beginSelectPosition = int(execute(SCI_GETCURRENTPOS));
+		_beginSelectPosition = static_cast<int32_t>(execute(SCI_GETCURRENTPOS));
 	}
 	else	{
 
@@ -2444,7 +2444,7 @@ void ScintillaEditView::updateBeginEndSelectPosition(bool is_insert, size_t posi
 void ScintillaEditView::marginClick(Sci_Position position, int modifiers)	{
 
 	size_t lineClick = execute(SCI_LINEFROMPOSITION, position, 0);
-	int levelClick = int(execute(SCI_GETFOLDLEVEL, lineClick, 0));
+	int levelClick = static_cast<int32_t>(execute(SCI_GETFOLDLEVEL, lineClick, 0));
 	if (levelClick & SC_FOLDLEVELHEADERFLAG)	{
 
 		if (modifiers & SCMOD_SHIFT)	{
@@ -2496,7 +2496,7 @@ void ScintillaEditView::expand(size_t& line, bool doExpand, bool force, int visL
 
 		int levelLine = level;
 		if (levelLine == -1)
-			levelLine = int(execute(SCI_GETFOLDLEVEL, line, 0));
+			levelLine = static_cast<int32_t>(execute(SCI_GETFOLDLEVEL, line, 0));
 
 		if (levelLine & SC_FOLDLEVELHEADERFLAG)	{
 
@@ -2612,9 +2612,9 @@ void ScintillaEditView::setLineIndent(int line, int indent) const
 	if (indent < 0)
 		return;
 	Sci_CharacterRange crange = getSelection();
-	int posBefore = int(execute(SCI_GETLINEINDENTPOSITION, line));
+	int posBefore = static_cast<int32_t>(execute(SCI_GETLINEINDENTPOSITION, line));
 	execute(SCI_SETLINEINDENTATION, line, indent);
-	int32_t posAfter = int(execute(SCI_GETLINEINDENTPOSITION, line));
+	int32_t posAfter = static_cast<int32_t>(execute(SCI_GETLINEINDENTPOSITION, line));
 	int posDifference = posAfter - posBefore;
 	if (posAfter > posBefore)	{
 
@@ -2720,11 +2720,11 @@ pair<int, int> ScintillaEditView::getSelectionLinesRange() const
 	pair<int, int> range(-1, -1);
 	if (execute(SCI_GETSELECTIONS) > 1) // multi-selection
 		return range;
-	int32_t start = int(execute(SCI_GETSELECTIONSTART));
-	int32_t end = int(execute(SCI_GETSELECTIONEND));
+	int32_t start = static_cast<int32_t>(execute(SCI_GETSELECTIONSTART));
+	int32_t end = static_cast<int32_t>(execute(SCI_GETSELECTIONEND));
 
-	range.first = int(execute(SCI_LINEFROMPOSITION, start));
-	range.second = int(execute(SCI_LINEFROMPOSITION, end));
+	range.first = static_cast<int32_t>(execute(SCI_LINEFROMPOSITION, start));
+	range.second = static_cast<int32_t>(execute(SCI_LINEFROMPOSITION, end));
 
 	return range;
 }
@@ -2909,7 +2909,7 @@ void ScintillaEditView::convertSelectedTextTo(const TextCase & caseToConvert)	{
 	size_t selectionStart = execute(SCI_GETSELECTIONSTART);
 	size_t selectionEnd = execute(SCI_GETSELECTIONEND);
 
-	int32_t strLen = int(selectionEnd - selectionStart);
+	int32_t strLen = static_cast<int32_t>(selectionEnd - selectionStart);
 	if (strLen)	{
 
 		int strSize = strLen + 1;
@@ -3020,14 +3020,14 @@ ColumnModeInfos ScintillaEditView::getColumnModeSelectInfo()
 	ColumnModeInfos columnModeInfos;
 	if (execute(SCI_GETSELECTIONS) > 1)	{ // Multi-Selection || Column mode
 
-		int nbSel = int(execute(SCI_GETSELECTIONS));
+		int nbSel = static_cast<int32_t>(execute(SCI_GETSELECTIONS));
 
 		for (int i = 0 ; i < nbSel ; ++i)	{
 
-			int absPosSelStartPerLine = int(execute(SCI_GETSELECTIONNANCHOR, i));
-			int absPosSelEndPerLine = int(execute(SCI_GETSELECTIONNCARET, i));
-			int nbVirtualAnchorSpc = int(execute(SCI_GETSELECTIONNANCHORVIRTUALSPACE, i));
-			int nbVirtualCaretSpc = int(execute(SCI_GETSELECTIONNCARETVIRTUALSPACE, i));
+			int absPosSelStartPerLine = static_cast<int32_t>(execute(SCI_GETSELECTIONNANCHOR, i));
+			int absPosSelEndPerLine = static_cast<int32_t>(execute(SCI_GETSELECTIONNCARET, i));
+			int nbVirtualAnchorSpc = static_cast<int32_t>(execute(SCI_GETSELECTIONNANCHORVIRTUALSPACE, i));
+			int nbVirtualCaretSpc = static_cast<int32_t>(execute(SCI_GETSELECTIONNCARETVIRTUALSPACE, i));
 
 			if (absPosSelStartPerLine == absPosSelEndPerLine && execute(SCI_SELECTIONISRECTANGLE))	{
 
@@ -3221,7 +3221,7 @@ void ScintillaEditView::foldChanged(size_t line, int levelNow, int levelPrev)	{
 	        ((levelPrev & SC_FOLDLEVELNUMBERMASK) > (levelNow & SC_FOLDLEVELNUMBERMASK)))
 	{
 		// See if should still be hidden
-		int parentLine = int(execute(SCI_GETFOLDPARENT, line));
+		int parentLine = static_cast<int32_t>(execute(SCI_GETFOLDPARENT, line));
 		if ((parentLine < 0) || !isFolded(parentLine && execute(SCI_GETLINEVISIBLE, parentLine)))
 			execute(SCI_SHOWLINES, line, line);
 	}
@@ -3231,12 +3231,12 @@ void ScintillaEditView::foldChanged(size_t line, int levelNow, int levelPrev)	{
 void ScintillaEditView::scrollPosToCenter(size_t pos)	{
 
 	execute(SCI_GOTOPOS, pos);
-	int line = int(execute(SCI_LINEFROMPOSITION, pos));
+	int line = static_cast<int32_t>(execute(SCI_LINEFROMPOSITION, pos));
 
-	int firstVisibleDisplayLine = int(execute(SCI_GETFIRSTVISIBLELINE));
-	int firstVisibleDocLine = int(execute(SCI_DOCLINEFROMVISIBLE, firstVisibleDisplayLine));
-	int nbLine = int(execute(SCI_LINESONSCREEN, firstVisibleDisplayLine));
-	int lastVisibleDocLine = int(execute(SCI_DOCLINEFROMVISIBLE, firstVisibleDisplayLine + nbLine));
+	int firstVisibleDisplayLine = static_cast<int32_t>(execute(SCI_GETFIRSTVISIBLELINE));
+	int firstVisibleDocLine = static_cast<int32_t>(execute(SCI_DOCLINEFROMVISIBLE, firstVisibleDisplayLine));
+	int nbLine = static_cast<int32_t>(execute(SCI_LINESONSCREEN, firstVisibleDisplayLine));
+	int lastVisibleDocLine = static_cast<int32_t>(execute(SCI_DOCLINEFROMVISIBLE, firstVisibleDisplayLine + nbLine));
 
 	int middleLine;
 	if (line - firstVisibleDocLine < lastVisibleDocLine - line)
@@ -3253,11 +3253,11 @@ void ScintillaEditView::hideLines()	{
 	//Adding runMarkers(hide, foldstart) directly (folding on single document) can help
 
 	//Special func on buffer. If markers are added, create notification with location of start, and hide bool set to true
-	int startLine = int(execute(SCI_LINEFROMPOSITION, execute(SCI_GETSELECTIONSTART)));
-	int endLine = int(execute(SCI_LINEFROMPOSITION, execute(SCI_GETSELECTIONEND)));
+	int startLine = static_cast<int32_t>(execute(SCI_LINEFROMPOSITION, execute(SCI_GETSELECTIONSTART)));
+	int endLine = static_cast<int32_t>(execute(SCI_LINEFROMPOSITION, execute(SCI_GETSELECTIONEND)));
 	//perform range check: cannot hide very first and very last lines
 	//Offset them one off the edges, and then check if they are within the reasonable
-	int nbLines = int(execute(SCI_GETLINECOUNT));
+	int nbLines = static_cast<int32_t>(execute(SCI_GETLINECOUNT));
 	if (nbLines < 3)
 		return;	//cannot possibly hide anything
 	if (!startLine)
@@ -3295,7 +3295,7 @@ void ScintillaEditView::hideLines()	{
 			++scope;
 		}
 	}
-	if (scope != 0)	{
+	if (scope)	{
 	//something went wrong
 		//Someone managed to make overlapping hidelines sections.
 		//We cant do anything since this isnt supposed to happen
@@ -3553,12 +3553,12 @@ void ScintillaEditView::sortLines(size_t fromLine, size_t toLine, ISorter *pSort
 	if (sortEntireDocument)	{
 
 		assert(joined.length() == text.length());
-		replaceTarget(joined.c_str(), int(startPos), int(endPos));
+		replaceTarget(joined.c_str(), static_cast<int32_t>(startPos), static_cast<int32_t>(endPos));
 	}
 	else	{
 
 		assert(joined.length() + getEOLString().length() == text.length());
-		replaceTarget((joined + getEOLString()).c_str(), int(startPos), int(endPos));
+		replaceTarget((joined + getEOLString()).c_str(), static_cast<int32_t>(startPos), static_cast<int32_t>(endPos));
 	}
 }
 
@@ -3577,7 +3577,7 @@ void ScintillaEditView::changeTextDirection(bool isRTL)	{
 
 generic_string ScintillaEditView::getEOLString()	{
 
-	const int eol_mode = int(execute(SCI_GETEOLMODE));
+	const int eol_mode = static_cast<int32_t>(execute(SCI_GETEOLMODE));
 	if (eol_mode == SC_EOL_CRLF)	{
 
 		return L"\r\n";

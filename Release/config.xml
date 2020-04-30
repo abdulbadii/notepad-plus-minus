@@ -21,6 +21,24 @@
         <Filter name="*.vc* *.sln" />
         <Filter name="*.c *.cpp *.cc *.h" />
         <Filter name="*.xml" />
+        <Find name="_colorStyle" />
+        <Find name="lexerUserExt" />
+        <Find name="_styleID" />
+        <Find name="COLORSTYLE_FOREGROUND" />
+        <Find name="setSpecialStyle" />
+        <Find name="ViewElem" />
+        <Find name="_activeView" />
+        <Find name="return" />
+        <Find name="lstrcmp" />
+        <Find name="_fontSize" />
+        <Find name="WordStyleDlg" />
+        <Find name="setStyle" />
+        <Find name="VK_PRIOR" />
+        <Find name="IDC_NEXT_DOC" />
+        <Find name="VK_TAB" />
+        <Find name="VK_0" />
+        <Find name="VK_NUMPAD1" />
+        <Find name="_styleDesc" />
         <Find name="create" />
         <Find name="checkItem" />
         <Find name="AddDirectory" />
@@ -160,7 +178,6 @@
         <Find name="IDD_FIND_REPLACE_" />
         <Find name="IDD_FIND_REPLACE_DLG" />
         <Find name="direction" />
-        <Find name="IDC_NEXT_DOC" />
         <Find name="index" />
         <Find name="FIND_" />
         <Find name="WM_MOV" />
@@ -264,6 +281,8 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\AnsiCharPanel\ansiCharPanel.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\NppCommands.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\FileBrowser\fileBrowser.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\ContextMenu\ContextMenu.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\keys.h" />
     </History>
     <GUIConfigs>
         <GUIConfig name="ToolBar" visible="no">standard</GUIConfig>
@@ -272,7 +291,7 @@
         <GUIConfig name="ScintillaViewsSplitter">vertical</GUIConfig>
         <GUIConfig name="UserDefineDlg" position="undocked">hide</GUIConfig>
         <GUIConfig name="TabSetting" replaceBySpace="no" size="3" />
-        <GUIConfig name="AppPosition" x="246" y="-4" width="1296" height="1087" isMaximized="no" />
+        <GUIConfig name="AppPosition" x="330" y="-18" width="1296" height="1087" isMaximized="no" />
         <GUIConfig name="noUpdate" intervalDays="15" nextUpdateDate="20171218">no</GUIConfig>
         <GUIConfig name="Auto-detection">auto</GUIConfig>
         <GUIConfig name="CheckHistoryFiles">no</GUIConfig>
@@ -289,7 +308,7 @@
         <GUIConfig name="MRU">yes</GUIConfig>
         <GUIConfig name="URL">1</GUIConfig>
         <GUIConfig name="globalOverride" fg="no" bg="no" font="yes" fontSize="no" bold="no" italic="no" underline="no" />
-        <GUIConfig name="auto-completion" autoCAction="1" triggerFromNbChar="2" autoCIgnoreNumbers="no" autoCCase="yes" funcParams="no" />
+        <GUIConfig name="auto-completion" autoCAction="1" triggerFromNbChar="2" autoCIgnoreNumbers="no" autoCCase="no" funcParams="no" />
         <GUIConfig name="auto-insert" parentheses="yes" brackets="no" curlyBrackets="no" quotes="no" doubleQuotes="yes" htmlXmlTag="no" />
         <GUIConfig name="sessionExt"></GUIConfig>
         <GUIConfig name="workspaceExt"></GUIConfig>
@@ -308,7 +327,7 @@
         <GUIConfig name="ScintillaPrimaryView" lineNumberMargin="show" bookMarkMargin="hide" indentGuideLine="show" folderMarkStyle="box" lineWrapMethod="indent" currentLineHilitingShow="show" scrollBeyondLastLine="yes" disableAdvancedScrolling="no" wrapSymbolShow="hide" Wrap="yes" borderEdge="no" edge="no" edgeNbColumn="80" zoom="1" zoom2="0" whiteSpaceShow="hide" eolShow="hide" borderWidth="0" smoothFont="yes" />
         <GUIConfig name="DockingManager" leftWidth="155" rightWidth="489" topHeight="200" bottomHeight="310">
             <FloatingWindow cont="4" x="642" y="-8" width="1250" height="439" />
-            <PluginDlg pluginName="Notepad++::InternalFunction" id="0" curr="1" prev="4" isVisible="no" />
+            <PluginDlg pluginName="Notepad++::InternalFunction" id="0" curr="1" prev="4" isVisible="yes" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="44079" curr="1" prev="-1" isVisible="no" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="44084" curr="1" prev="-1" isVisible="no" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="44070" curr="1" prev="-1" isVisible="no" />
@@ -322,7 +341,7 @@
             <PluginDlg pluginName="3P" id="2" curr="0" prev="-1" isVisible="no" />
             <PluginDlg pluginName="3P" id="1" curr="0" prev="-1" isVisible="no" />
             <ActiveTabs cont="0" activeTab="-1" />
-            <ActiveTabs cont="1" activeTab="-1" />
+            <ActiveTabs cont="1" activeTab="0" />
             <ActiveTabs cont="2" activeTab="-1" />
             <ActiveTabs cont="3" activeTab="-1" />
             <ActiveTabs cont="4" activeTab="-1" />

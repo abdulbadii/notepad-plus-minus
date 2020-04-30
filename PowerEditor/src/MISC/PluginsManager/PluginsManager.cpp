@@ -414,8 +414,7 @@ bool PluginsManager::removeShortcutByCmdID(int cmdID)	{
 	if (!cmdID)
 		return false;
 
-	NppParameters& nppParam = param;
-	vector<PluginCmdShortcut> & pluginCmdSCList = nppParam.getPluginCommandList();
+	vector<PluginCmdShortcut> & pluginCmdSCList = param.getPluginCommandList();
 
 	for (size_t i = 0, len = pluginCmdSCList.size(); i < len; ++i)	{
 
@@ -425,10 +424,10 @@ bool PluginsManager::removeShortcutByCmdID(int cmdID)	{
 			pluginCmdSCList[i].clear();
 
 			// inform accelerator instance
-			nppParam.getAccelerator()->updateShortcuts();
+			param.getAccelerator()->updateShortcuts();
 
 			// set dirty flag to force writing shortcuts.xml on shutdown
-			nppParam.setShortcutDirty();
+			param.setShortcutDirty();
 			break;
 		}
 	}

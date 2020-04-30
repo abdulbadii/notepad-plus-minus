@@ -110,7 +110,7 @@ struct NumericStringEquivalence	{
 
 				lcmp = generic_strtol(str1, &p1, 10) - generic_strtol(str2, &p2, 10);
 				if ( !lcmp )
-					lcmp = int((p2 - str2) - (p1 - str1));
+					lcmp = static_cast<int32_t>((p2 - str2) - (p1 - str1));
 				if ( lcmp )
 					break;
 				str1 = p1, str2 = p2;
@@ -650,7 +650,7 @@ void WindowsDlg::doRefresh(bool invalidate /*= false*/)	{
 				if (oldSize < count)
 					lo = oldSize;
 				for (size_t i = lo; i < count; ++i)
-					_idxMap[i] = int(i);
+					_idxMap[i] = static_cast<int32_t>(i);
 			}
 			LPARAM lp = invalidate ? LVSICF_NOSCROLL|LVSICF_NOINVALIDATEALL : LVSICF_NOSCROLL;
 			::SendMessage(_hList, LVM_SETITEMCOUNT, count, lp);
@@ -883,7 +883,7 @@ void WindowsMenu::initPopupMenu(HMENU hMenu, DocTabView *pTab)	{
 		nDoc = min(nDoc, nMaxDoc);
 		int id;
 		size_t pos;
-		for (id = IDM_WINDOW_MRU_FIRST, pos = 0; id < IDM_WINDOW_MRU_FIRST + int(nDoc); ++id, ++pos)	{
+		for (id = IDM_WINDOW_MRU_FIRST, pos = 0; id < IDM_WINDOW_MRU_FIRST + static_cast<int32_t>(nDoc); ++id, ++pos)	{
 
 			BufferID bufID = pTab->getBufferByIndex(pos);
 			Buffer * buf = MainFileManager.getBufferByID(bufID);
@@ -892,14 +892,14 @@ void WindowsMenu::initPopupMenu(HMENU hMenu, DocTabView *pTab)	{
 			memset(&mii, 0, sizeof(mii));
 			mii.cbSize = sizeof(mii);
 			mii.fMask = MIIM_STRING|MIIM_STATE|MIIM_ID;
-			generic_string strBuffer(BuildMenuFileName(60, int(pos), buf->getFileName()));
+			generic_string strBuffer(BuildMenuFileName(60, static_cast<int32_t>(pos), buf->getFileName()));
 			// Can't make mii.dwTypeData = strBuffer.c_str() because of const cast.
 			// So, making temporary buffer for this.
 			std::vector<TCHAR> vBuffer(strBuffer.begin(), strBuffer.end());
 			vBuffer.push_back('\0');
 			mii.dwTypeData = (&vBuffer[0]);
 			mii.fState &= ~(MF_GRAYED|MF_DISABLED|MF_CHECKED);
-			if (int(pos) == curDoc)
+			if (static_cast<int32_t>(pos) == curDoc)
 				mii.fState |= MF_CHECKED;
 			mii.wID = id;
 

@@ -468,7 +468,7 @@ void DisplayColumn(HWND hWnd,int SI,int c,int offset,HFONT hfont,HFONT hcolumnhe
 		else
 		// iProperty will combine (iDataType << 4) and (iProtection & 0xf), 
 		// this will reduce some unnecessary and 'heavy' message calls for getting iDataType and iProtection separately
-		iProperty = int(SendMessage(hWnd, BGM_GETCELLDATA, reinterpret_cast<WPARAM>(&BGcell), reinterpret_cast<LPARAM>(buffer)));
+		iProperty = static_cast<int32_t>(SendMessage(hWnd, BGM_GETCELLDATA, reinterpret_cast<WPARAM>(&BGcell), reinterpret_cast<LPARAM>(buffer)));
 
 		if(!c)	{
 
@@ -1467,15 +1467,15 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				break;
 
 		case BGM_DRAWCURSOR:
-			DrawCursor(hWnd, int(wParam));
+			DrawCursor(hWnd, static_cast<int32_t>(wParam));
 			break;
 		case BGM_SETCURSORPOS:
 					DrawCursor(hWnd,SelfIndex);
 					if((((int)wParam <= BGHS[SelfIndex].rows)&&((int)wParam > 0))&&
 						(((int)lParam <= BGHS[SelfIndex].cols)&&((int)lParam > 0)))
 					{
-						BGHS[SelfIndex].cursorrow = int(wParam);
-						BGHS[SelfIndex].cursorcol = int(lParam);
+						BGHS[SelfIndex].cursorrow = static_cast<int32_t>(wParam);
+						BGHS[SelfIndex].cursorcol = static_cast<int32_t>(lParam);
 					}
 					else	{
 
@@ -1493,9 +1493,9 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			if ((((int)wParam <= BGHS[SelfIndex].rows) && ((int)wParam > 0)) &&
 				(((int)lParam <= BGHS[SelfIndex].rows) && ((int)lParam > 0)))
 			{
-				BGHS[SelfIndex].homerow = int(wParam);
+				BGHS[SelfIndex].homerow = static_cast<int32_t>(wParam);
 				BGHS[SelfIndex].homecol = 1;
-				BGHS[SelfIndex].cursorrow = int(lParam);
+				BGHS[SelfIndex].cursorrow = static_cast<int32_t>(lParam);
 				BGHS[SelfIndex].cursorcol = 1;
 
 				SetHomeRow(hWnd, SelfIndex, BGHS[SelfIndex].cursorrow, BGHS[SelfIndex].cursorcol);
@@ -1658,7 +1658,7 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			wcscat_s(buffer, L"|");
 			wcscat_s(buffer, (TCHAR*)lParam);
-			FindResult = int(SendMessage(BGHS[SelfIndex].hlist1, LB_ADDSTRING, 0, reinterpret_cast<LPARAM>(buffer)));
+			FindResult = static_cast<int32_t>(SendMessage(BGHS[SelfIndex].hlist1, LB_ADDSTRING, 0, reinterpret_cast<LPARAM>(buffer)));
 
 				if(FindResult==LB_ERR)	{
 
@@ -1672,7 +1672,7 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				//get the last line and adjust grid dimmensions
 						if(BGHS[SelfIndex].AUTOROW)	{
 
-						int j = int(SendMessage(BGHS[SelfIndex].hlist1, LB_GETCOUNT, 0, 0));
+						int j = static_cast<int32_t>(SendMessage(BGHS[SelfIndex].hlist1, LB_GETCOUNT, 0, 0));
 						if(j>0)	{
 
 						auto lbTextLen = ::SendMessage(BGHS[SelfIndex].hlist1, LB_GETTEXTLEN, j-1, 0);
@@ -1852,7 +1852,7 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case BGM_SETGRIDDIM:
 				if((wParam>=0)&&(wParam<=MAX_ROWS))	{
 
-					BGHS[SelfIndex].rows = int(wParam);
+					BGHS[SelfIndex].rows = static_cast<int32_t>(wParam);
 				}
 				else	{
 
@@ -1868,7 +1868,7 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 				if((lParam>0)&&(lParam<=MAX_COLS))	{
 
-					BGHS[SelfIndex].cols = int(lParam);
+					BGHS[SelfIndex].cols = static_cast<int32_t>(lParam);
 				}
 				else	{
 
@@ -1893,7 +1893,7 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			if((wParam <= MAX_COLS)&&(wParam >= 0) && (lParam >= 0))	{
 
 					RECT rect;
-				BGHS[SelfIndex].columnwidths[wParam] = int(lParam);
+				BGHS[SelfIndex].columnwidths[wParam] = static_cast<int32_t>(lParam);
 					GetClientRect(hWnd,&rect);
 					InvalidateRect(hWnd,&rect,FALSE);
 					GetVisibleColumns(hWnd,SelfIndex);
@@ -1903,7 +1903,7 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			if(wParam >= 0)	{
 
 					RECT rect;
-				BGHS[SelfIndex].headerrowheight = int(wParam);
+				BGHS[SelfIndex].headerrowheight = static_cast<int32_t>(wParam);
 					SizeGrid(hWnd,SelfIndex);
 					GetClientRect(hWnd,&rect);
 					InvalidateRect(hWnd,&rect,FALSE);
@@ -1984,7 +1984,7 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 		case BGM_SETROWHEIGHT:
 			if(wParam <1){wParam=1;}
-			BGHS[SelfIndex].rowheight = int(wParam);
+			BGHS[SelfIndex].rowheight = static_cast<int32_t>(wParam);
 				SetHomeRow(hWnd,SelfIndex,BGHS[SelfIndex].cursorrow,BGHS[SelfIndex].cursorcol);
 				SetHomeCol(hWnd,SelfIndex,BGHS[SelfIndex].cursorrow,BGHS[SelfIndex].cursorcol);
 				SizeGrid(hWnd,SelfIndex);
@@ -1998,7 +1998,7 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 		case BGM_SETTITLEHEIGHT:
 				if(wParam<0){wParam =0;}
-			BGHS[SelfIndex].titleheight = int(wParam);
+			BGHS[SelfIndex].titleheight = static_cast<int32_t>(wParam);
 				SetHomeRow(hWnd,SelfIndex,BGHS[SelfIndex].cursorrow,BGHS[SelfIndex].cursorcol);
 				SetHomeCol(hWnd,SelfIndex,BGHS[SelfIndex].cursorrow,BGHS[SelfIndex].cursorcol);
 				{
@@ -2224,7 +2224,7 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 								//resizing hidden column to the left of cursor
 								if(c==-1)	{
 
-								c = int(SendMessage(hWnd, BGM_GETCOLS, 0, 0));
+								c = static_cast<int32_t>(SendMessage(hWnd, BGM_GETCOLS, 0, 0));
 									}
 								else	{
 
@@ -3163,7 +3163,7 @@ int BinarySearchListBox(HWND lbhWnd,TCHAR* searchtext)
 
 	FOUND=FALSE;
 	//get count of items in listbox
-	lbcount = int(SendMessage(lbhWnd, LB_GETCOUNT, 0, 0));
+	lbcount = static_cast<int32_t>(SendMessage(lbhWnd, LB_GETCOUNT, 0, 0));
 	if(!lbcount)	{
 
 			ReturnValue = LB_ERR;
@@ -3172,7 +3172,7 @@ int BinarySearchListBox(HWND lbhWnd,TCHAR* searchtext)
 	if(lbcount < 12)	{
 
 			//not worth doing binary search, do regular search
-			FindResult = int(SendMessage(lbhWnd, LB_FINDSTRING, static_cast<unsigned int>(-1), reinterpret_cast<LPARAM>(searchtext)));
+			FindResult = static_cast<int32_t>(SendMessage(lbhWnd, LB_FINDSTRING, static_cast<unsigned int>(-1), reinterpret_cast<LPARAM>(searchtext)));
 			ReturnValue = FindResult;
 			return ReturnValue;
 			}

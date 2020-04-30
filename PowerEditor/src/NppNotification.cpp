@@ -581,7 +581,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 			else if (notification->nmhdr.hwndFrom == _subEditView.getHSelf())
 				switchEditViewTo(SUB_VIEW);
 
-			int lineClick = int(_pEditView->execute(SCI_LINEFROMPOSITION, notification->position));
+			int lineClick = static_cast<int32_t>(_pEditView->execute(SCI_LINEFROMPOSITION, notification->position));
 
 			if (notification->margin == ScintillaEditView::_SC_MARGE_FOLDER)	{
 
@@ -688,7 +688,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 
 					// If the delimiters are the same (e.g. they are both a quotation mark), choose the ones
 					// which are closest to the clicked position.
-					for (int32_t i = int(position_of_click); i >= 0; --i)	{
+					for (int32_t i = static_cast<int32_t>(position_of_click); i >= 0; --i)	{
 
 						if (bufstring.at(i) == nGUI._leftmostDelimiter)	{
 
@@ -722,13 +722,13 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 
 								if (! (i > 0 && bufstring.at(i - 1) == '\\'))	{
 
-									rightmost_position = int(i);
+									rightmost_position = static_cast<int32_t>(i);
 									break;
 								}
 							}
 							else	{
 
-								rightmost_position = int(i);
+								rightmost_position = static_cast<int32_t>(i);
 								break;
 							}
 						}
@@ -864,7 +864,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 				docTip[0] = '\0';
 
 				generic_string tipTmp(L"");
-				int id = int(lpttt->hdr.idFrom);
+				int id = static_cast<int32_t>(lpttt->hdr.idFrom);
 
 				if (hWin == _rebarTop.getHSelf())	{
 
@@ -927,7 +927,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 					notification->message,
 					notification->wParam,
 					notification->lParam,
-					int(_pEditView->execute(SCI_GETCODEPAGE))
+					static_cast<int32_t>(_pEditView->execute(SCI_GETCODEPAGE))
 				)
 			);
 			break;

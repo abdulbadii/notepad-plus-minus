@@ -218,9 +218,9 @@ LRESULT SplitterContainer::runProc(UINT message, WPARAM wParam, LPARAM lParam)	{
 
 				if (wParam)	{
 
-					rc0.right = int(wParam);
+					rc0.right = static_cast<int32_t>(wParam);
 
-					rc1.left = int(wParam) + _x + _splitter.getPhisicalSize();
+					rc1.left = static_cast<int32_t>(wParam) + _x + _splitter.getPhisicalSize();
 					rc1.right = rc1.right - rc1.left + _x;
 				}
 			}
@@ -228,9 +228,9 @@ LRESULT SplitterContainer::runProc(UINT message, WPARAM wParam, LPARAM lParam)	{
 
 				if (lParam)	{
 
-					rc0.bottom = int(lParam);
+					rc0.bottom = static_cast<int32_t>(lParam);
 
-					rc1.top   = int(lParam) + _y + _splitter.getPhisicalSize();
+					rc1.top   = static_cast<int32_t>(lParam) + _y + _splitter.getPhisicalSize();
 					rc1.bottom = rc1.bottom - rc1.top + _y;
 				}
 			}

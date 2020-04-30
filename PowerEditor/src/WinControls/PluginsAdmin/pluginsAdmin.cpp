@@ -1161,7 +1161,7 @@ INT_PTR CALLBACK PluginsAdminDlg::run_dlgProc(UINT message, WPARAM wParam, LPARA
 				HWND tabHandle = _tab.getHSelf();
 				if (pnmh->hwndFrom == tabHandle)	{
 
-					int indexClicked = int(::SendMessage(tabHandle, TCM_GETCURSEL, 0, 0));
+					int indexClicked = static_cast<int32_t>(::SendMessage(tabHandle, TCM_GETCURSEL, 0, 0));
 					switchDialog(indexClicked);
 				}
 			}

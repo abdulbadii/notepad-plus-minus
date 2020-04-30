@@ -94,7 +94,7 @@ INT_PTR CALLBACK ColourPopup::run_dlgProc(UINT message, WPARAM wParam, LPARAM lP
 		case WM_INITDIALOG:	{
 
 			int nColor;
-			for (nColor = 0 ; nColor < int(sizeof(colourItems)/sizeof(DWORD)) ; ++nColor)	{
+			for (nColor = 0 ; nColor < static_cast<int32_t>(sizeof(colourItems)/sizeof(DWORD)) ; ++nColor)	{
 
 				::SendDlgItemMessage(_hSelf, IDC_COLOUR_LIST, LB_ADDSTRING, nColor, reinterpret_cast<LPARAM>(""));
 				::SendDlgItemMessage(_hSelf, IDC_COLOUR_LIST, LB_SETITEMDATA, nColor, static_cast<LPARAM>(colourItems[nColor]));

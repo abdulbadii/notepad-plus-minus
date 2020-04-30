@@ -100,7 +100,7 @@ bool FunctionCallTip::updateCalltip(int ch, bool needShown)	{
 	if (not needShown && ch != _start && ch != _param && not isVisible())		//must be already visible
 		return false;
 
-	_curPos = int(_pEditView->execute(SCI_GETCURRENTPOS));
+	_curPos = static_cast<int32_t>(_pEditView->execute(SCI_GETCURRENTPOS));
 
 	//recalculate everything
 	if (not getCursorFunction())	{
@@ -141,8 +141,8 @@ void FunctionCallTip::close()	{
 bool FunctionCallTip::getCursorFunction()	{
 
 	auto line = _pEditView->execute(SCI_LINEFROMPOSITION, _curPos);
-	int startpos = int(_pEditView->execute(SCI_POSITIONFROMLINE, line));
-	int endpos = int(_pEditView->execute(SCI_GETLINEENDPOSITION, line));
+	int startpos = static_cast<int32_t>(_pEditView->execute(SCI_POSITIONFROMLINE, line));
+	int endpos = static_cast<int32_t>(_pEditView->execute(SCI_GETLINEENDPOSITION, line));
 	int len = endpos - startpos + 3;	//also take CRLF in account, even if not there
 	int offset = _curPos - startpos;	//offset is cursor location, only stuff before cursor has influence
 	const int maxLen = 256;
@@ -206,7 +206,7 @@ bool FunctionCallTip::getCursorFunction()	{
 		Token & curToken = tokenVector.at(i);
 		if (curToken.isIdentifier)	{
 
-			curValue.lastIdentifier = int(i);
+			curValue.lastIdentifier = static_cast<int32_t>(i);
 		}
 		else	{
 
@@ -217,7 +217,7 @@ bool FunctionCallTip::getCursorFunction()	{
 				valueVec.push_back(newValue);	//store the current settings, so when this new function doesnt happen to be the 'real' one, we can restore everything
 				
 				curValue.scopeLevel = scopeLevel;
-				if (i > 0 && curValue.lastIdentifier == int(i) - 1)	{
+				if (i > 0 && curValue.lastIdentifier == static_cast<int32_t>(i) - 1)	{
 	//identifier must be right before (, else we have some expression like "( x + y() )"
 					curValue.lastFunctionIdentifier = curValue.lastIdentifier;
 					curValue.param = 0;
@@ -399,7 +399,7 @@ void FunctionCallTip::showCalltip()	{
 			psize = _overloads.at(i).size()+1;
 			if ((size_t)_currentParam < psize)	{
 
-				_currentOverload = int(i);
+				_currentOverload = static_cast<int32_t>(i);
 				break;
 			}
 		}
@@ -419,7 +419,7 @@ void FunctionCallTip::showCalltip()	{
 	size_t nbParams = params.size();
 	for (size_t i = 0; i < nbParams; ++i)	{
 
-		if (int(i) == _currentParam)	{ 
+		if (static_cast<int32_t>(i) == _currentParam)	{ 
 
 			highlightstart = static_cast<int>(callTipText.str().length());
 			highlightend = highlightstart + lstrlen(params.at(i));

@@ -118,7 +118,7 @@ public :
 	void reInit(int size);
 
 	int getNbIcon() const {
-		return int(_tbiis.size());
+		return static_cast<int32_t>(_tbiis.size());
 	};
 
 	int getStdIconAt(int i) const {

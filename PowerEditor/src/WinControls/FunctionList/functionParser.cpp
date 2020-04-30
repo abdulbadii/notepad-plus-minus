@@ -247,7 +247,7 @@ bool FunctionParsersManager::getFuncListFromXmlTree()	{
 
 					if (_parsers[i]->_id == id)	{
 
-						_associationMap.push_back(AssociationInfo(int(i), langIDStr ? langID : -1, exts ? exts : L"", userDefinedLangName ? userDefinedLangName : L""));
+						_associationMap.push_back(AssociationInfo(static_cast<int32_t>(i), langIDStr ? langID : -1, exts ? exts : L"", userDefinedLangName ? userDefinedLangName : L""));
 						break;
 					}
 				}
@@ -326,14 +326,14 @@ void FunctionParser::funcParse(std::vector<foundInfo> & foundInfos, size_t begin
 	//foundInfos.clear();
 	while (targetStart != -1 && targetStart != -2)	{
 
-		targetStart = int((*ppEditView)->execute(SCI_GETTARGETSTART));
-		targetEnd = int((*ppEditView)->execute(SCI_GETTARGETEND));
-		if (targetEnd > int(end))	{ //we found a result but outside our range, therefore do not process it
+		targetStart = static_cast<int32_t>((*ppEditView)->execute(SCI_GETTARGETSTART));
+		targetEnd = static_cast<int32_t>((*ppEditView)->execute(SCI_GETTARGETEND));
+		if (targetEnd > static_cast<int32_t>(end))	{ //we found a result but outside our range, therefore do not process it
 
 			break;
 		}
 		int foundTextLen = targetEnd - targetStart;
-		if (targetStart + foundTextLen == int(end))
+		if (targetStart + foundTextLen == static_cast<int32_t>(end))
             break;
 
 		foundInfo fi;
@@ -408,7 +408,7 @@ generic_string FunctionParser::parseSubLevel(size_t begin, size_t end, std::vect
 		foundPos = -1;
 		return generic_string();
 	}
-	int targetEnd = int((*ppEditView)->execute(SCI_GETTARGETEND));
+	int targetEnd = static_cast<int32_t>((*ppEditView)->execute(SCI_GETTARGETEND));
 
 	if (dataToSearch.size() >= 2)	{
 
@@ -513,7 +513,7 @@ void FunctionZoneParser::classParse(vector<foundInfo> & foundInfos, vector< pair
 	
 	while (targetStart != -1 && targetStart != -2)	{
 
-		targetEnd = int((*ppEditView)->execute(SCI_GETTARGETEND));
+		targetEnd = static_cast<int32_t>((*ppEditView)->execute(SCI_GETTARGETEND));
 
 		// Get class name
 		int foundPos = 0;
@@ -522,16 +522,16 @@ void FunctionZoneParser::classParse(vector<foundInfo> & foundInfos, vector< pair
 
 		if (not _openSymbole.empty() && not _closeSymbole.empty())	{
 
-			targetEnd = int(getBodyClosePos(targetEnd, _openSymbole.c_str(), _closeSymbole.c_str(), commentZones, ppEditView));
+			targetEnd = static_cast<int32_t>(getBodyClosePos(targetEnd, _openSymbole.c_str(), _closeSymbole.c_str(), commentZones, ppEditView));
 		}
 
-		if (targetEnd > int(end)) //we found a result but outside our range, therefore do not process it
+		if (targetEnd > static_cast<int32_t>(end)) //we found a result but outside our range, therefore do not process it
 			break;
 		
 		scannedZones.push_back(pair<int, int>(targetStart, targetEnd));
 
 		int foundTextLen = targetEnd - targetStart;
-		if (targetStart + foundTextLen == int(end))
+		if (targetStart + foundTextLen == static_cast<int32_t>(end))
             break;
 
 		// Begin to search all method inside
@@ -559,15 +559,15 @@ void FunctionParser::getCommentZones(vector< pair<int, int> > & commentZone, siz
 	
 	while (targetStart != -1 && targetStart != -2)	{
 
-		targetStart = int((*ppEditView)->execute(SCI_GETTARGETSTART));
-		targetEnd = int((*ppEditView)->execute(SCI_GETTARGETEND));
-		if (targetEnd > int(end)) //we found a result but outside our range, therefore do not process it
+		targetStart = static_cast<int32_t>((*ppEditView)->execute(SCI_GETTARGETSTART));
+		targetEnd = static_cast<int32_t>((*ppEditView)->execute(SCI_GETTARGETEND));
+		if (targetEnd > static_cast<int32_t>(end)) //we found a result but outside our range, therefore do not process it
 			break;
 
 		commentZone.push_back(pair<int, int>(targetStart, targetEnd));
 
 		int foundTextLen = targetEnd - targetStart;
-		if (targetStart + foundTextLen == int(end))
+		if (targetStart + foundTextLen == static_cast<int32_t>(end))
             break;
 		
 		begin = targetStart + foundTextLen;
@@ -596,7 +596,7 @@ void FunctionParser::getInvertZones(vector< pair<int, int> > &  destZones, vecto
 	else	{
 
 		// check the begin
-		if (int(begin) < sourceZones[0].first)	{
+		if (static_cast<int32_t>(begin) < sourceZones[0].first)	{
 
 			destZones.push_back(pair<int, int>(static_cast<int>(begin), sourceZones[0].first - 1));
 		}
@@ -610,7 +610,7 @@ void FunctionParser::getInvertZones(vector< pair<int, int> > &  destZones, vecto
 				destZones.push_back(pair<int, int>(newBegin, newEnd));
 		}
 		int lastBegin = sourceZones[i].second + 1;
-		if (lastBegin < int(end))
+		if (lastBegin < static_cast<int32_t>(end))
 			destZones.push_back(pair<int, int>(lastBegin, static_cast<int>(end)));
 	}
 }

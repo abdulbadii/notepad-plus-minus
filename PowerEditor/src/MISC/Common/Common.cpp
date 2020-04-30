@@ -146,7 +146,7 @@ void writeLog(const TCHAR *logFileName, const char *log2write)	{
 // http://msdn.microsoft.com/library/default.asp?url=/library/en-us/shellcc/platform/shell/reference/callbackfunctions/browsecallbackproc.asp
 static int __stdcall BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM, LPARAM pData)
 {
-	if (uMsg == BFFM_INITIALIZED && pData != 0)
+	if (uMsg == BFFM_INITIALIZED && pData)
 		::SendMessage(hwnd, BFFM_SETSELECTION, TRUE, pData);
 	return 0;
 };
@@ -179,7 +179,7 @@ generic_string folderBrowser(HWND parent, const generic_string & title, int outp
 		info.lpfn = BrowseCallbackProc;
 
 		TCHAR directory[MAX_PATH];
-		if (outputCtrlID != 0)
+		if (outputCtrlID)
 			::GetDlgItemText(parent, outputCtrlID, directory, _countof(directory));
 		directory[_countof(directory) - 1] = '\0';
 
@@ -201,7 +201,7 @@ generic_string folderBrowser(HWND parent, const generic_string & title, int outp
 			if (::SHGetPathFromIDList(pidl, szDir))	{
 
 				// Set edit control to the directory path.
-				if (outputCtrlID != 0)
+				if (outputCtrlID)
 					::SetDlgItemText(parent, outputCtrlID, szDir);
 				dirStr = szDir;
 			}
@@ -416,7 +416,7 @@ const wchar_t * WcharMbcsConvertor::char2wchar(const char * mbcs2Convert, UINT c
 	else if (lenMbcs != -1 && codepage == CP_UTF8)	{ // For UTF-8, we know how to test it
 
 		int indexOfLastChar = Utf8::characterStart(mbcs2Convert, lenMbcs-1); // get index of last character
-		if (indexOfLastChar != 0 && !Utf8::isValid(mbcs2Convert+indexOfLastChar, lenMbcs-indexOfLastChar))	{ // if it is not valid we do not process it right now (unless its the only character in string, to ensure that we always progress, e.g. that bytesNotProcessed < lenMbcs)
+		if (indexOfLastChar && !Utf8::isValid(mbcs2Convert+indexOfLastChar, lenMbcs-indexOfLastChar))	{ // if it is not valid we do not process it right now (unless its the only character in string, to ensure that we always progress, e.g. that bytesNotProcessed < lenMbcs)
 
 			bytesNotProcessed = lenMbcs-indexOfLastChar;
 		}
@@ -594,7 +594,7 @@ generic_string intToString(int val)	{
 
 	vt.push_back('0' + static_cast<TCHAR>(std::abs(val % 10)));
 	val /= 10;
-	while (val != 0)	{
+	while (val)	{
 
 		vt.push_back('0' + static_cast<TCHAR>(std::abs(val % 10)));
 		val /= 10;
@@ -613,7 +613,7 @@ generic_string uintToString(unsigned int val)	{
 
 	vt.push_back('0' + static_cast<TCHAR>(val % 10));
 	val /= 10;
-	while (val != 0)	{
+	while (val)	{
 
 		vt.push_back('0' + static_cast<TCHAR>(val % 10));
 		val /= 10;

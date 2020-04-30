@@ -112,7 +112,7 @@ public:
 	}
 
 	int size() const {
-		return int(_fileNames.size());
+		return static_cast<int32_t>(_fileNames.size());
 	}
 
 private :

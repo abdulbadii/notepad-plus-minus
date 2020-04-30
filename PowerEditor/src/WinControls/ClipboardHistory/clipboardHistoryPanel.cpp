@@ -153,7 +153,7 @@ int ClipboardHistoryPanel::getClipboardDataIndex(ClipboardData cbd)	{
 
 			if (found)	{
 
-				iFound = int(i);
+				iFound = static_cast<int32_t>(i);
 				break;
 			}
 		}
@@ -251,10 +251,10 @@ INT_PTR CALLBACK ClipboardHistoryPanel::run_dlgProc(UINT message, WPARAM wParam,
 							ByteArray ba(_clipboardDataVector[i]);
 							char* c = nullptr;
 							try {
-								int nbChar = WideCharToMultiByte(codepage, 0, (wchar_t *)ba.getPointer(), int(ba.getLength()), NULL, 0, NULL, NULL);
+								int nbChar = WideCharToMultiByte(codepage, 0, (wchar_t *)ba.getPointer(), static_cast<int32_t>(ba.getLength()), NULL, 0, NULL, NULL);
 
 								c = new char[nbChar + 1];
-								WideCharToMultiByte(codepage, 0, (wchar_t *)ba.getPointer(), int(ba.getLength()), c, nbChar + 1, NULL, NULL);
+								WideCharToMultiByte(codepage, 0, (wchar_t *)ba.getPointer(), static_cast<int32_t>(ba.getLength()), c, nbChar + 1, NULL, NULL);
 
 								(*_ppEditView)->execute(SCI_REPLACESEL, 0, reinterpret_cast<LPARAM>(""));
 								(*_ppEditView)->execute(SCI_ADDTEXT, strlen(c), reinterpret_cast<LPARAM>(c));
