@@ -249,7 +249,8 @@ public :
 
 	void doDialog(DIALOG_TYPE whichType, bool isRTL = false, bool toShow = true);
 	bool processFindNext(const TCHAR *txt2find, const FindOption *options = NULL, FindStatus *oFindStatus = NULL, FindNextType findNextType = FINDNEXTTYPE_FINDNEXT);
-	void processReplc1(const TCHAR *txtFind=nullptr, const TCHAR *txtRepl=nullptr);
+	void processReplc1();
+	void processReplc1(const TCHAR *txtFind, const TCHAR *txtRepl);
 	bool processReplace(const TCHAR *txt2find, const TCHAR *txt2replace, const FindOption *options = nullptr);
 
 	int markAll(const TCHAR *txt2find, int styleID, bool isWholeWordSelected);

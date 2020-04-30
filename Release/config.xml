@@ -244,7 +244,6 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\FindReplaceDlg.rc.rc" />
         <File filename="D:\WORK\SoftScreen\cscss\quora.css" />
         <File filename="D:\WORK\SoftScreen\cscss\soft.css" />
-        <File filename="Z:\Notepp\shortcuts.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\DockingWnd\DockingDlgInterface.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\StaticDialog\StaticDialog.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master\WinControls\DockingWnd\DockingDlgInterface.h" />
@@ -260,7 +259,6 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\AboutDlg\AboutDlg.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\Release\contextMenu.xml" />
-        <File filename="D:\MSYS\usr\src\notepadpp\Release\shortcuts.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\shortcut\shortcut.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\MISC\PluginsManager\Notepad_plus_msgs.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.rc" />
@@ -283,6 +281,8 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\FileBrowser\fileBrowser.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\ContextMenu\ContextMenu.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\keys.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\Release\shortcuts.xml" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\ScintillaEditView.cpp" />
     </History>
     <GUIConfigs>
         <GUIConfig name="ToolBar" visible="no">standard</GUIConfig>
@@ -341,10 +341,9 @@
             <PluginDlg pluginName="3P" id="2" curr="0" prev="-1" isVisible="no" />
             <PluginDlg pluginName="3P" id="1" curr="0" prev="-1" isVisible="no" />
             <ActiveTabs cont="0" activeTab="-1" />
-            <ActiveTabs cont="1" activeTab="0" />
+            <ActiveTabs cont="1" activeTab="-1" />
             <ActiveTabs cont="2" activeTab="-1" />
             <ActiveTabs cont="3" activeTab="-1" />
-            <ActiveTabs cont="4" activeTab="-1" />
         </GUIConfig>
     </GUIConfigs>
     <ProjectPanels>

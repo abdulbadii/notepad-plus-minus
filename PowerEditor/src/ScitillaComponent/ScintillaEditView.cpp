@@ -2169,15 +2169,14 @@ void ScintillaEditView::fold(size_t line, bool mode)	{
 
 void ScintillaEditView::foldAll(bool mode)	{
 
-	auto maxLine = execute(SCI_GETLINECOUNT);
-
-	for (int line = 0; line < maxLine; ++line)	{
+	for (int line = 0; line <execute(SCI_GETLINECOUNT); ++line)	{
 
 		auto level = execute(SCI_GETFOLDLEVEL, line);
 		if (level & SC_FOLDLEVELHEADERFLAG)
-			if (isFolded(line) != mode)
-				fold(line, mode);
+			if (isFolded(line) != mode)		fold(line, mode);
+
 	}
+	execute(SCI_SETYCARETPOLICY, 13, 77);execute(SCI_SCROLLCARET);
 }
 
 void ScintillaEditView::getText(char *dest, size_t start, size_t end) const

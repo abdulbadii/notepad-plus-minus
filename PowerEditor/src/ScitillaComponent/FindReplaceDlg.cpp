@@ -2267,14 +2267,14 @@ bool FindReplaceDlg::processReplace(const TCHAR *txt2find, const TCHAR *txt2repl
 	return moreMatches;	
 }
 
+void FindReplaceDlg::processReplc1()	{
+	FindReplaceDlg::processReplc1(
+		(_options._str2Search = getTextFromCombo( ::GetDlgItem(_hSelf, IDFINDWHAT))).c_str(),
+		(_options._str4Replace = getTextFromCombo(::GetDlgItem(_hSelf, IDREPLACEWITH))).c_str()
+	);
+}
 void FindReplaceDlg::processReplc1(const TCHAR *txt2find, const TCHAR *txt2replace)	{
 
-	if (!txt2find)
-		txt2find = (_options._str2Search = getTextFromCombo( ::GetDlgItem(_hSelf, IDFINDWHAT))).c_str();
-
-	if (!txt2replace)
-		txt2replace = (_options._str4Replace = getTextFromCombo(::GetDlgItem(_hSelf, IDREPLACEWITH))).c_str();
-						
 	FindOption replaceOptions = *_env;
 	replaceOptions._incrementalType = FirstIncremental;
 

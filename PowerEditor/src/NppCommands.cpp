@@ -1023,14 +1023,11 @@ void Notepad_plus::command(int id)	{
 			std::lock_guard<std::mutex> lock(command_mutex);
 
 			if (!_findReplaceDlg.isCreated())		return;
-
 			param._isFindReplacing = true;
 			_findReplaceDlg.processReplc1();
 			param._isFindReplacing = false;
 			}
 			break;
-
-		
 
 		case IDM_SEARCH_SETANDFINDNEXT :
 		case IDM_SEARCH_SETANDFINDPREV :	{
@@ -1623,7 +1620,7 @@ void Notepad_plus::command(int id)	{
 		case IDM_VIEW_TOGGLE_FOLDALL:
 		case IDM_VIEW_TOGGLE_UNFOLDALL:	{
 
-			_isFolding = true; // So we can ignore events while folding is taking place
+			_isFolding = true; // Keep folding take place from events
 			bool doCollapse = (id==IDM_VIEW_TOGGLE_FOLDALL)?fold_collapse:fold_uncollapse;
  			_pEditView->foldAll(doCollapse);
 			if (_pDocMap)	{
