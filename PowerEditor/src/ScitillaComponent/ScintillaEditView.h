@@ -93,8 +93,7 @@ const int CP_GREEK = 1253;
 #define LIST_8 256
 
 #define MAX_FOLD_COLLAPSE_LEVEL	8
-const bool fold_uncollapse = true;
-const bool fold_collapse = false;
+const bool fold_collapse = false, fold_uncollapse = true;
 
 enum TextCase : UCHAR
 {

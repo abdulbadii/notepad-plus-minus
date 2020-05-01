@@ -2169,14 +2169,19 @@ void ScintillaEditView::fold(size_t line, bool mode)	{
 
 void ScintillaEditView::foldAll(bool mode)	{
 
-	for (int line = 0; line <execute(SCI_GETLINECOUNT); ++line)	{
+	for (int line = 0; line <execute(SCI_GETLINECOUNT); ++line)
+		if (execute(SCI_GETFOLDLEVEL, line) & SC_FOLDLEVELHEADERFLAG
+			&& isFolded(line) != mode)
+				fold(line, mode);
 
-		auto level = execute(SCI_GETFOLDLEVEL, line);
-		if (level & SC_FOLDLEVELHEADERFLAG)
-			if (isFolded(line) != mode)		fold(line, mode);
+	execute(SCI_SETYCARETPOLICY, 13,77);execute(SCI_SCROLLCARET);
+	execute(SCI_SETYCARETPOLICY, 13, 1);
 
+	if (mode == fold_collapse)	{
+		auto line = execute(SCI_LINEFROMPOSITION, execute(SCI_GETCURRENTPOS));
+		while ( (execute(SCI_GETFOLDLEVEL, line--) & SC_FOLDLEVELNUMBERMASK) != SC_FOLDLEVELBASE)	;
+		execute(SCI_GOTOLINE, line);
 	}
-	execute(SCI_SETYCARETPOLICY, 13, 77);execute(SCI_SCROLLCARET);
 }
 
 void ScintillaEditView::getText(char *dest, size_t start, size_t end) const
@@ -2201,7 +2206,7 @@ generic_string ScintillaEditView::getGenericTextAsString(size_t start, size_t en
 
 void ScintillaEditView::getGenericText(TCHAR *dest, size_t destlen, size_t start, size_t end) const
 {
-		char *destA = new char[end - start + 1];
+	char *destA = new char[end - start + 1];
 	getText(destA, start, end);
 	UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
 	const TCHAR *destW = wmc.char2wchar(destA, cp);

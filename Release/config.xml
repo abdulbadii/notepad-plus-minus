@@ -282,7 +282,6 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\ContextMenu\ContextMenu.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\keys.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\Release\shortcuts.xml" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\ScintillaEditView.cpp" />
     </History>
     <GUIConfigs>
         <GUIConfig name="ToolBar" visible="no">standard</GUIConfig>

@@ -510,8 +510,8 @@ void Finder::gotoFoundLine(){
 	(*_ppEditView)->_positionRestoreNeeded = false;
 	Searching::displaySectionCentered(fInfo._start, fInfo._end, *_ppEditView);
 	
-	(*_ppEditView)->execute(SCI_SETYCARETPOLICY, 13, 77/*_scintView.execute(SCI_LINESONSCREEN/2)*/);
-	(*_ppEditView)->execute(SCI_SCROLLCARET);(*_ppEditView)->execute(SCI_SETYCARETPOLICY, 13, 1);
+	(*_ppEditView)->execute(SCI_SETYCARETPOLICY, 13, 77/*_scintView.execute(SCI_LINESONSCREEN/2)*/);(*_ppEditView)->execute(SCI_SCROLLCARET);
+	(*_ppEditView)->execute(SCI_SETYCARETPOLICY, 13, 1);
 	
 	
 	
