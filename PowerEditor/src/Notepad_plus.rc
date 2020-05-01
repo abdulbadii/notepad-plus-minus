@@ -325,9 +325,9 @@ BEGIN
 		END
 		POPUP "Comment/Uncomment"
 		BEGIN
-				MENUITEM "Toggle Single Line Comment",    IDM_EDIT_BLOCK_COMMENT
-				MENUITEM "Single Line Comment",           IDM_EDIT_BLOCK_COMMENT_SET
-				MENUITEM "Single Line Uncomment",         IDM_EDIT_BLOCK_UNCOMMENT
+				MENUITEM "Toggle Single Line Comment",    IDM_EDIT_LINE_COMMENT
+				MENUITEM "Single Line Comment",           IDM_EDIT_LINE_COMMENT_SET
+				MENUITEM "Single Line Uncomment",         IDM_EDIT_LINE_UNCOMMENT
 				MENUITEM "Block Comment",          IDM_EDIT_STREAM_COMMENT
 				MENUITEM "Block Uncomment",        IDM_EDIT_STREAM_UNCOMMENT
 		END
@@ -515,8 +515,8 @@ BEGIN
 		MENUITEM "Focus on Another View",         IDM_VIEW_SWITCHTO_OTHER_VIEW
 		MENUITEM "Hide Lines",                  IDM_VIEW_HIDELINES
 		MENUITEM SEPARATOR
-		MENUITEM "Fold All",                    IDM_VIEW_TOGGLE_FOLDALL
-		MENUITEM "Unfold All",                  IDM_VIEW_TOGGLE_UNFOLDALL
+		MENUITEM "Fold/Unfold All",                    IDM_VIEW_TOGGLE_FOLDALL
+		// MENUITEM "Unfold All",                  IDM_VIEW_TOGGLE_UNFOLDALL
 		MENUITEM "Collapse Current Level",      IDM_VIEW_FOLD_CURRENT
 		MENUITEM "Uncollapse Current Level",    IDM_VIEW_UNFOLD_CURRENT
 		POPUP "Collapse Level"
@@ -528,7 +528,6 @@ BEGIN
 				MENUITEM "5",   IDM_VIEW_FOLD_5
 				MENUITEM "6",   IDM_VIEW_FOLD_6
 				MENUITEM "7",   IDM_VIEW_FOLD_7
-				MENUITEM "8",   IDM_VIEW_FOLD_8
 		END
 		POPUP "Uncollapse Level"
 		BEGIN
@@ -539,7 +538,6 @@ BEGIN
 				MENUITEM "5",    IDM_VIEW_UNFOLD_5
 				MENUITEM "6",    IDM_VIEW_UNFOLD_6
 				MENUITEM "7",    IDM_VIEW_UNFOLD_7
-				MENUITEM "8",    IDM_VIEW_UNFOLD_8
 		END
 
 		MENUITEM SEPARATOR

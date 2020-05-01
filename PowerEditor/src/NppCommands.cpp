@@ -1473,15 +1473,15 @@ void Notepad_plus::command(int id)	{
 			_pEditView->convertSelectedTextToNewerCase(RANDOMCASE);
 			break;
 
-		case IDM_EDIT_BLOCK_COMMENT:
+		case IDM_EDIT_LINE_COMMENT:
 			doBlockComment(cm_toggle);
  			break;
 
-		case IDM_EDIT_BLOCK_COMMENT_SET:
+		case IDM_EDIT_LINE_COMMENT_SET:
 			doBlockComment(cm_comment);
 			break;
 
-		case IDM_EDIT_BLOCK_UNCOMMENT:
+		case IDM_EDIT_LINE_UNCOMMENT:
 			doBlockComment(cm_uncomment);
 			break;
 
@@ -1614,19 +1614,18 @@ void Notepad_plus::command(int id)	{
 
 		case IDM_VIEW_FOLD_CURRENT :
 		case IDM_VIEW_UNFOLD_CURRENT :
-			_pEditView->foldCurrentPos((id==IDM_VIEW_FOLD_CURRENT)?fold_collapse:fold_uncollapse);
+			_pEditView->foldCurrentPos(id==IDM_VIEW_FOLD_CURRENT ? fold_collapse : fold_uncollapse);
 			break;
 
-		case IDM_VIEW_TOGGLE_FOLDALL:
-		case IDM_VIEW_TOGGLE_UNFOLDALL:	{
+		// case IDM_VIEW_TOGGLE_UNFOLDALL:
+		case IDM_VIEW_TOGGLE_FOLDALL:	{
+
+			_foldAllState = _foldAllState == fold_collapse ? fold_uncollapse: fold_collapse;
 
 			_isFolding = true; // Keep folding take place from events
-			bool doCollapse = (id==IDM_VIEW_TOGGLE_FOLDALL)?fold_collapse:fold_uncollapse;
- 			_pEditView->foldAll(doCollapse);
-			if (_pDocMap)	{
+ 			_pEditView->foldAll(_foldAllState);
+			if (_pDocMap)		_pDocMap->foldAll(_foldAllState);
 
-				_pDocMap->foldAll(doCollapse);
-			}
 			_isFolding = false;
 		}
 		break;
@@ -1638,7 +1637,6 @@ void Notepad_plus::command(int id)	{
 		case IDM_VIEW_FOLD_5:
 		case IDM_VIEW_FOLD_6:
 		case IDM_VIEW_FOLD_7:
-		case IDM_VIEW_FOLD_8:
 			_isFolding = true; // So we can ignore events while folding is taking place
  			_pEditView->collapse(id - IDM_VIEW_FOLD - 1, fold_collapse);
 			_isFolding = false;
@@ -1651,7 +1649,6 @@ void Notepad_plus::command(int id)	{
 		case IDM_VIEW_UNFOLD_5:
 		case IDM_VIEW_UNFOLD_6:
 		case IDM_VIEW_UNFOLD_7:
-		case IDM_VIEW_UNFOLD_8:
 			_isFolding = true; // So we can ignore events while folding is taking place
  			_pEditView->collapse(id - IDM_VIEW_UNFOLD - 1, fold_uncollapse);
 			_isFolding = false;
@@ -3340,9 +3337,9 @@ void Notepad_plus::command(int id)	{
 			case IDM_EDIT_SENTENCECASE_BLEND:
 			case IDM_EDIT_INVERTCASE:
 			case IDM_EDIT_RANDOMCASE:
-			case IDM_EDIT_BLOCK_COMMENT:
-			case IDM_EDIT_BLOCK_COMMENT_SET:
-			case IDM_EDIT_BLOCK_UNCOMMENT:
+			case IDM_EDIT_LINE_COMMENT:
+			case IDM_EDIT_LINE_COMMENT_SET:
+			case IDM_EDIT_LINE_UNCOMMENT:
 			case IDM_EDIT_STREAM_COMMENT:
 			case IDM_EDIT_TRIMTRAILING:
 			case IDM_EDIT_TRIMLINEHEAD:
@@ -3376,7 +3373,7 @@ void Notepad_plus::command(int id)	{
 			case IDM_VIEW_FOLD_CURRENT :
 			case IDM_VIEW_UNFOLD_CURRENT :
 			case IDM_VIEW_TOGGLE_FOLDALL:
-			case IDM_VIEW_TOGGLE_UNFOLDALL:
+			// case IDM_VIEW_TOGGLE_UNFOLDALL:
 			case IDM_VIEW_FOLD_1:
 			case IDM_VIEW_FOLD_2:
 			case IDM_VIEW_FOLD_3:
@@ -3384,7 +3381,6 @@ void Notepad_plus::command(int id)	{
 			case IDM_VIEW_FOLD_5:
 			case IDM_VIEW_FOLD_6:
 			case IDM_VIEW_FOLD_7:
-			case IDM_VIEW_FOLD_8:
 			case IDM_VIEW_UNFOLD_1:
 			case IDM_VIEW_UNFOLD_2:
 			case IDM_VIEW_UNFOLD_3:
@@ -3392,7 +3388,6 @@ void Notepad_plus::command(int id)	{
 			case IDM_VIEW_UNFOLD_5:
 			case IDM_VIEW_UNFOLD_6:
 			case IDM_VIEW_UNFOLD_7:
-			case IDM_VIEW_UNFOLD_8:
 			case IDM_VIEW_GOTO_ANOTHER_VIEW:
 			case IDM_VIEW_SYNSCROLLV:
 			case IDM_VIEW_SYNSCROLLH:

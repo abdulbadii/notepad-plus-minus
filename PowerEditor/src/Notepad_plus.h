@@ -260,10 +260,9 @@ public:
 		return _pluginsAdminDlg.getPluginListVerStr();
 	};
 
-	// static int rB;
-//	// BufferID _recBuf[16] ={nullptr};
+// static int rB;
+/* BufferID _recBuf[16] ={nullptr};*/
 //	BufferID _recBuf =nullptr;
-
 /* 	void recBufIsCurrentB(){ _recBuf[rB++] = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());		_recBuf = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
 	} */
 
@@ -336,7 +335,6 @@ private:
 	HMENU _mainMenuHandle = NULL;
 
 	bool _sysMenuEntering = false;
-
 	// make sure we don't recursively call doClose when closing the last file with -quitOnEmpty
 	bool _isAttemptingCloseOnQuit = false;
 
@@ -346,18 +344,15 @@ private:
 	void postItToggle();
 
 	// Keystroke macro recording and playback
+	bool _recordingMacro = false,
+	_playingBackMacro = false,
+	_recordingSaved = false;
 	Macro _macro;
-	bool _recordingMacro = false;
-	bool _playingBackMacro = false;
-	bool _recordingSaved = false;
 	RunMacroDlg _runMacroDlg;
 
 	// For conflict detection when saving Macros or RunCommands
 	ShortcutMapper * _pShortcutMapper = nullptr;
 
-	// For hotspot
-	bool _isFolding = false;
-	bool _linkTriggered = true;
 
 	//For Dynamic selection highlight
 	Sci_CharacterRange _prevSelectedRange;
@@ -385,8 +380,11 @@ private:
 	PluginsManager _pluginsManager;
 	ButtonDlg _restoreButton;
 
-	bool _isFileOpening = false;
-	bool _isAdministrator = false;
+	bool _isFileOpening = false, _isAdministrator = false,
+	_foldAllState = fold_uncollapse;
+
+	// Scintilla hotspot
+	bool _linkTriggered = true, _isFolding = false;
 
 	ScintillaCtrls _scintillaCtrls4Plugins;
 

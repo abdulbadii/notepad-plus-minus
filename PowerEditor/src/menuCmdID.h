@@ -142,7 +142,7 @@
 	#define    IDM_MACRO_PLAYBACKRECORDEDMACRO      (IDM_EDIT + 21)
 //-----------
 
-	#define    IDM_EDIT_BLOCK_COMMENT               (IDM_EDIT + 22)
+	#define    IDM_EDIT_LINE_COMMENT               (IDM_EDIT + 22)
 	#define    IDM_EDIT_STREAM_COMMENT              (IDM_EDIT + 23)
 	#define    IDM_EDIT_TRIMTRAILING                (IDM_EDIT + 24)
 	#define    IDM_EDIT_TRIMLINEHEAD                (IDM_EDIT + 42)
@@ -171,8 +171,8 @@
 
 	#define    IDM_EDIT_CLEARREADONLY               (IDM_EDIT + 33)
 	#define    IDM_EDIT_COLUMNMODE                  (IDM_EDIT + 34)
-	#define    IDM_EDIT_BLOCK_COMMENT_SET           (IDM_EDIT + 35)
-	#define    IDM_EDIT_BLOCK_UNCOMMENT             (IDM_EDIT + 36)
+	#define    IDM_EDIT_LINE_COMMENT_SET           (IDM_EDIT + 35)
+	#define    IDM_EDIT_LINE_UNCOMMENT             (IDM_EDIT + 36)
 	#define    IDM_EDIT_COLUMNMODETIP               (IDM_EDIT + 37)
 	#define    IDM_EDIT_PASTE_AS_HTML               (IDM_EDIT + 38)
 	#define    IDM_EDIT_PASTE_AS_RTF                (IDM_EDIT + 39)
@@ -279,7 +279,10 @@
 	#define    IDM_VIEW_EOL                       (IDM_VIEW + 26)
 	#define    IDM_VIEW_EDGELINE                  (IDM_VIEW + 27)
 	#define    IDM_VIEW_EDGEBACKGROUND            (IDM_VIEW + 28)
-	#define    IDM_VIEW_TOGGLE_UNFOLDALL          (IDM_VIEW + 29)
+	// #define    IDM_VIEW_TOGGLE_UNFOLDALL          (IDM_VIEW + 29)
+
+	#define    IDM_VIEW_FOLD_CURREC              (IDM_VIEW + 11)
+	#define    IDM_VIEW_UNFOLD_CURREC            (IDM_VIEW + 12)
 	#define    IDM_VIEW_FOLD_CURRENT              (IDM_VIEW + 30)
 	#define    IDM_VIEW_UNFOLD_CURRENT            (IDM_VIEW + 31)
 	#define    IDM_VIEW_FULLSCREENTOGGLE          (IDM_VIEW + 32)
@@ -309,9 +312,8 @@
 		#define    IDM_VIEW_FOLD_5    (IDM_VIEW_FOLD + 5)
 		#define    IDM_VIEW_FOLD_6    (IDM_VIEW_FOLD + 6)
 		#define    IDM_VIEW_FOLD_7    (IDM_VIEW_FOLD + 7)
-		#define    IDM_VIEW_FOLD_8    (IDM_VIEW_FOLD + 8)
 
-	#define    IDM_VIEW_UNFOLD                    (IDM_VIEW + 60)
+	#define    IDM_VIEW_UNFOLD                    (IDM_VIEW + 57)
 		#define    IDM_VIEW_UNFOLD_1    (IDM_VIEW_UNFOLD + 1)
 		#define    IDM_VIEW_UNFOLD_2    (IDM_VIEW_UNFOLD + 2)
 		#define    IDM_VIEW_UNFOLD_3    (IDM_VIEW_UNFOLD + 3)
@@ -319,7 +321,7 @@
 		#define    IDM_VIEW_UNFOLD_5    (IDM_VIEW_UNFOLD + 5)
 		#define    IDM_VIEW_UNFOLD_6    (IDM_VIEW_UNFOLD + 6)
 		#define    IDM_VIEW_UNFOLD_7    (IDM_VIEW_UNFOLD + 7)
-		#define    IDM_VIEW_UNFOLD_8    (IDM_VIEW_UNFOLD + 8)
+
 		
 	#define    IDM_VIEW_FILESWITCHER_PANEL        (IDM_VIEW + 70)
 	#define    IDM_VIEW_SWITCHTO_OTHER_VIEW       (IDM_VIEW + 72)

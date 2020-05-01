@@ -35,7 +35,7 @@
 #include "verifySignedfile.h"
 
 using namespace std;
-WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
+WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();	
 
 // initialize the static variable
 
@@ -2173,15 +2173,13 @@ void ScintillaEditView::foldAll(bool mode)	{
 		if (execute(SCI_GETFOLDLEVEL, line) & SC_FOLDLEVELHEADERFLAG
 			&& isFolded(line) != mode)
 				fold(line, mode);
-
 	execute(SCI_SETYCARETPOLICY, 13,77);execute(SCI_SCROLLCARET);
 	execute(SCI_SETYCARETPOLICY, 13, 1);
-
-	if (mode == fold_collapse)	{
-		auto line = execute(SCI_LINEFROMPOSITION, execute(SCI_GETCURRENTPOS));
-		while ( (execute(SCI_GETFOLDLEVEL, line--) & SC_FOLDLEVELNUMBERMASK) != SC_FOLDLEVELBASE)	;
+/* 	if (mode == fold_collapse)	{
+		auto line = 1+ execute(SCI_LINEFROMPOSITION, execute(SCI_GETCURRENTPOS));
+		while ((execute(SCI_GETFOLDLEVEL, --line) & SC_FOLDLEVELNUMBERMASK) != SC_FOLDLEVELBASE);
 		execute(SCI_GOTOLINE, line);
-	}
+	}*/
 }
 
 void ScintillaEditView::getText(char *dest, size_t start, size_t end) const
@@ -2315,7 +2313,7 @@ TCHAR * ScintillaEditView::getGenericSelectedText(TCHAR * txt, int size, bool ex
 int ScintillaEditView::searchInTarget(const TCHAR * text2Find, size_t lenOfText2Find, size_t fromPos, size_t toPos) const	{
 	execute(SCI_SETTARGETRANGE, fromPos, toPos);
 
-		UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
+	UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
 	const char *text2FindA = wmc.wchar2char(text2Find, cp);
 	return static_cast<int32_t>(execute(SCI_SEARCHINTARGET, max(lenOfText2Find,strlen(text2FindA)), reinterpret_cast<LPARAM>(text2FindA)));
 }

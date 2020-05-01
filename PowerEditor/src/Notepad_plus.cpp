@@ -4023,18 +4023,15 @@ static generic_string extractSymbol(TCHAR firstChar, TCHAR secondChar, const TCH
 bool Notepad_plus::doBlockComment(comment_mode currCommentMode)	{
 
 	Buffer * buf = _pEditView->getCurrentBuffer();
-	// Avoid side-effects (e.g. cursor moves number of comment-characters) when file is read-only.
-	if (buf->isReadOnly())
-		return false;
+	if (buf->isReadOnly())		return false;
 
 	//-- BlockToStreamComment:
-	const TCHAR *commentStart;
-	const TCHAR *commentEnd;
-	generic_string symbolStart;
-	generic_string symbolEnd;
-
-	const TCHAR *commentLineSymbol;
-	generic_string symbol;
+	const TCHAR *commentStart,
+	*commentEnd,
+	*commentLineSymbol;
+	
+	generic_string symbol,
+	symbolStart, symbolEnd;
 
 	//Single Line Comment/Uncomment/Toggle can have two modes:
 	// * a NORMAL MODE which uses a commentLineSymbol to comment/uncomment code per line, and
@@ -4048,8 +4045,7 @@ bool Notepad_plus::doBlockComment(comment_mode currCommentMode)	{
 	if (buf->getLangType() == L_USER)	{
 
 		UserLangContainer * userLangContainer = param.getULCFromName(buf->getUserDefineLangName());
-		if (!userLangContainer)
-			return false;
+		if (!userLangContainer)		return false;
 
 		symbol = extractSymbol('0', '0', userLangContainer->_keywordLists[SCE_USER_KWLIST_COMMENTS]);
 		commentLineSymbol = symbol.c_str();

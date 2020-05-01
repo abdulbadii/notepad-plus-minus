@@ -37,6 +37,9 @@
 #define SHIFTED 0x8000
 using namespace std;
 
+// while (--line > 0 &&
+// (execute(SCI_GETFOLDLEVEL, line) & SC_FOLDLEVELHEADERFLAG && ((?:const|constexpr|virtual|void|volatile)auto|bool|case|char|char16_t|char32_t|class|double|enum|float|inline|int|long|mutable|short|struct|union|unsigned|wchar_t))	;
+
 FindOption *FindReplaceDlg::_env;
 FindOption FindReplaceDlg::_options;
 Notepad_plus *FindReplaceDlg::pNpp;
@@ -513,10 +516,6 @@ void Finder::gotoFoundLine(){
 	(*_ppEditView)->execute(SCI_SETYCARETPOLICY, 13, 77/*_scintView.execute(SCI_LINESONSCREEN/2)*/);(*_ppEditView)->execute(SCI_SCROLLCARET);
 	(*_ppEditView)->execute(SCI_SETYCARETPOLICY, 13, 1);
 	
-	
-	
-	
-	
 	// Then we colourise the double clicked line
 /* 	setFinderStyle();
 	_scintView.execute(SCI_STYLESETEOLFILLED, SCE_SEARCHRESULT_HIGHLIGHT_LINE, true);
@@ -713,9 +712,13 @@ void Finder::addSearchHitCount(int count, const TCHAR *dir, bool isMatchLines){
 			if(_nbFoundFiles >1)
 				wsprintf(text, L": %i in %i file(s) of %i opened files%s", count, _nbFoundFiles, _nbOpenedFiles, moreInfo);
 			else
-				wsprintf(text, L": %i in current/opened file below%s", count, moreInfo);
+				if (_findAllInCurrent)
+					wsprintf(text, L": %i in the current file%s", count, moreInfo);
+				else
+					wsprintf(text, L": %i in this opened file%s", count, moreInfo);
 	else
-		if (dir)	wsprintf(text, L"was not found under %s", dir);
+		if (dir)
+			wsprintf(text, L"was not found under %s", dir);
 		else if(_nbOpenedFiles)		wsprintf(text, L" wasn't found in any of %i opened files", _nbOpenedFiles);
 		else		wsprintf(text, L"was not found in current file");
 	
@@ -881,7 +884,7 @@ void Finder::finishFilesSearch(int count, bool isfold,const TCHAR *dir, bool isM
 	_scintView.execute(SCI_SETWRAPVISUALFLAGS,SC_WRAPVISUALFLAG_START);
 	_scintView.execute(SCI_SETWRAPSTARTINDENT,5);
 	_scintView.execute(SCI_SETWRAPINDENTMODE,SC_WRAPINDENT_FIXED);
-	_scintView.execute(SCI_SETYCARETPOLICY, 13, 1);
+	_scintView.execute(SCI_SETYCARETPOLICY, 13);_scintView.execute(SCI_SCROLLCARET);
 }
 
 void Finder::setFinderStyle()	{
@@ -1548,18 +1551,18 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 	
 				case IDC_FINDALL_OPENEDFILES :	{
 
-				if (_currentStatus == REPLACE_DLG)	{
-					setStatusbarMessage(L"", FSNoMessage);
-					HWND hFindCombo = ::GetDlgItem(_hSelf, IDFINDWHAT);
-							combo2ExtendedMode(IDFINDWHAT);
-					_options._str2Search = getTextFromCombo(hFindCombo);
-					updateCombo(IDFINDWHAT);
+					if (_currentStatus == REPLACE_DLG)	{
+						setStatusbarMessage(L"", FSNoMessage);
+						HWND hFindCombo = ::GetDlgItem(_hSelf, IDFINDWHAT);
+								combo2ExtendedMode(IDFINDWHAT);
+						_options._str2Search = getTextFromCombo(hFindCombo);
+						updateCombo(IDFINDWHAT);
 
-					param._isFindReplacing = true;
-					if (isMacroRecording) saveInMacro(wParam, FR_OP_FIND + FR_OP_GLOBAL);
-					findAllIn(ALL_OPEN_DOCS);
-					param._isFindReplacing = false;
-				}
+						param._isFindReplacing = true;
+						if (isMacroRecording) saveInMacro(wParam, FR_OP_FIND + FR_OP_GLOBAL);
+						findAllIn(WM_FINDALL_INOPENEDDOC);
+						param._isFindReplacing = false;
+					}
 				}
 				return TRUE;
 
@@ -1579,7 +1582,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 					param._isFindReplacing = true;
 					if (isMacroRecording) saveInMacro(wParam, FR_OP_FIND + FR_OP_GLOBAL);
-					findAllIn(CURRENT_DOC);
+					findAllIn(WM_FINDALL_INCURRENTDOC);
 					param._isFindReplacing = false;
 				}
 				return TRUE;
@@ -1614,7 +1617,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 					param._isFindReplacing = true;
 					if (isMacroRecording) saveInMacro(wParam, FR_OP_FIND + FR_OP_FIF);
-					findAllIn(FILES_IN_DIR);
+					findAllIn(WM_FINDINFILES);
 					param._isFindReplacing = false;
 				}
 				return TRUE;
@@ -2111,10 +2114,17 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 	}
 
 	(*_ppEditView)->execute(SCI_SETSEARCHFLAGS, flags);
-
-
 	posFind = (*_ppEditView)->searchInTarget(pText, stringSizeFind, startPosition, endPosition);
-	if (posFind == -1)	{ //no match found in target, check if a new target should be used
+	
+	 if (posFind == -2)	{ // Invalid Regular expression
+
+		NativeLangSpeaker *pNativeSpeaker = param.getNativeLangSpeaker();
+		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-invalid-re", L"Find: Invalid regular expression");
+		setStatusbarMessage(msg, FSNotFound);
+		return false;
+	}
+	
+	else if (posFind == -1)	{ //no match found in target, check if a new target should be used
 
 		if (pOptions->_isWrapAround)	{ 
 
@@ -2162,13 +2172,6 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 			delete [] pText;
 			return false;
 		}
-	}
-	else if (posFind == -2)	{ // Invalid Regular expression
-
-		NativeLangSpeaker *pNativeSpeaker = param.getNativeLangSpeaker();
-		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-invalid-re", L"Find: Invalid regular expression");
-		setStatusbarMessage(msg, FSNotFound);
-		return false;
 	}
 
 	start =	posFind;
@@ -2703,7 +2706,7 @@ void FindReplaceDlg::replaceAllInOpenedDocs()	{
 	::SendMessage(_hParent, WM_REPLACEALL_INOPENEDDOC, 0, 0);
 }
 
-void FindReplaceDlg::findAllIn(InWhat op)	{
+void FindReplaceDlg::findAllIn(int WM_cmd)	{
 
 	if (!_pFinder)	{
 		_pFinder = new Finder();
@@ -2759,16 +2762,25 @@ void FindReplaceDlg::findAllIn(InWhat op)	{
 	}
 
 	::SendMessage(_pFinder->getHSelf(), WM_SIZE, 0, 0);
-	int cmdid;
-	if (op == ALL_OPEN_DOCS)
-		cmdid = WM_FINDALL_INOPENEDDOC;
-	else if (op == FILES_IN_DIR)
-		cmdid = WM_FINDINFILES;
-	else if (op == CURRENT_DOC)
-		cmdid = WM_FINDALL_INCURRENTDOC;
-	else		return;
+	if (WM_cmd == WM_FINDALL_INCURRENTDOC)
+		_pFinder->_findAllInCurrent=1;
+	else
+		_pFinder->_findAllInCurrent=0;
 
-	if (::SendMessage(_hParent, cmdid, 0, 0))	{
+	int flags = Searching::buildSearchFlags(_env) | SCFIND_REGEXP_EMPTYMATCH_ALL | SCFIND_REGEXP_SKIPCRLFASONE;
+	(*_ppEditView)->execute(SCI_SETSEARCHFLAGS, flags);
+
+	 if (static_cast<int>((*_ppEditView)->execute(SCI_SEARCHINTARGET,
+		lstrlen(_options._str2Search.c_str()),
+		reinterpret_cast<LPARAM>(_options._str2Search.c_str()))) == -2)	{
+
+		NativeLangSpeaker *pNativeSpeaker = param.getNativeLangSpeaker();
+		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-invalid-re", L"Find: Invalid regular expression");
+		setStatusbarMessage(msg, FSNotFound);
+		return;
+	}
+
+	if (::SendMessage(_hParent, WM_cmd, 0, 0))	{
 
 		if (_findAllResult)
 			openFinder();
@@ -2776,9 +2788,9 @@ void FindReplaceDlg::findAllIn(InWhat op)	{
 			TCHAR s[64];
 			generic_string msg = param.getNativeLangSpeaker()->getLocalizedStrFromID("find-status-cannot-find", L"Find: Can't find the text \"$STR_REPLACE$\" in "),
 			ms = stringReplace(msg, L"$STR_REPLACE$", stringReplace(_options._str2Search, L"&", L"&&"));
-			if (op==ALL_OPEN_DOCS)
+			if (WM_cmd==WM_FINDALL_INOPENEDDOC)
 				wsprintf(s, L"%i opened file(s)", _pFinder->_nbOpenedFiles);
-			else if (op==CURRENT_DOC)
+			else if (WM_cmd==WM_FINDALL_INCURRENTDOC)
 				wsprintf(s, L"current file");
 			else
 				wsprintf(s, L"%i file(s) as specified", _fileTot);
@@ -3145,12 +3157,12 @@ void FindReplaceDlg::execSavedCommand(int cmd, uptr_t intValue, const generic_st
 						break;
 					case IDC_FINDALL_OPENEDFILES:
 						param._isFindReplacing = true;
-						findAllIn(ALL_OPEN_DOCS);
+						findAllIn(WM_FINDALL_INOPENEDDOC);
 						param._isFindReplacing = false;
 						break;
 					case IDC_FINDALL_CURRENTFILE:
 						param._isFindReplacing = true;
-						findAllIn(CURRENT_DOC);
+						findAllIn(WM_FINDALL_INCURRENTDOC);
 						param._isFindReplacing = false;
 						break;
 					case IDC_REPLACE_OPENEDFILES:
@@ -3160,7 +3172,7 @@ void FindReplaceDlg::execSavedCommand(int cmd, uptr_t intValue, const generic_st
 						break;
 					case IDD_FINDINFILES_FIND_BUTTON:
 						param._isFindReplacing = true;
-						findAllIn(FILES_IN_DIR);
+						findAllIn(WM_FINDINFILES);
 						param._isFindReplacing = false;
 						break;
 

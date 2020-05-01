@@ -44,8 +44,6 @@ enum DIALOG_TYPE {REPLACE_DLG, FINDINFILES_DLG, MARK_DLG};
 
 //#define FIND_REPLACE_STR_MAX 256
 
-enum InWhat{ALL_OPEN_DOCS, FILES_IN_DIR, CURRENT_DOC};
-
 struct FoundInfo {
 	FoundInfo(int start, int end, size_t lineNumber, const TCHAR *fullPath)
 		: _start(start), _end(end), _lineNumber(lineNumber), _fullPath(fullPath) {};
@@ -160,9 +158,9 @@ private:
 	ScintillaEditView _scintView;
 	uint32_t _nbFoundFiles = 0, _nbOpenedFiles = 0, _unDirLen=0;
 
-	int _FileHeader1stPos = 0,	_lastSearchHeaderPos = 0;
+	int _FileHeader1stPos =0,	_lastSearchHeaderPos =0;
 	
-	bool _canBeVolatiled = true;
+	bool _canBeVolatiled = true,	_findAllInCurrent=0;
 
 
 	void setFinderReadOnly(bool isReadOnly) {
@@ -259,7 +257,7 @@ public :
 	int processAll(ProcessOperation op, const FindOption *opt, bool isEntire = false, const FindersInfo *pFindersInfo = nullptr, int colourStyleID = -1);
 	int processRange(ProcessOperation op, FindReplaceInfo & findReplaceInfo, const FindersInfo *pFindersInfo, const FindOption *opt = nullptr, int colourStyleID = -1, ScintillaEditView *view2Process = nullptr);
 	void replaceAllInOpenedDocs();
-	void findAllIn(InWhat op);
+	void findAllIn(int op);
 	void setSearchText(TCHAR * txt2find);
 
 
