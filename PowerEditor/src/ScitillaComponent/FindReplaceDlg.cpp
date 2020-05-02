@@ -707,7 +707,7 @@ void Finder::addSearchHitCount(int count, const TCHAR *dir, bool isMatchLines){
 			if(_nbFoundFiles >1)
 				wsprintf(text, L": %i in %i %s%s", count, _nbFoundFiles, (L"files under "+generic_string(dir)).c_str(), moreInfo);
 			else
-				wsprintf(text, L": %i in this file under %s%s", count, dir, moreInfo);
+				wsprintf(text, L": %i in file below at %s%s", count, dir, moreInfo);
 		else
 			if(_nbFoundFiles >1)
 				wsprintf(text, L": %i in %i file(s) of %i opened files%s", count, _nbFoundFiles, _nbOpenedFiles, moreInfo);
@@ -715,7 +715,7 @@ void Finder::addSearchHitCount(int count, const TCHAR *dir, bool isMatchLines){
 				if (_findAllInCurrent)
 					wsprintf(text, L": %i in the current file%s", count, moreInfo);
 				else
-					wsprintf(text, L": %i in this opened file%s", count, moreInfo);
+					wsprintf(text, L": %i in the opened file below%s", count, moreInfo);
 	else
 		if (dir)
 			wsprintf(text, L"was not found under %s", dir);

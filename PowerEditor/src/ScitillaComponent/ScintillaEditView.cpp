@@ -2083,7 +2083,7 @@ void ScintillaEditView::collapseFoldIndentationBased(int level2Collapse, bool mo
 			levelStack.push(level);
 			if (level2Collapse == levelStack.levelCount)	{
 
-				if (isFolded(line) != mode)	{
+				if (bool(execute(SCI_GETFOLDEXPANDED, line)) != mode)	{
 
 					fold(line, mode);
 				}
@@ -2116,7 +2116,7 @@ void ScintillaEditView::collapse(int level2Collapse, bool mode)	{
 
 			level -= SC_FOLDLEVELBASE;
 			if (level2Collapse == (level & SC_FOLDLEVELNUMBERMASK))
-				if (isFolded(line) != mode)	{
+				if (bool(execute(SCI_GETFOLDEXPANDED, line)) != mode)	{
 
 					fold(line, mode);
 				}
@@ -2126,34 +2126,16 @@ void ScintillaEditView::collapse(int level2Collapse, bool mode)	{
 	runMarkers(true, 0, true, false);
 }
 
-void ScintillaEditView::foldCurrentPos(bool mode)	{
-
-	auto currentLine = this->getCurrentLineNumber();
-	fold(currentLine, mode);
-}
-
 void ScintillaEditView::fold(size_t line, bool mode)	{
 
-	auto endStyled = execute(SCI_GETENDSTYLED);
-	auto len = execute(SCI_GETTEXTLENGTH);
-
-	if (endStyled < len)
-		execute(SCI_COLOURISE, 0, -1);
-
+	if (execute(SCI_GETENDSTYLED) < execute(SCI_GETLENGTH))	execute(SCI_COLOURISE,0,-1);
 	int headerLine;
-	auto level = execute(SCI_GETFOLDLEVEL, line);
-
-	if (level & SC_FOLDLEVELHEADERFLAG)
+	if (execute(SCI_GETFOLDLEVEL, line) & SC_FOLDLEVELHEADERFLAG)
 		headerLine = static_cast<int32_t>(line);
-	else	{
+	else if ((headerLine = static_cast<int32_t>(execute(SCI_GETFOLDPARENT, line))) == -1)
+		return;
 
-		headerLine = static_cast<int32_t>(execute(SCI_GETFOLDPARENT, line));
-		if (headerLine == -1)
-			return;
-	}
-
-	if (isFolded(headerLine) != mode)	{
-
+	if (bool(execute(SCI_GETFOLDEXPANDED, headerLine)) != mode)	{
 		execute(SCI_TOGGLEFOLD, headerLine);
 
 		SCNotification scnN;
@@ -2161,19 +2143,60 @@ void ScintillaEditView::fold(size_t line, bool mode)	{
 		scnN.nmhdr.hwndFrom = _hSelf;
 		scnN.nmhdr.idFrom = 0;
 		scnN.line = headerLine;
-		scnN.foldLevelNow = isFolded(headerLine)?1:0; //folded:1, unfolded:0
+		scnN.foldLevelNow = bool(execute(SCI_GETFOLDEXPANDED, headerLine));
 
 		::SendMessage(_hParent, WM_NOTIFY, 0, reinterpret_cast<LPARAM>(&scnN));
 	}
 }
 
+void ScintillaEditView::toggleFold(size_t ln, bool rec)	{
+
+	if (execute(SCI_GETENDSTYLED) < execute(SCI_GETLENGTH))	execute(SCI_COLOURISE,0,-1);
+	int hLine;
+	if (execute(SCI_GETFOLDLEVEL, ln) & SC_FOLDLEVELHEADERFLAG)
+		hLine = static_cast<int32_t>(ln);
+	else if ((hLine = static_cast<int32_t>(execute(SCI_GETFOLDPARENT, ln))) == -1)
+		return;
+
+	SCNotification scnN;
+	scnN.nmhdr.code = SCN_FOLDINGSTATECHANGED;
+	scnN.nmhdr.hwndFrom = _hSelf;
+	scnN.nmhdr.idFrom = 0;
+
+	execute(SCI_TOGGLEFOLD, hLine);
+	scnN.line = hLine;
+	scnN.foldLevelNow = bool(execute(SCI_GETFOLDEXPANDED, hLine));
+	::SendMessage(_hParent, WM_NOTIFY, 0, reinterpret_cast<LPARAM>(&scnN));
+
+	if (rec)	{
+		bool hdState = scnN.foldLevelNow;
+		auto hdLevel = execute(SCI_GETFOLDLEVEL, hLine) & SC_FOLDLEVELNUMBERMASK;
+		while ((execute(SCI_GETFOLDLEVEL, ++hLine) & SC_FOLDLEVELNUMBERMASK) > hdLevel)
+			if (execute(SCI_GETFOLDLEVEL, hLine) & SC_FOLDLEVELHEADERFLAG && bool(execute(SCI_GETFOLDEXPANDED, hLine)) != hdState)	{
+				execute(SCI_TOGGLEFOLD, hLine);
+				scnN.line = hLine;
+				scnN.foldLevelNow = bool(execute(SCI_GETFOLDEXPANDED, hLine));
+				::SendMessage(_hParent, WM_NOTIFY, 0, reinterpret_cast<LPARAM>(&scnN));
+			}
+	}
+}
+
 void ScintillaEditView::foldAll(bool mode)	{
 
-	for (int line = 0; line <execute(SCI_GETLINECOUNT); ++line)
+	SCNotification scnN;
+	scnN.nmhdr.code = SCN_FOLDINGSTATECHANGED;
+	scnN.nmhdr.hwndFrom = _hSelf;
+	scnN.nmhdr.idFrom = 0;
+	for (int line = 0; line< execute(SCI_GETLINECOUNT); ++line)
 		if (execute(SCI_GETFOLDLEVEL, line) & SC_FOLDLEVELHEADERFLAG
-			&& isFolded(line) != mode)
-				fold(line, mode);
-	execute(SCI_SETYCARETPOLICY, 13,77);execute(SCI_SCROLLCARET);
+			&& bool(execute(SCI_GETFOLDEXPANDED, line)) != mode)	{
+
+			execute(SCI_TOGGLEFOLD, line);
+			scnN.line = line;
+			scnN.foldLevelNow = bool(execute(SCI_GETFOLDEXPANDED, line));
+			::SendMessage(_hParent, WM_NOTIFY, 0, reinterpret_cast<LPARAM>(&scnN));
+		}
+	execute(SCI_SETYCARETPOLICY, 13, 77);execute(SCI_SCROLLCARET);
 	execute(SCI_SETYCARETPOLICY, 13, 1);
 /* 	if (mode == fold_collapse)	{
 		auto line = 1+ execute(SCI_LINEFROMPOSITION, execute(SCI_GETCURRENTPOS));
@@ -2372,9 +2395,10 @@ int ScintillaEditView::replaceTargetRegExMode(const TCHAR * re, int fromTargetPo
 
 void ScintillaEditView::showAutoC(size_t lenEntered, const TCHAR* list)	{
 
-		UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
+	UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
 	const char *listA = wmc.wchar2char(list, cp);
-	execute(SCI_AUTOCSETDROPRESTOFWORD,1);
+
+	// execute(SCI_AUTOCSETDROPRESTOFWORD,1);
 	execute(SCI_AUTOCSHOW, lenEntered, reinterpret_cast<LPARAM>(listA));
 }
 
@@ -2457,7 +2481,7 @@ void ScintillaEditView::marginClick(Sci_Position position, int modifiers)	{
 		}
 		else if (modifiers & SCMOD_CTRL)	{
 
-			if (isFolded(lineClick))	{
+			if (bool(execute(SCI_GETFOLDEXPANDED, lineClick)))	{
 
 				// Contract this line and all children
 				execute(SCI_SETFOLDEXPANDED, lineClick, 0);
@@ -2473,7 +2497,7 @@ void ScintillaEditView::marginClick(Sci_Position position, int modifiers)	{
 		else	{
 
 			// Toggle this line
-			bool mode = isFolded(lineClick);
+			bool mode = bool(execute(SCI_GETFOLDEXPANDED, lineClick));
 			fold(lineClick, !mode);
 			runMarkers(true, lineClick, true, false);
 		}
@@ -2514,7 +2538,7 @@ void ScintillaEditView::expand(size_t& line, bool doExpand, bool force, int visL
 
 				if (doExpand)	{
 
-					if (!isFolded(line))
+					if (!bool(execute(SCI_GETFOLDEXPANDED, line)))
 						execute(SCI_SETFOLDEXPANDED, line, 1);
 
 					expand(line, true, force, visLevels - 1);
@@ -3211,7 +3235,7 @@ void ScintillaEditView::foldChanged(size_t line, int levelNow, int levelPrev)	{
 	}
 	else if (levelPrev & SC_FOLDLEVELHEADERFLAG)	{
 
-		if (isFolded(line))	{
+		if (bool(execute(SCI_GETFOLDEXPANDED, line)))	{
 
 			// Removing the fold from one that has been contracted so should expand
 			// otherwise lines are left invisible with no way to make them visible
@@ -3224,7 +3248,7 @@ void ScintillaEditView::foldChanged(size_t line, int levelNow, int levelPrev)	{
 	{
 		// See if should still be hidden
 		int parentLine = static_cast<int32_t>(execute(SCI_GETFOLDPARENT, line));
-		if ((parentLine < 0) || !isFolded(parentLine && execute(SCI_GETLINEVISIBLE, parentLine)))
+		if ((parentLine < 0) || !bool(execute(SCI_GETFOLDEXPANDED, parentLine && execute(SCI_GETLINEVISIBLE, parentLine))))
 			execute(SCI_SHOWLINES, line, line);
 	}
 }
@@ -3459,7 +3483,7 @@ void ScintillaEditView::runMarkers(bool doHide, size_t searchStart, bool endOfDo
 			auto levelLine = execute(SCI_GETFOLDLEVEL, i, 0);
 			if (levelLine & SC_FOLDLEVELHEADERFLAG)	{
 	//fold section. Dont show lines if fold is closed
-				if (isInSection && !isFolded(i))	{
+				if (isInSection && !bool(execute(SCI_GETFOLDEXPANDED, i)))	{
 
 					execute(SCI_SHOWLINES, startShowing, i);
 					//startShowing = execute(SCI_GETLASTCHILD, i, (levelLine & SC_FOLDLEVELNUMBERMASK));

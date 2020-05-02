@@ -381,7 +381,9 @@ private:
 	ButtonDlg _restoreButton;
 
 	bool _isFileOpening = false, _isAdministrator = false,
-	_foldAllState = fold_uncollapse;
+	_foldAllState = fold_uncollapse,
+	_foldCurState = fold_uncollapse;
+	// _foldCurrecState = fold_uncollapse;
 
 	// Scintilla hotspot
 	bool _linkTriggered = true, _isFolding = false;

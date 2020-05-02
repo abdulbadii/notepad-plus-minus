@@ -254,6 +254,19 @@ void Notepad_plus::command(int id)	{
 			::SendMessage(_pPublicInterface->getHSelf(), WM_CLOSE, 0, 0);
 			break;
 
+
+		case IDM_EDIT_TOGGLEOVERTYPE:	{
+			
+			_pEditView->execute(SCI_EDITTOGGLEOVERTYPE);
+			
+			// if ()
+				// _pEditView->execute(SCI_AUTOCSETDROPRESTOFWORD,1);
+			// else
+				// _pEditView->execute(SCI_AUTOCSETDROPRESTOFWORD,);
+
+		}
+		break;
+
 		case IDM_EDIT_UNDO:	{
 
 			std::lock_guard<std::mutex> lock(command_mutex);
@@ -1612,20 +1625,22 @@ void Notepad_plus::command(int id)	{
 		break;
 
 
-		case IDM_VIEW_FOLD_CURRENT :
-		case IDM_VIEW_UNFOLD_CURRENT :
-			_pEditView->foldCurrentPos(id==IDM_VIEW_FOLD_CURRENT ? fold_collapse : fold_uncollapse);
-			break;
+		case IDM_VIEW_TOGGLE_FOLDCURRENT:	{
+			_pEditView->toggleFold(_pEditView->getCurrentLineNumber());
+		}
+		break;
+		
+		case IDM_VIEW_TOGGLE_FOLDCURREC:	{
+			_pEditView->toggleFold(_pEditView->getCurrentLineNumber(), 1);
+		}
+		break;
 
-		// case IDM_VIEW_TOGGLE_UNFOLDALL:
 		case IDM_VIEW_TOGGLE_FOLDALL:	{
 
-			_foldAllState = _foldAllState == fold_collapse ? fold_uncollapse: fold_collapse;
-
+			_foldAllState = _foldAllState == fold_collapse ? fold_uncollapse : fold_collapse;
 			_isFolding = true; // Keep folding take place from events
  			_pEditView->foldAll(_foldAllState);
 			if (_pDocMap)		_pDocMap->foldAll(_foldAllState);
-
 			_isFolding = false;
 		}
 		break;
@@ -3370,10 +3385,9 @@ void Notepad_plus::command(int id)	{
 			case IDM_VIEW_FULLSCREENTOGGLE :
 			case IDM_VIEW_ALWAYSONTOP :
 			case IDM_VIEW_WRAP :
-			case IDM_VIEW_FOLD_CURRENT :
-			case IDM_VIEW_UNFOLD_CURRENT :
+			case IDM_VIEW_TOGGLE_FOLDCURRENT :
+			case IDM_VIEW_TOGGLE_FOLDCURREC :
 			case IDM_VIEW_TOGGLE_FOLDALL:
-			// case IDM_VIEW_TOGGLE_UNFOLDALL:
 			case IDM_VIEW_FOLD_1:
 			case IDM_VIEW_FOLD_2:
 			case IDM_VIEW_FOLD_3:

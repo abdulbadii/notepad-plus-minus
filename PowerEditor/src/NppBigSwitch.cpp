@@ -1009,7 +1009,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				return -1;
 
 			// get text of current scintilla
-			auto length = pSci->execute(SCI_GETTEXTLENGTH, 0, 0) + 1;
+			auto length = pSci->execute(SCI_GETLENGTH, 0, 0) + 1;
 			char* buffer = new char[length];
 			pSci->execute(SCI_GETTEXT, length, reinterpret_cast<LPARAM>(buffer));
 
@@ -1047,7 +1047,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				return -1;
 
 			// get text of current scintilla
-			auto length = pSci->execute(SCI_GETTEXTLENGTH, 0, 0) + 1;
+			auto length = pSci->execute(SCI_GETLENGTH, 0, 0) + 1;
 			char* buffer = new char[length];
 			pSci->execute(SCI_GETTEXT, length, reinterpret_cast<LPARAM>(buffer));
 

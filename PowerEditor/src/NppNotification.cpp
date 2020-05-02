@@ -587,7 +587,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 
 				_pEditView->marginClick(notification->position, notification->modifiers);
 				if (_pDocMap)
-					_pDocMap->fold(lineClick, _pEditView->isFolded(lineClick));
+					_pDocMap->fold(lineClick, bool(_pEditView->execute(SCI_GETFOLDEXPANDED, lineClick)));
 
 				ScintillaEditView * unfocusView = isFromPrimary ? &_subEditView : &_mainEditView;
 
@@ -615,7 +615,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 				}
 
 				if (_pDocMap)
-					_pDocMap->fold(lineClicked, _pEditView->isFolded(lineClicked));
+					_pDocMap->fold(lineClicked, bool(_pEditView->execute(SCI_GETFOLDEXPANDED, lineClicked)));
 			}
 			return TRUE;
 		}

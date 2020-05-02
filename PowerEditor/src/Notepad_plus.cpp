@@ -1167,7 +1167,7 @@ void Notepad_plus::wsTabConvert(spaceTab whichWay)	{
 				bookmarks.push_back(i);
 
 		if ((_pEditView->execute(SCI_GETFOLDLEVEL, i) & SC_FOLDLEVELHEADERFLAG))
-				if (!_pEditView->execute(SCI_GETFOLDEXPANDED, i))
+				if (!bool(_pEditView->execute(SCI_GETFOLDEXPANDED, i)))
 					folding.push_back(i);
 	}
 

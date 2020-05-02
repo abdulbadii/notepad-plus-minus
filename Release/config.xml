@@ -21,6 +21,12 @@
         <Filter name="*.vc* *.sln" />
         <Filter name="*.c *.cpp *.cc *.h" />
         <Filter name="*.xml" />
+        <Find name="_fontName" />
+        <Find name="timeinfo" />
+        <Find name="_month" />
+        <Find name="_year" />
+        <Find name="UserLangContainer" />
+        <Find name="NppParameters" />
         <Find name="\w(oo]" />
         <Find name="_defaultCharList" />
         <Find name="_SC_MARGE_FOLDER" />
@@ -126,7 +132,6 @@
         <Find name="NPPM_ISDOCSWITCHERSHOWN" />
         <Find name="SendMessage" />
         <Find name="process" />
-        <Find name="NppParameters" />
         <Find name="SCE_UNIVERSAL_FOUND_STYLE_EXT4" />
         <Find name="styleID" />
         <Find name="element" />
@@ -294,6 +299,9 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\FileBrowser\fileBrowser.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\ContextMenu\ContextMenu.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\keys.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\Release\shortcuts.xml" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\ScintillaEditView.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Parameters.h" />
     </History>
     <GUIConfigs>
         <GUIConfig name="ToolBar" visible="no">standard</GUIConfig>

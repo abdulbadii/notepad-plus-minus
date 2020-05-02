@@ -94,12 +94,14 @@
 #define    IDM_EDIT       (IDM + 2000)
 	#define    IDM_EDIT_CUT                         (IDM_EDIT + 1) 
 	#define    IDM_EDIT_COPY                        (IDM_EDIT + 2)
+
+	#define    IDM_EDIT_TOGGLEOVERTYPE            (IDM_EDIT + 85)
 	#define    IDM_EDIT_UNDO                        (IDM_EDIT + 3)
 	#define    IDM_EDIT_REDO                        (IDM_EDIT + 4)
 	#define    IDM_EDIT_PASTE                       (IDM_EDIT + 5)
 	#define    IDM_EDIT_DELETE                      (IDM_EDIT + 6)
 	#define    IDM_EDIT_SELECTALL                   (IDM_EDIT + 7)
-	#define    IDM_EDIT_BEGINENDSELECT              (IDM_EDIT + 20)
+	#define    IDM_EDIT_BEGINENDSELECT              (IDM_EDIT + 51)
 		
 	#define    IDM_EDIT_INS_TAB                     (IDM_EDIT + 8)
 	#define    IDM_EDIT_RMV_TAB                     (IDM_EDIT + 9)
@@ -112,12 +114,7 @@
 	#define    IDM_EDIT_LINE_DOWN                   (IDM_EDIT + 15)
 	#define    IDM_EDIT_UPPERCASE                   (IDM_EDIT + 16)
 	#define    IDM_EDIT_LOWERCASE                   (IDM_EDIT + 17)
-	#define    IDM_EDIT_PROPERCASE_FORCE            (IDM_EDIT + 67)
-	#define    IDM_EDIT_PROPERCASE_BLEND            (IDM_EDIT + 68)
-	#define    IDM_EDIT_SENTENCECASE_FORCE          (IDM_EDIT + 69)
-	#define    IDM_EDIT_SENTENCECASE_BLEND          (IDM_EDIT + 70)
-	#define    IDM_EDIT_INVERTCASE                  (IDM_EDIT + 71)
-	#define    IDM_EDIT_RANDOMCASE                  (IDM_EDIT + 72)
+
 	#define    IDM_EDIT_REMOVEEMPTYLINES            (IDM_EDIT + 55)
 	#define    IDM_EDIT_REMOVEEMPTYLINESWITHBLANK   (IDM_EDIT + 56)
 	#define    IDM_EDIT_BLANKLINEABOVECURRENT       (IDM_EDIT + 57)
@@ -130,33 +127,27 @@
 	#define    IDM_EDIT_SORTLINES_DECIMALCOMMA_DESCENDING	(IDM_EDIT + 64)
 	#define    IDM_EDIT_SORTLINES_DECIMALDOT_ASCENDING		(IDM_EDIT + 65)
 	#define    IDM_EDIT_SORTLINES_DECIMALDOT_DESCENDING		(IDM_EDIT + 66)
+	#define    IDM_EDIT_PROPERCASE_FORCE            (IDM_EDIT + 67)
+	#define    IDM_EDIT_PROPERCASE_BLEND            (IDM_EDIT + 68)
+	#define    IDM_EDIT_SENTENCECASE_FORCE          (IDM_EDIT + 69)
+	#define    IDM_EDIT_SENTENCECASE_BLEND          (IDM_EDIT + 70)
+	#define    IDM_EDIT_INVERTCASE                  (IDM_EDIT + 71)
+	#define    IDM_EDIT_RANDOMCASE                  (IDM_EDIT + 72)
 
 	#define    IDM_EDIT_OPENASFILE                   (IDM_EDIT + 73)
 	#define    IDM_EDIT_OPENINFOLDER                 (IDM_EDIT + 74)
 	#define    IDM_EDIT_SEARCHONINTERNET             (IDM_EDIT + 75)
 	#define    IDM_EDIT_CHANGESEARCHENGINE           (IDM_EDIT + 76)
 
-// Menu macro
-	#define    IDM_MACRO_STARTRECORDINGMACRO        (IDM_EDIT + 18)
-	#define    IDM_MACRO_STOPRECORDINGMACRO         (IDM_EDIT + 19)
-	#define    IDM_MACRO_PLAYBACKRECORDEDMACRO      (IDM_EDIT + 21)
-//-----------
+	#define    IDM_EDIT_LINE_COMMENT               (IDM_EDIT + 18)
+	#define    IDM_EDIT_STREAM_COMMENT              (IDM_EDIT + 19)
+	#define    IDM_EDIT_TRIMTRAILING                (IDM_EDIT + 20)
+	#define    IDM_EDIT_TRIMLINEHEAD                (IDM_EDIT + 21)
+	#define    IDM_EDIT_TRIM_BOTH                   (IDM_EDIT + 22)
+	#define    IDM_EDIT_EOL2WS                      (IDM_EDIT + 23)
+	#define    IDM_EDIT_TRIMALL                     (IDM_EDIT + 24)
+	#define    IDM_EDIT_TAB2SW                      (IDM_EDIT + 25)
 
-	#define    IDM_EDIT_LINE_COMMENT               (IDM_EDIT + 22)
-	#define    IDM_EDIT_STREAM_COMMENT              (IDM_EDIT + 23)
-	#define    IDM_EDIT_TRIMTRAILING                (IDM_EDIT + 24)
-	#define    IDM_EDIT_TRIMLINEHEAD                (IDM_EDIT + 42)
-	#define    IDM_EDIT_TRIM_BOTH                   (IDM_EDIT + 43)
-	#define    IDM_EDIT_EOL2WS                      (IDM_EDIT + 44)
-	#define    IDM_EDIT_TRIMALL                     (IDM_EDIT + 45)
-	#define    IDM_EDIT_TAB2SW                      (IDM_EDIT + 46)
-	#define    IDM_EDIT_SW2TAB_LEADING              (IDM_EDIT + 53)
-	#define    IDM_EDIT_SW2TAB_ALL                  (IDM_EDIT + 54)
-	#define    IDM_EDIT_STREAM_UNCOMMENT            (IDM_EDIT + 47)
-
-// Menu macro
-	#define    IDM_MACRO_SAVECURRENTMACRO           (IDM_EDIT + 25)
-//-----------
 
 	#define    IDM_EDIT_RTL                         (IDM_EDIT + 26)
 	#define    IDM_EDIT_LTR                         (IDM_EDIT + 27)
@@ -176,10 +167,21 @@
 	#define    IDM_EDIT_COLUMNMODETIP               (IDM_EDIT + 37)
 	#define    IDM_EDIT_PASTE_AS_HTML               (IDM_EDIT + 38)
 	#define    IDM_EDIT_PASTE_AS_RTF                (IDM_EDIT + 39)
-	#define    IDM_EDIT_COPY_BINARY                 (IDM_EDIT + 48)
-	#define    IDM_EDIT_CUT_BINARY                  (IDM_EDIT + 49)
-	#define    IDM_EDIT_PASTE_BINARY                (IDM_EDIT + 50)
-	#define    IDM_EDIT_CLIPBOARDHISTORY_PANEL      (IDM_EDIT + 52)
+	#define    IDM_EDIT_COPY_BINARY                 (IDM_EDIT + 40)
+	#define    IDM_EDIT_CUT_BINARY                  (IDM_EDIT + 41)
+	#define    IDM_EDIT_PASTE_BINARY                (IDM_EDIT + 42)
+	#define    IDM_EDIT_CLIPBOARDHISTORY_PANEL      (IDM_EDIT + 43)
+
+// Menu macro
+	#define    IDM_MACRO_STARTRECORDINGMACRO        (IDM_EDIT + 44)
+	#define    IDM_MACRO_STOPRECORDINGMACRO         (IDM_EDIT + 45)
+	#define    IDM_MACRO_PLAYBACKRECORDEDMACRO      (IDM_EDIT + 46)
+	#define    IDM_MACRO_SAVECURRENTMACRO           (IDM_EDIT + 47)
+//-----------
+	#define    IDM_EDIT_STREAM_UNCOMMENT            (IDM_EDIT + 48)
+	#define    IDM_EDIT_SW2TAB_LEADING              (IDM_EDIT + 49)
+	#define    IDM_EDIT_SW2TAB_ALL                  (IDM_EDIT + 50)
+
 
 	#define    IDM_EDIT_AUTOCOMPLETE                (50000 + 0)
 	#define    IDM_EDIT_AUTOCOMPLETE_CURRENTFILE    (50000 + 1)
@@ -187,8 +189,8 @@
 	#define    IDM_EDIT_AUTOCOMPLETE_PATH           (50000 + 6)
 		
 	//Belong to MENU FILE
-	#define    IDM_OPEN_SOME_RECENT_FILES             (IDM_EDIT + 40)
-	#define    IDM_CLEAN_RECENT_FILE_LIST           (IDM_EDIT + 41)
+	#define    IDM_OPEN_SOME_RECENT_FILES             (IDM_EDIT + 79)
+	#define    IDM_CLEAN_RECENT_FILE_LIST           (IDM_EDIT + 80)
 		
 #define    IDM_SEARCH    (IDM + 3000)
 	#define    IDM_SEARCH_REPLACE              (IDM_SEARCH + 2)
@@ -261,8 +263,12 @@
 	#define    IDM_VIEW_DRAWTABBAR_TOPBAR         (IDM_VIEW + 7)
 	#define    IDM_VIEW_DRAWTABBAR_INACIVETAB     (IDM_VIEW + 8) 
 	#define    IDM_VIEW_POSTIT                    (IDM_VIEW + 9)
+	//#define    IDM_VIEW_USER_DLG                  (IDM_VIEW + )
+
 	#define    IDM_VIEW_TOGGLE_FOLDALL            (IDM_VIEW + 10)
-	//#define    IDM_VIEW_USER_DLG                  (IDM_VIEW + 11)
+	#define    IDM_VIEW_TOGGLE_FOLDCURRENT              (IDM_VIEW + 11)
+	#define    IDM_VIEW_TOGGLE_FOLDCURREC              (IDM_VIEW + 12)
+
 	#define    IDM_VIEW_SYMBOLMARGIN              (IDM_VIEW + 13)
 	#define    IDM_VIEW_FOLDERMAGIN               (IDM_VIEW + 14)
 	#define    IDM_VIEW_FOLDERMAGIN_SIMPLE        (IDM_VIEW + 15)
@@ -279,12 +285,6 @@
 	#define    IDM_VIEW_EOL                       (IDM_VIEW + 26)
 	#define    IDM_VIEW_EDGELINE                  (IDM_VIEW + 27)
 	#define    IDM_VIEW_EDGEBACKGROUND            (IDM_VIEW + 28)
-	// #define    IDM_VIEW_TOGGLE_UNFOLDALL          (IDM_VIEW + 29)
-
-	#define    IDM_VIEW_FOLD_CURREC              (IDM_VIEW + 11)
-	#define    IDM_VIEW_UNFOLD_CURREC            (IDM_VIEW + 12)
-	#define    IDM_VIEW_FOLD_CURRENT              (IDM_VIEW + 30)
-	#define    IDM_VIEW_UNFOLD_CURRENT            (IDM_VIEW + 31)
 	#define    IDM_VIEW_FULLSCREENTOGGLE          (IDM_VIEW + 32)
 	#define    IDM_VIEW_ZOOMRESTORE               (IDM_VIEW + 33)
 	#define    IDM_VIEW_ALWAYSONTOP               (IDM_VIEW + 34)

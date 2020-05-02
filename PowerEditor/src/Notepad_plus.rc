@@ -516,9 +516,8 @@ BEGIN
 		MENUITEM "Hide Lines",                  IDM_VIEW_HIDELINES
 		MENUITEM SEPARATOR
 		MENUITEM "Fold/Unfold All",                    IDM_VIEW_TOGGLE_FOLDALL
-		// MENUITEM "Unfold All",                  IDM_VIEW_TOGGLE_UNFOLDALL
-		MENUITEM "Collapse Current Level",      IDM_VIEW_FOLD_CURRENT
-		MENUITEM "Uncollapse Current Level",    IDM_VIEW_UNFOLD_CURRENT
+		MENUITEM "Fold/Unfold This Level",      IDM_VIEW_TOGGLE_FOLDCURRENT
+		MENUITEM "Fold/Unfold It Recursively",    IDM_VIEW_TOGGLE_FOLDCURREC
 		POPUP "Collapse Level"
 		BEGIN
 				MENUITEM "1",   IDM_VIEW_FOLD_1
