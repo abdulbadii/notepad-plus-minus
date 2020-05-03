@@ -2341,13 +2341,13 @@ int ScintillaEditView::searchInTarget(const TCHAR * text2Find, size_t lenOfText2
 	return static_cast<int32_t>(execute(SCI_SEARCHINTARGET, max(lenOfText2Find,strlen(text2FindA)), reinterpret_cast<LPARAM>(text2FindA)));
 }
 
-int ScintillaEditView::searchInTarget(const TCHAR * text2find) const	{
+int ScintillaEditView::searchInTarget(const TCHAR * text2find, size_t lenOfText2Find) const	{
 	execute(SCI_SETTARGETRANGE, 0, static_cast<int32_t>(execute(SCI_GETLENGTH)));
 
-		UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
+	UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
 
 	const char *text2FindA = wmc.wchar2char(text2find, cp);
-	return static_cast<int32_t>(execute(SCI_SEARCHINTARGET, max(lstrlen(text2find), strlen(text2FindA)), reinterpret_cast<LPARAM>(text2FindA)));
+	return static_cast<int32_t>(execute(SCI_SEARCHINTARGET, max(lenOfText2Find,strlen(text2FindA)), reinterpret_cast<LPARAM>(text2FindA)));
 }
 
 void ScintillaEditView::appandGenericText(const TCHAR * text2Append) const

@@ -21,13 +21,17 @@
         <Filter name="*.vc* *.sln" />
         <Filter name="*.c *.cpp *.cc *.h" />
         <Filter name="*.xml" />
+        <Find name="\\n\h+W" />
+        <Find name="\\r\\n\h" />
+        <Find name="\w(oo]" />
+        <Find name="4401" />
+        <Find name="LanguageName" />
         <Find name="_fontName" />
         <Find name="timeinfo" />
         <Find name="_month" />
         <Find name="_year" />
         <Find name="UserLangContainer" />
         <Find name="NppParameters" />
-        <Find name="\w(oo]" />
         <Find name="_defaultCharList" />
         <Find name="_SC_MARGE_FOLDER" />
         <Find name="ScintillaEditView" />
@@ -282,7 +286,6 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.rc" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\TaskList\TaskListDlg.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\MISC\PluginsManager\PluginInterface.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\Release\config.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\FindReplaceDlg.rc" />
         <File filename="D:\MSYS\usr\src\notepadpp\Release\autoCompletion\cpp.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\Preference\preference.rc" />
@@ -299,9 +302,10 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\FileBrowser\fileBrowser.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\ContextMenu\ContextMenu.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\keys.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\Release\shortcuts.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\ScintillaEditView.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Parameters.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\Release\config.xml" />
+        <File filename="D:\MSYS\usr\src\notepadpp\Release\shortcuts.xml" />
     </History>
     <GUIConfigs>
         <GUIConfig name="ToolBar" visible="no">standard</GUIConfig>
@@ -310,7 +314,7 @@
         <GUIConfig name="ScintillaViewsSplitter">vertical</GUIConfig>
         <GUIConfig name="UserDefineDlg" position="undocked">hide</GUIConfig>
         <GUIConfig name="TabSetting" replaceBySpace="no" size="3" />
-        <GUIConfig name="AppPosition" x="343" y="-5" width="1296" height="1087" isMaximized="no" />
+        <GUIConfig name="AppPosition" x="232" y="-15" width="1296" height="1087" isMaximized="no" />
         <GUIConfig name="noUpdate" intervalDays="15" nextUpdateDate="20171218">no</GUIConfig>
         <GUIConfig name="Auto-detection">auto</GUIConfig>
         <GUIConfig name="CheckHistoryFiles">no</GUIConfig>
@@ -327,7 +331,7 @@
         <GUIConfig name="MRU">yes</GUIConfig>
         <GUIConfig name="URL">1</GUIConfig>
         <GUIConfig name="globalOverride" fg="no" bg="no" font="yes" fontSize="no" bold="no" italic="no" underline="no" />
-        <GUIConfig name="auto-completion" autoCAction="1" triggerFromNbChar="2" autoCIgnoreNumbers="no" autoCCase="no" funcParams="no" />
+        <GUIConfig name="auto-completion" autoCAction="1" triggerFromNbChar="2" autoCIgnoreNumbers="no" autoCCase="yes" funcParams="no" />
         <GUIConfig name="auto-insert" parentheses="yes" brackets="no" curlyBrackets="no" quotes="no" doubleQuotes="yes" htmlXmlTag="no" />
         <GUIConfig name="sessionExt"></GUIConfig>
         <GUIConfig name="workspaceExt"></GUIConfig>
@@ -346,7 +350,7 @@
         <GUIConfig name="ScintillaPrimaryView" lineNumberMargin="show" bookMarkMargin="hide" indentGuideLine="show" folderMarkStyle="box" lineWrapMethod="indent" currentLineHilitingShow="show" scrollBeyondLastLine="yes" disableAdvancedScrolling="no" wrapSymbolShow="hide" Wrap="yes" borderEdge="no" edge="no" edgeNbColumn="80" zoom="1" zoom2="0" whiteSpaceShow="hide" eolShow="hide" borderWidth="0" smoothFont="yes" />
         <GUIConfig name="DockingManager" leftWidth="155" rightWidth="489" topHeight="200" bottomHeight="310">
             <FloatingWindow cont="4" x="642" y="-8" width="1250" height="439" />
-            <PluginDlg pluginName="Notepad++::InternalFunction" id="0" curr="1" prev="4" isVisible="no" />
+            <PluginDlg pluginName="Notepad++::InternalFunction" id="0" curr="1" prev="4" isVisible="yes" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="44079" curr="1" prev="-1" isVisible="no" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="44084" curr="1" prev="-1" isVisible="no" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="44070" curr="1" prev="-1" isVisible="no" />

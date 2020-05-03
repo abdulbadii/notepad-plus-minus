@@ -69,7 +69,7 @@ bool AutoCompletion::showApiComplete()	{
 		return false;
 
 	// _pEditView->execute(SCI_AUTOCSETSEPARATOR, WPARAM(' '));
-	_pEditView->execute(SC_CASEINSENSITIVEBEHAVIOUR_IGNORECASE,1);
+	_pEditView->execute(SCI_AUTOCSETCASEINSENSITIVEBEHAVIOUR,1);
 	_pEditView->execute(SCI_AUTOCSETIGNORECASE, nGUI._autocIgnoreCase);
 	// _pEditView->execute(SC_ORDER_CUSTOM,2);
 	_pEditView->showAutoC(curPos - startPos, _keyWords.c_str());
@@ -126,7 +126,7 @@ bool AutoCompletion::showApiAndWordComplete()	{
 	}
 
 	// _pEditView->execute(SCI_AUTOCSETSEPARATOR, WPARAM('\n'));
-	_pEditView->execute(SC_CASEINSENSITIVEBEHAVIOUR_IGNORECASE,1);
+	_pEditView->execute(SCI_AUTOCSETCASEINSENSITIVEBEHAVIOUR,1);
 	_pEditView->execute(SCI_AUTOCSETIGNORECASE, nppGUI._autocIgnoreCase);
 	// _pEditView->execute(SC_ORDER_CUSTOM,2);
 	_pEditView->showAutoC(curPos - startPos, words.c_str());
@@ -368,7 +368,7 @@ bool AutoCompletion::showWordComplete(bool autoInsert)	{
 	}
 
 	// _pEditView->execute(SCI_AUTOCSETSEPARATOR, WPARAM('\n'));
-	_pEditView->execute(SC_CASEINSENSITIVEBEHAVIOUR_IGNORECASE,1);
+	_pEditView->execute(SCI_AUTOCSETCASEINSENSITIVEBEHAVIOUR,1);
 	_pEditView->execute(SCI_AUTOCSETIGNORECASE, nppGUI._autocIgnoreCase);
 	// _pEditView->execute(SC_ORDER_CUSTOM,2);
 	_pEditView->showAutoC(curPos - startPos, words.c_str());

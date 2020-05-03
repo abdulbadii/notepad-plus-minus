@@ -2057,7 +2057,7 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 	if (pOptions->_whichDirection == DIR_UP)	{
 
 		//When searching upwards, start is the lower part, end the upper, for backwards search
-		startPosition = cr.cpMax - 1;
+		--startPosition;// = cr.cpMax - 1;
 		endPosition = 0;
 	}
 
@@ -2110,7 +2110,7 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 	if ((*_ppEditView)->execute(SCI_GETCHARAT, startPosition - 1) == '\r'
 		&& (*_ppEditView)->execute(SCI_GETCHARAT, startPosition) == '\n') 
 	{
-		flags = (flags & ~SCFIND_REGEXP_EMPTYMATCH_MASK) | SCFIND_REGEXP_EMPTYMATCH_NONE;
+		flags = flags & ~SCFIND_REGEXP_EMPTYMATCH_MASK | SCFIND_REGEXP_EMPTYMATCH_NONE;
 	}
 
 	(*_ppEditView)->execute(SCI_SETSEARCHFLAGS, flags);
@@ -2767,13 +2767,21 @@ void FindReplaceDlg::findAllIn(int WM_cmd)	{
 	else
 		_pFinder->_findAllInCurrent=0;
 
-	int flags = Searching::buildSearchFlags(_env) | SCFIND_REGEXP_EMPTYMATCH_ALL | SCFIND_REGEXP_SKIPCRLFASONE;
-	(*_ppEditView)->execute(SCI_SETSEARCHFLAGS, flags);
 
-	 if (static_cast<int>((*_ppEditView)->execute(SCI_SEARCHINTARGET,
-		lstrlen(_options._str2Search.c_str()),
-		reinterpret_cast<LPARAM>(_options._str2Search.c_str()))) == -2)	{
+	(*_ppEditView)->execute(SCI_SETSEARCHFLAGS, 
+	Searching::buildSearchFlags(_env)
+	| SCFIND_REGEXP_EMPTYMATCH_ALL
+	| SCFIND_REGEXP_SKIPCRLFASONE);
 
+	const TCHAR* txt2find=_options._str2Search.c_str();
+	int strSz = lstrlen(txt2find);
+	TCHAR *pText = new TCHAR[strSz + 1];
+	wcscpy_s(pText, strSz + 1, txt2find);
+	
+	if (_env->_searchType == FindExtended)
+		strSz = Searching::convertExtendedToString(txt2find, pText, strSz);
+
+	 if ( (*_ppEditView)->searchInTarget(pText, strSz) == -2)	{
 		NativeLangSpeaker *pNativeSpeaker = param.getNativeLangSpeaker();
 		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-invalid-re", L"Find: Invalid regular expression");
 		setStatusbarMessage(msg, FSNotFound);

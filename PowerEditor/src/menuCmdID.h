@@ -94,11 +94,11 @@
 #define    IDM_EDIT       (IDM + 2000)
 	#define    IDM_EDIT_CUT                         (IDM_EDIT + 1) 
 	#define    IDM_EDIT_COPY                        (IDM_EDIT + 2)
+	#define    IDM_EDIT_PASTE                       (IDM_EDIT + 3)
 
 	#define    IDM_EDIT_TOGGLEOVERTYPE            (IDM_EDIT + 85)
-	#define    IDM_EDIT_UNDO                        (IDM_EDIT + 3)
-	#define    IDM_EDIT_REDO                        (IDM_EDIT + 4)
-	#define    IDM_EDIT_PASTE                       (IDM_EDIT + 5)
+	#define    IDM_EDIT_UNDO                        (IDM_EDIT + 4)
+	#define    IDM_EDIT_REDO                        (IDM_EDIT + 5)
 	#define    IDM_EDIT_DELETE                      (IDM_EDIT + 6)
 	#define    IDM_EDIT_SELECTALL                   (IDM_EDIT + 7)
 	#define    IDM_EDIT_BEGINENDSELECT              (IDM_EDIT + 51)
@@ -265,9 +265,9 @@
 	#define    IDM_VIEW_POSTIT                    (IDM_VIEW + 9)
 	//#define    IDM_VIEW_USER_DLG                  (IDM_VIEW + )
 
-	#define    IDM_VIEW_TOGGLE_FOLDALL            (IDM_VIEW + 10)
-	#define    IDM_VIEW_TOGGLE_FOLDCURRENT              (IDM_VIEW + 11)
-	#define    IDM_VIEW_TOGGLE_FOLDCURREC              (IDM_VIEW + 12)
+	#define    IDM_VIEW_TOGGLE_FOLDCURRENT              (IDM_VIEW + 10)
+	#define    IDM_VIEW_TOGGLE_FOLDCURREC              (IDM_VIEW + 11)
+	#define    IDM_VIEW_TOGGLE_FOLDALL            (IDM_VIEW + 12)
 
 	#define    IDM_VIEW_SYMBOLMARGIN              (IDM_VIEW + 13)
 	#define    IDM_VIEW_FOLDERMAGIN               (IDM_VIEW + 14)

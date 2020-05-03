@@ -39,7 +39,7 @@ FileDialog::FileDialog(HWND hwnd, HINSTANCE hInst)
 	: _nbCharFileExt(0), _nbExt(0), _fileExt(NULL), _extTypeIndex(-1)
 {
 	staticThis = this;
-    
+		
 	memset(_fileName, 0, sizeof(_fileName));
 	_winVersion = param.getWinVersion();
 
@@ -83,39 +83,39 @@ FileDialog::~FileDialog()
 // FileDialog.setExtFilter(L"Makefile", L"makefile", L"GNUmakefile", NULL);
 void FileDialog::setExtFilter(const TCHAR *extText, const TCHAR *ext, ...)	{
 
-    // fill out the ext array for save as file dialog
+	// fill out the ext array for save as file dialog
 	generic_string exts;
 
-    va_list pArg;
-    va_start(pArg, ext);
+	va_list pArg;
+	va_start(pArg, ext);
 
-    const TCHAR *ext2Concat;
+	const TCHAR *ext2Concat;
 	ext2Concat = ext;
-    do
+	do
 	{
-        if (ext2Concat[0] == L'.')
-            exts += L"*";
-        exts += ext2Concat;
-        exts += L";";
+		if (ext2Concat[0] == L'.')
+				exts += L"*";
+		exts += ext2Concat;
+		exts += L";";
 	}
 	while ( (ext2Concat = va_arg(pArg, const TCHAR *)) != NULL );
 
 	va_end(pArg);
 
 	// remove the last ';'
-    exts = exts.substr(0, exts.length()-1);
+	exts = exts.substr(0, exts.length()-1);
 
 	setExtsFilter(extText, exts.c_str());
 }
 
 int FileDialog::setExtsFilter(const TCHAR *extText, const TCHAR *exts)	{
 
-    // fill out the ext array for save as file dialog
-    generic_string extFilter = extText;
+	// fill out the ext array for save as file dialog
+	generic_string extFilter = extText;
 	TCHAR *oldFilter = NULL;
 
-    extFilter += L" (";
-    extFilter += exts;
+	extFilter += L" (";
+	extFilter += exts;
 	extFilter += L")";	
 	
 	// Resize filter buffer
@@ -142,12 +142,12 @@ int FileDialog::setExtsFilter(const TCHAR *extText, const TCHAR *exts)	{
 	}
 
 	// Append new filter    
-    TCHAR *pFileExt = _fileExt + _nbCharFileExt;
+	TCHAR *pFileExt = _fileExt + _nbCharFileExt;
 	auto curLen = extFilter.length() + 1;
 	wcscpy_s(pFileExt, curLen, extFilter.c_str());
 	_nbCharFileExt += int(curLen);
-    
-    pFileExt = _fileExt + _nbCharFileExt;
+		
+	pFileExt = _fileExt + _nbCharFileExt;
 	curLen = _tcsclen(exts) + 1;
 	wcscpy_s(pFileExt, curLen, exts);
 	_nbCharFileExt += int(curLen);
@@ -383,9 +383,9 @@ static generic_string addExt(HWND textCtrl, HWND typeCtrl)	{
 
 UINT_PTR CALLBACK FileDialog::OFNHookProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)	{
 
-    switch(uMsg)	{
+	switch(uMsg)	{
 
-        case WM_INITDIALOG :	{
+		case WM_INITDIALOG :	{
 
 			int index = param.getFileSaveDlgFilterIndex();
 
@@ -415,30 +415,30 @@ UINT_PTR CALLBACK FileDialog::OFNHookProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
 			}
 			return pFileDialog->run(hWnd, uMsg, wParam, lParam);
 		}
-    }
+	}
 }
 
 BOOL APIENTRY FileDialog::run(HWND hWnd, UINT uMsg, WPARAM, LPARAM lParam)	{
 
-    switch (uMsg)	{
+	switch (uMsg)	{
 
-        case WM_NOTIFY :	{
+		case WM_NOTIFY :	{
 
 			LPNMHDR pNmhdr = (LPNMHDR)lParam;
 			switch(pNmhdr->code)	{
 
-                case CDN_INITDONE :	{
+					case CDN_INITDONE :	{
 
-                    if (_extTypeIndex == -1)
-                        return TRUE;
+						if (_extTypeIndex == -1)
+								return TRUE;
 
-                    HWND fnControl = ::GetDlgItem(::GetParent(hWnd), _dialogFileBoxId);
-                    HWND typeControl = ::GetDlgItem(::GetParent(hWnd), cmb1);
-                    ::SendMessage(typeControl, CB_SETCURSEL, _extTypeIndex, 0);
+						HWND fnControl = ::GetDlgItem(::GetParent(hWnd), _dialogFileBoxId);
+						HWND typeControl = ::GetDlgItem(::GetParent(hWnd), cmb1);
+						::SendMessage(typeControl, CB_SETCURSEL, _extTypeIndex, 0);
 
-                    currentExt = addExt(fnControl, typeControl);
-                    return TRUE;
-                }
+						currentExt = addExt(fnControl, typeControl);
+						return TRUE;
+					}
 
 				case CDN_TYPECHANGE :	{
 
@@ -495,12 +495,12 @@ BOOL APIENTRY FileDialog::run(HWND hWnd, UINT uMsg, WPARAM, LPARAM lParam)	{
 		}
 		default :
 			return FALSE;
-    }
+	}
 }
 
 void goToCenter(HWND hwnd)	{
 
-    RECT rc;
+	RECT rc;
 	HWND hParent = ::GetParent(hwnd);
 	::GetClientRect(hParent, &rc);
 	
@@ -512,10 +512,10 @@ void goToCenter(HWND hwnd)	{
  		::GetClientRect(hParent,&rc);
  	}
 	
-    POINT center;
-    center.x = rc.left + (rc.right - rc.left)/2;
-    center.y = rc.top + (rc.bottom - rc.top)/2;
-    ::ClientToScreen(hParent, &center);
+	POINT center;
+	center.x = rc.left + (rc.right - rc.left)/2;
+	center.y = rc.top + (rc.bottom - rc.top)/2;
+	::ClientToScreen(hParent, &center);
 
 	RECT _rc;
 	::GetWindowRect(hwnd, &_rc);

@@ -36,7 +36,6 @@
 #include "regExtDlg.h"
 #include "RunDlg.h"
 #include "ShortcutMapper.h"
-#include "preferenceDlg.h"
 #include "TaskListDlg.h"
 #include "xmlMatchedTagsHighlighter.h"
 #include "EncodingMapper.h"

@@ -167,7 +167,8 @@ Altered list to support VK_0-9 and VK_A-Z
 #define VK_SCROLL         0x91
 
 #define VK_OEM_1          0xBA   // ';:' for US
-#define VK_OEM_PLUS       0xBB   // '+' any country
+#define VK_OEM_PLUS       0xBB   // '=+' any country
+#define VK_OEM_EQUAL       0xBB   // '=+' any country
 #define VK_OEM_COMMA      0xBC   // ',' any country
 #define VK_OEM_MINUS      0xBD   // '-' any country
 #define VK_OEM_PERIOD     0xBE   // '.' any country
