@@ -1,4 +1,4 @@
-// this file is part of docking functionality for Notepad++
+//// this file is part of docking functionality for Notepad++
 // Copyright (C)2006 Jens Lorenz <jens.plugin.npp@gmx.de>
 //
 // This program is free software; you can redistribute it and/or
@@ -565,14 +565,12 @@ void DockingManager::reSizeTo(RECT & rc)	{
 
 void DockingManager::createDockableDlg(tTbData data, int iCont, bool isVisible)	{
 
-	// add icons
-	if ((data.uMask & DWS_ICONTAB) && data.hIconTab != NULL)	{
+	if (data.uMask & DWS_ICONTAB && data.hIconTab)	{// if request icons
 
 		// create image list if not exist
 		if (!_hImageList)	{
-
-			int iconDpiDynamicalSize = param._dpiManager.scaleY(14);
-			_hImageList = ::ImageList_Create(iconDpiDynamicalSize,iconDpiDynamicalSize,ILC_COLOR8, 0, 0);
+			int iconDpiDynamicalSize;
+			_hImageList = ::ImageList_Create(iconDpiDynamicalSize = param._dpiManager.scaleY(14), iconDpiDynamicalSize,ILC_COLOR8, 0, 0);
 		}
 
 		// add icon
@@ -583,8 +581,8 @@ void DockingManager::createDockableDlg(tTbData data, int iCont, bool isVisible)	
 	}
 
 	// create additional containers if necessary
+	DockingCont*	pCont;
 	RECT				rc			= {0,0,0,0};
-	DockingCont*		pCont		= NULL;
 
 	// if floated rect not set
 	if (!memcmp(&data.rcFloat, &rc, sizeof(RECT)))	{
@@ -596,17 +594,15 @@ void DockingManager::createDockableDlg(tTbData data, int iCont, bool isVisible)	
 		if (iCont == -1)	{
 
 			// set default visible state
-			isVisible = (::IsWindowVisible(data.hClient) == TRUE);
+			isVisible = ::IsWindowVisible(data.hClient);
 
 			if (data.uMask & DWS_DF_FLOATING)	{
 
 				// create new container
-				pCont = new DockingCont;
-				_vContainer.push_back(pCont);
+				_vContainer.push_back(pCont = new DockingCont);
 
-				// initialize
 				pCont->init(_hInst, _hSelf);
-				pCont->doDialog(isVisible, true);
+				pCont->doDialog(isVisible, 1); //is floating
 
 				// get previous position and set container id
 				data.iPrevCont = (data.uMask & 0x30000000) >> 28;
@@ -665,8 +661,8 @@ void DockingManager::createDockableDlg(tTbData data, int iCont, bool isVisible)	
 	}
 
 	// attach toolbar
-	if (_vContainer.size() > (size_t)iCont && _vContainer[iCont] != NULL)
-		_vContainer[iCont]->createToolbar(data);
+	if (_vContainer.size() > (size_t)iCont && _vContainer[iCont])
+		_vContainer[iCont]->createToolbar(data, isVisible);
 
 	// notify client app
 	if (iCont < DOCKCONT_MAX)

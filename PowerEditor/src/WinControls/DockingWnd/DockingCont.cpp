@@ -130,7 +130,7 @@ void DockingCont::doDialog(bool willBeShown, bool isFloating)	{
 }
 
 
-tTbData* DockingCont::createToolbar(tTbData data)
+tTbData* DockingCont::createToolbar(tTbData data, bool isVisible)
 {
 	tTbData *pTbData = new tTbData;
 
@@ -150,7 +150,7 @@ tTbData* DockingCont::createToolbar(tTbData data)
     ::SetParent(pTbData->hClient, ::GetDlgItem(_hSelf, IDC_CLIENT_TAB));
 
 	// set names for captions and view toolbar
-	viewToolbar(pTbData);
+	viewToolbar(pTbData, isVisible);
 
 	// attach to list
 	_vTbData.push_back(pTbData);
@@ -1235,7 +1235,7 @@ int DockingCont::hideToolbar(tTbData *pTbData, BOOL hideClient)	{
 	return iItem;
 }
 
-void DockingCont::viewToolbar(tTbData *pTbData)	{
+void DockingCont::viewToolbar(tTbData *pTbData, bool visible)	{
 
 	TCITEM tcItem = {0};
 	int iItemCnt = static_cast<int32_t>(::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0));
@@ -1271,12 +1271,12 @@ void DockingCont::viewToolbar(tTbData *pTbData)	{
 		selectTab(iTabPos);
 	}
 
-	// show dialog and notify parent to update dialog view
-	if (isVisible() == false)	{
+	if (visible)	{
 
 		this->doDialog();
-		::SendMessage(_hParent, WM_SIZE, 0, 0);
+		::SendMessage(_hParent, WM_SIZE, 0, 0);// notify parent to update dialog view
 	}
+	else	this->doDialog(0);
 
 	// set position of client
 	onSize();

@@ -41,8 +41,7 @@
 using namespace std;
 
 
-namespace // anonymous namespace
-{
+namespace {
 
 
 struct WinMenuKeyDefinition	{ //more or less matches accelerator table definition, easy copy/paste
@@ -74,8 +73,7 @@ struct ScintillaKeyDefinition	{
 **
 ** values can be 0 for vKey, which means its unused
 */
-static const WinMenuKeyDefinition winKeyDefs[] =
-{
+static const WinMenuKeyDefinition winKeyDefs[] =	{
 	// V_KEY,    COMMAND_ID,                                    Ctrl,  Alt,   Shift, cmdName
 	// -------------------------------------------------------------------------------------
 	//
@@ -105,21 +103,21 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_F4,      IDM_FILE_EXIT,                                false, true,  false, nullptr },
 	{ VK_T,       IDM_FILE_RESTORELASTCLOSEDFILE,               true,  false, true, L"Restore Recent Closed File" },
 
-	{ VK_INSERT,   IDM_EDIT_TOGGLEOVERTYPE,               false, false, false, L"Insert/Overtype Toggling" },
+	{ VK_INSERT,   IDM_EDIT_TOGGLEOVERTYPE,               false, false, false, L"Overtype-Insert Toggling" },
 	{ VK_Z,    IDM_EDIT_UNDO,                                true, false, false, nullptr },
 	{ VK_Z,    IDM_EDIT_REDO,                                true, false, true, nullptr },
-//	{ VK_NULL,    IDM_EDIT_CUT,                                 true, false, false, nullptr },
-//	{ VK_NULL,    IDM_EDIT_COPY,                                false, false, false, nullptr },
-//	{ VK_NULL,    IDM_EDIT_PASTE,                               false, false, false, nullptr },
-//	{ VK_NULL,    IDM_EDIT_DELETE,                              false, false, false, nullptr },
-//	{ VK_NULL,    IDM_EDIT_SELECTALL,                           false, false, false, nullptr },
+/* 	{ VK_NULL,    IDM_EDIT_CUT,                                 true, false, false, nullptr },
+	{ VK_NULL,    IDM_EDIT_COPY,                                false, false, false, nullptr },
+	{ VK_NULL,    IDM_EDIT_PASTE,                               false, false, false, nullptr },
+	{ VK_NULL,    IDM_EDIT_DELETE,                              false, false, false, nullptr },
+	{ VK_NULL,    IDM_EDIT_SELECTALL,                           false, false, false, nullptr }, */
 	{ VK_NULL,    IDM_EDIT_BEGINENDSELECT,                      false, false, false, nullptr },
 
 	{ VK_NULL,    IDM_EDIT_FULLPATHTOCLIP,                      false, false, false, nullptr },
 	{ VK_NULL,    IDM_EDIT_FILENAMETOCLIP,                      false, false, false, nullptr },
 	{ VK_NULL,    IDM_EDIT_CURRENTDIRTOCLIP,                    false, false, false, nullptr },
-//	{ VK_NULL,    IDM_EDIT_INS_TAB,                             false, false, false, nullptr },
-//	{ VK_NULL,    IDM_EDIT_RMV_TAB,                             false, false, false, nullptr },
+/* 	{ VK_NULL,    IDM_EDIT_INS_TAB,                             false, false, false, nullptr },
+	{ VK_NULL,    IDM_EDIT_RMV_TAB,                             false, false, false, nullptr }, */
 	{ VK_U,       IDM_EDIT_UPPERCASE,                           true,  false, true,  nullptr },
 	{ VK_U,       IDM_EDIT_LOWERCASE,                           true,  false, false, nullptr },
 	{ VK_U,       IDM_EDIT_PROPERCASE_FORCE,                    false, true,  false, nullptr },
@@ -128,7 +126,7 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_U,       IDM_EDIT_SENTENCECASE_BLEND,                  true,  true,  true,  nullptr },
 	{ VK_NULL,    IDM_EDIT_INVERTCASE,                          false, false, false, nullptr },
 	{ VK_NULL,    IDM_EDIT_RANDOMCASE,                          false, false, false, nullptr },
-//	{ VK_NULL,    IDM_EDIT_DUP_LINE,                            false, false, false, nullptr },
+	/* { VK_NULL,    IDM_EDIT_DUP_LINE,                            false, false, false, nullptr }, */
 	{ VK_I,       IDM_EDIT_SPLIT_LINES,                         true,  false, false, nullptr },
 	{ VK_J,       IDM_EDIT_JOIN_LINES,                          true,  false, false, nullptr },
 	{ VK_UP,      IDM_EDIT_LINE_UP,                             true,  false, true,  nullptr },
@@ -174,7 +172,7 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_NULL,    IDM_EDIT_OPENINFOLDER,                        false, false, false, nullptr },
 	{ VK_NULL,    IDM_EDIT_SEARCHONINTERNET,                    false, false, false, nullptr },
 	{ VK_NULL,    IDM_EDIT_CHANGESEARCHENGINE,                  false, false, false, nullptr },
-//  { VK_NULL,    IDM_EDIT_COLUMNMODETIP,                       false, false, false, nullptr },
+	/* { VK_NULL,    IDM_EDIT_COLUMNMODETIP,                       false, false, false, nullptr }, */
 	{ VK_C,       IDM_EDIT_COLUMNMODE,                          false, true,  false, nullptr },
 	{ VK_NULL,    IDM_EDIT_CLIPBOARDHISTORY_PANEL,              false, false, false, nullptr },
 	{ VK_NULL,    IDM_EDIT_SETREADONLY,                         false, false, false, nullptr },
@@ -194,7 +192,8 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	
 	{ VK_G,       IDM_SEARCH_GOTOLINE,                          true,  false, false, nullptr },
 	{ VK_B,       IDM_SEARCH_GOTOMATCHINGBRACE,                 true,  false, false, nullptr },
-	{ VK_B,       IDM_SEARCH_SELECTMATCHINGBRACES,              true,  true,  false, nullptr },
+	{ VK_NULL,       IDM_SEARCH_SELECTMATCHINGBRACES,              true,  true,  false, nullptr },
+	{ VK_B,       IDM_SEARCH_SELECTMATCHBRACEX,              true,  true,  false, nullptr },
 	{ VK_NULL,    IDM_SEARCH_MARK,                              false, false, false, nullptr },
 	{ VK_NULL,    IDM_SEARCH_MARKALLEXT1,                       false, false, false, nullptr },
 	{ VK_NULL,    IDM_SEARCH_MARKALLEXT2,                       false, false, false, nullptr },
@@ -219,8 +218,8 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_4,       IDM_SEARCH_GONEXTMARKER4,                     true,  false, false, nullptr },
 	{ VK_5,       IDM_SEARCH_GONEXTMARKER5,                     true,  false, false, nullptr },
 	{ VK_0,       IDM_SEARCH_GONEXTMARKER_DEF,                  true,  false, false, nullptr },
-	{ VK_F2,      IDM_SEARCH_TOGGLE_BOOKMARK,                   true,  false, false, nullptr },
-	{ VK_F2,      IDM_SEARCH_NEXT_BOOKMARK,                     false, false, false, nullptr },
+	{ VK_P,      IDM_SEARCH_TOGGLE_BOOKMARK,                   false, true, true, nullptr },
+	{ VK_P,      IDM_SEARCH_NEXT_BOOKMARK,                     false, true, false, nullptr },
 	{ VK_F2,      IDM_SEARCH_PREV_BOOKMARK,                     false, false, true, nullptr  },
 	{ VK_NULL,    IDM_SEARCH_CLEAR_BOOKMARKS,                   false, false, false, nullptr },
 	{ VK_NULL,    IDM_SEARCH_CUTMARKEDLINES,                    false, false, false, nullptr },
@@ -230,8 +229,8 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_NULL,    IDM_SEARCH_DELETEUNMARKEDLINES,               false, false, false, nullptr },
 	{ VK_NULL,    IDM_SEARCH_INVERSEMARKS,                      false, false, false, nullptr },
 	{ VK_NULL,    IDM_SEARCH_FINDCHARINRANGE,                   false, false, false, nullptr },
-	{ VK_P,      IDM_SEARCH_REPLACE1,                           false, true, false, nullptr },
-				 
+	{ VK_O,      IDM_SEARCH_REPLACE1,                           false, true, false, nullptr },
+
 	{ VK_NULL,    IDM_VIEW_ALWAYSONTOP,                         false, false, false, nullptr },
 	{ VK_F11,     IDM_VIEW_FULLSCREENTOGGLE,                    false, false, false, nullptr },
 	{ VK_F12,     IDM_VIEW_POSTIT,                              false, false, false, nullptr },
@@ -246,9 +245,9 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_NULL,    IDM_VIEW_ALL_CHARACTERS,                      false, false, false, nullptr },
 	{ VK_NULL,    IDM_VIEW_INDENT_GUIDE,                        false, false, false, nullptr },
 	{ VK_NULL,    IDM_VIEW_WRAP_SYMBOL,                         false, false, false, nullptr },
-//  { VK_NULL,    IDM_VIEW_ZOOMIN,                              false, false, false, nullptr },
-//  { VK_NULL,    IDM_VIEW_ZOOMOUT,                             false, false, false, nullptr },
-//  { VK_NULL,    IDM_VIEW_ZOOMRESTORE,                         false, false, false, nullptr },
+/*  { VK_NULL,    IDM_VIEW_ZOOMIN,                              false, false, false, nullptr },
+ { VK_NULL,    IDM_VIEW_ZOOMOUT,                             false, false, false, nullptr },
+ { VK_NULL,    IDM_VIEW_ZOOMRESTORE,                         false, false, false, nullptr }, */
 	{ VK_NULL,    IDM_VIEW_GOTO_ANOTHER_VIEW,                   false, false, false, nullptr },
 	{ VK_NULL,    IDM_VIEW_CLONE_TO_ANOTHER_VIEW,               false, false, false, nullptr },
 	{ VK_NULL,    IDM_VIEW_GOTO_NEW_INSTANCE,                   false, false, false, nullptr },
@@ -274,7 +273,7 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_F8,      IDM_VIEW_SWITCHTO_OTHER_VIEW,                 false, false, false, nullptr },
 
 	{ VK_OEM_1,       IDM_VIEW_TOGGLE_FOLDALL,                      false, true,  false, nullptr },
-	{ VK_OEM_EQUAL,       IDM_VIEW_TOGGLE_FOLDCURRENT,                 false, true, true, nullptr },
+	{ VK_OEM_7,       IDM_VIEW_TOGGLE_FOLDCURRENT,                 false, true, true, nullptr },
 	{ VK_OEM_7,       IDM_VIEW_TOGGLE_FOLDCURREC,                   false, true,  false, nullptr },
 	
 	{ VK_1,       IDM_VIEW_FOLD_1,                              false, true,  false, nullptr },
@@ -298,12 +297,13 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_NULL,    IDM_VIEW_PROJECT_PANEL_3,                     false, false, false, nullptr },
 	{ VK_NULL,    IDM_VIEW_FILEBROWSER,                         false, false, false, nullptr },
 	{ VK_NULL,    IDM_VIEW_DOC_MAP,                             false, false, false, nullptr },
-	{ VK_SPACE,      IDM_VIEW_FIND_RESULT,                  true,  true, false, nullptr },
-	{ VK_BACK,    IDM_VIEW_FUNC_LIST,                           false, false, true, nullptr },
+	{ VK_OEM_EQUAL,    IDM_VIEW_FUNC_LIST,                           true, false, true, nullptr },
 	{ VK_F6,    IDM_VIEW_CHAR_PANEL,                          false, false, false, nullptr },
 	{ VK_L,    IDM_VIEW_LINENUMBER,                false, true, true, nullptr },
-	{ VK_TAB,      IDM_MAIN_FIND_RESULTS,                  true,  false, true, L"Switch Main/Find view" },
-	{ VK_SPACE,      IDM_CLEAR_CLOSE_FINDER,                  true,  true, true, L"Clear,Close Find View" },
+	{ VK_SPACE,      IDM_VIEW_FIND_RESULT,                  true,  true, false, nullptr },
+	{ VK_N,      IDM_INFOS,                 false, true, false, L"Scope Information" },
+	{ VK_TAB,      IDM_MAIN_FIND_RESULTS,                  true,  false, true, L"Switch Main/Find Pane" },
+	{ VK_SPACE,      IDM_CLEAR_CLOSE_FINDER,                  true,  true, true, L"Clear & Close Find Pane" },
 
 	{ VK_NULL,    IDM_VIEW_SYNSCROLLV,                          false, false, false, nullptr },
 	{ VK_NULL,    IDM_VIEW_SYNSCROLLH,                          false, false, false, nullptr },
@@ -353,12 +353,12 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_NULL,    IDM_FORMAT_WIN_1255,                          false, false, false, nullptr },
 	{ VK_NULL,    IDM_FORMAT_SHIFT_JIS,                         false, false, false, nullptr },
 	{ VK_NULL,    IDM_FORMAT_EUC_KR,                            false, false, false, nullptr },
-	//{ VK_NULL,    IDM_FORMAT_ISO_8859_10,                       false, false, false, nullptr },
+	/* { VK_NULL,    IDM_FORMAT_ISO_8859_10,                       false, false, false, nullptr }, */
 	{ VK_NULL,    IDM_FORMAT_ISO_8859_15,                       false, false, false, nullptr },
 	{ VK_NULL,    IDM_FORMAT_ISO_8859_4,                        false, false, false, nullptr },
-	//{ VK_NULL,    IDM_FORMAT_ISO_8859_16,                       false, false, false, nullptr },
+	/* { VK_NULL,    IDM_FORMAT_ISO_8859_16,                       false, false, false, nullptr }, */
 	{ VK_NULL,    IDM_FORMAT_ISO_8859_3,                        false, false, false, nullptr },
-	//{ VK_NULL,    IDM_FORMAT_ISO_8859_11,                       false, false, false, nullptr },
+	/* { VK_NULL,    IDM_FORMAT_ISO_8859_11,                       false, false, false, nullptr }, */
 	{ VK_NULL,    IDM_FORMAT_TIS_620,                           false, false, false, nullptr },
 	{ VK_NULL,    IDM_FORMAT_ISO_8859_9,                        false, false, false, nullptr },
 	{ VK_NULL,    IDM_FORMAT_WIN_1254,                          false, false, false, nullptr },
@@ -394,15 +394,14 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_NULL,    IDM_CMDLINEARGUMENTS,                         false, false, false, nullptr },
 	{ VK_NULL,    IDM_HOMESWEETHOME,                            false, false, false, nullptr },
 	{ VK_NULL,    IDM_PROJECTPAGE,                              false, false, false, nullptr },
-//  { VK_NULL,    IDM_ONLINEDOCUMENT,                               false, false, false, nullptr },
+ /* { VK_NULL,    IDM_ONLINEDOCUMENT,                               false, false, false, nullptr }, */
 	{ VK_NULL,    IDM_FORUM,                                    false, false, false, nullptr },
 	{ VK_NULL,    IDM_ONLINESUPPORT,                            false, false, false, nullptr },
-//	{ VK_NULL,    IDM_PLUGINSHOME,                              false, false, false, nullptr },
+	/* { VK_NULL,    IDM_PLUGINSHOME,                              false, false, false, nullptr }, */
 	{ VK_NULL,    IDM_UPDATE_NPP,                               false, false, false, nullptr },
 	{ VK_NULL,    IDM_CONFUPDATERPROXY,                         false, false, false, nullptr },
 	{ VK_NULL,    IDM_DEBUGINFO,                                false, false, false, nullptr },
 	{ VK_F1,      IDM_ABOUT,                                    false, false, false, nullptr }
-//  { VK_F1,      IDM_HELP,                                     false, false, true,  nullptr }
 };
 
 
@@ -416,7 +415,7 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 static const ScintillaKeyDefinition scintKeyDefs[] =
 {
 	{L"SCI_CUT",                     SCI_CUT,                     true, false, false, VK_X,        IDM_EDIT_CUT},
-	{L"",                            SCI_CUT,                     false, false, true,  VK_DELETE,   0},
+	{L"",                            SCI_CUT,                     true, false, false,  VK_DELETE,   0},
 	{L"SCI_COPY",                    SCI_COPY,                    true,  false, false, VK_C,        IDM_EDIT_COPY},
 	{L"",                            SCI_COPY,                    true,  false, false, VK_INSERT,   0},
 	{L"SCI_PASTE",                   SCI_PASTE,                   true,  false, false, VK_V,        IDM_EDIT_PASTE},
@@ -430,7 +429,6 @@ static const ScintillaKeyDefinition scintKeyDefs[] =
 	{L"SCI_CLEAR",                   SCI_CLEAR,                   false, false, false, VK_DELETE,   IDM_EDIT_DELETE},
 	{L"SCI_CLEARALL",                SCI_CLEARALL,                false, false, false, 0,           0},
 	{L"SCI_NEWLINE",                 SCI_NEWLINE,                 false, false, false, VK_RETURN,   0},
-	{L"",                            SCI_NEWLINE,                 false, false, true,  VK_RETURN,   0},
 	{L"SCI_TAB",                     SCI_TAB,                     false, false, false, VK_TAB,      IDM_EDIT_INS_TAB},
 	{L"SCI_BACKTAB",                 SCI_BACKTAB,                 false, false, true,  VK_TAB,      IDM_EDIT_RMV_TAB},
 	{L"SCI_FORMFEED",                SCI_FORMFEED,                false, false, false, 0,           0},
@@ -440,7 +438,7 @@ static const ScintillaKeyDefinition scintKeyDefs[] =
 	{L"SCI_SELECTIONDUPLICATE",      SCI_SELECTIONDUPLICATE,      true,  false, false, VK_D,        IDM_EDIT_DUP_LINE},
 	{L"SCI_LINESJOIN",               SCI_LINESJOIN,               false, false, false, 0,           0},
 	{L"SCI_SCROLLCARET",             SCI_SCROLLCARET,             false, false, false, 0,           0},
-	{L"SCI_EDITTOGGLEOVERTYPE",      SCI_EDITTOGGLEOVERTYPE,      false, false, false, VK_INSERT,   0},
+	// {L"SCI_EDITTOGGLEOVERTYPE",      SCI_EDITTOGGLEOVERTYPE,      false, false, false, VK_INSERT,   0},
 	{L"SCI_MOVECARETINSIDEVIEW",     SCI_MOVECARETINSIDEVIEW,     false, false, false, 0,           0},
 	{L"SCI_LINEDOWN",                SCI_LINEDOWN,                false, false, false, VK_DOWN,     0},
 	{L"SCI_LINEDOWNEXTEND",          SCI_LINEDOWNEXTEND,          false, false, true,  VK_DOWN,     0},
@@ -505,7 +503,6 @@ static const ScintillaKeyDefinition scintKeyDefs[] =
 	{L"SCI_STUTTEREDPAGEDOWN",       SCI_STUTTEREDPAGEDOWN,       false, false, false, 0,           0},
 	{L"SCI_STUTTEREDPAGEDOWNEXTEND", SCI_STUTTEREDPAGEDOWNEXTEND, false, false, false, 0,           0},
 	{L"SCI_DELETEBACK",              SCI_DELETEBACK,              false, false, false, VK_BACK,     0},
-	{L"",                            SCI_DELETEBACK,              false, false, true,  VK_BACK,     0},
 	{L"SCI_DELETEBACKNOTLINE",       SCI_DELETEBACKNOTLINE,       false, false, false, 0,           0},
 	{L"SCI_DELWORDLEFT",             SCI_DELWORDLEFT,             true,  false, false, VK_BACK,     0},
 	{L"SCI_DELWORDRIGHT",            SCI_DELWORDRIGHT,            true,  false, false, VK_DELETE,   0},
@@ -651,7 +648,7 @@ int base64ToAscii(char *dest, const char *base64Str)	{
 	return k;
 }
 
-} // anonymous namespace
+}//namespace
 
 
 void cutString(const TCHAR* str2cut, vector<generic_string>& patternVect)	{
@@ -4510,6 +4507,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			if (val)
 				_nppGUI._isMaximized = (!lstrcmp(val, L"yes"));
 		}
+
 		else if (!lstrcmp(nm, L"NewDocDefaultSettings"))	{
 
 			int i;
@@ -4545,8 +4543,8 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			const TCHAR* val = element->Attribute(L"openAnsiAsUTF8");
 			if (val)
 				_nppGUI._newDocDefaultSettings._openAnsiAsUtf8 = (!lstrcmp(val, L"yes"));
-
 		}
+		
 		else if (!lstrcmp(nm, L"langsExcluded"))	{
 
 			// TODO
@@ -5088,9 +5086,6 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			if (optNameMonoFont)
 				_nppGUI._monospacedFontFindDlg = (!lstrcmp(optNameMonoFont, L"yes"));
 
-			/* const TCHAR * optStopFillingFindField = element->Attribute(L"stopFillingFindField");
-			if (optStopFillingFindField)
-				_nppGUI._stopFillingFindField = (!lstrcmp(optStopFillingFindField, L"yes"));*/
 			const TCHAR * optNameNewStyleSaveDlg = element->Attribute(L"newStyleSaveDlg");
 			if (optNameNewStyleSaveDlg)
 				_nppGUI._useNewStyleSaveDlg = (!lstrcmp(optNameNewStyleSaveDlg, L"yes"));
@@ -5126,24 +5121,21 @@ void NppParameters::feedScintillaParam(TiXmlNode *node)	{
 
 	// Line Number Margin
 	const TCHAR *nm = element->Attribute(L"lineNumberMargin");
-	// if (nm)
-	// {
-		if (!lstrcmp(nm, L"show"))
+	if (nm)
+		if (!lstrcmp(nm, L"show"))	{
 			_svp._lineNumberMarginShow = true;
-		else if (!lstrcmp(nm, L"hide"))
+		}
+		else if (!lstrcmp(nm, L"hide"))	{
 			_svp._lineNumberMarginShow = false;
-	// }
+		}
 
 	// Bookmark Margin
 	nm = element->Attribute(L"bookMarkMargin");
-	if (nm)	{
-
-
+	if (nm)
 		if (!lstrcmp(nm, L"show"))
 			_svp._bookMarkMarginShow = true;
 		else if (!lstrcmp(nm, L"hide"))
 			_svp._bookMarkMarginShow = false;
-	}
 
 	// Indent GuideLine
 	nm = element->Attribute(L"indentGuideLine");
@@ -5887,8 +5879,6 @@ void NppParameters::createXmlTreeFromGUIParams()	{
 		GUIConfigElement->SetAttribute(L"name", L"commandLineInterpreter");
 		GUIConfigElement->InsertEndChild(TiXmlText(_nppGUI._commandLineInterpreter.c_str()));
 	}
-
-	// <GUIConfig name="ScintillaPrimaryView" lineNumberMargin="show" bookMarkMargin="show" indentGuideLine="show" folderMarkStyle="box" lineWrapMethod="aligned" currentLineHilitingShow="show" scrollBeyondLastLine="no" disableAdvancedScrolling="no" wrapSymbolShow="hide" Wrap="no" borderEdge="yes" edge="no" edgeNbColumn="80" zoom="0" zoom2="0" whiteSpaceShow="hide" eolShow="hide" borderWidth="2" smoothFont="no" />
 	writeScintillaParams();
 
 	// <GUIConfig name="DockingManager" leftWidth="328" rightWidth="359" topHeight="200" bottomHeight="436">

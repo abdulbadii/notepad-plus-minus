@@ -764,11 +764,11 @@ struct NppGUI final	{
 		_appPos.top = 0;
 		_appPos.right = 1100;
 		_appPos.bottom = 700;
-
 		_defaultDir[0] = 0;
 		_defaultDirExp[0] = 0;
 	}
 
+	HMENU mainMenuHandle = nullptr;
 	toolBarStatusType _toolBarStatus = TB_STANDARD;
 	bool _toolbarShow = true;
 	bool _statusBarShow = true;
@@ -1659,6 +1659,7 @@ public:
 	void setUdlXmlDirtyFromIndex(size_t i);
 	void setUdlXmlDirtyFromXmlDoc(const TiXmlDocument* xmlDoc);
 	void removeIndexFromXmlUdls(size_t i);
+	bool lineNumberMarginOn(){return _svp._lineNumberMarginShow;}
 
 private:
 	NppParameters();

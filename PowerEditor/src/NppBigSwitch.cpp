@@ -1950,11 +1950,20 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		case NPPM_DMMREGASDCKDLG:	{
 
 			tTbData *pData = reinterpret_cast<tTbData *>(lParam);
-			int		iCont	= -1;
-			bool	isVisible	= false;
+			int containerInfo	= -1;
+			bool	isVisible;
 
-			getIntegralDockingData(*pData, iCont, isVisible);
-			_dockingManager.createDockableDlg(*pData, iCont, isVisible);
+			getIntegralDockingData(*pData, containerInfo, isVisible);
+			_dockingManager.createDockableDlg(*pData, containerInfo, isVisible);
+			return TRUE;
+		}
+
+		case NPPM_DMMREGASDCKDLG_N:	{
+			tTbData *pData = reinterpret_cast<tTbData *>(lParam);
+			int	containerInfo	= -1;
+			bool	isVisible;
+			getIntegralDockingData(*pData, containerInfo, isVisible);
+			_dockingManager.createDockableDlg(*pData, containerInfo);
 			return TRUE;
 		}
 

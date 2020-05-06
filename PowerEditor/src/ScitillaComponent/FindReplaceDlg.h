@@ -295,14 +295,15 @@ public :
 
 		_pFinder->finishFilesSearch(_findAllResult=count, isfold, dir);
 	}
+	bool isVolatiled()	{
+		return _pFinder->_canBeVolatiled;
+	}
 
 	void execSavedCommand(int cmd, uptr_t intValue, const generic_string& stringValue);
 	void clearMarks(const FindOption& opt);
 	void setStatusbarMessage(const generic_string & msg, FindStatus staus);
 	Finder * createFinder();
 	bool removeFinder(Finder *finder2remove);
-	bool isVolatiled()	{
-return _pFinder->_canBeVolatiled;}
 
 	ScintillaEditView& get_scintView()	{
 		return _pFinder->_scintView;

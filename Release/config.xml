@@ -21,9 +21,27 @@
         <Filter name="*.vc* *.sln" />
         <Filter name="*.c *.cpp *.cc *.h" />
         <Filter name="*.xml" />
+        <Find name="getShortcuts" />
+        <Find name="triggerFromNbChar" />
+        <Find name="childNode" />
+        <Find name="idStr" />
+        <Find name="FolderName" />
+        <Find name="\b\w(oo)\w*l" />
+        <Find name="\w(oo]" />
+        <Find name="_putRecentFileInSubMenu" />
+        <Find name="lstrcmp" />
+        <Find name="\w(oo)" />
+        <Find name="\b\w(oo)" />
+        <Find name="return" />
+        <Find name="SCI_PASTE" />
+        <Find name="SCI_CONVERTEOLS" />
+        <Find name="SCI_GETEOLMODE" />
+        <Find name="command_mutex" />
+        <Find name="Notepad_plus_Window" />
+        <Find name="SCI_SETYCARETPOLICY" />
+        <Find name="\\n(+\W)" />
         <Find name="\\n\h+W" />
         <Find name="\\r\\n\h" />
-        <Find name="\w(oo]" />
         <Find name="4401" />
         <Find name="LanguageName" />
         <Find name="_fontName" />
@@ -39,7 +57,6 @@
         <Find name="appandGenericText" />
         <Find name="SCE_USER_KWLIST_COMMENTS" />
         <Find name="_keywordLists" />
-        <Find name="lstrcmp" />
         <Find name="pOldView" />
         <Find name="_fontSize" />
         <Find name="lexerUserExt" />
@@ -54,7 +71,6 @@
         <Find name="keywordList" />
         <Find name="ViewElem" />
         <Find name="_activeView" />
-        <Find name="return" />
         <Find name="WordStyleDlg" />
         <Find name="setStyle" />
         <Find name="VK_PRIOR" />
@@ -178,7 +194,6 @@
         <Find name="_hParent" />
         <Find name="_pDocMap" />
         <Find name="reload" />
-        <Find name="Notepad_plus_Window" />
         <Find name="SC_FOLDLEVELHEADERFLAG" />
         <Find name="nbMainFiles" />
         <Find name="sessionFileInfo" />
@@ -290,22 +305,21 @@
         <File filename="D:\MSYS\usr\src\notepadpp\Release\autoCompletion\cpp.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\Preference\preference.rc" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\NppBigSwitch.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\contextMenu.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\Preference\preferenceDlg.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\FindReplaceDlg.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\menuCmdID.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\DocTabView.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\NppNotification.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\AnsiCharPanel\ansiCharPanel.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\NppCommands.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\FileBrowser\fileBrowser.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\ContextMenu\ContextMenu.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\keys.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\ScintillaEditView.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Parameters.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\Release\config.xml" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\contextMenu.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\Release\shortcuts.xml" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\menuCmdID.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\Release\config.xml" />
     </History>
     <GUIConfigs>
         <GUIConfig name="ToolBar" visible="no">standard</GUIConfig>
@@ -314,7 +328,7 @@
         <GUIConfig name="ScintillaViewsSplitter">vertical</GUIConfig>
         <GUIConfig name="UserDefineDlg" position="undocked">hide</GUIConfig>
         <GUIConfig name="TabSetting" replaceBySpace="no" size="3" />
-        <GUIConfig name="AppPosition" x="232" y="-15" width="1296" height="1087" isMaximized="no" />
+        <GUIConfig name="AppPosition" x="476" y="-7" width="1168" height="1087" isMaximized="no" />
         <GUIConfig name="noUpdate" intervalDays="15" nextUpdateDate="20171218">no</GUIConfig>
         <GUIConfig name="Auto-detection">auto</GUIConfig>
         <GUIConfig name="CheckHistoryFiles">no</GUIConfig>

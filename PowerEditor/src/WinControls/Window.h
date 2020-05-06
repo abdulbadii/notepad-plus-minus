@@ -104,7 +104,7 @@ public:
 
 	virtual bool isVisible() const	{
 
-    	return (::IsWindowVisible(_hSelf)?true:false);
+    	return ::IsWindowVisible(_hSelf);
 	}
 
 	HWND getHSelf() const	{

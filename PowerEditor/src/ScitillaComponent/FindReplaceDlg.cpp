@@ -513,7 +513,7 @@ void Finder::gotoFoundLine(){
 	(*_ppEditView)->_positionRestoreNeeded = false;
 	Searching::displaySectionCentered(fInfo._start, fInfo._end, *_ppEditView);
 	
-	(*_ppEditView)->execute(SCI_SETYCARETPOLICY, 13, 77/*_scintView.execute(SCI_LINESONSCREEN/2)*/);(*_ppEditView)->execute(SCI_SCROLLCARET);
+	(*_ppEditView)->execute(SCI_SETYCARETPOLICY, 13, 77);(*_ppEditView)->execute(SCI_SCROLLCARET);
 	(*_ppEditView)->execute(SCI_SETYCARETPOLICY, 13, 1);
 	
 	// Then we colourise the double clicked line
@@ -710,12 +710,12 @@ void Finder::addSearchHitCount(int count, const TCHAR *dir, bool isMatchLines){
 				wsprintf(text, L": %i in file below at %s%s", count, dir, moreInfo);
 		else
 			if(_nbFoundFiles >1)
-				wsprintf(text, L": %i in %i file(s) of %i opened files%s", count, _nbFoundFiles, _nbOpenedFiles, moreInfo);
+				wsprintf(text, L": %i in %i files of %i opened files%s", count, _nbFoundFiles, _nbOpenedFiles, moreInfo);
 			else
 				if (_findAllInCurrent)
 					wsprintf(text, L": %i in the current file%s", count, moreInfo);
 				else
-					wsprintf(text, L": %i in the opened file below%s", count, moreInfo);
+					wsprintf(text, L": %i in below opened file out of %i opened files%s", count, _nbOpenedFiles, moreInfo);
 	else
 		if (dir)
 			wsprintf(text, L"was not found under %s", dir);
@@ -734,7 +734,7 @@ void Finder::add(FoundInfo fi, SearchResultMarking mi, const TCHAR* foundline)	{
 
 	TCHAR lnb[16];
 	wsprintf(lnb, L"%d: ", fi._lineNumber);
-	generic_string str = L"Line ";
+	generic_string str = L"L    ";
 	str += lnb;
 	mi._start += static_cast<int32_t>(str.length());
 	mi._end += static_cast<int32_t>(str.length());
@@ -773,8 +773,6 @@ void Finder::openAll()	{
 
 bool Finder::isLineActualSearchResult(const generic_string & s) const{
 	return (!s.find(L"Line "));
-	// const auto firstColon = s.find(L"Line ");
-	// return (!firstColon);
 }
 
 generic_string& Finder::prepareStringForClipboard(generic_string & s) const
@@ -874,17 +872,14 @@ void Finder::finishFilesSearch(int count, bool isfold,const TCHAR *dir, bool isM
 	_scintView.execute(SCI_SETLEXER, SCLEX_SEARCHRESULT);
 	_scintView.execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>( isfold? "1" : "0"));
 
-	auto of = (*_pMainMarkings)[2]._end;
-	_scintView.execute(SCI_GOTOPOS, _scintView.execute(SCI_POSITIONFROMLINE, 2) + of);
-	// _scintView.execute(SCI_SETTARGETRANGE, _scintView.execute(SCI_POSITIONFROMLINE, 2), _scintView.execute(SCI_GETLINEENDPOSITION, 2));
-	// auto of=_scintView.execute(SCI_SEARCHINTARGET, 1, reinterpret_cast<LPARAM>(L":"));
-	// _scintView.execute(SCI_GOTOPOS, of +2);
+	_scintView.execute(SCI_GOTOPOS, _scintView.execute(SCI_POSITIONFROMLINE, 2) +(*_pMainMarkings)[2]._end);
 
 	_scintView.execute(SCI_SETWRAPMODE, 2);
 	_scintView.execute(SCI_SETWRAPVISUALFLAGS,SC_WRAPVISUALFLAG_START);
 	_scintView.execute(SCI_SETWRAPSTARTINDENT,5);
 	_scintView.execute(SCI_SETWRAPINDENTMODE,SC_WRAPINDENT_FIXED);
-	_scintView.execute(SCI_SETYCARETPOLICY, 13);_scintView.execute(SCI_SCROLLCARET);
+	_scintView.execute(SCI_SETYCARETPOLICY, 13,77);_scintView.execute(SCI_SCROLLCARET);
+	_scintView.execute(SCI_SETYCARETPOLICY, 13,1);
 }
 
 void Finder::setFinderStyle()	{
@@ -2061,7 +2056,7 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 		endPosition = 0;
 	}
 
-	if (FirstIncremental==pOptions->_incrementalType)	{
+	if (pOptions->_incrementalType == FirstIncremental)	{
 
 		// the text to find is modified so use the current position
 		startPosition = cr.cpMin;
@@ -2074,7 +2069,7 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 			endPosition = 0;
 		}
 	}
-	else if (NextIncremental==pOptions->_incrementalType)	{
+	else if (pOptions->_incrementalType == NextIncremental)	{
 
 		// text to find is not modified, so use current position +1
 		startPosition = cr.cpMin + 1;
@@ -2726,10 +2721,10 @@ void FindReplaceDlg::findAllIn(int WM_cmd)	{
 		// the dlgDlg should be the index of funcItem where the current function pointer is
 		// in this case is DOCKABLE_DEMO_INDEX
 		data.dlgID = 0;
-		::SendMessage(_hParent, NPPM_DMMREGASDCKDLG, 0, reinterpret_cast<LPARAM>(&data));
-		::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
-
+		::SendMessage(_hParent, NPPM_DMMREGASDCKDLG_N, 0, reinterpret_cast<LPARAM>(&data));		
+		(*_ppEditView)->focus();	::SetFocus(::GetDlgItem(_hSelf, IDFINDWHAT));
 		_pFinder->_scintView.init(_hInst, _pFinder->getHSelf());
+
 
 		// Subclass the ScintillaEditView for the Finder (Scintilla doesn't notify all key presses)
 		originalFinderProc = SetWindowLongPtr(_pFinder->_scintView.getHSelf(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(finderProc));
@@ -2737,7 +2732,7 @@ void FindReplaceDlg::findAllIn(int WM_cmd)	{
 		_pFinder->setFinderReadOnly(true);
 		_pFinder->_scintView.execute(SCI_SETCODEPAGE, SC_CP_UTF8);
 		_pFinder->_scintView.execute(SCI_USEPOPUP, FALSE);
-		_pFinder->_scintView.execute(SCI_SETUNDOCOLLECTION, false);	//dont store any undo information
+		_pFinder->_scintView.execute(SCI_SETUNDOCOLLECTION, false);
 		_pFinder->_scintView.execute(SCI_SETCARETLINEVISIBLE, 1);
 		_pFinder->_scintView.execute(SCI_SETCARETLINEVISIBLEALWAYS, true);
 		_pFinder->_scintView.execute(SCI_SETCARETWIDTH, 2);
@@ -2781,7 +2776,7 @@ void FindReplaceDlg::findAllIn(int WM_cmd)	{
 	if (_env->_searchType == FindExtended)
 		strSz = Searching::convertExtendedToString(txt2find, pText, strSz);
 
-	 if ( (*_ppEditView)->searchInTarget(pText, strSz) == -2)	{
+	 if ( (*_ppEditView)->searchInTarget(pText, strSz, 0, 9) == -2)	{
 		NativeLangSpeaker *pNativeSpeaker = param.getNativeLangSpeaker();
 		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-invalid-re", L"Find: Invalid regular expression");
 		setStatusbarMessage(msg, FSNotFound);
@@ -2829,8 +2824,7 @@ Finder * FindReplaceDlg::createFinder()	{
 	// the dlgDlg should be the index of funcItem where the current function pointer is
 	// in this case is DOCKABLE_DEMO_INDEX
 	data.dlgID = 0;
-	::SendMessage(_hParent, NPPM_DMMREGASDCKDLG, 0, reinterpret_cast<LPARAM>(&data));
-
+	::SendMessage(_hParent, NPPM_DMMREGASDCKDLG_N, 0, reinterpret_cast<LPARAM>(&data));
 	pFinder->_scintView.init(_hInst, pFinder->getHSelf());
 
 	// Subclass the ScintillaEditView for the Finder (Scintilla doesn't notify all key presses)

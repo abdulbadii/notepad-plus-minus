@@ -70,7 +70,7 @@ public:
 			return _hSelf;
 	};
 
-	tTbData* createToolbar(tTbData data);
+	tTbData* createToolbar(tTbData data, bool isVisible=1);
 	void	 removeToolbar(tTbData data);
 	tTbData* findToolbarByWnd(HWND hClient);
 	tTbData* findToolbarByName(TCHAR* pszName);
@@ -173,7 +173,7 @@ protected :
 	void selectTab(int iTab);
 
 	int  hideToolbar(tTbData* pTbData, BOOL hideClient = TRUE);
-	void viewToolbar(tTbData *pTbData);
+	void viewToolbar(tTbData *pTbData, bool isVisible=1);
 	int  removeTab(tTbData* pTbData) {
 		return hideToolbar(pTbData, FALSE);
 	};

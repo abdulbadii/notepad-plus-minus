@@ -707,10 +707,6 @@ INT_PTR CALLBACK MarginsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPa
 					svp._doSmoothFont = (BST_CHECKED == ::SendDlgItemMessage(_hSelf, IDC_CHECK_SMOOTHFONT, BM_GETCHECK, 0, 0));
 					::SendMessage(::GetParent(_hParent), NPPM_SETSMOOTHFONT, 0, svp._doSmoothFont);
 					return TRUE;
-				/* case IDC_CHECK_LINENUMBERMARGE:
-					svp._lineNumberMarginShow = (BST_CHECKED == ::SendDlgItemMessage(_hSelf, IDC_CHECK_LINENUMBERMARGE, BM_GETCHECK, 0, 0));
-					::SendMessage(_hParent, WM_COMMAND, IDM_VIEW_LINENUMBER, 0);
-					return TRUE; */
 				
 				case IDC_CHECK_BOOKMARKMARGE:
 					svp._bookMarkMarginShow = (BST_CHECKED == ::SendDlgItemMessage(_hSelf, IDC_CHECK_BOOKMARKMARGE, BM_GETCHECK, 0, 0));
@@ -2667,7 +2663,7 @@ INT_PTR CALLBACK AutoCompletionDlg::run_dlgProc(UINT message, WPARAM wParam, LPA
 				else
 					::SendDlgItemMessage(_hSelf, IDD_AUTOC_BOTHRADIO, BM_SETCHECK, BST_CHECKED, 0);
 			}
-			::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORECASE, BM_SETCHECK, nGUI._autocIgnoreCase ? BST_CHECKED : BST_UNCHECKED, 0);
+			// ::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORECASE, BM_SETCHECK, nGUI._autocIgnoreCase ? BST_CHECKED : BST_UNCHECKED, 0);
 				
 
 			if (!isEnableAutoC)	{
@@ -2676,7 +2672,7 @@ INT_PTR CALLBACK AutoCompletionDlg::run_dlgProc(UINT message, WPARAM wParam, LPA
 				::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_WORDRADIO), FALSE);
 				::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_BOTHRADIO), FALSE);
 				::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_IGNORENUMBERS), FALSE);
-				::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_IGNORECASE), FALSE);
+				// ::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_IGNORECASE), FALSE);
 				::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_STATIC_FROM), FALSE);
 				::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_STATIC_N), FALSE);
 			}
@@ -2804,7 +2800,7 @@ INT_PTR CALLBACK AutoCompletionDlg::run_dlgProc(UINT message, WPARAM wParam, LPA
 
 						::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORENUMBERS, BM_SETCHECK, BST_UNCHECKED, 0);
 						nppGUI._autocIgnoreNumbers = false;
-						::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORECASE, BM_SETCHECK, BST_UNCHECKED, 0);
+						// ::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORECASE, BM_SETCHECK, BST_UNCHECKED, 0);
 						nppGUI._autocIgnoreCase = false;
 					}
 
@@ -2812,7 +2808,7 @@ INT_PTR CALLBACK AutoCompletionDlg::run_dlgProc(UINT message, WPARAM wParam, LPA
 					::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_WORDRADIO), isEnableAutoC);
 					::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_BOTHRADIO), isEnableAutoC);
 					::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_IGNORENUMBERS), isEnableAutoC);
-					::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_IGNORECASE), isEnableAutoC);
+					// ::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_IGNORECASE), isEnableAutoC);
 					::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_STATIC_FROM), isEnableAutoC);
 					::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_STATIC_N), isEnableAutoC);
 					return TRUE;
@@ -2849,11 +2845,11 @@ INT_PTR CALLBACK AutoCompletionDlg::run_dlgProc(UINT message, WPARAM wParam, LPA
 					return TRUE;
 				}
 
-				case IDD_AUTOC_IGNORECASE:	{
+/* 				case IDD_AUTOC_IGNORECASE:	{
 
 					nppGUI._autocIgnoreCase = (BST_CHECKED == ::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORECASE, BM_GETCHECK, 0, 0));
 					return TRUE;
-				}
+				} */
 
 				case IDD_FUNC_CHECK :	{
 

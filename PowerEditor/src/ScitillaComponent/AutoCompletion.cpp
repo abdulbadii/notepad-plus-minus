@@ -113,7 +113,7 @@ bool AutoCompletion::showApiAndWordComplete()	{
 		}
 	}
 
-	sort(wordArray.begin(), wordArray.end());
+	// sort(wordArray.begin(), wordArray.end());
 
 	// Get word list
 	generic_string words;
@@ -125,7 +125,6 @@ bool AutoCompletion::showApiAndWordComplete()	{
 			words += L" ";
 	}
 
-	// _pEditView->execute(SCI_AUTOCSETSEPARATOR, WPARAM('\n'));
 	_pEditView->execute(SCI_AUTOCSETCASEINSENSITIVEBEHAVIOUR,1);
 	_pEditView->execute(SCI_AUTOCSETIGNORECASE, nppGUI._autocIgnoreCase);
 	// _pEditView->execute(SC_ORDER_CUSTOM,2);
@@ -355,7 +354,7 @@ bool AutoCompletion::showWordComplete(bool autoInsert)	{
 		return true;
 	}
 
-	sort(wordArray.begin(), wordArray.end());
+	// sort(wordArray.begin(), wordArray.end());
 
 	// Get word list
 	generic_string words(L"");
@@ -367,7 +366,6 @@ bool AutoCompletion::showWordComplete(bool autoInsert)	{
 			words += L" ";
 	}
 
-	// _pEditView->execute(SCI_AUTOCSETSEPARATOR, WPARAM('\n'));
 	_pEditView->execute(SCI_AUTOCSETCASEINSENSITIVEBEHAVIOUR,1);
 	_pEditView->execute(SCI_AUTOCSETIGNORECASE, nppGUI._autocIgnoreCase);
 	// _pEditView->execute(SC_ORDER_CUSTOM,2);

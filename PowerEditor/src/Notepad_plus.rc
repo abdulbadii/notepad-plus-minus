@@ -388,7 +388,7 @@ BEGIN
 		MENUITEM "Find/Replace in Files",            IDM_SEARCH_FINDINFILES
 		MENUITEM "Find &Next",                  IDM_SEARCH_FINDNEXT
 		MENUITEM "Find &Previous",              IDM_SEARCH_FINDPREV
-		MENUITEM "Re&place Only ",              IDM_SEARCH_REPLACE1
+		MENUITEM "Replace Only ",              IDM_SEARCH_REPLACE1
 		MENUITEM "Find (Volatile) Next",        IDM_SEARCH_VOLATILE_FINDNEXT
 		MENUITEM "Find (Volatile) Previous",    IDM_SEARCH_VOLATILE_FINDPREV
 		MENUITEM "Select and Find Next",        IDM_SEARCH_SETANDFINDNEXT
@@ -396,11 +396,27 @@ BEGIN
 		MENUITEM "&Incremental Search",         IDM_SEARCH_FINDINCREMENT
 		MENUITEM "Next Search Result",          IDM_SEARCH_GOTONEXTFOUND
 		MENUITEM "Previous Search Result",      IDM_SEARCH_GOTOPREVFOUND
-		MENUITEM "&Go to...",                   IDM_SEARCH_GOTOLINE
-		MENUITEM "Go to Matching Brace",        IDM_SEARCH_GOTOMATCHINGBRACE
-		MENUITEM "Select All Between Matching Braces", IDM_SEARCH_SELECTMATCHINGBRACES
-		MENUITEM "Mar&k...",                    IDM_SEARCH_MARK
 		MENUITEM SEPARATOR
+		POPUP "Bookmark"
+		BEGIN
+				MENUITEM "Toggle Bookmark" ,                       IDM_SEARCH_TOGGLE_BOOKMARK
+				MENUITEM "Next Bookmark",                          IDM_SEARCH_NEXT_BOOKMARK
+				MENUITEM "Previous Bookmark",                      IDM_SEARCH_PREV_BOOKMARK
+				MENUITEM "Clear All Bookmarks",                    IDM_SEARCH_CLEAR_BOOKMARKS
+				MENUITEM "Cut Bookmarked Lines",                   IDM_SEARCH_CUTMARKEDLINES
+				MENUITEM "Copy Bookmarked Lines",                  IDM_SEARCH_COPYMARKEDLINES
+				MENUITEM "Paste over Bookmarked Lines",    IDM_SEARCH_PASTEMARKEDLINES
+				MENUITEM "Remove Bookmarked Lines",                IDM_SEARCH_DELETEMARKEDLINES
+				MENUITEM "Remove Unmarked Lines",                  IDM_SEARCH_DELETEUNMARKEDLINES
+				MENUITEM "Inverse Bookmark",                       IDM_SEARCH_INVERSEMARKS
+		END
+		MENUITEM SEPARATOR
+		MENUITEM "&Go to...",                   IDM_SEARCH_GOTOLINE
+		MENUITEM "Go to the Matching Brace",        IDM_SEARCH_GOTOMATCHINGBRACE
+		MENUITEM "Select in Braces Pair Inclusively", IDM_SEARCH_SELECTMATCHINGBRACES
+		MENUITEM "Select in Braces Pair Exclusively", IDM_SEARCH_SELECTMATCHBRACEX
+		MENUITEM SEPARATOR
+		MENUITEM "Mar&k...",                    IDM_SEARCH_MARK
 
 		POPUP "Mark All"
 		BEGIN
@@ -436,20 +452,6 @@ BEGIN
 				MENUITEM "4th Style",      IDM_SEARCH_GONEXTMARKER4
 				MENUITEM "5th Style",      IDM_SEARCH_GONEXTMARKER5
 				MENUITEM "Find Style",     IDM_SEARCH_GONEXTMARKER_DEF
-		END
-		MENUITEM SEPARATOR
-		POPUP "Bookmark"
-		BEGIN
-				MENUITEM "Toggle Bookmark" ,                       IDM_SEARCH_TOGGLE_BOOKMARK
-				MENUITEM "Next Bookmark",                          IDM_SEARCH_NEXT_BOOKMARK
-				MENUITEM "Previous Bookmark",                      IDM_SEARCH_PREV_BOOKMARK
-				MENUITEM "Clear All Bookmarks",                    IDM_SEARCH_CLEAR_BOOKMARKS
-				MENUITEM "Cut Bookmarked Lines",                   IDM_SEARCH_CUTMARKEDLINES
-				MENUITEM "Copy Bookmarked Lines",                  IDM_SEARCH_COPYMARKEDLINES
-				MENUITEM "Paste to (Replace) Bookmarked Lines",    IDM_SEARCH_PASTEMARKEDLINES
-				MENUITEM "Remove Bookmarked Lines",                IDM_SEARCH_DELETEMARKEDLINES
-				MENUITEM "Remove Unmarked Lines",                  IDM_SEARCH_DELETEUNMARKEDLINES
-				MENUITEM "Inverse Bookmark",                       IDM_SEARCH_INVERSEMARKS
 		END
 		MENUITEM SEPARATOR
 		MENUITEM "Find characters in range...",        IDM_SEARCH_FINDCHARINRANGE
@@ -550,10 +552,10 @@ BEGIN
 				END
 		MENUITEM "Folder as Workspace",   IDM_VIEW_FILEBROWSER
 		MENUITEM "Document Map",          IDM_VIEW_DOC_MAP
+		MENUITEM "Show/Hide Function List",         IDM_VIEW_FUNC_LIST
+		MENUITEM "Show/Hide Character Panel",        IDM_VIEW_CHAR_PANEL
+		MENUITEM "Show/Hide Line Number",IDM_VIEW_LINENUMBER
 		MENUITEM "Show/Hide Find Result",       IDM_VIEW_FIND_RESULT
-		MENUITEM "Function List",         IDM_VIEW_FUNC_LIST
-		MENUITEM "Character Panel",        IDM_VIEW_CHAR_PANEL
-		MENUITEM "Display line number",IDM_VIEW_LINENUMBER
 		MENUITEM SEPARATOR
 		MENUITEM "Synchronize Vertical Scrolling",      IDM_VIEW_SYNSCROLLV
 		MENUITEM "Synchronize Horizontal Scrolling",    IDM_VIEW_SYNSCROLLH

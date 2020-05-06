@@ -2165,11 +2165,10 @@ void ScintillaEditView::toggleFold(size_t ln, bool rec)	{
 
 	execute(SCI_TOGGLEFOLD, hLine);
 	scnN.line = hLine;
-	scnN.foldLevelNow = bool(execute(SCI_GETFOLDEXPANDED, hLine));
+	bool hdState = scnN.foldLevelNow = bool(execute(SCI_GETFOLDEXPANDED, hLine));
 	::SendMessage(_hParent, WM_NOTIFY, 0, reinterpret_cast<LPARAM>(&scnN));
 
 	if (rec)	{
-		bool hdState = scnN.foldLevelNow;
 		auto hdLevel = execute(SCI_GETFOLDLEVEL, hLine) & SC_FOLDLEVELNUMBERMASK;
 		while ((execute(SCI_GETFOLDLEVEL, ++hLine) & SC_FOLDLEVELNUMBERMASK) > hdLevel)
 			if (execute(SCI_GETFOLDLEVEL, hLine) & SC_FOLDLEVELHEADERFLAG && bool(execute(SCI_GETFOLDEXPANDED, hLine)) != hdState)	{
@@ -2179,6 +2178,8 @@ void ScintillaEditView::toggleFold(size_t ln, bool rec)	{
 				::SendMessage(_hParent, WM_NOTIFY, 0, reinterpret_cast<LPARAM>(&scnN));
 			}
 	}
+	execute(SCI_SETYCARETPOLICY, 13, 77);execute(SCI_SCROLLCARET);
+	execute(SCI_SETYCARETPOLICY, 13, 1);
 }
 
 void ScintillaEditView::foldAll(bool mode)	{
@@ -2341,16 +2342,7 @@ int ScintillaEditView::searchInTarget(const TCHAR * text2Find, size_t lenOfText2
 	return static_cast<int32_t>(execute(SCI_SEARCHINTARGET, max(lenOfText2Find,strlen(text2FindA)), reinterpret_cast<LPARAM>(text2FindA)));
 }
 
-int ScintillaEditView::searchInTarget(const TCHAR * text2find, size_t lenOfText2Find) const	{
-	execute(SCI_SETTARGETRANGE, 0, static_cast<int32_t>(execute(SCI_GETLENGTH)));
-
-	UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
-
-	const char *text2FindA = wmc.wchar2char(text2find, cp);
-	return static_cast<int32_t>(execute(SCI_SEARCHINTARGET, max(lenOfText2Find,strlen(text2FindA)), reinterpret_cast<LPARAM>(text2FindA)));
-}
-
-void ScintillaEditView::appandGenericText(const TCHAR * text2Append) const
+void ScintillaEditView::appendGenericText(const TCHAR * text2Append) const
 {
 		UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
 	const char *text2AppendA =wmc.wchar2char(text2Append, cp);
@@ -2398,13 +2390,12 @@ void ScintillaEditView::showAutoC(size_t lenEntered, const TCHAR* list)	{
 	UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
 	const char *listA = wmc.wchar2char(list, cp);
 
-	// execute(SCI_AUTOCSETDROPRESTOFWORD,1);
 	execute(SCI_AUTOCSHOW, lenEntered, reinterpret_cast<LPARAM>(listA));
 }
 
 void ScintillaEditView::showCallTip(int startPos, const TCHAR * def)	{
 
-		UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
+	UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
 	const char *defA = wmc.wchar2char(def, cp);
 	execute(SCI_CALLTIPSHOW, startPos, reinterpret_cast<LPARAM>(defA));
 }
@@ -3542,7 +3533,7 @@ void ScintillaEditView::insertNewLineBelowCurrentLine()	{
 	if (current_line == line_count - 1)	{
 
 		// Special handling if caret is at last line.
-		appandGenericText(newline.c_str());
+		appendGenericText(newline.c_str());
 	}
 	else	{
 

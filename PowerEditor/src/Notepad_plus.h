@@ -27,6 +27,8 @@
 
 #pragma once
 
+#include <vector>
+#include <iso646.h>
 #include "ScintillaEditView.h"
 #include "DocTabView.h"
 #include "SplitterContainer.h"
@@ -54,8 +56,7 @@
 #include "localization.h"
 #include "documentSnapshot.h"
 #include "md5Dlgs.h"
-#include <vector>
-#include <iso646.h>
+#include "ansiCharPanel.h"
 
 
 #define MENU 0x01
@@ -483,7 +484,7 @@ private:
 	BOOL processIncrFindAccel(MSG *msg) const;
 	BOOL processFindAccel(MSG *msg) const;
 
-	void checkMenuItem(int itemID, bool willBeChecked) const {
+	inline void checkMenuItem(int itemID, bool willBeChecked) const {
 		::CheckMenuItem(_mainMenuHandle, itemID, MF_BYCOMMAND | (willBeChecked?MF_CHECKED:MF_UNCHECKED));
 	}
 
@@ -501,7 +502,7 @@ private:
 			_pEditView->execute(SCI_MARKERADD, lineno, MARK_BOOKMARK);
 	}
 
-	void bookmarkDelete(int lineno) const	{
+	inline void bookmarkDelete(int lineno) const	{
 
 		if (lineno == -1)
 			lineno = int(_pEditView->getCurrentLineNumber());
@@ -542,7 +543,7 @@ private:
 	void inverseMarks();
 	void replaceMarkedline(int ln, const TCHAR *str);
 	generic_string getMarkedLine(int ln);
-	void findMatchingBracePos(int & braceAtCaret, int & braceOpposite);
+	bool findMatchingBracePos(int & braceAtCaret, int & braceOpposite);
 	bool braceMatch();
 
 	void activateNextDoc(bool direction);
@@ -596,7 +597,7 @@ private:
 	void doTrim(trimOp whichPart);
 	void removeEmptyLine(bool isBlankContained);
 	void removeDuplicateLines();
-	void launchAnsiCharPanel();
+	void initAnsiCharPanel();
 	void launchClipboardHistoryPanel();
 	void launchFileSwitcherPanel();
 	void launchProjectPanel(int cmdID, ProjectPanel ** pProjPanel, int panelID);

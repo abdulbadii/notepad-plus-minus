@@ -32,18 +32,10 @@
 #include "StatusBar.h"
 #include <algorithm>
 #include <cassert>
-
 //#define IDC_STATUSBAR 789
 
 
-
-enum
-{
-	defaultPartWidth = 5,
-};
-
-
-
+enum{	defaultPartWidth = 5 };
 
 StatusBar::~StatusBar()
 {
@@ -125,7 +117,7 @@ void StatusBar::adjustParts(int clientWidth)	{
 
     // Calculate the right edge coordinate for each part, and
     // copy the coordinates to the array.
-    int nWidth = std::max<int>(clientWidth - 20, 0);
+    int nWidth = std::max<int>(clientWidth - 17, 0);
 
 	for (int i = static_cast<int>(_partWidthArray.size()) - 1; i >= 0; --i )	{
 
@@ -140,14 +132,14 @@ void StatusBar::adjustParts(int clientWidth)	{
 
 bool StatusBar::setText(const TCHAR* str, int whichPart)	{
 
-	if ((size_t) whichPart < _partWidthArray.size())	{
+	if (size_t(whichPart) < _partWidthArray.size())	{
 
-		if (str)// != nullptr)
+		if (str)
 			_lastSetText = str;
 		else
 			_lastSetText.clear();
 
-		return (TRUE == ::SendMessage(_hSelf, SB_SETTEXT, whichPart, reinterpret_cast<LPARAM>(_lastSetText.c_str())));
+		return ::SendMessage(_hSelf, SB_SETTEXT, whichPart, reinterpret_cast<LPARAM>(_lastSetText.c_str()));
 	}
 	assert(false and "invalid status bar index");
 	return false;

@@ -356,7 +356,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 	::SetLastError(NO_ERROR);
 	::CreateMutex(NULL, false, L"nppInstance");
 	bool TheFirstOne = ::GetLastError() == ERROR_ALREADY_EXISTS? false: true;
-	// if ()		TheFirstOne = ;
 
 	// Convert commandline to notepad-compatible format, if applicable
 	if ( isInList(FLAG_NOTEPAD_COMPATIBILITY, params) )
@@ -381,9 +380,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 	cmdLineParams._openFoldersAsWorkspace = isInList(FLAG_OPEN_FOLDERS_AS_WORKSPACE, params);
 	cmdLineParams._langType = getLangTypeFromParam(params);
 	cmdLineParams._localizationPath = getLocalizationPathFromParam(params);
-	// cmdLineParams._easterEggName = getEasterEggNameFromParam(params, cmdLineParams._quoteType);
-	// cmdLineParams._ghostTypingSpeed = getGhostTypingSpeedFromParam(params);
-	// getNumberFromParam should be run at the end, to not consuming the other params
 	cmdLineParams._line2go = getNumberFromParam('n', params, isParamePresent);
     cmdLineParams._column2go = getNumberFromParam('c', params, isParamePresent);
     cmdLineParams._pos2go = getNumberFromParam('p', params, isParamePresent);
@@ -413,14 +409,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 	param.setFunctionListExportBoolean(doFunctionListExport);
 	param.setPrintAndExitBoolean(doPrintAndQuit);
 
-	// override the settings if notepad style is present
-	/* if (param.asNotepadStyle())
-	{
-		isMultiInst = true;
-		cmdLineParams._isNoTab = true;
-		cmdLineParams._isNoSession = true;
-	} */
-
 	if (nGUI._multiInstSetting == multiInst)	{
 		isMultiInst = true;
 	// override the settings if multiInst is choosen by user in the preference dialog
@@ -436,7 +424,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 		const TCHAR * currentFile = params.at(i).c_str();
 		if (currentFile[0])	{
 
-			//check if relative or full path. Relative paths dont have a colon for driveletter
+			//check if relative or full path: has no colon for driveletter
 
 			quotFileName += L"\"";
 			quotFileName += relativeFilePathToFullFilePath(currentFile);
@@ -499,13 +487,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 	// generic_string updaterParams = L"-v";
 	// updaterParams += VERSION_VALUE;
 
-	// bool isUpExist = nppGUI._doesExistUpdater = (::PathFileExists(updaterFullPath.c_str()) == TRUE);
+	// bool isUpExist = nppGUI._doesExistUpdater = ::PathFileExists(updaterFullPath.c_str());
 
     /* if (doUpdateNpp) // check more detail
     {
         Date today(0);
 
-        if (today < nppGUI._autoUpdateOpt._nextUpdateDate)
+        if (today <= nppGUI._autoUpdateOpt._nextUpdateDate)
             doUpdateNpp = false;
     } */
 	if (doUpdatePluginList)	{

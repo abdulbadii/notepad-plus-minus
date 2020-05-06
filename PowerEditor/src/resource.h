@@ -253,7 +253,7 @@
 
 #define IDM_MAIN_FIND_RESULTS    (IDCMD+10)
 #define IDM_CLEAR_CLOSE_FINDER    (IDCMD+11)
-// #define IDM_VIEW_LINENUMBER   (IDCMD + 12)
+#define IDM_INFOS   (IDCMD + 12)
 
 #define IDCMD_LIMIT                        (IDCMD+20)
 

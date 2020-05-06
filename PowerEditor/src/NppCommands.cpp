@@ -259,10 +259,7 @@ void Notepad_plus::command(int id)	{
 			
 			_pEditView->execute(SCI_EDITTOGGLEOVERTYPE);
 			
-			// if ()
-				// _pEditView->execute(SCI_AUTOCSETDROPRESTOFWORD,1);
-			// else
-				// _pEditView->execute(SCI_AUTOCSETDROPRESTOFWORD,);
+			_pEditView->execute(SCI_AUTOCSETDROPRESTOFWORD, _pEditView->execute(SCI_GETOVERTYPE));
 
 		}
 		break;
@@ -470,11 +467,10 @@ void Notepad_plus::command(int id)	{
 			if (_pEditView->execute(SCI_GETSELECTIONS) != 1) // Multi-Selection || Column mode || no selection
 				return;
 
-			const NppGUI & nppGui = (param).getNppGUI();
 			generic_string url;
-			if (nppGui._searchEngineChoice == nppGui.se_custom)	{
+			if (nGUI._searchEngineChoice == nGUI.se_custom)	{
 
-				url = nppGui._searchEngineCustom;
+				url = nGUI._searchEngineCustom;
 				remove_if(url.begin(), url.end(), _istspace);
 
 				auto httpPos = url.find(L"http://");
@@ -485,11 +481,11 @@ void Notepad_plus::command(int id)	{
 					url = L"https://www.google.com/search?q=$(CURRENT_WORD)";
 				}
 			}
-			else if (nppGui._searchEngineChoice == nppGui.se_duckDuckGo)	{
+			else if (nGUI._searchEngineChoice == nGUI.se_duckDuckGo)	{
 
 				url = L"https://duckduckgo.com/?q=$(CURRENT_WORD)";
 			}
-			else if (nppGui._searchEngineChoice == nppGui.se_google)	{
+			else if (nGUI._searchEngineChoice == nGUI.se_google)	{
 
 				url = L"https://www.google.com/search?q=$(CURRENT_WORD)";
 			}
@@ -660,12 +656,6 @@ void Notepad_plus::command(int id)	{
 		case IDM_EDIT_BLANKLINEBELOWCURRENT:	{
 
 			_pEditView->insertNewLineBelowCurrentLine();
-		}
-		break;
-
-		case IDM_VIEW_CHAR_PANEL:	{
-
-			launchAnsiCharPanel();
 		}
 		break;
 
@@ -1076,33 +1066,71 @@ void Notepad_plus::command(int id)	{
 		}
 		break;
 
-		case IDM_SEARCH_GOTONEXTFOUND:	{
-
+		case IDM_SEARCH_GOTONEXTFOUND:
 			_findReplaceDlg.gotoNextFoundResult();
-		}
 		break;
 
-		case IDM_SEARCH_GOTOPREVFOUND:	{
-
+		case IDM_SEARCH_GOTOPREVFOUND:
 			_findReplaceDlg.gotoNextFoundResult(-1);
-		}
 		break;
 
 		case IDM_VIEW_FIND_RESULT:
 			if (IsWindowVisible(_findReplaceDlg.getHFindResults())) {
 				_findReplaceDlg.closeFinder();
 				switchEditViewTo(MAIN_VIEW);
+				checkMenuItem(IDM_VIEW_CHAR_PANEL, 0);
 			}
 			else
-				// checkMenuItem(IDM_VIEW_FIND_RESULT, true);
 				_findReplaceDlg.openFinder();
+				// checkMenuItem(IDM_VIEW_CHAR_PANEL, 1);
 		break;
 
-		case IDM_MAIN_FIND_RESULTS:	{
+		case IDM_VIEW_CHAR_PANEL:
+			if (_pAnsiCharPanel && IsWindowVisible(_pAnsiCharPanel->getHSelf()))	{
+				_pAnsiCharPanel->display(0);
+				switchEditViewTo(MAIN_VIEW);
+				checkMenuItem(IDM_VIEW_CHAR_PANEL, 0);
+			}
+			else	{
+				if (!_pAnsiCharPanel)
+					initAnsiCharPanel();
+				_pAnsiCharPanel->display();
+				checkMenuItem(IDM_VIEW_CHAR_PANEL, true);
+			}
+		break;
+
+		case IDM_INFOS:	{
+			
+			_pEditView->execute(SCI_SETSEARCHFLAGS,
+			SCFIND_MATCHCASE
+			| SCFIND_REGEXP
+			| SCFIND_POSIX | SCFIND_REGEXP_EMPTYMATCH_ALL
+			| SCFIND_REGEXP_SKIPCRLFASONE);
+/* 			TCHAR*word = L"^\h*(?:class|struct|union|(?:inline\h+|mutable|virtual\h+)?(?:const\h+|constexpr\h+|void\h+|volatile\h+)?(?:auto|bool|char|[TW]CHAR|char16_t|char32_t|double|float|u?int(?:\d\d?_t)?|long|short|unsigned|wchar_t))";
+
+			auto ln = _pEditView->execute(SCI_LINEFROMPOSITION, _pEditView->execute(SCI_GETCURRENTPOS));
+
+			while ((ln = _pEditView->execute(SCI_GETFOLDPARENT, ln) != -1)	{
+				_pEditView->execute(SCI_SETTARGETRANGE, _scintView.execute(SCI_POSITIONFROMLINE, ln), _scintView.execute(SCI_GETLINEENDPOSITION, ln));
+
+				if (_pEditView->execute(SCI_SEARCHINTARGET, lstrlen(word), word) >= 0)
+			}
+		_statusBar.setText(
+		
+		
+			
+		execute(SCI_GOTOLINE, line);
+		auto line = 1+ _pEditView->execute(SCI_LINEFROMPOSITION, _pEditView->execute(SCI_GETCURRENTPOS));
+		while ((execute(SCI_GETFOLDLEVEL, --line) & SC_FOLDLEVELNUMBERMASK) != SC_FOLDLEVELBASE+1);
+		 */
+			
+		}
+		break;
+		
+		case IDM_MAIN_FIND_RESULTS:
 			if (::GetFocus() == _findReplaceDlg.getHFindResults())		switchEditViewTo(MAIN_VIEW);
 			else
 				_findReplaceDlg.openSwFinder();
-		}
 		break;
 		
 		case IDM_CLEAR_CLOSE_FINDER:
@@ -1289,22 +1317,31 @@ void Notepad_plus::command(int id)	{
 		}
 		break;
 
-		case IDM_SEARCH_GOTOMATCHINGBRACE :
-		case IDM_SEARCH_SELECTMATCHINGBRACES :	{
-
-			int braceAtCaret = -1;
-			int braceOpposite = -1;
-			findMatchingBracePos(braceAtCaret, braceOpposite);
-
-			if (braceOpposite != -1)	{
-
-				if (id == IDM_SEARCH_GOTOMATCHINGBRACE)
-					_pEditView->execute(SCI_GOTOPOS, braceOpposite);
-				else
-					_pEditView->execute(SCI_SETSEL, min(braceAtCaret, braceOpposite), max(braceAtCaret, braceOpposite) + 1); // + 1 so we always include the ending brace in the selection.
-			}
-		}
+		{
+		int braceAtCaret, braceOpposite;
+		case IDM_SEARCH_GOTOMATCHINGBRACE:
+			if (findMatchingBracePos(braceAtCaret, braceOpposite))
+				_pEditView->execute(SCI_GOTOPOS, braceOpposite);
 		break;
+
+		case IDM_SEARCH_SELECTMATCHINGBRACES:
+
+			if (findMatchingBracePos(braceAtCaret, braceOpposite))	{
+				_pEditView->execute(SCI_SETSEL, min(braceAtCaret, braceOpposite), max(braceAtCaret, braceOpposite) + 1);
+				if (braceAtCaret > braceOpposite)
+					_pEditView->execute(SCI_SWAPMAINANCHORCARET);
+			}
+		break;
+
+		case IDM_SEARCH_SELECTMATCHBRACEX:
+
+			if (findMatchingBracePos(braceAtCaret, braceOpposite))	{
+				_pEditView->execute(SCI_SETSEL, min(braceAtCaret, braceOpposite)+1, max(braceAtCaret, braceOpposite));
+				if (braceAtCaret > braceOpposite)
+					_pEditView->execute(SCI_SWAPMAINANCHORCARET);
+			}
+		break;
+		}
 
 		case IDM_SEARCH_TOGGLE_BOOKMARK :
 	        bookmarkToggle(-1);
@@ -1637,8 +1674,8 @@ void Notepad_plus::command(int id)	{
 
 		case IDM_VIEW_TOGGLE_FOLDALL:	{
 
-			_foldAllState = _foldAllState == fold_collapse ? fold_uncollapse : fold_collapse;
-			_isFolding = true; // Keep folding take place from events
+			_foldAllState = 1-_foldAllState;// == fold_collapse ? fold_uncollapse : fold_collapse;
+			_isFolding = true;
  			_pEditView->foldAll(_foldAllState);
 			if (_pDocMap)		_pDocMap->foldAll(_foldAllState);
 			_isFolding = false;
@@ -2031,7 +2068,7 @@ void Notepad_plus::command(int id)	{
 			int64_t fileLen = curBuf->getFileLength();
 
 			// localization for summary date
-			NativeLangSpeaker *pNativeSpeaker = (param).getNativeLangSpeaker();
+			NativeLangSpeaker *pNativeSpeaker = param.getNativeLangSpeaker();
 			if (pNativeSpeaker)	{
 
 
@@ -2536,7 +2573,7 @@ void Notepad_plus::command(int id)	{
 				// Tell users to restart Notepad++ to load plugin
 			if (copiedFiles.size())	{
 
-				NativeLangSpeaker *pNativeSpeaker = (param).getNativeLangSpeaker();
+				NativeLangSpeaker *pNativeSpeaker = param.getNativeLangSpeaker();
 				pNativeSpeaker->messageBox("NeedToRestartToLoadPlugins",
 					NULL,
 					L"You have to restart Notepad++ to load plugins you installed.",
@@ -2842,7 +2879,7 @@ void Notepad_plus::command(int id)	{
 			}
 			else	{
 
-				generic_string updaterDir = (param).getNppPath();
+				generic_string updaterDir = param.getNppPath();
 				PathAppend(updaterDir, L"updater");
 
 				generic_string updaterFullPath = updaterDir;
@@ -3165,21 +3202,20 @@ void Notepad_plus::command(int id)	{
 		case IDM_VIEW_SYMBOLMARGIN:
 		case IDM_VIEW_DOCCHANGEMARGIN:	{
 
-			int margin;
-			if (id == IDM_VIEW_LINENUMBER)
-				margin = ScintillaEditView::_SC_MARGE_LINENUMBER;
-			else// if (id == IDM_VIEW_SYMBOLMARGIN)
-				margin = ScintillaEditView::_SC_MARGE_SYBOLE;
+			int margin = IDM_VIEW_LINENUMBER ? ScintillaEditView::_SC_MARGE_LINENUMBER : ScintillaEditView::_SC_MARGE_SYBOLE;
 
 			if (_mainEditView.hasMarginShowed(margin))	{
 
 				_mainEditView.showMargin(margin, false);
 				_subEditView.showMargin(margin, false);
+
+				checkMenuItem(id, 0);
 			}
 			else	{
 
 				_mainEditView.showMargin(margin);
 				_subEditView.showMargin(margin);
+				checkMenuItem(id, 1);
 			}
 		}
 		break;
@@ -3268,13 +3304,13 @@ void Notepad_plus::command(int id)	{
 			else if (id >= ID_MACRO && (id < ID_MACRO_LIMIT))	{
 
 				int i = id - ID_MACRO;
-				vector<MacroShortcut> & theMacros = (param).getMacroList();
+				vector<MacroShortcut> & theMacros = param.getMacroList();
 				macroPlayback(theMacros[i].getMacro());
 			}
 			else if ((id >= ID_USER_CMD) && (id < ID_USER_CMD_LIMIT))	{
 
 				int i = id - ID_USER_CMD;
-				vector<UserCommand> & theUserCommands = (param).getUserCommandList();
+				vector<UserCommand> & theUserCommands = param.getUserCommandList();
 				UserCommand ucmd = theUserCommands[i];
 
 				Command cmd(ucmd.getCmd());
@@ -3324,8 +3360,9 @@ void Notepad_plus::command(int id)	{
 				case IDM_SEARCH_SETANDFINDNEXT :
 			case IDM_SEARCH_SETANDFINDPREV :
 			case IDM_SEARCH_GOTOMATCHINGBRACE :
-			case IDM_SEARCH_SELECTMATCHINGBRACES :
-			case IDM_SEARCH_TOGGLE_BOOKMARK :
+			case IDM_SEARCH_SELECTMATCHINGBRACES:
+			case IDM_SEARCH_SELECTMATCHBRACEX:
+			case IDM_SEARCH_TOGGLE_BOOKMARK:
 			case IDM_SEARCH_NEXT_BOOKMARK:
 			case IDM_SEARCH_PREV_BOOKMARK:
 			case IDM_SEARCH_CLEAR_BOOKMARKS:
