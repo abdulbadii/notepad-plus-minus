@@ -755,11 +755,11 @@ public:
 	bool _doDoubleQuotes = false;
 };
 
+class Notepad_plus;
 
 struct NppGUI final	{
 
-	NppGUI()
-	{
+	NppGUI()	{
 		_appPos.left = 0;
 		_appPos.top = 0;
 		_appPos.right = 1100;
@@ -768,7 +768,7 @@ struct NppGUI final	{
 		_defaultDirExp[0] = 0;
 	}
 
-	HMENU mainMenuHandle = nullptr;
+	Notepad_plus *pNpp = nullptr;
 	toolBarStatusType _toolBarStatus = TB_STANDARD;
 	bool _toolbarShow = true;
 	bool _statusBarShow = true;
@@ -1288,8 +1288,8 @@ class NppParameters final	{
 
 private:
 	static NppParameters* getInstancePointer() {
-		static NppParameters* instance = new NppParameters;
-		return instance;
+		// static NppParameters* instance =
+		return	(new NppParameters);
 	};
 
 public:
@@ -1659,6 +1659,7 @@ public:
 	void setUdlXmlDirtyFromIndex(size_t i);
 	void setUdlXmlDirtyFromXmlDoc(const TiXmlDocument* xmlDoc);
 	void removeIndexFromXmlUdls(size_t i);
+	
 	bool lineNumberMarginOn(){return _svp._lineNumberMarginShow;}
 
 private:

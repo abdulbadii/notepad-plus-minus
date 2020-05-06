@@ -147,10 +147,7 @@ Notepad_plus::Notepad_plus()
 
 	TiXmlDocument *toolIconsDocRoot = param.getToolIcons();
 
-	if (toolIconsDocRoot)	{
-
-		_toolBar.initTheme(toolIconsDocRoot);
-	}
+	if (toolIconsDocRoot)		_toolBar.initTheme(toolIconsDocRoot);
 
 	// Determine if user is administrator.
 	BOOL is_admin;
@@ -220,7 +217,7 @@ LRESULT Notepad_plus::init(HWND hwnd)	{
 	MainFileManager.init(this, &_fileEditView); //get it up and running asap.
 
 	param.setFontList(hwnd);
-
+	nppGUI.pNpp = this;
 
 	_mainWindowStatus = WindowMainActive;
 	// _activeView = MAIN_VIEW;
@@ -616,7 +613,7 @@ LRESULT Notepad_plus::init(HWND hwnd)	{
 	checkMacroState();
 
 	//--Init dialogs--//
-	_findReplaceDlg.init(_pPublicInterface->getHinst(), hwnd, &_pEditView, this);
+	_findReplaceDlg.init(_pPublicInterface->getHinst(), hwnd, &_pEditView);
 	_findInFinderDlg.init(_pPublicInterface->getHinst(), hwnd);
 	_incrementFindDlg.init(_pPublicInterface->getHinst(), hwnd, &_findReplaceDlg, _nativeLangSpeaker.isRTL());
 	_incrementFindDlg.addToRebar(&_rebarBottom);

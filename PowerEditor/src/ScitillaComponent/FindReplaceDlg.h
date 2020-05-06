@@ -225,7 +225,6 @@ friend class FindIncrementDlg;
 public :
 	static FindOption _options;
 	static FindOption* _env;
-	static Notepad_plus *pNpp;
 	FindReplaceDlg() {
 		_uniFileName = new char[(_fileNameLenMax + 3) * 2];
 		_winVer = param.getWinVersion();
@@ -233,12 +232,11 @@ public :
 	};
 	~FindReplaceDlg();
 
-	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView, Notepad_plus *N) {
+	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView) {
 		Window::init(hInst, hPere);
 		if (!ppEditView)
 			throw std::runtime_error("FindIncrementDlg::init : ppEditView is null.");
 		_ppEditView = ppEditView;
-		pNpp = N;
 	};
 
 	virtual void create(int dialogID, bool isRTL = false, bool msgDestParent = true);

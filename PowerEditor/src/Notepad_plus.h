@@ -260,12 +260,15 @@ public:
 	generic_string getPluginListVerStr() const {
 		return _pluginsAdminDlg.getPluginListVerStr();
 	};
+	
+inline void checkMenuItem(int itemID, bool willBeChecked) const {
+		::CheckMenuItem(_mainMenuHandle, itemID, MF_BYCOMMAND | (willBeChecked?MF_CHECKED:MF_UNCHECKED));
+	}
+
 
 // static int rB;
 /* BufferID _recBuf[16] ={nullptr};*/
 //	BufferID _recBuf =nullptr;
-/* 	void recBufIsCurrentB(){ _recBuf[rB++] = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());		_recBuf = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
-	} */
 
 private:
 	Notepad_plus_Window *_pPublicInterface = nullptr;
@@ -483,10 +486,6 @@ private:
 
 	BOOL processIncrFindAccel(MSG *msg) const;
 	BOOL processFindAccel(MSG *msg) const;
-
-	inline void checkMenuItem(int itemID, bool willBeChecked) const {
-		::CheckMenuItem(_mainMenuHandle, itemID, MF_BYCOMMAND | (willBeChecked?MF_CHECKED:MF_UNCHECKED));
-	}
 
 	bool isConditionExprLine(int lineNumber);
 	int findMachedBracePos(size_t startPos, size_t endPos, char targetSymbol, char matchedSymbol);

@@ -1078,11 +1078,10 @@ void Notepad_plus::command(int id)	{
 			if (IsWindowVisible(_findReplaceDlg.getHFindResults())) {
 				_findReplaceDlg.closeFinder();
 				switchEditViewTo(MAIN_VIEW);
-				checkMenuItem(IDM_VIEW_CHAR_PANEL, 0);
 			}
 			else
 				_findReplaceDlg.openFinder();
-				// checkMenuItem(IDM_VIEW_CHAR_PANEL, 1);
+				// checkMenuItem(IDM_VIEW_FIND_RESULT, 1);
 		break;
 
 		case IDM_VIEW_CHAR_PANEL:

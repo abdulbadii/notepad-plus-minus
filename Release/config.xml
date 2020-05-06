@@ -21,13 +21,16 @@
         <Filter name="*.vc* *.sln" />
         <Filter name="*.c *.cpp *.cc *.h" />
         <Filter name="*.xml" />
+        <Find name="unsigned" />
+        <Find name="\w(oo)l" />
+        <Find name="\w(oo]" />
+        <Find name="constexpr" />
         <Find name="getShortcuts" />
         <Find name="triggerFromNbChar" />
         <Find name="childNode" />
         <Find name="idStr" />
         <Find name="FolderName" />
         <Find name="\b\w(oo)\w*l" />
-        <Find name="\w(oo]" />
         <Find name="_putRecentFileInSubMenu" />
         <Find name="lstrcmp" />
         <Find name="\w(oo)" />
@@ -199,7 +202,6 @@
         <Find name="sessionFileInfo" />
         <Find name="_fileName" />
         <Find name="userReadOnly" />
-        <Find name="constexpr" />
         <Find name="const" />
         <Find name="^\h*const\h+(?!.*?\bvector\b)(?=[^*]+$)" />
         <Find name="checkClipboard" />
@@ -233,8 +235,9 @@
         <Find name="tabBarStatus" />
         <Find name="IDM_MACRO_STOPRECORDINGMACRO" />
         <Find name="omma" />
-        <Replace name="pOldView" />
         <Replace name="constexpr" />
+        <Replace name="unsigned" />
+        <Replace name="pOldView" />
         <Replace name="constexpr " />
         <Replace name="$0" />
         <Replace name="enum" />
@@ -262,7 +265,6 @@
         <Replace name="Finder::" />
         <Replace name="L\1" />
         <Replace name='L&quot;\1\3\5&quot;\2\4' />
-        <Replace name='&quot;' />
     </FindHistory>
     <History nbMaxFile="256" inSubMenu="no" customLength="35">
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\DockingWnd\DockingManager.cpp" />
@@ -304,17 +306,14 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\FindReplaceDlg.rc" />
         <File filename="D:\MSYS\usr\src\notepadpp\Release\autoCompletion\cpp.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\Preference\preference.rc" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\NppBigSwitch.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\Preference\preferenceDlg.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\FindReplaceDlg.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\DocTabView.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\NppNotification.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\AnsiCharPanel\ansiCharPanel.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\FileBrowser\fileBrowser.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\ContextMenu\ContextMenu.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\keys.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\ScintillaEditView.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Parameters.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\contextMenu.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\Release\shortcuts.xml" />
@@ -328,7 +327,7 @@
         <GUIConfig name="ScintillaViewsSplitter">vertical</GUIConfig>
         <GUIConfig name="UserDefineDlg" position="undocked">hide</GUIConfig>
         <GUIConfig name="TabSetting" replaceBySpace="no" size="3" />
-        <GUIConfig name="AppPosition" x="476" y="-7" width="1168" height="1087" isMaximized="no" />
+        <GUIConfig name="AppPosition" x="476" y="-7" width="1046" height="1087" isMaximized="no" />
         <GUIConfig name="noUpdate" intervalDays="15" nextUpdateDate="20171218">no</GUIConfig>
         <GUIConfig name="Auto-detection">auto</GUIConfig>
         <GUIConfig name="CheckHistoryFiles">no</GUIConfig>
@@ -364,9 +363,9 @@
         <GUIConfig name="ScintillaPrimaryView" lineNumberMargin="show" bookMarkMargin="hide" indentGuideLine="show" folderMarkStyle="box" lineWrapMethod="indent" currentLineHilitingShow="show" scrollBeyondLastLine="yes" disableAdvancedScrolling="no" wrapSymbolShow="hide" Wrap="yes" borderEdge="no" edge="no" edgeNbColumn="80" zoom="1" zoom2="0" whiteSpaceShow="hide" eolShow="hide" borderWidth="0" smoothFont="yes" />
         <GUIConfig name="DockingManager" leftWidth="155" rightWidth="489" topHeight="200" bottomHeight="310">
             <FloatingWindow cont="4" x="642" y="-8" width="1250" height="439" />
-            <PluginDlg pluginName="Notepad++::InternalFunction" id="0" curr="1" prev="4" isVisible="yes" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="44079" curr="1" prev="-1" isVisible="no" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="44084" curr="1" prev="-1" isVisible="no" />
+            <PluginDlg pluginName="Notepad++::InternalFunction" id="0" curr="1" prev="4" isVisible="no" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="44070" curr="1" prev="-1" isVisible="no" />
             <PluginDlg pluginName="JSMinNPP.dll" id="0" curr="0" prev="-1" isVisible="no" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="42051" curr="1" prev="-1" isVisible="no" />

@@ -42,7 +42,6 @@ using namespace std;
 
 FindOption *FindReplaceDlg::_env;
 FindOption FindReplaceDlg::_options;
-Notepad_plus *FindReplaceDlg::pNpp;
 
 inline void addText2Combo(const TCHAR * txt2add, HWND hCombo)	{
 
@@ -505,7 +504,6 @@ void Finder::gotoFoundLine(){
 		_scintView.execute(SCI_TOGGLEFOLD, lno);
 		return;
 	}
-	// FindReplaceDlg::pNpp->recBufIsCurrentB();
 	
 	const FoundInfo fInfo = *(_pMainFoundInfos->begin() + lno);
 	// Switch to another document
@@ -1724,7 +1722,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 							}
 							else	{
 								if(wParam == IDREPLACEALL_SAVE)	{
-									pNpp->fileSave();
+									nGUI.pNpp->fileSave();
 									result = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-nb-replaced", L"Replace All: $INT_REPLACE$ occurrences were replaced, then saved.");
 								}
 								result = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-nb-replaced", L"Replace All: $INT_REPLACE$ occurrences were replaced.");
@@ -1760,15 +1758,15 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 				case IDC_UNDO:	{
 					std::lock_guard<std::mutex> lock(findOps_mutex);
 					(*_ppEditView)->execute(WM_UNDO);
-					pNpp->cClipb();
-					pNpp->cUndoSt();
+					nGUI.pNpp->cClipb();
+					nGUI.pNpp->cUndoSt();
 					break;
 				}
 				case IDC_REDO:	{
 					std::lock_guard<std::mutex> lock(findOps_mutex);
 					(*_ppEditView)->execute(SCI_REDO);
-					pNpp->cClipb();
-					pNpp->cUndoSt();
+					nGUI.pNpp->cClipb();
+					nGUI.pNpp->cUndoSt();
 					break;
 				}				
 
@@ -2763,19 +2761,16 @@ void FindReplaceDlg::findAllIn(int WM_cmd)	{
 		_pFinder->_findAllInCurrent=0;
 
 
-	(*_ppEditView)->execute(SCI_SETSEARCHFLAGS, 
-	Searching::buildSearchFlags(_env)
-	| SCFIND_REGEXP_EMPTYMATCH_ALL
-	| SCFIND_REGEXP_SKIPCRLFASONE);
+	(*_ppEditView)->execute(SCI_SETSEARCHFLAGS, SCFIND_REGEXP);
 
 	const TCHAR* txt2find=_options._str2Search.c_str();
 	int strSz = lstrlen(txt2find);
 	TCHAR *pText = new TCHAR[strSz + 1];
 	wcscpy_s(pText, strSz + 1, txt2find);
 	
-	if (_env->_searchType == FindExtended)
-		strSz = Searching::convertExtendedToString(txt2find, pText, strSz);
-
+/* 	if (_env->_searchType == FindExtended)
+		strSz = Searching::convertExtendedToString(txt2find, pText, strSz); */
+	
 	 if ( (*_ppEditView)->searchInTarget(pText, strSz, 0, 9) == -2)	{
 		NativeLangSpeaker *pNativeSpeaker = param.getNativeLangSpeaker();
 		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-invalid-re", L"Find: Invalid regular expression");
