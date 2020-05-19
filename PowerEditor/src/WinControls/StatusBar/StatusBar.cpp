@@ -35,7 +35,7 @@
 //#define IDC_STATUSBAR 789
 
 
-enum{	defaultPartWidth = 5 };
+enum{	defaultPartWidth = 3 };
 
 StatusBar::~StatusBar()
 {
@@ -52,7 +52,7 @@ void StatusBar::init(HINSTANCE /*hInst*/, HWND /*hPere*/)	{
 void StatusBar::init(HINSTANCE hInst, HWND hPere, int nbParts)	{
 
 	Window::init(hInst, hPere);
-    InitCommonControls();
+	InitCommonControls();
 
 	// _hSelf = CreateStatusWindow(WS_CHILD | WS_CLIPSIBLINGS, NULL, _hParent, IDC_STATUSBAR);
 	_hSelf = ::CreateWindowEx(
@@ -67,18 +67,19 @@ void StatusBar::init(HINSTANCE hInst, HWND hPere, int nbParts)	{
 		throw std::runtime_error("StatusBar::init : CreateWindowEx() function return null");
 
 
-	_partWidthArray.clear();
-	if (nbParts > 0)
+	//_partWidthArray.clear();
+	if (nbParts > 0)	{
 		_partWidthArray.resize(nbParts, defaultPartWidth);
 
-    // Allocate an array for holding the right edge coordinates.
-	if (_partWidthArray.size())
+	// Allocate an array for holding the right edge coordinates.
 		_lpParts = new int[_partWidthArray.size()];
+	}
 
 	RECT rc;
 	::GetClientRect(_hParent, &rc);
 	adjustParts(rc.right);
-}
+	beText=L"";
+} 
 
 
 bool StatusBar::setPartWidth(int whichPart, int width)	{
@@ -115,9 +116,9 @@ int StatusBar::getHeight() const
 
 void StatusBar::adjustParts(int clientWidth)	{
 
-    // Calculate the right edge coordinate for each part, and
-    // copy the coordinates to the array.
-    int nWidth = std::max<int>(clientWidth - 17, 0);
+	// Calculate the right edge coordinate for each part, and
+	// copy the coordinates to the array.
+	int nWidth = max(clientWidth - 16, 0);
 
 	for (int i = static_cast<int>(_partWidthArray.size()) - 1; i >= 0; --i )	{
 
@@ -125,33 +126,6 @@ void StatusBar::adjustParts(int clientWidth)	{
 		nWidth -= _partWidthArray[i];
 	}
 
-    // Tell the status bar to create the window parts.
+	// Tell the status bar to create the window parts.
 	::SendMessage(_hSelf, SB_SETPARTS, _partWidthArray.size(), reinterpret_cast<LPARAM>(_lpParts));
-}
-
-
-bool StatusBar::setText(const TCHAR* str, int whichPart)	{
-
-	if (size_t(whichPart) < _partWidthArray.size())	{
-
-		if (str)
-			_lastSetText = str;
-		else
-			_lastSetText.clear();
-
-		return ::SendMessage(_hSelf, SB_SETTEXT, whichPart, reinterpret_cast<LPARAM>(_lastSetText.c_str()));
-	}
-	assert(false and "invalid status bar index");
-	return false;
-}
-
-
-bool StatusBar::setOwnerDrawText(const TCHAR* str)	{
-
-	if (str != nullptr)
-		_lastSetText = str;
-	else
-		_lastSetText.clear();
-
-	return (::SendMessage(_hSelf, SB_SETTEXT, SBT_OWNERDRAW, reinterpret_cast<LPARAM>(_lastSetText.c_str())) == TRUE);
 }

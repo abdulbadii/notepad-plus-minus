@@ -25,6 +25,8 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #pragma once
+#pragma warning(push)
+#pragma warning(disable:4706)
 
 #include "Scintilla.h"
 #include "ScintillaRef.h"
@@ -92,8 +94,7 @@ const int CP_GREEK = 1253;
 #define LIST_7 128
 #define LIST_8 256
 
-#define MAX_FOLD_COLLAPSE_LEVEL	8
-const bool fold_collapse = false, fold_uncollapse = true;
+enum { fold_collapse, fold_uncollapse, MAX_FOLD_COLLAPSE_LEVEL	=8 };
 
 enum TextCase : UCHAR
 {
@@ -107,22 +108,21 @@ enum TextCase : UCHAR
 	RANDOMCASE
 };
 
-const UCHAR MASK_FORMAT = 0x03;
-const UCHAR MASK_ZERO_LEADING = 0x04;
-const UCHAR BASE_10 = 0x00; // Dec
-const UCHAR BASE_16 = 0x01; // Hex
-const UCHAR BASE_08 = 0x02; // Oct
-const UCHAR BASE_02 = 0x03; // Bin
+enum : UCHAR {
+	BASE_10 = 0x00, // Dec
+	BASE_16 = 0x01, // Hex
+	BASE_08 = 0x02, // Oct
+	BASE_02 = 0x03, // Bin
+	MASK_FORMAT = 0x03,
+	MASK_ZERO_LEADING = 0x04
+};
 
-
-const int MARK_BOOKMARK = 24;
-const int MARK_HIDELINESBEGIN = 23;
-const int MARK_HIDELINESEND = 22;
-const int MARK_HIDELINESUNDERLINE = 21;
 //const int MARK_LINEMODIFIEDUNSAVED = 20;
 //const int MARK_LINEMODIFIEDSAVED = 19;
 // 24 - 16 reserved for Notepad++ internal used
 // 15 - 0  are free to use for plugins
+enum {
+	MARK_HIDELINESUNDERLINE = 21, MARK_HIDELINESEND, MARK_HIDELINESBEGIN, MARK_BOOKMARK	};
 
 
 int getNbDigits(int aNum, int base);
@@ -217,7 +217,7 @@ public:
 
 	virtual void init(HINSTANCE hInst, HWND hPere);
 
-	LRESULT execute(UINT Msg, WPARAM wParam=0, LPARAM lParam=0) const {
+	inline LRESULT f(UINT Msg, WPARAM wParam=0, LPARAM lParam=0) const {
 		try {
 			return _pScintillaFunc(_pScintillaPtr, Msg, wParam, lParam);
 		}
@@ -275,19 +275,19 @@ public:
 	};
 
 	int getCurrentDocLen() const {
-		return static_cast<int32_t>(execute(SCI_GETLENGTH));
+		return static_cast<int32_t>(f(SCI_GETLENGTH));
 	};
 
 	Sci_CharacterRange getSelection() const {
 		Sci_CharacterRange crange;
-		crange.cpMin = long(execute(SCI_GETSELECTIONSTART));
-		crange.cpMax = long(execute(SCI_GETSELECTIONEND));
+		crange.cpMin = long(f(SCI_GETSELECTIONSTART));
+		crange.cpMax = long(f(SCI_GETSELECTIONEND));
 		return crange;
 	};
 
 	void getWordToCurrentPos(TCHAR * str, int strLen) const {
-		auto caretPos = execute(SCI_GETCURRENTPOS);
-		auto startPos = execute(SCI_WORDSTARTPOSITION, caretPos, true);
+		auto caretPos = f(SCI_GETCURRENTPOS);
+		auto startPos = f(SCI_WORDSTARTPOSITION, caretPos, true);
 
 		str[0] = '\0';
 		if ((caretPos - startPos) < strLen)
@@ -301,8 +301,8 @@ public:
 	static UserDefineDialog * getUserDefineDlg() {return &_userDefineDlg;};
 
 	void setCaretColorWidth(int color, int width = 1) const {
-		execute(SCI_SETCARETFORE, color);
-		execute(SCI_SETCARETWIDTH, width);
+		f(SCI_SETCARETFORE, color);
+		f(SCI_SETCARETWIDTH, width);
 	};
 
 	void beSwitched() {
@@ -325,12 +325,12 @@ public:
 				width = param._dpiManager.scaleX(100) >= 150 ? 20 : 16;
 			else if (whichMarge == _SC_MARGE_FOLDER)
 				width = param._dpiManager.scaleX(100) >= 150 ? 18 : 14;
-			execute(SCI_SETMARGINWIDTHN, whichMarge, willBeShowed ? width : 0);
+			f(SCI_SETMARGINWIDTHN, whichMarge, willBeShowed ? width : 0);
 		}
 	};
 
 	bool hasMarginShowed(int witchMarge) {
-		return (execute(SCI_GETMARGINWIDTHN, witchMarge, 0));
+		return (f(SCI_GETMARGINWIDTHN, witchMarge, 0));
 	};
 
 	void updateBeginEndSelectPosition(bool is_insert, size_t position, size_t length);
@@ -360,21 +360,21 @@ public:
 	void setWrapMode(lineWrapMethod meth) {
 		int mode = (meth == LINEWRAP_ALIGNED)?SC_WRAPINDENT_SAME:\
 				(meth == LINEWRAP_INDENT)?SC_WRAPINDENT_INDENT:SC_WRAPINDENT_FIXED;
-		execute(SCI_SETWRAPINDENTMODE, mode);
+		f(SCI_SETWRAPINDENTMODE, mode);
 	};
 
 
 	void showWSAndTab(bool willBeShowed = true) {
-		execute(SCI_SETVIEWWS, willBeShowed?SCWS_VISIBLEALWAYS:SCWS_INVISIBLE);
-		execute(SCI_SETWHITESPACESIZE, 2, 0);
+		f(SCI_SETVIEWWS, willBeShowed?SCWS_VISIBLEALWAYS:SCWS_INVISIBLE);
+		f(SCI_SETWHITESPACESIZE, 2, 0);
 	};
 
 	void showEOL(bool willBeShowed = true) {
-		execute(SCI_SETVIEWEOL, willBeShowed);
+		f(SCI_SETVIEWEOL, willBeShowed);
 	};
 
 	bool isEolVisible() {
-		return (execute(SCI_GETVIEWEOL));
+		return (f(SCI_GETVIEWEOL));
 	};
 	void showInvisibleChars(bool willBeShowed = true) {
 		showWSAndTab(willBeShowed);
@@ -382,84 +382,88 @@ public:
 	};
 
 	bool isInvisibleCharsShown() {
-		return (execute(SCI_GETVIEWWS));
+		return (f(SCI_GETVIEWWS));
 	};
 
 	void showIndentGuideLine(bool willBeShowed = true);
 
 	bool isShownIndentGuide() const {
-		return (execute(SCI_GETINDENTATIONGUIDES));
+		return (f(SCI_GETINDENTATIONGUIDES));
 	};
 
 inline	void wrap(bool willBeWrapped = true) {
-		execute(SCI_SETWRAPMODE, willBeWrapped);
+		f(SCI_SETWRAPMODE, willBeWrapped);
 	};
 
 inline	bool isWrap() const {
-		return (execute(SCI_GETWRAPMODE) == SC_WRAP_WORD);
+		return (f(SCI_GETWRAPMODE) == SC_WRAP_WORD);
 	};
 
 inline	bool isWrapSymbolVisible() const {
-		return (execute(SCI_GETWRAPVISUALFLAGS) != SC_WRAPVISUALFLAG_NONE);
+		return (f(SCI_GETWRAPVISUALFLAGS) != SC_WRAPVISUALFLAG_NONE);
 	};
 
-	void showWrapSymbol(bool willBeShown = true) {
-		execute(SCI_SETWRAPVISUALFLAGSLOCATION, SC_WRAPVISUALFLAGLOC_DEFAULT);
-		execute(SCI_SETWRAPVISUALFLAGS, willBeShown?SC_WRAPVISUALFLAG_END:SC_WRAPVISUALFLAG_NONE);
+inline	void showWrapSymbol(bool willBeShown = true) {
+		f(SCI_SETWRAPVISUALFLAGSLOCATION, SC_WRAPVISUALFLAGLOC_DEFAULT);
+		f(SCI_SETWRAPVISUALFLAGS, willBeShown?SC_WRAPVISUALFLAG_END:SC_WRAPVISUALFLAG_NONE);
 	};
 
 inline	size_t getCurrentLineNumber()const {
-		return static_cast<size_t>(execute(SCI_LINEFROMPOSITION, execute(SCI_GETCURRENTPOS)));
+	return static_cast<size_t>(f(SCI_LINEFROMPOSITION, f(SCI_GETCURRENTPOS)));
 	};
 
+inline	long getCurrentColumnNumber() const {
+		return long(f(SCI_GETCOLUMN, f(SCI_GETCURRENTPOS)));
+	};
+
+inline	size_t getOffset()const {
+		return static_cast<size_t>(f(SCI_GETCURRENTPOS));
+	};
+	
 inline	int32_t lastZeroBasedLineNumber() const {
-		auto endPos = execute(SCI_GETLENGTH);
-		return static_cast<int32_t>(execute(SCI_LINEFROMPOSITION, endPos));
+		auto endPos = f(SCI_GETLENGTH);
+		return static_cast<int32_t>(f(SCI_LINEFROMPOSITION, endPos));
 	};
 
 inline	long getCurrentXOffset()const{
-		return long(execute(SCI_GETXOFFSET));
+		return long(f(SCI_GETXOFFSET));
 	};
 
 inline	void setCurrentXOffset(long xOffset){
-		execute(SCI_SETXOFFSET,xOffset);
+		f(SCI_SETXOFFSET,xOffset);
 	};
 
 inline	void scroll(int column, int line){
-		execute(SCI_LINESCROLL, column, line);
+		f(SCI_LINESCROLL, column, line);
 	};
 
 inline	long getCurrentPointX()const{
-		return long (execute(SCI_POINTXFROMPOSITION, 0, execute(SCI_GETCURRENTPOS)));
+		return long (f(SCI_POINTXFROMPOSITION, 0, f(SCI_GETCURRENTPOS)));
 	};
 
 inline	long getCurrentPointY()const{
-		return long (execute(SCI_POINTYFROMPOSITION, 0, execute(SCI_GETCURRENTPOS)));
+		return long (f(SCI_POINTYFROMPOSITION, 0, f(SCI_GETCURRENTPOS)));
 	};
 
 	long getTextHeight()const{
-		return long(execute(SCI_TEXTHEIGHT));
+		return long(f(SCI_TEXTHEIGHT));
 	};
 
 	void gotoLine(int line){
-		if (line < execute(SCI_GETLINECOUNT))
-			execute(SCI_GOTOLINE,line);
-	};
-
-	long getCurrentColumnNumber() const {
-		return long(execute(SCI_GETCOLUMN, execute(SCI_GETCURRENTPOS)));
+		if (line < f(SCI_GETLINECOUNT))
+			f(SCI_GOTOLINE,line);
 	};
 
 	bool getSelectedCount(int & selByte, int & selLine) const {
 		// return false if it's multi-selection or rectangle selection
-		if ((execute(SCI_GETSELECTIONS) > 1) || execute(SCI_SELECTIONISRECTANGLE))
+		if ((f(SCI_GETSELECTIONS) > 1) || f(SCI_SELECTIONISRECTANGLE))
 			return false;
-		long pStart = long(execute(SCI_GETSELECTIONSTART));
-		long pEnd = long(execute(SCI_GETSELECTIONEND));
+		long pStart = long(f(SCI_GETSELECTIONSTART));
+		long pEnd = long(f(SCI_GETSELECTIONEND));
 		selByte = pEnd - pStart;
 
-		long lStart = long(execute(SCI_LINEFROMPOSITION, pStart));
-		long lEnd = long(execute(SCI_LINEFROMPOSITION, pEnd));
+		long lStart = long(f(SCI_LINEFROMPOSITION, pStart));
+		long lEnd = long(f(SCI_LINEFROMPOSITION, pEnd));
 		selLine = lEnd - lStart;
 		if (selLine || selByte)
 			++selLine;
@@ -470,23 +474,23 @@ inline	long getCurrentPointY()const{
 	long getUnicodeSelectedLength() const	{
 
 		// return -1 if it's multi-selection or rectangle selection
-		if ((execute(SCI_GETSELECTIONS) > 1) || execute(SCI_SELECTIONISRECTANGLE))
+		if ((f(SCI_GETSELECTIONS) > 1) || f(SCI_SELECTIONISRECTANGLE))
 			return -1;
 
-		long start = long(execute(SCI_GETSELECTIONSTART));
-		long end = long(execute(SCI_GETSELECTIONEND));
-		long length = long(execute(SCI_COUNTCHARACTERS, start, end));
+		long start = long(f(SCI_GETSELECTIONSTART));
+		long end = long(f(SCI_GETSELECTIONEND));
+		long length = long(f(SCI_COUNTCHARACTERS, start, end));
 
 		return length;
 	};
 
 
 	long getLineLength(int line) const {
-		return long(execute(SCI_GETLINEENDPOSITION, line) - execute(SCI_POSITIONFROMLINE, line));
+		return long(f(SCI_GETLINEENDPOSITION, line) - f(SCI_POSITIONFROMLINE, line));
 	};
 
 	long getLineIndent(int line) const {
-		return long(execute(SCI_GETLINEINDENTATION, line));
+		return long(f(SCI_GETLINEINDENTATION, line));
 	};
 
 	void setLineIndent(int line, int indent) const;
@@ -498,20 +502,20 @@ inline	long getCurrentPointY()const{
 		if (show)
 			updateLineNumberWidth();
 		else
-			execute(SCI_SETMARGINWIDTHN, _SC_MARGE_LINENUMBER, 0);
+			f(SCI_SETMARGINWIDTHN, _SC_MARGE_LINENUMBER, 0);
 	}
 
 	void updateLineNumberWidth();
 
 	void setCurrentLineHiLiting(bool isHiliting, COLORREF bgColor) const {
-		execute(SCI_SETCARETLINEVISIBLE, isHiliting);
+		f(SCI_SETCARETLINEVISIBLE, isHiliting);
 		if (!isHiliting)
 			return;
-		execute(SCI_SETCARETLINEBACK, bgColor);
+		f(SCI_SETCARETLINEBACK, bgColor);
 	};
 
 	bool isCurrentLineHiLiting() const {
-		return (execute(SCI_GETCARETLINEVISIBLE));
+		return (f(SCI_GETCARETLINEVISIBLE));
 	};
 
 	void performGlobalStyles();
@@ -531,7 +535,7 @@ inline	long getCurrentPointY()const{
 		if (param.isTransparentAvailable())
 			convertSelectedTextTo(LOWERCASE);
 		else
-			execute(SCI_LOWERCASE);
+			f(SCI_LOWERCASE);
 	};
 
 	void convertSelectedTextToUpperCase() {
@@ -539,7 +543,7 @@ inline	long getCurrentPointY()const{
 		if (param.isTransparentAvailable())
 			convertSelectedTextTo(UPPERCASE);
 		else
-			execute(SCI_UPPERCASE);
+			f(SCI_UPPERCASE);
 	};
 
 	void convertSelectedTextToNewerCase(const TextCase & caseToConvert) {
@@ -553,10 +557,12 @@ inline	long getCurrentPointY()const{
 	bool isFoldIndentationBased() const;
 	void collapseFoldIndentationBased(int level2Collapse, bool mode);
 	void collapse(int level2Collapse, bool mode);
-	void fold(size_t line, bool mode);
-	void toggleFold(size_t line, bool rec =0);
-	void foldAll(bool mode);
-	int getCodepage() const {return _codepage;};
+	void foldAll(bool);
+	inline void foldAllToggle();
+	void putMvmntInView(int p, int e, int =0);
+	inline void fold(size_t line, bool mode);
+	inline void toggleFold(size_t line, bool rec =0);
+	inline int getCodepage() const {return _codepage;};
 
 	ColumnModeInfos getColumnModeSelectInfo();
 
@@ -564,11 +570,11 @@ inline	long getCurrentPointY()const{
 	void columnReplace(ColumnModeInfos & cmi, int initial, int incr, int repeat, UCHAR format);
 
 	void foldChanged(size_t line, int levelNow, int levelPrev);
-	void clearIndicator(int indicatorNumber) {
+	inline void clearIndicator(int indicatorNumber) {
 		int docStart = 0;
 		int docEnd = getCurrentDocLen();
-		execute(SCI_SETINDICATORCURRENT, indicatorNumber);
-		execute(SCI_INDICATORCLEARRANGE, docStart, docEnd-docStart);
+		f(SCI_SETINDICATORCURRENT, indicatorNumber);
+		f(SCI_INDICATORCLEARRANGE, docStart, docEnd-docStart);
 	};
 
 	static LanguageName langNames[L_EXTERNAL+1];
@@ -631,6 +637,20 @@ inline	long getCurrentPointY()const{
 	void changeTextDirection(bool isRTL);
 	bool isTextDirectionRTL() const;
 
+	inline bool ScintillaEditView::isBeingSelect()	{
+	return f(SCI_GETCURRENTPOS) != f(SCI_GETANCHOR);
+	}
+
+	inline void ScintillaEditView::toLeftEndSelect()	{
+	if (f(SCI_GETCURRENTPOS) > f(SCI_GETANCHOR))
+		f(SCI_SWAPMAINANCHORCARET);
+	}
+
+	inline void ScintillaEditView::toRightEndSelect()	{
+	if (f(SCI_GETCURRENTPOS) < f(SCI_GETANCHOR))
+		f(SCI_SWAPMAINANCHORCARET);
+	}
+
 protected:
 	static HINSTANCE _hLib;
 	static int _refCount;
@@ -675,7 +695,7 @@ protected:
 	void setStyle(Style styleToSet);			//NOT by reference	(style edited)
 	void setSpecialStyle(const Style & styleToSet);	//by reference
 	void setSpecialIndicator(const Style & styleToSet) {
-		execute(SCI_INDICSETFORE, styleToSet._styleID, styleToSet._bgColor);
+		f(SCI_INDICSETFORE, styleToSet._styleID, styleToSet._bgColor);
 	};
 
 	//Complex lexers (same lexer, different language)
@@ -700,23 +720,23 @@ protected:
 	};
 
 	void setMakefileLexer() {
-		execute(SCI_SETLEXER, SCLEX_MAKEFILE);
+		f(SCI_SETLEXER, SCLEX_MAKEFILE);
 		makeStyle(L_MAKEFILE);
 	};
 
 	void setIniLexer() {
-		execute(SCI_SETLEXER, SCLEX_PROPERTIES);
-		execute(SCI_STYLESETEOLFILLED, SCE_PROPS_SECTION, true);
+		f(SCI_SETLEXER, SCLEX_PROPERTIES);
+		f(SCI_STYLESETEOLFILLED, SCE_PROPS_SECTION, true);
 		makeStyle(L_INI);
-		execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>("1"));
-		execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.compact"), reinterpret_cast<LPARAM>("0"));
+		f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>("1"));
+		f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.compact"), reinterpret_cast<LPARAM>("0"));
 	};
 
 
 	void setSqlLexer() {
 		const bool kbBackSlash = nGUI._backSlashIsEscapeCharacterForSql;
 		setLexer(SCLEX_SQL, L_SQL, LIST_0 | LIST_1 | LIST_4);
-		execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("sql.backslash.escapes"), reinterpret_cast<LPARAM>(kbBackSlash ? "1" : "0"));
+		f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("sql.backslash.escapes"), reinterpret_cast<LPARAM>(kbBackSlash ? "1" : "0"));
 	};
 
 	void setBashLexer() {
@@ -729,7 +749,7 @@ protected:
 
 	void setPascalLexer() {
 		setLexer(SCLEX_PASCAL, L_PASCAL, LIST_0);
-		execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.preprocessor"), reinterpret_cast<LPARAM>("1"));
+		f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.preprocessor"), reinterpret_cast<LPARAM>("1"));
 	};
 
 	void setPerlLexer() {
@@ -738,7 +758,7 @@ protected:
 
 	void setPythonLexer() {
 		setLexer(SCLEX_PYTHON, L_PYTHON, LIST_0 | LIST_1);
-		execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.quotes.python"), reinterpret_cast<LPARAM>("1"));
+		f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.quotes.python"), reinterpret_cast<LPARAM>("1"));
 	};
 
 	void setBatchLexer() {
@@ -747,7 +767,7 @@ protected:
 
 	void setTeXLexer() {
 		for (int i = 0 ; i < 4 ; ++i)
-			execute(SCI_SETKEYWORDS, i, reinterpret_cast<LPARAM>(L""));
+			f(SCI_SETKEYWORDS, i, reinterpret_cast<LPARAM>(L""));
 		setLexer(SCLEX_TEX, L_TEX, 0);
 	};
 
@@ -789,7 +809,7 @@ protected:
 
 	void setRubyLexer(){
 		setLexer(SCLEX_RUBY, L_RUBY, LIST_0);
-		execute(SCI_STYLESETEOLFILLED, SCE_RB_POD, true);
+		f(SCI_STYLESETEOLFILLED, SCE_RB_POD, true);
 	};
 
 	void setSmalltalkLexer(){
@@ -806,7 +826,7 @@ protected:
 
 	void setAutoItLexer(){
 		setLexer(SCLEX_AU3, L_AU3, LIST_0 | LIST_1 | LIST_2 | LIST_3 | LIST_4 | LIST_5 | LIST_6);
-		execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.preprocessor"), reinterpret_cast<LPARAM>("1"));
+		f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.preprocessor"), reinterpret_cast<LPARAM>("1"));
 	};
 
 	void setCamlLexer(){
@@ -819,7 +839,7 @@ protected:
 
 	void setVerilogLexer(){
 		setLexer(SCLEX_VERILOG, L_VERILOG, LIST_0 | LIST_1);
-		execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.preprocessor"), reinterpret_cast<LPARAM>("1"));
+		f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.preprocessor"), reinterpret_cast<LPARAM>("1"));
 	};
 
 	void setMatlabLexer(){
@@ -866,14 +886,14 @@ protected:
 
 	void setBaanCLexer() {
 		setLexer(SCLEX_BAAN, L_BAANC, LIST_0 | LIST_1 | LIST_2 | LIST_3 | LIST_4 | LIST_5 | LIST_6 | LIST_7 | LIST_8);
-		execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("lexer.baan.styling.within.preprocessor"), reinterpret_cast<LPARAM>("1"));
-		execute(SCI_SETWORDCHARS, 0, reinterpret_cast<LPARAM>("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$:"));
-		execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.preprocessor"), reinterpret_cast<LPARAM>("1"));
-		execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.baan.syntax.based"), reinterpret_cast<LPARAM>("1"));
-		execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.baan.keywords.based"), reinterpret_cast<LPARAM>("1"));
-		execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.baan.sections"), reinterpret_cast<LPARAM>("1"));
-		execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.baan.inner.level"), reinterpret_cast<LPARAM>("1"));
-		execute(SCI_STYLESETEOLFILLED, SCE_BAAN_STRINGEOL, true);
+		f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("lexer.baan.styling.within.preprocessor"), reinterpret_cast<LPARAM>("1"));
+		f(SCI_SETWORDCHARS, 0, reinterpret_cast<LPARAM>("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$:"));
+		f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.preprocessor"), reinterpret_cast<LPARAM>("1"));
+		f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.baan.syntax.based"), reinterpret_cast<LPARAM>("1"));
+		f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.baan.keywords.based"), reinterpret_cast<LPARAM>("1"));
+		f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.baan.sections"), reinterpret_cast<LPARAM>("1"));
+		f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.baan.inner.level"), reinterpret_cast<LPARAM>("1"));
+		f(SCI_STYLESETEOLFILLED, SCE_BAAN_STRINGEOL, true);
 	};
 
 	void setSrecLexer() {
@@ -894,7 +914,7 @@ protected:
 
 	void setAVSLexer() {
 		setLexer(SCLEX_AVS, L_AVS, LIST_0 | LIST_1 | LIST_2 | LIST_3 | LIST_4 | LIST_5);
-		execute(SCI_SETWORDCHARS, 0, reinterpret_cast<LPARAM>("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_#"));
+		f(SCI_SETWORDCHARS, 0, reinterpret_cast<LPARAM>("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_#"));
 	};
 
 	void setBlitzBasicLexer() {
@@ -911,7 +931,7 @@ protected:
 
 	void setCsoundLexer() {
 		setLexer(SCLEX_CSOUND, L_CSOUND, LIST_0 | LIST_1 | LIST_2);
-		execute(SCI_STYLESETEOLFILLED, SCE_CSOUND_STRINGEOL, true);
+		f(SCI_STYLESETEOLFILLED, SCE_CSOUND_STRINGEOL, true);
 	};
 
 	void setErlangLexer() {
@@ -924,7 +944,7 @@ protected:
 
 	void setForthLexer() {
 		setLexer(SCLEX_FORTH, L_FORTH, LIST_0 | LIST_1 | LIST_2 | LIST_3 | LIST_4 | LIST_5);
-		execute(SCI_SETWORDCHARS, 0, reinterpret_cast<LPARAM>("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789%-"));
+		f(SCI_SETWORDCHARS, 0, reinterpret_cast<LPARAM>("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789%-"));
 	};
 
 	void setLatexLexer() {
@@ -941,17 +961,17 @@ protected:
 
 	void setNncrontabLexer() {
 		setLexer(SCLEX_NNCRONTAB, L_NNCRONTAB, LIST_0 | LIST_1 | LIST_2); 
-		execute(SCI_SETWORDCHARS, 0, reinterpret_cast<LPARAM>("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789%-"));
+		f(SCI_SETWORDCHARS, 0, reinterpret_cast<LPARAM>("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789%-"));
 	};
 
 	void setOScriptLexer() {
 		setLexer(SCLEX_OSCRIPT, L_OSCRIPT, LIST_0 | LIST_1 | LIST_2 | LIST_3 | LIST_4 | LIST_5);
-		execute(SCI_SETWORDCHARS, 0, reinterpret_cast<LPARAM>("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$"));
+		f(SCI_SETWORDCHARS, 0, reinterpret_cast<LPARAM>("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$"));
 	};
 
 	void setREBOLLexer() {
 		setLexer(SCLEX_REBOL, L_REBOL, LIST_0 | LIST_1 | LIST_2 | LIST_3 | LIST_4 | LIST_5 | LIST_6);
-		execute(SCI_SETWORDCHARS, 0, reinterpret_cast<LPARAM>("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789?!.’+-*&|=_~"));
+		f(SCI_SETWORDCHARS, 0, reinterpret_cast<LPARAM>("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789?!.’+-*&|=_~"));
 	};
 
 	void setRegistryLexer() {
@@ -960,7 +980,7 @@ protected:
 
 	void setRustLexer() {
 		setLexer(SCLEX_RUST, L_RUST, LIST_0 | LIST_1 | LIST_2 | LIST_3 | LIST_4 | LIST_5 | LIST_6); 
-		execute(SCI_SETWORDCHARS, 0, reinterpret_cast<LPARAM>("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_#"));
+		f(SCI_SETWORDCHARS, 0, reinterpret_cast<LPARAM>("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_#"));
 	};
 
 	void setSpiceLexer() {
@@ -978,8 +998,8 @@ protected:
 	//--------------------
 
 	void setSearchResultLexer() {
-		execute(SCI_STYLESETEOLFILLED, SCE_SEARCHRESULT_FILE_HEADER, true);
-		execute(SCI_STYLESETEOLFILLED, SCE_SEARCHRESULT_SEARCH_HEADER, true);
+		f(SCI_STYLESETEOLFILLED, SCE_SEARCHRESULT_FILE_HEADER, true);
+		f(SCI_STYLESETEOLFILLED, SCE_SEARCHRESULT_SEARCH_HEADER, true);
 		setLexer(SCLEX_SEARCHRESULT, L_SEARCHRESULT, 0);
 	};
 
@@ -1004,15 +1024,14 @@ protected:
 //END: Lexers and Styling
 
 	void defineMarker(int marker, int markerType, COLORREF fore, COLORREF back, COLORREF foreActive) {
-		execute(SCI_MARKERDEFINE, marker, markerType);
-		execute(SCI_MARKERSETFORE, marker, fore);
-		execute(SCI_MARKERSETBACK, marker, back);
-		execute(SCI_MARKERSETBACKSELECTED, marker, foreActive);
+		f(SCI_MARKERDEFINE, marker, markerType);
+		f(SCI_MARKERSETFORE, marker, fore);
+		f(SCI_MARKERSETBACK, marker, back);
+		f(SCI_MARKERSETBACKSELECTED, marker, foreActive);
 	};
 
 	int codepage2CharSet() const {
 		switch (_codepage)	{
-
 			case CP_CHINESE_TRADITIONAL : return SC_CHARSET_CHINESEBIG5;
 			case CP_CHINESE_SIMPLIFIED : return SC_CHARSET_GB2312;
 			case CP_KOREAN : return SC_CHARSET_HANGUL;
@@ -1021,9 +1040,81 @@ protected:
 			default : return 0;
 		}
 	};
-
 	std::pair<int, int> getWordRange();
 	bool expandWordSelection();
 	void getFoldColor(COLORREF& fgColor, COLORREF& bgColor, COLORREF& activeFgColor);
 };
 
+void ScintillaEditView::fold(size_t line, bool mode)	{
+	if (f(SCI_GETENDSTYLED) < f(SCI_GETLENGTH))
+		f(SCI_COLOURISE,0,-1);
+	int headerLine;
+	if (f(SCI_GETFOLDLEVEL, line) & SC_FOLDLEVELHEADERFLAG)
+		headerLine = static_cast<int32_t>(line);
+	else if ((headerLine = static_cast<int32_t>(f(SCI_GETFOLDPARENT, line))) == -1)
+		return;
+
+	if (bool(f(SCI_GETFOLDEXPANDED, headerLine)) != mode)	{
+		f(SCI_TOGGLEFOLD, headerLine);
+
+		SCNotification scnN;
+		scnN.nmhdr.code = SCN_FOLDINGSTATECHANGED;
+		scnN.nmhdr.hwndFrom = _hSelf;
+		scnN.nmhdr.idFrom = 0;
+		scnN.line = headerLine;
+		scnN.foldLevelNow = bool(f(SCI_GETFOLDEXPANDED, headerLine));
+
+		::SendMessage(_hParent, WM_NOTIFY, 0, reinterpret_cast<LPARAM>(&scnN));
+	}
+}
+
+void ScintillaEditView::toggleFold(size_t ln, bool rec)	{
+
+	if (f(SCI_GETENDSTYLED) < f(SCI_GETLENGTH))
+		f(SCI_COLOURISE,0,-1);
+	int hLine;
+	if (f(SCI_GETFOLDLEVEL, ln) & SC_FOLDLEVELHEADERFLAG)
+		hLine = static_cast<int>(ln);
+	else if ((hLine = static_cast<int>(f(SCI_GETFOLDPARENT, ln))) == -1)
+		return;
+
+	SCNotification scnN;
+	scnN.nmhdr.code = SCN_FOLDINGSTATECHANGED;
+	scnN.nmhdr.hwndFrom = _hSelf;
+	scnN.nmhdr.idFrom = 0;
+
+	f(SCI_TOGGLEFOLD, hLine);
+	scnN.line = hLine;
+	bool hdState = scnN.foldLevelNow = bool(f(SCI_GETFOLDEXPANDED, hLine));
+	::SendMessage(_hParent, WM_NOTIFY, 0, reinterpret_cast<LPARAM>(&scnN));
+
+	if (rec)	{
+		auto hdLevel = f(SCI_GETFOLDLEVEL, hLine) & SC_FOLDLEVELNUMBERMASK;
+		while ((f(SCI_GETFOLDLEVEL, ++hLine) & SC_FOLDLEVELNUMBERMASK) > hdLevel)
+			if (f(SCI_GETFOLDLEVEL, hLine) & SC_FOLDLEVELHEADERFLAG && bool(f(SCI_GETFOLDEXPANDED, hLine)) != hdState)	{
+				f(SCI_TOGGLEFOLD, hLine);
+				scnN.line = hLine;
+				scnN.foldLevelNow = bool(f(SCI_GETFOLDEXPANDED, hLine));
+				::SendMessage(_hParent, WM_NOTIFY, 0, reinterpret_cast<LPARAM>(&scnN));
+			}
+	}
+	f(SCI_SETYCARETPOLICY, 14, 0);f(SCI_SCROLLCARET);
+	f(SCI_SETYCARETPOLICY, 13, 1);
+}
+
+void ScintillaEditView::foldAllToggle()	{
+	bool isNode;
+	int ln, n; ln = n = static_cast<int>(f(SCI_LINEFROMPOSITION,f(SCI_GETCURRENTPOS)));
+	while (!(isNode=f(SCI_GETFOLDLEVEL, ln)&SC_FOLDLEVELHEADERFLAG) && 0<ln)
+		--ln;
+	if (isNode)
+		foldAll(!bool(f(SCI_GETFOLDEXPANDED, ln)));
+	else	{
+		while (!(isNode=f(SCI_GETFOLDLEVEL, ++n)&SC_FOLDLEVELHEADERFLAG) && n<f(SCI_GETLINECOUNT)-1);
+		if (isNode)	{
+			foldAll(!bool(f(SCI_GETFOLDEXPANDED, n)));
+			f(SCI_GOTOLINE,n);
+		}
+	}
+	f(SCI_SETYCARETPOLICY, 14, 0);f(SCI_SCROLLCARET);f(SCI_SETYCARETPOLICY, 13, 1);
+}

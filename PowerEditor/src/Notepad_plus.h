@@ -116,31 +116,6 @@ struct VisibleGUIConf final	{
 	}
 };
 
-/* struct QuoteParams
-{
-	enum Speed { slow = 0, rapid, speedOfLight };
-
-	QuoteParams() {};
-	QuoteParams(const wchar_t* quoter, Speed speed, bool shouldBeTrolling, int encoding, LangType lang, const wchar_t* quote) :
-		_quoter(quoter), _speed(speed), _shouldBeTrolling(shouldBeTrolling), _encoding(encoding), _lang(lang), _quote(quote) {}
-
-	void reset() {
-		_quoter = nullptr;
-		_speed = rapid;
-		_shouldBeTrolling = false;
-		_encoding = SC_CP_UTF8;
-		_lang = L_TEXT;
-		_quote = nullptr;
-	};
-
-	const wchar_t* _quoter = nullptr;
-	Speed _speed = rapid;
-	bool _shouldBeTrolling = false;
-	int _encoding = SC_CP_UTF8;
-	LangType _lang = L_TEXT;
-	const wchar_t* _quote = nullptr;
-};
-*/
 class FileDialog;
 class Notepad_plus_Window;
 class AnsiCharPanel;
@@ -167,7 +142,9 @@ public:
 	void killAllChildren();
 	void setTitle();
 	void getTaskListInfo(TaskListInfo *tli);
-	
+
+	inline void checkUndoState();
+	inline void checkClipboard();	
 	inline void cClipb(){checkClipboard();}
 	inline void cUndoSt(){checkUndoState();}
 
@@ -261,11 +238,11 @@ public:
 		return _pluginsAdminDlg.getPluginListVerStr();
 	};
 	
-inline void checkMenuItem(int itemID, bool willBeChecked) const {
+	inline void checkMenuItem(int itemID, bool willBeChecked) const {
 		::CheckMenuItem(_mainMenuHandle, itemID, MF_BYCOMMAND | (willBeChecked?MF_CHECKED:MF_UNCHECKED));
 	}
 
-
+	size_t openedFiles;
 // static int rB;
 /* BufferID _recBuf[16] ={nullptr};*/
 //	BufferID _recBuf =nullptr;
@@ -385,12 +362,7 @@ private:
 	ButtonDlg _restoreButton;
 
 	bool _isFileOpening = false, _isAdministrator = false,
-	_foldAllState = fold_uncollapse,
-	_foldCurState = fold_uncollapse;
-	// _foldCurrecState = fold_uncollapse;
-
-	// Scintilla hotspot
-	bool _linkTriggered = true, _isFolding = false;
+	_linkTriggered = true, _isFolding = false;	// Scintilla hotspot
 
 	ScintillaCtrls _scintillaCtrls4Plugins;
 
@@ -460,8 +432,6 @@ private:
 
 	// void enableMenu(int cmdID, bool doEnable) const;
 	void enableCommand(int cmdID, bool doEnable, int which) const;
-	void checkClipboard();
-	void checkUndoState();
 	void checkDocState();
 	void checkMacroState();
 	void checkSyncState();
@@ -493,45 +463,41 @@ private:
 
 	void addHotSpot();
 
-	void bookmarkAdd(int lineno) const	{
+	void bookmarkAdd(int ln) const	{
 
-		if (lineno == -1)
-			lineno = int(_pEditView->getCurrentLineNumber());
-		if (!bookmarkPresent(lineno))
-			_pEditView->execute(SCI_MARKERADD, lineno, MARK_BOOKMARK);
+		if (ln == -1)
+			ln = int(_pEditView->getCurrentLineNumber());
+		if (!bookmarkPresent(ln))
+			_pEditView->f(SCI_MARKERADD, ln, MARK_BOOKMARK);
 	}
 
-	inline void bookmarkDelete(int lineno) const	{
+	inline bool bookmarkPresent(int ln) const	{
 
-		if (lineno == -1)
-			lineno = int(_pEditView->getCurrentLineNumber());
-		while (bookmarkPresent(lineno))
-			_pEditView->execute(SCI_MARKERDELETE, lineno, MARK_BOOKMARK);
-	}
-
-	bool bookmarkPresent(int lineno) const	{
-
-		if (lineno == -1)
-			lineno = int(_pEditView->getCurrentLineNumber());
-		LRESULT state = _pEditView->execute(SCI_MARKERGET, lineno);
+		LRESULT state = _pEditView->f(SCI_MARKERGET, ln);
 		return ((state & (1 << MARK_BOOKMARK)) != 0);
 	}
 
-	void bookmarkToggle(int lineno) const	{
+	inline void bookmarkDelete(int ln) const	{
 
-		if (lineno == -1)
-			lineno = int(_pEditView->getCurrentLineNumber());
+		while (bookmarkPresent(ln))
+			_pEditView->f(SCI_MARKERDELETE, ln, MARK_BOOKMARK);
+	}
 
-		if (bookmarkPresent(lineno))
-			bookmarkDelete(lineno);
+	inline void bookmarkToggle() const	{
+		bookmarkToggle(int(_pEditView->getCurrentLineNumber()));	}
+	
+	inline void bookmarkToggle(int ln) const	{
+
+		if (bookmarkPresent(ln))
+			bookmarkDelete(ln);
 		else
-			bookmarkAdd(lineno);
+			bookmarkAdd(ln);
 	}
 
 	void bookmarkNext(bool forwardScan);
 	void bookmarkClearAll() const	{
 
-		_pEditView->execute(SCI_MARKERDELETEALL, MARK_BOOKMARK);
+		_pEditView->f(SCI_MARKERDELETEALL, MARK_BOOKMARK);
 	}
 
 	void copyMarkedLines();
@@ -542,13 +508,15 @@ private:
 	void inverseMarks();
 	void replaceMarkedline(int ln, const TCHAR *str);
 	generic_string getMarkedLine(int ln);
-	bool findMatchingBracePos(int & braceAtCaret, int & braceOpposite);
+	void findMatchingBracePos(int & braceAtCaret, int & braceOpposite);
+	bool selectBracePairContainCaret();
 	bool braceMatch();
 
 	void activateNextDoc(bool direction);
 	void activateDoc(size_t pos);
 
 	void updateStatusBar();
+	inline void updateStatusBar(bool);
 	size_t getSelectedCharNumber(UniMode);
 	size_t getCurrentDocCharCount(UniMode u);
 	size_t getSelectedAreas();
@@ -603,21 +571,6 @@ private:
 	void launchDocMap();
 	void launchFunctionList();
 	void launchFileBrowser(const std::vector<generic_string> & folders, bool fromScratch = false);
-	void showAllQuotes() const;
-	// static DWORD WINAPI threadTextPlayer(void *text2display);
-	static DWORD WINAPI threadTextTroller(void *params);
-	static int getRandomAction(int ranNum);
-	static bool deleteBack(ScintillaEditView *pCurrentView, BufferID targetBufID);
-	static bool deleteForward(ScintillaEditView *pCurrentView, BufferID targetBufID);
-	static bool selectBack(ScintillaEditView *pCurrentView, BufferID targetBufID);
-
-	static int getRandomNumber(int rangeMax = -1)	{
-
-		int randomNumber = rand();
-		if (rangeMax == -1)
-			return randomNumber;
-		return (rand() % rangeMax);
-	}
 
 	static DWORD WINAPI backupDocument(void *params);
 
@@ -628,8 +581,43 @@ private:
 		Buffer *_buffer = nullptr;
 		HWND _nppHandle = nullptr;
 	};
-
 	void monitoringStartOrStopAndUpdateUI(Buffer* pBuf, bool isStarting);
+	int beginSelectPos = -1;
+	bool offsetSB = 0;
 };
 
+void Notepad_plus::updateStatusBar(bool full)	{
+	size_t j = 0;
+	if (_mainWindowStatus & WindowSubActive)
+		for (size_t i = 0; i < _subDocTab.nbItem() ; ++i)
+			if (_mainDocTab.getIndexByBuffer(MainFileManager.getBufferByID(_subDocTab.getBufferByIndex(i))) == -1)	//skip clone, count only one same doc in either view
+				++j;
+	generic_string s = std::to_wstring(_mainDocTab.nbItem() + j);
+	s += L" ";
+	s += _pEditView->getCurrentBuffer()->getFileName();
+	_statusBar.setText(STATUSBAR_DOC_NAME,s.c_str());
+	if (full) updateStatusBar();
+
+}
+
+void Notepad_plus::checkUndoState()	{
+enableCommand(IDM_EDIT_UNDO, _pEditView->f(SCI_CANUNDO) != 0, MENU | TOOLBAR);
+enableCommand(IDM_EDIT_REDO, _pEditView->f(SCI_CANREDO) != 0, MENU | TOOLBAR);
+}
+void Notepad_plus::checkClipboard()	{
+	bool hasSelection = (_pEditView->f(SCI_GETSELECTIONSTART) != _pEditView->f(SCI_GETSELECTIONEND));
+	enableCommand(IDM_EDIT_CUT, hasSelection, MENU | TOOLBAR);
+	enableCommand(IDM_EDIT_COPY, hasSelection, MENU | TOOLBAR);
+
+	enableCommand(IDM_EDIT_PASTE, _pEditView->f(SCI_CANPASTE), MENU | TOOLBAR);
+	// enableCommand(IDM_EDIT_DELETE, hasSelection, MENU | TOOLBAR);
+	// enableCommand(IDM_EDIT_UPPERCASE, hasSelection, MENU);
+	// enableCommand(IDM_EDIT_LOWERCASE, hasSelection, MENU);
+	// enableCommand(IDM_EDIT_PROPERCASE_FORCE, hasSelection, MENU);
+	// enableCommand(IDM_EDIT_PROPERCASE_BLEND, hasSelection, MENU);
+	// enableCommand(IDM_EDIT_SENTENCECASE_FORCE, hasSelection, MENU);
+	// enableCommand(IDM_EDIT_SENTENCECASE_BLEND, hasSelection, MENU);
+	// enableCommand(IDM_EDIT_INVERTCASE, hasSelection, MENU);
+	// enableCommand(IDM_EDIT_RANDOMCASE, hasSelection, MENU);
+}
 

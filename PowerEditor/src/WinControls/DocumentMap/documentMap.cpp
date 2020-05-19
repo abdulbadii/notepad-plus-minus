@@ -34,8 +34,8 @@ void DocumentMap::reloadMap()	{
 
 	if (_pMapView && _ppEditView)	{
 
-		Document currentDoc = (*_ppEditView)->execute(SCI_GETDOCPOINTER);
-		_pMapView->execute(SCI_SETDOCPOINTER, 0, static_cast<LPARAM>(currentDoc));
+		Document currentDoc = (*_ppEditView)->f(SCI_GETDOCPOINTER);
+		_pMapView->f(SCI_SETDOCPOINTER, 0, static_cast<LPARAM>(currentDoc));
 
 		//
 		// sync with the current document
@@ -63,7 +63,7 @@ void DocumentMap::showInMapTemporarily(Buffer *buf2show, ScintillaEditView *from
 
 	if (_pMapView && fromEditView)	{
 
-		_pMapView->execute(SCI_SETDOCPOINTER, 0, static_cast<LPARAM>(buf2show->getDocument()));
+		_pMapView->f(SCI_SETDOCPOINTER, 0, static_cast<LPARAM>(buf2show->getDocument()));
 		_pMapView->setCurrentBuffer(buf2show);
 
 		// folding
@@ -93,7 +93,7 @@ bool DocumentMap::needToRecomputeWith(const ScintillaEditView *editView)	{
 
 	const ScintillaEditView *pEditView = editView ? editView : *_ppEditView;
 
-	auto currentZoom = pEditView->execute(SCI_GETZOOM);
+	auto currentZoom = pEditView->f(SCI_GETZOOM);
 	if (_displayZoom != currentZoom)
 		return true;
 
@@ -178,7 +178,7 @@ void DocumentMap::wrapMap(const ScintillaEditView *editView)	{
 
 		// update the wrap needed data
 		_displayWidth = editZoneWidth;
-		_displayZoom = static_cast<int32_t>(pEditView->execute(SCI_GETZOOM));
+		_displayZoom = static_cast<int32_t>(pEditView->f(SCI_GETZOOM));
 		double zr = zoomRatio[_displayZoom + 10];
 
 		// compute doc map width: dzw/ezw = 1/zoomRatio
@@ -188,7 +188,7 @@ void DocumentMap::wrapMap(const ScintillaEditView *editView)	{
 		_pMapView->wrap(true);
 
 		// sync wrapping indent mode
-		_pMapView->execute(SCI_SETWRAPINDENTMODE, pEditView->execute(SCI_GETWRAPINDENTMODE));
+		_pMapView->f(SCI_SETWRAPINDENTMODE, pEditView->f(SCI_GETWRAPINDENTMODE));
 
 	}
 }
@@ -203,7 +203,7 @@ int DocumentMap::getEditorTextZoneWidth(const ScintillaEditView *editView)	{
 	int marginWidths = 0;
 	for (int m = 0; m < 4; ++m)	{
 
-		marginWidths += static_cast<int32_t>(pEditView->execute(SCI_GETMARGINWIDTHN, m));
+		marginWidths += static_cast<int32_t>(pEditView->f(SCI_GETMARGINWIDTHN, m));
 	}
 	return editorRect.right - editorRect.left - marginWidths;
 }
@@ -213,16 +213,16 @@ void DocumentMap::scrollMap()	{
 	if (_pMapView && _ppEditView)	{
 
 		// Visible document line for the code view (but not displayed line)
-		auto firstVisibleDisplayLine = (*_ppEditView)->execute(SCI_GETFIRSTVISIBLELINE);
-		const auto firstVisibleDocLine = (*_ppEditView)->execute(SCI_DOCLINEFROMVISIBLE, firstVisibleDisplayLine);
-		const auto nbLine = (*_ppEditView)->execute(SCI_LINESONSCREEN, firstVisibleDisplayLine);
-		const auto lastVisibleDocLine = (*_ppEditView)->execute(SCI_DOCLINEFROMVISIBLE, firstVisibleDisplayLine + nbLine);
+		auto firstVisibleDisplayLine = (*_ppEditView)->f(SCI_GETFIRSTVISIBLELINE);
+		const auto firstVisibleDocLine = (*_ppEditView)->f(SCI_DOCLINEFROMVISIBLE, firstVisibleDisplayLine);
+		const auto nbLine = (*_ppEditView)->f(SCI_LINESONSCREEN, firstVisibleDisplayLine);
+		const auto lastVisibleDocLine = (*_ppEditView)->f(SCI_DOCLINEFROMVISIBLE, firstVisibleDisplayLine + nbLine);
 
 		// Visible document line for the map view
-		auto firstVisibleDisplayLineMap = _pMapView->execute(SCI_GETFIRSTVISIBLELINE);
-		auto firstVisibleDocLineMap = _pMapView->execute(SCI_DOCLINEFROMVISIBLE, firstVisibleDisplayLineMap);
-		auto nbLineMap = _pMapView->execute(SCI_LINESONSCREEN, firstVisibleDocLineMap);
-		auto lastVisibleDocLineMap = _pMapView->execute(SCI_DOCLINEFROMVISIBLE, firstVisibleDisplayLineMap + nbLineMap);
+		auto firstVisibleDisplayLineMap = _pMapView->f(SCI_GETFIRSTVISIBLELINE);
+		auto firstVisibleDocLineMap = _pMapView->f(SCI_DOCLINEFROMVISIBLE, firstVisibleDisplayLineMap);
+		auto nbLineMap = _pMapView->f(SCI_LINESONSCREEN, firstVisibleDocLineMap);
+		auto lastVisibleDocLineMap = _pMapView->f(SCI_DOCLINEFROMVISIBLE, firstVisibleDisplayLineMap + nbLineMap);
 
 		// If part of editor view is out of map, then scroll map
 		LRESULT mapLineToScroll = 0;
@@ -233,7 +233,7 @@ void DocumentMap::scrollMap()	{
 		//
 		// Scroll to make whole view zone visible
 		//
-		_pMapView->execute(SCI_GOTOLINE, mapLineToScroll);
+		_pMapView->f(SCI_GOTOLINE, mapLineToScroll);
 
 		// Get the editor's higher/lower Y, then compute the map's higher/lower Y
 		LRESULT higherY = 0;
@@ -241,26 +241,26 @@ void DocumentMap::scrollMap()	{
 		LRESULT higherPos = -1 ; // -1 => not (*_ppEditView)->isWrap()
 		if (not (*_ppEditView)->isWrap())	{
 
-			higherPos = _pMapView->execute(SCI_POSITIONFROMLINE, firstVisibleDocLine);
-			auto lowerPos = _pMapView->execute(SCI_POSITIONFROMLINE, lastVisibleDocLine);
-			higherY = _pMapView->execute(SCI_POINTYFROMPOSITION, 0, higherPos);
-			lowerY = _pMapView->execute(SCI_POINTYFROMPOSITION, 0, lowerPos);
+			higherPos = _pMapView->f(SCI_POSITIONFROMLINE, firstVisibleDocLine);
+			auto lowerPos = _pMapView->f(SCI_POSITIONFROMLINE, lastVisibleDocLine);
+			higherY = _pMapView->f(SCI_POINTYFROMPOSITION, 0, higherPos);
+			lowerY = _pMapView->f(SCI_POINTYFROMPOSITION, 0, lowerPos);
 			if (!lowerY)	{
 
-				auto lineHeight = _pMapView->execute(SCI_TEXTHEIGHT, firstVisibleDocLine);
+				auto lineHeight = _pMapView->f(SCI_TEXTHEIGHT, firstVisibleDocLine);
 				lowerY = nbLine * lineHeight + higherY;
 			}
 		}
 		else	{
 
 			// Get the position of the 1st showing char from the original edit view
-			higherPos = (*_ppEditView)->execute(SCI_POSITIONFROMPOINT, 0, 0);
+			higherPos = (*_ppEditView)->f(SCI_POSITIONFROMPOINT, 0, 0);
 
 			// Get the map higher Y point from the position in map
-			higherY = _pMapView->execute(SCI_POINTYFROMPOSITION, 0, static_cast<int32_t>(higherPos));
+			higherY = _pMapView->f(SCI_POINTYFROMPOSITION, 0, static_cast<int32_t>(higherPos));
 
 			// Get line height
-			auto lineHeight = _pMapView->execute(SCI_TEXTHEIGHT, firstVisibleDocLine);
+			auto lineHeight = _pMapView->f(SCI_TEXTHEIGHT, firstVisibleDocLine);
 
 			// Get the map lower Y point
 			lowerY = nbLine * lineHeight + higherY;
@@ -278,10 +278,10 @@ void DocumentMap::scrollMapWith(const MapPosition & mapPos)	{
 	if (_pMapView)	{
 
 		// Visible document line for the map view
-		auto firstVisibleDisplayLineMap = _pMapView->execute(SCI_GETFIRSTVISIBLELINE);
-		auto firstVisibleDocLineMap = _pMapView->execute(SCI_DOCLINEFROMVISIBLE, firstVisibleDisplayLineMap);
-		auto nbLineMap = _pMapView->execute(SCI_LINESONSCREEN, firstVisibleDocLineMap);
-		auto lastVisibleDocLineMap = _pMapView->execute(SCI_DOCLINEFROMVISIBLE, firstVisibleDisplayLineMap + nbLineMap);
+		auto firstVisibleDisplayLineMap = _pMapView->f(SCI_GETFIRSTVISIBLELINE);
+		auto firstVisibleDocLineMap = _pMapView->f(SCI_DOCLINEFROMVISIBLE, firstVisibleDisplayLineMap);
+		auto nbLineMap = _pMapView->f(SCI_LINESONSCREEN, firstVisibleDocLineMap);
+		auto lastVisibleDocLineMap = _pMapView->f(SCI_DOCLINEFROMVISIBLE, firstVisibleDisplayLineMap + nbLineMap);
 
 		// If part of editor view is out of map, then scroll map
 		LRESULT mapLineToScroll = 0;
@@ -292,27 +292,27 @@ void DocumentMap::scrollMapWith(const MapPosition & mapPos)	{
 		//
 		// Scroll to make whole view zone visible
 		//
-		_pMapView->execute(SCI_GOTOLINE, mapLineToScroll);
+		_pMapView->f(SCI_GOTOLINE, mapLineToScroll);
 
 		// Get the editor's higher/lower Y, then compute the map's higher/lower Y
 		LRESULT higherY = 0;
 		LRESULT lowerY = 0;
 		if (not mapPos._isWrap)	{
 
-			auto higherPos = _pMapView->execute(SCI_POSITIONFROMLINE, mapPos._firstVisibleDocLine);
-			auto lowerPos = _pMapView->execute(SCI_POSITIONFROMLINE, mapPos._lastVisibleDocLine);
-			higherY = _pMapView->execute(SCI_POINTYFROMPOSITION, 0, higherPos);
-			lowerY = _pMapView->execute(SCI_POINTYFROMPOSITION, 0, lowerPos);
+			auto higherPos = _pMapView->f(SCI_POSITIONFROMLINE, mapPos._firstVisibleDocLine);
+			auto lowerPos = _pMapView->f(SCI_POSITIONFROMLINE, mapPos._lastVisibleDocLine);
+			higherY = _pMapView->f(SCI_POINTYFROMPOSITION, 0, higherPos);
+			lowerY = _pMapView->f(SCI_POINTYFROMPOSITION, 0, lowerPos);
 			if (!lowerY)	{
 
-				auto lineHeight = _pMapView->execute(SCI_TEXTHEIGHT, mapPos._firstVisibleDocLine);
+				auto lineHeight = _pMapView->f(SCI_TEXTHEIGHT, mapPos._firstVisibleDocLine);
 				lowerY = mapPos._nbLine * lineHeight + mapPos._firstVisibleDocLine;
 			}
 		}
 		else	{
 
-			higherY = _pMapView->execute(SCI_POINTYFROMPOSITION, 0, static_cast<int32_t>(mapPos._higherPos));
-			auto lineHeight = _pMapView->execute(SCI_TEXTHEIGHT, mapPos._firstVisibleDocLine);
+			higherY = _pMapView->f(SCI_POINTYFROMPOSITION, 0, static_cast<int32_t>(mapPos._higherPos));
+			auto lineHeight = _pMapView->f(SCI_TEXTHEIGHT, mapPos._firstVisibleDocLine);
 			lowerY = mapPos._nbLine * lineHeight + higherY;
 		}
 
@@ -337,25 +337,20 @@ void DocumentMap::fold(size_t line, bool foldOrNot)	{
 	_pMapView->fold(line, foldOrNot);
 }
 
-void DocumentMap::foldAll(bool mode)	{
-
-	_pMapView->foldAll(mode);
-}
-
 void DocumentMap::scrollMap(bool direction, moveMode whichMode)	{
 
 	// Visible line for the code view
-	auto firstVisibleDisplayLine = (*_ppEditView)->execute(SCI_GETFIRSTVISIBLELINE);
-	auto nbLine = (*_ppEditView)->execute(SCI_LINESONSCREEN, firstVisibleDisplayLine);
+	auto firstVisibleDisplayLine = (*_ppEditView)->f(SCI_GETFIRSTVISIBLELINE);
+	auto nbLine = (*_ppEditView)->f(SCI_LINESONSCREEN, firstVisibleDisplayLine);
 	auto nbLine2go = (whichMode == perLine ? 1 : nbLine);
-	(*_ppEditView)->execute(SCI_LINESCROLL, 0, (direction == moveDown) ? nbLine2go : -nbLine2go);
+	(*_ppEditView)->f(SCI_LINESCROLL, 0, (direction == moveDown) ? nbLine2go : -nbLine2go);
 
 	scrollMap();
 }
 
 void DocumentMap::redraw(bool) const
 {
-	_pMapView->execute(SCI_COLOURISE, 0, -1);
+	_pMapView->f(SCI_COLOURISE, 0, -1);
 }
 
 INT_PTR CALLBACK DocumentMap::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)	{
@@ -366,9 +361,9 @@ INT_PTR CALLBACK DocumentMap::run_dlgProc(UINT message, WPARAM wParam, LPARAM lP
 
 			HWND hwndScintilla = reinterpret_cast<HWND>(::SendMessage(_hParent, NPPM_CREATESCINTILLAHANDLE, 0, reinterpret_cast<LPARAM>(_hSelf)));
 			_pMapView = reinterpret_cast<ScintillaEditView *>(::SendMessage(_hParent, NPPM_INTERNAL_GETSCINTEDTVIEW, 0, reinterpret_cast<LPARAM>(hwndScintilla)));
-			_pMapView->execute(SCI_SETZOOM, static_cast<WPARAM>(-10), 0);
-			_pMapView->execute(SCI_SETVSCROLLBAR, FALSE, 0);
-			_pMapView->execute(SCI_SETHSCROLLBAR, FALSE, 0);
+			_pMapView->f(SCI_SETZOOM, static_cast<WPARAM>(-10), 0);
+			_pMapView->f(SCI_SETVSCROLLBAR, FALSE, 0);
+			_pMapView->f(SCI_SETHSCROLLBAR, FALSE, 0);
 
 			_pMapView->showIndentGuideLine(false);
 			_pMapView->display();
@@ -470,10 +465,10 @@ INT_PTR CALLBACK DocumentMap::run_dlgProc(UINT message, WPARAM wParam, LPARAM lP
 
 			int newPosY = HIWORD(lParam);
 			int currentCenterPosY = _vzDlg.getCurrentCenterPosY();
-			int pixelPerLine = static_cast<int32_t>(_pMapView->execute(SCI_TEXTHEIGHT, 0));
+			int pixelPerLine = static_cast<int32_t>(_pMapView->f(SCI_TEXTHEIGHT, 0));
 			int jumpDistance = newPosY - currentCenterPosY;
 			int nbLine2jump = jumpDistance/pixelPerLine;
-			(*_ppEditView)->execute(SCI_LINESCROLL, 0, nbLine2jump);
+			(*_ppEditView)->f(SCI_LINESCROLL, 0, nbLine2jump);
 
 			scrollMap();
 		}

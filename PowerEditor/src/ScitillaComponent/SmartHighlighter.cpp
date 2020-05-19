@@ -40,12 +40,12 @@ SmartHighlighter::SmartHighlighter(FindReplaceDlg * pFRDlg)
 void SmartHighlighter::highlightViewWithWord(ScintillaEditView * pHighlightView, const generic_string & word2Hilite)	{
 
 	// save target locations for other search functions
-	auto originalStartPos = pHighlightView->execute(SCI_GETTARGETSTART);
-	auto originalEndPos = pHighlightView->execute(SCI_GETTARGETEND);
+	auto originalStartPos = pHighlightView->f(SCI_GETTARGETSTART);
+	auto originalEndPos = pHighlightView->f(SCI_GETTARGETEND);
 
 	// Get the range of text visible and highlight everything in it
-	auto firstLine = static_cast<int>(pHighlightView->execute(SCI_GETFIRSTVISIBLELINE));
-	auto nbLineOnScreen = pHighlightView->execute(SCI_LINESONSCREEN);
+	auto firstLine = static_cast<int>(pHighlightView->f(SCI_GETFIRSTVISIBLELINE));
+	auto nbLineOnScreen = pHighlightView->f(SCI_LINESONSCREEN);
 	auto nbLines = min(nbLineOnScreen, MAXLINEHIGHLIGHT) + 1;
 	auto lastLine = firstLine + nbLines;
 	int startPos = 0;
@@ -79,12 +79,12 @@ void SmartHighlighter::highlightViewWithWord(ScintillaEditView * pHighlightView,
 
 	for (; currentLine < lastLine; ++currentLine)	{
 
-		int docLine = static_cast<int>(pHighlightView->execute(SCI_DOCLINEFROMVISIBLE, currentLine));
+		int docLine = static_cast<int>(pHighlightView->f(SCI_DOCLINEFROMVISIBLE, currentLine));
 		if (docLine == prevDocLineChecked)
 			continue;	//still on same line (wordwrap)
 		prevDocLineChecked = docLine;
-		startPos = static_cast<int>(pHighlightView->execute(SCI_POSITIONFROMLINE, docLine));
-		endPos = static_cast<int>(pHighlightView->execute(SCI_POSITIONFROMLINE, docLine + 1));
+		startPos = static_cast<int>(pHighlightView->f(SCI_POSITIONFROMLINE, docLine));
+		endPos = static_cast<int>(pHighlightView->f(SCI_POSITIONFROMLINE, docLine + 1));
 		
 		frInfo._startRange = startPos;
 		frInfo._endRange = endPos;
@@ -101,7 +101,7 @@ void SmartHighlighter::highlightViewWithWord(ScintillaEditView * pHighlightView,
 	}
 
 	// restore the original targets to avoid conflicts with the search/replace functions
-	pHighlightView->execute(SCI_SETTARGETRANGE, originalStartPos, originalEndPos);
+	pHighlightView->f(SCI_SETTARGETRANGE, originalStartPos, originalEndPos);
 }
 
 void SmartHighlighter::highlightView(ScintillaEditView * pHighlightView, ScintillaEditView * unfocusView)	{
@@ -110,7 +110,7 @@ void SmartHighlighter::highlightView(ScintillaEditView * pHighlightView, Scintil
 	pHighlightView->clearIndicator(SCE_UNIVERSAL_FOUND_STYLE_SMART);
 
 	// If nothing selected or smart highlighting disabled, don't mark anything
-	if ((!nGUI._enableSmartHilite) || (pHighlightView->execute(SCI_GETSELECTIONEMPTY) == 1))	{
+	if ((!nGUI._enableSmartHilite) || (pHighlightView->f(SCI_GETSELECTIONEMPTY) == 1))	{
 
 		if (nGUI._smartHiliteOnAnotherView && unfocusView && unfocusView->isVisible()
 			&& unfocusView->getCurrentBufferID() != pHighlightView->getCurrentBufferID())
@@ -120,7 +120,7 @@ void SmartHighlighter::highlightView(ScintillaEditView * pHighlightView, Scintil
 		return;
 	}
 
-	auto curPos = pHighlightView->execute(SCI_GETCURRENTPOS);
+	auto curPos = pHighlightView->f(SCI_GETCURRENTPOS);
 	auto range = pHighlightView->getSelection();
 	int textlen = range.cpMax - range.cpMin + 1;
 
@@ -142,16 +142,16 @@ void SmartHighlighter::highlightView(ScintillaEditView * pHighlightView, Scintil
 	// Make sure the "word" positions match the current selection
 	if (isWordOnly)	{
 
-		auto wordStart = pHighlightView->execute(SCI_WORDSTARTPOSITION, curPos, true);
-		auto wordEnd = pHighlightView->execute(SCI_WORDENDPOSITION, wordStart, true);
+		auto wordStart = pHighlightView->f(SCI_WORDSTARTPOSITION, curPos, true);
+		auto wordEnd = pHighlightView->f(SCI_WORDENDPOSITION, wordStart, true);
 
 		if (wordStart == wordEnd || wordStart != range.cpMin || wordEnd != range.cpMax)
 			return;
 	}
 	else	{
 
-		auto line = pHighlightView->execute(SCI_LINEFROMPOSITION, curPos);
-		auto lineLength = pHighlightView->execute(SCI_LINELENGTH, line);
+		auto line = pHighlightView->f(SCI_LINEFROMPOSITION, curPos);
+		auto lineLength = pHighlightView->f(SCI_LINELENGTH, line);
 		if (textlen > lineLength)
 			return;
 	}
@@ -159,7 +159,7 @@ void SmartHighlighter::highlightView(ScintillaEditView * pHighlightView, Scintil
 	char * text2Find = new char[textlen];
 	pHighlightView->getSelectedText(text2Find, textlen, false); //do not expand selection (false)
 
-	UINT cp = static_cast<UINT>(pHighlightView->execute(SCI_GETCODEPAGE));
+	UINT cp = static_cast<UINT>(pHighlightView->f(SCI_GETCODEPAGE));
 	const TCHAR * text2FindW = wmc.char2wchar(text2Find, cp);
 
 	highlightViewWithWord(pHighlightView, text2FindW);

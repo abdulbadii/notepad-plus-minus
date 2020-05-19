@@ -32,11 +32,9 @@
 #include <iso646.h>
 #include <cstdint>
 
-#define WHITESPACE L" \n\r\t\f\v"
-const bool dirUp = true;
-const bool dirDown = false;
+constexpr size_t NB_SB = 9;
+const bool dirUp = true, dirDown = false;
 
-#define NPP_CP_WIN_1252           1252
 #define NPP_CP_DOS_437            437
 #define NPP_CP_BIG5               950
 
@@ -65,15 +63,44 @@ const bool dirDown = false;
 #define COPYDATA_FILENAMES COPYDATA_FILENAMESW
 #define NPP_INTERNAL_FUCTION_STR L"Notepad++::InternalFunction"
 
-typedef std::basic_string<TCHAR> generic_string;
-typedef std::basic_stringstream<TCHAR> generic_stringstream;
+using generic_string = std::basic_string<TCHAR>;
+using generic_stringstream = std::basic_stringstream<TCHAR>;
+
+
+template<class T>
+inline void rightPad(std::basic_string<T>& s, typename std::basic_string<T>::size_type n, T c) {
+   if (n > s.length())
+      s.append(n - s.length(), c);
+}
+template<class T>
+inline void leftPad(std::basic_string<T>& s, typename std::basic_string<T>::size_type n, T c) {
+   if (n > s.length())
+      s.insert(s.begin(), n - s.length(), c);
+}
+
+inline void printInt(int int2print)	{
+
+	TCHAR str[32];
+	wsprintf(str, L"%d", int2print);
+	::MessageBox(NULL, str, L"", MB_OK);
+}
+
+inline void printStr(const TCHAR *str2print)	{
+
+	::MessageBox(NULL, str2print, L"", MB_OK);
+}
+
+inline generic_string commafyInt(size_t n)	{
+
+	generic_stringstream ss;
+	ss.imbue(std::locale(""));
+	ss << n;
+	return ss.str();
+}
+
 
 generic_string folderBrowser(HWND parent, const generic_string & title = L"", int outputCtrlID = 0, const TCHAR *defaultStr = NULL);
 generic_string getFolderName(HWND parent, const TCHAR *defaultDir = NULL);
-
-void printInt(int int2print);
-void printStr(const TCHAR *str2print);
-generic_string commafyInt(size_t n);
 
 void writeLog(const TCHAR *logFileName, const char *log2write);
 int filter(unsigned int code, struct _EXCEPTION_POINTERS *ep);

@@ -143,16 +143,39 @@ INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /
 			_debugInfoStr += nppFullPath;
 			_debugInfoStr += L"\r\n";
 
+			//Size
+			HANDLE hItself = ::CreateFile(
+			reinterpret_cast<LPCWSTR>(nppFullPath),
+			GENERIC_READ,
+			0,
+			NULL,
+			OPEN_EXISTING,
+			FILE_ATTRIBUTE_NORMAL,
+			NULL);
+			
+			if (hItself != INVALID_HANDLE_VALUE)	{
+				LARGE_INTEGER size;
+				if (!GetFileSizeEx(hItself, &size))	{
+					_debugInfoStr += L"Size can't be known\r\n ";
+					CloseHandle(hItself);
+				}
+				else{
+				_debugInfoStr += L"Size : ";
+				_debugInfoStr += commafyInt(size.QuadPart);
+				_debugInfoStr += L" bytes\r\n";
+				CloseHandle(hItself);
+			}
+			}
+
 			// Administrator mode
-			_debugInfoStr += L"Admin mode : ";
-			_debugInfoStr += (_isAdmin ? L"ON" : L"OFF");
+			_debugInfoStr += L"As Administrator : ";
+			_debugInfoStr += (_isAdmin ? L"Yes" : L"No");
 			_debugInfoStr += L"\r\n";
 
 			// local conf
-			_debugInfoStr += L"Local Conf mode : ";
+			_debugInfoStr += L"XML Configuration Files: On ";
 			bool doLocalConf = param.isLocal();
-			_debugInfoStr += (doLocalConf ? L"ON" : L"OFF");
-			_debugInfoStr += L"\r\n";
+			_debugInfoStr += (doLocalConf ? L"Installation Directory\r\n" : L"%APPDATA%\\Notepad++\r\n");
 
 			// OS information
 			HKEY hKey;
@@ -239,10 +262,10 @@ INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /
 
 			// Plugins
 			_debugInfoStr += L"Plugins : ";
-			_debugInfoStr += !_loadedPlugins.length() ? L"none": _loadedPlugins;
+			_debugInfoStr += _loadedPlugins.length() ? _loadedPlugins : L"none";
 			_debugInfoStr += L"\r\n";
 
-			::SetDlgItemText(_hSelf, IDC_DEBUGINFO_EDIT, _debugInfoStr.c_str());
+			::SendMessage(::GetDlgItem(_hSelf, IDC_DEBUGINFO_EDIT), WM_SETTEXT, 0, reinterpret_cast<LPARAM>(_debugInfoStr.c_str()));
 
 			_copyToClipboardLink.init(_hInst, _hSelf);
 			_copyToClipboardLink.create(::GetDlgItem(_hSelf, IDC_DEBUGINFO_COPYLINK), IDC_DEBUGINFO_COPYLINK);
@@ -263,9 +286,6 @@ INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /
 				case IDC_DEBUGINFO_COPYLINK:	{
 
 					if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)	{
-
-						// Visual effect
-						::SendDlgItemMessage(_hSelf, IDC_DEBUGINFO_EDIT, EM_SETSEL, 0, _debugInfoStr.length() - 1);
 
 						// Copy to clipboard
 						str2Clipboard(_debugInfoStr, _hSelf);

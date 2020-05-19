@@ -440,13 +440,13 @@ bool Notepad_plus::doReload(BufferID id, bool alert)	{
 	if (mainVisisble)	{
 
 		_mainEditView.saveCurrentPos();
-		_mainEditView.execute(SCI_SETDOCPOINTER, 0, 0);
+		_mainEditView.f(SCI_SETDOCPOINTER, 0, 0);
 	}
 
 	if (subVisisble)	{
 
 		_subEditView.saveCurrentPos();
-		_subEditView.execute(SCI_SETDOCPOINTER, 0, 0);
+		_subEditView.f(SCI_SETDOCPOINTER, 0, 0);
 	}
 
 	if (!mainVisisble && !subVisisble)	{
@@ -458,13 +458,13 @@ bool Notepad_plus::doReload(BufferID id, bool alert)	{
 	Buffer * pBuf = MainFileManager.getBufferByID(id);
 	if (mainVisisble)	{
 
-		_mainEditView.execute(SCI_SETDOCPOINTER, 0, pBuf->getDocument());
+		_mainEditView.f(SCI_SETDOCPOINTER, 0, pBuf->getDocument());
 		_mainEditView.restoreCurrentPosPreStep();
 	}
 
 	if (subVisisble)	{
 
-		_subEditView.execute(SCI_SETDOCPOINTER, 0, pBuf->getDocument());
+		_subEditView.f(SCI_SETDOCPOINTER, 0, pBuf->getDocument());
 		_subEditView.restoreCurrentPosPreStep();
 	}
 
@@ -697,7 +697,8 @@ void Notepad_plus::doClose(BufferID id, int whichOne, bool doDeleteBackup){
 	command(IDM_VIEW_REFRESHTABAR);
 	// the user closed the last open tab
 	if ((nppGUI._tabStatus & TAB_QUITONEMPTY) && numInitialOpenBuffers == 1 && isEmpty() && !_isAttemptingCloseOnQuit)		command(IDM_FILE_EXIT);
-	return;
+	
+	updateStatusBar(0);
 }
 
 generic_string Notepad_plus::exts2Filters(const generic_string& exts) const
@@ -829,8 +830,7 @@ bool Notepad_plus::fileClose(BufferID id, int curView)	{
 
 	if ((buf->docLength() || !buf->isUntitled()) && buf->isDirty())	{
 		int res = doSaveOrNot(fileNamePath);
-		if (res == IDCANCEL)		return false;	//cancel aborts closing
-		else if (res == IDYES && !fileSave(id))	return false; // the cancel button of savedialog is pressed, aborts closing
+		if (res == IDCANCEL || res == IDYES && !fileSave(id))		return false;	//cancel aborts closing or if the cancel button of savedialog is pressed, aborts closing
 	}
 	
 	doClose(bufferID, curView==-1? currentView(): curView, nppGUI.isSnapshotMode());
@@ -1860,13 +1860,13 @@ bool Notepad_plus::loadSession(Session & session, bool isSnapshotMode)	{
 
 			//Force in the document so we can add the markers
 			//Don't use default methods because of performance
-			Document prevDoc = _mainEditView.execute(SCI_GETDOCPOINTER);
-			_mainEditView.execute(SCI_SETDOCPOINTER, 0, buf->getDocument());
+			Document prevDoc = _mainEditView.f(SCI_GETDOCPOINTER);
+			_mainEditView.f(SCI_SETDOCPOINTER, 0, buf->getDocument());
 			for (size_t j = 0, len = session._mainViewFiles[i]._marks.size(); j < len ; ++j)	{
 
-				_mainEditView.execute(SCI_MARKERADD, session._mainViewFiles[i]._marks[j], MARK_BOOKMARK);
+				_mainEditView.f(SCI_MARKERADD, session._mainViewFiles[i]._marks[j], MARK_BOOKMARK);
 			}
-			_mainEditView.execute(SCI_SETDOCPOINTER, 0, prevDoc);
+			_mainEditView.f(SCI_SETDOCPOINTER, 0, prevDoc);
 			++i;
 		}
 		else	{
@@ -1883,12 +1883,11 @@ bool Notepad_plus::loadSession(Session & session, bool isSnapshotMode)	{
 		_isFolding = false;
 	}
 
-
-	showView(SUB_VIEW);
-	switchEditViewTo(SUB_VIEW);	//open files in sub
 	int subIndex2Update = -1;
+	if (session.nbSubFiles())	{
 
-	for (size_t k = 0 ; k < session.nbSubFiles() ; )	{
+	showView(SUB_VIEW);	switchEditViewTo(SUB_VIEW);	//open files in sub
+	for (size_t k = 0 ; k < session.nbSubFiles(); )	{
 
 		const TCHAR *pFn = session._subViewFiles[k]._fileName.c_str();
 
@@ -1905,27 +1904,21 @@ bool Notepad_plus::loadSession(Session & session, bool isSnapshotMode)	{
 			param.safeWow64EnableWow64FsRedirection(FALSE);
 			isWow64Off = true;
 		}
+
 		if (PathFileExists(pFn))	{
+			lastOpened = (isSnapshotMode && session._subViewFiles[k]._backupFilePath[0])/* != L"")*/ ?
+			doOpen(pFn, false, false, session._subViewFiles[k]._encoding, session._subViewFiles[k]._backupFilePath.c_str(), session._subViewFiles[k]._originalFileLastModifTimestamp)
+			: doOpen(pFn, false, false, session._subViewFiles[k]._encoding);
 
-			if (isSnapshotMode && session._subViewFiles[k]._backupFilePath != L"")
-				lastOpened = doOpen(pFn, false, false, session._subViewFiles[k]._encoding, session._subViewFiles[k]._backupFilePath.c_str(), session._subViewFiles[k]._originalFileLastModifTimestamp);
-			else
-				lastOpened = doOpen(pFn, false, false, session._subViewFiles[k]._encoding);
-
-			//check if already open in main. If so, clone
-			if (_mainDocTab.getIndexByBuffer(lastOpened) != -1)	{
-
+			//check, if already open in main, clone it
+			if (_mainDocTab.getIndexByBuffer(lastOpened) != -1)
 				loadBufferIntoView(lastOpened, SUB_VIEW);
-			}
 		}
-		else if (isSnapshotMode && PathFileExists(session._subViewFiles[k]._backupFilePath.c_str()))	{
-
+		else if (isSnapshotMode && PathFileExists(session._subViewFiles[k]._backupFilePath.c_str()))
 			lastOpened = doOpen(pFn, false, false, session._subViewFiles[k]._encoding, session._subViewFiles[k]._backupFilePath.c_str(), session._subViewFiles[k]._originalFileLastModifTimestamp);
-		}
-		else	{
-
+		else
 			lastOpened = BUFFER_INVALID;
-		}
+
 		if (isWow64Off)	{
 
 			param.safeWow64EnableWow64FsRedirection(TRUE);
@@ -1977,13 +1970,13 @@ bool Notepad_plus::loadSession(Session & session, bool isSnapshotMode)	{
 
 			//Force in the document so we can add the markers
 			//Don't use default methods because of performance
-			Document prevDoc = _subEditView.execute(SCI_GETDOCPOINTER);
-			_subEditView.execute(SCI_SETDOCPOINTER, 0, buf->getDocument());
+			Document prevDoc = _subEditView.f(SCI_GETDOCPOINTER);
+			_subEditView.f(SCI_SETDOCPOINTER, 0, buf->getDocument());
 			for (size_t j = 0, len = session._subViewFiles[k]._marks.size(); j < len ; ++j)	{
 
-				_subEditView.execute(SCI_MARKERADD, session._subViewFiles[k]._marks[j], MARK_BOOKMARK);
+				_subEditView.f(SCI_MARKERADD, session._subViewFiles[k]._marks[j], MARK_BOOKMARK);
 			}
-			_subEditView.execute(SCI_SETDOCPOINTER, 0, prevDoc);
+			_subEditView.f(SCI_SETDOCPOINTER, 0, prevDoc);
 
 			++k;
 		}
@@ -1994,6 +1987,8 @@ bool Notepad_plus::loadSession(Session & session, bool isSnapshotMode)	{
 			allSessionFilesLoaded = false;
 		}
 	}
+	}
+
 	if (subIndex2Update != -1)	{
 
 		_isFolding = true;

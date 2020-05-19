@@ -45,7 +45,7 @@ void LastRecentFileList::initMenu(HMENU hMenu, int idBase, int posBase, Accelera
 	_idBase = idBase;
 	_posBase = posBase;
 	_pAccelerator = pAccelerator;
-	_nativeLangEncoding = NPP_CP_WIN_1252;
+	_nativeLangEncoding = 1252;
 
 	for (int i = 0 ; i < sizeof(_idFreeArray) ; ++i)
 		_idFreeArray[i] = true;

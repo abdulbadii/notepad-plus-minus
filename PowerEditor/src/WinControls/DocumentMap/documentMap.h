@@ -30,6 +30,7 @@
 
 #include "DockingDlgInterface.h"
 #include "documentMap_rc.h"
+#include "ScintillaEditView.h"
 
 #define DM_PANELTITLE     L"Document Map"
 
@@ -37,7 +38,6 @@
 #define DOCUMENTMAP_MOUSECLICKED  (WM_USER + 2)
 #define DOCUMENTMAP_MOUSEWHEEL    (WM_USER + 3)
 
-class ScintillaEditView;
 class Buffer;
 struct MapPosition;
 
@@ -129,7 +129,8 @@ public:
 	void scrollMapWith(const MapPosition & mapPos);
 	void doMove();
 	void fold(size_t line, bool foldOrNot);
-	void foldAll(bool mode);
+	inline void foldAll(bool mode);
+	inline void foldAllToggle();
 	void setSyntaxHiliting();
 	void changeTextDirection(bool isRTL);
 	bool isTemporarilyShowing() const { return _isTemporarilyShowing; };
@@ -152,3 +153,6 @@ private:
 	int _displayWidth = 0;
 	generic_string id4dockingCont = DM_NOFOCUSWHILECLICKINGCAPTION;
 };
+
+void DocumentMap::foldAll(bool mode){	_pMapView->foldAll(mode);	}
+void DocumentMap::foldAllToggle(){	_pMapView->foldAllToggle();	}

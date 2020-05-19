@@ -338,7 +338,7 @@ size_t Printer::doPrint(bool justDoIt)
 	size_t pageNum = 1;
 	const TCHAR pageVar[] = L"$(CURRENT_PRINTING_PAGE)";
 
-	_pSEView->execute(SCI_SETPRINTCOLOURMODE, nGUI._printSettings._printOption); // setting mode once is enough
+	_pSEView->f(SCI_SETPRINTCOLOURMODE, nGUI._printSettings._printOption); // setting mode once is enough
 	while (lengthPrinted < lengthDoc)	{ 
 
 		bool printPage = (!(_pdlg.Flags & PD_PAGENUMS) ||
@@ -419,7 +419,7 @@ size_t Printer::doPrint(bool justDoIt)
 		
 		frPrint.chrg.cpMin = lengthPrinted;
 		frPrint.chrg.cpMax = lengthDoc;
-		lengthPrinted = long(_pSEView->execute(SCI_FORMATRANGE, printPage, reinterpret_cast<LPARAM>(&frPrint)));
+		lengthPrinted = long(_pSEView->f(SCI_FORMATRANGE, printPage, reinterpret_cast<LPARAM>(&frPrint)));
 
 		if (printPage)	{ 
 
@@ -494,7 +494,7 @@ size_t Printer::doPrint(bool justDoIt)
 	if (!nGUI._printSettings._printLineNumber)
 		_pSEView->showMargin(ScintillaEditView::_SC_MARGE_LINENUMBER, isShown);
 
-	_pSEView->execute(SCI_FORMATRANGE, FALSE, 0);
+	_pSEView->f(SCI_FORMATRANGE, FALSE, 0);
 	::EndDoc(_pdlg.hDC);
 	::DeleteDC(_pdlg.hDC);
 

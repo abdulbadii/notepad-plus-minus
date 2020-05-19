@@ -1045,8 +1045,7 @@ INT_PTR CALLBACK SettingsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)	{
 				case IDC_CHECK_SHORTTITLE:	{
 
 					nppGUI._shortTitlebar = isCheckedOrNot(IDC_CHECK_SHORTTITLE);
-					HWND grandParent = ::GetParent(_hParent);
-					::SendMessage(grandParent, NPPM_INTERNAL_UPDATETITLEBAR, 0, 0);
+					::SendMessage(::GetParent(_hParent), NPPM_INTERNAL_UPDATETITLEBAR, 0, 0);
 					return TRUE;
 				}
 
@@ -2801,7 +2800,7 @@ INT_PTR CALLBACK AutoCompletionDlg::run_dlgProc(UINT message, WPARAM wParam, LPA
 						::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORENUMBERS, BM_SETCHECK, BST_UNCHECKED, 0);
 						nppGUI._autocIgnoreNumbers = false;
 						// ::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORECASE, BM_SETCHECK, BST_UNCHECKED, 0);
-						nppGUI._autocIgnoreCase = false;
+						// nppGUI._autocIgnoreCase = false;
 					}
 
 					::EnableWindow(::GetDlgItem(_hSelf, IDD_AUTOC_FUNCRADIO), isEnableAutoC);
@@ -2847,7 +2846,7 @@ INT_PTR CALLBACK AutoCompletionDlg::run_dlgProc(UINT message, WPARAM wParam, LPA
 
 /* 				case IDD_AUTOC_IGNORECASE:	{
 
-					nppGUI._autocIgnoreCase = (BST_CHECKED == ::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORECASE, BM_GETCHECK, 0, 0));
+					nppGUI._autocIgnoreCase = BST_CHECKED == ::SendDlgItemMessage(_hSelf, IDD_AUTOC_IGNORECASE, BM_GETCHECK, 0, 0);
 					return TRUE;
 				} */
 

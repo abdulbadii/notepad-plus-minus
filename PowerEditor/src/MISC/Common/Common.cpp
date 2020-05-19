@@ -34,31 +34,9 @@
 #include <locale>
 
 #include "StaticDialog.h"
-
 #include "Common.h"
 #include "../Utf8.h"
 #include <Parameters.h>
-
-void printInt(int int2print)	{
-
-	TCHAR str[32];
-	wsprintf(str, L"%d", int2print);
-	::MessageBox(NULL, str, L"", MB_OK);
-}
-
-
-void printStr(const TCHAR *str2print)	{
-
-	::MessageBox(NULL, str2print, L"", MB_OK);
-}
-
-generic_string commafyInt(size_t n)	{
-
-	generic_stringstream ss;
-	ss.imbue(std::locale(""));
-	ss << n;
-	return ss.str();
-}
 
 std::string getFileContent(const TCHAR *file2read)
 {

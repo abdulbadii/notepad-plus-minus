@@ -33,7 +33,8 @@
 #include "StaticDialog.h"
 
 class SizeableDlg : public StaticDialog {
-	typedef StaticDialog MyBaseClass;
+
+	using MyBaseClass = StaticDialog ;
 public:
 	explicit SizeableDlg(WINRECT* pWinMap);
 

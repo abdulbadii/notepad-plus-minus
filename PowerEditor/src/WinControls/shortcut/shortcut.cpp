@@ -807,6 +807,7 @@ bool recordedMacroStep::isMacroable() const
 		case SCI_MOVESELECTEDLINESDOWN:
 		case SCI_SCROLLTOSTART:
 		case SCI_SCROLLTOEND:
+		case SCI_SWAPMAINANCHORCARET:
 		case SCI_SETVIRTUALSPACEOPTIONS:	{
 
 			if (_macroType == mtUseLParameter)
@@ -837,15 +838,15 @@ void recordedMacroStep::PlayBack(Window* pNotepad, ScintillaEditView *pEditView)
 
 		if (_macroType == mtUseSParameter)	{ 
 
-			int byteBufferLength = ::WideCharToMultiByte(static_cast<UINT>(pEditView->execute(SCI_GETCODEPAGE)), 0, _sParameter.c_str(), -1, NULL, 0, NULL, NULL);
+			int byteBufferLength = ::WideCharToMultiByte(static_cast<UINT>(pEditView->f(SCI_GETCODEPAGE)), 0, _sParameter.c_str(), -1, NULL, 0, NULL, NULL);
 			auto byteBuffer = std::make_unique< char[] >(byteBufferLength);
-			::WideCharToMultiByte(static_cast<UINT>(pEditView->execute(SCI_GETCODEPAGE)), 0, _sParameter.c_str(), -1, byteBuffer.get(), byteBufferLength, NULL, NULL);
+			::WideCharToMultiByte(static_cast<UINT>(pEditView->f(SCI_GETCODEPAGE)), 0, _sParameter.c_str(), -1, byteBuffer.get(), byteBufferLength, NULL, NULL);
 			auto lParam = reinterpret_cast<LPARAM>(byteBuffer.get());
-			pEditView->execute(_message, _wParameter, lParam);
+			pEditView->f(_message, _wParameter, lParam);
 		}
 		else	{
 
-			pEditView->execute(_message, _wParameter, _lParameter);
+			pEditView->f(_message, _wParameter, _lParameter);
 		}
 
 		// If text content has been modified in Scintilla,

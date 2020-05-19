@@ -100,9 +100,9 @@
 	#define    IDM_EDIT_UNDO                        (IDM_EDIT + 4)
 	#define    IDM_EDIT_REDO                        (IDM_EDIT + 5)
 	#define    IDM_EDIT_DELETE                      (IDM_EDIT + 6)
-	#define    IDM_EDIT_SELECTALL                   (IDM_EDIT + 7)
+	#define    IDM_EDIT_SELECTION_PASTE_MODE              (IDM_EDIT + 7)
 	#define    IDM_EDIT_BEGINENDSELECT              (IDM_EDIT + 51)
-		
+
 	#define    IDM_EDIT_INS_TAB                     (IDM_EDIT + 8)
 	#define    IDM_EDIT_RMV_TAB                     (IDM_EDIT + 9)
 	#define    IDM_EDIT_DUP_LINE                    (IDM_EDIT + 10)
@@ -200,7 +200,6 @@
 	#define    IDM_SEARCH_NEXT_BOOKMARK        (IDM_SEARCH + 6)
 	#define    IDM_SEARCH_PREV_BOOKMARK        (IDM_SEARCH + 7)
 	#define    IDM_SEARCH_CLEAR_BOOKMARKS      (IDM_SEARCH + 8)
-	#define    IDM_SEARCH_GOTOMATCHINGBRACE    (IDM_SEARCH + 9)
 	#define    IDM_SEARCH_FINDINCREMENT        (IDM_SEARCH + 10)
 	#define    IDM_SEARCH_FINDNEXT             (IDM_SEARCH + 12)
 	#define    IDM_SEARCH_FINDPREV             (IDM_SEARCH + 13)
@@ -245,9 +244,11 @@
 	#define    IDM_SEARCH_INVERSEMARKS         (IDM_SEARCH + 50)
 	#define    IDM_SEARCH_DELETEUNMARKEDLINES  (IDM_SEARCH + 51)
 	#define    IDM_SEARCH_FINDCHARINRANGE      (IDM_SEARCH + 52)
-	#define    IDM_SEARCH_SELECTMATCHINGBRACES (IDM_SEARCH + 53)
-	#define    IDM_SEARCH_SELECTMATCHBRACEX (IDM_SEARCH + 54)
-	#define    IDM_SEARCH_MARK                 (IDM_SEARCH + 55)
+	
+	#define    IDM_SEARCH_GOTOMATCHINGBRACE    (IDM_SEARCH + 53)
+	#define    IDM_SEARCH_SELECTMATCHINGBRACES (IDM_SEARCH + 54)
+	#define    IDM_SEARCH_SELECTMATCHBRACEX (IDM_SEARCH + 55)
+	#define    IDM_SEARCH_MARK                 (IDM_SEARCH + 56)
 	
 #define    IDM_MISC    (IDM + 3500)
 	#define    IDM_FILESWITCHER_FILESCLOSE            (IDM_MISC + 1)
@@ -569,6 +570,7 @@
 	#define	   IDM_TOOL_SHA256_GENERATE  	            (IDM_TOOL + 4)
 	#define	   IDM_TOOL_SHA256_GENERATEFROMFILE  	    (IDM_TOOL + 5)
 	#define	   IDM_TOOL_SHA256_GENERATEINTOCLIPBOARD  	(IDM_TOOL + 6)
+	#define	   IDM_TOOL_KEYR  	(IDM_TOOL + 7)
 
 #define    IDM_EXECUTE  (IDM + 9000)
 

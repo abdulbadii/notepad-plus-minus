@@ -57,14 +57,14 @@ INT_PTR CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)	{
                         cleanLineEdit();
 						if (_mode == go2line)	{
 
-							(*_ppEditView)->execute(SCI_ENSUREVISIBLE, line-1);
-							(*_ppEditView)->execute(SCI_GOTOLINE, line-1);
+							(*_ppEditView)->f(SCI_ENSUREVISIBLE, line-1);
+							(*_ppEditView)->f(SCI_GOTOLINE, line-1);
 						}
 						else	{
 
-							auto sci_line = (*_ppEditView)->execute(SCI_LINEFROMPOSITION, line);
-							(*_ppEditView)->execute(SCI_ENSUREVISIBLE, sci_line);
-							(*_ppEditView)->execute(SCI_GOTOPOS, line);
+							auto sci_line = (*_ppEditView)->f(SCI_LINEFROMPOSITION, line);
+							(*_ppEditView)->f(SCI_ENSUREVISIBLE, sci_line);
+							(*_ppEditView)->f(SCI_GOTOPOS, line);
 						}
                     }
 
@@ -129,11 +129,11 @@ void GoToLineDlg::updateLinesNumbers() const
 	if (_mode == go2line)	{
 
 		current = static_cast<unsigned int>((*_ppEditView)->getCurrentLineNumber() + 1);
-		limit = static_cast<unsigned int>((*_ppEditView)->execute(SCI_GETLINECOUNT));
+		limit = static_cast<unsigned int>((*_ppEditView)->f(SCI_GETLINECOUNT));
 	}
 	else	{
 
-		current = static_cast<unsigned int>((*_ppEditView)->execute(SCI_GETCURRENTPOS));
+		current = static_cast<unsigned int>((*_ppEditView)->f(SCI_GETCURRENTPOS));
 		limit = static_cast<unsigned int>((*_ppEditView)->getCurrentDocLen() - 1);
 	}
     ::SetDlgItemInt(_hSelf, ID_CURRLINE, current, FALSE);

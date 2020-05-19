@@ -31,6 +31,7 @@
 #include "DockingDlgInterface.h"
 #include "BoostRegexSearch.h"
 #include "StatusBar.h"
+#include "localization.h"
 
 #define FIND_RECURSIVE 1
 #define FIND_INHIDDENDIR 2
@@ -94,12 +95,48 @@ public:
 				(option->_searchType == FindRegex ? SCFIND_REGEXP|SCFIND_POSIX : 0) |
 				((option->_searchType == FindRegex && option->_dotMatchesNewline) ? SCFIND_REGEXP_DOTMATCHESNL : 0);
 	};
-	static void displaySectionCentered(int posStart, int posEnd, ScintillaEditView * pEditView, bool isDownwards = true);
+	// inline static void displaySectionCentered(int posStart, int posEnd, ScintillaEditView * pEditView, bool);
 
 private:
 	static bool readBase(const TCHAR * str, int * value, int base, int size);
-
 };
+
+/* void Searching::displaySectionCentered(int posStart, int posEnd, ScintillaEditView * pEditView, bool d)	{
+	// (void)d;
+
+	int testPos = d ? posEnd : posStart;
+	pEditView->f(SCI_SETCURRENTPOS, testPos);
+	auto currentlineNumberDoc = pEditView->f(SCI_LINEFROMPOSITION, testPos);
+	auto currentlineNumberVis = pEditView->f(SCI_VISIBLEFROMDOCLINE, currentlineNumberDoc);
+	pEditView->f(SCI_ENSUREVISIBLE, currentlineNumberDoc);	// make sure target line is unfolded
+
+	auto firstVisibleLineVis =	pEditView->f(SCI_GETFIRSTVISIBLELINE);
+	auto linesVisible =			pEditView->f(SCI_LINESONSCREEN);
+	auto lastVisibleLineVis =	linesVisible + firstVisibleLineVis;
+	
+	//if out of view vertically, scroll line into (center of) view
+	int linesToScroll = 0;
+	if (currentlineNumberVis < firstVisibleLineVis)	{
+
+		linesToScroll = static_cast<int>(currentlineNumberVis - firstVisibleLineVis);
+		//use center
+		linesToScroll -= static_cast<int>(linesVisible/2);		
+	}
+	else if (currentlineNumberVis > lastVisibleLineVis)	{
+
+		linesToScroll = static_cast<int>(currentlineNumberVis - lastVisibleLineVis);
+		//use center
+		linesToScroll += static_cast<int>(linesVisible/2);
+	}
+	pEditView->scroll(0, linesToScroll);
+
+	//Make sure the caret is visible, scroll horizontally (this will also fix wrapping problems)
+	pEditView->f(SCI_GOTOPOS, posStart);
+	
+	pEditView->f(SCI_GOTOPOS, posEnd);
+	pEditView->f(SCI_ENSUREVISIBLE, pEditView->f(SCI_LINEFROMPOSITION, posEnd));	// make sure target line is unfolded
+	pEditView->f(SCI_SETANCHOR, posStart);
+} */
 
 //Finder: Dockable window that contains search results
 class Finder : public DockingDlgInterface {
@@ -164,7 +201,7 @@ private:
 
 
 	void setFinderReadOnly(bool isReadOnly) {
-		_scintView.execute(SCI_SETREADONLY, isReadOnly);
+		_scintView.f(SCI_SETREADONLY, isReadOnly);
 	};
 
 	bool isLineActualSearchResult(const generic_string & s) const;
@@ -248,12 +285,16 @@ public :
 	void processReplc1();
 	void processReplc1(const TCHAR *txtFind, const TCHAR *txtRepl);
 	bool processReplace(const TCHAR *txt2find, const TCHAR *txt2replace, const FindOption *options = nullptr);
+	
+	inline int FindReplaceDlg::processAll(ProcessOperation op, bool isEntire = false, const FindersInfo *pFindersInfo = nullptr, int colourStyleID=-1)	{
+		return processAll(op, _env, isEntire, pFindersInfo, colourStyleID);
+	}
+	inline int processAll(ProcessOperation op, const FindOption *opt, bool isEntire = false, const FindersInfo *pFindersInfo = nullptr, int colourStyleID =-1);
 
 	int markAll(const TCHAR *txt2find, int styleID, bool isWholeWordSelected);
 	int markAllInc(const FindOption *opt);
 
-	int processAll(ProcessOperation op, const FindOption *opt, bool isEntire = false, const FindersInfo *pFindersInfo = nullptr, int colourStyleID = -1);
-	int processRange(ProcessOperation op, FindReplaceInfo & findReplaceInfo, const FindersInfo *pFindersInfo, const FindOption *opt = nullptr, int colourStyleID = -1, ScintillaEditView *view2Process = nullptr);
+	int processRange(ProcessOperation op, FindReplaceInfo & findReplaceInfo, const FindersInfo *pFindersInfo, const FindOption *opt = nullptr, int colourStyleID =-1, ScintillaEditView *view2Process =nullptr);
 	void replaceAllInOpenedDocs();
 	void findAllIn(int op);
 	void setSearchText(TCHAR * txt2find);
@@ -507,3 +548,64 @@ private:
 	HWND _hBtn = nullptr;
 };
 
+int FindReplaceDlg::processAll(ProcessOperation op, const FindOption *pOptions, bool isEntire, const FindersInfo *pFindersInfo, int colourStyleID)	{
+	if (op == ProcessReplaceAll && (*_ppEditView)->getCurrentBuffer()->isReadOnly())	{
+
+		generic_string msg = param.getNativeLangSpeaker()->getLocalizedStrFromID("find-status-replaceall-readonly", L"Replace All: Cannot replace text. The current document is read only.");
+		setStatusbarMessage(msg, FSNotFound);
+		return 0;
+	}
+
+	// const FindOption *pOptions = opt?opt:_env;
+	const TCHAR *txt2find = pOptions->_str2Search.c_str();
+	const TCHAR *txt2replace = pOptions->_str4Replace.c_str();
+
+	Sci_CharacterRange cr = (*_ppEditView)->getSelection();
+	int docLength = static_cast<int32_t>((*_ppEditView)->f(SCI_GETLENGTH));
+
+	// Default : 
+	//        direction : down
+	//        begin at : 0
+	//        end at : end of doc
+	int startPosition = 0;
+	int endPosition = docLength;
+
+	bool direction = pOptions->_whichDirection;
+
+	//then adjust scope if the full document needs to be changed
+	if (op == ProcessCountAll && pOptions->_isInSelection)	{
+
+		startPosition = cr.cpMin;
+		endPosition = cr.cpMax;
+	}
+	else if (pOptions->_isWrapAround || isEntire || op == ProcessCountAll)	{	//entire document
+
+		startPosition = 0;
+		endPosition = docLength;
+	}
+	//try limiting scope by direction
+	else {
+		startPosition = direction == DIR_UP? 0: cr.cpMin;
+		endPosition = direction == DIR_UP? cr.cpMax: docLength;
+	}
+	
+	//then readjust scope if the selection override is active and allowed
+	if ((pOptions->_isInSelection) && ((op == ProcessMarkAll) || ((op == ProcessReplaceAll) && (!isEntire))))	{	//if selection limiter and either mark all or replace all w/o entire document override
+
+		startPosition = cr.cpMin;
+		endPosition = cr.cpMax;
+	}
+
+	if ((op == ProcessMarkAllExt) && (colourStyleID != -1))	{
+
+		startPosition = 0;
+		endPosition = docLength;
+	}
+
+	FindReplaceInfo findReplaceInfo;
+	findReplaceInfo._txt2find = txt2find;
+	findReplaceInfo._txt2replace = txt2replace;
+	findReplaceInfo._startRange = startPosition;
+	findReplaceInfo._endRange = endPosition;
+	return processRange(op, findReplaceInfo, pFindersInfo, pOptions, colourStyleID);
+}

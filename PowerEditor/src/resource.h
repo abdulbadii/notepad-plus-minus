@@ -249,11 +249,14 @@
     //#define IDC_KEY_HOME                    (IDCMD+6)
     //#define IDC_KEY_END                        (IDCMD+7)
     //#define IDC_KEY_SELECT_2_HOME            (IDCMD+8)
-    //#define IDC_KEY_SELECT_2_END            (IDCMD+9)
 
-#define IDM_MAIN_FIND_RESULTS    (IDCMD+10)
-#define IDM_CLEAR_CLOSE_FINDER    (IDCMD+11)
-#define IDM_INFOS   (IDCMD + 12)
+#define IDC_UNDO_2           (IDCMD+8)
+#define IDC_REDO_2           (IDCMD+9)
+#define IDC_PASTE_2           (IDCMD+10)
+
+#define IDC_VIEW_SWAP_MAIN_FIND     (IDCMD+11)
+#define IDC_VIEW_CLEAR_CLOSE_FIND       (IDCMD+12)
+#define IDC_INFOS        (IDCMD + 13)
 
 #define IDCMD_LIMIT                        (IDCMD+20)
 

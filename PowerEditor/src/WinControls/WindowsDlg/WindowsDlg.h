@@ -58,7 +58,7 @@ extern const UINT WDN_NOTIFY;
 
 class WindowsDlg : public SizeableDlg	{
 
-	typedef SizeableDlg MyBaseClass;
+	using MyBaseClass = SizeableDlg;
 
 public :
 	WindowsDlg();

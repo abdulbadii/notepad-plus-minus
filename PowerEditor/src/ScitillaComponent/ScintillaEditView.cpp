@@ -262,73 +262,73 @@ void ScintillaEditView::init(HINSTANCE hInst, HWND hPere)	{
 		throw runtime_error("ScintillaEditView::init : SCI_GETDIRECTPOINTER message failed");
 	}
 
-	execute(SCI_SETMARGINMASKN, _SC_MARGE_FOLDER, SC_MASK_FOLDERS);
+	f(SCI_SETMARGINMASKN, _SC_MARGE_FOLDER, SC_MASK_FOLDERS);
 	showMargin(_SC_MARGE_FOLDER, true);
 
-	execute(SCI_SETMARGINMASKN, _SC_MARGE_SYBOLE, (1<<MARK_BOOKMARK) | (1<<MARK_HIDELINESBEGIN) | (1<<MARK_HIDELINESEND) | (1<<MARK_HIDELINESUNDERLINE));
+	f(SCI_SETMARGINMASKN, _SC_MARGE_SYBOLE, (1<<MARK_BOOKMARK) | (1<<MARK_HIDELINESBEGIN) | (1<<MARK_HIDELINESEND) | (1<<MARK_HIDELINESUNDERLINE));
 
-	execute(SCI_MARKERSETALPHA, MARK_BOOKMARK, 70);
+	f(SCI_MARKERSETALPHA, MARK_BOOKMARK, 70);
 
-	execute(SCI_MARKERDEFINE, MARK_HIDELINESUNDERLINE, SC_MARK_UNDERLINE);
-	execute(SCI_MARKERSETBACK, MARK_HIDELINESUNDERLINE, 0x77CC77);
+	f(SCI_MARKERDEFINE, MARK_HIDELINESUNDERLINE, SC_MARK_UNDERLINE);
+	f(SCI_MARKERSETBACK, MARK_HIDELINESUNDERLINE, 0x77CC77);
 
 	if (param._dpiManager.scaleX(100) >= 150)	{
 
-		execute(SCI_RGBAIMAGESETWIDTH, 18);
-		execute(SCI_RGBAIMAGESETHEIGHT, 18);
-		execute(SCI_MARKERDEFINERGBAIMAGE, MARK_BOOKMARK, reinterpret_cast<LPARAM>(bookmark18));
-		execute(SCI_MARKERDEFINERGBAIMAGE, MARK_HIDELINESBEGIN, reinterpret_cast<LPARAM>(hidelines_begin18));
-		execute(SCI_MARKERDEFINERGBAIMAGE, MARK_HIDELINESEND, reinterpret_cast<LPARAM>(hidelines_end18));
+		f(SCI_RGBAIMAGESETWIDTH, 18);
+		f(SCI_RGBAIMAGESETHEIGHT, 18);
+		f(SCI_MARKERDEFINERGBAIMAGE, MARK_BOOKMARK, reinterpret_cast<LPARAM>(bookmark18));
+		f(SCI_MARKERDEFINERGBAIMAGE, MARK_HIDELINESBEGIN, reinterpret_cast<LPARAM>(hidelines_begin18));
+		f(SCI_MARKERDEFINERGBAIMAGE, MARK_HIDELINESEND, reinterpret_cast<LPARAM>(hidelines_end18));
 	}
 	else	{
 
-		execute(SCI_RGBAIMAGESETWIDTH, 14);
-		execute(SCI_RGBAIMAGESETHEIGHT, 14);
-		execute(SCI_MARKERDEFINERGBAIMAGE, MARK_BOOKMARK, reinterpret_cast<LPARAM>(bookmark14));
-		execute(SCI_MARKERDEFINERGBAIMAGE, MARK_HIDELINESBEGIN, reinterpret_cast<LPARAM>(hidelines_begin14));
-		execute(SCI_MARKERDEFINERGBAIMAGE, MARK_HIDELINESEND, reinterpret_cast<LPARAM>(hidelines_end14));
+		f(SCI_RGBAIMAGESETWIDTH, 14);
+		f(SCI_RGBAIMAGESETHEIGHT, 14);
+		f(SCI_MARKERDEFINERGBAIMAGE, MARK_BOOKMARK, reinterpret_cast<LPARAM>(bookmark14));
+		f(SCI_MARKERDEFINERGBAIMAGE, MARK_HIDELINESBEGIN, reinterpret_cast<LPARAM>(hidelines_begin14));
+		f(SCI_MARKERDEFINERGBAIMAGE, MARK_HIDELINESEND, reinterpret_cast<LPARAM>(hidelines_end14));
 	}
 
-	execute(SCI_SETMARGINSENSITIVEN, _SC_MARGE_FOLDER, true);
-	execute(SCI_SETMARGINSENSITIVEN, _SC_MARGE_SYBOLE, true);
+	f(SCI_SETMARGINSENSITIVEN, _SC_MARGE_FOLDER, true);
+	f(SCI_SETMARGINSENSITIVEN, _SC_MARGE_SYBOLE, true);
 
-	execute(SCI_SETFOLDFLAGS, 16);
-	execute(SCI_SETSCROLLWIDTHTRACKING, true);
-	execute(SCI_SETSCROLLWIDTH, 1);	//default empty document: override default width of 2000
+	f(SCI_SETFOLDFLAGS, 16);
+	f(SCI_SETSCROLLWIDTHTRACKING, true);
+	f(SCI_SETSCROLLWIDTH, 1);	//default empty document: override default width of 2000
 
 	// smart hilighting
-	execute(SCI_INDICSETSTYLE, SCE_UNIVERSAL_FOUND_STYLE_SMART, INDIC_ROUNDBOX);
-	execute(SCI_INDICSETSTYLE, SCE_UNIVERSAL_FOUND_STYLE, INDIC_ROUNDBOX);
-	execute(SCI_INDICSETSTYLE, SCE_UNIVERSAL_FOUND_STYLE_INC, INDIC_ROUNDBOX);
-	execute(SCI_INDICSETSTYLE, SCE_UNIVERSAL_TAGMATCH, INDIC_ROUNDBOX);
-	execute(SCI_INDICSETSTYLE, SCE_UNIVERSAL_TAGATTR, INDIC_ROUNDBOX);
-	execute(SCI_INDICSETSTYLE, SCE_UNIVERSAL_FOUND_STYLE_EXT1, INDIC_ROUNDBOX);
-	execute(SCI_INDICSETSTYLE, SCE_UNIVERSAL_FOUND_STYLE_EXT2, INDIC_ROUNDBOX);
-	execute(SCI_INDICSETSTYLE, SCE_UNIVERSAL_FOUND_STYLE_EXT3, INDIC_ROUNDBOX);
-	execute(SCI_INDICSETSTYLE, SCE_UNIVERSAL_FOUND_STYLE_EXT4, INDIC_ROUNDBOX);
-	execute(SCI_INDICSETSTYLE, SCE_UNIVERSAL_FOUND_STYLE_EXT5, INDIC_ROUNDBOX);
+	f(SCI_INDICSETSTYLE, SCE_UNIVERSAL_FOUND_STYLE_SMART, INDIC_ROUNDBOX);
+	f(SCI_INDICSETSTYLE, SCE_UNIVERSAL_FOUND_STYLE, INDIC_ROUNDBOX);
+	f(SCI_INDICSETSTYLE, SCE_UNIVERSAL_FOUND_STYLE_INC, INDIC_ROUNDBOX);
+	f(SCI_INDICSETSTYLE, SCE_UNIVERSAL_TAGMATCH, INDIC_ROUNDBOX);
+	f(SCI_INDICSETSTYLE, SCE_UNIVERSAL_TAGATTR, INDIC_ROUNDBOX);
+	f(SCI_INDICSETSTYLE, SCE_UNIVERSAL_FOUND_STYLE_EXT1, INDIC_ROUNDBOX);
+	f(SCI_INDICSETSTYLE, SCE_UNIVERSAL_FOUND_STYLE_EXT2, INDIC_ROUNDBOX);
+	f(SCI_INDICSETSTYLE, SCE_UNIVERSAL_FOUND_STYLE_EXT3, INDIC_ROUNDBOX);
+	f(SCI_INDICSETSTYLE, SCE_UNIVERSAL_FOUND_STYLE_EXT4, INDIC_ROUNDBOX);
+	f(SCI_INDICSETSTYLE, SCE_UNIVERSAL_FOUND_STYLE_EXT5, INDIC_ROUNDBOX);
 
-	execute(SCI_INDICSETALPHA, SCE_UNIVERSAL_FOUND_STYLE_SMART, 100);
-	execute(SCI_INDICSETALPHA, SCE_UNIVERSAL_FOUND_STYLE, 100);
-	execute(SCI_INDICSETALPHA, SCE_UNIVERSAL_FOUND_STYLE_INC, 100);
-	execute(SCI_INDICSETALPHA, SCE_UNIVERSAL_TAGMATCH, 100);
-	execute(SCI_INDICSETALPHA, SCE_UNIVERSAL_TAGATTR, 100);
-	execute(SCI_INDICSETALPHA, SCE_UNIVERSAL_FOUND_STYLE_EXT1, 100);
-	execute(SCI_INDICSETALPHA, SCE_UNIVERSAL_FOUND_STYLE_EXT2, 100);
-	execute(SCI_INDICSETALPHA, SCE_UNIVERSAL_FOUND_STYLE_EXT3, 100);
-	execute(SCI_INDICSETALPHA, SCE_UNIVERSAL_FOUND_STYLE_EXT4, 100);
-	execute(SCI_INDICSETALPHA, SCE_UNIVERSAL_FOUND_STYLE_EXT5, 100);
+	f(SCI_INDICSETALPHA, SCE_UNIVERSAL_FOUND_STYLE_SMART, 100);
+	f(SCI_INDICSETALPHA, SCE_UNIVERSAL_FOUND_STYLE, 100);
+	f(SCI_INDICSETALPHA, SCE_UNIVERSAL_FOUND_STYLE_INC, 100);
+	f(SCI_INDICSETALPHA, SCE_UNIVERSAL_TAGMATCH, 100);
+	f(SCI_INDICSETALPHA, SCE_UNIVERSAL_TAGATTR, 100);
+	f(SCI_INDICSETALPHA, SCE_UNIVERSAL_FOUND_STYLE_EXT1, 100);
+	f(SCI_INDICSETALPHA, SCE_UNIVERSAL_FOUND_STYLE_EXT2, 100);
+	f(SCI_INDICSETALPHA, SCE_UNIVERSAL_FOUND_STYLE_EXT3, 100);
+	f(SCI_INDICSETALPHA, SCE_UNIVERSAL_FOUND_STYLE_EXT4, 100);
+	f(SCI_INDICSETALPHA, SCE_UNIVERSAL_FOUND_STYLE_EXT5, 100);
 
-	execute(SCI_INDICSETUNDER, SCE_UNIVERSAL_FOUND_STYLE_SMART, true);
-	execute(SCI_INDICSETUNDER, SCE_UNIVERSAL_FOUND_STYLE, true);
-	execute(SCI_INDICSETUNDER, SCE_UNIVERSAL_FOUND_STYLE_INC, true);
-	execute(SCI_INDICSETUNDER, SCE_UNIVERSAL_TAGMATCH, true);
-	execute(SCI_INDICSETUNDER, SCE_UNIVERSAL_TAGATTR, true);
-	execute(SCI_INDICSETUNDER, SCE_UNIVERSAL_FOUND_STYLE_EXT1, true);
-	execute(SCI_INDICSETUNDER, SCE_UNIVERSAL_FOUND_STYLE_EXT2, true);
-	execute(SCI_INDICSETUNDER, SCE_UNIVERSAL_FOUND_STYLE_EXT3, true);
-	execute(SCI_INDICSETUNDER, SCE_UNIVERSAL_FOUND_STYLE_EXT4, true);
-	execute(SCI_INDICSETUNDER, SCE_UNIVERSAL_FOUND_STYLE_EXT5, true);
+	f(SCI_INDICSETUNDER, SCE_UNIVERSAL_FOUND_STYLE_SMART, true);
+	f(SCI_INDICSETUNDER, SCE_UNIVERSAL_FOUND_STYLE, true);
+	f(SCI_INDICSETUNDER, SCE_UNIVERSAL_FOUND_STYLE_INC, true);
+	f(SCI_INDICSETUNDER, SCE_UNIVERSAL_TAGMATCH, true);
+	f(SCI_INDICSETUNDER, SCE_UNIVERSAL_TAGATTR, true);
+	f(SCI_INDICSETUNDER, SCE_UNIVERSAL_FOUND_STYLE_EXT1, true);
+	f(SCI_INDICSETUNDER, SCE_UNIVERSAL_FOUND_STYLE_EXT2, true);
+	f(SCI_INDICSETUNDER, SCE_UNIVERSAL_FOUND_STYLE_EXT3, true);
+	f(SCI_INDICSETUNDER, SCE_UNIVERSAL_FOUND_STYLE_EXT4, true);
+	f(SCI_INDICSETUNDER, SCE_UNIVERSAL_FOUND_STYLE_EXT5, true);
 
 	_codepage = ::GetACP();
 
@@ -338,9 +338,9 @@ void ScintillaEditView::init(HINSTANCE hInst, HWND hPere)	{
 
 	if (_defaultCharList.empty())	{
 
-		auto defaultCharListLen = execute(SCI_GETWORDCHARS);
+		auto defaultCharListLen = f(SCI_GETWORDCHARS);
 		char *defaultCharList = new char[defaultCharListLen + 1];
-		execute(SCI_GETWORDCHARS, 0, reinterpret_cast<LPARAM>(defaultCharList));
+		f(SCI_GETWORDCHARS, 0, reinterpret_cast<LPARAM>(defaultCharList));
 		defaultCharList[defaultCharListLen] = '\0';
 		_defaultCharList = defaultCharList;
 		delete[] defaultCharList;
@@ -423,12 +423,12 @@ LRESULT ScintillaEditView::scintillaNew_Proc(HWND hwnd, UINT Message, WPARAM wPa
 				RECONVERTSTRING   *	reconvert = (RECONVERTSTRING *)lParam;
 
 				// does nothing with a rectangular selection
-				if (execute(SCI_SELECTIONISRECTANGLE, 0, 0))
+				if (f(SCI_SELECTIONISRECTANGLE, 0, 0))
 					return 0;
 
 				// get the codepage of the text
 
-				UINT codepage = static_cast<UINT>(execute(SCI_GETCODEPAGE));
+				UINT codepage = static_cast<UINT>(f(SCI_GETCODEPAGE));
 
 				// get the current text selection
 
@@ -519,34 +519,34 @@ void ScintillaEditView::setSpecialStyle(const Style & styleToSet)	{
 
 	int styleID = styleToSet._styleID;
 	if ( styleToSet._colorStyle & COLORSTYLE_FOREGROUND )
-		execute(SCI_STYLESETFORE, styleID, styleToSet._fgColor);
+		f(SCI_STYLESETFORE, styleID, styleToSet._fgColor);
 
 	if ( styleToSet._colorStyle & COLORSTYLE_BACKGROUND )
-		execute(SCI_STYLESETBACK, styleID, styleToSet._bgColor);
+		f(SCI_STYLESETBACK, styleID, styleToSet._bgColor);
 
 	if (styleToSet._fontName && lstrcmp(styleToSet._fontName, L""))	{
 
 		
 		if (!param.isInFontList(styleToSet._fontName))	{
 
-			execute(SCI_STYLESETFONT, styleID, reinterpret_cast<LPARAM>(DEFAULT_FONT_NAME));
+			f(SCI_STYLESETFONT, styleID, reinterpret_cast<LPARAM>(DEFAULT_FONT_NAME));
 		}
 		else	{
 
 			const char * fontNameA = wmc.wchar2char(styleToSet._fontName, CP_UTF8);
-			execute(SCI_STYLESETFONT, styleID, reinterpret_cast<LPARAM>(fontNameA));
+			f(SCI_STYLESETFONT, styleID, reinterpret_cast<LPARAM>(fontNameA));
 		}
 	}
 	int fontStyle = styleToSet._fontStyle;
 	if (fontStyle != STYLE_NOT_USED)	{
 
-		execute(SCI_STYLESETBOLD,		styleID, fontStyle & FONTSTYLE_BOLD);
-		execute(SCI_STYLESETITALIC,		styleID, fontStyle & FONTSTYLE_ITALIC);
-		execute(SCI_STYLESETUNDERLINE,	styleID, fontStyle & FONTSTYLE_UNDERLINE);
+		f(SCI_STYLESETBOLD,		styleID, fontStyle & FONTSTYLE_BOLD);
+		f(SCI_STYLESETITALIC,		styleID, fontStyle & FONTSTYLE_ITALIC);
+		f(SCI_STYLESETUNDERLINE,	styleID, fontStyle & FONTSTYLE_UNDERLINE);
 	}
 
 	if (styleToSet._fontSize > 0)
-		execute(SCI_STYLESETSIZE, styleID, styleToSet._fontSize);
+		f(SCI_STYLESETSIZE, styleID, styleToSet._fontSize);
 }
 
 void ScintillaEditView::setHotspotStyle(Style& styleToSet)	{
@@ -644,32 +644,32 @@ void ScintillaEditView::setXmlLexer(LangType type)	{
 
 	if (type == L_XML)	{
 
-		execute(SCI_SETLEXER, SCLEX_XML);
+		f(SCI_SETLEXER, SCLEX_XML);
 		for (int i = 0 ; i < 4 ; ++i)
-			execute(SCI_SETKEYWORDS, i, reinterpret_cast<LPARAM>(L""));
+			f(SCI_SETKEYWORDS, i, reinterpret_cast<LPARAM>(L""));
 
 		makeStyle(type);
 
-		execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("lexer.xml.allow.scripts"), reinterpret_cast<LPARAM>("0"));
+		f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("lexer.xml.allow.scripts"), reinterpret_cast<LPARAM>("0"));
 	}
 	else if ((type == L_HTML) || (type == L_PHP) || (type == L_ASP) || (type == L_JSP))	{
 
-		execute(SCI_SETLEXER, SCLEX_HTML);
+		f(SCI_SETLEXER, SCLEX_HTML);
 		const TCHAR *htmlKeyWords_generic = param.getWordList(L_HTML, LANG_INDEX_INSTR);
 
 				const char *htmlKeyWords = wmc.wchar2char(htmlKeyWords_generic, CP_ACP);
-		execute(SCI_SETKEYWORDS, 0, reinterpret_cast<LPARAM>(htmlKeyWords?htmlKeyWords:""));
+		f(SCI_SETKEYWORDS, 0, reinterpret_cast<LPARAM>(htmlKeyWords?htmlKeyWords:""));
 		makeStyle(L_HTML);
 
 		setEmbeddedJSLexer();
 		setEmbeddedPhpLexer();
 		setEmbeddedAspLexer();
 	}
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>("1"));
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.compact"), reinterpret_cast<LPARAM>("0"));
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.html"), reinterpret_cast<LPARAM>("1"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>("1"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.compact"), reinterpret_cast<LPARAM>("0"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.html"), reinterpret_cast<LPARAM>("1"));
 	// This allow to fold comment strem in php/javascript code
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.hypertext.comment"), reinterpret_cast<LPARAM>("1"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.hypertext.comment"), reinterpret_cast<LPARAM>("1"));
 }
 
 void ScintillaEditView::setEmbeddedJSLexer()	{
@@ -684,15 +684,15 @@ void ScintillaEditView::setEmbeddedJSLexer()	{
 		keywordList = wstring2string(kwlW, CP_ACP);
 	}
 
-	execute(SCI_SETKEYWORDS, 1, reinterpret_cast<LPARAM>(getCompleteKeywordList(keywordList, L_JS, LANG_INDEX_INSTR)));
-	execute(SCI_STYLESETEOLFILLED, SCE_HJ_DEFAULT, true);
-	execute(SCI_STYLESETEOLFILLED, SCE_HJ_COMMENT, true);
-	execute(SCI_STYLESETEOLFILLED, SCE_HJ_COMMENTDOC, true);
+	f(SCI_SETKEYWORDS, 1, reinterpret_cast<LPARAM>(getCompleteKeywordList(keywordList, L_JS, LANG_INDEX_INSTR)));
+	f(SCI_STYLESETEOLFILLED, SCE_HJ_DEFAULT, true);
+	f(SCI_STYLESETEOLFILLED, SCE_HJ_COMMENT, true);
+	f(SCI_STYLESETEOLFILLED, SCE_HJ_COMMENTDOC, true);
 }
 
 void ScintillaEditView::setJsonLexer()	{
 
-	execute(SCI_SETLEXER, SCLEX_JSON);
+	f(SCI_SETLEXER, SCLEX_JSON);
 
 	const TCHAR *pKwArray[10] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 
@@ -712,14 +712,14 @@ void ScintillaEditView::setJsonLexer()	{
 		keywordList2 = wstring2string(kwlW, CP_ACP);
 	}
 
-	execute(SCI_SETKEYWORDS, 0, reinterpret_cast<LPARAM>(getCompleteKeywordList(keywordList, L_JSON, LANG_INDEX_INSTR)));
-	execute(SCI_SETKEYWORDS, 1, reinterpret_cast<LPARAM>(getCompleteKeywordList(keywordList2, L_JSON, LANG_INDEX_INSTR2)));
+	f(SCI_SETKEYWORDS, 0, reinterpret_cast<LPARAM>(getCompleteKeywordList(keywordList, L_JSON, LANG_INDEX_INSTR)));
+	f(SCI_SETKEYWORDS, 1, reinterpret_cast<LPARAM>(getCompleteKeywordList(keywordList2, L_JSON, LANG_INDEX_INSTR2)));
 
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>("1"));
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.compact"), reinterpret_cast<LPARAM>("0"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>("1"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.compact"), reinterpret_cast<LPARAM>("0"));
 
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.comment"), reinterpret_cast<LPARAM>("1"));
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.preprocessor"), reinterpret_cast<LPARAM>("1"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.comment"), reinterpret_cast<LPARAM>("1"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.preprocessor"), reinterpret_cast<LPARAM>("1"));
 }
 
 void ScintillaEditView::setEmbeddedPhpLexer()	{
@@ -734,10 +734,10 @@ void ScintillaEditView::setEmbeddedPhpLexer()	{
 		keywordList = wstring2string(kwlW, CP_ACP);
 	}
 
-	execute(SCI_SETKEYWORDS, 4, reinterpret_cast<LPARAM>(getCompleteKeywordList(keywordList, L_PHP, LANG_INDEX_INSTR)));
+	f(SCI_SETKEYWORDS, 4, reinterpret_cast<LPARAM>(getCompleteKeywordList(keywordList, L_PHP, LANG_INDEX_INSTR)));
 
-	execute(SCI_STYLESETEOLFILLED, SCE_HPHP_DEFAULT, true);
-	execute(SCI_STYLESETEOLFILLED, SCE_HPHP_COMMENT, true);
+	f(SCI_STYLESETEOLFILLED, SCE_HPHP_DEFAULT, true);
+	f(SCI_STYLESETEOLFILLED, SCE_HPHP_COMMENT, true);
 }
 
 void ScintillaEditView::setEmbeddedAspLexer()	{
@@ -752,17 +752,17 @@ void ScintillaEditView::setEmbeddedAspLexer()	{
 		keywordList = wstring2string(kwlW, CP_ACP);
 	}
 
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("asp.default.language"), reinterpret_cast<LPARAM>("2"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("asp.default.language"), reinterpret_cast<LPARAM>("2"));
 
-	execute(SCI_SETKEYWORDS, 2, reinterpret_cast<LPARAM>(getCompleteKeywordList(keywordList, L_VB, LANG_INDEX_INSTR)));
+	f(SCI_SETKEYWORDS, 2, reinterpret_cast<LPARAM>(getCompleteKeywordList(keywordList, L_VB, LANG_INDEX_INSTR)));
 
-	execute(SCI_STYLESETEOLFILLED, SCE_HBA_DEFAULT, true);
+	f(SCI_STYLESETEOLFILLED, SCE_HBA_DEFAULT, true);
 }
 
 void ScintillaEditView::setUserLexer(const TCHAR *userLangName)	{
 
 	int setKeywordsCounter = 0;
-	execute(SCI_SETLEXER, SCLEX_USER);
+	f(SCI_SETLEXER, SCLEX_USER);
 
 	UserLangContainer * userLangContainer = userLangName? param.getULCFromName(userLangName):_userDefineDlg._pCurrentUserLang;
 
@@ -783,16 +783,16 @@ void ScintillaEditView::setUserLexer(const TCHAR *userLangName)	{
 								// but this is the best match WideCharToMultiByte offers
 	}
 
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>("1"));
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("userDefine.isCaseIgnored"),		  reinterpret_cast<LPARAM>(userLangContainer->_isCaseIgnored ? "1":"0"));
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("userDefine.allowFoldOfComments"),  reinterpret_cast<LPARAM>(userLangContainer->_allowFoldOfComments ? "1":"0"));
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("userDefine.foldCompact"),		  reinterpret_cast<LPARAM>(userLangContainer->_foldCompact ? "1":"0"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>("1"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("userDefine.isCaseIgnored"),		  reinterpret_cast<LPARAM>(userLangContainer->_isCaseIgnored ? "1":"0"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("userDefine.allowFoldOfComments"),  reinterpret_cast<LPARAM>(userLangContainer->_allowFoldOfComments ? "1":"0"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("userDefine.foldCompact"),		  reinterpret_cast<LPARAM>(userLangContainer->_foldCompact ? "1":"0"));
 
 	char name[] = "userDefine.prefixKeywords0";
 	for (int i=0 ; i<SCE_USER_TOTAL_KEYWORD_GROUPS ; ++i)	{
 
 		itoa(i+1, (name+25), 10);
-		execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>(name), reinterpret_cast<LPARAM>(userLangContainer->_isPrefix[i] ? "1" : "0"));
+		f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>(name), reinterpret_cast<LPARAM>(userLangContainer->_isPrefix[i] ? "1" : "0"));
 	}
 
 	for (int i = 0 ; i < SCE_USER_KWLIST_TOTAL ; ++i)	{
@@ -801,7 +801,7 @@ void ScintillaEditView::setUserLexer(const TCHAR *userLangName)	{
 
 		if (globalMappper().setLexerMapper.find(i) != globalMappper().setLexerMapper.end())	{
 
-			execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>(globalMappper().setLexerMapper[i].c_str()), reinterpret_cast<LPARAM>(keyWords_char));
+			f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>(globalMappper().setLexerMapper[i].c_str()), reinterpret_cast<LPARAM>(keyWords_char));
 		}
 		else	{ // OPERATORS2, FOLDERS_IN_CODE2, FOLDERS_IN_COMMENT, KEYWORDS1-8
 
@@ -853,24 +853,24 @@ void ScintillaEditView::setUserLexer(const TCHAR *userLangName)	{
 
 			}
 			temp[index++] = 0;
-			execute(SCI_SETKEYWORDS, setKeywordsCounter++, reinterpret_cast<LPARAM>(temp));
+			f(SCI_SETKEYWORDS, setKeywordsCounter++, reinterpret_cast<LPARAM>(temp));
 		}
 	}
 
  	char intBuffer[32];
 
 	sprintf(intBuffer, "%d", userLangContainer->_forcePureLC);
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("userDefine.forcePureLC"), reinterpret_cast<LPARAM>(intBuffer));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("userDefine.forcePureLC"), reinterpret_cast<LPARAM>(intBuffer));
 
 	sprintf(intBuffer, "%d", userLangContainer->_decimalSeparator);
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("userDefine.decimalSeparator"), reinterpret_cast<LPARAM>(intBuffer));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("userDefine.decimalSeparator"), reinterpret_cast<LPARAM>(intBuffer));
 
 	// at the end (position SCE_USER_KWLIST_TOTAL) send id values
 	sprintf(intBuffer, "%" PRIuPTR, reinterpret_cast<uintptr_t>(userLangContainer->getName())); // use numeric value of TCHAR pointer
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("userDefine.udlName"), reinterpret_cast<LPARAM>(intBuffer));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("userDefine.udlName"), reinterpret_cast<LPARAM>(intBuffer));
 
 	sprintf(intBuffer, "%" PRIuPTR, reinterpret_cast<uintptr_t>(_currentBufferID)); // use numeric value of BufferID pointer
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("userDefine.currentBufferID"), reinterpret_cast<LPARAM>(intBuffer));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("userDefine.currentBufferID"), reinterpret_cast<LPARAM>(intBuffer));
 
 	for (int i = 0 ; i < SCE_USER_STYLE_TOTAL_STYLES ; ++i)	{
 
@@ -882,7 +882,7 @@ void ScintillaEditView::setUserLexer(const TCHAR *userLangName)	{
 		char nestingBuffer[32];
 		sprintf(nestingBuffer, "userDefine.nesting.%02d", i );
 		sprintf(intBuffer, "%d", style._nesting);
-		execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>(nestingBuffer), reinterpret_cast<LPARAM>(intBuffer));
+		f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>(nestingBuffer), reinterpret_cast<LPARAM>(intBuffer));
 
 		setStyle(style);
 	}
@@ -895,7 +895,7 @@ void ScintillaEditView::setExternalLexer(LangType typeDoc)	{
 
 		const char *pName = wmc.wchar2char(name, CP_ACP);
 
-	execute(SCI_SETLEXERLANGUAGE, 0, reinterpret_cast<LPARAM>(pName));
+	f(SCI_SETLEXERLANGUAGE, 0, reinterpret_cast<LPARAM>(pName));
 
 	LexerStyler *pStyler = (param.getLStylerArray()).getLexerStylerByName(name);
 	if (pStyler)	{
@@ -913,7 +913,7 @@ void ScintillaEditView::setExternalLexer(LangType typeDoc)	{
 
 					keywordList = wstring2string(*(style._keywords), CP_ACP);
 				}
-				execute(SCI_SETKEYWORDS, style._keywordClass, reinterpret_cast<LPARAM>(getCompleteKeywordList(keywordList, typeDoc, style._keywordClass)));
+				f(SCI_SETKEYWORDS, style._keywordClass, reinterpret_cast<LPARAM>(getCompleteKeywordList(keywordList, typeDoc, style._keywordClass)));
 			}
 		}
 	}
@@ -925,14 +925,14 @@ void ScintillaEditView::setCppLexer(LangType langType)	{
 	const char *cppTypes;
 	const TCHAR *doxygenKeyWords  = param.getWordList(L_CPP, LANG_INDEX_TYPE2);
 
-	execute(SCI_SETLEXER, SCLEX_CPP);
+	f(SCI_SETLEXER, SCLEX_CPP);
 
 	if (langType != L_RC)	{
 
 		if (doxygenKeyWords)	{
 
 						const char * doxygenKeyWords_char = wmc.wchar2char(doxygenKeyWords, CP_ACP);
-			execute(SCI_SETKEYWORDS, 2, reinterpret_cast<LPARAM>(doxygenKeyWords_char));
+			f(SCI_SETKEYWORDS, 2, reinterpret_cast<LPARAM>(doxygenKeyWords_char));
 		}
 	}
 
@@ -955,32 +955,32 @@ void ScintillaEditView::setCppLexer(LangType langType)	{
 	}
 	cppTypes = getCompleteKeywordList(keywordListType, langType, LANG_INDEX_TYPE);
 
-	execute(SCI_SETKEYWORDS, 0, reinterpret_cast<LPARAM>(cppInstrs));
-	execute(SCI_SETKEYWORDS, 1, reinterpret_cast<LPARAM>(cppTypes));
+	f(SCI_SETKEYWORDS, 0, reinterpret_cast<LPARAM>(cppInstrs));
+	f(SCI_SETKEYWORDS, 1, reinterpret_cast<LPARAM>(cppTypes));
 
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>("1"));
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.compact"), reinterpret_cast<LPARAM>("0"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>("1"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.compact"), reinterpret_cast<LPARAM>("0"));
 
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.comment"), reinterpret_cast<LPARAM>("1"));
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.preprocessor"), reinterpret_cast<LPARAM>("1"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.comment"), reinterpret_cast<LPARAM>("1"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.preprocessor"), reinterpret_cast<LPARAM>("1"));
 
 	// Disable track preprocessor to avoid incorrect detection.
 	// In the most of cases, the symbols are defined outside of file.
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("lexer.cpp.track.preprocessor"), reinterpret_cast<LPARAM>("0"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("lexer.cpp.track.preprocessor"), reinterpret_cast<LPARAM>("0"));
 }
 
 void ScintillaEditView::setJsLexer()	{
 
 	const TCHAR *doxygenKeyWords = param.getWordList(L_CPP, LANG_INDEX_TYPE2);
 
-	execute(SCI_SETLEXER, SCLEX_CPP);
+	f(SCI_SETLEXER, SCLEX_CPP);
 	const TCHAR *pKwArray[10] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 	makeStyle(L_JAVASCRIPT, pKwArray);
 
 	if (doxygenKeyWords)	{
 
 				const char * doxygenKeyWords_char = wmc.wchar2char(doxygenKeyWords, CP_ACP);
-		execute(SCI_SETKEYWORDS, 2, reinterpret_cast<LPARAM>(doxygenKeyWords_char));
+		f(SCI_SETKEYWORDS, 2, reinterpret_cast<LPARAM>(doxygenKeyWords_char));
 	}
 
 	const TCHAR *newLexerName = ScintillaEditView::langNames[L_JAVASCRIPT].lexerName;
@@ -1018,9 +1018,9 @@ void ScintillaEditView::setJsLexer()	{
 		}
 		const char *jsInstrs2 = getCompleteKeywordList(keywordListInstruction2, L_JAVASCRIPT, LANG_INDEX_INSTR2);
 
-		execute(SCI_SETKEYWORDS, 0, reinterpret_cast<LPARAM>(jsInstrs));
-		execute(SCI_SETKEYWORDS, 1, reinterpret_cast<LPARAM>(jsTypes));
-		execute(SCI_SETKEYWORDS, 3, reinterpret_cast<LPARAM>(jsInstrs2));
+		f(SCI_SETKEYWORDS, 0, reinterpret_cast<LPARAM>(jsInstrs));
+		f(SCI_SETKEYWORDS, 1, reinterpret_cast<LPARAM>(jsTypes));
+		f(SCI_SETKEYWORDS, 3, reinterpret_cast<LPARAM>(jsInstrs2));
 	}
 	else	{ // New js styler is not available, we use the old styling for the sake of retro-compatibility
 
@@ -1052,10 +1052,10 @@ void ScintillaEditView::setJsLexer()	{
 				setStyle(style);
 			}
 		}
-		execute(SCI_STYLESETEOLFILLED, SCE_C_DEFAULT, true);
-		execute(SCI_STYLESETEOLFILLED, SCE_C_COMMENTLINE, true);
-		execute(SCI_STYLESETEOLFILLED, SCE_C_COMMENT, true);
-		execute(SCI_STYLESETEOLFILLED, SCE_C_COMMENTDOC, true);
+		f(SCI_STYLESETEOLFILLED, SCE_C_DEFAULT, true);
+		f(SCI_STYLESETEOLFILLED, SCE_C_COMMENTLINE, true);
+		f(SCI_STYLESETEOLFILLED, SCE_C_COMMENT, true);
+		f(SCI_STYLESETEOLFILLED, SCE_C_COMMENTDOC, true);
 
 		makeStyle(L_JS, pKwArray);
 
@@ -1066,19 +1066,19 @@ void ScintillaEditView::setJsLexer()	{
 			keywordListInstruction = wstring2string(kwlW, CP_ACP);
 		}
 		const char *jsEmbeddedInstrs = getCompleteKeywordList(keywordListInstruction, L_JS, LANG_INDEX_INSTR);
-		execute(SCI_SETKEYWORDS, 0, reinterpret_cast<LPARAM>(jsEmbeddedInstrs));
+		f(SCI_SETKEYWORDS, 0, reinterpret_cast<LPARAM>(jsEmbeddedInstrs));
 	}
 
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>("1"));
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.compact"), reinterpret_cast<LPARAM>("0"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>("1"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.compact"), reinterpret_cast<LPARAM>("0"));
 
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.comment"), reinterpret_cast<LPARAM>("1"));
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.preprocessor"), reinterpret_cast<LPARAM>("1"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.comment"), reinterpret_cast<LPARAM>("1"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.preprocessor"), reinterpret_cast<LPARAM>("1"));
 
 	// Disable track preprocessor to avoid incorrect detection.
 	// In the most of cases, the symbols are defined outside of file.
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("lexer.cpp.track.preprocessor"), reinterpret_cast<LPARAM>("0"));
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("lexer.cpp.backquoted.strings"), reinterpret_cast<LPARAM>("1"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("lexer.cpp.track.preprocessor"), reinterpret_cast<LPARAM>("0"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("lexer.cpp.backquoted.strings"), reinterpret_cast<LPARAM>("1"));
 }
 
 void ScintillaEditView::setTclLexer()	{
@@ -1087,7 +1087,7 @@ void ScintillaEditView::setTclLexer()	{
 	const char *tclTypes;
 
 
-	execute(SCI_SETLEXER, SCLEX_TCL);
+	f(SCI_SETLEXER, SCLEX_TCL);
 
 	const TCHAR *pKwArray[10] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 	makeStyle(L_TCL, pKwArray);
@@ -1108,13 +1108,13 @@ void ScintillaEditView::setTclLexer()	{
 	}
 	tclTypes = getCompleteKeywordList(keywordListType, L_TCL, LANG_INDEX_TYPE);
 
-	execute(SCI_SETKEYWORDS, 0, reinterpret_cast<LPARAM>(tclInstrs));
-	execute(SCI_SETKEYWORDS, 1, reinterpret_cast<LPARAM>(tclTypes));
+	f(SCI_SETKEYWORDS, 0, reinterpret_cast<LPARAM>(tclInstrs));
+	f(SCI_SETKEYWORDS, 1, reinterpret_cast<LPARAM>(tclTypes));
 }
 
 void ScintillaEditView::setObjCLexer(LangType langType)	{
 
-	execute(SCI_SETLEXER, SCLEX_OBJC);
+	f(SCI_SETLEXER, SCLEX_OBJC);
 
 	const TCHAR *pKwArray[10] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
@@ -1159,29 +1159,29 @@ void ScintillaEditView::setObjCLexer(LangType langType)	{
 	}
 	const char *doxygenKeyWords = doxygenKeyWordsString.c_str();
 
-	execute(SCI_SETKEYWORDS, 0, reinterpret_cast<LPARAM>(objcInstrs));
-	execute(SCI_SETKEYWORDS, 1, reinterpret_cast<LPARAM>(objcTypes));
-	execute(SCI_SETKEYWORDS, 2, reinterpret_cast<LPARAM>(doxygenKeyWords));
-	execute(SCI_SETKEYWORDS, 3, reinterpret_cast<LPARAM>(objCDirective));
-	execute(SCI_SETKEYWORDS, 4, reinterpret_cast<LPARAM>(objCQualifier));
+	f(SCI_SETKEYWORDS, 0, reinterpret_cast<LPARAM>(objcInstrs));
+	f(SCI_SETKEYWORDS, 1, reinterpret_cast<LPARAM>(objcTypes));
+	f(SCI_SETKEYWORDS, 2, reinterpret_cast<LPARAM>(doxygenKeyWords));
+	f(SCI_SETKEYWORDS, 3, reinterpret_cast<LPARAM>(objCDirective));
+	f(SCI_SETKEYWORDS, 4, reinterpret_cast<LPARAM>(objCQualifier));
 
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>("1"));
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.compact"), reinterpret_cast<LPARAM>("0"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>("1"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.compact"), reinterpret_cast<LPARAM>("0"));
 
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.comment"), reinterpret_cast<LPARAM>("1"));
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.preprocessor"), reinterpret_cast<LPARAM>("1"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.comment"), reinterpret_cast<LPARAM>("1"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.preprocessor"), reinterpret_cast<LPARAM>("1"));
 }
 
 void ScintillaEditView::setKeywords(LangType langType, const char *keywords, int index)	{
 
 	basic_string<char> wordList;
 	wordList = (keywords)?keywords:"";
-	execute(SCI_SETKEYWORDS, index, reinterpret_cast<LPARAM>(getCompleteKeywordList(wordList, langType, index)));
+	f(SCI_SETKEYWORDS, index, reinterpret_cast<LPARAM>(getCompleteKeywordList(wordList, langType, index)));
 }
 
 void ScintillaEditView::setLexer(int lexerID, LangType langType, int whichList)	{
 
-	execute(SCI_SETLEXER, lexerID);
+	f(SCI_SETLEXER, lexerID);
 
 	const TCHAR *pKwArray[10] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
@@ -1242,9 +1242,9 @@ void ScintillaEditView::setLexer(int lexerID, LangType langType, int whichList)	
 		setKeywords(langType, keyWords_char, LANG_INDEX_TYPE7);
 	}
 
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>("1"));
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.compact"), reinterpret_cast<LPARAM>("0"));
-	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.comment"), reinterpret_cast<LPARAM>("1"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>("1"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.compact"), reinterpret_cast<LPARAM>("0"));
+	f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.comment"), reinterpret_cast<LPARAM>("1"));
 }
 
 void ScintillaEditView::makeStyle(LangType language, const TCHAR **keywordArray)	{
@@ -1268,7 +1268,7 @@ void ScintillaEditView::makeStyle(LangType language, const TCHAR **keywordArray)
 
 void ScintillaEditView::restoreDefaultWordChars()	{
 
-	execute(SCI_SETWORDCHARS, 0, reinterpret_cast<LPARAM>(_defaultCharList.c_str()));
+	f(SCI_SETWORDCHARS, 0, reinterpret_cast<LPARAM>(_defaultCharList.c_str()));
 }
 
 void ScintillaEditView::addCustomWordChars()	{
@@ -1300,7 +1300,7 @@ void ScintillaEditView::addCustomWordChars()	{
 
 		string newCharList = _defaultCharList;
 		newCharList += chars2addStr;
-		execute(SCI_SETWORDCHARS, 0, reinterpret_cast<LPARAM>(newCharList.c_str()));
+		f(SCI_SETWORDCHARS, 0, reinterpret_cast<LPARAM>(newCharList.c_str()));
 	}
 }
 
@@ -1323,7 +1323,7 @@ void ScintillaEditView::defineDocType(LangType typeDoc)	{
 		setStyle(styleDefault);
 	}
 
-	execute(SCI_STYLECLEARALL);
+	f(SCI_STYLECLEARALL);
 
 	Style *pStyle;
 	Style defaultIndicatorStyle;
@@ -1436,9 +1436,9 @@ void ScintillaEditView::defineDocType(LangType typeDoc)	{
 		if (getCurrentBuffer()->getUnicodeMode() == uni8Bit)	{
 
 			if (typeDoc == L_CSS || typeDoc == L_CAML || typeDoc == L_ASM || typeDoc == L_MATLAB)
-				execute(SCI_SETCODEPAGE, CP_ACP);
+				f(SCI_SETCODEPAGE, CP_ACP);
 			else
-				execute(SCI_SETCODEPAGE, _codepage);
+				f(SCI_SETCODEPAGE, _codepage);
 		}
 	}
 
@@ -1519,7 +1519,7 @@ void ScintillaEditView::defineDocType(LangType typeDoc)	{
 				}
 			}
 			setSpecialStyle(nfoStyle);
-			execute(SCI_STYLECLEARALL);
+			f(SCI_STYLECLEARALL);
 
 			Buffer * buf = MainFileManager.getBufferByID(_currentBufferID);
 
@@ -1716,7 +1716,7 @@ void ScintillaEditView::defineDocType(LangType typeDoc)	{
 			if (typeDoc >= L_EXTERNAL && typeDoc < param.L_END)
 				setExternalLexer(typeDoc);
 			else
-				execute(SCI_SETLEXER, (_codepage == CP_CHINESE_TRADITIONAL)?SCLEX_MAKEFILE:SCLEX_NULL);
+				f(SCI_SETLEXER, (_codepage == CP_CHINESE_TRADITIONAL)?SCLEX_MAKEFILE:SCLEX_NULL);
 			break;
 
 	}
@@ -1750,21 +1750,21 @@ void ScintillaEditView::defineDocType(LangType typeDoc)	{
 	
 	if (svp._indentGuideLineShow)	{
 
-		const auto currentIndentMode = execute(SCI_GETINDENTATIONGUIDES);
+		const auto currentIndentMode = f(SCI_GETINDENTATIONGUIDES);
 		// Python like indentation, excludes lexers (Nim, VB, YAML, etc.)
 		// that includes tailing empty or whitespace only lines in folding block.
 		const bool pythonLike = (typeDoc == L_PYTHON || typeDoc == L_COFFEESCRIPT || typeDoc == L_HASKELL);
 		const int docIndentMode = pythonLike ? SC_IV_LOOKFORWARD : SC_IV_LOOKBOTH;
 		if (currentIndentMode != docIndentMode)
-			execute(SCI_SETINDENTATIONGUIDES, docIndentMode);
+			f(SCI_SETINDENTATIONGUIDES, docIndentMode);
 	}
 }
 
 BufferID ScintillaEditView::attachDefaultDoc()
 {
 	// get the doc pointer attached (by default) on the view Scintilla
-	Document doc = execute(SCI_GETDOCPOINTER, 0, 0);
-	execute(SCI_ADDREFDOCUMENT, 0, doc);
+	Document doc = f(SCI_GETDOCPOINTER, 0, 0);
+	f(SCI_ADDREFDOCUMENT, 0, doc);
 	BufferID id = MainFileManager.bufferFromDocument(doc, false, true);//true, true);	//keep counter on 1
 	Buffer * buf = MainFileManager.getBufferByID(id);
 
@@ -1780,21 +1780,21 @@ BufferID ScintillaEditView::attachDefaultDoc()
 void ScintillaEditView::saveCurrentPos()	{
 
 	//Save data so, that the current topline becomes visible again after restoring.
-	int32_t displayedLine = static_cast<int32_t>(execute(SCI_GETFIRSTVISIBLELINE));
-	int32_t docLine = static_cast<int32_t>(execute(SCI_DOCLINEFROMVISIBLE, displayedLine));		//linenumber of the line displayed in the top
-	int32_t offset = displayedLine - static_cast<int32_t>(execute(SCI_VISIBLEFROMDOCLINE, docLine));		//use this to calc offset of wrap. If no wrap this should be zero
-	int wrapCount = static_cast<int32_t>(execute(SCI_WRAPCOUNT, docLine));
+	int32_t displayedLine = static_cast<int32_t>(f(SCI_GETFIRSTVISIBLELINE));
+	int32_t docLine = static_cast<int32_t>(f(SCI_DOCLINEFROMVISIBLE, displayedLine));		//linenumber of the line displayed in the top
+	int32_t offset = displayedLine - static_cast<int32_t>(f(SCI_VISIBLEFROMDOCLINE, docLine));		//use this to calc offset of wrap. If no wrap this should be zero
+	int wrapCount = static_cast<int32_t>(f(SCI_WRAPCOUNT, docLine));
 
 	Buffer * buf = MainFileManager.getBufferByID(_currentBufferID);
 
 	Position pos;
 	// the correct visible line number
 	pos._firstVisibleLine = docLine;
-	pos._startPos = static_cast<int>(execute(SCI_GETANCHOR));
-	pos._endPos = static_cast<int>(execute(SCI_GETCURRENTPOS));
-	pos._xOffset = static_cast<int>(execute(SCI_GETXOFFSET));
-	pos._selMode = static_cast<int32_t>(execute(SCI_GETSELECTIONMODE));
-	pos._scrollWidth = static_cast<int32_t>(execute(SCI_GETSCROLLWIDTH));
+	pos._startPos = static_cast<int>(f(SCI_GETANCHOR));
+	pos._endPos = static_cast<int>(f(SCI_GETCURRENTPOS));
+	pos._xOffset = static_cast<int>(f(SCI_GETXOFFSET));
+	pos._selMode = static_cast<int32_t>(f(SCI_GETSELECTIONMODE));
+	pos._scrollWidth = static_cast<int32_t>(f(SCI_GETSCROLLWIDTH));
 	pos._offset = offset;
 	pos._wrapCount = wrapCount;
 
@@ -1810,18 +1810,18 @@ void ScintillaEditView::restoreCurrentPosPreStep()	{
 	Buffer * buf = MainFileManager.getBufferByID(_currentBufferID);
 	Position & pos = buf->getPosition(this);
 
-	execute(SCI_SETSELECTIONMODE, pos._selMode);	//enable
-	execute(SCI_SETANCHOR, pos._startPos);
-	execute(SCI_SETCURRENTPOS, pos._endPos);
-	execute(SCI_CANCEL);							//disable
+	f(SCI_SETSELECTIONMODE, pos._selMode);	//enable
+	f(SCI_SETANCHOR, pos._startPos);
+	f(SCI_SETCURRENTPOS, pos._endPos);
+	f(SCI_CANCEL);							//disable
 	if (not isWrap())	{ //only offset if not wrapping, otherwise the offset isnt needed at all
 
-		execute(SCI_SETSCROLLWIDTH, pos._scrollWidth);
-		execute(SCI_SETXOFFSET, pos._xOffset);
+		f(SCI_SETSCROLLWIDTH, pos._scrollWidth);
+		f(SCI_SETXOFFSET, pos._xOffset);
 	}
-	execute(SCI_CHOOSECARETX); // choose current x position
-	int lineToShow = static_cast<int32_t>(execute(SCI_VISIBLEFROMDOCLINE, pos._firstVisibleLine));
-	execute(SCI_SETFIRSTVISIBLELINE, lineToShow);
+	f(SCI_CHOOSECARETX); // choose current x position
+	int lineToShow = static_cast<int32_t>(f(SCI_VISIBLEFROMDOCLINE, pos._firstVisibleLine));
+	f(SCI_SETFIRSTVISIBLELINE, lineToShow);
 	if (isWrap())	{
 
 		// Enable flag 'positionRestoreNeeded' so that function restoreCurrentPosPostStep get called
@@ -1855,8 +1855,8 @@ void ScintillaEditView::restoreCurrentPosPostStep()	{
 		return;
 	}
 	
-	int32_t displayedLine = static_cast<int32_t>(execute(SCI_GETFIRSTVISIBLELINE));
-	int32_t docLine = static_cast<int32_t>(execute(SCI_DOCLINEFROMVISIBLE, displayedLine));		//linenumber of the line displayed in the 
+	int32_t displayedLine = static_cast<int32_t>(f(SCI_GETFIRSTVISIBLELINE));
+	int32_t docLine = static_cast<int32_t>(f(SCI_DOCLINEFROMVISIBLE, displayedLine));		//linenumber of the line displayed in the 
 	
 
 	// check docLine must equals saved position
@@ -1864,14 +1864,14 @@ void ScintillaEditView::restoreCurrentPosPostStep()	{
 
 		
 		// Scintilla has paint the buffer but the position is not correct.
-		int lineToShow = static_cast<int32_t>(execute(SCI_VISIBLEFROMDOCLINE, pos._firstVisibleLine));
-		execute(SCI_SETFIRSTVISIBLELINE, lineToShow);
+		int lineToShow = static_cast<int32_t>(f(SCI_VISIBLEFROMDOCLINE, pos._firstVisibleLine));
+		f(SCI_SETFIRSTVISIBLELINE, lineToShow);
 	}
 	else if (pos._offset > 0)	{
 
 		// don't scroll anything if the wrap count is different than the saved one.
 		// Buffer update may be in progress (in case wrap is enabled)
-		int wrapCount = static_cast<int32_t>(execute(SCI_WRAPCOUNT, docLine));
+		int wrapCount = static_cast<int32_t>(f(SCI_WRAPCOUNT, docLine));
 		if (wrapCount == pos._wrapCount)	{
 
 			scroll(0, pos._offset);
@@ -1887,8 +1887,8 @@ void ScintillaEditView::restoreCurrentPosPostStep()	{
 
 void ScintillaEditView::restyleBuffer()	{
 
-	execute(SCI_CLEARDOCUMENTSTYLE);
-	execute(SCI_COLOURISE, 0, -1);
+	f(SCI_CLEARDOCUMENTSTYLE);
+	f(SCI_COLOURISE, 0, -1);
 	_currentBuffer->setNeedsLexing(false);
 }
 
@@ -1922,9 +1922,9 @@ void ScintillaEditView::activateBuffer(BufferID buffer)	{
 	// change the doc, this operation will decrease
 	// the ref count of old current doc and increase the one of the new doc. FileManager should manage the rest
 	// Note that the actual reference in the Buffer itself is NOT decreased, Notepad_plus does that if neccessary
-	execute(SCI_SETDOCPOINTER, 0, _currentBuffer->getDocument());
+	f(SCI_SETDOCPOINTER, 0, _currentBuffer->getDocument());
 
-	// Due to execute(SCI_CLEARDOCUMENTSTYLE); in defineDocType() function
+	// Due to f(SCI_CLEARDOCUMENTSTYLE); in defineDocType() function
 	// defineDocType() function should be called here, but not be after the fold info loop
 	defineDocType(_currentBuffer->getLangType());
 
@@ -1944,7 +1944,7 @@ void ScintillaEditView::activateBuffer(BufferID buffer)	{
 	bufferUpdated(_currentBuffer, (BufferChangeMask & ~BufferChangeLanguage));	//everything should be updated, but the language (which undoes some operations done here like folding)
 
 	//setup line number margin
-	int numLines = static_cast<int32_t>(execute(SCI_GETLINECOUNT));
+	int numLines = static_cast<int32_t>(f(SCI_GETLINECOUNT));
 
 	char numLineStr[32];
 	itoa(numLines, numLineStr, 10);
@@ -1960,7 +1960,7 @@ void ScintillaEditView::getCurrentFoldStates(vector<size_t> & lineStateVector)	{
 	size_t contractedFoldHeaderLine = 0;
 
 	do {
-		contractedFoldHeaderLine = static_cast<size_t>(execute(SCI_CONTRACTEDFOLDNEXT, contractedFoldHeaderLine));
+		contractedFoldHeaderLine = static_cast<size_t>(f(SCI_CONTRACTEDFOLDNEXT, contractedFoldHeaderLine));
 		if (contractedFoldHeaderLine != -1)	{
 
 			//-- Store contracted line
@@ -2002,11 +2002,11 @@ void ScintillaEditView::bufferUpdated(Buffer * buffer, int mask)	{
 
 		if (mask & BufferChangeFormat)	{
 
-			execute(SCI_SETEOLMODE, static_cast<int>(_currentBuffer->getEolFormat()));
+			f(SCI_SETEOLMODE, static_cast<int>(_currentBuffer->getEolFormat()));
 		}
 		if (mask & BufferChangeReadonly)	{
 
-			execute(SCI_SETREADONLY, _currentBuffer->isReadOnly());
+			f(SCI_SETREADONLY, _currentBuffer->isReadOnly());
 		}
 		if (mask & BufferChangeUnicode)	{
 
@@ -2026,14 +2026,14 @@ void ScintillaEditView::bufferUpdated(Buffer * buffer, int mask)	{
 			}
 			else	//CP UTF8 for all unicode
 				enc = SC_CP_UTF8;
-				execute(SCI_SETCODEPAGE, enc);
+				f(SCI_SETCODEPAGE, enc);
 		}
 	}
 }
 
 bool ScintillaEditView::isFoldIndentationBased() const
 {
-	const auto lexer = execute(SCI_GETLEXER);
+	const auto lexer = f(SCI_GETLEXER);
 	// search IndentAmount in scintilla\lexers folder
 	return lexer == SCLEX_PYTHON
 		|| lexer == SCLEX_COFFEESCRIPT
@@ -2065,17 +2065,17 @@ struct FoldLevelStack	{
 
 void ScintillaEditView::collapseFoldIndentationBased(int level2Collapse, bool mode)	{
 
-	execute(SCI_COLOURISE, 0, -1);
+	f(SCI_COLOURISE, 0, -1);
 
 	FoldLevelStack levelStack;
 	++level2Collapse; // 1-based level number
 
-	const int maxLine = static_cast<int32_t>(execute(SCI_GETLINECOUNT));
+	const int maxLine = static_cast<int32_t>(f(SCI_GETLINECOUNT));
 	int line = 0;
 
 	while (line < maxLine)	{
 
-		int level = static_cast<int32_t>(execute(SCI_GETFOLDLEVEL, line));
+		int level = static_cast<int32_t>(f(SCI_GETFOLDLEVEL, line));
 		if (level & SC_FOLDLEVELHEADERFLAG)	{
 
 			level &= SC_FOLDLEVELNUMBERMASK;
@@ -2083,12 +2083,12 @@ void ScintillaEditView::collapseFoldIndentationBased(int level2Collapse, bool mo
 			levelStack.push(level);
 			if (level2Collapse == levelStack.levelCount)	{
 
-				if (bool(execute(SCI_GETFOLDEXPANDED, line)) != mode)	{
+				if (bool(f(SCI_GETFOLDEXPANDED, line)) != mode)	{
 
 					fold(line, mode);
 				}
 				// skip all children lines, required to avoid buffer overrun.
-				line = static_cast<int32_t>(execute(SCI_GETLASTCHILD, line, -1));
+				line = static_cast<int32_t>(f(SCI_GETLASTCHILD, line, -1));
 			}
 		}
 		++line;
@@ -2105,106 +2105,26 @@ void ScintillaEditView::collapse(int level2Collapse, bool mode)	{
 		return;
 	}
 
-	execute(SCI_COLOURISE, 0, -1);
+	f(SCI_COLOURISE, 0, -1);
 
-	int maxLine = static_cast<int32_t>(execute(SCI_GETLINECOUNT));
+	int maxLine = static_cast<int32_t>(f(SCI_GETLINECOUNT));
 
 	for (int line = 0; line < maxLine; ++line)	{
 
-		int level = static_cast<int32_t>(execute(SCI_GETFOLDLEVEL, line));
+		int level = static_cast<int32_t>(f(SCI_GETFOLDLEVEL, line));
 		if (level & SC_FOLDLEVELHEADERFLAG)	{
 
 			level -= SC_FOLDLEVELBASE;
 			if (level2Collapse == (level & SC_FOLDLEVELNUMBERMASK))
-				if (bool(execute(SCI_GETFOLDEXPANDED, line)) != mode)	{
+				if (bool(f(SCI_GETFOLDEXPANDED, line)) != mode)	{
 
 					fold(line, mode);
 				}
 		}
 	}
-
 	runMarkers(true, 0, true, false);
 }
 
-void ScintillaEditView::fold(size_t line, bool mode)	{
-
-	if (execute(SCI_GETENDSTYLED) < execute(SCI_GETLENGTH))	execute(SCI_COLOURISE,0,-1);
-	int headerLine;
-	if (execute(SCI_GETFOLDLEVEL, line) & SC_FOLDLEVELHEADERFLAG)
-		headerLine = static_cast<int32_t>(line);
-	else if ((headerLine = static_cast<int32_t>(execute(SCI_GETFOLDPARENT, line))) == -1)
-		return;
-
-	if (bool(execute(SCI_GETFOLDEXPANDED, headerLine)) != mode)	{
-		execute(SCI_TOGGLEFOLD, headerLine);
-
-		SCNotification scnN;
-		scnN.nmhdr.code = SCN_FOLDINGSTATECHANGED;
-		scnN.nmhdr.hwndFrom = _hSelf;
-		scnN.nmhdr.idFrom = 0;
-		scnN.line = headerLine;
-		scnN.foldLevelNow = bool(execute(SCI_GETFOLDEXPANDED, headerLine));
-
-		::SendMessage(_hParent, WM_NOTIFY, 0, reinterpret_cast<LPARAM>(&scnN));
-	}
-}
-
-void ScintillaEditView::toggleFold(size_t ln, bool rec)	{
-
-	if (execute(SCI_GETENDSTYLED) < execute(SCI_GETLENGTH))	execute(SCI_COLOURISE,0,-1);
-	int hLine;
-	if (execute(SCI_GETFOLDLEVEL, ln) & SC_FOLDLEVELHEADERFLAG)
-		hLine = static_cast<int32_t>(ln);
-	else if ((hLine = static_cast<int32_t>(execute(SCI_GETFOLDPARENT, ln))) == -1)
-		return;
-
-	SCNotification scnN;
-	scnN.nmhdr.code = SCN_FOLDINGSTATECHANGED;
-	scnN.nmhdr.hwndFrom = _hSelf;
-	scnN.nmhdr.idFrom = 0;
-
-	execute(SCI_TOGGLEFOLD, hLine);
-	scnN.line = hLine;
-	bool hdState = scnN.foldLevelNow = bool(execute(SCI_GETFOLDEXPANDED, hLine));
-	::SendMessage(_hParent, WM_NOTIFY, 0, reinterpret_cast<LPARAM>(&scnN));
-
-	if (rec)	{
-		auto hdLevel = execute(SCI_GETFOLDLEVEL, hLine) & SC_FOLDLEVELNUMBERMASK;
-		while ((execute(SCI_GETFOLDLEVEL, ++hLine) & SC_FOLDLEVELNUMBERMASK) > hdLevel)
-			if (execute(SCI_GETFOLDLEVEL, hLine) & SC_FOLDLEVELHEADERFLAG && bool(execute(SCI_GETFOLDEXPANDED, hLine)) != hdState)	{
-				execute(SCI_TOGGLEFOLD, hLine);
-				scnN.line = hLine;
-				scnN.foldLevelNow = bool(execute(SCI_GETFOLDEXPANDED, hLine));
-				::SendMessage(_hParent, WM_NOTIFY, 0, reinterpret_cast<LPARAM>(&scnN));
-			}
-	}
-	execute(SCI_SETYCARETPOLICY, 13, 77);execute(SCI_SCROLLCARET);
-	execute(SCI_SETYCARETPOLICY, 13, 1);
-}
-
-void ScintillaEditView::foldAll(bool mode)	{
-
-	SCNotification scnN;
-	scnN.nmhdr.code = SCN_FOLDINGSTATECHANGED;
-	scnN.nmhdr.hwndFrom = _hSelf;
-	scnN.nmhdr.idFrom = 0;
-	for (int line = 0; line< execute(SCI_GETLINECOUNT); ++line)
-		if (execute(SCI_GETFOLDLEVEL, line) & SC_FOLDLEVELHEADERFLAG
-			&& bool(execute(SCI_GETFOLDEXPANDED, line)) != mode)	{
-
-			execute(SCI_TOGGLEFOLD, line);
-			scnN.line = line;
-			scnN.foldLevelNow = bool(execute(SCI_GETFOLDEXPANDED, line));
-			::SendMessage(_hParent, WM_NOTIFY, 0, reinterpret_cast<LPARAM>(&scnN));
-		}
-	execute(SCI_SETYCARETPOLICY, 13, 77);execute(SCI_SCROLLCARET);
-	execute(SCI_SETYCARETPOLICY, 13, 1);
-/* 	if (mode == fold_collapse)	{
-		auto line = 1+ execute(SCI_LINEFROMPOSITION, execute(SCI_GETCURRENTPOS));
-		while ((execute(SCI_GETFOLDLEVEL, --line) & SC_FOLDLEVELNUMBERMASK) != SC_FOLDLEVELBASE);
-		execute(SCI_GOTOLINE, line);
-	}*/
-}
 
 void ScintillaEditView::getText(char *dest, size_t start, size_t end) const
 {
@@ -2212,7 +2132,7 @@ void ScintillaEditView::getText(char *dest, size_t start, size_t end) const
 	tr.chrg.cpMin = static_cast<long>(start);
 	tr.chrg.cpMax = static_cast<long>(end);
 	tr.lpstrText = dest;
-	execute(SCI_GETTEXTRANGE, 0, reinterpret_cast<LPARAM>(&tr));
+	f(SCI_GETTEXTRANGE, 0, reinterpret_cast<LPARAM>(&tr));
 }
 
 generic_string ScintillaEditView::getGenericTextAsString(size_t start, size_t end) const
@@ -2230,7 +2150,7 @@ void ScintillaEditView::getGenericText(TCHAR *dest, size_t destlen, size_t start
 {
 	char *destA = new char[end - start + 1];
 	getText(destA, start, end);
-	UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
+	UINT cp = static_cast<UINT>(f(SCI_GETCODEPAGE));
 	const TCHAR *destW = wmc.char2wchar(destA, cp);
 	_tcsncpy_s(dest, destlen, destW, _TRUNCATE);
 	delete [] destA;
@@ -2243,7 +2163,7 @@ void ScintillaEditView::getGenericText(TCHAR *dest, size_t destlen, int start, i
 {
 		char *destA = new char[end - start + 1];
 	getText(destA, start, end);
-	UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE))    ;
+	UINT cp = static_cast<UINT>(f(SCI_GETCODEPAGE))    ;
 	const TCHAR *destW = wmc.char2wchar(destA, cp, mstart, mend);
 	_tcsncpy_s(dest, destlen, destW, _TRUNCATE);
 	delete [] destA;
@@ -2251,28 +2171,28 @@ void ScintillaEditView::getGenericText(TCHAR *dest, size_t destlen, int start, i
 
 void ScintillaEditView::insertGenericTextFrom(size_t position, const TCHAR *text2insert) const
 {
-		UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
+		UINT cp = static_cast<UINT>(f(SCI_GETCODEPAGE));
 	const char *text2insertA = wmc.wchar2char(text2insert, cp);
-	execute(SCI_INSERTTEXT, position, reinterpret_cast<LPARAM>(text2insertA));
+	f(SCI_INSERTTEXT, position, reinterpret_cast<LPARAM>(text2insertA));
 }
 
 void ScintillaEditView::replaceSelWith(const char * replaceText)	{
 
-	execute(SCI_REPLACESEL, 0, reinterpret_cast<LPARAM>(replaceText));
+	f(SCI_REPLACESEL, 0, reinterpret_cast<LPARAM>(replaceText));
 }
 
 void ScintillaEditView::getVisibleStartAndEndPosition(int * startPos, int * endPos)	{
 
 	assert(startPos != NULL && endPos != NULL);
 
-	auto firstVisibleLine = execute(SCI_GETFIRSTVISIBLELINE);
-	*startPos = static_cast<int32_t>(execute(SCI_POSITIONFROMLINE, execute(SCI_DOCLINEFROMVISIBLE, firstVisibleLine)));
-	auto linesOnScreen = execute(SCI_LINESONSCREEN);
-	auto lineCount = execute(SCI_GETLINECOUNT);
-	auto visibleLine = execute(SCI_DOCLINEFROMVISIBLE, firstVisibleLine + min(linesOnScreen, lineCount));
-	*endPos = static_cast<int32_t>(execute(SCI_POSITIONFROMLINE, visibleLine));
+	auto firstVisibleLine = f(SCI_GETFIRSTVISIBLELINE);
+	*startPos = static_cast<int32_t>(f(SCI_POSITIONFROMLINE, f(SCI_DOCLINEFROMVISIBLE, firstVisibleLine)));
+	auto linesOnScreen = f(SCI_LINESONSCREEN);
+	auto lineCount = f(SCI_GETLINECOUNT);
+	auto visibleLine = f(SCI_DOCLINEFROMVISIBLE, firstVisibleLine + min(linesOnScreen, lineCount));
+	*endPos = static_cast<int32_t>(f(SCI_POSITIONFROMLINE, visibleLine));
 	if (*endPos == -1) 
-		*endPos = static_cast<int32_t>(execute(SCI_GETLENGTH));
+		*endPos = static_cast<int32_t>(f(SCI_GETLENGTH));
 }
 
 char * ScintillaEditView::getWordFromRange(char * txt, int size, int pos1, int pos2)	{
@@ -2296,7 +2216,7 @@ char * ScintillaEditView::getWordOnCaretPos(char * txt, int size)	{
 
 TCHAR * ScintillaEditView::getGenericWordOnCaretPos(TCHAR * txt, int size)	{
 
-		UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
+		UINT cp = static_cast<UINT>(f(SCI_GETCODEPAGE));
 	char *txtA = new char[size + 1];
 	getWordOnCaretPos(txtA, size);
 
@@ -2324,7 +2244,7 @@ char * ScintillaEditView::getSelectedText(char * txt, int size, bool expand)	{
 
 TCHAR * ScintillaEditView::getGenericSelectedText(TCHAR * txt, int size, bool expand)	{
 
-		UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
+		UINT cp = static_cast<UINT>(f(SCI_GETCODEPAGE));
 	char *txtA = new char[size + 1];
 	getSelectedText(txtA, size, expand);
 
@@ -2335,74 +2255,74 @@ TCHAR * ScintillaEditView::getGenericSelectedText(TCHAR * txt, int size, bool ex
 }
 
 int ScintillaEditView::searchInTarget(const TCHAR * text2Find, size_t lenOfText2Find, size_t fromPos, size_t toPos) const	{
-	execute(SCI_SETTARGETRANGE, fromPos, toPos);
+	f(SCI_SETTARGETRANGE, fromPos, toPos);
 
-	UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
+	UINT cp = static_cast<UINT>(f(SCI_GETCODEPAGE));
 	const char *text2FindA = wmc.wchar2char(text2Find, cp);
-	return static_cast<int32_t>(execute(SCI_SEARCHINTARGET, max(lenOfText2Find,strlen(text2FindA)), reinterpret_cast<LPARAM>(text2FindA)));
+	return static_cast<int32_t>(f(SCI_SEARCHINTARGET, max(lenOfText2Find,strlen(text2FindA)), reinterpret_cast<LPARAM>(text2FindA)));
 }
 
 void ScintillaEditView::appendGenericText(const TCHAR * text2Append) const
 {
-		UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
+		UINT cp = static_cast<UINT>(f(SCI_GETCODEPAGE));
 	const char *text2AppendA =wmc.wchar2char(text2Append, cp);
-	execute(SCI_APPENDTEXT, strlen(text2AppendA), reinterpret_cast<LPARAM>(text2AppendA));
+	f(SCI_APPENDTEXT, strlen(text2AppendA), reinterpret_cast<LPARAM>(text2AppendA));
 }
 
 void ScintillaEditView::addGenericText(const TCHAR * text2Append) const
 {
-		UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
+		UINT cp = static_cast<UINT>(f(SCI_GETCODEPAGE));
 	const char *text2AppendA =wmc.wchar2char(text2Append, cp);
-	execute(SCI_ADDTEXT, strlen(text2AppendA), reinterpret_cast<LPARAM>(text2AppendA));
+	f(SCI_ADDTEXT, strlen(text2AppendA), reinterpret_cast<LPARAM>(text2AppendA));
 }
 
 void ScintillaEditView::addGenericText(const TCHAR * text2Append, long *mstart, long *mend) const
 {
-		UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
+		UINT cp = static_cast<UINT>(f(SCI_GETCODEPAGE));
 	const char *text2AppendA =wmc.wchar2char(text2Append, cp, mstart, mend);
-	execute(SCI_ADDTEXT, strlen(text2AppendA), reinterpret_cast<LPARAM>(text2AppendA));
+	f(SCI_ADDTEXT, strlen(text2AppendA), reinterpret_cast<LPARAM>(text2AppendA));
 }
 
 int32_t ScintillaEditView::replaceTarget(const TCHAR * str2replace, int fromTargetPos, int toTargetPos) const
 {
 	if (fromTargetPos != -1 || toTargetPos != -1)	{
 
-		execute(SCI_SETTARGETRANGE, fromTargetPos, toTargetPos);
+		f(SCI_SETTARGETRANGE, fromTargetPos, toTargetPos);
 	}
-		UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
+		UINT cp = static_cast<UINT>(f(SCI_GETCODEPAGE));
 	const char *str2replaceA = wmc.wchar2char(str2replace, cp);
-	return static_cast<int32_t>(execute(SCI_REPLACETARGET, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(str2replaceA)));
+	return static_cast<int32_t>(f(SCI_REPLACETARGET, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(str2replaceA)));
 }
 
 int ScintillaEditView::replaceTargetRegExMode(const TCHAR * re, int fromTargetPos, int toTargetPos) const
 {
 	if (fromTargetPos != -1 || toTargetPos != -1)	{
 
-		execute(SCI_SETTARGETRANGE, fromTargetPos, toTargetPos);
+		f(SCI_SETTARGETRANGE, fromTargetPos, toTargetPos);
 	}
-		UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
+		UINT cp = static_cast<UINT>(f(SCI_GETCODEPAGE));
 	const char *reA = wmc.wchar2char(re, cp);
-	return static_cast<int32_t>(execute(SCI_REPLACETARGETRE, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(reA)));
+	return static_cast<int32_t>(f(SCI_REPLACETARGETRE, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(reA)));
 }
 
 void ScintillaEditView::showAutoC(size_t lenEntered, const TCHAR* list)	{
 
-	UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
+	UINT cp = static_cast<UINT>(f(SCI_GETCODEPAGE));
 	const char *listA = wmc.wchar2char(list, cp);
 
-	execute(SCI_AUTOCSHOW, lenEntered, reinterpret_cast<LPARAM>(listA));
+	f(SCI_AUTOCSHOW, lenEntered, reinterpret_cast<LPARAM>(listA));
 }
 
 void ScintillaEditView::showCallTip(int startPos, const TCHAR * def)	{
 
-	UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
+	UINT cp = static_cast<UINT>(f(SCI_GETCODEPAGE));
 	const char *defA = wmc.wchar2char(def, cp);
-	execute(SCI_CALLTIPSHOW, startPos, reinterpret_cast<LPARAM>(defA));
+	f(SCI_CALLTIPSHOW, startPos, reinterpret_cast<LPARAM>(defA));
 }
 
 generic_string ScintillaEditView::getLine(size_t lineNumber)	{
 
-	int32_t lineLen = static_cast<int32_t>(execute(SCI_LINELENGTH, lineNumber));
+	int32_t lineLen = static_cast<int32_t>(f(SCI_LINELENGTH, lineNumber));
 	const int bufSize = lineLen + 1;
 	unique_ptr<TCHAR[]> buf = make_unique<TCHAR[]>(bufSize);
 	getLine(lineNumber, buf.get(), bufSize);
@@ -2412,16 +2332,16 @@ generic_string ScintillaEditView::getLine(size_t lineNumber)	{
 void ScintillaEditView::getLine(size_t lineNumber, TCHAR * line, int lineBufferLen)	{
 
 	// make sure the buffer length is enough to get the whole line
-	auto lineLen = execute(SCI_LINELENGTH, lineNumber);
+	auto lineLen = f(SCI_LINELENGTH, lineNumber);
 	if (lineLen >= lineBufferLen)
 		return;
 
-		UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
+		UINT cp = static_cast<UINT>(f(SCI_GETCODEPAGE));
 	char *lineA = new char[lineBufferLen];
 	// From Scintilla documentation for SCI_GETLINE: "The buffer is not terminated by a 0 character."
 	memset(lineA, 0x0, sizeof(char) * lineBufferLen);
 	
-	execute(SCI_GETLINE, lineNumber, reinterpret_cast<LPARAM>(lineA));
+	f(SCI_GETLINE, lineNumber, reinterpret_cast<LPARAM>(lineA));
 	const TCHAR *lineW = wmc.char2wchar(lineA, cp);
 	lstrcpyn(line, lineW, lineBufferLen);
 	delete [] lineA;
@@ -2429,21 +2349,21 @@ void ScintillaEditView::getLine(size_t lineNumber, TCHAR * line, int lineBufferL
 
 void ScintillaEditView::addText(size_t length, const char *buf)	{
 
-	execute(SCI_ADDTEXT, length, reinterpret_cast<LPARAM>(buf));
+	f(SCI_ADDTEXT, length, reinterpret_cast<LPARAM>(buf));
 }
 
-void ScintillaEditView::beginOrEndSelect()	{
+/* void ScintillaEditView::beginOrEndSelect()	{
 
 	if (_beginSelectPosition == -1)	{
 
-		_beginSelectPosition = static_cast<int32_t>(execute(SCI_GETCURRENTPOS));
+		_beginSelectPosition = static_cast<int32_t>(f(SCI_GETCURRENTPOS));
 	}
 	else	{
 
-		execute(SCI_SETANCHOR, static_cast<WPARAM>(_beginSelectPosition));
+		f(SCI_SETANCHOR, static_cast<WPARAM>(_beginSelectPosition));
 		_beginSelectPosition = -1;
 	}
-}
+} */
 
 void ScintillaEditView::updateBeginEndSelectPosition(bool is_insert, size_t position, size_t length)	{
 
@@ -2460,35 +2380,35 @@ void ScintillaEditView::updateBeginEndSelectPosition(bool is_insert, size_t posi
 
 void ScintillaEditView::marginClick(Sci_Position position, int modifiers)	{
 
-	size_t lineClick = execute(SCI_LINEFROMPOSITION, position, 0);
-	int levelClick = static_cast<int32_t>(execute(SCI_GETFOLDLEVEL, lineClick, 0));
+	size_t lineClick = f(SCI_LINEFROMPOSITION, position, 0);
+	int levelClick = static_cast<int32_t>(f(SCI_GETFOLDLEVEL, lineClick, 0));
 	if (levelClick & SC_FOLDLEVELHEADERFLAG)	{
 
 		if (modifiers & SCMOD_SHIFT)	{
 
 			// Ensure all children visible
-			execute(SCI_SETFOLDEXPANDED, lineClick, 1);
+			f(SCI_SETFOLDEXPANDED, lineClick, 1);
 			expand(lineClick, true, true, 100, levelClick);
 		}
 		else if (modifiers & SCMOD_CTRL)	{
 
-			if (bool(execute(SCI_GETFOLDEXPANDED, lineClick)))	{
+			if (bool(f(SCI_GETFOLDEXPANDED, lineClick)))	{
 
 				// Contract this line and all children
-				execute(SCI_SETFOLDEXPANDED, lineClick, 0);
+				f(SCI_SETFOLDEXPANDED, lineClick, 0);
 				expand(lineClick, false, true, 0, levelClick);
 			}
 				else	{
 
 				// Expand this line and all children
-				execute(SCI_SETFOLDEXPANDED, lineClick, 1);
+				f(SCI_SETFOLDEXPANDED, lineClick, 1);
 				expand(lineClick, true, true, 100, levelClick);
 			}
 		}
 		else	{
 
 			// Toggle this line
-			bool mode = bool(execute(SCI_GETFOLDEXPANDED, lineClick));
+			bool mode = bool(f(SCI_GETFOLDEXPANDED, lineClick));
 			fold(lineClick, !mode);
 			runMarkers(true, lineClick, true, false);
 		}
@@ -2497,40 +2417,40 @@ void ScintillaEditView::marginClick(Sci_Position position, int modifiers)	{
 
 void ScintillaEditView::expand(size_t& line, bool doExpand, bool force, int visLevels, int level)	{
 
-	size_t lineMaxSubord = execute(SCI_GETLASTCHILD, line, level & SC_FOLDLEVELNUMBERMASK);
+	size_t lineMaxSubord = f(SCI_GETLASTCHILD, line, level & SC_FOLDLEVELNUMBERMASK);
 	++line;
 	while (line <= lineMaxSubord)	{
 
 		if (force)	{
 
-			execute(((visLevels > 0) ? SCI_SHOWLINES : SCI_HIDELINES), line, line);
+			f(((visLevels > 0) ? SCI_SHOWLINES : SCI_HIDELINES), line, line);
 		}
 		else	{
 
 			if (doExpand)
-				execute(SCI_SHOWLINES, line, line);
+				f(SCI_SHOWLINES, line, line);
 		}
 
 		int levelLine = level;
 		if (levelLine == -1)
-			levelLine = static_cast<int32_t>(execute(SCI_GETFOLDLEVEL, line, 0));
+			levelLine = static_cast<int32_t>(f(SCI_GETFOLDLEVEL, line, 0));
 
 		if (levelLine & SC_FOLDLEVELHEADERFLAG)	{
 
 			if (force)	{
 
 				if (visLevels > 1)
-					execute(SCI_SETFOLDEXPANDED, line, 1);
+					f(SCI_SETFOLDEXPANDED, line, 1);
 				else
-					execute(SCI_SETFOLDEXPANDED, line, 0);
+					f(SCI_SETFOLDEXPANDED, line, 0);
 				expand(line, doExpand, force, visLevels - 1);
 			}
 				else	{
 
 				if (doExpand)	{
 
-					if (!bool(execute(SCI_GETFOLDEXPANDED, line)))
-						execute(SCI_SETFOLDEXPANDED, line, 1);
+					if (!bool(f(SCI_GETFOLDEXPANDED, line)))
+						f(SCI_SETFOLDEXPANDED, line, 1);
 
 					expand(line, true, force, visLevels - 1);
 				}
@@ -2554,7 +2474,7 @@ void ScintillaEditView::performGlobalStyles()	{
 	if (i != -1)	{
 
 		Style & style = stylers.getStyler(i);
-		execute(SCI_SETCARETLINEBACK, style._bgColor);
+		f(SCI_SETCARETLINEBACK, style._bgColor);
 	}
 
 	COLORREF selectColorBack = grey;
@@ -2565,7 +2485,7 @@ void ScintillaEditView::performGlobalStyles()	{
 		Style & style = stylers.getStyler(i);
 		selectColorBack = style._bgColor;
 	}
-	execute(SCI_SETSELBACK, 1, selectColorBack);
+	f(SCI_SETSELBACK, 1, selectColorBack);
 
 	COLORREF caretColor = black;
 	i = stylers.getStylerIndexByID(SCI_SETCARETFORE);
@@ -2574,7 +2494,7 @@ void ScintillaEditView::performGlobalStyles()	{
 		Style & style = stylers.getStyler(i);
 		caretColor = style._fgColor;
 	}
-	execute(SCI_SETCARETFORE, caretColor);
+	f(SCI_SETCARETFORE, caretColor);
 
 	COLORREF edgeColor = liteGrey;
 	i = stylers.getStylerIndexByName(L"Edge colour");
@@ -2583,7 +2503,7 @@ void ScintillaEditView::performGlobalStyles()	{
 		Style & style = stylers.getStyler(i);
 		edgeColor = style._fgColor;
 	}
-	execute(SCI_SETEDGECOLOUR, edgeColor);
+	f(SCI_SETEDGECOLOUR, edgeColor);
 
 	COLORREF foldMarginColor = grey;
 	COLORREF foldMarginHiColor = white;
@@ -2594,8 +2514,8 @@ void ScintillaEditView::performGlobalStyles()	{
 		foldMarginHiColor = style._fgColor;
 		foldMarginColor = style._bgColor;
 	}
-	execute(SCI_SETFOLDMARGINCOLOUR, true, foldMarginColor);
-	execute(SCI_SETFOLDMARGINHICOLOUR, true, foldMarginHiColor);
+	f(SCI_SETFOLDMARGINCOLOUR, true, foldMarginColor);
+	f(SCI_SETFOLDMARGINHICOLOUR, true, foldMarginHiColor);
 
 	COLORREF foldfgColor = white, foldbgColor = grey, activeFoldFgColor = red;
 	getFoldColor(foldfgColor, foldbgColor, activeFoldFgColor);
@@ -2604,7 +2524,7 @@ void ScintillaEditView::performGlobalStyles()	{
 	for (int j = 0 ; j < NB_FOLDER_STATE ; ++j)
 		defineMarker(_markersArray[FOLDER_TYPE][j], _markersArray[svp._folderStyle][j], foldfgColor, foldbgColor, activeFoldFgColor);
 
-	execute(SCI_MARKERENABLEHIGHLIGHT, true);
+	f(SCI_MARKERENABLEHIGHLIGHT, true);
 
 	COLORREF wsSymbolFgColor = black;
 	i = stylers.getStylerIndexByName(L"White space symbol");
@@ -2613,7 +2533,7 @@ void ScintillaEditView::performGlobalStyles()	{
 		Style & style = stylers.getStyler(i);
 		wsSymbolFgColor = style._fgColor;
 	}
-	execute(SCI_SETWHITESPACEFORE, true, wsSymbolFgColor);
+	f(SCI_SETWHITESPACEFORE, true, wsSymbolFgColor);
 }
 
 void ScintillaEditView::showIndentGuideLine(bool willBeShowed)	{
@@ -2621,7 +2541,7 @@ void ScintillaEditView::showIndentGuideLine(bool willBeShowed)	{
 	auto typeDoc = _currentBuffer->getLangType();
 	const bool pythonLike = (typeDoc == L_PYTHON || typeDoc == L_COFFEESCRIPT || typeDoc == L_HASKELL);
 	const int docIndentMode = pythonLike ? SC_IV_LOOKFORWARD : SC_IV_LOOKBOTH;
-	execute(SCI_SETINDENTATIONGUIDES, willBeShowed ? docIndentMode : SC_IV_NONE);
+	f(SCI_SETINDENTATIONGUIDES, willBeShowed ? docIndentMode : SC_IV_NONE);
 }
 
 void ScintillaEditView::setLineIndent(int line, int indent) const
@@ -2629,9 +2549,9 @@ void ScintillaEditView::setLineIndent(int line, int indent) const
 	if (indent < 0)
 		return;
 	Sci_CharacterRange crange = getSelection();
-	int posBefore = static_cast<int32_t>(execute(SCI_GETLINEINDENTPOSITION, line));
-	execute(SCI_SETLINEINDENTATION, line, indent);
-	int32_t posAfter = static_cast<int32_t>(execute(SCI_GETLINEINDENTPOSITION, line));
+	int posBefore = static_cast<int32_t>(f(SCI_GETLINEINDENTPOSITION, line));
+	f(SCI_SETLINEINDENTATION, line, indent);
+	int32_t posAfter = static_cast<int32_t>(f(SCI_GETLINEINDENTPOSITION, line));
 	int posDifference = posAfter - posBefore;
 	if (posAfter > posBefore)	{
 
@@ -2664,22 +2584,22 @@ void ScintillaEditView::setLineIndent(int line, int indent) const
 				crange.cpMax = posAfter;
 		}
 	}
-	execute(SCI_SETSEL, crange.cpMin, crange.cpMax);
+	f(SCI_SETSEL, crange.cpMin, crange.cpMax);
 }
 
 void ScintillaEditView::updateLineNumberWidth(){
 	if (_lineNumbersShown)	{
-		if (auto linesVisible = execute(SCI_LINESONSCREEN))	{
-			auto firstVisibleLineVis = execute(SCI_GETFIRSTVISIBLELINE);
+		if (auto linesVisible = f(SCI_LINESONSCREEN))	{
+			auto firstVisibleLineVis = f(SCI_GETFIRSTVISIBLELINE);
 			auto lastVisibleLineVis = linesVisible + firstVisibleLineVis + 1;
 
-/* 			if (execute(SCI_GETWRAPMODE) != SC_WRAP_NONE)
+/* 			if (f(SCI_GETWRAPMODE) != SC_WRAP_NONE)
 			{
-				auto numLinesDoc = execute(SCI_GETLINECOUNT);
-				auto prevLineDoc = execute(SCI_DOCLINEFROMVISIBLE, firstVisibleLineVis);
+				auto numLinesDoc = f(SCI_GETLINECOUNT);
+				auto prevLineDoc = f(SCI_DOCLINEFROMVISIBLE, firstVisibleLineVis);
 				for (auto i = firstVisibleLineVis; i <= lastVisibleLineVis; ++i)	{// + 1
 
-					auto lineDoc = execute(SCI_DOCLINEFROMVISIBLE, i);
+					auto lineDoc = f(SCI_DOCLINEFROMVISIBLE, i);
 					if (lineDoc == numLinesDoc)		break;
 					if (lineDoc == prevLineDoc)
 						lastVisibleLineVis++;
@@ -2687,13 +2607,13 @@ void ScintillaEditView::updateLineNumberWidth(){
 				}
 			} */
 
-			auto lastVisibleLineDoc = execute(SCI_DOCLINEFROMVISIBLE, lastVisibleLineVis);
+			auto lastVisibleLineDoc = f(SCI_DOCLINEFROMVISIBLE, lastVisibleLineVis);
 			int i = 1;
 			while (lastVisibleLineDoc /= 10)		++i;
 
 			// i = max(i, 3);
 			// auto pixelWidth = ;
-			execute(SCI_SETMARGINWIDTHN, _SC_MARGE_LINENUMBER,  5 + i * execute(SCI_TEXTWIDTH, STYLE_LINENUMBER, reinterpret_cast<LPARAM>("7")));//pixelWidth
+			f(SCI_SETMARGINWIDTHN, _SC_MARGE_LINENUMBER,  3 + i * f(SCI_TEXTWIDTH, STYLE_LINENUMBER, reinterpret_cast<LPARAM>("6")));
 		}
 	}
 }
@@ -2717,15 +2637,15 @@ void ScintillaEditView::setMultiSelections(const ColumnModeInfos & cmi)	{
 
 			int selStart = cmi[i]._direction == L2R?cmi[i]._selLpos:cmi[i]._selRpos;
 			int selEnd   = cmi[i]._direction == L2R?cmi[i]._selRpos:cmi[i]._selLpos;
-			execute(SCI_SETSELECTIONNSTART, i, selStart);
-			execute(SCI_SETSELECTIONNEND, i, selEnd);
+			f(SCI_SETSELECTIONNSTART, i, selStart);
+			f(SCI_SETSELECTIONNEND, i, selEnd);
 		}
 		//if (cmi[i].hasVirtualSpace())
 		//{
 		if (cmi[i]._nbVirtualAnchorSpc)
-			execute(SCI_SETSELECTIONNANCHORVIRTUALSPACE, i, cmi[i]._nbVirtualAnchorSpc);
+			f(SCI_SETSELECTIONNANCHORVIRTUALSPACE, i, cmi[i]._nbVirtualAnchorSpc);
 		if (cmi[i]._nbVirtualCaretSpc)
-			execute(SCI_SETSELECTIONNCARETVIRTUALSPACE, i, cmi[i]._nbVirtualCaretSpc);
+			f(SCI_SETSELECTIONNCARETVIRTUALSPACE, i, cmi[i]._nbVirtualCaretSpc);
 		//}
 	}
 }
@@ -2735,28 +2655,28 @@ void ScintillaEditView::setMultiSelections(const ColumnModeInfos & cmi)	{
 pair<int, int> ScintillaEditView::getSelectionLinesRange() const
 {
 	pair<int, int> range(-1, -1);
-	if (execute(SCI_GETSELECTIONS) > 1) // multi-selection
+	if (f(SCI_GETSELECTIONS) > 1) // multi-selection
 		return range;
-	int32_t start = static_cast<int32_t>(execute(SCI_GETSELECTIONSTART));
-	int32_t end = static_cast<int32_t>(execute(SCI_GETSELECTIONEND));
+	int32_t start = static_cast<int32_t>(f(SCI_GETSELECTIONSTART));
+	int32_t end = static_cast<int32_t>(f(SCI_GETSELECTIONEND));
 
-	range.first = static_cast<int32_t>(execute(SCI_LINEFROMPOSITION, start));
-	range.second = static_cast<int32_t>(execute(SCI_LINEFROMPOSITION, end));
+	range.first = static_cast<int32_t>(f(SCI_LINEFROMPOSITION, start));
+	range.second = static_cast<int32_t>(f(SCI_LINEFROMPOSITION, end));
 
 	return range;
 }
 
 void ScintillaEditView::currentLinesUp() const
 {
-	execute(SCI_MOVESELECTEDLINESUP);
+	f(SCI_MOVESELECTEDLINESUP);
 }
 
 void ScintillaEditView::currentLinesDown() const
 {
-	execute(SCI_MOVESELECTEDLINESDOWN);
+	f(SCI_MOVESELECTEDLINESDOWN);
 
 	// Ensure the selection is within view
-	execute(SCI_SCROLLRANGE, execute(SCI_GETSELECTIONEND), execute(SCI_GETSELECTIONSTART));
+	f(SCI_SCROLLRANGE, f(SCI_GETSELECTIONEND), f(SCI_GETSELECTIONSTART));
 }
 
 void ScintillaEditView::changeCase(__inout wchar_t * const strWToConvert, const int & nbChars, const TextCase & caseToConvert) const
@@ -2888,9 +2808,9 @@ void ScintillaEditView::convertSelectedTextTo(const TextCase & caseToConvert)	{
 	if (um != uni8Bit)
 	codepage = CP_UTF8;
 
-	if (execute(SCI_GETSELECTIONS) > 1)	{ // Multi-Selection || Column mode
+	if (f(SCI_GETSELECTIONS) > 1)	{ // Multi-Selection || Column mode
 
-		execute(SCI_BEGINUNDOACTION);
+		f(SCI_BEGINUNDOACTION);
 
 		ColumnModeInfos cmi = getColumnModeSelectInfo();
 
@@ -2910,8 +2830,8 @@ void ScintillaEditView::convertSelectedTextTo(const TextCase & caseToConvert)	{
 
 			::WideCharToMultiByte(codepage, 0, destStr, len, srcStr, len, NULL, NULL);
 
-			execute(SCI_SETTARGETRANGE, start, end);
-			execute(SCI_REPLACETARGET, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(srcStr));
+			f(SCI_SETTARGETRANGE, start, end);
+			f(SCI_REPLACETARGET, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(srcStr));
 
 			delete [] srcStr;
 			delete [] destStr;
@@ -2919,12 +2839,12 @@ void ScintillaEditView::convertSelectedTextTo(const TextCase & caseToConvert)	{
 
 		setMultiSelections(cmi);
 
-		execute(SCI_ENDUNDOACTION);
+		f(SCI_ENDUNDOACTION);
 		return;
 	}
 
-	size_t selectionStart = execute(SCI_GETSELECTIONSTART);
-	size_t selectionEnd = execute(SCI_GETSELECTIONEND);
+	size_t selectionStart = f(SCI_GETSELECTIONSTART);
+	size_t selectionEnd = f(SCI_GETSELECTIONEND);
 
 	int32_t strLen = static_cast<int32_t>(selectionEnd - selectionStart);
 	if (strLen)	{
@@ -2934,7 +2854,7 @@ void ScintillaEditView::convertSelectedTextTo(const TextCase & caseToConvert)	{
 		int strWSize = strSize * 2;
 		wchar_t *selectedStrW = new wchar_t[strWSize+3];
 
-		execute(SCI_GETSELTEXT, 0, reinterpret_cast<LPARAM>(selectedStr));
+		f(SCI_GETSELTEXT, 0, reinterpret_cast<LPARAM>(selectedStr));
 
 		int nbChar = ::MultiByteToWideChar(codepage, 0, selectedStr, strSize, selectedStrW, strWSize);
 
@@ -2942,9 +2862,9 @@ void ScintillaEditView::convertSelectedTextTo(const TextCase & caseToConvert)	{
 
 		::WideCharToMultiByte(codepage, 0, selectedStrW, strWSize, selectedStr, strSize, NULL, NULL);
 
-		execute(SCI_SETTARGETRANGE, selectionStart, selectionEnd);
-		execute(SCI_REPLACETARGET, strLen, reinterpret_cast<LPARAM>(selectedStr));
-		execute(SCI_SETSEL, selectionStart, selectionEnd);
+		f(SCI_SETTARGETRANGE, selectionStart, selectionEnd);
+		f(SCI_REPLACETARGET, strLen, reinterpret_cast<LPARAM>(selectedStr));
+		f(SCI_SETSEL, selectionStart, selectionEnd);
 		delete [] selectedStr;
 		delete [] selectedStrW;
 	}
@@ -2954,9 +2874,9 @@ void ScintillaEditView::convertSelectedTextTo(const TextCase & caseToConvert)	{
 
 pair<int, int> ScintillaEditView::getWordRange()
 {
-	auto caretPos = execute(SCI_GETCURRENTPOS, 0, 0);
-	int startPos = static_cast<int>(execute(SCI_WORDSTARTPOSITION, caretPos, true));
-	int endPos = static_cast<int>(execute(SCI_WORDENDPOSITION, caretPos, true));
+	auto caretPos = f(SCI_GETCURRENTPOS, 0, 0);
+	int startPos = static_cast<int>(f(SCI_WORDSTARTPOSITION, caretPos, true));
+	int endPos = static_cast<int>(f(SCI_WORDENDPOSITION, caretPos, true));
 	return pair<int, int>(startPos, endPos);
 }
 
@@ -2965,8 +2885,8 @@ bool ScintillaEditView::expandWordSelection()	{
 	pair<int, int> wordRange = 	getWordRange();
 	if (wordRange.first != wordRange.second)	{
 
-		execute(SCI_SETSELECTIONSTART, wordRange.first);
-		execute(SCI_SETSELECTIONEND, wordRange.second);
+		f(SCI_SETSELECTIONSTART, wordRange.first);
+		f(SCI_SETSELECTIONEND, wordRange.second);
 		return true;
 	}
 	return false;
@@ -2975,7 +2895,7 @@ bool ScintillaEditView::expandWordSelection()	{
 TCHAR * int2str(TCHAR *str, int strLen, int number, int base, int nbChiffre, bool isZeroLeading)	{
 
 	if (nbChiffre >= strLen) return NULL;
-	TCHAR f[64];
+	TCHAR frm[64];
 	TCHAR fStr[2] = L"d";
 	if (base == 16)
 		fStr[0] = 'X';
@@ -3010,8 +2930,8 @@ TCHAR * int2str(TCHAR *str, int strLen, int number, int base, int nbChiffre, boo
 
 			// use sprintf or swprintf instead of wsprintf
 			// to make octal format work
-			generic_sprintf(f, L"%%%s", fStr);
-			generic_sprintf(str, f, number);
+			generic_sprintf(frm, L"%%%s", fStr);
+			generic_sprintf(str, frm, number);
 		}
 		int i = lstrlen(str);
 		for ( ; i < nbChiffre ; ++i)
@@ -3024,8 +2944,8 @@ TCHAR * int2str(TCHAR *str, int strLen, int number, int base, int nbChiffre, boo
 
 			// use sprintf or swprintf instead of wsprintf
 			// to make octal format work
-			generic_sprintf(f, L"%%.%d%s", nbChiffre, fStr);
-			generic_sprintf(str, f, number);
+			generic_sprintf(frm, L"%%.%d%s", nbChiffre, fStr);
+			generic_sprintf(str, frm, number);
 		}
 		// else already done.
 	}
@@ -3035,18 +2955,18 @@ TCHAR * int2str(TCHAR *str, int strLen, int number, int base, int nbChiffre, boo
 ColumnModeInfos ScintillaEditView::getColumnModeSelectInfo()
 {
 	ColumnModeInfos columnModeInfos;
-	if (execute(SCI_GETSELECTIONS) > 1)	{ // Multi-Selection || Column mode
+	if (f(SCI_GETSELECTIONS) > 1)	{ // Multi-Selection || Column mode
 
-		int nbSel = static_cast<int32_t>(execute(SCI_GETSELECTIONS));
+		int nbSel = static_cast<int32_t>(f(SCI_GETSELECTIONS));
 
 		for (int i = 0 ; i < nbSel ; ++i)	{
 
-			int absPosSelStartPerLine = static_cast<int32_t>(execute(SCI_GETSELECTIONNANCHOR, i));
-			int absPosSelEndPerLine = static_cast<int32_t>(execute(SCI_GETSELECTIONNCARET, i));
-			int nbVirtualAnchorSpc = static_cast<int32_t>(execute(SCI_GETSELECTIONNANCHORVIRTUALSPACE, i));
-			int nbVirtualCaretSpc = static_cast<int32_t>(execute(SCI_GETSELECTIONNCARETVIRTUALSPACE, i));
+			int absPosSelStartPerLine = static_cast<int32_t>(f(SCI_GETSELECTIONNANCHOR, i));
+			int absPosSelEndPerLine = static_cast<int32_t>(f(SCI_GETSELECTIONNCARET, i));
+			int nbVirtualAnchorSpc = static_cast<int32_t>(f(SCI_GETSELECTIONNANCHORVIRTUALSPACE, i));
+			int nbVirtualCaretSpc = static_cast<int32_t>(f(SCI_GETSELECTIONNCARETVIRTUALSPACE, i));
 
-			if (absPosSelStartPerLine == absPosSelEndPerLine && execute(SCI_SELECTIONISRECTANGLE))	{
+			if (absPosSelStartPerLine == absPosSelEndPerLine && f(SCI_SELECTIONISRECTANGLE))	{
 
 				bool dir = nbVirtualAnchorSpc<nbVirtualCaretSpc?L2R:R2L;
 				columnModeInfos.push_back(ColumnModeInfo(absPosSelStartPerLine, absPosSelEndPerLine, i, dir, nbVirtualAnchorSpc, nbVirtualCaretSpc));
@@ -3078,17 +2998,17 @@ void ScintillaEditView::columnReplace(ColumnModeInfos & cmi, const TCHAR *str)	{
 
 				for (int j = 0, k = cmi[i]._selLpos; j < cmi[i]._nbVirtualCaretSpc ; ++j, ++k)	{
 
-					execute(SCI_INSERTTEXT, k, reinterpret_cast<LPARAM>(" "));
+					f(SCI_INSERTTEXT, k, reinterpret_cast<LPARAM>(" "));
 				}
 				cmi[i]._selLpos += cmi[i]._nbVirtualAnchorSpc;
 				cmi[i]._selRpos += cmi[i]._nbVirtualCaretSpc;
 			}
 
-			execute(SCI_SETTARGETRANGE, cmi[i]._selLpos, cmi[i]._selRpos);
+			f(SCI_SETTARGETRANGE, cmi[i]._selLpos, cmi[i]._selRpos);
 
-						UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
+						UINT cp = static_cast<UINT>(f(SCI_GETCODEPAGE));
 			const char *strA = wmc.wchar2char(str, cp);
-			execute(SCI_REPLACETARGET, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(strA));
+			f(SCI_REPLACETARGET, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(strA));
 
 			if (hasVirtualSpc)	{
 
@@ -3127,15 +3047,15 @@ void ScintillaEditView::columnReplace(ColumnModeInfos & cmi, int initial, int in
 	//const UCHAR MASK_FORMAT = 0x03;
 	//const UCHAR MASK_ZERO_LEADING = 0x04;
 
-	UCHAR f = format & MASK_FORMAT;
+	UCHAR frm = format & MASK_FORMAT;
 	bool isZeroLeading = (MASK_ZERO_LEADING & format) != 0;
 
 	int base = 10;
-	if (f == BASE_16)
+	if (frm == BASE_16)
 		base = 16;
-	else if (f == BASE_08)
+	else if (frm == BASE_08)
 		base = 8;
-	else if (f == BASE_02)
+	else if (frm == BASE_02)
 		base = 2;
 
 	const int stringSize = 512;
@@ -3185,16 +3105,16 @@ void ScintillaEditView::columnReplace(ColumnModeInfos & cmi, int initial, int in
 
 				for (int j = 0, k = cmi[i]._selLpos; j < cmi[i]._nbVirtualCaretSpc ; ++j, ++k)	{
 
-					execute(SCI_INSERTTEXT, k, reinterpret_cast<LPARAM>(" "));
+					f(SCI_INSERTTEXT, k, reinterpret_cast<LPARAM>(" "));
 				}
 				cmi[i]._selLpos += cmi[i]._nbVirtualAnchorSpc;
 				cmi[i]._selRpos += cmi[i]._nbVirtualCaretSpc;
 			}
-			execute(SCI_SETTARGETRANGE, cmi[i]._selLpos, cmi[i]._selRpos);
+			f(SCI_SETTARGETRANGE, cmi[i]._selLpos, cmi[i]._selRpos);
 
-						UINT cp = static_cast<UINT>(execute(SCI_GETCODEPAGE));
+						UINT cp = static_cast<UINT>(f(SCI_GETCODEPAGE));
 			const char *strA = wmc.wchar2char(str, cp);
-			execute(SCI_REPLACETARGET, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(strA));
+			f(SCI_REPLACETARGET, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(strA));
 
 			if (hasVirtualSpc)	{
 
@@ -3220,17 +3140,17 @@ void ScintillaEditView::foldChanged(size_t line, int levelNow, int levelPrev)	{
 		if (!(levelPrev & SC_FOLDLEVELHEADERFLAG))	{	//but previously couldnt
 
 			// Adding a fold point.
-			execute(SCI_SETFOLDEXPANDED, line, 1);
+			f(SCI_SETFOLDEXPANDED, line, 1);
 			expand(line, true, false, 0, levelPrev);
 		}
 	}
 	else if (levelPrev & SC_FOLDLEVELHEADERFLAG)	{
 
-		if (bool(execute(SCI_GETFOLDEXPANDED, line)))	{
+		if (bool(f(SCI_GETFOLDEXPANDED, line)))	{
 
 			// Removing the fold from one that has been contracted so should expand
 			// otherwise lines are left invisible with no way to make them visible
-			execute(SCI_SETFOLDEXPANDED, line, 1);
+			f(SCI_SETFOLDEXPANDED, line, 1);
 			expand(line, true, false, 0, levelPrev);
 		}
 	}
@@ -3238,22 +3158,22 @@ void ScintillaEditView::foldChanged(size_t line, int levelNow, int levelPrev)	{
 	        ((levelPrev & SC_FOLDLEVELNUMBERMASK) > (levelNow & SC_FOLDLEVELNUMBERMASK)))
 	{
 		// See if should still be hidden
-		int parentLine = static_cast<int32_t>(execute(SCI_GETFOLDPARENT, line));
-		if ((parentLine < 0) || !bool(execute(SCI_GETFOLDEXPANDED, parentLine && execute(SCI_GETLINEVISIBLE, parentLine))))
-			execute(SCI_SHOWLINES, line, line);
+		int parentLine = static_cast<int32_t>(f(SCI_GETFOLDPARENT, line));
+		if ((parentLine < 0) || !bool(f(SCI_GETFOLDEXPANDED, parentLine && f(SCI_GETLINEVISIBLE, parentLine))))
+			f(SCI_SHOWLINES, line, line);
 	}
 }
 
 
 void ScintillaEditView::scrollPosToCenter(size_t pos)	{
 
-	execute(SCI_GOTOPOS, pos);
-	int line = static_cast<int32_t>(execute(SCI_LINEFROMPOSITION, pos));
+	f(SCI_GOTOPOS, pos);
+	int line = static_cast<int32_t>(f(SCI_LINEFROMPOSITION, pos));
 
-	int firstVisibleDisplayLine = static_cast<int32_t>(execute(SCI_GETFIRSTVISIBLELINE));
-	int firstVisibleDocLine = static_cast<int32_t>(execute(SCI_DOCLINEFROMVISIBLE, firstVisibleDisplayLine));
-	int nbLine = static_cast<int32_t>(execute(SCI_LINESONSCREEN, firstVisibleDisplayLine));
-	int lastVisibleDocLine = static_cast<int32_t>(execute(SCI_DOCLINEFROMVISIBLE, firstVisibleDisplayLine + nbLine));
+	int firstVisibleDisplayLine = static_cast<int32_t>(f(SCI_GETFIRSTVISIBLELINE));
+	int firstVisibleDocLine = static_cast<int32_t>(f(SCI_DOCLINEFROMVISIBLE, firstVisibleDisplayLine));
+	int nbLine = static_cast<int32_t>(f(SCI_LINESONSCREEN));
+	int lastVisibleDocLine = static_cast<int32_t>(f(SCI_DOCLINEFROMVISIBLE, firstVisibleDisplayLine + nbLine));
 
 	int middleLine;
 	if (line - firstVisibleDocLine < lastVisibleDocLine - line)
@@ -3270,11 +3190,11 @@ void ScintillaEditView::hideLines()	{
 	//Adding runMarkers(hide, foldstart) directly (folding on single document) can help
 
 	//Special func on buffer. If markers are added, create notification with location of start, and hide bool set to true
-	int startLine = static_cast<int32_t>(execute(SCI_LINEFROMPOSITION, execute(SCI_GETSELECTIONSTART)));
-	int endLine = static_cast<int32_t>(execute(SCI_LINEFROMPOSITION, execute(SCI_GETSELECTIONEND)));
+	int startLine = static_cast<int32_t>(f(SCI_LINEFROMPOSITION, f(SCI_GETSELECTIONSTART)));
+	int endLine = static_cast<int32_t>(f(SCI_LINEFROMPOSITION, f(SCI_GETSELECTIONEND)));
 	//perform range check: cannot hide very first and very last lines
 	//Offset them one off the edges, and then check if they are within the reasonable
-	int nbLines = static_cast<int32_t>(execute(SCI_GETLINECOUNT));
+	int nbLines = static_cast<int32_t>(f(SCI_GETLINECOUNT));
 	if (nbLines < 3)
 		return;	//cannot possibly hide anything
 	if (!startLine)
@@ -3286,29 +3206,29 @@ void ScintillaEditView::hideLines()	{
 		return;	//tried to hide line at edge
 
 	//Hide the lines. We add marks on the outside of the hidden section and hide the lines
-	//execute(SCI_HIDELINES, startLine, endLine);
+	//f(SCI_HIDELINES, startLine, endLine);
 	//Add markers
-	execute(SCI_MARKERADD, startLine-1, MARK_HIDELINESBEGIN);
-	execute(SCI_MARKERADD, startLine-1, MARK_HIDELINESUNDERLINE);
-	execute(SCI_MARKERADD, endLine+1, MARK_HIDELINESEND);
+	f(SCI_MARKERADD, startLine-1, MARK_HIDELINESBEGIN);
+	f(SCI_MARKERADD, startLine-1, MARK_HIDELINESUNDERLINE);
+	f(SCI_MARKERADD, endLine+1, MARK_HIDELINESEND);
 
 	//remove any markers in between
 	int scope = 0;
 	for (int i = startLine; i <= endLine; ++i)	{
 
-		auto state = execute(SCI_MARKERGET, i);
+		auto state = f(SCI_MARKERGET, i);
 		bool closePresent = ((state & (1 << MARK_HIDELINESEND)) != 0);	//check close first, then open, since close closes scope
 		bool openPresent = ((state & (1 << MARK_HIDELINESBEGIN | 1 << MARK_HIDELINESUNDERLINE)) != 0);
 		if (closePresent)	{
 
-			execute(SCI_MARKERDELETE, i, MARK_HIDELINESEND);
+			f(SCI_MARKERDELETE, i, MARK_HIDELINESEND);
 			if (scope > 0) scope--;
 		}
 
 		if (openPresent)	{
 
-			execute(SCI_MARKERDELETE, i, MARK_HIDELINESBEGIN);
-			execute(SCI_MARKERDELETE, i, MARK_HIDELINESUNDERLINE);
+			f(SCI_MARKERDELETE, i, MARK_HIDELINESBEGIN);
+			f(SCI_MARKERDELETE, i, MARK_HIDELINESUNDERLINE);
 			++scope;
 		}
 	}
@@ -3323,7 +3243,7 @@ void ScintillaEditView::hideLines()	{
 
 bool ScintillaEditView::markerMarginClick(int lineNumber)	{
 
-	auto state = execute(SCI_MARKERGET, lineNumber);
+	auto state = f(SCI_MARKERGET, lineNumber);
 	bool openPresent = ((state & (1 << MARK_HIDELINESBEGIN | 1 << MARK_HIDELINESUNDERLINE)) != 0);
 	bool closePresent = ((state & (1 << MARK_HIDELINESEND)) != 0);
 
@@ -3341,7 +3261,7 @@ bool ScintillaEditView::markerMarginClick(int lineNumber)	{
 		openPresent = false;
 		for (lineNumber--; lineNumber >= 0 && !openPresent; --lineNumber )	{
 
-			state = execute(SCI_MARKERGET, lineNumber);
+			state = f(SCI_MARKERGET, lineNumber);
 			openPresent = ((state & (1 << MARK_HIDELINESBEGIN | 1 << MARK_HIDELINESUNDERLINE)) != 0);
 		}
 
@@ -3391,19 +3311,19 @@ void ScintillaEditView::runMarkers(bool doHide, size_t searchStart, bool endOfDo
 				Skip to LASTCHILD
 				Set last start to lastchild
 	*/
-	size_t maxLines = execute(SCI_GETLINECOUNT);
+	size_t maxLines = f(SCI_GETLINECOUNT);
 	if (doHide)	{
 
 		auto startHiding = searchStart;
 		bool isInSection = false;
 		for (auto i = searchStart; i < maxLines; ++i)	{
 
-			auto state = execute(SCI_MARKERGET, i);
+			auto state = f(SCI_MARKERGET, i);
 			if ( ((state & (1 << MARK_HIDELINESEND)) != 0) )	{
 
 				if (isInSection)	{
 
-					execute(SCI_HIDELINES, startHiding, i-1);
+					f(SCI_HIDELINES, startHiding, i-1);
 					if (!endOfDoc)	{
 
 						return;	//done, only single section requested
@@ -3425,12 +3345,12 @@ void ScintillaEditView::runMarkers(bool doHide, size_t searchStart, bool endOfDo
 		bool isInSection = false;
 		for (auto i = searchStart; i < maxLines; ++i)	{
 
-			auto state = execute(SCI_MARKERGET, i);
+			auto state = f(SCI_MARKERGET, i);
 			if ( ((state & (1 << MARK_HIDELINESEND)) != 0) )	{
 
 				if (doDelete)	{
 
-					execute(SCI_MARKERDELETE, i, MARK_HIDELINESEND);
+					f(SCI_MARKERDELETE, i, MARK_HIDELINESEND);
 					if (!endOfDoc)	{
 
 						return;	//done, only single section requested
@@ -3449,7 +3369,7 @@ void ScintillaEditView::runMarkers(bool doHide, size_t searchStart, bool endOfDo
 							continue;
 						}
 					}
-					execute(SCI_SHOWLINES, startShowing, i-1);
+					f(SCI_SHOWLINES, startShowing, i-1);
 					if (!endOfDoc)	{
 
 						return;	//done, only single section requested
@@ -3461,8 +3381,8 @@ void ScintillaEditView::runMarkers(bool doHide, size_t searchStart, bool endOfDo
 
 				if (doDelete)	{
 
-					execute(SCI_MARKERDELETE, i, MARK_HIDELINESBEGIN);
-					execute(SCI_MARKERDELETE, i, MARK_HIDELINESUNDERLINE);
+					f(SCI_MARKERDELETE, i, MARK_HIDELINESBEGIN);
+					f(SCI_MARKERDELETE, i, MARK_HIDELINESUNDERLINE);
 				}
 				else	{
 
@@ -3471,13 +3391,13 @@ void ScintillaEditView::runMarkers(bool doHide, size_t searchStart, bool endOfDo
 				}
 			}
 
-			auto levelLine = execute(SCI_GETFOLDLEVEL, i, 0);
+			auto levelLine = f(SCI_GETFOLDLEVEL, i, 0);
 			if (levelLine & SC_FOLDLEVELHEADERFLAG)	{
 	//fold section. Dont show lines if fold is closed
-				if (isInSection && !bool(execute(SCI_GETFOLDEXPANDED, i)))	{
+				if (isInSection && !bool(f(SCI_GETFOLDEXPANDED, i)))	{
 
-					execute(SCI_SHOWLINES, startShowing, i);
-					//startShowing = execute(SCI_GETLASTCHILD, i, (levelLine & SC_FOLDLEVELNUMBERMASK));
+					f(SCI_SHOWLINES, startShowing, i);
+					//startShowing = f(SCI_GETLASTCHILD, i, (levelLine & SC_FOLDLEVELNUMBERMASK));
 				}
 			}
 		}
@@ -3492,17 +3412,17 @@ void ScintillaEditView::setTabSettings(Lang *lang)	{
 		if (lang->_langID == L_JAVASCRIPT)	{
 
 			Lang *ljs = param.getLangFromID(L_JS);
-			execute(SCI_SETTABWIDTH, ljs->_tabSize > 0 ? ljs->_tabSize : lang->_tabSize);
-			execute(SCI_SETUSETABS, !ljs->_isTabReplacedBySpace);
+			f(SCI_SETTABWIDTH, ljs->_tabSize > 0 ? ljs->_tabSize : lang->_tabSize);
+			f(SCI_SETUSETABS, !ljs->_isTabReplacedBySpace);
 			return;
 		}
-		execute(SCI_SETTABWIDTH, lang->_tabSize);
-		execute(SCI_SETUSETABS, !lang->_isTabReplacedBySpace);
+		f(SCI_SETTABWIDTH, lang->_tabSize);
+		f(SCI_SETUSETABS, !lang->_isTabReplacedBySpace);
 	}
 	else	{
 
-		execute(SCI_SETTABWIDTH, nGUI._tabSize  > 0 ? nGUI._tabSize : lang->_tabSize);
-		execute(SCI_SETUSETABS, !nGUI._tabReplacedBySpace);
+		f(SCI_SETTABWIDTH, nGUI._tabSize  > 0 ? nGUI._tabSize : lang->_tabSize);
+		f(SCI_SETUSETABS, !nGUI._tabReplacedBySpace);
 	}
 }
 
@@ -3518,17 +3438,17 @@ void ScintillaEditView::insertNewLineAboveCurrentLine()	{
 	else	{
 
 		const auto eol_length = newline.length();
-		const auto position = static_cast<size_t>(execute(SCI_POSITIONFROMLINE, current_line)) - eol_length;
+		const auto position = static_cast<size_t>(f(SCI_POSITIONFROMLINE, current_line)) - eol_length;
 		insertGenericTextFrom(position, newline.c_str());
 	}
-	execute(SCI_SETEMPTYSELECTION, execute(SCI_POSITIONFROMLINE, current_line));
+	f(SCI_SETEMPTYSELECTION, f(SCI_POSITIONFROMLINE, current_line));
 }
 
 
 void ScintillaEditView::insertNewLineBelowCurrentLine()	{
 
 	generic_string newline = getEOLString();
-	const auto line_count = static_cast<size_t>(execute(SCI_GETLINECOUNT));
+	const auto line_count = static_cast<size_t>(f(SCI_GETLINECOUNT));
 	const auto current_line = getCurrentLineNumber();
 	if (current_line == line_count - 1)	{
 
@@ -3538,10 +3458,10 @@ void ScintillaEditView::insertNewLineBelowCurrentLine()	{
 	else	{
 
 		const auto eol_length = newline.length();
-		const auto position = eol_length + execute(SCI_GETLINEENDPOSITION, current_line);
+		const auto position = eol_length + f(SCI_GETLINEENDPOSITION, current_line);
 		insertGenericTextFrom(position, newline.c_str());
 	}
-	execute(SCI_SETEMPTYSELECTION, execute(SCI_POSITIONFROMLINE, current_line + 1));
+	f(SCI_SETEMPTYSELECTION, f(SCI_POSITIONFROMLINE, current_line + 1));
 }
 
 void ScintillaEditView::sortLines(size_t fromLine, size_t toLine, ISorter *pSort)	{
@@ -3551,11 +3471,11 @@ void ScintillaEditView::sortLines(size_t fromLine, size_t toLine, ISorter *pSort
 		return;
 	}
 
-	const auto startPos = execute(SCI_POSITIONFROMLINE, fromLine);
-	const auto endPos = execute(SCI_POSITIONFROMLINE, toLine) + execute(SCI_LINELENGTH, toLine);
+	const auto startPos = f(SCI_POSITIONFROMLINE, fromLine);
+	const auto endPos = f(SCI_POSITIONFROMLINE, toLine) + f(SCI_LINELENGTH, toLine);
 	const generic_string text = getGenericTextAsString(startPos, endPos);
 	vector<generic_string> splitText = stringSplit(text, getEOLString());
-	size_t lineCount = execute(SCI_GETLINECOUNT);
+	size_t lineCount = f(SCI_GETLINECOUNT);
 	const bool sortEntireDocument = toLine == lineCount - 1;
 	if (!sortEntireDocument)	{
 
@@ -3594,7 +3514,7 @@ void ScintillaEditView::changeTextDirection(bool isRTL)	{
 
 generic_string ScintillaEditView::getEOLString()	{
 
-	const int eol_mode = static_cast<int32_t>(execute(SCI_GETEOLMODE));
+	const int eol_mode = static_cast<int32_t>(f(SCI_GETEOLMODE));
 	if (eol_mode == SC_EOL_CRLF)	{
 
 		return L"\r\n";
@@ -3640,4 +3560,42 @@ void ScintillaEditView::getFoldColor(COLORREF& fgColor, COLORREF& bgColor, COLOR
 		Style & style = stylers.getStyler(i);
 		activeFgColor = style._fgColor;
 	}
+}
+
+
+void ScintillaEditView::foldAll(bool isEXPAND)	{
+	SCNotification scnN;
+	scnN.nmhdr.code = SCN_FOLDINGSTATECHANGED;
+	scnN.nmhdr.hwndFrom = _hSelf;
+	scnN.nmhdr.idFrom = 0;
+ 	for (int line = 0; line< f(SCI_GETLINECOUNT); ++line)
+		if (f(SCI_GETFOLDLEVEL, line) & SC_FOLDLEVELHEADERFLAG
+		&& bool(f(SCI_GETFOLDEXPANDED, line)) != isEXPAND)	{
+			f(SCI_TOGGLEFOLD, line);
+			scnN.line = line;
+			scnN.foldLevelNow = bool(f(SCI_GETFOLDEXPANDED, line));
+			::SendMessage(_hParent, WM_NOTIFY, 0, reinterpret_cast<LPARAM>(&scnN));
+		}
+	f(SCI_SETYCARETPOLICY, 13, 77);f(SCI_SCROLLCARET);f(SCI_SETYCARETPOLICY, 13, 1);
+}
+
+void ScintillaEditView::putMvmntInView(int p, int e, int prevFound)	{
+	// int curDocLine = static_cast<int>(f(SCI_LINEFROMPOSITION,p)),
+	// curVL = static_cast<int>(f(SCI_VISIBLEFROMDOCLINE, curDocLine)),
+	// firstVL_a = static_cast<int>(f(SCI_GETFIRSTVISIBLELINE));
+	// int nbVL = static_cast<int>(f(SCI_LINESONSCREEN));
+	auto firstVL = f(SCI_GETFIRSTVISIBLELINE);
+	f(SCI_GOTOPOS, p);f(SCI_ENSUREVISIBLE, f(SCI_LINEFROMPOSITION, p));
+	f(SCI_SETANCHOR, e);
+
+	if (f(SCI_LINEFROMPOSITION,p) != f(SCI_LINEFROMPOSITION, prevFound))	{
+		f(SCI_SETYCARETPOLICY, 13, 2);f(SCI_SCROLLCARET);
+		if (firstVL < f(SCI_GETFIRSTVISIBLELINE))	{
+			f(SCI_LINESCROLL, 0, 11);
+		}
+		else if (firstVL > f(SCI_GETFIRSTVISIBLELINE))	{
+			f(SCI_LINESCROLL, 0, -11);
+		}
+	}
+	f(SCI_SETYCARETPOLICY, 13, 1);
 }

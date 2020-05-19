@@ -738,13 +738,11 @@ private:
 
 
 class MatchedPairConf final	{
-
 public:
 	bool hasUserDefinedPairs() const { return _matchedPairs.size() != 0; }
 	bool hasDefaultPairs() const { return _doParentheses||_doBrackets||_doCurlyBrackets||_doQuotes||_doDoubleQuotes||_doHtmlXmlTag; }
 	bool hasAnyPairsPair() const { return hasUserDefinedPairs() || hasDefaultPairs(); }
 
-public:
 	std::vector<std::pair<char, char>> _matchedPairs;
 	std::vector<std::pair<char, char>> _matchedPairsInit; // used only on init
 	bool _doHtmlXmlTag = false;
@@ -847,7 +845,7 @@ struct NppGUI final	{
 	AutocStatus _autocStatus = autoc_both;
 	size_t  _autocFromLen = 1;
 	bool _autocIgnoreNumbers = false;
-	bool _autocIgnoreCase = false;
+	// bool _autocIgnoreCase = false;
 	bool _funcParams = true;
 	MatchedPairConf _matchedPairConf;
 
@@ -862,36 +860,34 @@ struct NppGUI final	{
 		int _intervalDays = 15;
 		Date _nextUpdateDate;
 		AutoUpdateOptions(): _nextUpdateDate(Date()) {};
-	}
-	_autoUpdateOpt;
+	}	_autoUpdateOpt;
 
-	bool _doesExistUpdater = false;
-	int _caretBlinkRate = 600;
-	int _caretWidth = 1;
-	bool _enableMultiSelection = false;
-
-	bool _shortTitlebar = false;
+	TCHAR _defaultDir[MAX_PATH],
+	_defaultDirExp[MAX_PATH];	//expanded environment variables
 
 	OpenSaveDirSetting _openSaveDir = dir_followCurrent;
+	int _caretBlinkRate = 475,
+	_caretWidth = 2;
 
-	TCHAR _defaultDir[MAX_PATH];
-	TCHAR _defaultDirExp[MAX_PATH];	//expanded environment variables
-	generic_string _themeName;
+	bool _doesExistUpdater = false, _shortTitlebar = false,
+	_enableMultiSelection = true,
+	_fileSwitcherWithoutExtColumn = false,
+	_isSnapshotMode = true,
+	_useNewStyleSaveDlg = true,
+	persistentSelectionPaste = 0;
+
 	MultiInstSetting _multiInstSetting = monoInst;
-	bool _fileSwitcherWithoutExtColumn = false;
-	bool isSnapshotMode() const {return _isSnapshotMode && _rememberLastSession && !_isCmdlineNosessionActivated;};
-	bool _isSnapshotMode = true;
 	size_t _snapshotBackupTiming = 7000;
-	generic_string _cloudPath; // this option will never be read/written from/to config.xml
+	generic_string _themeName, _cloudPath; // this option will not be kept in config.xml
 	unsigned char _availableClouds = '\0'; // this option will never be read/written from/to config.xml
-	bool _useNewStyleSaveDlg = true;
+	bool isSnapshotMode() const {
+		return _isSnapshotMode && _rememberLastSession && !_isCmdlineNosessionActivated;}
 
-	enum SearchEngineChoice{ se_custom = 0, se_duckDuckGo = 1, se_google = 2};
+	enum SearchEngineChoice{ se_custom, se_duckDuckGo, se_google	};
 	SearchEngineChoice _searchEngineChoice = se_google;
 	generic_string _searchEngineCustom;
 
 	bool _isFolderDroppedOpenFiles = false;
-
 	bool _isDocPeekOnTab = false;
 	bool _isDocPeekOnMap = false;
 };
@@ -1278,24 +1274,18 @@ struct UdlXmlFileState final {
 };
 
 constexpr int NB_LANG = 100;
-constexpr bool DUP = true;
-constexpr bool FREE = false;
+constexpr bool DUP = true, FREE = false;
 
-constexpr int RECENTFILES_SHOWFULLPATH = 1;
-constexpr int RECENTFILES_SHOWONLYFILENAME = 0;
+constexpr int RECENTFILES_SHOWFULLPATH = 1, RECENTFILES_SHOWONLYFILENAME = 0;
 
 class NppParameters final	{
 
-private:
 	static NppParameters* getInstancePointer() {
-		// static NppParameters* instance =
-		return	(new NppParameters);
+		return	new NppParameters;
 	};
 
 public:
-	static NppParameters& getInstance() {
-		return *getInstancePointer();
-	};
+	static NppParameters& getInstance() {		return *getInstancePointer();	};
 
 	static LangType getLangIDFromStr(const TCHAR *langName);
 	static generic_string getLocPathFromStr(const generic_string & localizationCode);
@@ -1309,9 +1299,7 @@ public:
 	bool _isTaskListRBUTTONUP_Active = false;
 	int L_END;
 
-	const NppGUI & getNppGUI() const {
-		return _nppGUI;
-	}
+	const NppGUI& getNppGUI() {	return _nppGUI;	}
 
 	const TCHAR * getWordList(LangType langID, int typeIndex) const	{
 

@@ -242,7 +242,7 @@ INT_PTR CALLBACK ClipboardHistoryPanel::run_dlgProc(UINT message, WPARAM wParam,
 							int codepage = (*_ppEditView)->getCurrentBuffer()->getEncoding();
 							if (codepage == -1)	{
 
-								auto cp = (*_ppEditView)->execute(SCI_GETCODEPAGE);
+								auto cp = (*_ppEditView)->f(SCI_GETCODEPAGE);
 								codepage = cp == SC_CP_UTF8 ? SC_CP_UTF8 : 0;
 							}
 							else
@@ -256,8 +256,8 @@ INT_PTR CALLBACK ClipboardHistoryPanel::run_dlgProc(UINT message, WPARAM wParam,
 								c = new char[nbChar + 1];
 								WideCharToMultiByte(codepage, 0, (wchar_t *)ba.getPointer(), static_cast<int32_t>(ba.getLength()), c, nbChar + 1, NULL, NULL);
 
-								(*_ppEditView)->execute(SCI_REPLACESEL, 0, reinterpret_cast<LPARAM>(""));
-								(*_ppEditView)->execute(SCI_ADDTEXT, strlen(c), reinterpret_cast<LPARAM>(c));
+								(*_ppEditView)->f(SCI_REPLACESEL, 0, reinterpret_cast<LPARAM>(""));
+								(*_ppEditView)->f(SCI_ADDTEXT, strlen(c), reinterpret_cast<LPARAM>(c));
 								(*_ppEditView)->focus();
 								delete[] c;
 							}

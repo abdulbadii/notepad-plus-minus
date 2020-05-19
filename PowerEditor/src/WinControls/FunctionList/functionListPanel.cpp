@@ -87,7 +87,7 @@ size_t FunctionListPanel::getBodyClosePos(size_t begin, const TCHAR *bodyOpenSym
 
 	int flags = SCFIND_REGEXP | SCFIND_POSIX;
 
-	(*_ppEditView)->execute(SCI_SETSEARCHFLAGS, flags);
+	(*_ppEditView)->f(SCI_SETSEARCHFLAGS, flags);
 	int targetStart = (*_ppEditView)->searchInTarget(exprToSearch.c_str(), exprToSearch.length(), begin, docLen);
 	int targetEnd = 0;
 
@@ -95,7 +95,7 @@ size_t FunctionListPanel::getBodyClosePos(size_t begin, const TCHAR *bodyOpenSym
 	{
 		if (targetStart != -1 && targetStart != -2)	{ // found open or close symbol
 
-			targetEnd = int((*_ppEditView)->execute(SCI_GETTARGETEND));
+			targetEnd = int((*_ppEditView)->f(SCI_GETTARGETEND));
 
 			// Now we determinate the symbol (open or close)
 			int tmpStart = (*_ppEditView)->searchInTarget(bodyOpenSymbol, lstrlen(bodyOpenSymbol), targetStart, targetEnd);
@@ -134,7 +134,7 @@ generic_string FunctionListPanel::parseSubLevel(size_t begin, size_t end, std::v
 
 	int flags = SCFIND_REGEXP | SCFIND_POSIX;
 
-	(*_ppEditView)->execute(SCI_SETSEARCHFLAGS, flags);
+	(*_ppEditView)->f(SCI_SETSEARCHFLAGS, flags);
 	const TCHAR *regExpr2search = dataToSearch[0].c_str();
 	int targetStart = (*_ppEditView)->searchInTarget(regExpr2search, lstrlen(regExpr2search), begin, end);
 
@@ -143,7 +143,7 @@ generic_string FunctionListPanel::parseSubLevel(size_t begin, size_t end, std::v
 		foundPos = -1;
 		return L"";
 	}
-	int targetEnd = int((*_ppEditView)->execute(SCI_GETTARGETEND));
+	int targetEnd = int((*_ppEditView)->f(SCI_GETTARGETEND));
 
 	if (dataToSearch.size() >= 2)	{
 
@@ -419,7 +419,7 @@ void FunctionListPanel::findMarkEntry(HTREEITEM htItem, LONG line)	{
 				int pos = generic_atoi(posStr->c_str());
 				if (pos != -1)	{
 
-					LONG sci_line = static_cast<LONG>((*_ppEditView)->execute(SCI_LINEFROMPOSITION, pos));
+					LONG sci_line = static_cast<LONG>((*_ppEditView)->f(SCI_LINEFROMPOSITION, pos));
 					if (line >= sci_line)	{
 
 						if (sci_line > _findLine || _findLine == -1)	{
@@ -496,8 +496,8 @@ bool FunctionListPanel::openSelection(const TreeView & treeView)	{
 	if (pos == -1)
 		return false;
 
-	auto sci_line = (*_ppEditView)->execute(SCI_LINEFROMPOSITION, pos);
-	(*_ppEditView)->execute(SCI_ENSUREVISIBLE, sci_line);
+	auto sci_line = (*_ppEditView)->f(SCI_LINEFROMPOSITION, pos);
+	(*_ppEditView)->f(SCI_ENSUREVISIBLE, sci_line);
 	(*_ppEditView)->scrollPosToCenter(pos);
 
 	return true;
