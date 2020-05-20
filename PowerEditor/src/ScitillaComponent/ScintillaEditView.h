@@ -270,9 +270,6 @@ public:
 	void restoreCurrentPosPostStep();
 
 	void beginOrEndSelect();
-	bool beginEndSelectedIsStarted() const {
-		return _beginSelectPosition != -1;
-	};
 
 	int getCurrentDocLen() const {
 		return static_cast<int32_t>(f(SCI_GETLENGTH));
@@ -333,7 +330,6 @@ public:
 		return (f(SCI_GETMARGINWIDTHN, witchMarge, 0));
 	};
 
-	void updateBeginEndSelectPosition(bool is_insert, size_t position, size_t length);
 	void marginClick(Sci_Position position, int modifiers);
 
 	void setMakerStyle(folderStyle style) {
@@ -681,8 +677,6 @@ protected:
 	typedef std::unordered_map<int, Style> StyleMap;
 	typedef std::unordered_map<BufferID, StyleMap*> BufferStyleMap;
 	BufferStyleMap _hotspotStyles;
-
-	long long _beginSelectPosition = -1;
 
 	static std::string _defaultCharList;
 
@@ -1072,12 +1066,15 @@ void ScintillaEditView::toggleFold(size_t ln, bool rec)	{
 
 	if (f(SCI_GETENDSTYLED) < f(SCI_GETLENGTH))
 		f(SCI_COLOURISE,0,-1);
-	int hLine;
+	size_t hLine, n=ln;
+	bool isNode;
 	if (f(SCI_GETFOLDLEVEL, ln) & SC_FOLDLEVELHEADERFLAG)
 		hLine = static_cast<int>(ln);
-	else if ((hLine = static_cast<int>(f(SCI_GETFOLDPARENT, ln))) == -1)
-		return;
-
+	else if ((hLine = static_cast<int>(f(SCI_GETFOLDPARENT, ln))) == -1)	{
+		while (!(isNode=f(SCI_GETFOLDLEVEL, ++ln)&SC_FOLDLEVELHEADERFLAG) && ln<n+9);
+		if (isNode)	hLine=ln;
+		else return;
+	}
 	SCNotification scnN;
 	scnN.nmhdr.code = SCN_FOLDINGSTATECHANGED;
 	scnN.nmhdr.hwndFrom = _hSelf;
@@ -1098,8 +1095,7 @@ void ScintillaEditView::toggleFold(size_t ln, bool rec)	{
 				::SendMessage(_hParent, WM_NOTIFY, 0, reinterpret_cast<LPARAM>(&scnN));
 			}
 	}
-	f(SCI_SETYCARETPOLICY, 14, 0);f(SCI_SCROLLCARET);
-	f(SCI_SETYCARETPOLICY, 13, 1);
+	f(SCI_SETYCARETPOLICY, 14, 0);f(SCI_SCROLLCARET); f(SCI_SETYCARETPOLICY, 13, 1);
 }
 
 void ScintillaEditView::foldAllToggle()	{

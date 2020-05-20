@@ -1285,7 +1285,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				// case STATUSBAR_DOC_SIZE:
 				// case STATUSBAR_CUR_POS:
 				// case STATUSBAR_EOF_FORMAT:
-				// case STATUSBAR_UNICODE_TYPE:
+				// case STATUSBAR_ENCODING:
 				// case STATUSBAR_TYPING_MODE:
 					_statusBar.setText( static_cast<int32_t>(wParam),str2set);
 					return TRUE;

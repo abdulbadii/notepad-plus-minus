@@ -62,8 +62,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 
 			static bool prevWasEdit = false;
 			if (notification->modificationType & (SC_MOD_DELETETEXT | SC_MOD_INSERTTEXT))	{
-
-				_pEditView->updateBeginEndSelectPosition(notification->modificationType & SC_MOD_INSERTTEXT, notification->position, notification->length);
+				updateBeginEndSelectPosition(notification->modificationType & SC_MOD_INSERTTEXT, notification->position, notification->length);
 				prevWasEdit = true;
 				_linkTriggered = true;
 				::InvalidateRect(notifyView->getHSelf(), NULL, TRUE);
@@ -375,16 +374,32 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 		case NM_CLICK :	{
 
 			if (notification->nmhdr.hwndFrom == _statusBar.getHSelf())	{
-
 				LPNMMOUSE lpnm = (LPNMMOUSE)notification;
-				if (lpnm->dwItemSpec == DWORD(STATUSBAR_TYPING_MODE))	{
 
-					_pEditView->f(SCI_SETOVERTYPE, !_pEditView->f(SCI_GETOVERTYPE));
-					_statusBar.setText( STATUSBAR_TYPING_MODE,(_pEditView->f(SCI_GETOVERTYPE))?L"OVR":L"INS");
+				if (lpnm->dwItemSpec == DWORD(STATUSBAR_CUR_POS))	{
+				offsetSB = !offsetSB;
+				generic_string s = commafyInt(_pEditView->getOffset());	s += L"  ";
+
+				if (offsetSB)
+					_statusBar.setText(STATUSBAR_CUR_POS, nullptr, s.c_str());
+				else
+					_statusBar.setText(STATUSBAR_CUR_POS);
 				}
-				if (lpnm->dwItemSpec == DWORD(STATUSBAR_SEL_PASTE))	{nppGUI.persistentSelectionPaste=!nppGUI.persistentSelectionPaste;
+				
+				if (lpnm->dwItemSpec == DWORD(STATUSBAR_TYPING_MODE))	{
+					_pEditView->f(SCI_SETOVERTYPE, !_pEditView->f(SCI_GETOVERTYPE));
+					_statusBar.setText( STATUSBAR_TYPING_MODE,(_pEditView->f(SCI_GETOVERTYPE))?L"OT":L"INS");
+				}
+				
+				if (lpnm->dwItemSpec == DWORD(STATUSBAR_SEL_PASTE))	{
+					nppGUI.persistentSelectionPaste=!nppGUI.persistentSelectionPaste;
 					_statusBar.setText( STATUSBAR_SEL_PASTE, nppGUI.persistentSelectionPaste? L"KEEP" : L"LOSE");
-					}
+				}
+				if (lpnm->dwItemSpec == DWORD(STATUSBAR_SEL_UNDO))	{
+					nppGUI.persistentSelectUndo=!nppGUI.persistentSelectUndo;
+					_statusBar.setText(STATUSBAR_SEL_UNDO, nppGUI.persistentSelectUndo? L"KP" : L"LS");
+				}
+					
 			}
 			else if (notification->nmhdr.hwndFrom == _mainDocTab.getHSelf() && _activeView == SUB_VIEW)	{
 
@@ -428,13 +443,6 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 
 					command(IDM_VIEW_SUMMARY);
 				}
-				else if (lpnm->dwItemSpec == DWORD(STATUSBAR_DOC_TYPE))	{
-
-					POINT p;
-					::GetCursorPos(&p);
-					HMENU hLangMenu = ::GetSubMenu(_mainMenuHandle, MENUINDEX_LANGUAGE);
-					TrackPopupMenu(hLangMenu, 0, p.x, p.y, 0, _pPublicInterface->getHSelf(), NULL);
-				}
 				else if (lpnm->dwItemSpec == DWORD(STATUSBAR_EOF_FORMAT))	{
 
 					POINT p;
@@ -456,16 +464,26 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 			POINT p;
 			::GetCursorPos(&p);
 
-/* 			if (notification->nmhdr.hwndFrom == _mainDocTab.getHSelf())
+			if (notification->nmhdr.hwndFrom == _mainDocTab.getHSelf())
 				switchEditViewTo(MAIN_VIEW);
 			else if (notification->nmhdr.hwndFrom == _subDocTab.getHSelf())
-				switchEditViewTo(SUB_VIEW); */
-
-			if (notification->nmhdr.hwndFrom == _statusBar.getHSelf())	{  // From Status Bar
+				switchEditViewTo(SUB_VIEW);
+			
+			else if (notification->nmhdr.hwndFrom == _statusBar.getHSelf())	{  // From Status Bar
 				LPNMMOUSE lpnm = (LPNMMOUSE)notification;
 
-				if (lpnm->dwItemSpec == DWORD(STATUSBAR_EOF_FORMAT))	{
-
+				if (lpnm->dwItemSpec == DWORD(STATUSBAR_DOC_NAME))	{
+					MenuPosition & menuPos = getMenuPosition("file-closeAllMore");
+					HMENU hMenu = ::GetSubMenu(_mainMenuHandle, menuPos._x);
+					if (!hMenu)
+						return TRUE;
+					HMENU hFileCloseMenu = ::GetSubMenu(hMenu, menuPos._y);
+					if (!hFileCloseMenu)
+						return TRUE;
+					TrackPopupMenu(hFileCloseMenu, 0, p.x, p.y, 0, _pPublicInterface->getHSelf(), NULL);
+				}
+				
+				else if (lpnm->dwItemSpec == DWORD(STATUSBAR_EOF_FORMAT))	{
 					MenuPosition & menuPos = getMenuPosition("edit-eolConversion");
 					HMENU hEditMenu = ::GetSubMenu(_mainMenuHandle, menuPos._x);
 					if (!hEditMenu)
@@ -475,15 +493,19 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 						return TRUE;
 					TrackPopupMenu(hEolFormatMenu, 0, p.x, p.y, 0, _pPublicInterface->getHSelf(), NULL);
 				}
-				else if (lpnm->dwItemSpec == DWORD(STATUSBAR_CUR_POS))	{
-					offsetSB = !offsetSB;
-					generic_string s = commafyInt(_pEditView->getOffset());	s += L"  ";
+				
+				else if (lpnm->dwItemSpec == DWORD(STATUSBAR_DOC_TYPE))	{
 
-					if (offsetSB)
-						_statusBar.setText(STATUSBAR_CUR_POS, nullptr, s.c_str());
-					else
-						_statusBar.setText(STATUSBAR_CUR_POS);
+					HMENU hLangMenu = ::GetSubMenu(_mainMenuHandle, MENUINDEX_LANGUAGE);
+					TrackPopupMenu(hLangMenu, 0, p.x, p.y, 0, _pPublicInterface->getHSelf(), NULL);
 				}
+
+				else if (lpnm->dwItemSpec == DWORD(STATUSBAR_ENCODING))	{
+
+					HMENU hMenu = ::GetSubMenu(_mainMenuHandle, MENUINDEX_ENCODE);
+					TrackPopupMenu(hMenu, 0, p.x, p.y, 0, _pPublicInterface->getHSelf(), NULL);
+				}
+
 				return TRUE;
 			}
 			

@@ -114,7 +114,7 @@ static const WinMenuKeyDefinition winKeyDefs[] =	{
 	{ VK_NULL,    IDM_EDIT_COPY,                                false, false, false, nullptr },
 	{ VK_NULL,    IDM_EDIT_DELETE,                              false, false, false, nullptr },*/
 	
-	{ VK_O,    IDM_EDIT_SELECTION_PASTE_MODE,                 true, true, false, L"Keep Selection on Pasting" },
+	{ VK_O,    IDC_SELECT_PASTE,                 true, true, false, L"Keep Selection on Pasting" },
 	{ VK_M,    IDM_EDIT_BEGINENDSELECT,                      false, true, false, nullptr },
 
 	{ VK_NULL,    IDM_EDIT_FULLPATHTOCLIP,                      false, false, false, nullptr },
@@ -5070,7 +5070,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 
 			int i;
 			if (element->Attribute(L"searchEngineChoice", &i))
-				_nppGUI._searchEngineChoice = static_cast<NppGUI::SearchEngineChoice>(i);
+				_nppGUI._searchEngineChoice = static_cast<NppGUI::SearchEngine>(i);
 
 			const TCHAR * searchEngineCustom = element->Attribute(L"searchEngineCustom");
 			if (searchEngineCustom && searchEngineCustom[0])

@@ -2354,29 +2354,16 @@ void ScintillaEditView::addText(size_t length, const char *buf)	{
 
 /* void ScintillaEditView::beginOrEndSelect()	{
 
-	if (_beginSelectPosition == -1)	{
+	if (beginSelectPos == -1)	{
 
-		_beginSelectPosition = static_cast<int32_t>(f(SCI_GETCURRENTPOS));
+		beginSelectPos = static_cast<int32_t>(f(SCI_GETCURRENTPOS));
 	}
 	else	{
 
-		f(SCI_SETANCHOR, static_cast<WPARAM>(_beginSelectPosition));
-		_beginSelectPosition = -1;
+		f(SCI_SETANCHOR, static_cast<WPARAM>(beginSelectPos));
+		beginSelectPos = -1;
 	}
 } */
-
-void ScintillaEditView::updateBeginEndSelectPosition(bool is_insert, size_t position, size_t length)	{
-
-	if (_beginSelectPosition != -1 && static_cast<long long>(position) < _beginSelectPosition - 1)	{
-
-		if (is_insert)
-			_beginSelectPosition += static_cast<long long>(length);
-		else
-			_beginSelectPosition -= static_cast<long long>(length);
-
-		assert(_beginSelectPosition >= 0);
-	}
-}
 
 void ScintillaEditView::marginClick(Sci_Position position, int modifiers)	{
 
@@ -3561,7 +3548,6 @@ void ScintillaEditView::getFoldColor(COLORREF& fgColor, COLORREF& bgColor, COLOR
 		activeFgColor = style._fgColor;
 	}
 }
-
 
 void ScintillaEditView::foldAll(bool isEXPAND)	{
 	SCNotification scnN;

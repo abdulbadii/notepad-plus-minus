@@ -874,7 +874,11 @@ struct NppGUI final	{
 	_fileSwitcherWithoutExtColumn = false,
 	_isSnapshotMode = true,
 	_useNewStyleSaveDlg = true,
-	persistentSelectionPaste = 0;
+	persistentSelectionPaste = 0,
+	persistentSelectUndo = 0,
+	_isFolderDroppedOpenFiles = false,
+	_isDocPeekOnTab = false,
+	_isDocPeekOnMap = false;
 
 	MultiInstSetting _multiInstSetting = monoInst;
 	size_t _snapshotBackupTiming = 7000;
@@ -883,13 +887,10 @@ struct NppGUI final	{
 	bool isSnapshotMode() const {
 		return _isSnapshotMode && _rememberLastSession && !_isCmdlineNosessionActivated;}
 
-	enum SearchEngineChoice{ se_custom, se_duckDuckGo, se_google	};
-	SearchEngineChoice _searchEngineChoice = se_google;
+	enum SearchEngine {se_custom, se_duckDuckGo, se_google}
+	_searchEngineChoice = se_google;
 	generic_string _searchEngineCustom;
 
-	bool _isFolderDroppedOpenFiles = false;
-	bool _isDocPeekOnTab = false;
-	bool _isDocPeekOnMap = false;
 };
 
 struct ScintillaViewParams	{

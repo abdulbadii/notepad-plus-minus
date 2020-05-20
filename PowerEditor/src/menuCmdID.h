@@ -100,7 +100,6 @@
 	#define    IDM_EDIT_UNDO                        (IDM_EDIT + 4)
 	#define    IDM_EDIT_REDO                        (IDM_EDIT + 5)
 	#define    IDM_EDIT_DELETE                      (IDM_EDIT + 6)
-	#define    IDM_EDIT_SELECTION_PASTE_MODE              (IDM_EDIT + 7)
 	#define    IDM_EDIT_BEGINENDSELECT              (IDM_EDIT + 51)
 
 	#define    IDM_EDIT_INS_TAB                     (IDM_EDIT + 8)

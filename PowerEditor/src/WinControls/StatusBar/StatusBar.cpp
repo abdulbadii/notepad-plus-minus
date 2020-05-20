@@ -35,7 +35,7 @@
 //#define IDC_STATUSBAR 789
 
 
-enum{	defaultPartWidth = 3 };
+enum{	defaultPartWidth = 4 };
 
 StatusBar::~StatusBar()
 {
@@ -92,7 +92,6 @@ bool StatusBar::setPartWidth(int whichPart, int width)	{
 	assert(false and "invalid status bar index");
 	return false;
 }
-
 
 void StatusBar::destroy()	{
 

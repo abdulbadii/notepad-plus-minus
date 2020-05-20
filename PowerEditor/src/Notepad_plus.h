@@ -224,23 +224,28 @@ public:
 	};
 
 	bool emergency(const generic_string& emergencySavedDir);
+	void launchDocumentBackupTask();
 
 	Buffer* getCurrentBuffer()	{
 		return _pEditView->getCurrentBuffer();
-	};
-
-	void launchDocumentBackupTask();
-	// int getQuoteIndexFrom(const wchar_t* quoter) const;
-	// void showQuoteFromIndex(int index) const;
-	// void showQuote(const QuoteParams* quote) const;
-
-	generic_string getPluginListVerStr() const {
-		return _pluginsAdminDlg.getPluginListVerStr();
 	};
 	
 	inline void checkMenuItem(int itemID, bool willBeChecked) const {
 		::CheckMenuItem(_mainMenuHandle, itemID, MF_BYCOMMAND | (willBeChecked?MF_CHECKED:MF_UNCHECKED));
 	}
+	
+	inline void updateBeginEndSelectPosition(bool is_insert, size_t position, size_t length)	{
+		if (beginSelectPos != -1 && static_cast<long long>(position) < beginSelectPos - 1)	{
+			beginSelectPos += is_insert ? static_cast<long long>(length)
+			: -static_cast<long long>(length);
+
+		assert(beginSelectPos >= 0);
+	}
+}
+
+	inline generic_string getPluginListVerStr() const {
+		return _pluginsAdminDlg.getPluginListVerStr();
+	};
 
 	size_t openedFiles;
 // static int rB;
@@ -582,7 +587,7 @@ private:
 		HWND _nppHandle = nullptr;
 	};
 	void monitoringStartOrStopAndUpdateUI(Buffer* pBuf, bool isStarting);
-	int beginSelectPos = -1;
+	long long beginSelectPos = -1;
 	bool offsetSB = 0;
 };
 

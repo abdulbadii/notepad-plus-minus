@@ -253,10 +253,12 @@
 #define IDC_UNDO_2           (IDCMD+8)
 #define IDC_REDO_2           (IDCMD+9)
 #define IDC_PASTE_2           (IDCMD+10)
+#define IDC_SELECT_PASTE           (IDCMD+11)
+#define IDC_SELECT_UNDO           (IDCMD+12)
 
-#define IDC_VIEW_SWAP_MAIN_FIND     (IDCMD+11)
-#define IDC_VIEW_CLEAR_CLOSE_FIND       (IDCMD+12)
-#define IDC_INFOS        (IDCMD + 13)
+#define IDC_VIEW_SWAP_MAIN_FIND     (IDCMD+13)
+#define IDC_VIEW_CLEAR_CLOSE_FIND       (IDCMD+14)
+#define IDC_INFOS        (IDCMD + 15)
 
 #define IDCMD_LIMIT                        (IDCMD+20)
 
@@ -498,7 +500,7 @@
 #define MENUINDEX_EDIT     1
 #define MENUINDEX_SEARCH   2
 #define MENUINDEX_VIEW     3
-#define MENUINDEX_FORMAT   4
+#define MENUINDEX_ENCODE   4
 #define MENUINDEX_LANGUAGE 5
 #define MENUINDEX_SETTINGS 6
 #define MENUINDEX_TOOLS    7

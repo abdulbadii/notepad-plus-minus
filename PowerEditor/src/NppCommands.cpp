@@ -275,9 +275,16 @@ void Notepad_plus::command(int id)	{
 		case IDC_UNDO_2:
 		case IDM_EDIT_UNDO:	{
 			std::lock_guard<std::mutex> lock(command_mutex);
+			auto b = _pEditView->f(SCI_GETCURRENTPOS);
 			_pEditView->f(WM_UNDO);
-			int p = static_cast<int>(_pEditView->f(SCI_GETCURRENTPOS));
-			_pEditView->f(SCI_SCROLLRANGE, p-190, p+209);
+			if (nppGUI.persistentSelectUndo)	{
+				_pEditView->f(SCI_REDO);
+				auto b = _pEditView->f(SCI_GETCURRENTPOS);
+				_pEditView->f(SCI_UNDO);
+				if (_pEditView->f(SCI_GETCURRENTPOS) > b)
+					_pEditView->f(SCI_SETANCHOR, b);
+			}
+			_pEditView->f(SCI_SCROLLRANGE, b-190, b+199);
 
 			checkClipboard();
 			checkUndoState();
@@ -288,7 +295,7 @@ void Notepad_plus::command(int id)	{
 			std::lock_guard<std::mutex> lock(command_mutex);
 			_pEditView->f(SCI_REDO);
 			int p = static_cast<int>(_pEditView->f(SCI_GETCURRENTPOS));
-			_pEditView->f(SCI_SCROLLRANGE, p-190, p+219);
+			_pEditView->f(SCI_SCROLLRANGE, p-190, p+199);
 
 			checkClipboard();
 			checkUndoState();
@@ -302,17 +309,22 @@ void Notepad_plus::command(int id)	{
 			if (nppGUI.persistentSelectionPaste)	{
 				if (_pEditView->isBeingSelect())
 					_pEditView->toLeftEndSelect();
-				int p = static_cast<int>(_pEditView->f(SCI_GETCURRENTPOS));
+				auto b=_pEditView->f(SCI_GETCURRENTPOS);
 				_pEditView->f(SCI_PASTE);
-				_pEditView->f(SCI_SETANCHOR, p);
+				_pEditView->f(SCI_SETANCHOR, b);
 			}
 			else	
 			_pEditView->f(SCI_PASTE);
 		}
 		break;
+		
+		case IDC_SELECT_PASTE:{
+			_statusBar.setText(STATUSBAR_SEL_PASTE,(nppGUI.persistentSelectionPaste=!nppGUI.persistentSelectionPaste) ? L"KEEP" : L"LOSE");
+		}
+		break;
 
-		case IDM_EDIT_SELECTION_PASTE_MODE:{
-			_statusBar.setText( STATUSBAR_SEL_PASTE,(nppGUI.persistentSelectionPaste=!nppGUI.persistentSelectionPaste) ? L"KEEP" : L"LOSE");
+		case IDC_SELECT_UNDO:{
+			_statusBar.setText(STATUSBAR_SEL_UNDO,(nppGUI.persistentSelectUndo=!nppGUI.persistentSelectUndo) ? L"KP" : L"LS");
 		}
 		break;
 		
@@ -559,7 +571,7 @@ void Notepad_plus::command(int id)	{
 
 		case IDM_EDIT_BEGINENDSELECT:	{
 
-			::CheckMenuItem(_mainMenuHandle, IDM_EDIT_BEGINENDSELECT, MF_BYCOMMAND | (_pEditView->beginEndSelectedIsStarted() ? MF_UNCHECKED : MF_CHECKED));
+			::CheckMenuItem(_mainMenuHandle, IDM_EDIT_BEGINENDSELECT, MF_BYCOMMAND | (beginSelectPos != -1? MF_UNCHECKED : MF_CHECKED));
 			generic_string s,
 			p= commafyInt(_pEditView->getOffset());
 			p += L"  ";

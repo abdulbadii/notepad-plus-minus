@@ -366,12 +366,14 @@ LRESULT Notepad_plus::init(HWND hwnd)	{
 	_statusBar.setPartWidth(STATUSBAR_INFOS, param._dpiManager.scaleX(227));
 	_statusBar.setPartWidth(STATUSBAR_DOC_SIZE, param._dpiManager.scaleX(91));
 	_statusBar.setPartWidth(STATUSBAR_EOF_FORMAT, param._dpiManager.scaleX(54));
-	_statusBar.setPartWidth(STATUSBAR_UNICODE_TYPE, param._dpiManager.scaleX(91));
+	_statusBar.setPartWidth(STATUSBAR_ENCODING, param._dpiManager.scaleX(91));
 	_statusBar.setPartWidth(STATUSBAR_SEL_PASTE, param._dpiManager.scaleX(31));
+	_statusBar.setPartWidth(STATUSBAR_SEL_UNDO, param._dpiManager.scaleX(18));
 	_statusBar.setPartWidth(STATUSBAR_TYPING_MODE, param._dpiManager.scaleX(26));
 	_statusBar.display(nppGUI._statusBarShow);
 	
 	_statusBar.setText(STATUSBAR_SEL_PASTE,L"LOSE");
+	_statusBar.setText(STATUSBAR_SEL_UNDO,L"LS");
 	_pEditView->f(SCI_SETOVERTYPE,0);_statusBar.setText(STATUSBAR_TYPING_MODE,L"INS");
 
 	_pMainWindow = &_mainDocTab;
@@ -2438,7 +2440,7 @@ void Notepad_plus::setUniModeText()	{
 		uniModeTextString = uniModeText;
 	}
 
-	_statusBar.setText( STATUSBAR_UNICODE_TYPE,uniModeTextString.c_str());
+	_statusBar.setText(STATUSBAR_ENCODING,uniModeTextString.c_str());
 }
 
 
@@ -3938,7 +3940,7 @@ void Notepad_plus::checkUnicodeMenuItems() const
 	if (encoding == -1)	{
 
 		// Uncheck all in the sub encoding menu
-		HMENU _formatMenuHandle = ::GetSubMenu(_mainMenuHandle, MENUINDEX_FORMAT);
+		HMENU _formatMenuHandle = ::GetSubMenu(_mainMenuHandle, MENUINDEX_ENCODE);
 		doCheck(_formatMenuHandle, IDM_FORMAT_ENCODE);
 		::CheckMenuItem(_mainMenuHandle, IDM_FORMAT_ENCODE, MF_UNCHECKED | MF_BYCOMMAND);
 
@@ -3968,7 +3970,7 @@ void Notepad_plus::checkUnicodeMenuItems() const
 		::CheckMenuItem(_mainMenuHandle, IDM_FORMAT_ANSI, MF_UNCHECKED | MF_BYCOMMAND);
 
 		// Check the encoding item
-		HMENU _formatMenuHandle = ::GetSubMenu(_mainMenuHandle, MENUINDEX_FORMAT);
+		HMENU _formatMenuHandle = ::GetSubMenu(_mainMenuHandle, MENUINDEX_ENCODE);
 		doCheck(_formatMenuHandle, cmdID);
 	}
 }
