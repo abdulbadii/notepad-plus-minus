@@ -44,21 +44,21 @@ ClipboardData ClipboardHistoryPanel::getClipboadData()
 		return clipboardData;
 	 
 	HGLOBAL hglb = GetClipboardData(CLIPBOARD_TEXTFORMAT); 
-	if (hglb != NULL)	{ 
+	if (hglb)	{ 
  
 		char *lpchar = (char *)GlobalLock(hglb);
 		wchar_t *lpWchar = (wchar_t *)GlobalLock(hglb);
 		
-		if (lpchar != NULL)	{ 
+		if (lpchar)	{ 
 
 			UINT cf_nppTextLen = RegisterClipboardFormat(CF_NPPTEXTLEN);
 			if (IsClipboardFormatAvailable(cf_nppTextLen))	{
 
 				HGLOBAL hglbLen = GetClipboardData(cf_nppTextLen); 
-				if (hglbLen != NULL)	{ 
+				if (hglbLen)	{ 
  
 					unsigned long *lpLen = (unsigned long *)GlobalLock(hglbLen); 
-					if (lpLen != NULL)	{ 
+					if (lpLen)	{ 
 
 						for (size_t i = 0 ; i < (*lpLen) ; ++i)	{
 

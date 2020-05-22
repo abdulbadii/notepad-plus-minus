@@ -250,7 +250,7 @@ INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /
 
 			// Detect WINE
 			PWINEGETVERSION pWGV = (PWINEGETVERSION)GetProcAddress(GetModuleHandle(L"ntdll.dll"), "wine_get_version");
-			if (pWGV != NULL)	{
+			if (pWGV)	{
 
 				TCHAR szWINEVersion[32];
 				generic_sprintf(szWINEVersion, L"%hs", pWGV());

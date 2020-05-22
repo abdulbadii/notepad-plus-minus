@@ -48,7 +48,7 @@ public:
 	~ContextMenu();
 
 	void create(HWND hParent, const std::vector<MenuItemUnit> & menuItemArray, const HMENU mainMenuHandle = NULL);
-	bool isCreated() const {return _hMenu != NULL;}
+	bool isCreated() const {return _hMenu;}
 	
 	void display(const POINT & p) const {
 		::TrackPopupMenu(_hMenu, TPM_LEFTALIGN, p.x, p.y, 0, _hParent, NULL);

@@ -579,7 +579,7 @@ void Gripper::drawRectangle(const POINT* pPt)	{
 	if (!_hbrush)
 		_hbrush = ::CreatePatternBrush(_hbm);
 
-	if (pPt != NULL)	{
+	if (pPt)	{
 
 		// Determine whether to draw a solid drag rectangle or checkered
 		// ???(jg) solid or checked ??? - must have been an old comment, I didn't
@@ -638,7 +638,7 @@ void Gripper::drawRectangle(const POINT* pPt)	{
 		::PatBlt(hdcMem, rcOld.left  , rcOld.top  , rcOld.right  , rcOld.bottom  , PATINVERT);
 		::PatBlt(hdcMem, rcOld.left+3, rcOld.top+3, rcOld.right-6, rcOld.bottom-6, PATINVERT);
 	}
-	if (pPt != NULL)	{
+	if (pPt)	{
 	// draw the new drag-rectangle
 		::PatBlt(hdcMem, rcNew.left  , rcNew.top  , rcNew.right  , rcNew.bottom  , PATINVERT);
 		::PatBlt(hdcMem, rcNew.left+3, rcNew.top+3, rcNew.right-6, rcNew.bottom-6, PATINVERT);
@@ -681,7 +681,7 @@ void Gripper::getMovingRect(POINT pt, RECT *rc)	{
 	/* test if mouse hits a container */
 	pContHit = contHitTest(pt);
 
-	if (pContHit != NULL)	{
+	if (pContHit)	{
 
 		/* get rect of client */
 		::GetWindowRect(pContHit->getHSelf(), rc);
@@ -808,7 +808,7 @@ DockingCont* Gripper::workHitTest(POINT pt, RECT *rc)
 			rcCont.right  += rcCont.left;
 			rcCont.bottom += rcCont.top;
 
-			if (rc != NULL)	{
+			if (rc)	{
 
 				*rc = rcCont;
 			}
@@ -839,7 +839,7 @@ DockingCont* Gripper::workHitTest(POINT pt, RECT *rc)
 
 			if (::PtInRect(&rcCont, pt) == TRUE)	{
 
-				if (rc != NULL)	{
+				if (rc)	{
 
 					ClientRectToScreenRect(_dockData.hWnd, rc);
 					rc->right  -= rc->left;

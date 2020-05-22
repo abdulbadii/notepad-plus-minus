@@ -114,7 +114,9 @@ static const WinMenuKeyDefinition winKeyDefs[] =	{
 	{ VK_NULL,    IDM_EDIT_COPY,                                false, false, false, nullptr },
 	{ VK_NULL,    IDM_EDIT_DELETE,                              false, false, false, nullptr },*/
 	
-	{ VK_O,    IDC_SELECT_PASTE,                 true, true, false, L"Keep Selection on Pasting" },
+	{ VK_F12,    IDC_CR_UZ,                 true, false, true, L"Set Caret-Prevented Line Margin" },
+	{ VK_P,    IDC_SELECT_PASTE,                 true, false, true, L"Keep Selection on Pasting" },
+	{ VK_P,    IDC_SELECT_UNDO,                 true, true, false, L"Keep Selection on Undo/Redo" },
 	{ VK_M,    IDM_EDIT_BEGINENDSELECT,                      false, true, false, nullptr },
 
 	{ VK_NULL,    IDM_EDIT_FULLPATHTOCLIP,                      false, false, false, nullptr },
@@ -275,7 +277,7 @@ static const WinMenuKeyDefinition winKeyDefs[] =	{
 	{ VK_TAB,     IDC_NEXT_DOC,                                 true,  false, false, L"Switch to next document"},
 	{ VK_NULL,    IDM_VIEW_WRAP,                                false, false, false, nullptr },
 	{ VK_H,       IDM_VIEW_HIDELINES,                           false, true,  false, nullptr },
-	{ VK_F8,      IDM_VIEW_SWITCHTO_OTHER_VIEW,                 false, false, false, nullptr },
+	{ VK_F12,     IDM_VIEW_SWITCHTO_OTHER_VIEW,         false, true, true, nullptr },
 
 	{ VK_OEM_1,       IDM_VIEW_TOGGLE_FOLDALL,                      false, true,  false, nullptr },
 	{ VK_OEM_1,       IDM_VIEW_TOGGLE_FOLDCURRENT,                 false, true, true, nullptr },
@@ -304,9 +306,10 @@ static const WinMenuKeyDefinition winKeyDefs[] =	{
 	{ VK_NULL,    IDM_VIEW_DOC_MAP,                             false, false, false, nullptr },
 	{ VK_OEM_EQUAL,    IDM_VIEW_FUNC_LIST,                           true, false, true, nullptr },
 	{ VK_F6,    IDM_VIEW_CHAR_PANEL,                          false, false, false, nullptr },
-	{ VK_O,    IDM_VIEW_LINENUMBER,                false, true, true, nullptr },
 	{ VK_SPACE,      IDM_VIEW_FIND_RESULT,                  true,  true, false, nullptr },
-	{ VK_L,      IDC_VIEW_SWAP_MAIN_FIND,                  true, true, false,  L"Switch Main/Find Result" },
+	{ VK_O,    IDM_VIEW_LINENUMBER,                false, true, true, nullptr },
+	{ VK_V,    IDM_VIEW_CR_LINE_BG,                false, true, false, nullptr },
+	{ VK_OEM_PERIOD,      IDC_VIEW_SWAP_MAIN_FIND,                   false,true, true, L"Switch Main/Find Result" },
 	{ VK_SPACE,      IDC_VIEW_CLEAR_CLOSE_FIND,                  true,  true, true, L"Clear & Close Find Pane" },
 	{ VK_N,      IDC_INFOS,                 false, true, false, L"Scope Information" },
 
@@ -754,7 +757,7 @@ winVer NppParameters::getWindowsVersion()
 	}
 
 	pGNSI = (PGNSI) GetProcAddress(GetModuleHandle(L"kernel32.dll"), "GetNativeSystemInfo");
-	if (pGNSI != NULL)
+	if (pGNSI)
 		pGNSI(&si);
 	else
 		GetSystemInfo(&si);
@@ -892,7 +895,7 @@ bool NppParameters::reloadStylers(TCHAR* stylePath)	{
 
 	delete _pXmlUserStylerDoc;
 
-	const TCHAR* stylePathToLoad = stylePath != nullptr ? stylePath : _stylerPath.c_str();
+	const TCHAR* stylePathToLoad = stylePath ? stylePath : _stylerPath.c_str();
 	_pXmlUserStylerDoc = new TiXmlDocument(stylePathToLoad);
 
 	bool loadOkay = _pXmlUserStylerDoc->LoadFile();
@@ -1073,8 +1076,8 @@ bool NppParameters::load()	{
 		if (not cloudChoiceStrW.empty() and ::PathFileExists(cloudChoiceStrW.c_str()))	{
 
 			_userPath = cloudChoiceStrW;
-			_nppGUI._cloudPath = cloudChoiceStrW;
-			_initialCloudChoice = _nppGUI._cloudPath;
+			nGUI._cloudPath = cloudChoiceStrW;
+			_initialCloudChoice = nGUI._cloudPath;
 		}
 	}
 
@@ -1199,10 +1202,10 @@ bool NppParameters::load()	{
 		::CopyFile(srcStylersPath.c_str(), _stylerPath.c_str(), TRUE);
 	}
 
-	if (_nppGUI._themeName.empty() || (!PathFileExists(_nppGUI._themeName.c_str())))
-		_nppGUI._themeName.assign(_stylerPath);
+	if (nGUI._themeName.empty() || (!PathFileExists(nGUI._themeName.c_str())))
+		nGUI._themeName.assign(_stylerPath);
 
-	_pXmlUserStylerDoc = new TiXmlDocument(_nppGUI._themeName.c_str());
+	_pXmlUserStylerDoc = new TiXmlDocument(nGUI._themeName.c_str());
 
 	loadOkay = _pXmlUserStylerDoc->LoadFile();
 	if (!loadOkay)	{
@@ -1391,7 +1394,7 @@ bool NppParameters::load()	{
 	PathAppend(_sessionPath, L"session.xml");
 
 	// Don't load session.xml if not required in order to speed up!!
-	if (_nppGUI._rememberLastSession)	{
+	if (nGUI._rememberLastSession)	{
 
 		_pXmlSessionDoc = new TiXmlDocument(_sessionPath);
 
@@ -1465,7 +1468,7 @@ void NppParameters::setWorkSpaceFilePath(int i, const TCHAR* wsFile)	{
 
 void NppParameters::removeTransparent(HWND hwnd)	{
 
-	if (hwnd != NULL)
+	if (hwnd)
 		::SetWindowLongPtr(hwnd, GWL_EXSTYLE,  ::GetWindowLongPtr(hwnd, GWL_EXSTYLE) & ~0x00080000);
 }
 
@@ -1993,8 +1996,8 @@ void NppParameters::setDefOpenSaveDir(const TCHAR * newPath, bool noLast)	{
 		if (noLast)
 		_currentWDir = newPath;
 	}
-	else if (PathFileExists(_nppGUI._defaultDirExp))
-		_currentDirectory = _nppGUI._defaultDirExp;
+	else if (PathFileExists(nGUI._defaultDirExp))
+		_currentDirectory = nGUI._defaultDirExp;
 	else
 		_currentDirectory = _nppPath.c_str();
 }
@@ -2778,23 +2781,23 @@ void NppParameters::removeCloudChoice()	{
 
 bool NppParameters::isCloudPathChanged() const
 {
-	if (_initialCloudChoice == _nppGUI._cloudPath)
+	if (_initialCloudChoice == nGUI._cloudPath)
 		return false;
-	else if (_initialCloudChoice.size() - _nppGUI._cloudPath.size() == 1)	{
+	else if (_initialCloudChoice.size() - nGUI._cloudPath.size() == 1)	{
 
 		TCHAR c = _initialCloudChoice.at(_initialCloudChoice.size()-1);
 		if (c == '\\' || c == '/')	{
 
-			if (!_initialCloudChoice.find(_nppGUI._cloudPath))
+			if (!_initialCloudChoice.find(nGUI._cloudPath))
 				return false;
 		}
 	}
-	else if (_nppGUI._cloudPath.size() - _initialCloudChoice.size() == 1)	{
+	else if (nGUI._cloudPath.size() - _initialCloudChoice.size() == 1)	{
 
-		TCHAR c = _nppGUI._cloudPath.at(_nppGUI._cloudPath.size() - 1);
+		TCHAR c = nGUI._cloudPath.at(nGUI._cloudPath.size() - 1);
 		if (c == '\\' || c == '/')	{
 
-			if (!_nppGUI._cloudPath.find(_initialCloudChoice))
+			if (!nGUI._cloudPath.find(_initialCloudChoice))
 				return false;
 		}
 	}
@@ -3443,11 +3446,11 @@ bool NppParameters::feedStylerArray(TiXmlNode *node)	{
 		if (lexerName)	{
 
 			_lexerStylerArray.addLexerStyler(lexerName, lexerDesc, lexerUserExt, childNode);
-			if (lexerExcluded != NULL && (!lstrcmp(lexerExcluded, L"yes")))	{
+			if (lexerExcluded && (!lstrcmp(lexerExcluded, L"yes")))	{
 
 				int index = getExternalLangIndexFromName(lexerName);
 				if (index != -1)
-					_nppGUI._excludedLangList.push_back(LangMenuItem((LangType)(index + L_EXTERNAL)));
+					nGUI._excludedLangList.push_back(LangMenuItem((LangType)(index + L_EXTERNAL)));
 			}
 		}
 	}
@@ -4008,9 +4011,9 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			if (val)	{
 
 				if (!lstrcmp(val, L"no"))
-					_nppGUI._toolbarShow = false;
+					nGUI._toolbarShow = false;
 				else// if (!lstrcmp(val, L"yes"))
-					_nppGUI._toolbarShow = true;
+					nGUI._toolbarShow = true;
 			}
 			TiXmlNode *n = childNode->FirstChild();
 			if (n)	{
@@ -4019,11 +4022,11 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 				if (val)	{
 
 					if (!lstrcmp(val, L"small"))
-						_nppGUI._toolBarStatus = TB_SMALL;
+						nGUI._toolBarStatus = TB_SMALL;
 					else if (!lstrcmp(val, L"large"))
-						_nppGUI._toolBarStatus = TB_LARGE;
+						nGUI._toolBarStatus = TB_LARGE;
 					else// if (!lstrcmp(val, L"standard"))	//assume standard in all other cases
-						_nppGUI._toolBarStatus = TB_STANDARD;
+						nGUI._toolBarStatus = TB_STANDARD;
 				}
 			}
 		}
@@ -4036,9 +4039,9 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 				if (val)	{
 
 					if (!lstrcmp(val, L"hide"))
-						_nppGUI._statusBarShow = false;
+						nGUI._statusBarShow = false;
 					else if (!lstrcmp(val, L"show"))
-						_nppGUI._statusBarShow = true;
+						nGUI._statusBarShow = true;
 				}
 			}
 		}
@@ -4051,23 +4054,23 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 				if (val)	{
 
 					if (!lstrcmp(val, L"hide"))
-						_nppGUI._menuBarShow = false;
+						nGUI._menuBarShow = false;
 					else if (!lstrcmp(val, L"show"))
-						_nppGUI._menuBarShow = true;
+						nGUI._menuBarShow = true;
 				}
 			}
 		}
 		else if (!lstrcmp(nm, L"TabBar"))	{
 
 			bool isFailed = false;
-			int oldValue = _nppGUI._tabStatus;
+			int oldValue = nGUI._tabStatus;
 			const TCHAR* val = element->Attribute(L"dragAndDrop");
 			if (val)	{
 
 				if (!lstrcmp(val, L"yes"))
-					_nppGUI._tabStatus = TAB_DRAGNDROP;
+					nGUI._tabStatus = TAB_DRAGNDROP;
 				else if (!lstrcmp(val, L"no"))
-					_nppGUI._tabStatus = 0;
+					nGUI._tabStatus = 0;
 				else
 					isFailed = true;
 			}
@@ -4076,9 +4079,9 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			if (val)	{
 
 				if (!lstrcmp(val, L"yes"))
-					_nppGUI._tabStatus |= TAB_DRAWTOPBAR;
+					nGUI._tabStatus |= TAB_DRAWTOPBAR;
 				else if (!lstrcmp(val, L"no"))
-					_nppGUI._tabStatus |= 0;
+					nGUI._tabStatus |= 0;
 				else
 					isFailed = true;
 			}
@@ -4087,9 +4090,9 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			if (val)	{
 
 				if (!lstrcmp(val, L"yes"))
-					_nppGUI._tabStatus |= TAB_DRAWINACTIVETAB;
+					nGUI._tabStatus |= TAB_DRAWINACTIVETAB;
 				else if (!lstrcmp(val, L"no"))
-					_nppGUI._tabStatus |= 0;
+					nGUI._tabStatus |= 0;
 				else
 					isFailed = true;
 			}
@@ -4098,9 +4101,9 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			if (val)	{
 
 				if (!lstrcmp(val, L"yes"))
-					_nppGUI._tabStatus |= TAB_REDUCE;
+					nGUI._tabStatus |= TAB_REDUCE;
 				else if (!lstrcmp(val, L"no"))
-					_nppGUI._tabStatus |= 0;
+					nGUI._tabStatus |= 0;
 				else
 					isFailed = true;
 			}
@@ -4109,9 +4112,9 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			if (val)	{
 
 				if (!lstrcmp(val, L"yes"))
-					_nppGUI._tabStatus |= TAB_CLOSEBUTTON;
+					nGUI._tabStatus |= TAB_CLOSEBUTTON;
 				else if (!lstrcmp(val, L"no"))
-					_nppGUI._tabStatus |= 0;
+					nGUI._tabStatus |= 0;
 				else
 					isFailed = true;
 			}
@@ -4120,9 +4123,9 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			if (val)	{
 
 				if (!lstrcmp(val, L"yes"))
-					_nppGUI._tabStatus |= TAB_DBCLK2CLOSE;
+					nGUI._tabStatus |= TAB_DBCLK2CLOSE;
 				else if (!lstrcmp(val, L"no"))
-					_nppGUI._tabStatus |= 0;
+					nGUI._tabStatus |= 0;
 				else
 					isFailed = true;
 			}
@@ -4130,9 +4133,9 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			if (val)	{
 
 				if (!lstrcmp(val, L"yes"))
-					_nppGUI._tabStatus |= TAB_VERTICAL;
+					nGUI._tabStatus |= TAB_VERTICAL;
 				else if (!lstrcmp(val, L"no"))
-					_nppGUI._tabStatus |= 0;
+					nGUI._tabStatus |= 0;
 				else
 					isFailed = true;
 			}
@@ -4141,9 +4144,9 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			if (val)	{
 
 				if (!lstrcmp(val, L"yes"))
-					_nppGUI._tabStatus |= TAB_MULTILINE;
+					nGUI._tabStatus |= TAB_MULTILINE;
 				else if (!lstrcmp(val, L"no"))
-					_nppGUI._tabStatus |= 0;
+					nGUI._tabStatus |= 0;
 				else
 					isFailed = true;
 			}
@@ -4152,9 +4155,9 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			if (val)	{
 
 				if (!lstrcmp(val, L"yes"))
-					_nppGUI._tabStatus |= TAB_HIDE;
+					nGUI._tabStatus |= TAB_HIDE;
 				else if (!lstrcmp(val, L"no"))
-					_nppGUI._tabStatus |= 0;
+					nGUI._tabStatus |= 0;
 				else
 					isFailed = true;
 			}
@@ -4163,14 +4166,14 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			if (val)	{
 
 				if (!lstrcmp(val, L"yes"))
-					_nppGUI._tabStatus |= TAB_QUITONEMPTY;
+					nGUI._tabStatus |= TAB_QUITONEMPTY;
 				else if (!lstrcmp(val, L"no"))
-					_nppGUI._tabStatus |= 0;
+					nGUI._tabStatus |= 0;
 				else
 					isFailed = true;
 			}
 			if (isFailed)
-				_nppGUI._tabStatus = oldValue;
+				nGUI._tabStatus = oldValue;
 
 
 		}
@@ -4183,23 +4186,23 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 				if (val)	{
 
 					if (!lstrcmp(val, L"yesOld"))
-						_nppGUI._fileAutoDetection = cdEnabledOld;
+						nGUI._fileAutoDetection = cdEnabledOld;
 					else if (!lstrcmp(val, L"autoOld"))
-						_nppGUI._fileAutoDetection = (cdEnabledOld | cdAutoUpdate);
+						nGUI._fileAutoDetection = (cdEnabledOld | cdAutoUpdate);
 					else if (!lstrcmp(val, L"Update2EndOld"))
-						_nppGUI._fileAutoDetection = (cdEnabledOld | cdGo2end);
+						nGUI._fileAutoDetection = (cdEnabledOld | cdGo2end);
 					else if (!lstrcmp(val, L"autoUpdate2EndOld"))
-						_nppGUI._fileAutoDetection = (cdEnabledOld | cdAutoUpdate | cdGo2end);
+						nGUI._fileAutoDetection = (cdEnabledOld | cdAutoUpdate | cdGo2end);
 					else if (!lstrcmp(val, L"yes"))
-						_nppGUI._fileAutoDetection = cdEnabledNew;
+						nGUI._fileAutoDetection = cdEnabledNew;
 					else if (!lstrcmp(val, L"auto"))
-						_nppGUI._fileAutoDetection = (cdEnabledNew | cdAutoUpdate);
+						nGUI._fileAutoDetection = (cdEnabledNew | cdAutoUpdate);
 					else if (!lstrcmp(val, L"Update2End"))
-						_nppGUI._fileAutoDetection = (cdEnabledNew | cdGo2end);
+						nGUI._fileAutoDetection = (cdEnabledNew | cdGo2end);
 					else if (!lstrcmp(val, L"autoUpdate2End"))
-						_nppGUI._fileAutoDetection = (cdEnabledNew | cdAutoUpdate | cdGo2end);
+						nGUI._fileAutoDetection = (cdEnabledNew | cdAutoUpdate | cdGo2end);
 					else //(!lstrcmp(val, L"no"))
-						_nppGUI._fileAutoDetection = cdDisabled;
+						nGUI._fileAutoDetection = cdDisabled;
 				}
 			}
 		}
@@ -4212,7 +4215,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 				const TCHAR* val = n->Value();
 				if (val)	{
 
-					_nppGUI._isMinimizedToTray = (!lstrcmp(val, L"yes"));
+					nGUI._isMinimizedToTray = (!lstrcmp(val, L"yes"));
 				}
 			}
 		}
@@ -4225,9 +4228,9 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 				if (val)	{
 
 					if (!lstrcmp(val, L"yes"))
-						_nppGUI._rememberLastSession = true;
+						nGUI._rememberLastSession = true;
 					else
-						_nppGUI._rememberLastSession = false;
+						nGUI._rememberLastSession = false;
 				}
 			}
 		}
@@ -4240,9 +4243,9 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 				if (val)	{
 
 					if (!lstrcmp(val, L"yes"))
-						_nppGUI._detectEncoding = true;
+						nGUI._detectEncoding = true;
 					else
-						_nppGUI._detectEncoding = false;
+						nGUI._detectEncoding = false;
 				}
 			}
 		}
@@ -4255,9 +4258,9 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 				if (val)	{
 
 					if (!lstrcmp(val, L"yes"))
-						_nppGUI._maitainIndent = true;
+						nGUI._maitainIndent = true;
 					else
-						_nppGUI._maitainIndent = false;
+						nGUI._maitainIndent = false;
 				}
 			}
 		}
@@ -4271,45 +4274,45 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 				if (val)	{
 
 					if (!lstrcmp(val, L"yes"))
-						_nppGUI._enableSmartHilite = true;
+						nGUI._enableSmartHilite = true;
 					else
-						_nppGUI._enableSmartHilite = false;
+						nGUI._enableSmartHilite = false;
 				}
 
 				val = element->Attribute(L"matchCase");
 				if (val)	{
 
 					if (!lstrcmp(val, L"yes"))
-						_nppGUI._smartHiliteCaseSensitive = true;
+						nGUI._smartHiliteCaseSensitive = true;
 					else if (!lstrcmp(val, L"no"))
-						_nppGUI._smartHiliteCaseSensitive = false;
+						nGUI._smartHiliteCaseSensitive = false;
 				}
 
 				val = element->Attribute(L"wholeWordOnly");
 				if (val)	{
 
 					if (!lstrcmp(val, L"yes"))
-						_nppGUI._smartHiliteWordOnly = true;
+						nGUI._smartHiliteWordOnly = true;
 					else if (!lstrcmp(val, L"no"))
-						_nppGUI._smartHiliteWordOnly = false;
+						nGUI._smartHiliteWordOnly = false;
 				}
 
 				val = element->Attribute(L"useFindSettings");
 				if (val)	{
 
 					if (!lstrcmp(val, L"yes"))
-						_nppGUI._smartHiliteUseFindSettings = true;
+						nGUI._smartHiliteUseFindSettings = true;
 					else if (!lstrcmp(val, L"no"))
-						_nppGUI._smartHiliteUseFindSettings = false;
+						nGUI._smartHiliteUseFindSettings = false;
 				}
 
 				val = element->Attribute(L"onAnotherView");
 				if (val)	{
 
 					if (!lstrcmp(val, L"yes"))
-						_nppGUI._smartHiliteOnAnotherView = true;
+						nGUI._smartHiliteOnAnotherView = true;
 					else if (!lstrcmp(val, L"no"))
-						_nppGUI._smartHiliteOnAnotherView = false;
+						nGUI._smartHiliteOnAnotherView = false;
 				}
 			}
 		}
@@ -4322,14 +4325,14 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 				const TCHAR* val = n->Value();
 				if (val)	{
 
-					_nppGUI._enableTagsMatchHilite = !lstrcmp(val, L"yes");
+					nGUI._enableTagsMatchHilite = !lstrcmp(val, L"yes");
 					const TCHAR *tahl = element->Attribute(L"TagAttrHighLight");
 					if (tahl)
-						_nppGUI._enableTagAttrsHilite = !lstrcmp(tahl, L"yes");
+						nGUI._enableTagAttrsHilite = !lstrcmp(tahl, L"yes");
 
 					tahl = element->Attribute(L"HighLightNonHtmlZone");
 					if (tahl)
-						_nppGUI._enableHiliteNonHTMLZone = !lstrcmp(tahl, L"yes");
+						nGUI._enableHiliteNonHTMLZone = !lstrcmp(tahl, L"yes");
 				}
 			}
 		}
@@ -4342,7 +4345,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 				const TCHAR* val = n->Value();
 				if (val)	{
 
-					_nppGUI._doTaskList = (!lstrcmp(val, L"yes"))?true:false;
+					nGUI._doTaskList = (!lstrcmp(val, L"yes"))?true:false;
 				}
 			}
 		}
@@ -4354,7 +4357,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 
 				const TCHAR* val = n->Value();
 				if (val)
-					_nppGUI._styleMRU = (!lstrcmp(val, L"yes"));
+					nGUI._styleMRU = (!lstrcmp(val, L"yes"));
 			}
 		}
 
@@ -4367,11 +4370,11 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 				if (val)	{
 
 					if (!lstrcmp(val, L"1"))
-						_nppGUI._styleURL = 1;
+						nGUI._styleURL = 1;
 					else if (!lstrcmp(val, L"2"))
-						_nppGUI._styleURL = 2;
+						nGUI._styleURL = 2;
 					else
-						_nppGUI._styleURL = 0;
+						nGUI._styleURL = 0;
 				}
 			}
 		}
@@ -4385,9 +4388,9 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 				if (val)	{
 
 					if (!lstrcmp(val, L"no"))
-						_nppGUI._checkHistoryFiles = false;
+						nGUI._checkHistoryFiles = false;
 					else if (!lstrcmp(val, L"yes"))
-						_nppGUI._checkHistoryFiles = true;
+						nGUI._checkHistoryFiles = true;
 				}
 			}
 		}
@@ -4400,16 +4403,16 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 				if (val)	{
 
 					if (!lstrcmp(val, L"vertical"))
-						_nppGUI._splitterPos = POS_VERTICAL;
+						nGUI._splitterPos = POS_VERTICAL;
 					else if (!lstrcmp(val, L"horizontal"))
-						_nppGUI._splitterPos = POS_HORIZOTAL;
+						nGUI._splitterPos = POS_HORIZOTAL;
 				}
 			}
 		}
 		else if (!lstrcmp(nm, L"UserDefineDlg"))	{
 
 			bool isFailed = false;
-			int oldValue = _nppGUI._userDefineDlgStatus;
+			int oldValue = nGUI._userDefineDlgStatus;
 
 			TiXmlNode *n = childNode->FirstChild();
 			if (n)	{
@@ -4418,9 +4421,9 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 				if (val)	{
 
 					if (!lstrcmp(val, L"hide"))
-						_nppGUI._userDefineDlgStatus = 0;
+						nGUI._userDefineDlgStatus = 0;
 					else if (!lstrcmp(val, L"show"))
-						_nppGUI._userDefineDlgStatus = UDD_SHOW;
+						nGUI._userDefineDlgStatus = UDD_SHOW;
 					else
 						isFailed = true;
 				}
@@ -4430,28 +4433,28 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			if (val)	{
 
 				if (!lstrcmp(val, L"docked"))
-					_nppGUI._userDefineDlgStatus |= UDD_DOCKED;
+					nGUI._userDefineDlgStatus |= UDD_DOCKED;
 				else if (!lstrcmp(val, L"undocked"))
-					_nppGUI._userDefineDlgStatus |= 0;
+					nGUI._userDefineDlgStatus |= 0;
 				else
 					isFailed = true;
 			}
 			if (isFailed)
-				_nppGUI._userDefineDlgStatus = oldValue;
+				nGUI._userDefineDlgStatus = oldValue;
 		}
 		else if (!lstrcmp(nm, L"TabSetting"))	{
 
 			int i;
 			const TCHAR* val = element->Attribute(L"size", &i);
 			if (val)
-				_nppGUI._tabSize = i;
+				nGUI._tabSize = i;
 
-			if ((_nppGUI._tabSize == -1) || (!_nppGUI._tabSize))
-				_nppGUI._tabSize = 4;
+			if ((nGUI._tabSize == -1) || (!nGUI._tabSize))
+				nGUI._tabSize = 4;
 
 			val = element->Attribute(L"replaceBySpace");
 			if (val)
-				_nppGUI._tabReplacedBySpace = (!lstrcmp(val, L"yes"));
+				nGUI._tabReplacedBySpace = (!lstrcmp(val, L"yes"));
 		}
 
 		else if (!lstrcmp(nm, L"Caret"))	{
@@ -4459,11 +4462,11 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			int i;
 			const TCHAR* val = element->Attribute(L"width", &i);
 			if (val)
-				_nppGUI._caretWidth = i;
+				nGUI._caretWidth = i;
 
 			val = element->Attribute(L"blinkRate", &i);
 			if (val)
-				_nppGUI._caretBlinkRate = i;
+				nGUI._caretBlinkRate = i;
 		}
 
 		else if (!lstrcmp(nm, L"ScintillaGlobalSettings"))	{
@@ -4472,44 +4475,44 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			if (val)	{
 
 				if (!lstrcmp(val, L"yes"))
-					_nppGUI._enableMultiSelection = true;
+					nGUI._enableMultiSelection = true;
 				else if (!lstrcmp(val, L"no"))
-					_nppGUI._enableMultiSelection = false;
+					nGUI._enableMultiSelection = false;
 			}
 		}
 
 		else if (!lstrcmp(nm, L"AppPosition"))	{
 
-			RECT oldRect = _nppGUI._appPos;
+			RECT oldRect = nGUI._appPos;
 			bool fuckUp = true;
 			int i;
 
 			if (element->Attribute(L"x", &i))	{
 
-				_nppGUI._appPos.left = i;
+				nGUI._appPos.left = i;
 
 				if (element->Attribute(L"y", &i))	{
 
-					_nppGUI._appPos.top = i;
+					nGUI._appPos.top = i;
 
 					if (element->Attribute(L"width", &i))	{
 
-						_nppGUI._appPos.right = i;
+						nGUI._appPos.right = i;
 
 						if (element->Attribute(L"height", &i))	{
 
-							_nppGUI._appPos.bottom = i;
+							nGUI._appPos.bottom = i;
 							fuckUp = false;
 						}
 					}
 				}
 			}
 			if (fuckUp)
-				_nppGUI._appPos = oldRect;
+				nGUI._appPos = oldRect;
 
 			const TCHAR* val = element->Attribute(L"isMaximized");
 			if (val)
-				_nppGUI._isMaximized = (!lstrcmp(val, L"yes"));
+				nGUI._isMaximized = (!lstrcmp(val, L"yes"));
 		}
 
 		else if (!lstrcmp(nm, L"NewDocDefaultSettings"))	{
@@ -4532,21 +4535,21 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 					default:
 						assert(false and "invalid buffer format - fallback to default");
 				}
-				_nppGUI._newDocDefaultSettings._format = newFormat;
+				nGUI._newDocDefaultSettings._format = newFormat;
 			}
 
 			if (element->Attribute(L"encoding", &i))
-				_nppGUI._newDocDefaultSettings._unicodeMode = (UniMode)i;
+				nGUI._newDocDefaultSettings._unicodeMode = (UniMode)i;
 
 			if (element->Attribute(L"lang", &i))
-				_nppGUI._newDocDefaultSettings._lang = (LangType)i;
+				nGUI._newDocDefaultSettings._lang = (LangType)i;
 
 			if (element->Attribute(L"codepage", &i))
-				_nppGUI._newDocDefaultSettings._codepage = (LangType)i;
+				nGUI._newDocDefaultSettings._codepage = (LangType)i;
 
 			const TCHAR* val = element->Attribute(L"openAnsiAsUTF8");
 			if (val)
-				_nppGUI._newDocDefaultSettings._openAnsiAsUtf8 = (!lstrcmp(val, L"yes"));
+				nGUI._newDocDefaultSettings._openAnsiAsUtf8 = (!lstrcmp(val, L"yes"));
 		}
 		
 		else if (!lstrcmp(nm, L"langsExcluded"))	{
@@ -4640,7 +4643,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			for (int i = 0 ; i < 8 ; ++i)	{
 
 				if (mask & g0)
-					_nppGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
+					nGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
 				mask <<= 1;
 			}
 
@@ -4648,7 +4651,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			for (int i = 8 ; i < 16 ; ++i)	{
 
 				if (mask & g1)
-					_nppGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
+					nGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
 				mask <<= 1;
 			}
 
@@ -4656,7 +4659,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			for (int i = 16 ; i < 24 ; ++i)	{
 
 				if (mask & g2)
-					_nppGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
+					nGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
 				mask <<= 1;
 			}
 
@@ -4664,7 +4667,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			for (int i = 24 ; i < 32 ; ++i)	{
 
 				if (mask & g3)
-					_nppGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
+					nGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
 				mask <<= 1;
 			}
 
@@ -4672,7 +4675,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			for (int i = 32 ; i < 40 ; ++i)	{
 
 				if (mask & g4)
-					_nppGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
+					nGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
 				mask <<= 1;
 			}
 
@@ -4680,7 +4683,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			for (int i = 40 ; i < 48 ; ++i)	{
 
 				if (mask & g5)
-					_nppGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
+					nGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
 				mask <<= 1;
 			}
 
@@ -4688,7 +4691,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			for (int i = 48 ; i < 56 ; ++i)	{
 
 				if (mask & g6)
-					_nppGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
+					nGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
 				mask <<= 1;
 			}
 
@@ -4696,7 +4699,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			for (int i = 56 ; i < 64 ; ++i)	{
 
 				if (mask & g7)
-					_nppGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
+					nGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
 				mask <<= 1;
 			}
 
@@ -4704,7 +4707,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			for (int i = 64; i < 72; ++i)	{
 
 				if (mask & g8)
-					_nppGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
+					nGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
 				mask <<= 1;
 			}
 
@@ -4712,7 +4715,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			for (int i = 72; i < 80; ++i)	{
 
 				if (mask & g9)
-					_nppGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
+					nGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
 				mask <<= 1;
 			}
 
@@ -4720,7 +4723,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			for (int i = 80; i < 88; ++i)	{
 
 				if (mask & g10)
-					_nppGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
+					nGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
 				mask <<= 1;
 			}
 
@@ -4728,7 +4731,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			for (int i = 88; i < 96; ++i)	{
 
 				if (mask & g11)
-					_nppGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
+					nGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
 				mask <<= 1;
 			}
 
@@ -4736,83 +4739,83 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			for (int i = 96; i < 104; ++i)	{
 
 				if (mask & g12)
-					_nppGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
+					nGUI._excludedLangList.push_back(LangMenuItem((LangType)i));
 				mask <<= 1;
 			}
 
 			const TCHAR* val = element->Attribute(L"langMenuCompact");
 			if (val)
-				_nppGUI._isLangMenuCompact = (!lstrcmp(val, L"yes"));
+				nGUI._isLangMenuCompact = (!lstrcmp(val, L"yes"));
 		}
 
 		else if (!lstrcmp(nm, L"Print"))	{
 
 			const TCHAR* val = element->Attribute(L"lineNumber");
 			if (val)
-				_nppGUI._printSettings._printLineNumber = (!lstrcmp(val, L"yes"));
+				nGUI._printSettings._printLineNumber = (!lstrcmp(val, L"yes"));
 
 			int i;
 			if (element->Attribute(L"printOption", &i))
-				_nppGUI._printSettings._printOption = i;
+				nGUI._printSettings._printOption = i;
 
 			val = element->Attribute(L"headerLeft");
 			if (val)
-				_nppGUI._printSettings._headerLeft = val;
+				nGUI._printSettings._headerLeft = val;
 
 			val = element->Attribute(L"headerMiddle");
 			if (val)
-				_nppGUI._printSettings._headerMiddle = val;
+				nGUI._printSettings._headerMiddle = val;
 
 			val = element->Attribute(L"headerRight");
 			if (val)
-				_nppGUI._printSettings._headerRight = val;
+				nGUI._printSettings._headerRight = val;
 
 
 			val = element->Attribute(L"footerLeft");
 			if (val)
-				_nppGUI._printSettings._footerLeft = val;
+				nGUI._printSettings._footerLeft = val;
 
 			val = element->Attribute(L"footerMiddle");
 			if (val)
-				_nppGUI._printSettings._footerMiddle = val;
+				nGUI._printSettings._footerMiddle = val;
 
 			val = element->Attribute(L"footerRight");
 			if (val)
-				_nppGUI._printSettings._footerRight = val;
+				nGUI._printSettings._footerRight = val;
 
 
 			val = element->Attribute(L"headerFontName");
 			if (val)
-				_nppGUI._printSettings._headerFontName = val;
+				nGUI._printSettings._headerFontName = val;
 
 			val = element->Attribute(L"footerFontName");
 			if (val)
-				_nppGUI._printSettings._footerFontName = val;
+				nGUI._printSettings._footerFontName = val;
 
 			if (element->Attribute(L"headerFontStyle", &i))
-				_nppGUI._printSettings._headerFontStyle = i;
+				nGUI._printSettings._headerFontStyle = i;
 
 			if (element->Attribute(L"footerFontStyle", &i))
-				_nppGUI._printSettings._footerFontStyle = i;
+				nGUI._printSettings._footerFontStyle = i;
 
 			if (element->Attribute(L"headerFontSize", &i))
-				_nppGUI._printSettings._headerFontSize = i;
+				nGUI._printSettings._headerFontSize = i;
 
 			if (element->Attribute(L"footerFontSize", &i))
-				_nppGUI._printSettings._footerFontSize = i;
+				nGUI._printSettings._footerFontSize = i;
 
 
 			if (element->Attribute(L"margeLeft", &i))
-				_nppGUI._printSettings._marge.left = i;
+				nGUI._printSettings._marge.left = i;
 
 			if (element->Attribute(L"margeTop", &i))
-				_nppGUI._printSettings._marge.top = i;
+				nGUI._printSettings._marge.top = i;
 
 			if (element->Attribute(L"margeRight", &i))
-				_nppGUI._printSettings._marge.right = i;
+				nGUI._printSettings._marge.right = i;
 
 			if (element->Attribute(L"margeBottom", &i))
-				_nppGUI._printSettings._marge.bottom = i;
+				nGUI._printSettings._marge.bottom = i;
 		}
 
 		else if (!lstrcmp(nm, L"ScintillaPrimaryView"))	{
@@ -4824,24 +4827,24 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 
 			int i;
 			if (element->Attribute(L"action", &i))
-				_nppGUI._backup = (BackupFeature)i;
+				nGUI._backup = (BackupFeature)i;
 
 			const TCHAR *bDir = element->Attribute(L"useCustumDir");
 			if (bDir)	{
 
-				_nppGUI._useDir = (!lstrcmp(bDir, L"yes"));;
+				nGUI._useDir = (!lstrcmp(bDir, L"yes"));;
 			}
 			const TCHAR *pDir = element->Attribute(L"dir");
 			if (pDir)
-				_nppGUI._backupDir = pDir;
+				nGUI._backupDir = pDir;
 
 			const TCHAR *isSnapshotModeStr = element->Attribute(L"isSnapshotMode");
 			if (isSnapshotModeStr && !lstrcmp(isSnapshotModeStr, L"no"))
-				_nppGUI._isSnapshotMode = false;
+				nGUI._isSnapshotMode = false;
 
 			int timing;
 			if (element->Attribute(L"snapshotBackupTiming", &timing))
-				_nppGUI._snapshotBackupTiming = timing;
+				nGUI._snapshotBackupTiming = timing;
 
 		}
 		else if (!lstrcmp(nm, L"DockingManager"))	{
@@ -4853,78 +4856,78 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 
 			const TCHAR *bDir = element->Attribute(L"fg");
 			if (bDir)
-				_nppGUI._globalOverride.enableFg = (!lstrcmp(bDir, L"yes"));
+				nGUI._globalOverride.enableFg = (!lstrcmp(bDir, L"yes"));
 
 			bDir = element->Attribute(L"bg");
 			if (bDir)
-				_nppGUI._globalOverride.enableBg = (!lstrcmp(bDir, L"yes"));
+				nGUI._globalOverride.enableBg = (!lstrcmp(bDir, L"yes"));
 
 			bDir = element->Attribute(L"font");
 			if (bDir)
-				_nppGUI._globalOverride.enableFont = (!lstrcmp(bDir, L"yes"));
+				nGUI._globalOverride.enableFont = (!lstrcmp(bDir, L"yes"));
 
 			bDir = element->Attribute(L"fontSize");
 			if (bDir)
-				_nppGUI._globalOverride.enableFontSize = (!lstrcmp(bDir, L"yes"));
+				nGUI._globalOverride.enableFontSize = (!lstrcmp(bDir, L"yes"));
 
 			bDir = element->Attribute(L"bold");
 			if (bDir)
-				_nppGUI._globalOverride.enableBold = (!lstrcmp(bDir, L"yes"));
+				nGUI._globalOverride.enableBold = (!lstrcmp(bDir, L"yes"));
 
 			bDir = element->Attribute(L"italic");
 			if (bDir)
-				_nppGUI._globalOverride.enableItalic = (!lstrcmp(bDir, L"yes"));
+				nGUI._globalOverride.enableItalic = (!lstrcmp(bDir, L"yes"));
 
 			bDir = element->Attribute(L"underline");
 			if (bDir)
-				_nppGUI._globalOverride.enableUnderLine = (!lstrcmp(bDir, L"yes"));
+				nGUI._globalOverride.enableUnderLine = (!lstrcmp(bDir, L"yes"));
 		}
 		else if (!lstrcmp(nm, L"auto-completion"))	{
 
 			int i;
 			if (element->Attribute(L"autoCAction", &i))
-				_nppGUI._autocStatus = static_cast<NppGUI::AutocStatus>(i);
+				nGUI._autocStatus = static_cast<NppGUI::AutocStatus>(i);
 
 			if (element->Attribute(L"triggerFromNbChar", &i))
-				_nppGUI._autocFromLen = i;
+				nGUI._autocFromLen = i;
 
 			const TCHAR * optName = element->Attribute(L"autoCIgnoreNumbers");
 			if (optName)
-				_nppGUI._autocIgnoreNumbers = (!lstrcmp(optName, L"yes"));
+				nGUI._autocIgnoreNumbers = (!lstrcmp(optName, L"yes"));
 
 			// optName = element->Attribute(L"autoCCase");
 			// if (optName)
-				// _nppGUI._autocIgnoreCase = (!lstrcmp(optName, L"yes"));
+				// nGUI._autocIgnoreCase = (!lstrcmp(optName, L"yes"));
 
 			optName = element->Attribute(L"funcParams");
 			if (optName)
-				_nppGUI._funcParams = (!lstrcmp(optName, L"yes"));
+				nGUI._funcParams = (!lstrcmp(optName, L"yes"));
 		}
 		else if (!lstrcmp(nm, L"auto-insert"))	{
 
 			const TCHAR * optName = element->Attribute(L"htmlXmlTag");
 			if (optName)
-				_nppGUI._matchedPairConf._doHtmlXmlTag = (!lstrcmp(optName, L"yes"));
+				nGUI._matchedPairConf._doHtmlXmlTag = (!lstrcmp(optName, L"yes"));
 
 			optName = element->Attribute(L"parentheses");
 			if (optName)
-				_nppGUI._matchedPairConf._doParentheses = (!lstrcmp(optName, L"yes"));
+				nGUI._matchedPairConf._doParentheses = (!lstrcmp(optName, L"yes"));
 
 			optName = element->Attribute(L"brackets");
 			if (optName)
-				_nppGUI._matchedPairConf._doBrackets = (!lstrcmp(optName, L"yes"));
+				nGUI._matchedPairConf._doBrackets = (!lstrcmp(optName, L"yes"));
 
 			optName = element->Attribute(L"curlyBrackets");
 			if (optName)
-				_nppGUI._matchedPairConf._doCurlyBrackets = (!lstrcmp(optName, L"yes"));
+				nGUI._matchedPairConf._doCurlyBrackets = (!lstrcmp(optName, L"yes"));
 
 			optName = element->Attribute(L"quotes");
 			if (optName)
-				_nppGUI._matchedPairConf._doQuotes = (!lstrcmp(optName, L"yes"));
+				nGUI._matchedPairConf._doQuotes = (!lstrcmp(optName, L"yes"));
 
 			optName = element->Attribute(L"doubleQuotes");
 			if (optName)
-				_nppGUI._matchedPairConf._doDoubleQuotes = (!lstrcmp(optName, L"yes"));
+				nGUI._matchedPairConf._doDoubleQuotes = (!lstrcmp(optName, L"yes"));
 
 			for (TiXmlNode *subChildNode = childNode->FirstChildElement(L"UserDefinePair");
 				 subChildNode;
@@ -4943,7 +4946,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 					close = closeVal;
 
 				if (open != -1 && close != -1)
-					_nppGUI._matchedPairConf._matchedPairsInit.push_back(pair<char, char>(char(open), char(close)));
+					nGUI._matchedPairConf._matchedPairsInit.push_back(pair<char, char>(char(open), char(close)));
 			}
 		}
 		else if (!lstrcmp(nm, L"sessionExt"))	{
@@ -4953,7 +4956,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 
 				const TCHAR* val = n->Value();
 				if (val)
-					_nppGUI._definedSessionExt = val;
+					nGUI._definedSessionExt = val;
 			}
 		}
 		else if (!lstrcmp(nm, L"workspaceExt"))	{
@@ -4963,7 +4966,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 
 				const TCHAR* val = n->Value();
 				if (val)
-					_nppGUI._definedWorkspaceExt = val;
+					nGUI._definedWorkspaceExt = val;
 			}
 		}
 		else if (!lstrcmp(nm, L"noUpdate"))	{
@@ -4973,16 +4976,16 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 
 				const TCHAR* val = n->Value();
 				if (val)
-					_nppGUI._autoUpdateOpt._doAutoUpdate = (!lstrcmp(val, L"yes"))?false:true;
+					nGUI._autoUpdateOpt._doAutoUpdate = (!lstrcmp(val, L"yes"))?false:true;
 
 				int i;
 				val = element->Attribute(L"intervalDays", &i);
 				if (val)
-					_nppGUI._autoUpdateOpt._intervalDays = i;
+					nGUI._autoUpdateOpt._intervalDays = i;
 
 				val = element->Attribute(L"nextUpdateDate");
 				if (val)
-					_nppGUI._autoUpdateOpt._nextUpdateDate = Date(val);
+					nGUI._autoUpdateOpt._nextUpdateDate = Date(val);
 			}
 		}
 		else if (!lstrcmp(nm, L"openSaveDir"))	{
@@ -4991,37 +4994,37 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			if (value && value[0])	{
 
 				if (!lstrcmp(value, L"1"))
-					_nppGUI._openSaveDir = dir_last;
+					nGUI._openSaveDir = dir_last;
 				else if (!lstrcmp(value, L"2"))
-					_nppGUI._openSaveDir = dir_userDef;
+					nGUI._openSaveDir = dir_userDef;
 				else
-					_nppGUI._openSaveDir = dir_followCurrent;
+					nGUI._openSaveDir = dir_followCurrent;
 			}
 
 			const TCHAR * path = element->Attribute(L"defaultDirPath");
 			if (path && path[0])	{
 
-				lstrcpyn(_nppGUI._defaultDir, path, MAX_PATH);
-				::ExpandEnvironmentStrings(_nppGUI._defaultDir, _nppGUI._defaultDirExp, MAX_PATH);
+				lstrcpyn(nGUI._defaultDir, path, MAX_PATH);
+				::ExpandEnvironmentStrings(nGUI._defaultDir, nGUI._defaultDirExp, MAX_PATH);
 			}
  		}
 		else if (!lstrcmp(nm, L"titleBar"))	{
 
 			const TCHAR * value = element->Attribute(L"short");
-			_nppGUI._shortTitlebar = false;	//default state
+			nGUI._shortTitlebar = false;	//default state
 			if (value && value[0])	{
 
 				if (!lstrcmp(value, L"yes"))
-					_nppGUI._shortTitlebar = true;
+					nGUI._shortTitlebar = true;
 				else if (!lstrcmp(value, L"no"))
-					_nppGUI._shortTitlebar = false;
+					nGUI._shortTitlebar = false;
 			}
 		}
 		else if (!lstrcmp(nm, L"stylerTheme"))	{
 
 			const TCHAR *themePath = element->Attribute(L"path");
-			if (themePath != NULL && themePath[0])
-				_nppGUI._themeName.assign(themePath);
+			if (themePath && themePath[0])
+				nGUI._themeName.assign(themePath);
 		}
 		else if (!lstrcmp(nm, L"wordCharList"))	{
 
@@ -5029,15 +5032,15 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			if (value && value[0])	{
 
 				if (!lstrcmp(value, L"yes"))
-					_nppGUI._isWordCharDefault = true;
+					nGUI._isWordCharDefault = true;
 				else if (!lstrcmp(value, L"no"))
-					_nppGUI._isWordCharDefault = false;
+					nGUI._isWordCharDefault = false;
 			}
 
 			const TCHAR *charsAddedW = element->Attribute(L"charsAdded");
 			if (charsAddedW)	{
 
-								_nppGUI._customWordChars = wmc.wchar2char(charsAddedW, SC_CP_UTF8);
+								nGUI._customWordChars = wmc.wchar2char(charsAddedW, SC_CP_UTF8);
 			}
 		}
 		else if (!lstrcmp(nm, L"delimiterSelection"))	{
@@ -5045,18 +5048,18 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			int leftmost = 0;
 			element->Attribute(L"leftmostDelimiter", &leftmost);
 			if (leftmost > 0 && leftmost < 256)
-				_nppGUI._leftmostDelimiter = static_cast<char>(leftmost);
+				nGUI._leftmostDelimiter = static_cast<char>(leftmost);
 
 			int rightmost = 0;
 			element->Attribute(L"rightmostDelimiter", &rightmost);
 			if (rightmost > 0 && rightmost < 256)
-				_nppGUI._rightmostDelimiter = static_cast<char>(rightmost);
+				nGUI._rightmostDelimiter = static_cast<char>(rightmost);
 
 			const TCHAR *delimiterSelectionOnEntireDocument = element->Attribute(L"delimiterSelectionOnEntireDocument");
-			if (delimiterSelectionOnEntireDocument != NULL && !lstrcmp(delimiterSelectionOnEntireDocument, L"yes"))
-				_nppGUI._delimiterSelectionOnEntireDocument = true;
+			if (delimiterSelectionOnEntireDocument && !lstrcmp(delimiterSelectionOnEntireDocument, L"yes"))
+				nGUI._delimiterSelectionOnEntireDocument = true;
 			else
-				_nppGUI._delimiterSelectionOnEntireDocument = false;
+				nGUI._delimiterSelectionOnEntireDocument = false;
 		}
 		else if (!lstrcmp(nm, L"multiInst"))	{
 
@@ -5064,47 +5067,47 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 			element->Attribute(L"setting", &val);
 			if (val < 0 || val > 2)
 				val = 0;
-			_nppGUI._multiInstSetting = (MultiInstSetting)val;
+			nGUI._multiInstSetting = (MultiInstSetting)val;
 		}
 		else if (!lstrcmp(nm, L"searchEngine"))	{
 
 			int i;
 			if (element->Attribute(L"searchEngineChoice", &i))
-				_nppGUI._searchEngineChoice = static_cast<NppGUI::SearchEngine>(i);
+				nGUI._searchEngineChoice = static_cast<NppGUI::SearchEngine>(i);
 
 			const TCHAR * searchEngineCustom = element->Attribute(L"searchEngineCustom");
 			if (searchEngineCustom && searchEngineCustom[0])
-				_nppGUI._searchEngineCustom = searchEngineCustom;
+				nGUI._searchEngineCustom = searchEngineCustom;
 		}
 		else if (!lstrcmp(nm, L"MISC"))	{
 
 			const TCHAR * optName = element->Attribute(L"fileSwitcherWithoutExtColumn");
 			if (optName)
-				_nppGUI._fileSwitcherWithoutExtColumn = (!lstrcmp(optName, L"yes"));
+				nGUI._fileSwitcherWithoutExtColumn = (!lstrcmp(optName, L"yes"));
 
 			const TCHAR * optNameBackSlashEscape = element->Attribute(L"backSlashIsEscapeCharacterForSql");
 			if (optNameBackSlashEscape && !lstrcmp(optNameBackSlashEscape, L"no"))
-				_nppGUI._backSlashIsEscapeCharacterForSql = false;
+				nGUI._backSlashIsEscapeCharacterForSql = false;
 
 			const TCHAR * optNameMonoFont = element->Attribute(L"monospacedFontFindDlg");
 			if (optNameMonoFont)
-				_nppGUI._monospacedFontFindDlg = (!lstrcmp(optNameMonoFont, L"yes"));
+				nGUI._monospacedFontFindDlg = (!lstrcmp(optNameMonoFont, L"yes"));
 
 			const TCHAR * optNameNewStyleSaveDlg = element->Attribute(L"newStyleSaveDlg");
 			if (optNameNewStyleSaveDlg)
-				_nppGUI._useNewStyleSaveDlg = (!lstrcmp(optNameNewStyleSaveDlg, L"yes"));
+				nGUI._useNewStyleSaveDlg = (!lstrcmp(optNameNewStyleSaveDlg, L"yes"));
 
 			const TCHAR * optNameFolderDroppedOpenFiles = element->Attribute(L"isFolderDroppedOpenFiles");
 			if (optNameFolderDroppedOpenFiles)
-				_nppGUI._isFolderDroppedOpenFiles = (!lstrcmp(optNameFolderDroppedOpenFiles, L"yes"));
+				nGUI._isFolderDroppedOpenFiles = (!lstrcmp(optNameFolderDroppedOpenFiles, L"yes"));
 
 			const TCHAR * optDocPeekOnTab = element->Attribute(L"docPeekOnTab");
 			if (optDocPeekOnTab)
-				_nppGUI._isDocPeekOnTab = (!lstrcmp(optDocPeekOnTab, L"yes"));
+				nGUI._isDocPeekOnTab = (!lstrcmp(optDocPeekOnTab, L"yes"));
 
 			const TCHAR * optDocPeekOnMap = element->Attribute(L"docPeekOnMap");
 			if (optDocPeekOnMap)
-				_nppGUI._isDocPeekOnMap = (!lstrcmp(optDocPeekOnMap, L"yes"));
+				nGUI._isDocPeekOnMap = (!lstrcmp(optDocPeekOnMap, L"yes"));
 		}
 		else if (!lstrcmp(nm, L"commandLineInterpreter"))	{
 
@@ -5113,7 +5116,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)	{
 
 				const TCHAR *cli = node->Value();
 				if (cli && cli[0])
-					_nppGUI._commandLineInterpreter.assign(cli);
+					nGUI._commandLineInterpreter.assign(cli);
 			}
 		}
 	}
@@ -5315,16 +5318,16 @@ void NppParameters::feedDockingManager(TiXmlNode *node)	{
 
 	int i;
 	if (element->Attribute(L"leftWidth", &i))
-		_nppGUI._dockingData._leftWidth = i;
+		nGUI._dockingData._leftWidth = i;
 
 	if (element->Attribute(L"rightWidth", &i))
-		_nppGUI._dockingData._rightWidth = i;
+		nGUI._dockingData._rightWidth = i;
 
 	if (element->Attribute(L"topHeight", &i))
-		_nppGUI._dockingData._topHeight = i;
+		nGUI._dockingData._topHeight = i;
 
 	if (element->Attribute(L"bottomHeight", &i))
-		_nppGUI._dockingData._bottomHight = i;
+		nGUI._dockingData._bottomHight = i;
 
 
 
@@ -5345,7 +5348,7 @@ void NppParameters::feedDockingManager(TiXmlNode *node)	{
 			floatElement->Attribute(L"y", &y);
 			floatElement->Attribute(L"width", &w);
 			floatElement->Attribute(L"height", &h);
-			_nppGUI._dockingData._flaotingWindowInfo.push_back(FloatingWindowInfo(cont, x, y, w, h));
+			nGUI._dockingData._flaotingWindowInfo.push_back(FloatingWindowInfo(cont, x, y, w, h));
 		}
 	}
 
@@ -5373,7 +5376,7 @@ void NppParameters::feedDockingManager(TiXmlNode *node)	{
 				isVisible = (!lstrcmp(val, L"yes"));
 			}
 
-			_nppGUI._dockingData._pluginDockInfo.push_back(PluginDlgDockingInfo(name, id, curr, prev, isVisible));
+			nGUI._dockingData._pluginDockInfo.push_back(PluginDlgDockingInfo(name, id, curr, prev, isVisible));
 		}
 	}
 
@@ -5388,7 +5391,7 @@ void NppParameters::feedDockingManager(TiXmlNode *node)	{
 
 			int activeTab = 0;
 			dlgElement->Attribute(L"activeTab", &activeTab);
-			_nppGUI._dockingData._containerTabInfo.push_back(ContainerTabInfo(cont, activeTab));
+			nGUI._dockingData._containerTabInfo.push_back(ContainerTabInfo(cont, activeTab));
 		}
 	}
 }
@@ -5476,9 +5479,9 @@ void NppParameters::createXmlTreeFromGUIParams()	{
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"ToolBar");
-		const TCHAR *pStr = (_nppGUI._toolbarShow) ? L"yes" : L"no";
+		const TCHAR *pStr = (nGUI._toolbarShow) ? L"yes" : L"no";
 		GUIConfigElement->SetAttribute(L"visible", pStr);
-		pStr = _nppGUI._toolBarStatus == TB_SMALL ? L"small" : (_nppGUI._toolBarStatus == TB_STANDARD ? L"standard" : L"large");
+		pStr = nGUI._toolBarStatus == TB_SMALL ? L"small" : (nGUI._toolBarStatus == TB_STANDARD ? L"standard" : L"large");
 		GUIConfigElement->InsertEndChild(TiXmlText(pStr));
 	}
 
@@ -5486,7 +5489,7 @@ void NppParameters::createXmlTreeFromGUIParams()	{
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"StatusBar");
-		const TCHAR *pStr = _nppGUI._statusBarShow ? L"show" : L"hide";
+		const TCHAR *pStr = nGUI._statusBarShow ? L"show" : L"hide";
 		GUIConfigElement->InsertEndChild(TiXmlText(pStr));
 	}
 
@@ -5495,34 +5498,34 @@ void NppParameters::createXmlTreeFromGUIParams()	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"TabBar");
 
-		const TCHAR *pStr = (_nppGUI._tabStatus & TAB_DRAWTOPBAR) ? L"yes" : L"no";
+		const TCHAR *pStr = (nGUI._tabStatus & TAB_DRAWTOPBAR) ? L"yes" : L"no";
 		GUIConfigElement->SetAttribute(L"dragAndDrop", pStr);
 
-		pStr = (_nppGUI._tabStatus & TAB_DRAGNDROP) ? L"yes" : L"no";
+		pStr = (nGUI._tabStatus & TAB_DRAGNDROP) ? L"yes" : L"no";
 		GUIConfigElement->SetAttribute(L"drawTopBar", pStr);
 
-		pStr = (_nppGUI._tabStatus & TAB_DRAWINACTIVETAB) ? L"yes" : L"no";
+		pStr = (nGUI._tabStatus & TAB_DRAWINACTIVETAB) ? L"yes" : L"no";
 		GUIConfigElement->SetAttribute(L"drawInactiveTab", pStr);
 
-		pStr = (_nppGUI._tabStatus & TAB_REDUCE) ? L"yes" : L"no";
+		pStr = (nGUI._tabStatus & TAB_REDUCE) ? L"yes" : L"no";
 		GUIConfigElement->SetAttribute(L"reduce", pStr);
 
-		pStr = (_nppGUI._tabStatus & TAB_CLOSEBUTTON) ? L"yes" : L"no";
+		pStr = (nGUI._tabStatus & TAB_CLOSEBUTTON) ? L"yes" : L"no";
 		GUIConfigElement->SetAttribute(L"closeButton", pStr);
 
-		pStr = (_nppGUI._tabStatus & TAB_DBCLK2CLOSE) ? L"yes" : L"no";
+		pStr = (nGUI._tabStatus & TAB_DBCLK2CLOSE) ? L"yes" : L"no";
 		GUIConfigElement->SetAttribute(L"doubleClick2Close", pStr);
 
-		pStr = (_nppGUI._tabStatus & TAB_VERTICAL) ? L"yes" : L"no";
+		pStr = (nGUI._tabStatus & TAB_VERTICAL) ? L"yes" : L"no";
 		GUIConfigElement->SetAttribute(L"vertical", pStr);
 
-		pStr = (_nppGUI._tabStatus & TAB_MULTILINE) ? L"yes" : L"no";
+		pStr = (nGUI._tabStatus & TAB_MULTILINE) ? L"yes" : L"no";
 		GUIConfigElement->SetAttribute(L"multiLine", pStr);
 
-		pStr = (_nppGUI._tabStatus & TAB_HIDE) ? L"yes" : L"no";
+		pStr = (nGUI._tabStatus & TAB_HIDE) ? L"yes" : L"no";
 		GUIConfigElement->SetAttribute(L"hide", pStr);
 
-		pStr = (_nppGUI._tabStatus & TAB_QUITONEMPTY) ? L"yes" : L"no";
+		pStr = (nGUI._tabStatus & TAB_QUITONEMPTY) ? L"yes" : L"no";
 		GUIConfigElement->SetAttribute(L"quitOnEmpty", pStr);
 	}
 
@@ -5530,7 +5533,7 @@ void NppParameters::createXmlTreeFromGUIParams()	{
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"ScintillaViewsSplitter");
-		const TCHAR *pStr = _nppGUI._splitterPos == POS_VERTICAL ? L"vertical" : L"horizontal";
+		const TCHAR *pStr = nGUI._splitterPos == POS_VERTICAL ? L"vertical" : L"horizontal";
 		GUIConfigElement->InsertEndChild(TiXmlText(pStr));
 	}
 
@@ -5538,9 +5541,9 @@ void NppParameters::createXmlTreeFromGUIParams()	{
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"UserDefineDlg");
-		const TCHAR *pStr = (_nppGUI._userDefineDlgStatus & UDD_DOCKED) ? L"docked" : L"undocked";
+		const TCHAR *pStr = (nGUI._userDefineDlgStatus & UDD_DOCKED) ? L"docked" : L"undocked";
 		GUIConfigElement->SetAttribute(L"position", pStr);
-		pStr = (_nppGUI._userDefineDlgStatus & UDD_SHOW) ? L"show" : L"hide";
+		pStr = (nGUI._userDefineDlgStatus & UDD_SHOW) ? L"show" : L"hide";
 		GUIConfigElement->InsertEndChild(TiXmlText(pStr));
 	}
 
@@ -5548,63 +5551,63 @@ void NppParameters::createXmlTreeFromGUIParams()	{
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"TabSetting");
-		const TCHAR *pStr = _nppGUI._tabReplacedBySpace ? L"yes" : L"no";
+		const TCHAR *pStr = nGUI._tabReplacedBySpace ? L"yes" : L"no";
 		GUIConfigElement->SetAttribute(L"replaceBySpace", pStr);
-		GUIConfigElement->SetAttribute(L"size", _nppGUI._tabSize);
+		GUIConfigElement->SetAttribute(L"size", nGUI._tabSize);
 	}
 
 	// <GUIConfig name = "AppPosition" x = "3900" y = "446" width = "2160" height = "1380" isMaximized = "no" / >
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"AppPosition");
-		GUIConfigElement->SetAttribute(L"x", _nppGUI._appPos.left);
-		GUIConfigElement->SetAttribute(L"y", _nppGUI._appPos.top);
-		GUIConfigElement->SetAttribute(L"width", _nppGUI._appPos.right);
-		GUIConfigElement->SetAttribute(L"height", _nppGUI._appPos.bottom);
-		GUIConfigElement->SetAttribute(L"isMaximized", _nppGUI._isMaximized ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"x", nGUI._appPos.left);
+		GUIConfigElement->SetAttribute(L"y", nGUI._appPos.top);
+		GUIConfigElement->SetAttribute(L"width", nGUI._appPos.right);
+		GUIConfigElement->SetAttribute(L"height", nGUI._appPos.bottom);
+		GUIConfigElement->SetAttribute(L"isMaximized", nGUI._isMaximized ? L"yes" : L"no");
 	}
 
 	// <GUIConfig name="noUpdate" intervalDays="15" nextUpdateDate="20161022">no</GUIConfig>
 	{
-		TiXmlElement *element = insertGUIConfigBoolNode(newGUIRoot, L"noUpdate", !_nppGUI._autoUpdateOpt._doAutoUpdate);
-		element->SetAttribute(L"intervalDays", _nppGUI._autoUpdateOpt._intervalDays);
-		element->SetAttribute(L"nextUpdateDate", _nppGUI._autoUpdateOpt._nextUpdateDate.toString().c_str());
+		TiXmlElement *element = insertGUIConfigBoolNode(newGUIRoot, L"noUpdate", !nGUI._autoUpdateOpt._doAutoUpdate);
+		element->SetAttribute(L"intervalDays", nGUI._autoUpdateOpt._intervalDays);
+		element->SetAttribute(L"nextUpdateDate", nGUI._autoUpdateOpt._nextUpdateDate.toString().c_str());
 	}
 
 	// <GUIConfig name="Auto-detection">yes</GUIConfig>	
 	{
 		const TCHAR *pStr = L"no";
 
-		if (_nppGUI._fileAutoDetection & cdEnabledOld)	{
+		if (nGUI._fileAutoDetection & cdEnabledOld)	{
 
 			pStr = L"yesOld";
 
-			if ((_nppGUI._fileAutoDetection & cdAutoUpdate) && (_nppGUI._fileAutoDetection & cdGo2end))	{
+			if ((nGUI._fileAutoDetection & cdAutoUpdate) && (nGUI._fileAutoDetection & cdGo2end))	{
 
 				pStr = L"autoUpdate2EndOld";
 			}
-			else if (_nppGUI._fileAutoDetection & cdAutoUpdate)	{
+			else if (nGUI._fileAutoDetection & cdAutoUpdate)	{
 
 				pStr = L"autoOld";
 			}
-			else if (_nppGUI._fileAutoDetection & cdGo2end)	{
+			else if (nGUI._fileAutoDetection & cdGo2end)	{
 
 				pStr = L"Update2EndOld";
 			}
 		}
-		else if (_nppGUI._fileAutoDetection & cdEnabledNew)	{
+		else if (nGUI._fileAutoDetection & cdEnabledNew)	{
 
 			pStr = L"yes";
 
-			if ((_nppGUI._fileAutoDetection & cdAutoUpdate) && (_nppGUI._fileAutoDetection & cdGo2end))	{
+			if ((nGUI._fileAutoDetection & cdAutoUpdate) && (nGUI._fileAutoDetection & cdGo2end))	{
 
 				pStr = L"autoUpdate2End";
 			}
-			else if (_nppGUI._fileAutoDetection & cdAutoUpdate)	{
+			else if (nGUI._fileAutoDetection & cdAutoUpdate)	{
 
 				pStr = L"auto";
 			}
-			else if (_nppGUI._fileAutoDetection & cdGo2end)	{
+			else if (nGUI._fileAutoDetection & cdGo2end)	{
 
 				pStr = L"Update2End";
 			}
@@ -5617,45 +5620,45 @@ void NppParameters::createXmlTreeFromGUIParams()	{
 
 	// <GUIConfig name="CheckHistoryFiles">no</GUIConfig>
 	{
-		insertGUIConfigBoolNode(newGUIRoot, L"CheckHistoryFiles", _nppGUI._checkHistoryFiles);
+		insertGUIConfigBoolNode(newGUIRoot, L"CheckHistoryFiles", nGUI._checkHistoryFiles);
 	}
 
 	// <GUIConfig name="TrayIcon">no</GUIConfig>
 	{
-		insertGUIConfigBoolNode(newGUIRoot, L"TrayIcon", _nppGUI._isMinimizedToTray);
+		insertGUIConfigBoolNode(newGUIRoot, L"TrayIcon", nGUI._isMinimizedToTray);
 	}
 
 	// <GUIConfig name="MaitainIndent">yes</GUIConfig>
 	{
-		insertGUIConfigBoolNode(newGUIRoot, L"MaitainIndent", _nppGUI._maitainIndent);
+		insertGUIConfigBoolNode(newGUIRoot, L"MaitainIndent", nGUI._maitainIndent);
 	}
 
 	// <GUIConfig name = "TagsMatchHighLight" TagAttrHighLight = "yes" HighLightNonHtmlZone = "no">yes< / GUIConfig>
 	{
-		TiXmlElement * ele = insertGUIConfigBoolNode(newGUIRoot, L"TagsMatchHighLight", _nppGUI._enableTagsMatchHilite);
-		ele->SetAttribute(L"TagAttrHighLight", _nppGUI._enableTagAttrsHilite ? L"yes" : L"no");
-		ele->SetAttribute(L"HighLightNonHtmlZone", _nppGUI._enableHiliteNonHTMLZone ? L"yes" : L"no");
+		TiXmlElement * ele = insertGUIConfigBoolNode(newGUIRoot, L"TagsMatchHighLight", nGUI._enableTagsMatchHilite);
+		ele->SetAttribute(L"TagAttrHighLight", nGUI._enableTagAttrsHilite ? L"yes" : L"no");
+		ele->SetAttribute(L"HighLightNonHtmlZone", nGUI._enableHiliteNonHTMLZone ? L"yes" : L"no");
 	}
 
 	// <GUIConfig name = "RememberLastSession">yes< / GUIConfig>
 	{
-		insertGUIConfigBoolNode(newGUIRoot, L"RememberLastSession", _nppGUI._rememberLastSession);
+		insertGUIConfigBoolNode(newGUIRoot, L"RememberLastSession", nGUI._rememberLastSession);
 	}
 
 	// <GUIConfig name = "DetectEncoding">yes< / GUIConfig>
 	{
-		insertGUIConfigBoolNode(newGUIRoot, L"DetectEncoding", _nppGUI._detectEncoding);
+		insertGUIConfigBoolNode(newGUIRoot, L"DetectEncoding", nGUI._detectEncoding);
 	}
 
 	// <GUIConfig name = "NewDocDefaultSettings" format = "0" encoding = "0" lang = "3" codepage = "-1" openAnsiAsUTF8 = "no" / >
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"NewDocDefaultSettings");
-		GUIConfigElement->SetAttribute(L"format", static_cast<int32_t>(_nppGUI._newDocDefaultSettings._format));
-		GUIConfigElement->SetAttribute(L"encoding", _nppGUI._newDocDefaultSettings._unicodeMode);
-		GUIConfigElement->SetAttribute(L"lang", _nppGUI._newDocDefaultSettings._lang);
-		GUIConfigElement->SetAttribute(L"codepage", _nppGUI._newDocDefaultSettings._codepage);
-		GUIConfigElement->SetAttribute(L"openAnsiAsUTF8", _nppGUI._newDocDefaultSettings._openAnsiAsUtf8 ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"format", static_cast<int32_t>(nGUI._newDocDefaultSettings._format));
+		GUIConfigElement->SetAttribute(L"encoding", nGUI._newDocDefaultSettings._unicodeMode);
+		GUIConfigElement->SetAttribute(L"lang", nGUI._newDocDefaultSettings._lang);
+		GUIConfigElement->SetAttribute(L"codepage", nGUI._newDocDefaultSettings._codepage);
+		GUIConfigElement->SetAttribute(L"openAnsiAsUTF8", nGUI._newDocDefaultSettings._openAnsiAsUtf8 ? L"yes" : L"no");
 	}
 
 	// <GUIConfig name = "langsExcluded" gr0 = "0" gr1 = "0" gr2 = "0" gr3 = "0" gr4 = "0" gr5 = "0" gr6 = "0" gr7 = "0" langMenuCompact = "yes" / >
@@ -5663,7 +5666,7 @@ void NppParameters::createXmlTreeFromGUIParams()	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"langsExcluded");
 		writeExcludedLangList(GUIConfigElement);
-		GUIConfigElement->SetAttribute(L"langMenuCompact", _nppGUI._isLangMenuCompact ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"langMenuCompact", nGUI._isLangMenuCompact ? L"yes" : L"no");
 	}
 
 	// <GUIConfig name="Print" lineNumber="no" printOption="0" headerLeft="$(FULL_CURRENT_PATH)" headerMiddle="" headerRight="$(LONG_DATE) $(TIME)" headerFontName="IBMPC" headerFontStyle="1" headerFontSize="8" footerLeft="" footerMiddle="-$(CURRENT_PRINTING_PAGE)-" footerRight="" footerFontName="" footerFontStyle="0" footerFontSize="9" margeLeft="0" margeTop="0" margeRight="0" margeBottom="0" />
@@ -5677,30 +5680,30 @@ void NppParameters::createXmlTreeFromGUIParams()	{
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"Backup");
-		GUIConfigElement->SetAttribute(L"action", _nppGUI._backup);
-		GUIConfigElement->SetAttribute(L"useCustumDir", _nppGUI._useDir ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"dir", _nppGUI._backupDir.c_str());
+		GUIConfigElement->SetAttribute(L"action", nGUI._backup);
+		GUIConfigElement->SetAttribute(L"useCustumDir", nGUI._useDir ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"dir", nGUI._backupDir.c_str());
 
-		GUIConfigElement->SetAttribute(L"isSnapshotMode", _nppGUI._isSnapshotMode ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"snapshotBackupTiming", static_cast<int32_t>(_nppGUI._snapshotBackupTiming));
+		GUIConfigElement->SetAttribute(L"isSnapshotMode", nGUI._isSnapshotMode ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"snapshotBackupTiming", static_cast<int32_t>(nGUI._snapshotBackupTiming));
 	}
 
 	// <GUIConfig name = "TaskList">yes< / GUIConfig>
 	{
-		insertGUIConfigBoolNode(newGUIRoot, L"TaskList", _nppGUI._doTaskList);
+		insertGUIConfigBoolNode(newGUIRoot, L"TaskList", nGUI._doTaskList);
 	}
 
 	// <GUIConfig name = "MRU">yes< / GUIConfig>
 	{
-		insertGUIConfigBoolNode(newGUIRoot, L"MRU", _nppGUI._styleMRU);
+		insertGUIConfigBoolNode(newGUIRoot, L"MRU", nGUI._styleMRU);
 	}
 
 	// <GUIConfig name="URL">2</GUIConfig>
 	{
 		const TCHAR *pStr = L"0";
-		if (_nppGUI._styleURL == 1)
+		if (nGUI._styleURL == 1)
 			pStr = L"1";
-		else if (_nppGUI._styleURL == 2)
+		else if (nGUI._styleURL == 2)
 			pStr = L"2";
 
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
@@ -5712,26 +5715,26 @@ void NppParameters::createXmlTreeFromGUIParams()	{
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"globalOverride");
-		GUIConfigElement->SetAttribute(L"fg", _nppGUI._globalOverride.enableFg ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"bg", _nppGUI._globalOverride.enableBg ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"font", _nppGUI._globalOverride.enableFont ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"fontSize", _nppGUI._globalOverride.enableFontSize ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"bold", _nppGUI._globalOverride.enableBold ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"italic", _nppGUI._globalOverride.enableItalic ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"underline", _nppGUI._globalOverride.enableUnderLine ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"fg", nGUI._globalOverride.enableFg ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"bg", nGUI._globalOverride.enableBg ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"font", nGUI._globalOverride.enableFont ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"fontSize", nGUI._globalOverride.enableFontSize ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"bold", nGUI._globalOverride.enableBold ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"italic", nGUI._globalOverride.enableItalic ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"underline", nGUI._globalOverride.enableUnderLine ? L"yes" : L"no");
 	}
 
 	// <GUIConfig name = "auto-completion" autoCAction = "3" triggerFromNbChar = "1" funcParams = "yes" autoCIgnoreNumbers = "yes" autoCCase = "yes" / >
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"auto-completion");
-		GUIConfigElement->SetAttribute(L"autoCAction", _nppGUI._autocStatus);
-		GUIConfigElement->SetAttribute(L"triggerFromNbChar", static_cast<int32_t>(_nppGUI._autocFromLen));
-		const TCHAR * pStr = _nppGUI._autocIgnoreNumbers ? L"yes" : L"no";
+		GUIConfigElement->SetAttribute(L"autoCAction", nGUI._autocStatus);
+		GUIConfigElement->SetAttribute(L"triggerFromNbChar", static_cast<int32_t>(nGUI._autocFromLen));
+		const TCHAR * pStr = nGUI._autocIgnoreNumbers ? L"yes" : L"no";
 		GUIConfigElement->SetAttribute(L"autoCIgnoreNumbers", pStr);
-		// GUIConfigElement->SetAttribute(L"autoCCase", _nppGUI._autocIgnoreCase ? L"yes" : L"no");
+		// GUIConfigElement->SetAttribute(L"autoCCase", nGUI._autocIgnoreCase ? L"yes" : L"no");
 
-		pStr = _nppGUI._funcParams ? L"yes" : L"no";
+		pStr = nGUI._funcParams ? L"yes" : L"no";
 		GUIConfigElement->SetAttribute(L"funcParams", pStr);
 	}
 
@@ -5740,19 +5743,19 @@ void NppParameters::createXmlTreeFromGUIParams()	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"auto-insert");
 
-		GUIConfigElement->SetAttribute(L"parentheses", _nppGUI._matchedPairConf._doParentheses ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"brackets", _nppGUI._matchedPairConf._doBrackets ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"curlyBrackets", _nppGUI._matchedPairConf._doCurlyBrackets ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"quotes", _nppGUI._matchedPairConf._doQuotes ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"doubleQuotes", _nppGUI._matchedPairConf._doDoubleQuotes ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"htmlXmlTag", _nppGUI._matchedPairConf._doHtmlXmlTag ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"parentheses", nGUI._matchedPairConf._doParentheses ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"brackets", nGUI._matchedPairConf._doBrackets ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"curlyBrackets", nGUI._matchedPairConf._doCurlyBrackets ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"quotes", nGUI._matchedPairConf._doQuotes ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"doubleQuotes", nGUI._matchedPairConf._doDoubleQuotes ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"htmlXmlTag", nGUI._matchedPairConf._doHtmlXmlTag ? L"yes" : L"no");
 
 		TiXmlElement hist_element{ L""};
 		hist_element.SetValue(L"UserDefinePair");
-		for (size_t i = 0, nb = _nppGUI._matchedPairConf._matchedPairs.size(); i < nb; ++i)	{
+		for (size_t i = 0, nb = nGUI._matchedPairConf._matchedPairs.size(); i < nb; ++i)	{
 
-			int open = _nppGUI._matchedPairConf._matchedPairs[i].first;
-			int close = _nppGUI._matchedPairConf._matchedPairs[i].second;
+			int open = nGUI._matchedPairConf._matchedPairs[i].first;
+			int close = nGUI._matchedPairConf._matchedPairs[i].second;
 
 			(hist_element.ToElement())->SetAttribute(L"open", open);
 			(hist_element.ToElement())->SetAttribute(L"close", close);
@@ -5764,51 +5767,51 @@ void NppParameters::createXmlTreeFromGUIParams()	{
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"sessionExt");
-		GUIConfigElement->InsertEndChild(TiXmlText(_nppGUI._definedSessionExt.c_str()));
+		GUIConfigElement->InsertEndChild(TiXmlText(nGUI._definedSessionExt.c_str()));
 	}
 
 	// <GUIConfig name="workspaceExt"></GUIConfig>
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"workspaceExt");
-		GUIConfigElement->InsertEndChild(TiXmlText(_nppGUI._definedWorkspaceExt.c_str()));
+		GUIConfigElement->InsertEndChild(TiXmlText(nGUI._definedWorkspaceExt.c_str()));
 	}
 
 	// <GUIConfig name="MenuBar">show</GUIConfig>
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"MenuBar");
-		GUIConfigElement->InsertEndChild(TiXmlText(_nppGUI._menuBarShow ? L"show" : L"hide"));
+		GUIConfigElement->InsertEndChild(TiXmlText(nGUI._menuBarShow ? L"show" : L"hide"));
 	}
 
 	// <GUIConfig name="Caret" width="1" blinkRate="250" />
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"Caret");
-		GUIConfigElement->SetAttribute(L"width", _nppGUI._caretWidth);
-		GUIConfigElement->SetAttribute(L"blinkRate", _nppGUI._caretBlinkRate);
+		GUIConfigElement->SetAttribute(L"width", nGUI._caretWidth);
+		GUIConfigElement->SetAttribute(L"blinkRate", nGUI._caretBlinkRate);
 	}
 
 	// <GUIConfig name="ScintillaGlobalSettings" enableMultiSelection="no" />
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"ScintillaGlobalSettings");
-		GUIConfigElement->SetAttribute(L"enableMultiSelection", _nppGUI._enableMultiSelection ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"enableMultiSelection", nGUI._enableMultiSelection ? L"yes" : L"no");
 	}
 
 	// <GUIConfig name="openSaveDir" value="0" defaultDirPath="" />
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"openSaveDir");
-		GUIConfigElement->SetAttribute(L"value", _nppGUI._openSaveDir);
-		GUIConfigElement->SetAttribute(L"defaultDirPath", _nppGUI._defaultDir);
+		GUIConfigElement->SetAttribute(L"value", nGUI._openSaveDir);
+		GUIConfigElement->SetAttribute(L"defaultDirPath", nGUI._defaultDir);
 	}
 
 	// <GUIConfig name="titleBar" short="no" />
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"titleBar");
-		const TCHAR *pStr = (_nppGUI._shortTitlebar) ? L"yes" : L"no";
+		const TCHAR *pStr = (nGUI._shortTitlebar) ? L"yes" : L"no";
 		GUIConfigElement->SetAttribute(L"short", pStr);
 	}
 
@@ -5816,15 +5819,15 @@ void NppParameters::createXmlTreeFromGUIParams()	{
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"stylerTheme");
-		GUIConfigElement->SetAttribute(L"path", _nppGUI._themeName.c_str());
+		GUIConfigElement->SetAttribute(L"path", nGUI._themeName.c_str());
 	}
 
 	// <GUIConfig name="wordCharList" useDefault="yes" charsAdded=".$%"  />
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"wordCharList");
-		GUIConfigElement->SetAttribute(L"useDefault", _nppGUI._isWordCharDefault ? L"yes" : L"no");
-				const wchar_t* charsAddStr = wmc.char2wchar(_nppGUI._customWordChars.c_str(), SC_CP_UTF8);
+		GUIConfigElement->SetAttribute(L"useDefault", nGUI._isWordCharDefault ? L"yes" : L"no");
+				const wchar_t* charsAddStr = wmc.char2wchar(nGUI._customWordChars.c_str(), SC_CP_UTF8);
 		GUIConfigElement->SetAttribute(L"charsAdded", charsAddStr);
 	}
 
@@ -5832,16 +5835,16 @@ void NppParameters::createXmlTreeFromGUIParams()	{
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"delimiterSelection");
-		GUIConfigElement->SetAttribute(L"leftmostDelimiter", _nppGUI._leftmostDelimiter);
-		GUIConfigElement->SetAttribute(L"rightmostDelimiter", _nppGUI._rightmostDelimiter);
-		GUIConfigElement->SetAttribute(L"delimiterSelectionOnEntireDocument", _nppGUI._delimiterSelectionOnEntireDocument ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"leftmostDelimiter", nGUI._leftmostDelimiter);
+		GUIConfigElement->SetAttribute(L"rightmostDelimiter", nGUI._rightmostDelimiter);
+		GUIConfigElement->SetAttribute(L"delimiterSelectionOnEntireDocument", nGUI._delimiterSelectionOnEntireDocument ? L"yes" : L"no");
 	}
 
 	// <GUIConfig name="multiInst" setting="0" />
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"multiInst");
-		GUIConfigElement->SetAttribute(L"setting", _nppGUI._multiInstSetting);
+		GUIConfigElement->SetAttribute(L"setting", nGUI._multiInstSetting);
 	}
 
 	// <GUIConfig name="MISC" fileSwitcherWithoutExtColumn="no" backSlashIsEscapeCharacterForSql="yes" newStyleSaveDlg="no" isFolderDroppedOpenFiles="no" />
@@ -5849,39 +5852,39 @@ void NppParameters::createXmlTreeFromGUIParams()	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"MISC");
 
-		GUIConfigElement->SetAttribute(L"fileSwitcherWithoutExtColumn", _nppGUI._fileSwitcherWithoutExtColumn ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"backSlashIsEscapeCharacterForSql", _nppGUI._backSlashIsEscapeCharacterForSql ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"monospacedFontFindDlg", _nppGUI._monospacedFontFindDlg ? L"yes" : L"no");
-		// GUIConfigElement->SetAttribute(L"stopFillingFindField", _nppGUI._stopFillingFindField ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"newStyleSaveDlg", _nppGUI._useNewStyleSaveDlg ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"isFolderDroppedOpenFiles", _nppGUI._isFolderDroppedOpenFiles ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"docPeekOnTab", _nppGUI._isDocPeekOnTab ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"docPeekOnMap", _nppGUI._isDocPeekOnMap ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"fileSwitcherWithoutExtColumn", nGUI._fileSwitcherWithoutExtColumn ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"backSlashIsEscapeCharacterForSql", nGUI._backSlashIsEscapeCharacterForSql ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"monospacedFontFindDlg", nGUI._monospacedFontFindDlg ? L"yes" : L"no");
+		// GUIConfigElement->SetAttribute(L"stopFillingFindField", nGUI._stopFillingFindField ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"newStyleSaveDlg", nGUI._useNewStyleSaveDlg ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"isFolderDroppedOpenFiles", nGUI._isFolderDroppedOpenFiles ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"docPeekOnTab", nGUI._isDocPeekOnTab ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"docPeekOnMap", nGUI._isDocPeekOnMap ? L"yes" : L"no");
 	}
 
 	// <GUIConfig name="searchEngine" searchEngineChoice="2" searchEngineCustom="" />
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"searchEngine");
-		GUIConfigElement->SetAttribute(L"searchEngineChoice", _nppGUI._searchEngineChoice);
-		GUIConfigElement->SetAttribute(L"searchEngineCustom", _nppGUI._searchEngineCustom);
+		GUIConfigElement->SetAttribute(L"searchEngineChoice", nGUI._searchEngineChoice);
+		GUIConfigElement->SetAttribute(L"searchEngineCustom", nGUI._searchEngineCustom);
 	}
 
 	// <GUIConfig name="SmartHighLight" matchCase="no" wholeWordOnly="yes" useFindSettings="no" onAnotherView="no">yes</GUIConfig>
 	{
-		TiXmlElement *GUIConfigElement = insertGUIConfigBoolNode(newGUIRoot, L"SmartHighLight", _nppGUI._enableSmartHilite);
-		GUIConfigElement->SetAttribute(L"matchCase", _nppGUI._smartHiliteCaseSensitive ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"wholeWordOnly", _nppGUI._smartHiliteWordOnly ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"useFindSettings", _nppGUI._smartHiliteUseFindSettings ? L"yes" : L"no");
-		GUIConfigElement->SetAttribute(L"onAnotherView", _nppGUI._smartHiliteOnAnotherView ? L"yes" : L"no");
+		TiXmlElement *GUIConfigElement = insertGUIConfigBoolNode(newGUIRoot, L"SmartHighLight", nGUI._enableSmartHilite);
+		GUIConfigElement->SetAttribute(L"matchCase", nGUI._smartHiliteCaseSensitive ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"wholeWordOnly", nGUI._smartHiliteWordOnly ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"useFindSettings", nGUI._smartHiliteUseFindSettings ? L"yes" : L"no");
+		GUIConfigElement->SetAttribute(L"onAnotherView", nGUI._smartHiliteOnAnotherView ? L"yes" : L"no");
 	}
 
 	// <GUIConfig name="commandLineInterpreter">powershell</GUIConfig>
-	if (_nppGUI._commandLineInterpreter.compare(L"cmd"))	{
+	if (nGUI._commandLineInterpreter.compare(L"cmd"))	{
 
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(L"GUIConfig")))->ToElement();
 		GUIConfigElement->SetAttribute(L"name", L"commandLineInterpreter");
-		GUIConfigElement->InsertEndChild(TiXmlText(_nppGUI._commandLineInterpreter.c_str()));
+		GUIConfigElement->InsertEndChild(TiXmlText(nGUI._commandLineInterpreter.c_str()));
 	}
 	writeScintillaParams();
 
@@ -5967,14 +5970,14 @@ void NppParameters::insertDockingParamNode(TiXmlNode *GUIRoot)	{
 
 	TiXmlElement DMNode(L"GUIConfig");
 	DMNode.SetAttribute(L"name", L"DockingManager");
-	DMNode.SetAttribute(L"leftWidth", _nppGUI._dockingData._leftWidth);
-	DMNode.SetAttribute(L"rightWidth", _nppGUI._dockingData._rightWidth);
-	DMNode.SetAttribute(L"topHeight", _nppGUI._dockingData._topHeight);
-	DMNode.SetAttribute(L"bottomHeight", _nppGUI._dockingData._bottomHight);
+	DMNode.SetAttribute(L"leftWidth", nGUI._dockingData._leftWidth);
+	DMNode.SetAttribute(L"rightWidth", nGUI._dockingData._rightWidth);
+	DMNode.SetAttribute(L"topHeight", nGUI._dockingData._topHeight);
+	DMNode.SetAttribute(L"bottomHeight", nGUI._dockingData._bottomHight);
 
-	for (size_t i = 0, len = _nppGUI._dockingData._flaotingWindowInfo.size(); i < len ; ++i)	{
+	for (size_t i = 0, len = nGUI._dockingData._flaotingWindowInfo.size(); i < len ; ++i)	{
 
-		FloatingWindowInfo & fwi = _nppGUI._dockingData._flaotingWindowInfo[i];
+		FloatingWindowInfo & fwi = nGUI._dockingData._flaotingWindowInfo[i];
 		TiXmlElement FWNode(L"FloatingWindow");
 		FWNode.SetAttribute(L"cont", fwi._cont);
 		FWNode.SetAttribute(L"x", fwi._pos.left);
@@ -5985,9 +5988,9 @@ void NppParameters::insertDockingParamNode(TiXmlNode *GUIRoot)	{
 		DMNode.InsertEndChild(FWNode);
 	}
 
-	for (size_t i = 0, len = _nppGUI._dockingData._pluginDockInfo.size() ; i < len ; ++i)	{
+	for (size_t i = 0, len = nGUI._dockingData._pluginDockInfo.size() ; i < len ; ++i)	{
 
-		PluginDlgDockingInfo & pdi = _nppGUI._dockingData._pluginDockInfo[i];
+		PluginDlgDockingInfo & pdi = nGUI._dockingData._pluginDockInfo[i];
 		TiXmlElement PDNode(L"PluginDlg");
 		PDNode.SetAttribute(L"pluginName", pdi._name);
 		PDNode.SetAttribute(L"id", pdi._internalID);
@@ -5998,9 +6001,9 @@ void NppParameters::insertDockingParamNode(TiXmlNode *GUIRoot)	{
 		DMNode.InsertEndChild(PDNode);
 	}
 
-	for (size_t i = 0, len = _nppGUI._dockingData._containerTabInfo.size(); i < len ; ++i)	{
+	for (size_t i = 0, len = nGUI._dockingData._containerTabInfo.size(); i < len ; ++i)	{
 
-		ContainerTabInfo & cti = _nppGUI._dockingData._containerTabInfo[i];
+		ContainerTabInfo & cti = nGUI._dockingData._containerTabInfo[i];
 		TiXmlElement CTNode(L"ActiveTabs");
 		CTNode.SetAttribute(L"cont", cti._cont);
 		CTNode.SetAttribute(L"activeTab", cti._activeTab);
@@ -6012,29 +6015,29 @@ void NppParameters::insertDockingParamNode(TiXmlNode *GUIRoot)	{
 
 void NppParameters::writePrintSetting(TiXmlElement *element)	{
 
-	const TCHAR *pStr = _nppGUI._printSettings._printLineNumber?L"yes":L"no";
+	const TCHAR *pStr = nGUI._printSettings._printLineNumber?L"yes":L"no";
 	element->SetAttribute(L"lineNumber", pStr);
 
-	element->SetAttribute(L"printOption", _nppGUI._printSettings._printOption);
+	element->SetAttribute(L"printOption", nGUI._printSettings._printOption);
 
-	element->SetAttribute(L"headerLeft", _nppGUI._printSettings._headerLeft.c_str());
-	element->SetAttribute(L"headerMiddle", _nppGUI._printSettings._headerMiddle.c_str());
-	element->SetAttribute(L"headerRight", _nppGUI._printSettings._headerRight.c_str());
-	element->SetAttribute(L"footerLeft", _nppGUI._printSettings._footerLeft.c_str());
-	element->SetAttribute(L"footerMiddle", _nppGUI._printSettings._footerMiddle.c_str());
-	element->SetAttribute(L"footerRight", _nppGUI._printSettings._footerRight.c_str());
+	element->SetAttribute(L"headerLeft", nGUI._printSettings._headerLeft.c_str());
+	element->SetAttribute(L"headerMiddle", nGUI._printSettings._headerMiddle.c_str());
+	element->SetAttribute(L"headerRight", nGUI._printSettings._headerRight.c_str());
+	element->SetAttribute(L"footerLeft", nGUI._printSettings._footerLeft.c_str());
+	element->SetAttribute(L"footerMiddle", nGUI._printSettings._footerMiddle.c_str());
+	element->SetAttribute(L"footerRight", nGUI._printSettings._footerRight.c_str());
 
-	element->SetAttribute(L"headerFontName", _nppGUI._printSettings._headerFontName.c_str());
-	element->SetAttribute(L"headerFontStyle", _nppGUI._printSettings._headerFontStyle);
-	element->SetAttribute(L"headerFontSize", _nppGUI._printSettings._headerFontSize);
-	element->SetAttribute(L"footerFontName", _nppGUI._printSettings._footerFontName.c_str());
-	element->SetAttribute(L"footerFontStyle", _nppGUI._printSettings._footerFontStyle);
-	element->SetAttribute(L"footerFontSize", _nppGUI._printSettings._footerFontSize);
+	element->SetAttribute(L"headerFontName", nGUI._printSettings._headerFontName.c_str());
+	element->SetAttribute(L"headerFontStyle", nGUI._printSettings._headerFontStyle);
+	element->SetAttribute(L"headerFontSize", nGUI._printSettings._headerFontSize);
+	element->SetAttribute(L"footerFontName", nGUI._printSettings._footerFontName.c_str());
+	element->SetAttribute(L"footerFontStyle", nGUI._printSettings._footerFontStyle);
+	element->SetAttribute(L"footerFontSize", nGUI._printSettings._footerFontSize);
 
-	element->SetAttribute(L"margeLeft", _nppGUI._printSettings._marge.left);
-	element->SetAttribute(L"margeRight", _nppGUI._printSettings._marge.right);
-	element->SetAttribute(L"margeTop", _nppGUI._printSettings._marge.top);
-	element->SetAttribute(L"margeBottom", _nppGUI._printSettings._marge.bottom);
+	element->SetAttribute(L"margeLeft", nGUI._printSettings._marge.left);
+	element->SetAttribute(L"margeRight", nGUI._printSettings._marge.right);
+	element->SetAttribute(L"margeTop", nGUI._printSettings._marge.top);
+	element->SetAttribute(L"margeBottom", nGUI._printSettings._marge.bottom);
 }
 
 void NppParameters::writeExcludedLangList(TiXmlElement *element)	{
@@ -6055,9 +6058,9 @@ void NppParameters::writeExcludedLangList(TiXmlElement *element)	{
 
 	const int groupNbMember = 8;
 
-	for (size_t i = 0, len = _nppGUI._excludedLangList.size(); i < len ; ++i)	{
+	for (size_t i = 0, len = nGUI._excludedLangList.size(); i < len ; ++i)	{
 
-		LangType langType = _nppGUI._excludedLangList[i]._langType;
+		LangType langType = nGUI._excludedLangList[i]._langType;
 		if (langType >= L_EXTERNAL && langType < L_END)
 			continue;
 

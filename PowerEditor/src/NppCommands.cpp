@@ -131,7 +131,7 @@ void Notepad_plus::command(int id)	{
 
 					vector<generic_string> dummy;
 					launchFileBrowser(dummy);
-					if (_pFileBrowser != nullptr)	{
+					if (_pFileBrowser)	{
 
 						checkMenuItem(IDM_VIEW_FILEBROWSER, true);
 						_toolBar.setCheck(IDM_VIEW_FILEBROWSER, true);
@@ -275,7 +275,6 @@ void Notepad_plus::command(int id)	{
 		case IDC_UNDO_2:
 		case IDM_EDIT_UNDO:	{
 			std::lock_guard<std::mutex> lock(command_mutex);
-			auto b = _pEditView->f(SCI_GETCURRENTPOS);
 			_pEditView->f(WM_UNDO);
 			if (nppGUI.persistentSelectUndo)	{
 				_pEditView->f(SCI_REDO);
@@ -284,7 +283,6 @@ void Notepad_plus::command(int id)	{
 				if (_pEditView->f(SCI_GETCURRENTPOS) > b)
 					_pEditView->f(SCI_SETANCHOR, b);
 			}
-			_pEditView->f(SCI_SCROLLRANGE, b-190, b+199);
 
 			checkClipboard();
 			checkUndoState();
@@ -294,9 +292,13 @@ void Notepad_plus::command(int id)	{
 		case IDM_EDIT_REDO:	{
 			std::lock_guard<std::mutex> lock(command_mutex);
 			_pEditView->f(SCI_REDO);
-			int p = static_cast<int>(_pEditView->f(SCI_GETCURRENTPOS));
-			_pEditView->f(SCI_SCROLLRANGE, p-190, p+199);
-
+			if (nppGUI.persistentSelectUndo)	{
+				_pEditView->f(SCI_UNDO);
+				auto b = _pEditView->f(SCI_GETCURRENTPOS);
+				_pEditView->f(SCI_REDO);
+				if (_pEditView->f(SCI_GETCURRENTPOS) > b)
+					_pEditView->f(SCI_SETANCHOR, b);
+			}
 			checkClipboard();
 			checkUndoState();
 			break;
@@ -313,8 +315,18 @@ void Notepad_plus::command(int id)	{
 				_pEditView->f(SCI_PASTE);
 				_pEditView->f(SCI_SETANCHOR, b);
 			}
-			else	
+			else
 			_pEditView->f(SCI_PASTE);
+		}
+		break;
+
+		case IDC_CR_UZ:{
+			if (++nppGUI.caretUZ>5)
+				_pEditView->f(SCI_SETYCARETPOLICY, 8,nppGUI.caretUZ=0);
+			else
+				_pEditView->f(SCI_SETYCARETPOLICY, 13, nGUI.caretUZ);
+			_pEditView->f(SCI_SCROLLCARET);
+			_statusBar.setText(STATUSBAR_CR_UZ, to_wstring(nGUI.caretUZ).c_str());
 		}
 		break;
 		
@@ -408,19 +420,19 @@ void Notepad_plus::command(int id)	{
 				return;
 
 			HGLOBAL hglb = GetClipboardData(CF_TEXT);
-			if (hglb != NULL)	{
+			if (hglb)	{
 
 				char *lpchar = (char *)GlobalLock(hglb);
-				if (lpchar != NULL)	{
+				if (lpchar)	{
 
 					UINT cf_nppTextLen = RegisterClipboardFormat(CF_NPPTEXTLEN);
 					if (IsClipboardFormatAvailable(cf_nppTextLen))	{
 
 						HGLOBAL hglbLen = GetClipboardData(cf_nppTextLen);
-						if (hglbLen != NULL)	{
+						if (hglbLen)	{
 
 							unsigned long *lpLen = (unsigned long *)GlobalLock(hglbLen);
-							if (lpLen != NULL)	{
+							if (lpLen)	{
 
 								_pEditView->f(SCI_REPLACESEL, 0, reinterpret_cast<LPARAM>(""));
 								_pEditView->f(SCI_ADDTEXT, *lpLen, reinterpret_cast<LPARAM>(lpchar));
@@ -552,10 +564,10 @@ void Notepad_plus::command(int id)	{
 				return;
 
 			HGLOBAL hglb = GetClipboardData(f);
-			if (hglb != NULL)	{
+			if (hglb)	{
 
 				LPSTR lptstr = (LPSTR)GlobalLock(hglb);
-				if (lptstr != NULL)	{
+				if (lptstr)	{
 
 					// Call the application-defined ReplaceSelection
 					// function to insert the text and repaint the
@@ -753,7 +765,7 @@ void Notepad_plus::command(int id)	{
 			if (!_pFileBrowser)	{ // first launch, check in Params to open folders
 
 				launchFileBrowser(param.getFileBrowserRoots());
-				if (_pFileBrowser != nullptr)	{
+				if (_pFileBrowser)	{
 
 					checkMenuItem(IDM_VIEW_FILEBROWSER, true);
 					_toolBar.setCheck(IDM_VIEW_FILEBROWSER, true);
@@ -1145,6 +1157,32 @@ void Notepad_plus::command(int id)	{
 				// checkMenuItem(IDM_VIEW_FIND_RESULT, 1);
 		break;
 
+ 		case IDM_VIEW_CR_LINE_BG:	{
+/*			StyleArray & sty = param.getMiscStylerArray();
+
+			Style& s = sty.getStylerOf(L"Current line background colour");
+			COLORREF co= s._bgColor
+			uint8_t c[3], m;
+			c[0] = co &0x000000FF; // R G B of LSB -> MSB
+			c[1] = co &0x0000FF00;
+			c[2] = co &0x00FF0000;
+			m = max(c[0],c[1],c[2]);
+ }*/
+	
+	
+			if (++crSt>6)
+				if (crSt<11)
+					_pEditView->f(SCI_SETCARETLINEFRAME, crSt-6);
+				else
+					_pEditView->f(SCI_SETCARETLINEVISIBLE, crSt =0);
+			else	{
+				_pEditView->f(SCI_SETCARETLINEFRAME,0);
+				_pEditView->f(SCI_SETCARETLINEBACK, crSt*0x291B0F);	//BGR
+				_pEditView->f(SCI_SETCARETLINEVISIBLE,1);
+			}
+		}
+		break;
+		
 		case IDM_VIEW_CHAR_PANEL:
 			if (_pAnsiCharPanel && IsWindowVisible(_pAnsiCharPanel->getHSelf()))	{
 				_pAnsiCharPanel->display(0);
@@ -1391,7 +1429,7 @@ void Notepad_plus::command(int id)	{
 				_pEditView->f(SCI_SETSEL, min(braceAtCaret, braceOpposite), max(braceAtCaret, braceOpposite) + 1);
 				if (braceAtCaret > braceOpposite)	{
 					_pEditView->f(SCI_SWAPMAINANCHORCARET);
-					_pEditView->f(SCI_SETYCARETPOLICY, 13, 3);_pEditView->f(SCI_SCROLLCARET);_pEditView->f(SCI_SETYCARETPOLICY, 13, 1);
+					_pEditView->f(SCI_SCROLLRANGE, braceAtCaret, braceOpposite);
 				}
 			}
 			// else	selectBracePairContainCaret();
@@ -2743,17 +2781,12 @@ void Notepad_plus::command(int id)	{
 
 		case IDM_VIEW_SWITCHTO_OTHER_VIEW:	{
 
-			int view_to_focus;
-			HWND wnd = GetFocus();
-			if (_pEditView->getHSelf() == wnd)	{
+			int view_to_focus =_pEditView->getHSelf() != GetFocus() ?
+			MAIN_VIEW
+			: viewVisible(view_to_focus=otherView()) ?
+			view_to_focus
+			: _activeView;
 
-				view_to_focus = otherView();
-				if (!viewVisible(view_to_focus)) view_to_focus = _activeView;
-			}
-			else	{
-
-				view_to_focus = MAIN_VIEW;
-			}
 			switchEditViewTo(view_to_focus);
 			break;
 		}
@@ -3322,13 +3355,13 @@ BOOL parseDword(const char* in, DWORD* out)
 		}
 		break;
 
-		case IDM_VIEW_CURLINE_HILITING:	{
+/* 		case IDM_VIEW_CURLINE_HILITING:	{
 
 			COLORREF colour = param.getCurLineHilitingColour();
 			_mainEditView.setCurrentLineHiLiting(!_pEditView->isCurrentLineHiLiting(), colour);
 			_subEditView.setCurrentLineHiLiting(!_pEditView->isCurrentLineHiLiting(), colour);
 		}
-		break;
+		break; */
 
 		case IDM_VIEW_EDGEBACKGROUND:
 		case IDM_VIEW_EDGELINE:

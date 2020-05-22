@@ -49,7 +49,7 @@ void FunctionListPanel::addEntry(const TCHAR *nodeName, const TCHAR *displayText
 	generic_itoa(int(pos), posStr, 10);
 	HTREEITEM root = _treeView.getRoot();
 
-	if (nodeName != NULL && *nodeName != '\0')	{
+	if (nodeName && *nodeName != '\0')	{
 
 		itemParent = _treeView.searchSubItemByName(nodeName, root);
 		if (!itemParent)	{
@@ -400,10 +400,10 @@ void FunctionListPanel::findMarkEntry(HTREEITEM htItem, LONG line)	{
 
 	HTREEITEM cItem;
 	TVITEM tvItem;
-	for (; htItem != NULL; htItem = _treeView.getNextSibling(htItem))	{
+	for (; htItem; htItem = _treeView.getNextSibling(htItem))	{
 
 		cItem = _treeView.getChildFrom(htItem);
-		if (cItem != NULL)	{
+		if (cItem)	{
 
 			findMarkEntry(cItem, line);
 		}

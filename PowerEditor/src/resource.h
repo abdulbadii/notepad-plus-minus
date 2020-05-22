@@ -253,12 +253,12 @@
 #define IDC_UNDO_2           (IDCMD+8)
 #define IDC_REDO_2           (IDCMD+9)
 #define IDC_PASTE_2           (IDCMD+10)
-#define IDC_SELECT_PASTE           (IDCMD+11)
-#define IDC_SELECT_UNDO           (IDCMD+12)
-
-#define IDC_VIEW_SWAP_MAIN_FIND     (IDCMD+13)
-#define IDC_VIEW_CLEAR_CLOSE_FIND       (IDCMD+14)
-#define IDC_INFOS        (IDCMD + 15)
+#define IDC_INFOS        (IDCMD + 11)
+#define IDC_CR_UZ        (IDCMD + 12)
+#define IDC_SELECT_PASTE           (IDCMD+13)
+#define IDC_SELECT_UNDO           (IDCMD+14)
+#define IDC_VIEW_SWAP_MAIN_FIND     (IDCMD+15)
+#define IDC_VIEW_CLEAR_CLOSE_FIND       (IDCMD+16)
 
 #define IDCMD_LIMIT                        (IDCMD+20)
 
@@ -324,12 +324,14 @@
 #define IDD_GOLINE        2000
 #define ID_GOLINE_EDIT    (IDD_GOLINE + 1)
 #define ID_CURRLINE        (IDD_GOLINE + 2)
-#define ID_LASTLINE        (IDD_GOLINE + 3)
-#define ID_URHERE_STATIC           (IDD_GOLINE + 4)
-#define ID_UGO_STATIC                 (IDD_GOLINE + 5)
-#define ID_NOMORETHAN_STATIC   (IDD_GOLINE + 6)
-#define IDC_RADIO_GOTOLINE   (IDD_GOLINE + 7)
-#define IDC_RADIO_GOTOOFFSET   (IDD_GOLINE + 8)
+#define ID_CUROFFSET        (IDD_GOLINE + 3)
+#define ID_LASTLINE        (IDD_GOLINE + 4)
+#define ID_LASTOFF        (IDD_GOLINE + 5)
+#define ID_URHERE_STATIC           (IDD_GOLINE + 6)
+#define ID_UGO_STATIC                 (IDD_GOLINE + 7)
+#define ID_NOMORETHAN_STATIC   (IDD_GOLINE + 8)
+#define IDC_RADIO_GOTOLINE   (IDD_GOLINE + 9)
+#define IDC_RADIO_GOTOOFFSET   (IDD_GOLINE + 10)
 
 // voir columnEditor_rc.h
 //#define IDD_COLUMNEDIT   2020

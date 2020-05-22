@@ -32,7 +32,7 @@
 #include <iso646.h>
 #include <cstdint>
 
-constexpr size_t NB_SB = 10;
+constexpr size_t NB_SB = 11;
 constexpr bool dirUp = true, dirDown = false;
 
 #define NPP_CP_DOS_437            437

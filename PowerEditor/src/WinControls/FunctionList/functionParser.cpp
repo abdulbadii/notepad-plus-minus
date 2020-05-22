@@ -371,7 +371,7 @@ void FunctionParser::funcParse(std::vector<foundInfo> & foundInfos, size_t begin
 
 		if (fi._pos != -1 || fi._pos2 != -1)	{ // at least one should be found
 
-			if (commentZones != NULL)	{
+			if (commentZones)	{
 
 				if (!isInZones(fi._pos, *commentZones) && !isInZones(fi._pos2, *commentZones))
 					foundInfos.push_back(fi);

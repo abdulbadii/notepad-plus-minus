@@ -634,9 +634,9 @@ LRESULT WindowsDlg::onWinMgr(WPARAM wp, LPARAM lp)	{
 
 void WindowsDlg::doRefresh(bool invalidate /*= false*/)	{
 
-	if (_hSelf != NULL && isVisible())	{
+	if (_hSelf && isVisible())	{
 
-		if (_hList != NULL)	{
+		if (_hList)	{
 
 			size_t count = (_pTab != NULL) ? _pTab->nbItem() : 0;
 			size_t oldSize = _idxMap.size();

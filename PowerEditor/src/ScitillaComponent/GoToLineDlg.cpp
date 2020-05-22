@@ -45,16 +45,16 @@ INT_PTR CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)	{
 
 				case IDCANCEL : // Close
 					display(false);
-                    cleanLineEdit();
+						cleanLineEdit();
 					return TRUE;
 
 				case IDOK :	{
 
-                    int line = getLine();
-                    if (line != -1)	{
+						int line = getLine();
+						if (line != -1)	{
 
-                        display(false);
-                        cleanLineEdit();
+								display(false);
+								cleanLineEdit();
 						if (_mode == go2line)	{
 
 							(*_ppEditView)->f(SCI_ENSUREVISIBLE, line-1);
@@ -66,7 +66,7 @@ INT_PTR CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)	{
 							(*_ppEditView)->f(SCI_ENSUREVISIBLE, sci_line);
 							(*_ppEditView)->f(SCI_GOTOPOS, line);
 						}
-                    }
+						}
 
 					SCNotification notification = {};
 					notification.nmhdr.code = SCN_PAINTED;
@@ -74,9 +74,9 @@ INT_PTR CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)	{
 					notification.nmhdr.idFrom = ::GetDlgCtrlID(_hSelf);
 					::SendMessage(_hParent, WM_NOTIFY, LINKTRIGGERED, reinterpret_cast<LPARAM>(&notification));
 
-                    (*_ppEditView)->focus();
-                    return TRUE;
-                }
+						(*_ppEditView)->focus();
+						return TRUE;
+					}
 
 				case IDC_RADIO_GOTOLINE :
 				case IDC_RADIO_GOTOOFFSET :	{
@@ -123,20 +123,15 @@ INT_PTR CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)	{
 
 void GoToLineDlg::updateLinesNumbers() const 
 {
-	unsigned int current = 0;
-	unsigned int limit = 0;
-	
-	if (_mode == go2line)	{
+	unsigned int
+	curLn = static_cast<unsigned int>((*_ppEditView)->getCurrentLineNumber() + 1),
+	limLn = static_cast<unsigned int>((*_ppEditView)->f(SCI_GETLINECOUNT)),
+	curOff = static_cast<unsigned int>((*_ppEditView)->f(SCI_GETCURRENTPOS)),
+	limOff = static_cast<unsigned int>((*_ppEditView)->getCurrentDocLen() - 1);
 
-		current = static_cast<unsigned int>((*_ppEditView)->getCurrentLineNumber() + 1);
-		limit = static_cast<unsigned int>((*_ppEditView)->f(SCI_GETLINECOUNT));
-	}
-	else	{
-
-		current = static_cast<unsigned int>((*_ppEditView)->f(SCI_GETCURRENTPOS));
-		limit = static_cast<unsigned int>((*_ppEditView)->getCurrentDocLen() - 1);
-	}
-    ::SetDlgItemInt(_hSelf, ID_CURRLINE, current, FALSE);
-    ::SetDlgItemInt(_hSelf, ID_LASTLINE, limit, FALSE);
+	::SetDlgItemInt(_hSelf, ID_CURRLINE, curLn, FALSE);
+	::SetDlgItemInt(_hSelf, ID_CUROFFSET, curOff, FALSE);
+	::SetDlgItemInt(_hSelf, ID_LASTLINE, limLn, FALSE);
+	::SetDlgItemInt(_hSelf, ID_LASTOFF, limOff, FALSE);
 }
 

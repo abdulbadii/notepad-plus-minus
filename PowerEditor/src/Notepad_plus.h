@@ -238,7 +238,6 @@ public:
 		if (beginSelectPos != -1 && static_cast<long long>(position) < beginSelectPos - 1)	{
 			beginSelectPos += is_insert ? static_cast<long long>(length)
 			: -static_cast<long long>(length);
-
 		assert(beginSelectPos >= 0);
 	}
 }
@@ -587,6 +586,7 @@ private:
 		HWND _nppHandle = nullptr;
 	};
 	void monitoringStartOrStopAndUpdateUI(Buffer* pBuf, bool isStarting);
+	int crSt = 0;
 	long long beginSelectPos = -1;
 	bool offsetSB = 0;
 };

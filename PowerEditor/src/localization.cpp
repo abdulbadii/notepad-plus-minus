@@ -364,7 +364,7 @@ static const int tabContextMenuItemPos[] =
 //  |
 //  |       +------ Number in english.xml (<language>.xml) : <TabBar>
 //  |       |
-	0,   // 0 : Close
+//	0,   // 0 : Close
 	1,   // 1 : Close ALL BUT This
 	5,   // 2 : Save
 	6,   // 3 : Save As

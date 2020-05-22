@@ -98,7 +98,7 @@ void FileDialog::setExtFilter(const TCHAR *extText, const TCHAR *ext, ...)	{
 		exts += ext2Concat;
 		exts += L";";
 	}
-	while ( (ext2Concat = va_arg(pArg, const TCHAR *)) != NULL );
+	while ((ext2Concat = va_arg(pArg, const TCHAR *)) != nullptr);
 
 	va_end(pArg);
 

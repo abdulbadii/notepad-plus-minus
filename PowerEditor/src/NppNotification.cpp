@@ -432,14 +432,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 			if (notification->nmhdr.hwndFrom == _statusBar.getHSelf())	{
 
 				LPNMMOUSE lpnm = (LPNMMOUSE)notification;
-				if (lpnm->dwItemSpec == DWORD(STATUSBAR_CUR_POS))	{
-
-					bool isFirstTime = !_goToLineDlg.isCreated();
-					_goToLineDlg.doDialog(_nativeLangSpeaker.isRTL());
-					if (isFirstTime)
-						_nativeLangSpeaker.changeDlgLang(_goToLineDlg.getHSelf(), "GoToLine");
-				}
-				else if (lpnm->dwItemSpec == DWORD(STATUSBAR_DOC_SIZE))	{
+				if (lpnm->dwItemSpec == DWORD(STATUSBAR_DOC_SIZE))	{
 
 					command(IDM_VIEW_SUMMARY);
 				}
@@ -472,7 +465,13 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 			else if (notification->nmhdr.hwndFrom == _statusBar.getHSelf())	{  // From Status Bar
 				LPNMMOUSE lpnm = (LPNMMOUSE)notification;
 
-				if (lpnm->dwItemSpec == DWORD(STATUSBAR_DOC_NAME))	{
+				if (lpnm->dwItemSpec == DWORD(STATUSBAR_CUR_POS))	{
+
+					_goToLineDlg.doDialog(_nativeLangSpeaker.isRTL());
+					if (!_goToLineDlg.isCreated())
+						_nativeLangSpeaker.changeDlgLang(_goToLineDlg.getHSelf(), "GoToLine");
+				}
+				else if (lpnm->dwItemSpec == DWORD(STATUSBAR_DOC_NAME))	{
 					MenuPosition & menuPos = getMenuPosition("file-closeAllMore");
 					HMENU hMenu = ::GetSubMenu(_mainMenuHandle, menuPos._x);
 					if (!hMenu)
@@ -536,7 +535,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 
 				// IMPORTANT: If list below is modified, you have to change the value of tabContextMenuItemPos[] in localization.cpp file
                 std::vector<MenuItemUnit> itemUnitArray;
-				itemUnitArray.push_back(MenuItemUnit(IDM_FILE_CLOSE, L"Close"));
+				// itemUnitArray.push_back(MenuItemUnit(IDM_FILE_CLOSE, L"Close"));
 				itemUnitArray.push_back(MenuItemUnit(IDM_FILE_CLOSEALL_BUT_CURRENT, L"Close All BUT This"));
 				itemUnitArray.push_back(MenuItemUnit(IDM_FILE_CLOSEALL_TOLEFT, L"Close All to the Left"));
 				itemUnitArray.push_back(MenuItemUnit(IDM_FILE_CLOSEALL_TORIGHT, L"Close All to the Right"));

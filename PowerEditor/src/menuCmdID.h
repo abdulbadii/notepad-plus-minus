@@ -278,7 +278,7 @@
 	#define    IDM_VIEW_FOLDERMAGIN_BOX           (IDM_VIEW + 18)
 	#define    IDM_VIEW_ALL_CHARACTERS            (IDM_VIEW + 19)
 	#define    IDM_VIEW_INDENT_GUIDE              (IDM_VIEW + 20)
-	#define    IDM_VIEW_CURLINE_HILITING          (IDM_VIEW + 21)
+	// #define    IDM_VIEW_CURLINE_HILITING          (IDM_VIEW + 21)
 	#define    IDM_VIEW_WRAP                      (IDM_VIEW + 22)
 	#define    IDM_VIEW_ZOOMIN                    (IDM_VIEW + 23)
 	#define    IDM_VIEW_ZOOMOUT                   (IDM_VIEW + 24)
@@ -325,19 +325,20 @@
 
 		
 	#define    IDM_VIEW_FILESWITCHER_PANEL        (IDM_VIEW + 70)
-	#define    IDM_VIEW_SWITCHTO_OTHER_VIEW       (IDM_VIEW + 72)
-	#define    IDM_EXPORT_FUNC_LIST_AND_QUIT      (IDM_VIEW + 73)
+	#define    IDM_VIEW_SWITCHTO_OTHER_VIEW       (IDM_VIEW + 71)
+	#define    IDM_EXPORT_FUNC_LIST_AND_QUIT      (IDM_VIEW + 72)
 
-	#define    IDM_VIEW_DOC_MAP                   (IDM_VIEW + 80)
+	#define    IDM_VIEW_DOC_MAP                   (IDM_VIEW + 73)
 
-	#define    IDM_VIEW_PROJECT_PANEL_1           (IDM_VIEW + 81)
-	#define    IDM_VIEW_PROJECT_PANEL_2           (IDM_VIEW + 82)
-	#define    IDM_VIEW_PROJECT_PANEL_3           (IDM_VIEW + 83)
+	#define    IDM_VIEW_PROJECT_PANEL_1           (IDM_VIEW + 74)
+	#define    IDM_VIEW_PROJECT_PANEL_2           (IDM_VIEW + 75)
+	#define    IDM_VIEW_PROJECT_PANEL_3           (IDM_VIEW + 76)
 
 	#define    IDM_VIEW_LINENUMBER                (IDM_VIEW + 77)
-	#define    IDM_VIEW_FIND_RESULT      (IDM_VIEW +78)
-	#define    IDM_VIEW_FUNC_LIST                 (IDM_VIEW + 84)
+	#define    IDM_VIEW_FUNC_LIST                 (IDM_VIEW + 78)
 	#define    IDM_VIEW_CHAR_PANEL                  (IDM_VIEW + 79)
+	#define    IDM_VIEW_FIND_RESULT      (IDM_VIEW +80)
+	#define    IDM_VIEW_CR_LINE_BG      (IDM_VIEW + 81)
 
 	#define    IDM_VIEW_FILEBROWSER            (IDM_VIEW + 85)
 	#define	   IDM_VIEW_TAB1					  (IDM_VIEW + 86)

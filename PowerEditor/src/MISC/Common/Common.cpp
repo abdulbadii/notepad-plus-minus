@@ -840,7 +840,7 @@ double stodLocale(const generic_string& str, _locale_t loc, size_t* idx)	{
 		throw std::invalid_argument("invalid stod argument");
 	if (errno == ERANGE)
 		throw std::out_of_range("stod argument out of range");
-	if (idx != NULL)
+	if (idx)
 		*idx = (size_t)(eptr - ptr);
 	return ans;
 }
@@ -1159,11 +1159,11 @@ bool isCertificateValidated(const generic_string & fullFilePath, const generic_s
 	}
 
 	// Clean up.
-	if (pSignerInfo != NULL) LocalFree(pSignerInfo);
-	if (pCertContext != NULL) CertFreeCertificateContext(pCertContext);
-	if (hStore != NULL) CertCloseStore(hStore, 0);
-	if (hMsg != NULL) CryptMsgClose(hMsg);
-	if (szName != NULL) LocalFree(szName);
+	if (pSignerInfo) LocalFree(pSignerInfo);
+	if (pCertContext) CertFreeCertificateContext(pCertContext);
+	if (hStore) CertCloseStore(hStore, 0);
+	if (hMsg) CryptMsgClose(hMsg);
+	if (szName) LocalFree(szName);
 
 	return isOK;
 }

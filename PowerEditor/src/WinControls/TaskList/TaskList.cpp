@@ -236,7 +236,7 @@ LRESULT TaskList::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 
 			MSG *msg = (MSG*)lParam;
 
-			if ( msg != NULL)	{
+			if ( msg)	{
 
 				if ((msg->message == WM_KEYDOWN) && (0x80 & GetKeyState(VK_CONTROL)))	{
 

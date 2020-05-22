@@ -605,7 +605,7 @@ BufferID FileManager::loadFile(const TCHAR * filename, Document doc, int encodin
 		::GetLongPathName(fullpath, fullpath, MAX_PATH);
 	}
 
-	bool isSnapshotMode = backupFileName != NULL && PathFileExists(backupFileName);
+	bool isSnapshotMode = backupFileName && PathFileExists(backupFileName);
 	if (isSnapshotMode && !PathFileExists(fullpath))	{ // if backup mode and fullpath doesn't exist, we guess is UNTITLED
 
 		wcscpy_s(fullpath, MAX_PATH, filename); // we restore fullpath with filename, in our case is "new  #"
@@ -627,7 +627,7 @@ BufferID FileManager::loadFile(const TCHAR * filename, Document doc, int encodin
 		BufferID id = static_cast<BufferID>(newBuf);
 		newBuf->_id = id;
 
-		if (backupFileName != NULL)	{
+		if (backupFileName)	{
 
 			newBuf->_backupFileName = backupFileName;
 			if (!PathFileExists(fullpath))
@@ -1039,7 +1039,7 @@ bool FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool isCopy, g
 
 			_pscratchTilla->f(SCI_SETDOCPOINTER, 0, _scratchDocDefault);
 
-			if (error_msg != NULL)
+			if (error_msg)
 				*error_msg = L"Failed to save file.\nNot enough space on disk to save file?";
 
 			return false;

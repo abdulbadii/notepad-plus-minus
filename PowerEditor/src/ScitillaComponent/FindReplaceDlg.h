@@ -300,7 +300,8 @@ public :
 	void setSearchText(TCHAR * txt2find);
 
 
-	void gotoNextFoundResult(int direction = 0) {if (_pFinder) _pFinder->gotoNextFoundResult(direction);};
+	inline void gotoNextFoundResult(int direction=1) {
+		if (_pFinder) _pFinder->gotoNextFoundResult(direction);};
 
 	void getPatterns(std::vector<generic_string> & patternVect);
 

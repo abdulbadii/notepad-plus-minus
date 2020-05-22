@@ -534,7 +534,7 @@ CShellExt::~CShellExt() {
 		DeinitTheming();
 	}
 
-	if (m_hBitmap != NULL && m_hBitmap != HBMMENU_CALLBACK)
+	if (m_hBitmap && m_hBitmap != HBMMENU_CALLBACK)
 		DeleteBitmap(m_hBitmap);
 
 	if (m_pDataObj)
@@ -631,7 +631,7 @@ STDMETHODIMP CShellExt::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmd
 			icon = HBMMENU_CALLBACK;
 		}
 
-		if (icon != NULL) {
+		if (icon) {
 			MENUITEMINFO mii;
 			ZeroMemory(&mii, sizeof(mii));
 			mii.cbSize = sizeof(mii);

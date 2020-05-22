@@ -469,7 +469,7 @@ generic_string FileBrowser::getNodePath(HTREEITEM node) const
 
 	// go up until to root, then get the full path
 	HTREEITEM parent = node;
-	for (; parent != nullptr;)	{
+	for (; parent;)	{
 
 		generic_string folderName = _treeView.getItemDisplayName(parent);
 	
@@ -1152,7 +1152,7 @@ bool FileBrowser::addInTree(const generic_string& rootPath, const generic_string
 
 		// Search : if no found, add
 		HTREEITEM childNodeFound = findChildNodeFromName(node, linarPathArray[0]);
-		if (childNodeFound != nullptr)
+		if (childNodeFound)
 			return false;
 
 		// No found, good - Action

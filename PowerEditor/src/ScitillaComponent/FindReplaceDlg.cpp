@@ -554,15 +554,14 @@ bool Finder::canFind(const TCHAR *fileName, size_t lineNumber) const
 	return false; 
 }
 
-void Finder::gotoNextFoundResult(int direction)	{
+void Finder::gotoNextFoundResult(int increment)	{
 
-	int increment = direction < 0 ? -1 : 1;
 	auto currentPos = _scintView.f(SCI_GETCURRENTPOS);
 	auto lno = _scintView.f(SCI_LINEFROMPOSITION, currentPos);
 	auto total_lines = _scintView.f(SCI_GETLINECOUNT);
 	if (total_lines <= 1) return;
 	
-	lno -= (lno==total_lines -1)? 1 : 0; // last line doesn't belong to any search, use last search
+	if (lno==total_lines -1) --lno; // last line doesn't belong to any search, use last search
 
 	auto init_lno = lno;
 	auto max_lno = _scintView.f(SCI_GETLASTCHILD, lno, searchHeaderLevel);
@@ -582,18 +581,18 @@ void Finder::gotoNextFoundResult(int direction)	{
 
 	assert(min_lno <= max_lno);
 
-	lno += increment;
-	
-	if      (lno > max_lno) lno = min_lno;
-	else if (lno < min_lno) lno = max_lno;
-
-	while (_scintView.f(SCI_GETFOLDLEVEL, lno) & SC_FOLDLEVELHEADERFLAG)	{
+	do	{
+		lno += increment;
+		lno = lno > max_lno? min_lno : lno < min_lno? max_lno : lno;
+	}
+	while (_scintView.f(SCI_GETFOLDLEVEL, lno) & SC_FOLDLEVELHEADERFLAG && lno != init_lno);
+/* 		{
 
 		lno += increment;
 		if      (lno > max_lno) lno = min_lno;
 		else if (lno < min_lno) lno = max_lno;
 		if (lno == init_lno) break;
-	}
+	} */
 
 	if (!(_scintView.f(SCI_GETFOLDLEVEL, lno) & SC_FOLDLEVELHEADERFLAG))	{
 
@@ -835,8 +834,8 @@ void Finder::finishFilesSearch(int count, bool isfold,const TCHAR *dir, bool isM
 	_scintView.f(SCI_SETWRAPVISUALFLAGS,SC_WRAPVISUALFLAG_START);
 	_scintView.f(SCI_SETWRAPSTARTINDENT,5);
 	_scintView.f(SCI_SETWRAPINDENTMODE,SC_WRAPINDENT_FIXED);
-	_scintView.f(SCI_SETYCARETPOLICY, 13, 9);_scintView.f(SCI_SCROLLCARET);
-	_scintView.f(SCI_SETYCARETPOLICY, 13, 1);
+	_scintView.f(SCI_SETYCARETPOLICY, 14, 0);_scintView.f(SCI_SCROLLCARET);
+	_scintView.f(SCI_SETYCARETPOLICY, 8,0);
 }
 
 void Finder::setFinderStyle()	{

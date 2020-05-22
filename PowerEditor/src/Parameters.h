@@ -472,7 +472,7 @@ public:
 	int getNbStyler() const {return _nbStyler;};
 	void setNbStyler(int nb) {_nbStyler = nb;};
 
-	Style& getStyler(size_t index)	{
+	inline Style& getStyler(size_t index)	{
 
 		assert(index < SCE_STYLE_ARRAY_SIZE);
 		return _styleArray[index];
@@ -490,22 +490,31 @@ public:
 		++_nbStyler;
 	}
 
-	int getStylerIndexByID(int id)	{
+	inline int getStylerIndexByID(int id)	{
 
 		for (int i = 0 ; i < _nbStyler ; ++i)
 			if (_styleArray[i]._styleID == id)		return i;
 		return -1;
 	}
 
-	int getStylerIndexByName(const TCHAR *name) const	{
-
-		if (name)	{
-
-		for (int i = 0 ; i < _nbStyler ; ++i)
-			if (!lstrcmp(_styleArray[i]._styleDesc, name))		return i;
-		}
+	inline int getStylerIndexByName(const TCHAR *name) const	{
+		if (name)
+			for (int i = 0 ; i < _nbStyler ; ++i)
+				if (!lstrcmp(_styleArray[i]._styleDesc, name))		return i;
 		return -1;
 	}
+
+
+	inline Style& getStylerOf(const TCHAR *name)	{
+
+		for (int i = 0 ; i < _nbStyler ; ++i)
+			if (!lstrcmp(_styleArray[i]._styleDesc, name))
+				return _styleArray[i];
+
+		assert(index < SCE_STYLE_ARRAY_SIZE);
+	}
+
+
 
 protected:
 	Style _styleArray[SCE_STYLE_ARRAY_SIZE];
@@ -867,7 +876,8 @@ struct NppGUI final	{
 
 	OpenSaveDirSetting _openSaveDir = dir_followCurrent;
 	int _caretBlinkRate = 475,
-	_caretWidth = 2;
+	_caretWidth = 2,
+	caretUZ = 2;
 
 	bool _doesExistUpdater = false, _shortTitlebar = false,
 	_enableMultiSelection = true,
@@ -1300,7 +1310,7 @@ public:
 	bool _isTaskListRBUTTONUP_Active = false;
 	int L_END;
 
-	const NppGUI& getNppGUI() {	return _nppGUI;	}
+	const NppGUI& getNppGUI() {	return nGUI;	}
 
 	const TCHAR * getWordList(LangType langID, int typeIndex) const	{
 
@@ -1397,8 +1407,8 @@ public:
 	LexerStylerArray & getLStylerArray() {return _lexerStylerArray;};
 	StyleArray & getGlobalStylers() {return _widgetStyleArray;};
 
-	StyleArray & getMiscStylerArray() {return _widgetStyleArray;};
-	GlobalOverride & getGlobalOverrideStyle() {return _nppGUI._globalOverride;};
+	inline StyleArray & getMiscStylerArray() {return _widgetStyleArray;};
+	inline GlobalOverride & getGlobalOverrideStyle() {return nGUI._globalOverride;};
 
 	COLORREF getCurLineHilitingColour();
 	void setCurLineHilitingColour(COLORREF colour2Set);
@@ -1634,12 +1644,12 @@ public:
 		_currentDefaultFgColor = c;
 	}
 
-	bool useNewStyleSaveDlg() const {
-		return _nppGUI._useNewStyleSaveDlg;
+	inline bool useNewStyleSaveDlg() const {
+		return nGUI._useNewStyleSaveDlg;
 	}
 
-	void setUseNewStyleSaveDlg(bool v) {
-		_nppGUI._useNewStyleSaveDlg = v;
+	inline void setUseNewStyleSaveDlg(bool v) {
+		nGUI._useNewStyleSaveDlg = v;
 	}
 	DPIManager _dpiManager;
 
@@ -1679,7 +1689,7 @@ private:
 
 	std::vector<TiXmlDocument *> _pXmlExternalLexerDoc;
 
-	NppGUI _nppGUI;
+	NppGUI nGUI;
 	ScintillaViewParams _svp;
 	Lang *_langList[NB_LANG];
 	int _nbLang = 0;

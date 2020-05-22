@@ -255,7 +255,7 @@ LRESULT DockingManager::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 			}
 
 			// destroy imagelist if it exists
-			if (_hImageList != NULL)	{
+			if (_hImageList)	{
 
 				::ImageList_Destroy(_hImageList);
 			}
@@ -684,7 +684,7 @@ void DockingManager::showDockableDlg(HWND hDlg, BOOL view)	{
 	for (size_t i = 0, len = _vContainer.size(); i < len; ++i)	{
 
 		tTbData *pTbData = _vContainer[i]->findToolbarByWnd(hDlg);
-		if (pTbData != NULL)	{
+		if (pTbData)	{
 
 			_vContainer[i]->showToolbar(pTbData, view);
 			return;
@@ -697,7 +697,7 @@ void DockingManager::showDockableDlg(TCHAR* pszName, BOOL view)	{
 	for (size_t i = 0, len = _vContainer.size(); i < len; ++i)	{
 
 		tTbData *pTbData = _vContainer[i]->findToolbarByName(pszName);
-		if (pTbData != NULL)	{
+		if (pTbData)	{
 
 			_vContainer[i]->showToolbar(pTbData, view);
 			return;
@@ -745,7 +745,7 @@ DockingCont* DockingManager::toggleActiveTb(DockingCont* pContSrc, UINT message,
 	DockingCont*	pContTgt	= NULL;
 
 	// if new float position is given
-	if (prcFloat != NULL)	{
+	if (prcFloat)	{
 
 		TbData.rcFloat = *prcFloat;
 	}
@@ -820,7 +820,7 @@ DockingCont* DockingManager::toggleVisTb(DockingCont* pContSrc, UINT message, LP
 		tTbData		TbData = *vTbData[iTb];
 
 		// if new float position is given
-		if (prcFloat != NULL)	{
+		if (prcFloat)	{
 
 			TbData.rcFloat = *prcFloat;
 		}

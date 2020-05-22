@@ -591,7 +591,7 @@ void Accelerator::updateShortcuts()	{
 
 	if (_hFindAccTab)
 		::DestroyAcceleratorTable(_hFindAccTab);
-	if (pSearchFindAccel != nullptr)	{
+	if (pSearchFindAccel)	{
 
 		ACCEL *tmpFindAccelArray = new ACCEL[1];
 		tmpFindAccelArray[0] = *pSearchFindAccel;

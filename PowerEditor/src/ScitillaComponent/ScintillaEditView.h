@@ -25,8 +25,6 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #pragma once
-#pragma warning(push)
-#pragma warning(disable:4706)
 
 #include "Scintilla.h"
 #include "ScintillaRef.h"
@@ -256,7 +254,6 @@ public:
 	void addGenericText(const TCHAR * text2Append, long *mstart, long *mend) const;
 	int replaceTarget(const TCHAR * str2replace, int fromTargetPos = -1, int toTargetPos = -1) const;
 	int replaceTargetRegExMode(const TCHAR * re, int fromTargetPos = -1, int toTargetPos = -1) const;
-	void showAutoC(size_t lenEntered, const TCHAR * list);
 	void showCallTip(int startPos, const TCHAR * def);
 	generic_string getLine(size_t lineNumber);
 	void getLine(size_t lineNumber, TCHAR * line, int lineBufferLen);
@@ -270,6 +267,14 @@ public:
 	void restoreCurrentPosPostStep();
 
 	void beginOrEndSelect();
+	// void showAutoC(size_t lenEntered, const TCHAR * list)
+	inline void showAutoC(size_t lenEntered, const TCHAR* list)	{
+
+	UINT cp = static_cast<UINT>(f(SCI_GETCODEPAGE));
+	const char *listA = wmc.wchar2char(list, cp);
+
+	f(SCI_AUTOCSHOW, lenEntered, reinterpret_cast<LPARAM>(listA));
+	}
 
 	int getCurrentDocLen() const {
 		return static_cast<int32_t>(f(SCI_GETLENGTH));
@@ -503,7 +508,7 @@ inline	long getCurrentPointY()const{
 
 	void updateLineNumberWidth();
 
-	void setCurrentLineHiLiting(bool isHiliting, COLORREF bgColor) const {
+/* 	void setCurrentLineHiLiting(bool isHiliting, COLORREF bgColor) const {
 		f(SCI_SETCARETLINEVISIBLE, isHiliting);
 		if (!isHiliting)
 			return;
@@ -513,7 +518,7 @@ inline	long getCurrentPointY()const{
 	bool isCurrentLineHiLiting() const {
 		return (f(SCI_GETCARETLINEVISIBLE));
 	};
-
+ */
 	void performGlobalStyles();
 
 	void expand(size_t& line, bool doExpand, bool force = false, int visLevels = 0, int level = -1);
@@ -1062,19 +1067,31 @@ void ScintillaEditView::fold(size_t line, bool mode)	{
 	}
 }
 
+#pragma warning(disable:4701)
+#pragma warning(disable:4706)
 void ScintillaEditView::toggleFold(size_t ln, bool rec)	{
 
 	if (f(SCI_GETENDSTYLED) < f(SCI_GETLENGTH))
 		f(SCI_COLOURISE,0,-1);
-	size_t hLine, n=ln;
-	bool isNode;
+	size_t hLine;
+	int t; bool hd;
 	if (f(SCI_GETFOLDLEVEL, ln) & SC_FOLDLEVELHEADERFLAG)
 		hLine = static_cast<int>(ln);
-	else if ((hLine = static_cast<int>(f(SCI_GETFOLDPARENT, ln))) == -1)	{
-		while (!(isNode=f(SCI_GETFOLDLEVEL, ++ln)&SC_FOLDLEVELHEADERFLAG) && ln<n+9);
-		if (isNode)	hLine=ln;
-		else return;
+	else	{
+		const char re[] = R"((?:\h*\r?\n){0,7}\{)";
+		auto p=f(SCI_POSITIONFROMLINE, ln+1);
+		f(SCI_SETSEARCHFLAGS, SCFIND_REGEXP|SCFIND_POSIX);
+		f(SCI_SETTARGETRANGE, p, p+9);
+		if ((t=int(f(SCI_SEARCHINTARGET, strlen(re), reinterpret_cast<LPARAM>(re)))) >=0)
+			hLine = f(SCI_LINEFROMPOSITION, t);
+		else	{
+			while (ln>0 && !(hd=f(SCI_GETFOLDLEVEL, ln) & SC_FOLDLEVELHEADERFLAG) && (hLine = static_cast<int>(f(SCI_GETFOLDPARENT, ln))) == -1)
+				--ln;
+			if (!ln)	return;
+			else if (hd)	hLine = ln;
+		}
 	}
+
 	SCNotification scnN;
 	scnN.nmhdr.code = SCN_FOLDINGSTATECHANGED;
 	scnN.nmhdr.hwndFrom = _hSelf;
@@ -1095,12 +1112,13 @@ void ScintillaEditView::toggleFold(size_t ln, bool rec)	{
 				::SendMessage(_hParent, WM_NOTIFY, 0, reinterpret_cast<LPARAM>(&scnN));
 			}
 	}
-	f(SCI_SETYCARETPOLICY, 14, 0);f(SCI_SCROLLCARET); f(SCI_SETYCARETPOLICY, 13, 1);
+	// f(SCI_SETYCARETPOLICY, nGUI.caretUZ? 13: 8, nGUI.caretUZ);
 }
 
 void ScintillaEditView::foldAllToggle()	{
 	bool isNode;
-	int ln, n; ln = n = static_cast<int>(f(SCI_LINEFROMPOSITION,f(SCI_GETCURRENTPOS)));
+	auto o=f(SCI_GETCURRENTPOS);
+	int ln, n; ln = n = static_cast<int>(f(SCI_LINEFROMPOSITION,o));
 	while (!(isNode=f(SCI_GETFOLDLEVEL, ln)&SC_FOLDLEVELHEADERFLAG) && 0<ln)
 		--ln;
 	if (isNode)
@@ -1112,5 +1130,6 @@ void ScintillaEditView::foldAllToggle()	{
 			f(SCI_GOTOLINE,n);
 		}
 	}
-	f(SCI_SETYCARETPOLICY, 14, 0);f(SCI_SCROLLCARET);f(SCI_SETYCARETPOLICY, 13, 1);
+	f(SCI_SETYCARETPOLICY,14,0);f(SCI_SCROLLCARET);
+	// f(SCI_SETYCARETPOLICY, nGUI.caretUZ? 13: 8, nGUI.caretUZ);
 }

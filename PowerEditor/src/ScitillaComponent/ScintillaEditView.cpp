@@ -2183,7 +2183,7 @@ void ScintillaEditView::replaceSelWith(const char * replaceText)	{
 
 void ScintillaEditView::getVisibleStartAndEndPosition(int * startPos, int * endPos)	{
 
-	assert(startPos != NULL && endPos != NULL);
+	assert(startPos != NULL && endPos);
 
 	auto firstVisibleLine = f(SCI_GETFIRSTVISIBLELINE);
 	*startPos = static_cast<int32_t>(f(SCI_POSITIONFROMLINE, f(SCI_DOCLINEFROMVISIBLE, firstVisibleLine)));
@@ -2303,14 +2303,6 @@ int ScintillaEditView::replaceTargetRegExMode(const TCHAR * re, int fromTargetPo
 		UINT cp = static_cast<UINT>(f(SCI_GETCODEPAGE));
 	const char *reA = wmc.wchar2char(re, cp);
 	return static_cast<int32_t>(f(SCI_REPLACETARGETRE, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(reA)));
-}
-
-void ScintillaEditView::showAutoC(size_t lenEntered, const TCHAR* list)	{
-
-	UINT cp = static_cast<UINT>(f(SCI_GETCODEPAGE));
-	const char *listA = wmc.wchar2char(list, cp);
-
-	f(SCI_AUTOCSHOW, lenEntered, reinterpret_cast<LPARAM>(listA));
 }
 
 void ScintillaEditView::showCallTip(int startPos, const TCHAR * def)	{
@@ -3562,7 +3554,8 @@ void ScintillaEditView::foldAll(bool isEXPAND)	{
 			scnN.foldLevelNow = bool(f(SCI_GETFOLDEXPANDED, line));
 			::SendMessage(_hParent, WM_NOTIFY, 0, reinterpret_cast<LPARAM>(&scnN));
 		}
-	f(SCI_SETYCARETPOLICY, 13, 77);f(SCI_SCROLLCARET);f(SCI_SETYCARETPOLICY, 13, 1);
+		// auto o=_pEditView->f(SCI_GETCURRENTPOS);
+		// _pEditView->f(SCI_SCROLLRANGE, o-9, o+9);
 }
 
 void ScintillaEditView::putMvmntInView(int p, int e, int prevFound)	{
@@ -3570,18 +3563,24 @@ void ScintillaEditView::putMvmntInView(int p, int e, int prevFound)	{
 	// curVL = static_cast<int>(f(SCI_VISIBLEFROMDOCLINE, curDocLine)),
 	// firstVL_a = static_cast<int>(f(SCI_GETFIRSTVISIBLELINE));
 	// int nbVL = static_cast<int>(f(SCI_LINESONSCREEN));
-	auto firstVL = f(SCI_GETFIRSTVISIBLELINE);
-	f(SCI_GOTOPOS, p);f(SCI_ENSUREVISIBLE, f(SCI_LINEFROMPOSITION, p));
-	f(SCI_SETANCHOR, e);
+	f(SCI_GOTOPOS, p);f(SCI_GOTOPOS, e);
+	f(SCI_ENSUREVISIBLE, f(SCI_LINEFROMPOSITION,p));
+	f(SCI_SETANCHOR, p);
 
-	if (f(SCI_LINEFROMPOSITION,p) != f(SCI_LINEFROMPOSITION, prevFound))	{
+	if (!prevFound || f(SCI_LINEFROMPOSITION,p) != f(SCI_LINEFROMPOSITION, prevFound))	{
+		auto firstVL = f(SCI_GETFIRSTVISIBLELINE);
 		f(SCI_SETYCARETPOLICY, 13, 2);f(SCI_SCROLLCARET);
-		if (firstVL < f(SCI_GETFIRSTVISIBLELINE))	{
-			f(SCI_LINESCROLL, 0, 11);
+		if (firstVL != f(SCI_GETFIRSTVISIBLELINE))	{
+			f(SCI_SETYCARETPOLICY, 14, 0);f(SCI_SCROLLCARET);
 		}
-		else if (firstVL > f(SCI_GETFIRSTVISIBLELINE))	{
-			f(SCI_LINESCROLL, 0, -11);
+		else{
+			firstVL = f(SCI_GETFIRSTVISIBLELINE);
+			f(SCI_SETYCARETPOLICY, 13, 6);f(SCI_SCROLLCARET);
+			if (firstVL < f(SCI_GETFIRSTVISIBLELINE))
+				f(SCI_LINESCROLL, 0, 4);
+			else if (firstVL > f(SCI_GETFIRSTVISIBLELINE))
+				f(SCI_LINESCROLL, 0, -4);
 		}
 	}
-	f(SCI_SETYCARETPOLICY, 13, 1);
+	f(SCI_SETYCARETPOLICY, nGUI.caretUZ? 13: 8, nGUI.caretUZ);
 }

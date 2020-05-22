@@ -31,7 +31,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#pragma warning(push)
 #pragma warning(disable:4706) // assignment within conditional expression
 
 #pragma region MD5 defines

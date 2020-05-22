@@ -343,9 +343,9 @@ bool SecurityGard::verifySignedLibrary(const std::wstring& filepath, NppModule m
 
 	// Clean up.
 
-	if (hStore != NULL)       CertCloseStore(hStore, 0);
-	if (hMsg != NULL)       CryptMsgClose(hMsg);
-	if (pSignerInfo != NULL)  LocalFree(pSignerInfo);
+	if (hStore)       CertCloseStore(hStore, 0);
+	if (hMsg)       CryptMsgClose(hMsg);
+	if (pSignerInfo)  LocalFree(pSignerInfo);
 
 	return status;
 }

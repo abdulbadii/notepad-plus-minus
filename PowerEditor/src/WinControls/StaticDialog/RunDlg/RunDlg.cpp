@@ -324,7 +324,7 @@ INT_PTR CALLBACK RunDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 
 					if (const TCHAR *fn = fd.doOpenSingleFileDlg())	{
 
-						if (wcschr(fn, ' ') != NULL)	{
+						if (wcschr(fn, ' '))	{
 
 							generic_string fn_quotes(fn);
 							fn_quotes = L"\"" + fn_quotes + L"\"";

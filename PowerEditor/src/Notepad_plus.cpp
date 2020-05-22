@@ -265,8 +265,8 @@ LRESULT Notepad_plus::init(HWND hwnd)	{
 	_mainEditView.setWrapMode(svp1._lineWrapMethod);
 	_subEditView.setWrapMode(svp1._lineWrapMethod);
 
-	_mainEditView.f(SCI_SETCARETLINEVISIBLE, svp1._currentLineHilitingShow);
-	_subEditView.f(SCI_SETCARETLINEVISIBLE, svp1._currentLineHilitingShow);
+	// _mainEditView.f(SCI_SETCARETLINEVISIBLE, svp1._currentLineHilitingShow);
+	// _subEditView.f(SCI_SETCARETLINEVISIBLE, svp1._currentLineHilitingShow);
 
 	_mainEditView.f(SCI_SETENDATLASTLINE, not svp1._scrollBeyondLastLine);
 	_subEditView.f(SCI_SETENDATLASTLINE, not svp1._scrollBeyondLastLine);
@@ -353,7 +353,7 @@ LRESULT Notepad_plus::init(HWND hwnd)	{
 	drawTabbarColoursFromStylerArray();
 
 	//--Splitter Section--//
-	bool isVertical = (nppGUI._splitterPos == POS_VERTICAL);
+	bool isVertical = (nGUI._splitterPos == POS_VERTICAL);
 
 	_subSplitter.init(_pPublicInterface->getHinst(), hwnd);
 	_subSplitter.create(&_mainDocTab, &_subDocTab, 5, SplitterMode::DYNAMIC, 50, isVertical);
@@ -363,10 +363,11 @@ LRESULT Notepad_plus::init(HWND hwnd)	{
 	_statusBar.init(_pPublicInterface->getHinst(), hwnd, NB_SB);
 	_statusBar.setPartWidth(STATUSBAR_DOC_NAME, param._dpiManager.scaleX(143));
 	_statusBar.setPartWidth(STATUSBAR_CUR_POS, param._dpiManager.scaleX(225));
-	_statusBar.setPartWidth(STATUSBAR_INFOS, param._dpiManager.scaleX(227));
+	_statusBar.setPartWidth(STATUSBAR_INFOS, param._dpiManager.scaleX(220));
+	_statusBar.setPartWidth(STATUSBAR_CR_UZ, param._dpiManager.scaleX(12));
 	_statusBar.setPartWidth(STATUSBAR_DOC_SIZE, param._dpiManager.scaleX(91));
-	_statusBar.setPartWidth(STATUSBAR_EOF_FORMAT, param._dpiManager.scaleX(54));
-	_statusBar.setPartWidth(STATUSBAR_ENCODING, param._dpiManager.scaleX(91));
+	_statusBar.setPartWidth(STATUSBAR_EOF_FORMAT, param._dpiManager.scaleX(52));
+	_statusBar.setPartWidth(STATUSBAR_ENCODING, param._dpiManager.scaleX(89));
 	_statusBar.setPartWidth(STATUSBAR_SEL_PASTE, param._dpiManager.scaleX(31));
 	_statusBar.setPartWidth(STATUSBAR_SEL_UNDO, param._dpiManager.scaleX(18));
 	_statusBar.setPartWidth(STATUSBAR_TYPING_MODE, param._dpiManager.scaleX(26));
@@ -375,11 +376,13 @@ LRESULT Notepad_plus::init(HWND hwnd)	{
 	_statusBar.setText(STATUSBAR_SEL_PASTE,L"LOSE");
 	_statusBar.setText(STATUSBAR_SEL_UNDO,L"LS");
 	_pEditView->f(SCI_SETOVERTYPE,0);_statusBar.setText(STATUSBAR_TYPING_MODE,L"INS");
+	_statusBar.setText(STATUSBAR_CR_UZ,to_wstring(nGUI.caretUZ).c_str());
+	_pEditView->f(SCI_SETYCARETPOLICY, 13, nGUI.caretUZ);_pEditView->f(SCI_SCROLLCARET);
 
 	_pMainWindow = &_mainDocTab;
 	_dockingManager.init(_pPublicInterface->getHinst(), hwnd, &_pMainWindow);
 
-	if (nppGUI._isMinimizedToTray &&!_pTrayIco)
+	if (nGUI._isMinimizedToTray &&!_pTrayIco)
 		_pTrayIco = new trayIconControler(hwnd, IDI_M30ICON, IDC_MINIMIZED_TRAY,
 		::LoadIcon(_pPublicInterface->getHinst(), MAKEINTRESOURCE(IDI_M30ICON)), L"");
 
@@ -670,7 +673,7 @@ LRESULT Notepad_plus::init(HWND hwnd)	{
 			break;
 	}
 
-	checkMenuItem(IDM_VIEW_LINENUMBER, param.lineNumberMarginOn());
+	// checkMenuItem(IDM_VIEW_LINENUMBER, param.lineNumberMarginOn());
 
 	// Menu & toolbar for UserDefine Dialog
 	checkMenuItem(IDM_LANG_USER_DLG, uddShow);
@@ -2732,7 +2735,7 @@ void Notepad_plus::maintainIndentation(TCHAR ch)	{
 
 			// Look backward for the pair {
 			int startPos = int(_pEditView->f(SCI_GETCURRENTPOS));
-			if (startPos != 0)
+			if (startPos)
 				startPos -= 1;
 			int posFound = findMachedBracePos(startPos - 1, 0, '{', '}');
 

@@ -797,7 +797,7 @@ void ProjectPanel::showContextMenuFromMenuKey(HTREEITEM selectedItem, int x, int
 
 	ClientToScreen(_treeView.getHSelf(), &p);
 
-	if (selectedItem != NULL)	{
+	if (selectedItem)	{
 
 		HMENU hMenu = getMenuHandler(selectedItem);
 		TrackPopupMenu(hMenu, TPM_LEFTALIGN, p.x, p.y, 0, _hSelf, NULL);

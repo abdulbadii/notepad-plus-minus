@@ -21,6 +21,8 @@
         <Filter name="*.js " />
         <Filter name="*.vc* *.sln *.xml" />
         <Filter name="*.vc* *.sln" />
+        <Find name="NativeLangSpeaker" />
+        <Find name="SCI_PASTE" />
         <Find name="STATUSBAR_CUR_POS" />
         <Find name="IDM_FILE_OPEN_FOLDER" />
         <Find name="IDM_FILE_SAVEALL" />
@@ -193,7 +195,6 @@
         <Find name="\w(oo)" />
         <Find name="\b\w(oo)" />
         <Find name="return" />
-        <Find name="SCI_PASTE" />
         <Find name="SCI_CONVERTEOLS" />
         <Find name="SCI_GETEOLMODE" />
         <Find name="command_mutex" />
@@ -353,7 +354,6 @@
         <Find name="^\h*const\h+(?!.*?\bvector\b)(?=[^*]+$)" />
         <Find name="checkClipboard" />
         <Find name="lParam" />
-        <Find name="L_SEARCHRESULT" />
         <Replace name="lastText" />
         <Replace name="lastMainText" />
         <Replace name="mainText" />
@@ -411,7 +411,6 @@
         <File filename="D:\MSYS\home\Budi\.bashrc" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\dpiManager.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_m\Notepad_plus.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\localization.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\AboutDlg\AboutDlg.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\Release\contextMenu.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\TaskList\TaskListDlg.cpp" />
@@ -437,23 +436,26 @@
         <File filename="Z:\Notepp\autoCompletion\cpp.xml" />
         <File filename="D:\MSYS\usr\src\key_rate\key.c" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\AutoCompletion.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Parameters.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\shortcut\shortcut.cpp" />
-        <File filename="Z:\Notepp\shortcuts.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.rc" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\menuCmdID.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\resource.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\MISC\Common\Common.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Parameters.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\ScintillaEditView.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\StaticDialog\RunDlg\RunDlg.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\lesDlgs.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\MISC\PluginsManager\Notepad_plus_msgs.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\NppBigSwitch.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\StatusBar\StatusBar.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\NppCommands.cpp" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\ScintillaEditView.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\Preference\preferenceDlg.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\Preference\preferenceDlg.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\ProjectPanel\ProjectPanel.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\shortcut\shortcut.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\VerticalFileSwitcher\VerticalFileSwitcherListView.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Parameters.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Parameters.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\WindowsDlg\WindowsDlg.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\NppCommands.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.cpp" />
     </History>
     <GUIConfigs>
         <GUIConfig name="ToolBar" visible="no">standard</GUIConfig>
@@ -462,7 +464,7 @@
         <GUIConfig name="ScintillaViewsSplitter">vertical</GUIConfig>
         <GUIConfig name="UserDefineDlg" position="undocked">hide</GUIConfig>
         <GUIConfig name="TabSetting" replaceBySpace="no" size="3" />
-        <GUIConfig name="AppPosition" x="342" y="-21" width="1302" height="1092" isMaximized="no" />
+        <GUIConfig name="AppPosition" x="233" y="-9" width="1302" height="1092" isMaximized="no" />
         <GUIConfig name="noUpdate" intervalDays="15" nextUpdateDate="20171218">no</GUIConfig>
         <GUIConfig name="Auto-detection">auto</GUIConfig>
         <GUIConfig name="CheckHistoryFiles">no</GUIConfig>
@@ -498,6 +500,7 @@
         <GUIConfig name="ScintillaPrimaryView" lineNumberMargin="show" bookMarkMargin="hide" indentGuideLine="show" folderMarkStyle="circle" lineWrapMethod="indent" currentLineHilitingShow="show" scrollBeyondLastLine="yes" disableAdvancedScrolling="no" wrapSymbolShow="hide" Wrap="yes" borderEdge="no" edge="no" edgeNbColumn="80" zoom="1" zoom2="0" whiteSpaceShow="hide" eolShow="hide" borderWidth="0" smoothFont="yes" />
         <GUIConfig name="DockingManager" leftWidth="155" rightWidth="416" topHeight="200" bottomHeight="310">
             <FloatingWindow cont="4" x="642" y="-8" width="1250" height="439" />
+            <PluginDlg pluginName="Notepad++::InternalFunction" id="44078" curr="1" prev="-1" isVisible="no" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="0" curr="1" prev="4" isVisible="yes" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="44079" curr="1" prev="-1" isVisible="no" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="44084" curr="1" prev="-1" isVisible="no" />
