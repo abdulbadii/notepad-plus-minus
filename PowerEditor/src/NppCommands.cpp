@@ -320,14 +320,9 @@ void Notepad_plus::command(int id)	{
 		}
 		break;
 
-		case IDC_CR_UZ:{
-			if (++nppGUI.caretUZ>5)
-				_pEditView->f(SCI_SETYCARETPOLICY, 8,nppGUI.caretUZ=0);
-			else
-				_pEditView->f(SCI_SETYCARETPOLICY, 13, nGUI.caretUZ);
-			_pEditView->f(SCI_SCROLLCARET);
+		case IDC_CR_UZ:
+			_pEditView->thruOptionUZ();
 			_statusBar.setText(STATUSBAR_CR_UZ, to_wstring(nGUI.caretUZ).c_str());
-		}
 		break;
 		
 		case IDC_SELECT_PASTE:{

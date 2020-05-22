@@ -267,7 +267,8 @@ public:
 	void restoreCurrentPosPostStep();
 
 	void beginOrEndSelect();
-	// void showAutoC(size_t lenEntered, const TCHAR * list)
+	void thruOptionUZ();
+
 	inline void showAutoC(size_t lenEntered, const TCHAR* list)	{
 
 	UINT cp = static_cast<UINT>(f(SCI_GETCODEPAGE));
@@ -1073,8 +1074,7 @@ void ScintillaEditView::toggleFold(size_t ln, bool rec)	{
 
 	if (f(SCI_GETENDSTYLED) < f(SCI_GETLENGTH))
 		f(SCI_COLOURISE,0,-1);
-	size_t hLine;
-	int t; bool hd;
+	size_t hLine; int t; bool hd;
 	if (f(SCI_GETFOLDLEVEL, ln) & SC_FOLDLEVELHEADERFLAG)
 		hLine = static_cast<int>(ln);
 	else	{
@@ -1091,12 +1091,10 @@ void ScintillaEditView::toggleFold(size_t ln, bool rec)	{
 			else if (hd)	hLine = ln;
 		}
 	}
-
 	SCNotification scnN;
 	scnN.nmhdr.code = SCN_FOLDINGSTATECHANGED;
 	scnN.nmhdr.hwndFrom = _hSelf;
 	scnN.nmhdr.idFrom = 0;
-
 	f(SCI_TOGGLEFOLD, hLine);
 	scnN.line = hLine;
 	bool hdState = scnN.foldLevelNow = bool(f(SCI_GETFOLDEXPANDED, hLine));
@@ -1112,7 +1110,8 @@ void ScintillaEditView::toggleFold(size_t ln, bool rec)	{
 				::SendMessage(_hParent, WM_NOTIFY, 0, reinterpret_cast<LPARAM>(&scnN));
 			}
 	}
-	// f(SCI_SETYCARETPOLICY, nGUI.caretUZ? 13: 8, nGUI.caretUZ);
+	f(SCI_SETYCARETPOLICY,14,0);f(SCI_SCROLLCARET);
+	f(SCI_SETYCARETPOLICY, nGUI.caretUZ? 13: 8, nGUI.caretUZ);
 }
 
 void ScintillaEditView::foldAllToggle()	{
@@ -1131,5 +1130,5 @@ void ScintillaEditView::foldAllToggle()	{
 		}
 	}
 	f(SCI_SETYCARETPOLICY,14,0);f(SCI_SCROLLCARET);
-	// f(SCI_SETYCARETPOLICY, nGUI.caretUZ? 13: 8, nGUI.caretUZ);
+	f(SCI_SETYCARETPOLICY, nGUI.caretUZ? 13: 8, nGUI.caretUZ);
 }

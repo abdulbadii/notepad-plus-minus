@@ -3532,13 +3532,19 @@ void ScintillaEditView::getFoldColor(COLORREF& fgColor, COLORREF& bgColor, COLOR
 		fgColor = style._bgColor;
 		bgColor = style._fgColor;
 	}
-
 	i = stylers.getStylerIndexByName(L"Fold active");
 	if (i != -1)	{
-
 		Style & style = stylers.getStyler(i);
 		activeFgColor = style._fgColor;
 	}
+}
+
+void ScintillaEditView::thruOptionUZ()	{
+	if (++nppGUI.caretUZ>5)
+		f(SCI_SETYCARETPOLICY, 8,nppGUI.caretUZ=0);
+	else
+		f(SCI_SETYCARETPOLICY, 13, nGUI.caretUZ);
+	f(SCI_SCROLLCARET);
 }
 
 void ScintillaEditView::foldAll(bool isEXPAND)	{

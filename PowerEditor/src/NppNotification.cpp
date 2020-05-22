@@ -376,6 +376,11 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 			if (notification->nmhdr.hwndFrom == _statusBar.getHSelf())	{
 				LPNMMOUSE lpnm = (LPNMMOUSE)notification;
 
+				if (lpnm->dwItemSpec == DWORD(STATUSBAR_CR_UZ))	{
+					_pEditView->thruOptionUZ();
+					_statusBar.setText(STATUSBAR_CR_UZ, to_wstring(nGUI.caretUZ).c_str());
+				}
+				
 				if (lpnm->dwItemSpec == DWORD(STATUSBAR_CUR_POS))	{
 				offsetSB = !offsetSB;
 				generic_string s = commafyInt(_pEditView->getOffset());	s += L"  ";

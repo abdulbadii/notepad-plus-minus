@@ -364,12 +364,12 @@ LRESULT Notepad_plus::init(HWND hwnd)	{
 	_statusBar.setPartWidth(STATUSBAR_DOC_NAME, param._dpiManager.scaleX(143));
 	_statusBar.setPartWidth(STATUSBAR_CUR_POS, param._dpiManager.scaleX(225));
 	_statusBar.setPartWidth(STATUSBAR_INFOS, param._dpiManager.scaleX(220));
-	_statusBar.setPartWidth(STATUSBAR_CR_UZ, param._dpiManager.scaleX(12));
 	_statusBar.setPartWidth(STATUSBAR_DOC_SIZE, param._dpiManager.scaleX(91));
 	_statusBar.setPartWidth(STATUSBAR_EOF_FORMAT, param._dpiManager.scaleX(52));
 	_statusBar.setPartWidth(STATUSBAR_ENCODING, param._dpiManager.scaleX(89));
 	_statusBar.setPartWidth(STATUSBAR_SEL_PASTE, param._dpiManager.scaleX(31));
 	_statusBar.setPartWidth(STATUSBAR_SEL_UNDO, param._dpiManager.scaleX(18));
+	_statusBar.setPartWidth(STATUSBAR_CR_UZ, param._dpiManager.scaleX(12));
 	_statusBar.setPartWidth(STATUSBAR_TYPING_MODE, param._dpiManager.scaleX(26));
 	_statusBar.display(nppGUI._statusBarShow);
 	
