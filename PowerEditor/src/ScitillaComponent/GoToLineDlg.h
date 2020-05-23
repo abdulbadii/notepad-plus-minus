@@ -52,11 +52,11 @@ public :
 		display();
 	};
 
-    virtual void display(bool toShow = true) const {
-        Window::display(toShow);
-        if (toShow)
-            ::SetFocus(::GetDlgItem(_hSelf, ID_GOLINE_EDIT));
-    };
+	virtual void display(bool toShow = true) const {
+		Window::display(toShow);
+		if (toShow)
+				::SetFocus(::GetDlgItem(_hSelf, ID_GOLINE_EDIT));
+	};
 
 protected :
 	enum mode {go2line, go2offsset};
@@ -64,19 +64,19 @@ protected :
 	virtual INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 
 private :
-    ScintillaEditView **_ppEditView = nullptr;
+	ScintillaEditView **_ppEditView = nullptr;
 
-    void updateLinesNumbers() const;
+	void updateLinesNumbers() const;
 
-    void cleanLineEdit() const {
-        ::SetDlgItemText(_hSelf, ID_GOLINE_EDIT, L"");
-    };
+	void cleanLineEdit() const {
+		::SetDlgItemText(_hSelf, ID_GOLINE_EDIT, L"");
+	};
 
-    int getLine() const {
-        BOOL isSuccessful;
-        int line = ::GetDlgItemInt(_hSelf, ID_GOLINE_EDIT, &isSuccessful, FALSE);
-        return (isSuccessful?line:-1);
-    };
+	inline int getLine() const {
+		BOOL isSuccessful;
+		int inp = ::GetDlgItemInt(_hSelf, ID_GOLINE_EDIT, &isSuccessful, FALSE);
+		return isSuccessful ? inp : -1;
+	};
 
 };
 

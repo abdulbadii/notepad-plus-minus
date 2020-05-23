@@ -321,8 +321,7 @@ void Notepad_plus::command(int id)	{
 		break;
 
 		case IDC_CR_UZ:
-			_pEditView->thruOptionUZ();
-			_statusBar.setText(STATUSBAR_CR_UZ, to_wstring(nGUI.caretUZ).c_str());
+			_statusBar.setText(STATUSBAR_CR_UZ, to_wstring(_pEditView->crUZoption()).c_str());
 		break;
 		
 		case IDC_SELECT_PASTE:{
@@ -1153,26 +1152,26 @@ void Notepad_plus::command(int id)	{
 		break;
 
  		case IDM_VIEW_CR_LINE_BG:	{
-/*			StyleArray & sty = param.getMiscStylerArray();
 
-			Style& s = sty.getStylerOf(L"Current line background colour");
-			COLORREF co= s._bgColor
-			uint8_t c[3], m;
-			c[0] = co &0x000000FF; // R G B of LSB -> MSB
-			c[1] = co &0x0000FF00;
-			c[2] = co &0x00FF0000;
-			m = max(c[0],c[1],c[2]);
- }*/
-	
-	
-			if (++crSt>6)
-				if (crSt<11)
-					_pEditView->f(SCI_SETCARETLINEFRAME, crSt-6);
-				else
+			Style s;
+			if (! param.getMiscStylerArray().stylerOf(L"Current line background colour", s)) return;
+			COLORREF c = s._bgColor, co;
+			uint8_t R,G,B;
+			R = static_cast<uint8_t>(c &0x0000FF);
+			G = static_cast<uint8_t>(c >>8 &0x0000FF);
+			B = static_cast<uint8_t>(c >>16 &0x0000FF);
+			auto m=max(R, max(G, B));
+			co = R/m*0x30 + (G/m*0x30 << 8) + (B/m*0x30 << 16); 
+
+			if (++crSt>5)
+				if (crSt<=9)
+					_pEditView->f(SCI_SETCARETLINEFRAME, crSt-5);
+				else	{
 					_pEditView->f(SCI_SETCARETLINEVISIBLE, crSt =0);
+					_pEditView->f(SCI_SETCARETLINEFRAME,0);
+				}
 			else	{
-				_pEditView->f(SCI_SETCARETLINEFRAME,0);
-				_pEditView->f(SCI_SETCARETLINEBACK, crSt*0x291B0F);	//BGR
+				_pEditView->f(SCI_SETCARETLINEBACK, COLORREF(crSt * co));
 				_pEditView->f(SCI_SETCARETLINEVISIBLE,1);
 			}
 		}

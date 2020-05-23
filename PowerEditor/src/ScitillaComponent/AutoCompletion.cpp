@@ -583,29 +583,24 @@ void AutoCompletion::insertMatchedChars(int character, const MatchedPairConf & m
 	switch (character)	{
 
 		case int('('):
-			if (matchedPairConf._doParentheses)	{
+			if (matchedPairConf._doParentheses && (isCharNextBlank || isCharNextCloseSymbol))	{
 					matchedChars = ")";
 					_insertedMatchedChars.add(MatchedCharInserted(static_cast<char>(character), caretPos - 1));
 			}
 		break;
 
 		case int('['):
-			if (matchedPairConf._doBrackets)	{
-
-				if (isCharNextBlank || isCharNextCloseSymbol)	{
+			if (matchedPairConf._doBrackets && (isCharNextBlank || isCharNextCloseSymbol))	{
 
 					matchedChars = "]";
 					_insertedMatchedChars.add(MatchedCharInserted(static_cast<char>(character), caretPos - 1));
-				}
 			}
 		break;
 
 		case int('{'):
-			if (matchedPairConf._doCurlyBrackets)	{
-				if (isCharNextBlank || isCharNextCloseSymbol)	{
+			if (matchedPairConf._doCurlyBrackets && (isCharNextBlank || isCharNextCloseSymbol))	{
 					matchedChars = "}";
 					_insertedMatchedChars.add(MatchedCharInserted(static_cast<char>(character), caretPos - 1));
-				}
 			}
 		break;
 

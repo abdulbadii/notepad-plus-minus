@@ -21,6 +21,9 @@
         <Filter name="*.js " />
         <Filter name="*.vc* *.sln *.xml" />
         <Filter name="*.vc* *.sln" />
+        <Find name="expandNppEnvironmentStrs" />
+        <Find name="NPP_DIRECTORY" />
+        <Find name="NPP_FULL_FILE_PATH" />
         <Find name="NativeLangSpeaker" />
         <Find name="SCI_PASTE" />
         <Find name="STATUSBAR_CUR_POS" />
@@ -351,9 +354,6 @@
         <Find name="_fileName" />
         <Find name="userReadOnly" />
         <Find name="const" />
-        <Find name="^\h*const\h+(?!.*?\bvector\b)(?=[^*]+$)" />
-        <Find name="checkClipboard" />
-        <Find name="lParam" />
         <Replace name="lastText" />
         <Replace name="lastMainText" />
         <Replace name="mainText" />
@@ -456,6 +456,10 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\NppCommands.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\Printer.cpp" />
+        <File filename="Z:\Notepp\stylers.xml" />
+        <File filename="Z:\Notepp\shortcuts.xml" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\lastRecentFileList.cpp" />
     </History>
     <GUIConfigs>
         <GUIConfig name="ToolBar" visible="no">standard</GUIConfig>
@@ -490,7 +494,7 @@
         <GUIConfig name="ScintillaGlobalSettings" enableMultiSelection="yes" />
         <GUIConfig name="openSaveDir" value="2" defaultDirPath="D:\MSYS\usr\src" />
         <GUIConfig name="titleBar" short="no" />
-        <GUIConfig name="stylerTheme" path="Z:\Notepp\stylers.xml" />
+        <GUIConfig name="stylerTheme" path="D:\MSYS\usr\src\notepadpp\PowerEditor\visual.net\..\..\Release\stylers.xml" />
         <GUIConfig name="wordCharList" useDefault="yes" charsAdded="" />
         <GUIConfig name="delimiterSelection" leftmostDelimiter="40" rightmostDelimiter="41" delimiterSelectionOnEntireDocument="no" />
         <GUIConfig name="multiInst" setting="2" />
@@ -500,8 +504,8 @@
         <GUIConfig name="ScintillaPrimaryView" lineNumberMargin="show" bookMarkMargin="hide" indentGuideLine="show" folderMarkStyle="circle" lineWrapMethod="indent" currentLineHilitingShow="show" scrollBeyondLastLine="yes" disableAdvancedScrolling="no" wrapSymbolShow="hide" Wrap="yes" borderEdge="no" edge="no" edgeNbColumn="80" zoom="1" zoom2="0" whiteSpaceShow="hide" eolShow="hide" borderWidth="0" smoothFont="yes" />
         <GUIConfig name="DockingManager" leftWidth="155" rightWidth="416" topHeight="200" bottomHeight="310">
             <FloatingWindow cont="4" x="642" y="-8" width="1250" height="439" />
-            <PluginDlg pluginName="Notepad++::InternalFunction" id="44078" curr="1" prev="-1" isVisible="no" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="0" curr="1" prev="4" isVisible="yes" />
+            <PluginDlg pluginName="Notepad++::InternalFunction" id="44078" curr="1" prev="-1" isVisible="no" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="44079" curr="1" prev="-1" isVisible="no" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="44084" curr="1" prev="-1" isVisible="no" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="44070" curr="1" prev="-1" isVisible="no" />

@@ -2660,7 +2660,7 @@ void FindReplaceDlg::findAllIn(int WM_cmd)	{
 		_pFinder->_scintView.f(SCI_SETCARETLINEVISIBLE, 1);
 		_pFinder->_scintView.f(SCI_SETCARETLINEVISIBLEALWAYS, true);
 		_pFinder->_scintView.f(SCI_SETCARETWIDTH, 2);
-		_pFinder->_scintView.showMargin(ScintillaEditView::_SC_MARGE_FOLDER, true);
+		// _pFinder->_scintView.showMargin(ScintillaEditView::_SC_MARGE_FOLDER, true);
 
 		// get the width of FindDlg
 		RECT findRect;

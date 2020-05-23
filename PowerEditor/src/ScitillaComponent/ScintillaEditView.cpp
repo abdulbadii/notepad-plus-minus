@@ -3539,12 +3539,13 @@ void ScintillaEditView::getFoldColor(COLORREF& fgColor, COLORREF& bgColor, COLOR
 	}
 }
 
-void ScintillaEditView::thruOptionUZ()	{
+int ScintillaEditView::crUZoption()	{
 	if (++nppGUI.caretUZ>5)
 		f(SCI_SETYCARETPOLICY, 8,nppGUI.caretUZ=0);
 	else
 		f(SCI_SETYCARETPOLICY, 13, nGUI.caretUZ);
 	f(SCI_SCROLLCARET);
+	return nGUI.caretUZ;
 }
 
 void ScintillaEditView::foldAll(bool isEXPAND)	{
@@ -3565,28 +3566,19 @@ void ScintillaEditView::foldAll(bool isEXPAND)	{
 }
 
 void ScintillaEditView::putMvmntInView(int p, int e, int prevFound)	{
-	// int curDocLine = static_cast<int>(f(SCI_LINEFROMPOSITION,p)),
-	// curVL = static_cast<int>(f(SCI_VISIBLEFROMDOCLINE, curDocLine)),
-	// firstVL_a = static_cast<int>(f(SCI_GETFIRSTVISIBLELINE));
-	// int nbVL = static_cast<int>(f(SCI_LINESONSCREEN));
+	auto crVL = f(SCI_VISIBLEFROMDOCLINE, f(SCI_LINEFROMPOSITION,p)),
+	preVL = f(SCI_VISIBLEFROMDOCLINE, f(SCI_LINEFROMPOSITION,prevFound)),
+	firstVL = f(SCI_GETFIRSTVISIBLELINE),
+	lastVL = firstVL + f(SCI_LINESONSCREEN);
+
 	f(SCI_GOTOPOS, p);f(SCI_GOTOPOS, e);
-	f(SCI_ENSUREVISIBLE, f(SCI_LINEFROMPOSITION,p));
+	f(SCI_ENSUREVISIBLE, f(SCI_LINEFROMPOSITION,e));
 	f(SCI_SETANCHOR, p);
 
-	if (!prevFound || f(SCI_LINEFROMPOSITION,p) != f(SCI_LINEFROMPOSITION, prevFound))	{
-		auto firstVL = f(SCI_GETFIRSTVISIBLELINE);
-		f(SCI_SETYCARETPOLICY, 13, 2);f(SCI_SCROLLCARET);
-		if (firstVL != f(SCI_GETFIRSTVISIBLELINE))	{
-			f(SCI_SETYCARETPOLICY, 14, 0);f(SCI_SCROLLCARET);
-		}
-		else{
-			firstVL = f(SCI_GETFIRSTVISIBLELINE);
-			f(SCI_SETYCARETPOLICY, 13, 6);f(SCI_SCROLLCARET);
-			if (firstVL < f(SCI_GETFIRSTVISIBLELINE))
-				f(SCI_LINESCROLL, 0, 4);
-			else if (firstVL > f(SCI_GETFIRSTVISIBLELINE))
-				f(SCI_LINESCROLL, 0, -4);
-		}
+	if (!prevFound
+		|| preVL<firstVL || preVL>lastVL
+		|| crVL<firstVL || crVL>lastVL)	{
+		f(SCI_SETYCARETPOLICY, 14, 0);f(SCI_SCROLLCARET);
+		f(SCI_SETYCARETPOLICY, nGUI.caretUZ? 13: 8, nGUI.caretUZ);
 	}
-	f(SCI_SETYCARETPOLICY, nGUI.caretUZ? 13: 8, nGUI.caretUZ);
 }

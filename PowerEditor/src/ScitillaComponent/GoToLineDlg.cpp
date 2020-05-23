@@ -50,31 +50,33 @@ INT_PTR CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)	{
 
 				case IDOK :	{
 
-						int line = getLine();
-						if (line != -1)	{
+					int inp = getLine();
+					if (inp != -1)	{
 
 								display(false);
 								cleanLineEdit();
 						if (_mode == go2line)	{
 
-							(*_ppEditView)->f(SCI_ENSUREVISIBLE, line-1);
-							(*_ppEditView)->f(SCI_GOTOLINE, line-1);
+							(*_ppEditView)->f(SCI_ENSUREVISIBLE, inp-1);
+							(*_ppEditView)->f(SCI_GOTOLINE, inp-1);
 						}
 						else	{
 
-							auto sci_line = (*_ppEditView)->f(SCI_LINEFROMPOSITION, line);
-							(*_ppEditView)->f(SCI_ENSUREVISIBLE, sci_line);
-							(*_ppEditView)->f(SCI_GOTOPOS, line);
+							(*_ppEditView)->f(SCI_ENSUREVISIBLE, (*_ppEditView)->f(SCI_LINEFROMPOSITION, inp));
+							(*_ppEditView)->f(SCI_GOTOPOS, inp);
 						}
-						}
+						(*_ppEditView)->f(SCI_SETYCARETPOLICY,14,0);
+						(*_ppEditView)->f(SCI_SCROLLCARET);
+						(*_ppEditView)->f(SCI_SETYCARETPOLICY, nGUI.caretUZ? 13: 8, nGUI.caretUZ);
+					}
 
-					SCNotification notification = {};
-					notification.nmhdr.code = SCN_PAINTED;
-					notification.nmhdr.hwndFrom = _hSelf;
-					notification.nmhdr.idFrom = ::GetDlgCtrlID(_hSelf);
-					::SendMessage(_hParent, WM_NOTIFY, LINKTRIGGERED, reinterpret_cast<LPARAM>(&notification));
+					// SCNotification notification = {};
+					// notification.nmhdr.code = SCN_PAINTED;
+					// notification.nmhdr.hwndFrom = _hSelf;
+					// notification.nmhdr.idFrom = ::GetDlgCtrlID(_hSelf);
+					// ::SendMessage(_hParent, WM_NOTIFY, LINKTRIGGERED, reinterpret_cast<LPARAM>(&notification));
 
-						(*_ppEditView)->focus();
+						// (*_ppEditView)->focus();
 						return TRUE;
 					}
 

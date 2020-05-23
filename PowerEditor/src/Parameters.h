@@ -505,11 +505,12 @@ public:
 	}
 
 
-	inline Style& getStylerOf(const TCHAR *name)	{
+	inline bool stylerOf(const TCHAR *name, Style& s)	{
 
 		for (int i = 0 ; i < _nbStyler ; ++i)
 			if (!lstrcmp(_styleArray[i]._styleDesc, name))
-				return _styleArray[i];
+				return s = _styleArray[i], 1;
+		return 0;
 
 		assert(index < SCE_STYLE_ARRAY_SIZE);
 	}

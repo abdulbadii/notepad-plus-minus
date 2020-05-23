@@ -267,7 +267,7 @@ public:
 	void restoreCurrentPosPostStep();
 
 	void beginOrEndSelect();
-	void thruOptionUZ();
+	int crUZoption();
 
 	inline void showAutoC(size_t lenEntered, const TCHAR* list)	{
 
