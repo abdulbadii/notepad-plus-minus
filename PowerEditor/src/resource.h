@@ -167,10 +167,6 @@
 
 #define IDC_MY_CUR     1402
 #define IDC_UP_ARROW  1403
-#define IDC_DRAG_TAB    1404
-#define IDC_DRAG_INTERDIT_TAB 1405
-#define IDC_DRAG_PLUS_TAB 1406
-#define IDC_DRAG_OUT_TAB 1407
 
 #define IDC_MACRO_RECORDING 1408
 
@@ -257,8 +253,7 @@
 #define IDC_CR_UZ        (IDCMD + 12)
 #define IDC_SELECT_PASTE           (IDCMD+13)
 #define IDC_SELECT_UNDO           (IDCMD+14)
-#define IDC_VIEW_SWAP_MAIN_FIND     (IDCMD+15)
-#define IDC_VIEW_CLEAR_CLOSE_FIND       (IDCMD+16)
+#define IDC_VIEW_CLEAR_CLOSE_FIND       (IDCMD+15)
 
 #define IDCMD_LIMIT                        (IDCMD+20)
 
@@ -327,11 +322,12 @@
 #define ID_CUROFFSET        (IDD_GOLINE + 3)
 #define ID_LASTLINE        (IDD_GOLINE + 4)
 #define ID_LASTOFF        (IDD_GOLINE + 5)
-#define ID_URHERE_STATIC           (IDD_GOLINE + 6)
-#define ID_UGO_STATIC                 (IDD_GOLINE + 7)
-#define ID_NOMORETHAN_STATIC   (IDD_GOLINE + 8)
-#define IDC_RADIO_GOTOLINE   (IDD_GOLINE + 9)
-#define IDC_RADIO_GOTOOFFSET   (IDD_GOLINE + 10)
+#define ID_TITLE_STATIC           (IDD_GOLINE + 6)
+#define ID_URHERE_STATIC           (IDD_GOLINE + 7)
+#define ID_UGO_STATIC                 (IDD_GOLINE + 8)
+#define ID_NOMORETHAN_STATIC   (IDD_GOLINE + 9)
+#define IDC_RADIO_GOTOLINE   (IDD_GOLINE + 10)
+#define IDC_RADIO_GOTOOFFSET   (IDD_GOLINE + 11)
 
 // voir columnEditor_rc.h
 //#define IDD_COLUMNEDIT   2020

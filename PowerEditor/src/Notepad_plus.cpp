@@ -377,7 +377,8 @@ LRESULT Notepad_plus::init(HWND hwnd)	{
 	_statusBar.setText(STATUSBAR_SEL_UNDO,L"LS");
 	_pEditView->f(SCI_SETOVERTYPE,0);_statusBar.setText(STATUSBAR_TYPING_MODE,L"INS");
 	_statusBar.setText(STATUSBAR_CR_UZ,to_wstring(nGUI.caretUZ).c_str());
-	_pEditView->f(SCI_SETYCARETPOLICY, 13, nGUI.caretUZ);_pEditView->f(SCI_SCROLLCARET);
+	_pEditView->f(SCI_SETYCARETPOLICY, 13, nGUI.caretUZ);
+	_pEditView->f(SCI_SCROLLCARET);
 
 	_pMainWindow = &_mainDocTab;
 	_dockingManager.init(_pPublicInterface->getHinst(), hwnd, &_pMainWindow);
@@ -777,7 +778,7 @@ bool Notepad_plus::saveGUIParams()	{
 	bool b = udd->isDocked();
 	nppGUI._userDefineDlgStatus = (b?UDD_DOCKED:0) | (udd->isVisible()?UDD_SHOW:0);
 
-	// When window is maximized GetWindowPlacement returns window's last non maximized coordinates.
+	// When window is maximized GetWindowPlacement will return window's last non maximized coordinates.
 	// Save them so that those will be used when window is restored next time.
 	WINDOWPLACEMENT posInfo;
 	posInfo.length = sizeof(WINDOWPLACEMENT);
@@ -5636,18 +5637,10 @@ generic_string Notepad_plus::getLangFromMenu(const Buffer * buf)	{
 	return	userLangName;
 }
 
-Style * Notepad_plus::getStyleFromName(const TCHAR *styleName)
-{
-	StyleArray & stylers = param.getMiscStylerArray();
-
-	int i = stylers.getStylerIndexByName(styleName);
-	Style * st = NULL;
-	if (i != -1)	{
-
-		Style & style = stylers.getStyler(i);
-		st = &style;
-	}
-	return st;
+Style * Notepad_plus::getStyleFromName(const TCHAR *styleName)	{
+	bool is2Be;
+	Style& style = param.getMiscStylerArray().styleOf(styleName, is2Be);
+	return is2Be ? &style : nullptr;
 }
 
 bool Notepad_plus::noOpenedDoc() const

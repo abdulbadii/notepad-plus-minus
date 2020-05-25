@@ -3561,8 +3561,6 @@ void ScintillaEditView::foldAll(bool isEXPAND)	{
 			scnN.foldLevelNow = bool(f(SCI_GETFOLDEXPANDED, line));
 			::SendMessage(_hParent, WM_NOTIFY, 0, reinterpret_cast<LPARAM>(&scnN));
 		}
-		// auto o=_pEditView->f(SCI_GETCURRENTPOS);
-		// _pEditView->f(SCI_SCROLLRANGE, o-9, o+9);
 }
 
 void ScintillaEditView::putMvmntInView(int p, int e, int prevFound)	{

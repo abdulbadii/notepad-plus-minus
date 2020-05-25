@@ -29,10 +29,12 @@
 #include "TabBar.h"
 #include "Parameters.h"
 
-#define	IDC_DRAG_TAB     1404
-#define	IDC_DRAG_INTERDIT_TAB 1405
-#define	IDC_DRAG_PLUS_TAB 1406
-#define	IDC_DRAG_OUT_TAB 1407
+enum {
+	IDC_DRAG_TAB = 1404,
+	IDC_DRAG_INTERDIT_TAB,
+	IDC_DRAG_PLUS_TAB,
+	IDC_DRAG_OUT_TAB
+};
 
 bool TabBarPlus::_doDragNDrop = false;
 bool TabBarPlus::_drawTopBar = true;

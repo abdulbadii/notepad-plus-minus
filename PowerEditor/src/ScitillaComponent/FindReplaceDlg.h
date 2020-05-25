@@ -40,8 +40,10 @@
 
 enum DIALOG_TYPE {REPLACE_DLG, FINDINFILES_DLG, MARK_DLG};
 
-#define DIR_DOWN true
-#define DIR_UP false
+enum {
+DIR_UP,
+DIR_DOWN
+};
 
 //#define FIND_REPLACE_STR_MAX 256
 
@@ -200,7 +202,7 @@ private:
 	bool _canBeVolatiled = true,	_findAllInCurrent=0;
 
 
-	void setFinderReadOnly(bool isReadOnly) {
+	inline void setFinderReadOnly(bool isReadOnly) {
 		_scintView.f(SCI_SETREADONLY, isReadOnly);
 	};
 
@@ -341,7 +343,7 @@ public :
 
 	void execSavedCommand(int cmd, uptr_t intValue, const generic_string& stringValue);
 	void clearMarks(const FindOption& opt);
-	void setStatusbarMessage(const generic_string & msg, FindStatus staus);
+	void setStatusbarMessage(const generic_string& msg, FindStatus staus);
 	Finder * createFinder();
 	bool removeFinder(Finder *finder2remove);
 
@@ -349,20 +351,23 @@ public :
 		return _pFinder->_scintView;
 	}
 
-	HWND getHFindResults() {
+	inline HWND getHFindResults() {
 		if (_pFinder)
 			return _pFinder->_scintView.getHSelf();
 		return NULL;
 	}
 
-	void updateFinderScintilla() {
+	inline void updateFinderScintilla() {
 		if (_pFinder && _pFinder->isCreated() && _pFinder->isVisible())	{
 
 			_pFinder->setFinderStyle();
 		}
 	};
-	void openSwFinder(){
-		if (::GetFocus() == _pFinder->_scintView.getHSelf())
+
+	void switch2Finder(){	_pFinder->_scintView.focus();	}
+	
+	inline void openSwFinder(){
+		if (IsWindowVisible(getHFindResults()))
 			_pFinder->_scintView.focus();
 		else		openFinder();
 	}

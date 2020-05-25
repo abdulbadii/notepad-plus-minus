@@ -405,10 +405,10 @@ private:
 
 	int currentView() {	return _activeView;	}
 
-	int otherView(int view)	{
+	inline int otherView(int view)	{
 		return view == MAIN_VIEW? SUB_VIEW: MAIN_VIEW;	}
 
-	int otherView(){
+	inline int otherView(){
 		return _activeView == MAIN_VIEW?SUB_VIEW:MAIN_VIEW;	}
 	
 

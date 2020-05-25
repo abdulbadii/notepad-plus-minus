@@ -504,25 +504,18 @@ public:
 		return -1;
 	}
 
-
-	inline bool stylerOf(const TCHAR *name, Style& s)	{
+	inline Style& styleOf(const TCHAR *name, bool& b)	{
 
 		for (int i = 0 ; i < _nbStyler ; ++i)
 			if (!lstrcmp(_styleArray[i]._styleDesc, name))
-				return s = _styleArray[i], 1;
-		return 0;
-
-		assert(index < SCE_STYLE_ARRAY_SIZE);
+				return b = 1, _styleArray[i];
+		return b=0, *_styleArray;
 	}
-
-
 
 protected:
 	Style _styleArray[SCE_STYLE_ARRAY_SIZE];
 	int _nbStyler = 0;
 };
-
-
 
 struct LexerStyler : public StyleArray	{
 
@@ -563,9 +556,7 @@ private :
 	generic_string _lexerUserExt;
 };
 
-
-
-constexpr int MAX_LEXER_STYLE = 100;
+constexpr int MAX_LEXER_STYLE = 99;
 
 struct LexerStylerArray	{
 

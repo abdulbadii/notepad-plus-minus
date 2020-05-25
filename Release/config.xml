@@ -21,10 +21,19 @@
         <Filter name="*.js " />
         <Filter name="*.vc* *.sln *.xml" />
         <Filter name="*.vc* *.sln" />
+        <Find name="FindReplaceDlg" />
+        <Find name="Window" />
+        <Find name="ScintillaEditView" />
+        <Find name="NativeLangSpeaker" />
+        <Find name="WM_MOUSEWHEEL" />
+        <Find name="CreateWindowEx" />
+        <Find name="StatusBar" />
+        <Find name="_hSelf" />
+        <Find name="SCNotification" />
+        <Find name="bool" />
         <Find name="expandNppEnvironmentStrs" />
         <Find name="NPP_DIRECTORY" />
         <Find name="NPP_FULL_FILE_PATH" />
-        <Find name="NativeLangSpeaker" />
         <Find name="SCI_PASTE" />
         <Find name="STATUSBAR_CUR_POS" />
         <Find name="IDM_FILE_OPEN_FOLDER" />
@@ -145,7 +154,6 @@
         <Find name="SCI_GETDOCPOINTER" />
         <Find name="restoreCurrentPosPreStep" />
         <Find name="scnN" />
-        <Find name="SCNotification" />
         <Find name="(?&lt;=\w)(?=\W)" />
         <Find name="(?&lt;=\w)\b" />
         <Find name="\b" />
@@ -214,7 +222,6 @@
         <Find name="NppParameters" />
         <Find name="_defaultCharList" />
         <Find name="_SC_MARGE_FOLDER" />
-        <Find name="ScintillaEditView" />
         <Find name="insertGenericTextFrom" />
         <Find name="appandGenericText" />
         <Find name="SCE_USER_KWLIST_COMMENTS" />
@@ -256,7 +263,6 @@
         <Find name="enableDlgTheme" />
         <Find name="ETDTProc" />
         <Find name="CB_ERR" />
-        <Find name="FindReplaceDlg" />
         <Find name="Notepad_plus" />
         <Find name="MF_BYCOMMAND" />
         <Find name="nbChar" />
@@ -348,12 +354,6 @@
         <Find name="_hParent" />
         <Find name="_pDocMap" />
         <Find name="reload" />
-        <Find name="SC_FOLDLEVELHEADERFLAG" />
-        <Find name="nbMainFiles" />
-        <Find name="sessionFileInfo" />
-        <Find name="_fileName" />
-        <Find name="userReadOnly" />
-        <Find name="const" />
         <Replace name="lastText" />
         <Replace name="lastMainText" />
         <Replace name="mainText" />
@@ -424,7 +424,6 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\ContextMenu\ContextMenu.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\keys.h" />
         <File filename="D:\MSYS\usr\src\notepadpp\Release\config.xml" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\contextMenu.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus_Window.cpp" />
         <File filename="D:\WORK\SoftScreen\setting\opt.html" />
         <File filename="D:\MSYS\usr\src\notepadpp\Release\shortcuts.xml" />
@@ -434,7 +433,6 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src_master\WinControls\StatusBar\StatusBar.h" />
         <File filename="D:\MSYS\usr\src\k.cpp" />
         <File filename="Z:\Notepp\autoCompletion\cpp.xml" />
-        <File filename="D:\MSYS\usr\src\key_rate\key.c" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\AutoCompletion.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.rc" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\menuCmdID.h" />
@@ -455,11 +453,17 @@
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\WindowsDlg\WindowsDlg.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\NppCommands.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.h" />
-        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\Notepad_plus.cpp" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\Printer.cpp" />
         <File filename="Z:\Notepp\stylers.xml" />
         <File filename="Z:\Notepp\shortcuts.xml" />
         <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\lastRecentFileList.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\contextMenu.xml" />
+        <File filename="D:\MSYS\usr\src\key_rate\key.c" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\ScitillaComponent\ScintillaEditView.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\StatusBar\StatusBar.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\localization.cpp" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\localization.h" />
+        <File filename="D:\MSYS\usr\src\notepadpp\PowerEditor\src\WinControls\StatusBar\StatusBar.h" />
     </History>
     <GUIConfigs>
         <GUIConfig name="ToolBar" visible="no">standard</GUIConfig>
@@ -501,7 +505,7 @@
         <GUIConfig name="MISC" fileSwitcherWithoutExtColumn="no" backSlashIsEscapeCharacterForSql="yes" monospacedFontFindDlg="no" newStyleSaveDlg="no" isFolderDroppedOpenFiles="no" docPeekOnTab="no" docPeekOnMap="no" />
         <GUIConfig name="searchEngine" searchEngineChoice="2" searchEngineCustom="" />
         <GUIConfig name="SmartHighLight" matchCase="no" wholeWordOnly="yes" useFindSettings="no" onAnotherView="no">yes</GUIConfig>
-        <GUIConfig name="ScintillaPrimaryView" lineNumberMargin="show" bookMarkMargin="hide" indentGuideLine="show" folderMarkStyle="circle" lineWrapMethod="indent" currentLineHilitingShow="show" scrollBeyondLastLine="yes" disableAdvancedScrolling="no" wrapSymbolShow="hide" Wrap="yes" borderEdge="no" edge="no" edgeNbColumn="80" zoom="1" zoom2="0" whiteSpaceShow="hide" eolShow="hide" borderWidth="0" smoothFont="yes" />
+        <GUIConfig name="ScintillaPrimaryView" lineNumberMargin="show" bookMarkMargin="hide" indentGuideLine="show" folderMarkStyle="circle" lineWrapMethod="indent" currentLineHilitingShow="show" scrollBeyondLastLine="yes" disableAdvancedScrolling="no" wrapSymbolShow="hide" Wrap="yes" borderEdge="no" edge="no" edgeNbColumn="80" zoom="0" zoom2="0" whiteSpaceShow="hide" eolShow="hide" borderWidth="0" smoothFont="yes" />
         <GUIConfig name="DockingManager" leftWidth="155" rightWidth="416" topHeight="200" bottomHeight="310">
             <FloatingWindow cont="4" x="642" y="-8" width="1250" height="439" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="0" curr="1" prev="4" isVisible="yes" />

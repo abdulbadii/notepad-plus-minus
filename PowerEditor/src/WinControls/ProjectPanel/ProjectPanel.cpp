@@ -33,17 +33,17 @@
 #include "localization.h"
 #include "Parameters.h"
 
-#define CX_BITMAP         16
-#define CY_BITMAP         16
-
-#define INDEX_CLEAN_ROOT     0
-#define INDEX_DIRTY_ROOT     1
-#define INDEX_PROJECT        2
-#define INDEX_OPEN_NODE	     3
-#define INDEX_CLOSED_NODE    4
-#define INDEX_LEAF           5
-#define INDEX_LEAF_INVALID   6
-
+enum {
+	INDEX_CLEAN_ROOT,
+	INDEX_DIRTY_ROOT,
+	INDEX_PROJECT,
+	INDEX_OPEN_NODE,
+	INDEX_CLOSED_NODE,
+	INDEX_LEAF,
+	INDEX_LEAF_INVALID,
+	CX_BITMAP = 16,
+	CY_BITMAP = 16
+};
 
 INT_PTR CALLBACK ProjectPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)	{
 

@@ -225,8 +225,8 @@ static const WinMenuKeyDefinition winKeyDefs[] =	{
 	{ VK_5,       IDM_SEARCH_GONEXTMARKER5,                     true,  false, false, nullptr },
 	{ VK_0,       IDM_SEARCH_GONEXTMARKER_DEF,                  true,  false, false, nullptr },
 
-	{ VK_L,      IDM_SEARCH_TOGGLE_BOOKMARK,                   false, true, true, nullptr },
-	{ VK_L,      IDM_SEARCH_NEXT_BOOKMARK,                     false, true, false, nullptr },
+	{ VK_OEM_1,      IDM_SEARCH_TOGGLE_BOOKMARK,                true, false, true, nullptr },
+	{ VK_OEM_1,      IDM_SEARCH_NEXT_BOOKMARK,                      true, false, false, nullptr },
 	{ VK_F2,      IDM_SEARCH_PREV_BOOKMARK,                     false, false, true, nullptr  },
 	{ VK_NULL,    IDM_SEARCH_CLEAR_BOOKMARKS,                   false, false, false, nullptr },
 	{ VK_NULL,    IDM_SEARCH_CUTMARKEDLINES,                    false, false, false, nullptr },
@@ -277,7 +277,7 @@ static const WinMenuKeyDefinition winKeyDefs[] =	{
 	{ VK_TAB,     IDC_NEXT_DOC,                                 true,  false, false, L"Switch to next document"},
 	{ VK_NULL,    IDM_VIEW_WRAP,                                false, false, false, nullptr },
 	{ VK_H,       IDM_VIEW_HIDELINES,                           false, true,  false, nullptr },
-	{ VK_F12,     IDM_VIEW_SWITCHTO_OTHER_VIEW,         false, true, true, nullptr },
+	{ VK_L,      IDM_VIEW_FOCUS_THRU_EACH,                   false,true, false, nullptr },
 
 	{ VK_OEM_1,       IDM_VIEW_TOGGLE_FOLDALL,                      false, true,  false, nullptr },
 	{ VK_OEM_1,       IDM_VIEW_TOGGLE_FOLDCURRENT,                 false, true, true, nullptr },
@@ -306,11 +306,10 @@ static const WinMenuKeyDefinition winKeyDefs[] =	{
 	{ VK_NULL,    IDM_VIEW_DOC_MAP,                             false, false, false, nullptr },
 	{ VK_OEM_EQUAL,    IDM_VIEW_FUNC_LIST,                           true, false, true, nullptr },
 	{ VK_F6,    IDM_VIEW_CHAR_PANEL,                          false, false, false, nullptr },
-	{ VK_SPACE,      IDM_VIEW_FIND_RESULT,                  true,  true, false, nullptr },
+	{ VK_F12,      IDM_VIEW_FIND_RESULT,                  false,  false, false, nullptr },
 	{ VK_O,    IDM_VIEW_LINENUMBER,                false, true, true, nullptr },
 	{ VK_V,    IDM_VIEW_CR_LINE_BG,                false, true, false, nullptr },
-	{ VK_OEM_PERIOD,      IDC_VIEW_SWAP_MAIN_FIND,                   false,true, true, L"Switch Main/Find Result" },
-	{ VK_SPACE,      IDC_VIEW_CLEAR_CLOSE_FIND,                  true,  true, true, L"Clear & Close Find Pane" },
+	{ VK_SPACE,      IDC_VIEW_CLEAR_CLOSE_FIND,                  true,  true, true, L"Clear, Close Find Pane" },
 	{ VK_N,      IDC_INFOS,                 false, true, false, L"Scope Information" },
 
 	{ VK_NULL,    IDM_VIEW_SYNSCROLLV,                          false, false, false, nullptr },
@@ -1540,30 +1539,22 @@ UserLangContainer* NppParameters::getULCFromName(const TCHAR *userLangName)
 		if (!lstrcmp(userLangName, _userLangArray[i]->_name.c_str()))
 			return _userLangArray[i];
 	}
-
-	//qui doit etre jamais passer
 	return nullptr;
 }
 
-
 COLORREF NppParameters::getCurLineHilitingColour()	{
+	bool isAlive;
+	Style& s = _widgetStyleArray.styleOf(L"Current line background colour", isAlive);
+	return isAlive ? s._bgColor : -1;
 
-	int i = _widgetStyleArray.getStylerIndexByName(L"Current line background colour");
-	if (i == -1)
-		return i;
-	Style & style = _widgetStyleArray.getStyler(i);
-	return style._bgColor;
+
 }
 
-
 void NppParameters::setCurLineHilitingColour(COLORREF colour2Set)	{
-
-	int i = _widgetStyleArray.getStylerIndexByName(L"Current line background colour");
-	if (i == -1)
-		return;
-
-	Style& style = _widgetStyleArray.getStyler(i);
-	style._bgColor = colour2Set;
+	bool isAlive;
+	Style& style = _widgetStyleArray.styleOf(L"Current line background colour", isAlive);
+	if (isAlive)
+		style._bgColor = colour2Set;
 }
 
 

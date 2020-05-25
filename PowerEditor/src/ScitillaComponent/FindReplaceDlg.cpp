@@ -1978,7 +1978,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *options, FindStatus *oFindStatus, FindNextType findNextType /* = FINDNEXTTYPE_FINDNEXT */)	{
 
-	ScintillaEditView *ptrSci =	*_ppEditView;
+	ScintillaEditView *pScv =	*_ppEditView;
 	if (oFindStatus)
 		*oFindStatus = FSFound;
 
@@ -1986,7 +1986,7 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 
 	const FindOption *pOptions = options?options:_env;
 
-	ptrSci->f(SCI_CALLTIPCANCEL);
+	pScv->f(SCI_CALLTIPCANCEL);
 
 	int stringSizeFind = lstrlen(txt2find);
 	TCHAR *pText = new TCHAR[stringSizeFind + 1];
@@ -1997,8 +1997,8 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 		stringSizeFind = Searching::convertExtendedToString(txt2find, pText, stringSizeFind);
 	}
 
-	int docLength = static_cast<int32_t>(ptrSci->f(SCI_GETLENGTH));
-	Sci_CharacterRange cr = ptrSci->getSelection();
+	int docLength = static_cast<int32_t>(pScv->f(SCI_GETLENGTH));
+	Sci_CharacterRange cr = pScv->getSelection();
 
 
 	//The search "zone" is relative to the selection, so search happens 'outside'
@@ -2009,7 +2009,7 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 	if (pOptions->_whichDirection == DIR_UP)	{
 
 		//When searching upwards, start is the lower part, end the upper, for backwards search
-		--startPosition;// = cr.cpMax - 1;
+		startPosition = cr.cpMin;
 		endPosition = 0;
 	}
 
@@ -2059,14 +2059,14 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 	int end, fndStart;
 
 	/* Never allow a zero length match in the middle of a line end marker
-	if (ptrSci->f(SCI_GETCHARAT, startPosition - 1) == '\r'
-		&& ptrSci->f(SCI_GETCHARAT, startPosition) == '\n') 
+	if (pScv->f(SCI_GETCHARAT, startPosition - 1) == '\r'
+		&& pScv->f(SCI_GETCHARAT, startPosition) == '\n') 
 	{
 		flags = flags & ~SCFIND_REGEXP_EMPTYMATCH_MASK | SCFIND_REGEXP_EMPTYMATCH_NONE;
 	} */
 
-	ptrSci->f(SCI_SETSEARCHFLAGS, flags);
-	fndStart = ptrSci->searchInTarget(pText, stringSizeFind, startPosition, endPosition);
+	pScv->f(SCI_SETSEARCHFLAGS, flags);
+	fndStart = pScv->searchInTarget(pText, stringSizeFind, startPosition, endPosition);
 	
 	 if (fndStart == -2)	{ // Invalid Regular expression
 
@@ -2076,28 +2076,23 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 		return false;
 	}
 	
-	else if (fndStart == -1)	{ //no match found in target, check if a new target should be used
+	else if (fndStart == -1)	{ //no match found in target, check if a new target
 
 		if (pOptions->_isWrapAround)	{ 
 
 			//when wrapping, use the rest of the document (entire document is usable)
 			if (pOptions->_whichDirection == DIR_DOWN)	{
 
-				startPosition = 0;
-				endPosition = docLength;
 				if (oFindStatus)
 					*oFindStatus = FSEndReached;
+				fndStart = pScv->searchInTarget(pText, stringSizeFind, 0, docLength);
 			}
 			else	{
-
-				startPosition = docLength;
-				endPosition = 0;
 				if (oFindStatus)
 					*oFindStatus = FSTopReached;
+				fndStart = pScv->searchInTarget(pText, stringSizeFind, docLength, 0);
 			}
 
-			//new target, search again
-			fndStart = ptrSci->searchInTarget(pText, stringSizeFind, startPosition, endPosition);
 		}
 
 		if (fndStart == -1)	{
@@ -2114,24 +2109,24 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 				if (::IsWindowVisible(_hSelf))
 					::SetFocus(::GetDlgItem(_hSelf, IDFINDWHAT));
 				else
-					ptrSci->focus();
+					pScv->focus();
 			}
 			delete [] pText;
 			return false;
 		}
 	}
-	end = static_cast<int32_t>(ptrSci->f(SCI_GETTARGETEND));
+	end = static_cast<int32_t>(pScv->f(SCI_GETTARGETEND));
 
-	ptrSci->f(SCI_STOPRECORD);// prevent recording of absolute positioning commands issued in the process
+	pScv->f(SCI_STOPRECORD);// prevent recording of absolute positioning commands issued in the process
 
-	ptrSci->putMvmntInView(fndStart, end, startPosition);
+	pScv->putMvmntInView(fndStart, end, startPosition);
 
 	if (fndStart == end)	{// Show a calltip for a zero length match
-		ptrSci->f(SCI_CALLTIPSETBACK, 0x33270D);ptrSci->f(SCI_CALLTIPSETFORE, 0xE1E9F3);
-		ptrSci->f(SCI_CALLTIPSHOW, fndStart, reinterpret_cast<LPARAM>("empty match"));
+		pScv->f(SCI_CALLTIPSETBACK, 0x33270D);pScv->f(SCI_CALLTIPSETFORE, 0xE1E9F3);
+		pScv->f(SCI_CALLTIPSHOW, fndStart, reinterpret_cast<LPARAM>("empty match"));
 	}
 	if (::SendMessage(_hParent, WM_GETCURRENTMACROSTATUS,0,0) == MACRO_RECORDING_IN_PROGRESS)
-		ptrSci->f(SCI_STARTRECORD);
+		pScv->f(SCI_STARTRECORD);
 
 	delete [] pText;
 
@@ -2657,7 +2652,7 @@ void FindReplaceDlg::findAllIn(int WM_cmd)	{
 		_pFinder->_scintView.f(SCI_SETCODEPAGE, SC_CP_UTF8);
 		_pFinder->_scintView.f(SCI_USEPOPUP, FALSE);
 		_pFinder->_scintView.f(SCI_SETUNDOCOLLECTION, false);
-		_pFinder->_scintView.f(SCI_SETCARETLINEVISIBLE, 1);
+		_pFinder->_scintView.f(SCI_SETCARETLINEVISIBLE, true);
 		_pFinder->_scintView.f(SCI_SETCARETLINEVISIBLEALWAYS, true);
 		_pFinder->_scintView.f(SCI_SETCARETWIDTH, 2);
 		// _pFinder->_scintView.showMargin(ScintillaEditView::_SC_MARGE_FOLDER, true);
