@@ -479,26 +479,27 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 
 	Notepad_plus_Window notepad_plus_plus;
 
-	// generic_string updaterDir = param.getNppPath();
-	// updaterDir += L"\\updater\\";
+    /*
+	generic_string updaterDir = param.getNppPath();
+	updaterDir += L"\\updater\\";
 
-	// generic_string updaterFullPath = updaterDir + L"gup.exe";
+	generic_string updaterFullPath = updaterDir + L"gup.exe";
 
-	// generic_string updaterParams = L"-v";
-	// updaterParams += VERSION_VALUE;
+	generic_string updaterParams = L"-v";
+	updaterParams += VERSION_VALUE;
 
-	// bool isUpExist = nppGUI._doesExistUpdater = ::PathFileExists(updaterFullPath.c_str());
+	bool isUpExist = nppGUI._doesExistUpdater = ::PathFileExists(updaterFullPath.c_str());
 
-    /* if (doUpdateNpp) // check more detail
+	 if (doUpdateNpp) // check more detail
     {
         Date today(0);
 
         if (today <= nppGUI._autoUpdateOpt._nextUpdateDate)
             doUpdateNpp = false;
     } */
+/* 	TODO: detect update frequency
 	if (doUpdatePluginList)	{
-		// TODO: detect update frequency
-	}
+	} */
 
 	// wingup doesn't work with the obsolet security layer (API) under xp since downloadings are secured with SSL on notepad_plus_plus.org
 	winVer ver = param.getWinVersion();

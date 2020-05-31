@@ -190,24 +190,23 @@ private :
 		::EnableWindow(_hBgColourStaticText, isEnable);
 	};
 
-	void enableFontName(bool isEnable) {
+	inline void enableFontName(bool isEnable) {
 		::EnableWindow(_hFontNameCombo, isEnable);
 		::EnableWindow(_hFontNameStaticText, isEnable);
 	};
 
-	void enableFontSize(bool isEnable) {
+	inline void enableFontSize(bool isEnable) {
 		::EnableWindow(_hFontSizeCombo, isEnable);
 		::EnableWindow(_hFontSizeStaticText, isEnable);
 	};
 
-	void enableFontStyle(bool isEnable) {
+	inline void enableFontStyle(bool isEnable) {
 		::EnableWindow(_hCheckBold, isEnable);
 		::EnableWindow(_hCheckItalic, isEnable);
 		::EnableWindow(_hCheckUnderline, isEnable);
 	};
-    long notifyDataModified() {
-		_isDirty = true;
-		_isThemeDirty = true;
+   inline long notifyDataModified() {
+		_isDirty = _isThemeDirty = true;
 		::EnableWindow(::GetDlgItem(_hSelf, IDC_SAVECLOSE_BUTTON), TRUE);
 		return TRUE;
     };

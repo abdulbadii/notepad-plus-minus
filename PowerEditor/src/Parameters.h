@@ -369,6 +369,7 @@ struct Style	{
 
 	COLORREF _fgColor = COLORREF(STYLE_NOT_USED);
 	COLORREF _bgColor = COLORREF(STYLE_NOT_USED);
+	COLORREF _lastColorState = COLORREF(STYLE_NOT_USED);
 	int _colorStyle = COLORSTYLE_ALL;
 	const TCHAR* _fontName = nullptr;
 	int _fontStyle = FONTSTYLE_NONE;
@@ -381,19 +382,20 @@ struct Style	{
 
 	Style() = default;
 
-	Style(const Style & style)
+	Style(const Style& style)
 	{
 		_styleID	  = style._styleID;
 		_styleDesc	= style._styleDesc;
 		_fgColor	  = style._fgColor;
 		_bgColor	  = style._bgColor;
+		_lastColorState = style._lastColorState; 
 		_colorStyle   = style._colorStyle;
 		_fontName	 = style._fontName;
 		_fontSize	 = style._fontSize;
 		_fontStyle	= style._fontStyle;
-		_keywordClass = style._keywordClass;
 		_nesting	  = style._nesting;
-		_keywords	 = (style._keywords) ? new generic_string(*(style._keywords)) : nullptr;
+		_keywordClass = style._keywordClass;
+		_keywords	 = style._keywords ? new generic_string(*(style._keywords)) : nullptr;
 	}
 
 	~Style()
@@ -410,6 +412,7 @@ struct Style	{
 			_styleDesc	= style._styleDesc;
 			_fgColor	  = style._fgColor;
 			_bgColor	  = style._bgColor;
+			_lastColorState = style._lastColorState; 
 			_colorStyle   = style._colorStyle;
 			_fontName	 = style._fontName;
 			_fontSize	 = style._fontSize;
@@ -481,12 +484,13 @@ public:
 	bool hasEnoughSpace() {return (_nbStyler < SCE_STYLE_ARRAY_SIZE);};
 	void addStyler(int styleID, TiXmlNode *styleNode);
 
-	void addStyler(int styleID, const TCHAR *styleName)	{
+	inline void addStyler(int styleID, const TCHAR *styleName)	{
 
 		_styleArray[styleID]._styleID = styleID;
 		_styleArray[styleID]._styleDesc = styleName;
 		_styleArray[styleID]._fgColor = black;
 		_styleArray[styleID]._bgColor = white;
+		_styleArray[styleID]._lastColorState = blue;
 		++_nbStyler;
 	}
 
@@ -869,7 +873,7 @@ struct NppGUI final	{
 	OpenSaveDirSetting _openSaveDir = dir_followCurrent;
 	int _caretBlinkRate = 475,
 	_caretWidth = 2,
-	caretUZ = 2;
+	caretUZ = 3;
 
 	bool _doesExistUpdater = false, _shortTitlebar = false,
 	_enableMultiSelection = true,
@@ -882,10 +886,11 @@ struct NppGUI final	{
 	_isDocPeekOnTab = false,
 	_isDocPeekOnMap = false;
 
-	MultiInstSetting _multiInstSetting = monoInst;
+	MultiInstSetting _multiInstSetting = multiInstOnSession;
 	size_t _snapshotBackupTiming = 7000;
-	generic_string _themeName, _cloudPath; // this option will not be kept in config.xml
-	unsigned char _availableClouds = '\0'; // this option will never be read/written from/to config.xml
+	generic_string _themeName, _cloudPath; // this option will not be kept,
+	unsigned char _availableClouds = 0; // nor read/written in config.xml
+	
 	bool isSnapshotMode() const {
 		return _isSnapshotMode && _rememberLastSession && !_isCmdlineNosessionActivated;}
 
@@ -907,7 +912,7 @@ struct ScintillaViewParams	{
 	bool _wrapSymbolShow = false;
 	bool _doWrap = false;
 	int _edgeMode = EDGE_NONE;
-	int _edgeNbColumn = 80;
+	int _edgeNbColumn = 79;
 	int _zoom = 0;
 	int _zoom2 = 0;
 	bool _whiteSpaceShow = false;
@@ -919,19 +924,21 @@ struct ScintillaViewParams	{
 	bool _showBorderEdge = true;
 };
 
-constexpr int NB_LIST = 20;
-constexpr int NB_MAX_LRF_FILE = 256;
-constexpr int NB_MAX_USER_LANG = 30;
-constexpr int NB_MAX_EXTERNAL_LANG = 30;
-constexpr int NB_MAX_IMPORTED_UDL = 30;
-
-constexpr int NB_MAX_FINDHISTORY_FIND	= 512;
-constexpr int NB_MAX_FINDHISTORY_REPLACE = 30;
-constexpr int NB_MAX_FINDHISTORY_PATH	= 30;
-constexpr int NB_MAX_FINDHISTORY_FILTER  = 20;
-
-constexpr int MASK_ReplaceBySpc = 0x80;
-constexpr int MASK_TabSize = 0x7F;
+enum {
+	NB_LIST = 20,
+	NB_MAX_LRF_FILE = 256,
+	NB_MAX_USER_LANG = 30,
+	NB_MAX_EXTERNAL_LANG = 30,
+	NB_MAX_IMPORTED_UDL = 30,
+	
+	NB_MAX_FINDHISTORY_FIND	= 512,
+	NB_MAX_FINDHISTORY_REPLACE = 30,
+	NB_MAX_FINDHISTORY_PATH	= 30,
+	NB_MAX_FINDHISTORY_FILTER  = 20,
+	
+	MASK_ReplaceBySpc = 0x80,
+	MASK_TabSize = 0x7F
+};
 
 struct Lang final	{
 
@@ -1402,8 +1409,78 @@ public:
 	inline StyleArray & getMiscStylerArray() {return _widgetStyleArray;};
 	inline GlobalOverride & getGlobalOverrideStyle() {return nGUI._globalOverride;};
 
-	COLORREF getCurLineHilitingColour();
-	void setCurLineHilitingColour(COLORREF colour2Set);
+	inline int NppParameters::curLineHilitingFrame()	{
+		bool isAlive;
+		Style& s = _widgetStyleArray.styleOf(L"Current line background colour", isAlive);
+		return isAlive ? s._colorStyle : -1;
+	}
+
+	inline COLORREF NppParameters::styleLastColorState()	{
+		bool isAlive;
+		Style& s = _widgetStyleArray.styleOf(L"Current line background colour", isAlive);
+		return isAlive ? s._lastColorState : -1;
+	}
+
+	inline COLORREF NppParameters::styleColorDelta()	{
+		bool isAlive;
+		Style& s = _widgetStyleArray.styleOf(L"Current line background colour", isAlive);
+		return isAlive ? s._fgColor : -1;
+	}
+
+	inline void NppParameters::setLineHilitState(COLORREF c, int nbFrame, COLORREF d=0)	{
+		bool isAlive;
+		Style& s = _widgetStyleArray.styleOf(L"Current line background colour", isAlive);
+		if (isAlive)	{
+			s._lastColorState = c;
+			s._colorStyle = nbFrame;
+			if /* constexpr */ (d)	s._fgColor = d;
+		}
+	}
+
+
+inline void NppParameters::saveConfig_xml()	{
+	if (_pXmlUserDoc)	_pXmlUserDoc->SaveFile();
+}
+
+inline void NppParameters::setWorkSpaceFilePath(int i, const TCHAR* wsFile)	{
+
+	if (i < 0 || i > 2 || !wsFile)
+		return;
+	_workSpaceFilePathes[i] = wsFile;
+}
+
+inline void NppParameters::removeTransparent(HWND hwnd)	{
+	if (hwnd)
+		::SetWindowLongPtr(hwnd, GWL_EXSTYLE,  ::GetWindowLongPtr(hwnd, GWL_EXSTYLE) & ~0x00080000);
+}
+
+inline void NppParameters::SetTransparent(HWND hwnd, int percent)	{
+
+	if (nullptr != _transparentFuncAddr)	{
+
+		::SetWindowLongPtr(hwnd, GWL_EXSTYLE, ::GetWindowLongPtr(hwnd, GWL_EXSTYLE) | 0x00080000);
+		if (percent > 255)
+			percent = 255;
+		if (percent < 0)
+			percent = 0;
+		_transparentFuncAddr(hwnd, 0, percent, 0x00000002);
+	}
+}
+
+
+inline bool NppParameters::isExistingExternalLangName(const TCHAR *newName) const
+{
+	if ((!newName) || (!newName[0]))
+		return true;
+
+	for (int i = 0 ; i < _nbExternalLang ; ++i)	{
+
+		if (!lstrcmp(_externalLangArray[i]->_name, newName))
+			return true;
+	}
+	return false;
+}
+
 
 	void setFontList(HWND hWnd);
 	bool isInFontList(const generic_string& fontName2Search) const;
@@ -1448,7 +1525,7 @@ public:
 	int addUserLangToEnd(const UserLangContainer & userLang, const TCHAR *newName);
 	void removeUserLang(size_t index);
 
-	bool isExistingExternalLangName(const TCHAR *newName) const;
+	// bool isExistingExternalLangName(const TCHAR *newName) const;
 
 	int addExternalLangToEnd(ExternalLangContainer * externalLang);
 
@@ -1462,9 +1539,9 @@ public:
 
 	// 0 <= percent < 256
 	// if (percent == 255) then opacq
-	void SetTransparent(HWND hwnd, int percent);
+	// void SetTransparent(HWND hwnd, int percent);
 
-	void removeTransparent(HWND hwnd);
+	// void removeTransparent(HWND hwnd);
 
 	void setCmdlineParam(const CmdLineParamsDTO & cmdLineParams)	{
 
@@ -1520,7 +1597,7 @@ public:
 		return _currentDirectory.c_str();	}
 	void setDefOpenSaveDir(const TCHAR * =nullptr, bool noLast=1);
 
-	void setWorkSpaceFilePath(int i, const TCHAR *wsFile);
+	// void setWorkSpaceFilePath(int i, const TCHAR *wsFile);
 	void setStartWithLocFileName(const generic_string& locPath) {
 		_startWithLocFileName = locPath;
 	};
@@ -1600,7 +1677,7 @@ public:
 		return _isLocal;
 	};
 
-	void saveConfig_xml();
+	// void saveConfig_xml();
 
 	generic_string getUserPath() const {
 		return _userPath;

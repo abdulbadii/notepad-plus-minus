@@ -102,8 +102,8 @@ void Notepad_plus::command(int id)	{
 			HINSTANCE res = ::ShellExecute(NULL, L"open", buf->getFullPathName(), NULL, NULL, SW_SHOW);
 
 			// As per MSDN (https://msdn.microsoft.com/en-us/library/windows/desktop/bb762153(v=vs.85).aspx)
-			// If the function succeeds, it returns a value greater than 32.
-			// If the function fails, it returns an error value that indicates the cause of the failure.
+			// If the function succeeds, it'll return a value greater than 32.
+			// If the function fails, it'll return an error value that indicates the cause of the failure.
 			int retResult = static_cast<int>(reinterpret_cast<INT_PTR>(res));
 			if (retResult <= 32)	{
 
@@ -251,6 +251,8 @@ void Notepad_plus::command(int id)	{
 			break;
 
 		case IDM_FILE_EXIT:
+		
+			param.writeStyles(param.getLStylerArray(), param.getGlobalStylers());
 			::SendMessage(_pPublicInterface->getHSelf(), WM_CLOSE, 0, 0);
 			break;
 
@@ -1150,30 +1152,61 @@ void Notepad_plus::command(int id)	{
 		break;
 
  		case IDM_VIEW_CR_LINE_BG:	{
-			bool isAlive;
-			Style& s = param.getMiscStylerArray().styleOf(L"Current line background colour", isAlive);
-			if (!isAlive)	return;
-			COLORREF c = s._bgColor, co;
-			uint8_t R,G,B;
-			R = static_cast<uint8_t>(c &0x0000FF);
-			G = static_cast<uint8_t>(c >>8 &0x0000FF);
-			B = static_cast<uint8_t>(c >>16 &0x0000FF);
-			auto m=max(R, max(G, B));
-			co = (B/m*0x30 << 16) + (G/m*0x30 << 8) + R/m*0x30;
-
-			if (++crSt>5)
-				if (crSt<=9)
-					_pEditView->f(SCI_SETCARETLINEFRAME, crSt-5);
-				else	{
-					_pEditView->f(SCI_SETCARETLINEVISIBLE, crSt =0);
-					_pEditView->f(SCI_SETCARETLINEFRAME,0);
+			static COLORREF d, c, c_n, col_o = 0xFFFFFFFF;
+			static int f = param.curLineHilitingFrame();
+			COLORREF col;			
+			if (_pEditView->f(SCI_GETCARETLINEVISIBLE))	{
+				col = static_cast<COLORREF>(_pEditView->f(SCI_GETCARETLINEBACK));
+				if (col)	{
+					if (col_o != col)	{
+						uint8_t R,G,B, m;
+						R = static_cast<uint8_t>(col &0x0000FF);
+						G = static_cast<uint8_t>(col >>8 &0x0000FF);
+						B = static_cast<uint8_t>(col >>16 &0x0000FF);
+						m = max(R, max(G, B));
+						d =
+						uint32_t( float(R /m * 0x2C))
+						+ (uint32_t( float(G /m * 0x2C)) <<8)
+						+ (uint32_t( float(B /m * 0x2C)) <<16);
+						c = col;
+					}
+					c_n = c + d;
 				}
+				else
+					c_n = c = col = d = param.styleColorDelta();
+			}
 			else	{
-				_pEditView->f(SCI_SETCARETLINEBACK, COLORREF(crSt * co));
+				_pEditView->f(SCI_SETCARETLINEBACK, c_n=c=col=d/*= param.styleColorDelta() */);
+				_pEditView->f(SCI_SETCARETLINEVISIBLE, 1);
+			}
+
+			bool tooShiny =
+			uint8_t( (c_n & 0xFF) >0xCA || (c_n >> 8 & 0xFF) >0xCA || (c_n >> 16 & 0xFF) >0xCA );
+			if (f)
+				if (++f < 5)
+					_pEditView->f(SCI_SETCARETLINEFRAME, f);
+				else if (tooShiny)	{
+					_pEditView->f(SCI_SETCARETLINEVISIBLE, 0);
+					_pEditView->f(SCI_SETCARETLINEFRAME, f=0);
+					param.setLineHilitState(col_o=c=0, f, d);
+					break;
+				}
+				else	{
+					_pEditView->f(SCI_SETCARETLINEFRAME, f=1);
+					_pEditView->f(SCI_SETCARETLINEBACK, c=c_n);
+				}
+			else if (tooShiny)	{
+				_pEditView->f(SCI_SETCARETLINEFRAME, f=1);
+				_pEditView->f(SCI_SETCARETLINEBACK, c=d);
+			}
+			else	{
+				_pEditView->f(SCI_SETCARETLINEBACK, c=c_n);
 				_pEditView->f(SCI_SETCARETLINEVISIBLE,1);
 			}
+			param.setLineHilitState(col_o=c, f);
 		}
 		break;
+
 
 		case IDM_VIEW_CHAR_PANEL:
 			if (_pAnsiCharPanel && IsWindowVisible(_pAnsiCharPanel->getHSelf()))	{
@@ -3360,14 +3393,6 @@ BOOL parseDword(const char* in, DWORD* out)
 			_subEditView.setMakerStyle(fStyle);
 		}
 		break;
-
-/* 		case IDM_VIEW_CURLINE_HILITING:	{
-
-			COLORREF colour = param.getCurLineHilitingColour();
-			_mainEditView.setCurrentLineHiLiting(!_pEditView->isCurrentLineHiLiting(), colour);
-			_subEditView.setCurrentLineHiLiting(!_pEditView->isCurrentLineHiLiting(), colour);
-		}
-		break; */
 
 		case IDM_VIEW_EDGEBACKGROUND:
 		case IDM_VIEW_EDGELINE:

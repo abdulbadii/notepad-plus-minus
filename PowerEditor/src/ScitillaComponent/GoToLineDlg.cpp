@@ -65,9 +65,6 @@ INT_PTR CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)	{
 							(*_ppEditView)->f(SCI_ENSUREVISIBLE, (*_ppEditView)->f(SCI_LINEFROMPOSITION, inp));
 							(*_ppEditView)->f(SCI_GOTOPOS, inp);
 						}
-						(*_ppEditView)->f(SCI_SETYCARETPOLICY,14,0);
-						(*_ppEditView)->f(SCI_SCROLLCARET);
-						(*_ppEditView)->f(SCI_SETYCARETPOLICY, nGUI.caretUZ? 13: 8, nGUI.caretUZ);
 					}
 
 					// SCNotification notification = {};

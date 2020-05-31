@@ -2415,35 +2415,42 @@ void ScintillaEditView::expand(size_t& line, bool doExpand, bool force, int visL
 			levelLine = static_cast<int32_t>(f(SCI_GETFOLDLEVEL, line, 0));
 
 		if (levelLine & SC_FOLDLEVELHEADERFLAG)	{
-
 			if (force)	{
-
 				if (visLevels > 1)
 					f(SCI_SETFOLDEXPANDED, line, 1);
 				else
 					f(SCI_SETFOLDEXPANDED, line, 0);
 				expand(line, doExpand, force, visLevels - 1);
 			}
-				else	{
-
-				if (doExpand)	{
-
-					if (!bool(f(SCI_GETFOLDEXPANDED, line)))
-						f(SCI_SETFOLDEXPANDED, line, 1);
-
-					expand(line, true, force, visLevels - 1);
-				}
+				else
+					if (doExpand)	{
+						if (!bool(f(SCI_GETFOLDEXPANDED, line)))
+							f(SCI_SETFOLDEXPANDED, line, 1);
+						expand(line, true, force, visLevels - 1);
+					}
 					else
-					expand(line, false, force, visLevels - 1);
-			}
+						expand(line, false, force, visLevels - 1);
 		}
 		else
 			++line;
 	}
-
 	runMarkers(true, 0, true, false);
 }
 
+
+void ScintillaEditView::performCrHiLi()	{
+	bool is;
+	Style& style = param.getMiscStylerArray().styleOf(L"Current line background colour", is);
+	if (is)	{
+		if (style._lastColorState || style._colorStyle)	{
+			f(SCI_SETCARETLINEBACK, style._lastColorState);
+			f(SCI_SETCARETLINEFRAME, style._colorStyle);
+			f(SCI_SETCARETLINEVISIBLE, 1);
+		}
+		else
+			f(SCI_SETCARETLINEVISIBLE, 0);
+	}
+}
 
 void ScintillaEditView::performGlobalStyles()	{
 
@@ -2454,6 +2461,7 @@ void ScintillaEditView::performGlobalStyles()	{
 
 		Style & style = stylers.getStyler(i);
 		f(SCI_SETCARETLINEBACK, style._bgColor);
+		f(SCI_SETCARETLINEVISIBLE, 1);
 	}
 
 	COLORREF selectColorBack = grey;
@@ -3540,7 +3548,7 @@ void ScintillaEditView::getFoldColor(COLORREF& fgColor, COLORREF& bgColor, COLOR
 }
 
 int ScintillaEditView::crUZoption()	{
-	if (++nppGUI.caretUZ>5)
+	if (++nppGUI.caretUZ>7)
 		f(SCI_SETYCARETPOLICY, 8,nppGUI.caretUZ=0);
 	else
 		f(SCI_SETYCARETPOLICY, 13, nGUI.caretUZ);

@@ -32,9 +32,6 @@
 #include <iso646.h>
 #include <cstdint>
 
-constexpr size_t NB_SB = 11;
-constexpr bool dirUp = true, dirDown = false;
-
 #define NPP_CP_DOS_437            437
 #define NPP_CP_BIG5               950
 
@@ -62,6 +59,26 @@ constexpr bool dirUp = true, dirDown = false;
 #define generic_fgets fgetws
 #define COPYDATA_FILENAMES COPYDATA_FILENAMESW
 #define NPP_INTERNAL_FUCTION_STR L"Notepad++::InternalFunction"
+
+// #ifndef STATUSBAR_HEADER
+// #define STATUSBAR_HEADER
+enum STATUSBAR {
+	STATUSBAR_DOC_TYPE,
+	STATUSBAR_DOC_NAME,
+	STATUSBAR_CUR_POS,
+	STATUSBAR_INFOS,
+	STATUSBAR_DOC_SIZE,
+	STATUSBAR_EOF_FORMAT,
+	STATUSBAR_ENCODING,
+	STATUSBAR_SEL_PASTE,
+	STATUSBAR_SEL_UNDO,
+	STATUSBAR_CR_UZ,
+	STATUSBAR_TYPING_MODE,
+	TOTAL_STATUSBAR
+};
+// #endif
+
+constexpr bool dirUp = true, dirDown = false;
 
 using generic_string = std::basic_string<TCHAR>;
 using generic_stringstream = std::basic_stringstream<TCHAR>;

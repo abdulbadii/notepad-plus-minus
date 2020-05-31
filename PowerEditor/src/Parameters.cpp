@@ -1450,56 +1450,6 @@ void NppParameters::destroyInstance()	{
 }
 
 
-void NppParameters::saveConfig_xml()	{
-
-	if (_pXmlUserDoc)
-		_pXmlUserDoc->SaveFile();
-}
-
-
-void NppParameters::setWorkSpaceFilePath(int i, const TCHAR* wsFile)	{
-
-	if (i < 0 || i > 2 || !wsFile)
-		return;
-	_workSpaceFilePathes[i] = wsFile;
-}
-
-
-void NppParameters::removeTransparent(HWND hwnd)	{
-
-	if (hwnd)
-		::SetWindowLongPtr(hwnd, GWL_EXSTYLE,  ::GetWindowLongPtr(hwnd, GWL_EXSTYLE) & ~0x00080000);
-}
-
-
-void NppParameters::SetTransparent(HWND hwnd, int percent)	{
-
-	if (nullptr != _transparentFuncAddr)	{
-
-		::SetWindowLongPtr(hwnd, GWL_EXSTYLE, ::GetWindowLongPtr(hwnd, GWL_EXSTYLE) | 0x00080000);
-		if (percent > 255)
-			percent = 255;
-		if (percent < 0)
-			percent = 0;
-		_transparentFuncAddr(hwnd, 0, percent, 0x00000002);
-	}
-}
-
-
-bool NppParameters::isExistingExternalLangName(const TCHAR *newName) const
-{
-	if ((!newName) || (!newName[0]))
-		return true;
-
-	for (int i = 0 ; i < _nbExternalLang ; ++i)	{
-
-		if (!lstrcmp(_externalLangArray[i]->_name, newName))
-			return true;
-	}
-	return false;
-}
-
-
 const TCHAR* NppParameters::getUserDefinedLangNameFromExt(TCHAR *ext, TCHAR *fullName) const	{
 
 	if ((!ext) || (!ext[0]))
@@ -1541,23 +1491,6 @@ UserLangContainer* NppParameters::getULCFromName(const TCHAR *userLangName)
 	}
 	return nullptr;
 }
-
-COLORREF NppParameters::getCurLineHilitingColour()	{
-	bool isAlive;
-	Style& s = _widgetStyleArray.styleOf(L"Current line background colour", isAlive);
-	return isAlive ? s._bgColor : -1;
-
-
-}
-
-void NppParameters::setCurLineHilitingColour(COLORREF colour2Set)	{
-	bool isAlive;
-	Style& style = _widgetStyleArray.styleOf(L"Current line background colour", isAlive);
-	if (isAlive)
-		style._bgColor = colour2Set;
-}
-
-
 
 static int CALLBACK EnumFontFamExProc(const LOGFONT* lpelfe, const TEXTMETRIC*, DWORD, LPARAM lParam)	{
 
@@ -3516,7 +3449,7 @@ void StyleArray::addStyler(int styleID, TiXmlNode *styleNode)	{
 	bool isUser = styleID >> 16 == L_USER;
 	if (isUser)	{
 
-		styleID = (styleID & 0xFFFF);
+		styleID &= 0xFFFF;//(styleID & 0xFFFF);
 		index = styleID;
 		if (index >= SCE_USER_STYLE_TOTAL_STYLES || _styleArray[index]._styleID != -1)
 			return;
@@ -3554,6 +3487,13 @@ void StyleArray::addStyler(int styleID, TiXmlNode *styleNode)	{
 
 			unsigned long result = hexStrVal(str);
 			_styleArray[index]._bgColor = (RGB((result >> 16) & 0xFF, (result >> 8) & 0xFF, result & 0xFF)) | (result & 0xFF000000);
+		}
+
+		str = element->Attribute(L"lastColorState");
+		if (str)	{
+
+			unsigned long result = hexStrVal(str);
+			_styleArray[index]._lastColorState = (RGB((result >> 16) & 0xFF, (result >> 8) & 0xFF, result & 0xFF)) | (result & 0xFF000000);
 		}
 
 		str = element->Attribute(L"colorStyle");
@@ -5174,7 +5114,7 @@ void NppParameters::feedScintillaParam(TiXmlNode *node)	{
 	}
 
 	// Current Line Highlighting State
-	nm = element->Attribute(L"currentLineHilitingShow");
+/* 	nm = element->Attribute(L"currentLineHilitingShow");
 	if (nm)	{
 
 		if (!lstrcmp(nm, L"show"))
@@ -5182,7 +5122,7 @@ void NppParameters::feedScintillaParam(TiXmlNode *node)	{
 		else if (!lstrcmp(nm, L"hide"))
 			_svp._currentLineHilitingShow = false;
 	}
-
+ */
 	// Scrolling Beyond Last Line State
 	nm = element->Attribute(L"scrollBeyondLastLine");
 	if (nm)	{
@@ -5424,7 +5364,7 @@ bool NppParameters::writeScintillaParams()	{
 								(_svp._lineWrapMethod == LINEWRAP_INDENT)?L"indent":L"default";
 	(scintNode->ToElement())->SetAttribute(L"lineWrapMethod", pWrapMethodStr);
 
-	(scintNode->ToElement())->SetAttribute(L"currentLineHilitingShow", _svp._currentLineHilitingShow?L"show":L"hide");
+	// (scintNode->ToElement())->SetAttribute(L"currentLineHilitingShow", _svp._currentLineHilitingShow?L"show":L"hide");
 	(scintNode->ToElement())->SetAttribute(L"scrollBeyondLastLine", _svp._scrollBeyondLastLine?L"yes":L"no");
 	(scintNode->ToElement())->SetAttribute(L"disableAdvancedScrolling", _svp._disableAdvancedScrolling?L"yes":L"no");
 	(scintNode->ToElement())->SetAttribute(L"wrapSymbolShow", _svp._wrapSymbolShow?L"show":L"hide");
@@ -6531,6 +6471,14 @@ void NppParameters::writeStyle2Element(Style & style2Write, Style & style2Sync, 
 		element->SetAttribute(L"bgColor", bgStr);
 	}
 
+	if (HIBYTE(HIWORD(style2Write._lastColorState)) != 0xFF)	{
+
+		int rgbVal = RGB2int(style2Write._lastColorState);
+		TCHAR str[7];
+		wsprintf(str, L"%.6X", rgbVal);
+		element->SetAttribute(L"lastColorState", str);
+	}
+
 	if (style2Write._colorStyle != COLORSTYLE_ALL)	{
 
 		element->SetAttribute(L"colorStyle", style2Write._colorStyle);
@@ -6634,6 +6582,12 @@ void NppParameters::insertUserLang2Tree(TiXmlNode *node, UserLangContainer *user
 			TCHAR bgStr[7];
 			wsprintf(bgStr, L"%.6X", rgbVal);
 			styleElement->SetAttribute(L"bgColor", bgStr);
+		}
+		{
+			int rgbVal = RGB2int(style2Write._lastColorState);
+			TCHAR str[7];
+			wsprintf(str, L"%.6X", rgbVal);
+			styleElement->SetAttribute(L"lastColorState", str);
 		}
 
 		if (style2Write._colorStyle != COLORSTYLE_ALL)	{

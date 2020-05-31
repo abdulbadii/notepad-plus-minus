@@ -218,6 +218,7 @@ public:
 	std::vector<generic_string> addNppComponents(const TCHAR *destDir, const TCHAR *extFilterName, const TCHAR *extFilter);
 	std::vector<generic_string> addNppPlugins(const TCHAR *extFilterName, const TCHAR *extFilter);
 	int getHtmlXmlEncoding(const TCHAR *fileName) const;
+	size_t openedFiles;
 
 	HACCEL getAccTable() const{
 		return _accelerator.getAccTable();
@@ -235,18 +236,15 @@ public:
 	}
 	
 	inline void updateBeginEndSelectPosition(bool is_insert, size_t position, size_t length)	{
-		if (beginSelectPos != -1 && static_cast<long long>(position) < beginSelectPos - 1)	{
+		if (beginSelectPos != -1 && static_cast<long long>(position) < beginSelectPos - 1)
 			beginSelectPos += is_insert ? static_cast<long long>(length)
 			: -static_cast<long long>(length);
 		assert(beginSelectPos >= 0);
-	}
 }
 
 	inline generic_string getPluginListVerStr() const {
-		return _pluginsAdminDlg.getPluginListVerStr();
-	};
+		return _pluginsAdminDlg.getPluginListVerStr();	}
 
-	size_t openedFiles;
 // static int rB;
 /* BufferID _recBuf[16] ={nullptr};*/
 //	BufferID _recBuf =nullptr;
@@ -586,7 +584,6 @@ private:
 		HWND _nppHandle = nullptr;
 	};
 	void monitoringStartOrStopAndUpdateUI(Buffer* pBuf, bool isStarting);
-	int crSt = 0;
 	long long beginSelectPos = -1;
 	bool offsetSB = 0;
 };

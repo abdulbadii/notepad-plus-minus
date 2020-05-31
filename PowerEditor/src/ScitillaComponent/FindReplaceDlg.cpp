@@ -596,8 +596,7 @@ void Finder::gotoNextFoundResult(int increment)	{
 
 	if (!(_scintView.f(SCI_GETFOLDLEVEL, lno) & SC_FOLDLEVELHEADERFLAG))	{
 
-		auto start = _scintView.f(SCI_POSITIONFROMLINE, lno);
-		_scintView.f(SCI_SETSEL, start, start);
+		_scintView.f(SCI_SETCURRENTPOS, _scintView.f(SCI_POSITIONFROMLINE, lno));
 		_scintView.f(SCI_ENSUREVISIBLE, lno);
 		_scintView.f(SCI_SCROLLCARET);
 
@@ -827,15 +826,15 @@ void Finder::finishFilesSearch(int count, bool isfold,const TCHAR *dir, bool isM
 	_scintView.f(SCI_SETLEXER, SCLEX_SEARCHRESULT);
 	_scintView.f(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold"), reinterpret_cast<LPARAM>( isfold? "1" : "0"));
 
-	_scintView.f(SCI_GOTOPOS, _scintView.f(SCI_POSITIONFROMLINE, 2) +(*_pMainMarkings)[2]._start);
+	auto o=_scintView.f(SCI_POSITIONFROMLINE, 2) +(*_pMainMarkings)[2]._start;
+	_scintView.f(SCI_GOTOPOS, o);
 	_scintView.f(SCI_SETANCHOR, _scintView.f(SCI_POSITIONFROMLINE, 2) +(*_pMainMarkings)[2]._end);
 
 	_scintView.f(SCI_SETWRAPMODE, 2);
 	_scintView.f(SCI_SETWRAPVISUALFLAGS,SC_WRAPVISUALFLAG_START);
 	_scintView.f(SCI_SETWRAPSTARTINDENT,5);
 	_scintView.f(SCI_SETWRAPINDENTMODE,SC_WRAPINDENT_FIXED);
-	_scintView.f(SCI_SETYCARETPOLICY, 14, 0);_scintView.f(SCI_SCROLLCARET);
-	_scintView.f(SCI_SETYCARETPOLICY, 8,0);
+	_scintView.f(SCI_SCROLLRANGE, 0, o);
 }
 
 void Finder::setFinderStyle()	{
@@ -2655,7 +2654,7 @@ void FindReplaceDlg::findAllIn(int WM_cmd)	{
 		_pFinder->_scintView.f(SCI_SETCARETLINEVISIBLE, true);
 		_pFinder->_scintView.f(SCI_SETCARETLINEVISIBLEALWAYS, true);
 		_pFinder->_scintView.f(SCI_SETCARETWIDTH, 2);
-		// _pFinder->_scintView.showMargin(ScintillaEditView::_SC_MARGE_FOLDER, true);
+		_pFinder->_scintView.f(SCI_SETYCARETPOLICY, nGUI.caretUZ? 13: 8, nGUI.caretUZ);
 
 		// get the width of FindDlg
 		RECT findRect;

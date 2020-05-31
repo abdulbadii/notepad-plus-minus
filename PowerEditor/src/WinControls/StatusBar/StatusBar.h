@@ -41,7 +41,7 @@ class StatusBar final : public Window	{
 	std::vector<int> _partWidthArray;
 	int *_lpParts = nullptr;
 
-	generic_string lastText[NB_SB];
+	generic_string lastText[TOTAL_STATUSBAR];
 	generic_string savedOVLText;
 
 public:

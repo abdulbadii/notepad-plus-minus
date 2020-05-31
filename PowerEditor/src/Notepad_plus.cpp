@@ -51,9 +51,8 @@
 using namespace std;
 
 // int Notepad_plus::rB = 0;
-enum tb_stat {tb_saved, tb_unsaved, tb_ro};
-#define DIR_LEFT true
-#define DIR_RIGHT false
+enum tb_stat {	tb_saved, tb_unsaved, tb_ro };
+enum {	DIR_RIGHT, DIR_LEFT	};
 
 int docTabIconIDs[] = {IDI_SAVED_ICON, IDI_UNSAVED_ICON, IDI_READONLY_ICON, IDI_MONITORING_ICON};
 
@@ -199,9 +198,8 @@ LRESULT Notepad_plus::init(HWND hwnd)	{
 
 	// Menu
 	_mainMenuHandle = ::GetMenu(hwnd);
-	int langPos2BeRemoved = MENUINDEX_LANGUAGE+1;
-	if (nppGUI._isLangMenuCompact)
-		langPos2BeRemoved = MENUINDEX_LANGUAGE;
+	int langPos2BeRemoved = MENUINDEX_LANGUAGE;
+	langPos2BeRemoved += nppGUI._isLangMenuCompact ? 0 : 1;
 	::RemoveMenu(_mainMenuHandle, langPos2BeRemoved, MF_BYPOSITION);
 
 	//Views
@@ -302,6 +300,8 @@ LRESULT Notepad_plus::init(HWND hwnd)	{
 
 	_mainEditView.performGlobalStyles();
 	_subEditView.performGlobalStyles();
+	_mainEditView.performCrHiLi();
+	_subEditView.performCrHiLi();
 
 	_zoomOriginalValue = int(_pEditView->f(SCI_GETZOOM));
 	_mainEditView.f(SCI_SETZOOM, svp1._zoom);
@@ -359,8 +359,7 @@ LRESULT Notepad_plus::init(HWND hwnd)	{
 	_subSplitter.create(&_mainDocTab, &_subDocTab, 5, SplitterMode::DYNAMIC, 50, isVertical);
 
 	//--Status Bar Section--//
-
-	_statusBar.init(_pPublicInterface->getHinst(), hwnd, NB_SB);
+	_statusBar.init(_pPublicInterface->getHinst(), hwnd, TOTAL_STATUSBAR);
 	_statusBar.setPartWidth(STATUSBAR_DOC_NAME, param._dpiManager.scaleX(143));
 	_statusBar.setPartWidth(STATUSBAR_CUR_POS, param._dpiManager.scaleX(225));
 	_statusBar.setPartWidth(STATUSBAR_INFOS, param._dpiManager.scaleX(220));
@@ -377,7 +376,7 @@ LRESULT Notepad_plus::init(HWND hwnd)	{
 	_statusBar.setText(STATUSBAR_SEL_UNDO,L"LS");
 	_pEditView->f(SCI_SETOVERTYPE,0);_statusBar.setText(STATUSBAR_TYPING_MODE,L"INS");
 	_statusBar.setText(STATUSBAR_CR_UZ,to_wstring(nGUI.caretUZ).c_str());
-	_pEditView->f(SCI_SETYCARETPOLICY, 13, nGUI.caretUZ);
+	_pEditView->f(SCI_SETYCARETPOLICY, nGUI.caretUZ? 13: 8, nGUI.caretUZ);
 	_pEditView->f(SCI_SCROLLCARET);
 
 	_pMainWindow = &_mainDocTab;

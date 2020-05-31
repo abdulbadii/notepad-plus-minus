@@ -379,7 +379,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 				if (lpnm->dwItemSpec == DWORD(STATUSBAR_CR_UZ))
 					_statusBar.setText(STATUSBAR_CR_UZ, to_wstring(_pEditView->crUZoption()).c_str());
 				
-				if (lpnm->dwItemSpec == DWORD(STATUSBAR_CUR_POS))	{
+				else if (lpnm->dwItemSpec == DWORD(STATUSBAR_CUR_POS))	{
 				offsetSB = !offsetSB;
 				generic_string s = commafyInt(_pEditView->getOffset());	s += L"  ";
 
@@ -389,12 +389,12 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 					_statusBar.setText(STATUSBAR_CUR_POS);
 				}
 				
-				if (lpnm->dwItemSpec == DWORD(STATUSBAR_TYPING_MODE))	{
+				else if (lpnm->dwItemSpec == DWORD(STATUSBAR_TYPING_MODE))	{
 					_pEditView->f(SCI_SETOVERTYPE, !_pEditView->f(SCI_GETOVERTYPE));
 					_statusBar.setText( STATUSBAR_TYPING_MODE,(_pEditView->f(SCI_GETOVERTYPE))?L"OT":L"INS");
 				}
 				
-				if (lpnm->dwItemSpec == DWORD(STATUSBAR_SEL_PASTE))	{
+				else if (lpnm->dwItemSpec == DWORD(STATUSBAR_SEL_PASTE))	{
 					nppGUI.persistentSelectionPaste=!nppGUI.persistentSelectionPaste;
 					_statusBar.setText( STATUSBAR_SEL_PASTE, nppGUI.persistentSelectionPaste? L"KEEP" : L"LOSE");
 				}

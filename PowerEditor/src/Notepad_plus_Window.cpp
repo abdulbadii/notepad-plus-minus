@@ -105,8 +105,8 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 		0, 0, 0, 0,
 		_hParent, nullptr, _hInst,
 		(LPVOID) this); // pass the ptr of this instantiated object
-        // for retrieve it in Notepad_plus_Proc from
-        // the CREATESTRUCT.lpCreateParams afterward.
+		// for retrieve it in Notepad_plus_Proc from
+		// the CREATESTRUCT.lpCreateParams afterward.
 
 	if (!_hSelf)
 		throw std::runtime_error("Notepad_plus_Window::init : CreateWindowEx() function return null");
@@ -125,7 +125,7 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	else	{
 
 		WINDOWPLACEMENT posInfo;
-	    posInfo.length = sizeof(WINDOWPLACEMENT);
+		posInfo.length = sizeof(WINDOWPLACEMENT);
 		posInfo.flags = 0;
 		if (_isPrelaunch)
 			posInfo.showCmd = SW_HIDE;
@@ -207,16 +207,16 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	//  overriding default themes of the same name.
 
 	generic_string themeDir;
-    if (param.getAppDataNppDir() && param.getAppDataNppDir()[0])	{
+	if (param.getAppDataNppDir() && param.getAppDataNppDir()[0])	{
 
-        themeDir = param.getAppDataNppDir();
-	    PathAppend(themeDir, L"themes\\");
-	    _notepad_plus_plus_core.getMatchedFileNames(themeDir.c_str(), patterns, fileNames, false, false);
-	    for (size_t i = 0, len = fileNames.size() ; i < len ; ++i)	{
+		themeDir = param.getAppDataNppDir();
+		PathAppend(themeDir, L"themes\\");
+		_notepad_plus_plus_core.getMatchedFileNames(themeDir.c_str(), patterns, fileNames, false, false);
+		for (size_t i = 0, len = fileNames.size() ; i < len ; ++i)	{
 
-		    themeSwitcher.addThemeFromXml(fileNames[i]);
-	    }
-    }
+			themeSwitcher.addThemeFromXml(fileNames[i]);
+		}
+	}
 
 	fileNames.clear();
 	themeDir.clear();

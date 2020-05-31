@@ -520,6 +520,8 @@ inline	long getCurrentPointY()const{
 		return (f(SCI_GETCARETLINEVISIBLE));
 	};
  */
+ 
+	void performCrHiLi();
 	void performGlobalStyles();
 
 	void expand(size_t& line, bool doExpand, bool force = false, int visLevels = 0, int level = -1);

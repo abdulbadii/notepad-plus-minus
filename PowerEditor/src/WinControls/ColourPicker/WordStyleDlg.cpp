@@ -270,12 +270,6 @@ INT_PTR CALLBACK WordStyleDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM l
 					case IDC_SAVECLOSE_BUTTON :	{
 
 						if (_isDirty)	{
-
-							LexerStylerArray & lsa = param.getLStylerArray();
-							StyleArray & globalStyles = param.getGlobalStylers();
-
-							_lsArray = lsa;
-							_globalStyles = globalStyles;
 							updateThemeName(_themeName);
 							_restoreInvalid = false;
 
@@ -284,7 +278,7 @@ INT_PTR CALLBACK WordStyleDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM l
 							_isDirty = false;
 						}
 						_isThemeDirty = false;
-						param.writeStyles(_lsArray, _globalStyles);
+						param.writeStyles(param.getLStylerArray(), param.getGlobalStylers());
 						::EnableWindow(::GetDlgItem(_hSelf, IDC_SAVECLOSE_BUTTON), FALSE);
 						//_isSync = true;
 						display(false);

@@ -358,31 +358,29 @@ public :
 	}
 
 	inline void updateFinderScintilla() {
-		if (_pFinder && _pFinder->isCreated() && _pFinder->isVisible())	{
-
+		if (_pFinder && _pFinder->isCreated() && _pFinder->isVisible())
 			_pFinder->setFinderStyle();
-		}
 	};
 
-	void switch2Finder(){	_pFinder->_scintView.focus();	}
+	inline void switch2Finder()	{	_pFinder->_scintView.focus();	}
 	
-	inline void openSwFinder(){
+	inline void openSwFinder()	{
 		if (IsWindowVisible(getHFindResults()))
 			_pFinder->_scintView.focus();
-		else		openFinder();
+		else	openFinder();
 	}
-	
-	void clearAllFinder();
 
-	void openFinder()	{
+	inline void openFinder()	{
 		if (_pFinder)	{
 			::SendMessage(_hParent, NPPM_DMMSHOW, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
 			_pFinder->_scintView.focus();
 		}
 	}
-	void closeFinder()	{
+	inline void closeFinder()	{
 		if (_pFinder)	::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
 	}
+
+	void clearAllFinder();
 
 	void nf(size_t len){	_pFinder->_nbOpenedFiles = uint32_t(len);	}
 

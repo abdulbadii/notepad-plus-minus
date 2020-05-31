@@ -1275,23 +1275,14 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			}
 		}
 
-		case NPPM_SETSTATUSBAR:	{
+/* 		case NPPM_SETSTATUSBAR:	{
 
 			TCHAR *str2set = reinterpret_cast<TCHAR *>(lParam);
 			if (!str2set || !str2set[0])		return FALSE;
 
-			// switch (wParam)	{
-				// case STATUSBAR_DOC_TYPE:
-				// case STATUSBAR_DOC_SIZE:
-				// case STATUSBAR_CUR_POS:
-				// case STATUSBAR_EOF_FORMAT:
-				// case STATUSBAR_ENCODING:
-				// case STATUSBAR_TYPING_MODE:
-					_statusBar.setText( static_cast<int32_t>(wParam),str2set);
-					return TRUE;
-				// default :
-					// return FALSE;	}
-		}
+				_statusBar.setText( static_cast<int32_t>(wParam),str2set);
+				return TRUE;
+		} */
 
 		case NPPM_GETMENUHANDLE:	{
 
@@ -1788,6 +1779,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				// saving config.xml
 				//
 				param.saveConfig_xml();
+				param.writeStyles(param.getLStylerArray(), param.getGlobalStylers());
 
 				//
 				// saving userDefineLang.xml
