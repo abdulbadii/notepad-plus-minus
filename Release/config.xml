@@ -498,14 +498,14 @@
         <GUIConfig name="ScintillaGlobalSettings" enableMultiSelection="yes" />
         <GUIConfig name="openSaveDir" value="2" defaultDirPath="D:\MSYS\usr\src" />
         <GUIConfig name="titleBar" short="no" />
-        <GUIConfig name="stylerTheme" path="D:\MSYS\usr\src\notepadpp\Release\stylers.xml" />
+        <GUIConfig name="stylerTheme" path="" />
         <GUIConfig name="wordCharList" useDefault="yes" charsAdded="" />
         <GUIConfig name="delimiterSelection" leftmostDelimiter="40" rightmostDelimiter="41" delimiterSelectionOnEntireDocument="no" />
         <GUIConfig name="multiInst" setting="2" />
         <GUIConfig name="MISC" fileSwitcherWithoutExtColumn="no" backSlashIsEscapeCharacterForSql="yes" monospacedFontFindDlg="no" newStyleSaveDlg="no" isFolderDroppedOpenFiles="no" docPeekOnTab="no" docPeekOnMap="no" />
         <GUIConfig name="searchEngine" searchEngineChoice="2" searchEngineCustom="" />
         <GUIConfig name="SmartHighLight" matchCase="no" wholeWordOnly="yes" useFindSettings="no" onAnotherView="no">yes</GUIConfig>
-        <GUIConfig name="ScintillaPrimaryView" lineNumberMargin="show" bookMarkMargin="hide" indentGuideLine="show" folderMarkStyle="circle" lineWrapMethod="indent" currentLineHilitingShow="show" scrollBeyondLastLine="yes" disableAdvancedScrolling="no" wrapSymbolShow="hide" Wrap="yes" borderEdge="no" edge="no" edgeNbColumn="80" zoom="1" zoom2="0" whiteSpaceShow="hide" eolShow="hide" borderWidth="0" smoothFont="yes" />
+        <GUIConfig name="ScintillaPrimaryView" lineNumberMargin="show" bookMarkMargin="hide" indentGuideLine="show" folderMarkStyle="circle" lineWrapMethod="indent" scrollBeyondLastLine="yes" disableAdvancedScrolling="no" wrapSymbolShow="hide" Wrap="yes" borderEdge="no" edge="no" edgeNbColumn="80" zoom="1" zoom2="0" whiteSpaceShow="hide" eolShow="hide" borderWidth="0" smoothFont="yes" />
         <GUIConfig name="DockingManager" leftWidth="155" rightWidth="416" topHeight="200" bottomHeight="310">
             <FloatingWindow cont="4" x="642" y="-8" width="1250" height="439" />
             <PluginDlg pluginName="Notepad++::InternalFunction" id="0" curr="1" prev="4" isVisible="yes" />

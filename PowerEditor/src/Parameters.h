@@ -1433,7 +1433,7 @@ public:
 		if (isAlive)	{
 			s._lastColorState = c;
 			s._colorStyle = nbFrame;
-			if /* constexpr */ (d)	s._fgColor = d;
+			s._fgColor = d;
 		}
 	}
 

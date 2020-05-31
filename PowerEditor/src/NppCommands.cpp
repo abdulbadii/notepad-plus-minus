@@ -1160,9 +1160,9 @@ void Notepad_plus::command(int id)	{
 				if (col)	{
 					if (col_o != col)	{
 						uint8_t R,G,B, m;
-						R = static_cast<uint8_t>(col &0x0000FF);
-						G = static_cast<uint8_t>(col >>8 &0x0000FF);
-						B = static_cast<uint8_t>(col >>16 &0x0000FF);
+						R = static_cast<uint8_t>(col &0xFF);
+						G = static_cast<uint8_t>(col >>8 &0xFF);
+						B = static_cast<uint8_t>(col >>16 &0xFF);
 						m = max(R, max(G, B));
 						d =
 						uint32_t( float(R /m * 0x2C))
@@ -1176,14 +1176,14 @@ void Notepad_plus::command(int id)	{
 					c_n = c = col = d = param.styleColorDelta();
 			}
 			else	{
-				_pEditView->f(SCI_SETCARETLINEBACK, c_n=c=col=d/*= param.styleColorDelta() */);
+				_pEditView->f(SCI_SETCARETLINEBACK, c_n=c=col=d);
 				_pEditView->f(SCI_SETCARETLINEVISIBLE, 1);
 			}
 
 			bool tooShiny =
-			uint8_t( (c_n & 0xFF) >0xCA || (c_n >> 8 & 0xFF) >0xCA || (c_n >> 16 & 0xFF) >0xCA );
+			uint8_t( (c_n & 0xFF) >0xD3 || (c_n >> 8 & 0xFF) >0xCB || (c_n >> 16 & 0xFF) >0xCB );
 			if (f)
-				if (++f < 5)
+				if (++f < 6)
 					_pEditView->f(SCI_SETCARETLINEFRAME, f);
 				else if (tooShiny)	{
 					_pEditView->f(SCI_SETCARETLINEVISIBLE, 0);
@@ -1197,7 +1197,7 @@ void Notepad_plus::command(int id)	{
 				}
 			else if (tooShiny)	{
 				_pEditView->f(SCI_SETCARETLINEFRAME, f=1);
-				_pEditView->f(SCI_SETCARETLINEBACK, c=d);
+				_pEditView->f(SCI_SETCARETLINEBACK, c=d+(d>>1));
 			}
 			else	{
 				_pEditView->f(SCI_SETCARETLINEBACK, c=c_n);
