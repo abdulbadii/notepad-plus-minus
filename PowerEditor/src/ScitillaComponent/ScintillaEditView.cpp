@@ -2448,7 +2448,7 @@ void ScintillaEditView::performCrHiLi()	{
 			f(SCI_SETCARETLINEVISIBLE, 1);
 		}
 		else	{
-			f(SCI_SETCARETLINEBACK, style._fgColor ? style._fgColor : style._bgColor ? style._bgColor : 0xCC7171);
+			f(SCI_SETCARETLINEBACK, style._fgColor ? style._fgColor : style._bgColor ? style._bgColor : 0xCC3371);
 			f(SCI_SETCARETLINEVISIBLE, 0);
 		}
 	}

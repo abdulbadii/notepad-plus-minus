@@ -1343,7 +1343,7 @@
         <WidgetStyle name="Indent guideline style" styleID="37" fgColor="808080" bgColor="000000" fontName="" fontStyle="0" fontSize="" />
         <WidgetStyle name="Brace highlight style" styleID="34" fgColor="FDFD00" bgColor="D70000" fontName="" fontStyle="1" fontSize="10" />
         <WidgetStyle name="Bad brace colour" styleID="35" fgColor="0000A0" bgColor="FF4A4A" fontName="" fontStyle="0" fontSize="" />
-        <WidgetStyle name="Current line background colour" styleID="0" bgColor="FF0000" fontStyle="0" fgColor="000000" fontSize="" colorStyle="0" lastColorState="000000" />
+        <WidgetStyle name="Current line background colour" styleID="0" bgColor="FF0000" fontStyle="0" fgColor="1F0000" fontSize="" colorStyle="6" lastColorState="9B0000" />
         <WidgetStyle name="Selected text colour" styleID="0" bgColor="6F003D" fontStyle="0" fgColor="000024" />
         <WidgetStyle name="Caret colour" styleID="2069" fgColor="CAFF4F" fontStyle="0" bgColor="372017" />
         <WidgetStyle name="Edge colour" styleID="0" fgColor="80FFFF" fontStyle="0" bgColor="112435" fontSize="" />

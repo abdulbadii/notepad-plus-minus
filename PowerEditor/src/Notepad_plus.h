@@ -236,7 +236,7 @@ public:
 	}
 	
 	inline void updateBeginEndSelectPosition(bool is_insert, size_t position, size_t length)	{
-		if (beginSelectPos != -1 && static_cast<long long>(position) < beginSelectPos - 1)
+		if (static_cast<long long>(position) < beginSelectPos - 1)
 			beginSelectPos += is_insert ? static_cast<long long>(length)
 			: -static_cast<long long>(length);
 		assert(beginSelectPos >= 0);

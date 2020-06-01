@@ -1182,7 +1182,7 @@ void Notepad_plus::command(int id)	{
 			}
 
 			bool tooShiny =
-			uint8_t( (c_n & 0xFF) > 0xE5 || (c_n >> 8 & 0xFF) > uint32_t(f? 0xDE : 0xAE) || (c_n >> 16 & 0xFF) >0xE5 );
+			uint8_t( (c_n & 0xFF) > 0xE3 || (c_n >> 8 & 0xFF) > uint32_t(f? 0xDE : 0xAE) || (c_n >> 16 & 0xFF) >0xE3 );
 			if (f)
 				if (++f < 7)
 					_pEditView->f(SCI_SETCARETLINEFRAME, f);
