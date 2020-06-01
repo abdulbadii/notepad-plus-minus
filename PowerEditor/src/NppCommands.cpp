@@ -692,8 +692,8 @@ void Notepad_plus::command(int id)	{
 			{
 				_pEditView->sortLines(fromLine, toLine, pSorter.get());
 			}
-			catch (size_t& failedLineIndex)
-			{
+			catch (size_t& failedLineIndex)	{
+
 				size_t lineNo = 1 + fromLine + failedLineIndex;
 
 				_nativeLangSpeaker.messageBox("SortingError",
@@ -1164,10 +1164,9 @@ void Notepad_plus::command(int id)	{
 						G = static_cast<uint8_t>(col >>8 &0xFF);
 						B = static_cast<uint8_t>(col >>16 &0xFF);
 						m = max(R, max(G, B));
-						d =
-						uint32_t( float(R /m * 0x2C))
-						+ (uint32_t( float(G /m * 0x2C)) <<8)
-						+ (uint32_t( float(B /m * 0x2C)) <<16);
+						d=uint32_t( float(0x1F * R) /m )
+						+ (uint32_t( float(0x1F * G) /m ) <<8)
+						+ (uint32_t( float(0x1F * B) /m ) <<16);
 						c = col;
 					}
 					c_n = c + d;
@@ -1176,19 +1175,21 @@ void Notepad_plus::command(int id)	{
 					c_n = c = col = d = param.styleColorDelta();
 			}
 			else	{
-				_pEditView->f(SCI_SETCARETLINEBACK, c_n=c=col=d);
+				if (d)
+					_pEditView->f(SCI_SETCARETLINEBACK, c_n=c=col=d<<1);
 				_pEditView->f(SCI_SETCARETLINEVISIBLE, 1);
+				break;
 			}
 
 			bool tooShiny =
-			uint8_t( (c_n & 0xFF) >0xD3 || (c_n >> 8 & 0xFF) >0xCB || (c_n >> 16 & 0xFF) >0xCB );
+			uint8_t( (c_n & 0xFF) > 0xE5 || (c_n >> 8 & 0xFF) > uint32_t(f? 0xDE : 0xAE) || (c_n >> 16 & 0xFF) >0xE5 );
 			if (f)
-				if (++f < 6)
+				if (++f < 7)
 					_pEditView->f(SCI_SETCARETLINEFRAME, f);
 				else if (tooShiny)	{
 					_pEditView->f(SCI_SETCARETLINEVISIBLE, 0);
 					_pEditView->f(SCI_SETCARETLINEFRAME, f=0);
-					param.setLineHilitState(col_o=c=0, f, d);
+					param.setLineHilitState(c=0, f, col_o=d);
 					break;
 				}
 				else	{
@@ -1197,13 +1198,11 @@ void Notepad_plus::command(int id)	{
 				}
 			else if (tooShiny)	{
 				_pEditView->f(SCI_SETCARETLINEFRAME, f=1);
-				_pEditView->f(SCI_SETCARETLINEBACK, c=d+(d>>1));
+				_pEditView->f(SCI_SETCARETLINEBACK, c=(d<<1)+d);
 			}
-			else	{
+			else
 				_pEditView->f(SCI_SETCARETLINEBACK, c=c_n);
-				_pEditView->f(SCI_SETCARETLINEVISIBLE,1);
-			}
-			param.setLineHilitState(col_o=c, f);
+			param.setLineHilitState(col_o=c, f, d);
 		}
 		break;
 
@@ -1463,8 +1462,8 @@ void Notepad_plus::command(int id)	{
 
 		case IDM_SEARCH_SELECTMATCHINGBRACES:
 			findMatchingBracePos(braceAtCaret, braceOpposite);
-			if (braceOpposite != -1)
-			{
+			if (braceOpposite != -1)	{
+
 				_pEditView->f(SCI_SETSEL, min(braceAtCaret, braceOpposite), max(braceAtCaret, braceOpposite) + 1);
 				if (braceAtCaret > braceOpposite)	{
 					_pEditView->f(SCI_SWAPMAINANCHORCARET);
@@ -2922,8 +2921,8 @@ void Notepad_plus::command(int id)	{
 
 /*
 		case IDM_TOOL_KEYR:{
-BOOL parseDword(const char* in, DWORD* out)
-{
+BOOL parseDword(const char* in, DWORD* out)	{
+
 	char* t;
 	long number = strtol(in, &t);
 	BOOL ok = (!errno && t != in);

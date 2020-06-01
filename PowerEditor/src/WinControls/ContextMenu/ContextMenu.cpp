@@ -28,8 +28,8 @@
 
 #include "ContextMenu.h"
 
-MenuItemUnit::MenuItemUnit(unsigned long cmdID, const TCHAR *itemName, const TCHAR *parentFolderName) : _cmdID(cmdID)
-{
+MenuItemUnit::MenuItemUnit(unsigned long cmdID, const TCHAR *itemName, const TCHAR *parentFolderName) : _cmdID(cmdID)	{
+
 	if (!itemName)
 		_itemName.clear();
 	else

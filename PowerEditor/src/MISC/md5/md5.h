@@ -238,8 +238,8 @@ private:
 
 public:
   // MAIN FUNCTIONS
-  MD5()
-  {
+  MD5()	{
+
     Init() ;
   }
 

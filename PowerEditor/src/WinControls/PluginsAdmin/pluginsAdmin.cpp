@@ -47,8 +47,8 @@
 using namespace std;
 using nlohmann::json;
 
-Version::Version(const generic_string& versionStr)
-{
+Version::Version(const generic_string& versionStr)	{
+
 	try {
 		auto ss = tokenizeString(versionStr, '.');
 
@@ -68,8 +68,8 @@ Version::Version(const generic_string& versionStr)
 			++i;
 		}
 	}
-	catch (...)
-	{
+	catch (...)	{
+
 		_major = 0;
 		_minor = 0;
 		_patch = 0;
@@ -417,8 +417,8 @@ vector<PluginUpdateInfo*> PluginViewList::fromUiIndexesToPluginInfos(const std::
 	return r;
 }
 
-PluginsAdminDlg::PluginsAdminDlg()
-{
+PluginsAdminDlg::PluginsAdminDlg()	{
+
 	// Get wingup path
 	_updaterDir = param.getNppPath();
 	PathAppend(_updaterDir, L"updater");
@@ -677,8 +677,8 @@ bool loadFromJson(PluginViewList & pl, const json& j)	{
 	return true;
 }
 
-PluginUpdateInfo::PluginUpdateInfo(const generic_string& fullFilePath, const generic_string& filename)
-{
+PluginUpdateInfo::PluginUpdateInfo(const generic_string& fullFilePath, const generic_string& filename)	{
+
 	if (!::PathFileExists(fullFilePath.c_str()))
 		return;
 
@@ -810,8 +810,8 @@ bool PluginsAdminDlg::updateListAndLoadFromJson()	{
 		::FreeLibrary(hLib);
 		return true;
 	}
-	catch (...)
-	{
+	catch (...)	{
+
 		// whichever exception
 		if (hLib)
 			::FreeLibrary(hLib);

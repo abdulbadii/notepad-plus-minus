@@ -63,8 +63,8 @@ class GlobalMappers	{
 		std::unordered_map<int, std::string> setLexerMapper;
 
         // only default constructor is needed
-        GlobalMappers()
-        {
+        GlobalMappers()	{
+
             // pre 2.0
             temp[L"Operators"]                     = SCE_USER_KWLIST_OPERATORS1;
             temp[L"Folder+"]                       = SCE_USER_KWLIST_FOLDERS_IN_CODE1_OPEN;

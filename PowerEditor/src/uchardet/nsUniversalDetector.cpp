@@ -45,8 +45,8 @@
 #include "nsEscCharsetProber.h"
 #include "nsLatin1Prober.h"
 
-nsUniversalDetector::nsUniversalDetector(PRUint32 aLanguageFilter)
-{
+nsUniversalDetector::nsUniversalDetector(PRUint32 aLanguageFilter)	{
+
   mDone = PR_FALSE;
   mBestGuess = -1;   //illegal value as signal
   mInTag = PR_FALSE;
@@ -73,8 +73,8 @@ nsUniversalDetector::~nsUniversalDetector()
 }
 
 void 
-nsUniversalDetector::Reset()
-{
+nsUniversalDetector::Reset()	{
+
   mDone = PR_FALSE;
   mBestGuess = -1;   //illegal value as signal
   mInTag = PR_FALSE;
@@ -98,8 +98,8 @@ nsUniversalDetector::Reset()
 #define SHORTCUT_THRESHOLD      (float)0.95
 #define MINIMUM_THRESHOLD      (float)0.60
 
-nsresult nsUniversalDetector::HandleData(const char* aBuf, PRUint32 aLen)
-{
+nsresult nsUniversalDetector::HandleData(const char* aBuf, PRUint32 aLen)	{
+
   if(mDone) 
     return NS_OK;
 

@@ -22,8 +22,8 @@ inline static DWORD GetExStyle(HWND hWnd) {
 
 const UINT WM_WINMGR = RegisterWindowMessage(L"WM_WINMGR");
 
-CWinMgr::CWinMgr(WINRECT* pWinMap) : m_map(pWinMap)
-{
+CWinMgr::CWinMgr(WINRECT* pWinMap) : m_map(pWinMap)	{
+
 	WINRECT::InitMap(m_map);
 }
 
@@ -70,8 +70,8 @@ void CWinMgr::GetWindowPositions(HWND hWnd)	{
 // Move all the windows. Use DeferWindowPos for speed.
 //
 void
-CWinMgr::SetWindowPositions(HWND hWnd)
-{
+CWinMgr::SetWindowPositions(HWND hWnd)	{
+
 	int nWindows = CountWindows();
 	if (m_map && hWnd && nWindows>0) {
 		HDWP hdwp = ::BeginDeferWindowPos(nWindows);
@@ -133,8 +133,8 @@ WINRECT* CWinMgr::FindRect(int nID)	{
 // desired size for TOFIT types.
 //
 void
-CWinMgr::CalcGroup(WINRECT* pGroup, HWND hWnd)
-{
+CWinMgr::CalcGroup(WINRECT* pGroup, HWND hWnd)	{
+
 	// If this bombs, most likely the first entry in your map is not a group!
 	assert(pGroup && pGroup->IsGroup());
 	assert(hWnd);
@@ -237,8 +237,8 @@ CWinMgr::AdjustSize(WINRECT* wrc, BOOL bRow,
 // each to the right of the previous.
 //
 void
-CWinMgr::PositionRects(WINRECT* pGroup, const RECT& rcTotal, BOOL bRow)
-{
+CWinMgr::PositionRects(WINRECT* pGroup, const RECT& rcTotal, BOOL bRow)	{
+
 	LONG xoryPos = bRow ? rcTotal.top : rcTotal.left;
 
 	CWinGroupIterator it;
@@ -270,8 +270,8 @@ CWinMgr::PositionRects(WINRECT* pGroup, const RECT& rcTotal, BOOL bRow)
 // subentries.
 //
 void
-CWinMgr::OnGetSizeInfo(SIZEINFO& szi, WINRECT* wrc, HWND hWnd)
-{
+CWinMgr::OnGetSizeInfo(SIZEINFO& szi, WINRECT* wrc, HWND hWnd)	{
+
 	szi.szMin = SIZEZERO;				// default min size = zero
 	szi.szMax = SIZEMAX;					// default max size = infinite
 	szi.szDesired = RectToSize(wrc->GetRect());	// default desired size = current
@@ -402,8 +402,8 @@ BOOL CWinMgr::SendGetSizeInfo(SIZEINFO& szi, HWND hWnd, UINT nID)	{
 // Get min/max info.
 //
 void
-CWinMgr::GetMinMaxInfo(HWND hWnd, MINMAXINFO* lpMMI)
-{
+CWinMgr::GetMinMaxInfo(HWND hWnd, MINMAXINFO* lpMMI)	{
+
 	SIZEINFO szi;
 	GetMinMaxInfo(hWnd, szi); // call overloaded version
 	lpMMI->ptMinTrackSize = SizeToPoint(szi.szMin);

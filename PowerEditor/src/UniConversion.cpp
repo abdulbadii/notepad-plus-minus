@@ -8,8 +8,8 @@
 #include <windows.h>
 #include "UniConversion.h"
 
-unsigned int UTF8Length(const wchar_t *uptr, unsigned int tlen)
-{
+unsigned int UTF8Length(const wchar_t *uptr, unsigned int tlen)	{
+
 	unsigned int len = 0;
 	for (unsigned int i = 0; i < tlen && uptr[i]; ++i)	{
 
@@ -49,8 +49,8 @@ void UTF8FromUCS2(const wchar_t *uptr, unsigned int tlen, char *putf, unsigned i
 	putf[len] = '\0';
 }
 
-unsigned int UCS2Length(const char *s, unsigned int len)
-{
+unsigned int UCS2Length(const char *s, unsigned int len)	{
+
 	unsigned int ulen = 0;
 	for (unsigned int i=0; i<len; ++i)	{
 
@@ -61,8 +61,8 @@ unsigned int UCS2Length(const char *s, unsigned int len)
 	return ulen;
 }
 
-unsigned int UCS2FromUTF8(const char *s, unsigned int len, wchar_t *tbuf, unsigned int tlen)
-{
+unsigned int UCS2FromUTF8(const char *s, unsigned int len, wchar_t *tbuf, unsigned int tlen)	{
+
 	unsigned int ui=0;
 	const UCHAR *us = reinterpret_cast<const UCHAR *>(s);
 	unsigned int i=0;
@@ -93,8 +93,8 @@ unsigned int UCS2FromUTF8(const char *s, unsigned int len, wchar_t *tbuf, unsign
 }
 
 
-unsigned int ascii_to_utf8(const char * pszASCII, unsigned int lenASCII, char * pszUTF8)
-{
+unsigned int ascii_to_utf8(const char * pszASCII, unsigned int lenASCII, char * pszUTF8)	{
+
   // length of pszUTF8 must be enough; 
   // its maximum is (lenASCII*3 + 1)
   

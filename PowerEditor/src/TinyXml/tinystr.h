@@ -48,8 +48,8 @@ class TiXmlString	{
     TiXmlString (const TCHAR * instring);
 
     // TiXmlString empty constructor
-    TiXmlString ()
-    {
+    TiXmlString ()	{
+
         allocated = 0;
         cstring = NULL;
         current_length = 0;

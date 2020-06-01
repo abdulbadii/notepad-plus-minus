@@ -169,15 +169,12 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	if (nppGUI._rememberLastSession && !cmdLineParams->_isNoSession)
 		_notepad_plus_plus_core.loadLastSession();
 
-	if (not cmdLineParams->_isPreLaunch)	{
-
+	if (not cmdLineParams->_isPreLaunch)
 		if (cmdLineParams->isPointValid())
 			::ShowWindow(_hSelf, SW_SHOW);
 		else
 			::ShowWindow(_hSelf, nppGUI._isMaximized ? SW_MAXIMIZE : SW_SHOW);
-	}
 	else	{
-
 		_notepad_plus_plus_core._pTrayIco = new trayIconControler(_hSelf, IDI_M30ICON, IDC_MINIMIZED_TRAY, ::LoadIcon(_hInst, MAKEINTRESOURCE(IDI_M30ICON)), L"");
 		_notepad_plus_plus_core._pTrayIco->doTrayIcon(ADD);
 	}

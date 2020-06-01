@@ -69,8 +69,8 @@ protected:
 	}
 
 public:
-	ISorter(bool isDescending, size_t fromColumn, size_t toColumn) : _isDescending(isDescending), _fromColumn(fromColumn), _toColumn(toColumn)
-	{
+	ISorter(bool isDescending, size_t fromColumn, size_t toColumn) : _isDescending(isDescending), _fromColumn(fromColumn), _toColumn(toColumn)	{
+
 		assert(_fromColumn <= _toColumn);
 	};
 	virtual ~ISorter() { };
@@ -90,8 +90,8 @@ public:
 		// getSortKey() so many times.
 		if (isSortingSpecificColumns())	{
 
-			std::sort(lines.begin(), lines.end(), [this](generic_string a, generic_string b)
-			{
+			std::sort(lines.begin(), lines.end(), [this](generic_string a, generic_string b)	{
+
 				if (isDescending())	{
 
 					return getSortKey(a).compare(getSortKey(b)) > 0;
@@ -105,8 +105,8 @@ public:
 		}
 		else	{
 
-			std::sort(lines.begin(), lines.end(), [this](generic_string a, generic_string b)
-			{
+			std::sort(lines.begin(), lines.end(), [this](generic_string a, generic_string b)	{
+
 				if (isDescending())	{
 
 					return a.compare(b) > 0;
@@ -135,8 +135,8 @@ public:
 		// getSortKey() so many times.
 		if (isSortingSpecificColumns())	{
 
-			std::sort(lines.begin(), lines.end(), [this](generic_string aIn, generic_string bIn)
-			{
+			std::sort(lines.begin(), lines.end(), [this](generic_string aIn, generic_string bIn)	{
+
 				generic_string a = getSortKey(aIn);
 				generic_string b = getSortKey(bIn);
 
@@ -193,8 +193,8 @@ public:
 		}
 		else	{
 
-			std::sort(lines.begin(), lines.end(), [this](generic_string a, generic_string b)
-			{
+			std::sort(lines.begin(), lines.end(), [this](generic_string a, generic_string b)	{
+
 				long long compareResult = 0;
 				size_t i = 0;
 				while (!compareResult)	{
@@ -256,8 +256,8 @@ template<typename T_Num>
 class NumericSorter : public ISorter	{
 
 public:
-	NumericSorter(bool isDescending, size_t fromColumn, size_t toColumn) : ISorter(isDescending, fromColumn, toColumn)
-	{
+	NumericSorter(bool isDescending, size_t fromColumn, size_t toColumn) : ISorter(isDescending, fromColumn, toColumn)	{
+
 #ifdef __MINGW32__
 		_usLocale = NULL;
 #else
@@ -292,16 +292,16 @@ public:
 				{
 					nonEmptyInputAsNumbers.push_back(std::make_pair(lineIndex, convertStringToNumber(preparedLine)));
 				}
-				catch (...)
-				{
+				catch (...)	{
+
 					throw lineIndex;
 				}
 			}
 		}
 		assert(nonEmptyInputAsNumbers.size() + empties.size() == lines.size());
 		const bool descending = isDescending();
-		std::sort(nonEmptyInputAsNumbers.begin(), nonEmptyInputAsNumbers.end(), [descending](std::pair<size_t, T_Num> a, std::pair<size_t, T_Num> b)
-		{
+		std::sort(nonEmptyInputAsNumbers.begin(), nonEmptyInputAsNumbers.end(), [descending](std::pair<size_t, T_Num> a, std::pair<size_t, T_Num> b)	{
+
 			if (descending)	{
 
 				return a.second > b.second;

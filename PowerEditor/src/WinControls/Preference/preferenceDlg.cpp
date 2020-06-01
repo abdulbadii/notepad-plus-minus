@@ -2432,8 +2432,8 @@ INT_PTR CALLBACK PrintSettingsDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 
 						::SetDlgItemText(_hSelf, _focusedEditCtrl, str2Set.c_str());
 					}
-					catch (...)
-					{
+					catch (...)	{
+
 						// Do nothing
 					}
 				}

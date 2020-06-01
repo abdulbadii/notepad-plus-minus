@@ -379,8 +379,8 @@ void Buffer::setPosition(const Position & pos, ScintillaEditView * identifier)	{
 }
 
 
-Position& Buffer::getPosition(ScintillaEditView* identifier)
-{
+Position& Buffer::getPosition(ScintillaEditView* identifier)	{
+
 	int index = indexOfReference(identifier);
 	return _positions.at(index);
 }
@@ -550,8 +550,8 @@ int FileManager::getBufferIndexByID(BufferID id)	{
 	return -1;
 }
 
-Buffer* FileManager::getBufferByIndex(size_t index)
-{
+Buffer* FileManager::getBufferByIndex(size_t index)	{
+
 	if (index >= _buffers.size())
 		return nullptr;
 	return _buffers.at(index);
@@ -589,8 +589,8 @@ void FileManager::closeBuffer(BufferID id, ScintillaEditView * identifier)	{
 
 
 // backupFileName is sentinel of backup mode: if it's not NULL, then we use it (load it). Otherwise we use filename
-BufferID FileManager::loadFile(const TCHAR * filename, Document doc, int encoding, const TCHAR *backupFileName, FILETIME fileNameTimestamp)
-{
+BufferID FileManager::loadFile(const TCHAR * filename, Document doc, int encoding, const TCHAR *backupFileName, FILETIME fileNameTimestamp)	{
+
 	bool ownDoc = false;
 	if (!doc)	{
 
@@ -1132,8 +1132,8 @@ size_t FileManager::nextUntitledNewNumber() const
 	return newNumber;
 }
 
-BufferID FileManager::newEmptyDocument()
-{
+BufferID FileManager::newEmptyDocument()	{
+
 	generic_string newTitle = UNTITLED_STR;
 	TCHAR nb[10];
 	wsprintf(nb, L"%d", nextUntitledNewNumber());
@@ -1149,8 +1149,8 @@ BufferID FileManager::newEmptyDocument()
 	return id;
 }
 
-BufferID FileManager::bufferFromDocument(Document doc, bool dontIncrease, bool dontRef)
-{
+BufferID FileManager::bufferFromDocument(Document doc, bool dontIncrease, bool dontRef)	{
+
 	generic_string newTitle = UNTITLED_STR;
 	TCHAR nb[10];
 	wsprintf(nb, L"%d", nextUntitledNewNumber());
@@ -1180,8 +1180,8 @@ int FileManager::detectCodepage(char* buf, size_t len)	{
 	return codepage;
 }
 
-LangType FileManager::detectLanguageFromTextBegining(const unsigned char *data, size_t dataLen)
-{
+LangType FileManager::detectLanguageFromTextBegining(const unsigned char *data, size_t dataLen)	{
+
 	struct FirstLineLanguages	{
 
 		std::string pattern;
@@ -1446,8 +1446,8 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, char* data,
 }
 
 
-BufferID FileManager::getBufferFromName(const TCHAR* name)
-{
+BufferID FileManager::getBufferFromName(const TCHAR* name)	{
+
 	TCHAR fullpath[MAX_PATH];
 	::GetFullPathName(name, MAX_PATH, fullpath, NULL);
 	if (_tcschr(fullpath, '~'))	{
@@ -1464,8 +1464,8 @@ BufferID FileManager::getBufferFromName(const TCHAR* name)
 }
 
 
-BufferID FileManager::getBufferFromDocument(Document doc)
-{
+BufferID FileManager::getBufferFromDocument(Document doc)	{
+
 	for (size_t i = 0; i < _nbBufs; ++i)	{
 
 		if (_buffers[i]->_doc == doc)

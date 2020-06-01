@@ -39,8 +39,8 @@
 #include "nsEscCharsetProber.h"
 #include "nsUniversalDetector.h"
 
-nsEscCharSetProber::nsEscCharSetProber(PRUint32 aLanguageFilter)
-{
+nsEscCharSetProber::nsEscCharSetProber(PRUint32 aLanguageFilter)	{
+
   for (PRUint32 i = 0; i < NUM_OF_ESC_CHARSETS; ++i )
     mCodingSM[i] = nsnull;
   if (aLanguageFilter & NS_FILTER_CHINESE_SIMPLIFIED)	{ 
@@ -73,8 +73,8 @@ void nsEscCharSetProber::Reset(void)	{
   mDetectedCharset = nsnull;
 }
 
-nsProbingState nsEscCharSetProber::HandleData(const char* aBuf, PRUint32 aLen)
-{
+nsProbingState nsEscCharSetProber::HandleData(const char* aBuf, PRUint32 aLen)	{
+
   for (PRUint32 i = 0; i < aLen && mState == eDetecting; ++i )	{
 
     for (PRInt32 j = mActiveSM-1; j>= 0; --j )	{

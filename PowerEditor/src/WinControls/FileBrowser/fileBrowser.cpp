@@ -687,8 +687,8 @@ void FileBrowser::notified(LPNMHDR notification)	{
 	}
 }
 
-BrowserNodeType FileBrowser::getNodeType(HTREEITEM hItem)
-{
+BrowserNodeType FileBrowser::getNodeType(HTREEITEM hItem)	{
+
 	TVITEM tvItem;
 	tvItem.hItem = hItem;
 	tvItem.mask = TVIF_IMAGE | TVIF_PARAM;

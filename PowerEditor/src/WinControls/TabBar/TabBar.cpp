@@ -1242,8 +1242,8 @@ void TabBarPlus::exchangeItemData(POINT point)	{
 }
 
 
-CloseButtonZone::CloseButtonZone()
-{
+CloseButtonZone::CloseButtonZone()	{
+
 	// TODO: get width/height of close button dynamically
 	_width = param._dpiManager.scaleX(11);
 	_height = param._dpiManager.scaleY(11);

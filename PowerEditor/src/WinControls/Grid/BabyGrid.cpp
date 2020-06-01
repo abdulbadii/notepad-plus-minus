@@ -121,8 +121,8 @@ int         CountGrids();
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
-int HomeColumnNthVisible(int SI)
-	{
+int HomeColumnNthVisible(int SI)	{
+
 	int j,hc,count=0;
 	hc=BGHS[SI].homecol;
 	for(j=1;j<=hc;++j)	{
@@ -136,8 +136,8 @@ int HomeColumnNthVisible(int SI)
 	}
 
 
-void RefreshGrid(HWND hWnd)
-	{
+void RefreshGrid(HWND hWnd)	{
+
 	RECT rect;
 	int SI;
 	GetClientRect(hWnd,&rect);
@@ -150,8 +150,8 @@ void RefreshGrid(HWND hWnd)
 
 	}
 
-int GetNextColWithWidth(int SI, int startcol, int direction)
-	{
+int GetNextColWithWidth(int SI, int startcol, int direction)	{
+
 	//calls with direction == 1 for right, direction == -1 for left
 	//returns 0 if no more cols in that direction, else column number
 	int ReturnValue, j=startcol;
@@ -175,8 +175,8 @@ int GetNextColWithWidth(int SI, int startcol, int direction)
 	}
 
 
-int GetRowOfMouse(int SI,int y)
-	{
+int GetRowOfMouse(int SI,int y)	{
+
 	int ReturnValue;
 	if(y<=(BGHS[SI].titleheight))	{
 
@@ -196,8 +196,8 @@ int GetRowOfMouse(int SI,int y)
 	}
 
 
-int GetColOfMouse(int SI,int x)
-	{
+int GetColOfMouse(int SI,int x)	{
+
 	int ReturnValue;
 	int j;
 	if(x<=BGHS[SI].columnwidths[0])	{
@@ -227,22 +227,22 @@ int GetColOfMouse(int SI,int x)
 	return ReturnValue;
 	}
 
-BOOL OutOfRange(_BGCELL *cell)
-	{
+BOOL OutOfRange(_BGCELL *cell)	{
+
 		if((cell->row > MAX_ROWS)||(cell->col > MAX_COLS))	{
 return TRUE;}
 		else	{
 return FALSE;}
 	}
 
-void SetCell(_BGCELL *cell,int row, int col)
-	{
+void SetCell(_BGCELL *cell,int row, int col)	{
+
 	cell->row = row;
 	cell->col = col;
 	}
 
-void CalcVisibleCellBoundaries(int SelfIndex)
-{
+void CalcVisibleCellBoundaries(int SelfIndex)	{
+
 int gridx,gridy;
 int j;
 gridx=BGHS[SelfIndex].gridwidth;
@@ -282,8 +282,8 @@ BGHS[SelfIndex].bottomvisiblerow = j;
 }
 
 
-RECT GetCellRect(HWND hWnd,int SI, int r, int c)
-	{
+RECT GetCellRect(HWND hWnd,int SI, int r, int c)	{
+
 	RECT rect;
 	int offset;
 	int j;
@@ -328,8 +328,8 @@ RECT GetCellRect(HWND hWnd,int SI, int r, int c)
 	}
 
 
-void DisplayTitle(HWND hWnd,int SI,HFONT hfont)
-	{
+void DisplayTitle(HWND hWnd,int SI,HFONT hfont)	{
+
 	RECT rect;
 	HDC gdc;
 	HFONT holdfont;
@@ -350,8 +350,8 @@ void DisplayTitle(HWND hWnd,int SI,HFONT hfont)
 
 const size_t bufferLen = 1000;
 
-void DisplayColumn(HWND hWnd,int SI,int c,int offset,HFONT hfont,HFONT hcolumnheadingfont)
-{
+void DisplayColumn(HWND hWnd,int SI,int c,int offset,HFONT hfont,HFONT hcolumnheadingfont)	{
+
 	HDC gdc;
 	RECT rect,rectsave;
 	HFONT holdfont;
@@ -647,8 +647,8 @@ void DisplayColumn(HWND hWnd,int SI,int c,int offset,HFONT hfont,HFONT hcolumnhe
 
 
 
-void DrawCursor(HWND hWnd,int SI)
-	{
+void DrawCursor(HWND hWnd,int SI)	{
+
 		RECT rect,rectwhole;
 		HDC gdc;
 		HPEN hpen,holdpen;
@@ -676,8 +676,8 @@ void DrawCursor(HWND hWnd,int SI)
 		ReleaseDC(hWnd,gdc);
 	}
 
-void SetCurrentCellStatus(HWND hWnd,int SelfIndex)
-	{
+void SetCurrentCellStatus(HWND hWnd,int SelfIndex)	{
+
 		SetCell(&BGcell,BGHS[SelfIndex].cursorrow,BGHS[SelfIndex].cursorcol);
 		if (SendMessage(hWnd, BGM_GETPROTECTION, reinterpret_cast<WPARAM>(&BGcell), 0))	{
 
@@ -692,8 +692,8 @@ void SetCurrentCellStatus(HWND hWnd,int SelfIndex)
 
 
 
-TCHAR GetASCII(WPARAM wParam, LPARAM lParam)
-	{
+TCHAR GetASCII(WPARAM wParam, LPARAM lParam)	{
+
 	int returnvalue;
 	TCHAR mbuffer[100];
 	int result;
@@ -711,8 +711,8 @@ TCHAR GetASCII(WPARAM wParam, LPARAM lParam)
 
 
 
-void SetHomeRow(HWND hWnd,int SI,int row,int col)
-	{
+void SetHomeRow(HWND hWnd,int SI,int row,int col)	{
+
 	RECT gridrect,cellrect;
 	//get rect of grid window
 	GetClientRect(hWnd,&gridrect);
@@ -757,8 +757,8 @@ void SetHomeRow(HWND hWnd,int SI,int row,int col)
 
 
 
-void SetHomeCol(HWND hWnd,int SI,int row,int col)
-	{
+void SetHomeCol(HWND hWnd,int SI,int row,int col)	{
+
 		RECT gridrect,cellrect;
 		BOOL LASTCOLVISIBLE;
 		//get rect of grid window
@@ -812,8 +812,8 @@ void SetHomeCol(HWND hWnd,int SI,int row,int col)
 
 
 
-void ShowVscroll(HWND hWnd,int SI)
-	{
+void ShowVscroll(HWND hWnd,int SI)	{
+
 	//if more rows than can be visible on grid, display vertical scrollbar
 	//otherwise, hide it.
 	RECT gridrect;
@@ -841,8 +841,8 @@ void ShowVscroll(HWND hWnd,int SI)
 
 	}
 
-void ShowHscroll(HWND hWnd,int SI)
-	{
+void ShowHscroll(HWND hWnd,int SI)	{
+
 	//if more rows than can be visible on grid, display vertical scrollbar
 	//otherwise, hide it.
 	RECT gridrect;
@@ -879,8 +879,8 @@ void ShowHscroll(HWND hWnd,int SI)
 
 
 
-void NotifyRowChanged(HWND hWnd,int SI)
-	{
+void NotifyRowChanged(HWND hWnd,int SI)	{
+
 	WPARAM wParam;
 	LPARAM lParam;
 		lParam = MAKELPARAM(BGHS[SI].cursorrow,BGHS[SI].cursorcol);
@@ -891,8 +891,8 @@ void NotifyRowChanged(HWND hWnd,int SI)
 	}
 
 
-void NotifyColChanged(HWND hWnd,int SI)
-	{
+void NotifyColChanged(HWND hWnd,int SI)	{
+
 	WPARAM wParam;
 	LPARAM lParam;
 		lParam = MAKELPARAM(BGHS[SI].cursorrow,BGHS[SI].cursorcol);
@@ -904,8 +904,8 @@ void NotifyColChanged(HWND hWnd,int SI)
 	}
 
 
-void NotifyEndEdit(HWND hWnd,int SI)
-	{
+void NotifyEndEdit(HWND hWnd,int SI)	{
+
 	WPARAM wParam;
 	LPARAM lParam;
 		lParam = MAKELPARAM(BGHS[SI].cursorrow,BGHS[SI].cursorcol);
@@ -915,8 +915,8 @@ void NotifyEndEdit(HWND hWnd,int SI)
 	}
 
 
-void NotifyDelete(HWND hWnd,int SI)
-	{
+void NotifyDelete(HWND hWnd,int SI)	{
+
 	WPARAM wParam;
 	LPARAM lParam;
 		lParam = MAKELPARAM(BGHS[SI].cursorrow,BGHS[SI].cursorcol);
@@ -926,8 +926,8 @@ void NotifyDelete(HWND hWnd,int SI)
 	}
 
 
-void NotifyEditBegin(HWND hWnd,int SI)
-	{
+void NotifyEditBegin(HWND hWnd,int SI)	{
+
 	WPARAM wParam;
 	LPARAM lParam;
 		lParam = MAKELPARAM(BGHS[SI].cursorrow,BGHS[SI].cursorcol);
@@ -936,8 +936,8 @@ void NotifyEditBegin(HWND hWnd,int SI)
 
 	}
 
-void NotifyEditEnd(HWND hWnd,int SI)
-	{
+void NotifyEditEnd(HWND hWnd,int SI)	{
+
 	WPARAM wParam;
 	LPARAM lParam;
 		lParam = MAKELPARAM(BGHS[SI].cursorrow,BGHS[SI].cursorcol);
@@ -947,8 +947,8 @@ void NotifyEditEnd(HWND hWnd,int SI)
 	}
 
 /*
-void NotifyF1(HWND hWnd,int SI)
-	{
+void NotifyF1(HWND hWnd,int SI)	{
+
 	WPARAM wParam;
 	LPARAM lParam;
 		lParam = MAKELPARAM(BGHS[SI].cursorrow,BGHS[SI].cursorcol);
@@ -957,8 +957,8 @@ void NotifyF1(HWND hWnd,int SI)
 
 	}
 
-void NotifyF2(HWND hWnd,int SI)
-	{
+void NotifyF2(HWND hWnd,int SI)	{
+
 	WPARAM wParam;
 	LPARAM lParam;
 		lParam = MAKELPARAM(BGHS[SI].cursorrow,BGHS[SI].cursorcol);
@@ -967,8 +967,8 @@ void NotifyF2(HWND hWnd,int SI)
 
 	}
 
-void NotifyF3(HWND hWnd,int SI)
-	{
+void NotifyF3(HWND hWnd,int SI)	{
+
 	WPARAM wParam;
 	LPARAM lParam;
 		lParam = MAKELPARAM(BGHS[SI].cursorrow,BGHS[SI].cursorcol);
@@ -977,8 +977,8 @@ void NotifyF3(HWND hWnd,int SI)
 
 	}
 
-void NotifyF4(HWND hWnd,int SI)
-	{
+void NotifyF4(HWND hWnd,int SI)	{
+
 	WPARAM wParam;
 	LPARAM lParam;
 		lParam = MAKELPARAM(BGHS[SI].cursorrow,BGHS[SI].cursorcol);
@@ -987,8 +987,8 @@ void NotifyF4(HWND hWnd,int SI)
 
 	}
 
-void NotifyF5(HWND hWnd,int SI)
-	{
+void NotifyF5(HWND hWnd,int SI)	{
+
 	WPARAM wParam;
 	LPARAM lParam;
 		lParam = MAKELPARAM(BGHS[SI].cursorrow,BGHS[SI].cursorcol);
@@ -997,8 +997,8 @@ void NotifyF5(HWND hWnd,int SI)
 
 	}
 
-void NotifyF6(HWND hWnd,int SI)
-	{
+void NotifyF6(HWND hWnd,int SI)	{
+
 	WPARAM wParam;
 	LPARAM lParam;
 		lParam = MAKELPARAM(BGHS[SI].cursorrow,BGHS[SI].cursorcol);
@@ -1007,8 +1007,8 @@ void NotifyF6(HWND hWnd,int SI)
 
 	}
 
-void NotifyF7(HWND hWnd,int SI)
-	{
+void NotifyF7(HWND hWnd,int SI)	{
+
 	WPARAM wParam;
 	LPARAM lParam;
 		lParam = MAKELPARAM(BGHS[SI].cursorrow,BGHS[SI].cursorcol);
@@ -1017,8 +1017,8 @@ void NotifyF7(HWND hWnd,int SI)
 
 	}
 
-void NotifyF8(HWND hWnd,int SI)
-	{
+void NotifyF8(HWND hWnd,int SI)	{
+
 	WPARAM wParam;
 	LPARAM lParam;
 		lParam = MAKELPARAM(BGHS[SI].cursorrow,BGHS[SI].cursorcol);
@@ -1027,8 +1027,8 @@ void NotifyF8(HWND hWnd,int SI)
 
 	}
 
-void NotifyF9(HWND hWnd,int SI)
-	{
+void NotifyF9(HWND hWnd,int SI)	{
+
 	WPARAM wParam;
 	LPARAM lParam;
 		lParam = MAKELPARAM(BGHS[SI].cursorrow,BGHS[SI].cursorcol);
@@ -1037,8 +1037,8 @@ void NotifyF9(HWND hWnd,int SI)
 
 	}
 
-void NotifyF10(HWND hWnd,int SI)
-	{
+void NotifyF10(HWND hWnd,int SI)	{
+
 	WPARAM wParam;
 	LPARAM lParam;
 		lParam = MAKELPARAM(BGHS[SI].cursorrow,BGHS[SI].cursorcol);
@@ -1047,8 +1047,8 @@ void NotifyF10(HWND hWnd,int SI)
 
 	}
 
-void NotifyF11(HWND hWnd,int SI)
-	{
+void NotifyF11(HWND hWnd,int SI)	{
+
 	WPARAM wParam;
 	LPARAM lParam;
 		lParam = MAKELPARAM(BGHS[SI].cursorrow,BGHS[SI].cursorcol);
@@ -1057,8 +1057,8 @@ void NotifyF11(HWND hWnd,int SI)
 
 	}
 
-void NotifyF12(HWND hWnd,int SI)
-	{
+void NotifyF12(HWND hWnd,int SI)	{
+
 	WPARAM wParam;
 	LPARAM lParam;
 		lParam = MAKELPARAM(BGHS[SI].cursorrow,BGHS[SI].cursorcol);
@@ -1067,8 +1067,8 @@ void NotifyF12(HWND hWnd,int SI)
 
 	}
 */
-void NotifyCellClicked(HWND hWnd,int SI)
-	{
+void NotifyCellClicked(HWND hWnd,int SI)	{
+
 	WPARAM wParam;
 	LPARAM lParam;
 		lParam = MAKELPARAM(BGHS[SI].cursorrow,BGHS[SI].cursorcol);
@@ -1077,8 +1077,8 @@ void NotifyCellClicked(HWND hWnd,int SI)
 
 	}
 
-void NotifyCellDbClicked(HWND hWnd,int SI)
-	{
+void NotifyCellDbClicked(HWND hWnd,int SI)	{
+
 	WPARAM wParam;
 	LPARAM lParam;
 		lParam = MAKELPARAM(BGHS[SI].cursorrow,BGHS[SI].cursorcol);
@@ -1086,16 +1086,16 @@ void NotifyCellDbClicked(HWND hWnd,int SI)
 		SendMessage(GetParent(hWnd),WM_COMMAND,wParam,lParam);
 	}
 
-void NotifyCellRClicked(HWND hWnd,int SI)
-	{
+void NotifyCellRClicked(HWND hWnd,int SI)	{
+
 	WPARAM wParam;
 	LPARAM lParam;
 		lParam = MAKELPARAM(BGHS[SI].cursorrow,BGHS[SI].cursorcol);
 		wParam=MAKEWPARAM(BGHS[SI].gridmenu,BGN_CELLRCLICKED);
 		SendMessage(GetParent(hWnd),WM_COMMAND,wParam,lParam);
 	}
-void GetVisibleColumns(HWND hWnd,int SI)
-	{
+void GetVisibleColumns(HWND hWnd,int SI)	{
+
 	int j;
 	int value;
 	value=0;
@@ -1110,8 +1110,8 @@ void GetVisibleColumns(HWND hWnd,int SI)
 	SetScrollRange(hWnd,SB_HORZ,1,value,TRUE);
 	}
 
-int GetNthVisibleColumn(HWND, int SI, int n)
-	{
+int GetNthVisibleColumn(HWND, int SI, int n)	{
+
 	int j,count;
 	int value;
 	j=1;
@@ -1133,8 +1133,8 @@ int GetNthVisibleColumn(HWND, int SI, int n)
 	}
 
 
-void CloseEdit(HWND hWnd,int SI)
-	{
+void CloseEdit(HWND hWnd,int SI)	{
+
 	int r,c;
 	_BGCELL cell;
 	r=BGHS[SI].cursorrow;
@@ -1149,8 +1149,8 @@ void CloseEdit(HWND hWnd,int SI)
 	NotifyEditEnd(hWnd,SI);
 	}
 
-void DisplayEditString(HWND hWnd,int SI, const TCHAR* tstring)
-	{
+void DisplayEditString(HWND hWnd,int SI, const TCHAR* tstring)	{
+
 		int r,c;
 		HFONT holdfont;
 		RECT rt;
@@ -1206,8 +1206,8 @@ void DisplayEditString(HWND hWnd,int SI, const TCHAR* tstring)
 ////////////////////////////////////////////////////////////////////////
 
 
-ATOM RegisterGridClass(HINSTANCE hInstance)
-{
+ATOM RegisterGridClass(HINSTANCE hInstance)	{
+
 	//initialize BGHS structure
 
 	for(int j = 0 ; j < MAX_GRIDS ; ++j )	{
@@ -1281,13 +1281,13 @@ ATOM RegisterGridClass(HINSTANCE hInstance)
 }
 
 
-void SizeGrid(HWND hWnd,int /*SI*/)
-{
+void SizeGrid(HWND hWnd,int /*SI*/)	{
+
 	SendMessage(hWnd,WM_SIZE,SIZE_MAXIMIZED,0);
 }
 
-int FindLongestLine(HDC hdc, wchar_t* text, SIZE* size)
-{
+int FindLongestLine(HDC hdc, wchar_t* text, SIZE* size)	{
+
 	int longest = 0;
 	wchar_t temptext[1000];
 	wchar_t *p;
@@ -1308,8 +1308,8 @@ int FindLongestLine(HDC hdc, wchar_t* text, SIZE* size)
 }
 
 
-LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
+LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)	{
+
 	int wmId, wmEvent;
 	PAINTSTRUCT ps;
 	HDC hdc;
@@ -3076,8 +3076,8 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return ReturnValue;
 }
 
-int CountGrids()
-	{
+int CountGrids()	{
+
 	int j,count;
 	count=0;
 	for(j=0;j<MAX_GRIDS;++j )
@@ -3089,8 +3089,8 @@ int CountGrids()
 	}
 
 
-int AddGrid( HMENU menuid)
-	{
+int AddGrid( HMENU menuid)	{
+
 	//if grid doesn't exist, add it.  otherwise return existing index + MAX_GRIDS
 	//if trying to add more than MAX_GRIDS, return -1;
 	int empty_space = -1;
@@ -3128,8 +3128,8 @@ int AddGrid( HMENU menuid)
 
 	}
 
-int FindGrid( HMENU menuid)
-	{
+int FindGrid( HMENU menuid)	{
+
 	//if grid doesn't exist, return -1, else return gridindex
 	int returnvalue;
 	int j;
@@ -3148,8 +3148,8 @@ int FindGrid( HMENU menuid)
 
 
 
-int BinarySearchListBox(HWND lbhWnd,TCHAR* searchtext)
-	{
+int BinarySearchListBox(HWND lbhWnd,TCHAR* searchtext)	{
+
 		int ReturnValue;
 		int lbcount;
 		int head,tail,finger;

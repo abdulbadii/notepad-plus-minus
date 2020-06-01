@@ -29,8 +29,8 @@ distribution.
 #include "tinystr.h"
 
 // TiXmlString constructor, based on a C generic_string
-TiXmlString::TiXmlString (const TCHAR* instring)
-{
+TiXmlString::TiXmlString (const TCHAR* instring)	{
+
     unsigned newlen;
     TCHAR * newstring;
 
@@ -50,8 +50,8 @@ TiXmlString::TiXmlString (const TCHAR* instring)
 }
 
 // TiXmlString copy constructor
-TiXmlString::TiXmlString (const TiXmlString& copy)
-{
+TiXmlString::TiXmlString (const TiXmlString& copy)	{
+
     unsigned newlen;
     TCHAR * newstring;
 

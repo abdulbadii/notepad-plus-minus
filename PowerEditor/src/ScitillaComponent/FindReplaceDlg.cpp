@@ -3206,8 +3206,8 @@ void FindReplaceDlg::execSavedCommand(int cmd, uptr_t intValue, const generic_st
 				throw std::runtime_error("Internal error: unknown SnR command!");
 		}
 	}
-	catch (const std::runtime_error& err)
-	{
+	catch (const std::runtime_error& err)	{
+
 		MessageBoxA(NULL, err.what(), "Play Macro Exception", MB_OK);
 	}
 }
@@ -3729,8 +3729,8 @@ const int Progress::cBTNheight = 25;
 volatile LONG Progress::refCount = 0;
 
 
-Progress::Progress(HINSTANCE hInst) : _hwnd(NULL), _hCallerWnd(NULL)
-{
+Progress::Progress(HINSTANCE hInst) : _hwnd(NULL), _hCallerWnd(NULL)	{
+
 	if (::InterlockedIncrement(&refCount) == 1)	{
 
 		_hInst = hInst;

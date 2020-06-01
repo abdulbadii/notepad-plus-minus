@@ -110,8 +110,8 @@ struct VisibleGUIConf final	{
 	//used by fullscreen only
 	WINDOWPLACEMENT _winPlace;
 
-	VisibleGUIConf()
-	{
+	VisibleGUIConf()	{
+
 		memset(&_winPlace, 0x0, sizeof(_winPlace));
 	}
 };

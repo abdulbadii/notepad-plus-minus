@@ -34,8 +34,8 @@
 #define CLIPBOARD_TEXTFORMAT CF_UNICODETEXT
 #define MAX_DISPLAY_LENGTH 64
 
-ClipboardData ClipboardHistoryPanel::getClipboadData()
-{
+ClipboardData ClipboardHistoryPanel::getClipboadData()	{
+
 	ClipboardData clipboardData;
 	if (!IsClipboardFormatAvailable(CLIPBOARD_TEXTFORMAT))
 		return clipboardData;
@@ -84,8 +84,8 @@ ClipboardData ClipboardHistoryPanel::getClipboadData()
 	return clipboardData;
 }
 
-ByteArray::ByteArray(ClipboardData cd)
-{
+ByteArray::ByteArray(ClipboardData cd)	{
+
 	_length = cd.size();
 	if (!_length)	{
 
@@ -99,8 +99,8 @@ ByteArray::ByteArray(ClipboardData cd)
 	}
 }
 
-StringArray::StringArray(ClipboardData cd, size_t maxLen)
-{
+StringArray::StringArray(ClipboardData cd, size_t maxLen)	{
+
 	if (!cd.size())	{
 
 		_pBytes = NULL;
@@ -261,8 +261,8 @@ INT_PTR CALLBACK ClipboardHistoryPanel::run_dlgProc(UINT message, WPARAM wParam,
 								(*_ppEditView)->focus();
 								delete[] c;
 							}
-							catch (...)
-							{
+							catch (...)	{
+
 								MessageBox(_hSelf,	L"Cannot process this clipboard data in the history:\nThe data is too large to be treated.", L"Clipboard problem", MB_OK | MB_APPLMODAL);
 								delete[] c;
 							}

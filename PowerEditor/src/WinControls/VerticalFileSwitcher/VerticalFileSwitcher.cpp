@@ -31,8 +31,8 @@
 #include "menuCmdID.h"
 #include "Parameters.h"
 
-int CALLBACK ListViewCompareProc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
-{
+int CALLBACK ListViewCompareProc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)	{
+
 	sortCompareData* sortData = (sortCompareData*)lParamSort;
 	TCHAR str1[MAX_PATH];
 	TCHAR str2[MAX_PATH];

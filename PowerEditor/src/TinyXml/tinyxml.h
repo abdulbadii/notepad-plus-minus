@@ -556,16 +556,16 @@ class TiXmlAttribute : public TiXmlBase	{
 
 public:
 	/// Construct an empty attribute.
-	TiXmlAttribute()
-	{
+	TiXmlAttribute()	{
+
 		document = 0;
 		prev = next = 0;
 	}
 
 	#ifdef TIXML_USE_STL
 	/// string constructor.
-	TiXmlAttribute( const generic_string& _name, const generic_string& _value )
-	{
+	TiXmlAttribute( const generic_string& _name, const generic_string& _value )	{
+
 		name = _name;
 		value = _value;
 		document = 0;
@@ -574,8 +574,8 @@ public:
 	#endif
 
 	/// Construct an attribute with a name and value.
-	TiXmlAttribute( const TCHAR * _name, const TCHAR * _value )
-	{
+	TiXmlAttribute( const TCHAR * _name, const TCHAR * _value )	{
+
 		name = _name;
 		value = _value;
 		document = 0;
@@ -695,8 +695,8 @@ public:
 
 	#ifdef TIXML_USE_STL
 	/// string constructor.
-	TiXmlElement( const generic_string& _value ) : 	TiXmlNode( TiXmlNode::ELEMENT )
-	{
+	TiXmlElement( const generic_string& _value ) : 	TiXmlNode( TiXmlNode::ELEMENT )	{
+
 		firstChild = lastChild = 0;
 		value = _value;
 	}
@@ -842,16 +842,16 @@ class TiXmlText : public TiXmlNode	{
 	friend class TiXmlElement;
 public:
 	/// Constructor.
-	TiXmlText (const TCHAR * initValue) : TiXmlNode (TiXmlNode::TEXT)
-	{
+	TiXmlText (const TCHAR * initValue) : TiXmlNode (TiXmlNode::TEXT)	{
+
 		SetValue( initValue );
 	}
 	virtual ~TiXmlText() {}
 
 	#ifdef TIXML_USE_STL
 	/// Constructor.
-	TiXmlText( const generic_string& initValue ) : TiXmlNode (TiXmlNode::TEXT)
-	{
+	TiXmlText( const generic_string& initValue ) : TiXmlNode (TiXmlNode::TEXT)	{
+
 		SetValue( initValue );
 	}
 	#endif
@@ -990,8 +990,8 @@ public:
 	#ifdef TIXML_USE_STL
 	/// Constructor.
 	TiXmlDocument( const generic_string& documentName ) :
-	    TiXmlNode( TiXmlNode::DOCUMENT )
-	{
+	    TiXmlNode( TiXmlNode::DOCUMENT )	{
+
 		tabsize = 4;
         value = documentName;
 		error = false;

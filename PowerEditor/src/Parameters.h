@@ -165,8 +165,8 @@ private:
 struct sessionFileInfo : public Position	{
 
 	sessionFileInfo(const TCHAR *fn, const TCHAR *ln, int encoding, bool userReadOnly, const Position& pos, const TCHAR *backupFilePath, FILETIME originalFileLastModifTimestamp, const MapPosition & mapPos) :
-		_isUserReadOnly(userReadOnly), _encoding(encoding), Position(pos), _originalFileLastModifTimestamp(originalFileLastModifTimestamp), _mapPos(mapPos)
-	{
+		_isUserReadOnly(userReadOnly), _encoding(encoding), Position(pos), _originalFileLastModifTimestamp(originalFileLastModifTimestamp), _mapPos(mapPos)	{
+
 		if (fn) _fileName = fn;
 		if (ln)	_langName = ln;
 		if (backupFilePath) _backupFilePath = backupFilePath;
@@ -228,8 +228,8 @@ struct CmdLineParams	{
 	unsigned char _quoteType = '\0';
 	// int _ghostTypingSpeed = -1; // -1: initial value  1: slow  2: fast  3: speed of light
 
-	CmdLineParams()
-	{
+	CmdLineParams()	{
+
 		_point.x = 0;
 		_point.y = 0;
 	}
@@ -382,8 +382,8 @@ struct Style	{
 
 	Style() = default;
 
-	Style(const Style& style)
-	{
+	Style(const Style& style)	{
+
 		_styleID	  = style._styleID;
 		_styleDesc	= style._styleDesc;
 		_fgColor	  = style._fgColor;
@@ -953,13 +953,13 @@ struct Lang final	{
 	bool _isTabReplacedBySpace = false;
 	int _tabSize = -1;
 
-	Lang()
-	{
+	Lang()	{
+
 		for (int i = 0 ; i < NB_LIST ; _langKeyWordList[i] = NULL, ++i);
 	}
 
-	Lang(LangType langID, const TCHAR *name) : _langID(langID), _langName(name ? name : L"")
-	{
+	Lang(LangType langID, const TCHAR *name) : _langID(langID), _langName(name ? name : L"")	{
+
 		for (int i = 0 ; i < NB_LIST ; _langKeyWordList[i] = NULL, ++i);
 	}
 
@@ -1017,13 +1017,13 @@ struct Lang final	{
 class UserLangContainer final	{
 
 public:
-	UserLangContainer() :_name(L"new user define"), _ext(L""), _udlVersion(L"")
-	{
+	UserLangContainer() :_name(L"new user define"), _ext(L""), _udlVersion(L"")	{
+
 		init();
 	}
 
-	UserLangContainer(const TCHAR *name, const TCHAR *ext, const TCHAR *udlVer) : _name(name), _ext(ext), _udlVersion(udlVer)
-	{
+	UserLangContainer(const TCHAR *name, const TCHAR *ext, const TCHAR *udlVer) : _name(name), _ext(ext), _udlVersion(udlVer)	{
+
 		init();
 	}
 
@@ -1118,8 +1118,8 @@ public:
 	TCHAR _name[MAX_EXTERNAL_LEXER_NAME_LEN];
 	TCHAR _desc[MAX_EXTERNAL_LEXER_DESC_LEN];
 
-	ExternalLangContainer(const TCHAR* name, const TCHAR* desc)
-	{
+	ExternalLangContainer(const TCHAR* name, const TCHAR* desc)	{
+
 		generic_strncpy(_name, name, MAX_EXTERNAL_LEXER_NAME_LEN);
 		generic_strncpy(_desc, desc, MAX_EXTERNAL_LEXER_DESC_LEN);
 	}

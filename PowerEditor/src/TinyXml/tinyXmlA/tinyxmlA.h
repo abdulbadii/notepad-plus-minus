@@ -557,16 +557,16 @@ class TiXmlAttributeA : public TiXmlBaseA	{
 
 public:
 	/// Construct an empty attribute.
-	TiXmlAttributeA()
-	{
+	TiXmlAttributeA()	{
+
 		document = 0;
 		prev = next = 0;
 	}
 
 	#ifdef TIXMLA_USE_STL
 	/// std::string constructor.
-	TiXmlAttributeA( const std::string& _name, const std::string& _value )
-	{
+	TiXmlAttributeA( const std::string& _name, const std::string& _value )	{
+
 		name = _name;
 		value = _value;
 		document = 0;
@@ -575,8 +575,8 @@ public:
 	#endif
 
 	/// Construct an attribute with a name and value.
-	TiXmlAttributeA( const char * _name, const char * _value )
-	{
+	TiXmlAttributeA( const char * _name, const char * _value )	{
+
 		name = _name;
 		value = _value;
 		document = 0;
@@ -696,8 +696,8 @@ public:
 
 	#ifdef TIXMLA_USE_STL
 	/// std::string constructor.
-	TiXmlElementA( const std::string& _value ) : 	TiXmlNodeA( TiXmlNodeA::ELEMENT )
-	{
+	TiXmlElementA( const std::string& _value ) : 	TiXmlNodeA( TiXmlNodeA::ELEMENT )	{
+
 		firstChild = lastChild = 0;
 		value = _value;
 	}
@@ -843,16 +843,16 @@ class TiXmlTextA : public TiXmlNodeA	{
 	friend class TiXmlElementA;
 public:
 	/// Constructor.
-	TiXmlTextA (const char * initValue) : TiXmlNodeA (TiXmlNodeA::TEXT)
-	{
+	TiXmlTextA (const char * initValue) : TiXmlNodeA (TiXmlNodeA::TEXT)	{
+
 		SetValue( initValue );
 	}
 	virtual ~TiXmlTextA() {}
 
 	#ifdef TIXMLA_USE_STL
 	/// Constructor.
-	TiXmlTextA( const std::string& initValue ) : TiXmlNodeA (TiXmlNodeA::TEXT)
-	{
+	TiXmlTextA( const std::string& initValue ) : TiXmlNodeA (TiXmlNodeA::TEXT)	{
+
 		SetValue( initValue );
 	}
 	#endif
@@ -991,8 +991,8 @@ public:
 	#ifdef TIXMLA_USE_STL
 	/// Constructor.
 	TiXmlDocumentA( const std::string& documentName ) :
-	    TiXmlNodeA( TiXmlNodeA::DOCUMENT )
-	{
+	    TiXmlNodeA( TiXmlNodeA::DOCUMENT )	{
+
         value = documentName;
 		error = false;
 	}

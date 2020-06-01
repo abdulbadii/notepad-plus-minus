@@ -32,8 +32,8 @@ distribution.
 #include "tinystrA.h"
 
 // TiXmlStringA constructor, based on a C string
-TiXmlStringA::TiXmlStringA (const char* instring)
-{
+TiXmlStringA::TiXmlStringA (const char* instring)	{
+
     unsigned newlen;
     char * newstring;
 
@@ -54,8 +54,8 @@ TiXmlStringA::TiXmlStringA (const char* instring)
 }
 
 // TiXmlStringA copy constructor
-TiXmlStringA::TiXmlStringA (const TiXmlStringA& copy)
-{
+TiXmlStringA::TiXmlStringA (const TiXmlStringA& copy)	{
+
     unsigned newlen;
     char * newstring;
 

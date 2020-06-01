@@ -32,8 +32,8 @@ typedef std::vector<generic_string> stringVector;
 class FileNameStringSplitter	{
 
 public:
-	FileNameStringSplitter(const TCHAR *fileNameStr)
-	{
+	FileNameStringSplitter(const TCHAR *fileNameStr)	{
+
 		//if (!fileNameStr) return;
 		TCHAR *pStr = NULL;
 		bool isInsideQuotes = false;

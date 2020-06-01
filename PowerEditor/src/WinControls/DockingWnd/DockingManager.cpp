@@ -73,8 +73,8 @@ LRESULT CALLBACK focusWndProc(int nCode, WPARAM wParam, LPARAM lParam)	{
 	return CallNextHookEx(gWinCallHook, nCode, wParam, lParam);
 }
 
-DockingManager::DockingManager()
-{
+DockingManager::DockingManager()	{
+
 	memset(_iContMap, -1, CONT_MAP_MAX * sizeof(int));
 
 	_iContMap[0] = CONT_LEFT;
@@ -736,8 +736,8 @@ int DockingManager::getDockedContSize(int iCont)	{
 		return -1;
 }
 
-DockingCont* DockingManager::toggleActiveTb(DockingCont* pContSrc, UINT message, BOOL bNew, LPRECT prcFloat)
-{
+DockingCont* DockingManager::toggleActiveTb(DockingCont* pContSrc, UINT message, BOOL bNew, LPRECT prcFloat)	{
+
 	tTbData			TbData		= *pContSrc->getDataOfActiveTb();
 	int				iContSrc	= GetContainer(pContSrc);
 	int				iContPrev	= TbData.iPrevCont;
@@ -800,8 +800,8 @@ DockingCont* DockingManager::toggleActiveTb(DockingCont* pContSrc, UINT message,
 	return pContTgt;
 }
 
-DockingCont* DockingManager::toggleVisTb(DockingCont* pContSrc, UINT message, LPRECT prcFloat)
-{
+DockingCont* DockingManager::toggleVisTb(DockingCont* pContSrc, UINT message, LPRECT prcFloat)	{
+
 	vector<tTbData*>	vTbData		= pContSrc->getDataOfVisTb();
 	tTbData*			pTbData		= pContSrc->getDataOfActiveTb();
 

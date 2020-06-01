@@ -924,8 +924,8 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 				else
 					return FALSE;
 			}
-			catch (...)
-			{
+			catch (...)	{
+
 				//printStr(L"ToolTip crash is caught!");
 			}
 			break;

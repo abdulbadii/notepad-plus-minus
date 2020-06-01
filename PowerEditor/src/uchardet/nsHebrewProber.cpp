@@ -61,13 +61,13 @@
 #define VISUAL_HEBREW_NAME ("ISO-8859-8")
 #define LOGICAL_HEBREW_NAME ("windows-1255")
 
-PRBool nsHebrewProber::isFinal(char c)
-{
+PRBool nsHebrewProber::isFinal(char c)	{
+
   return ((c == FINAL_KAF) || (c == FINAL_MEM) || (c == FINAL_NUN) || (c == FINAL_PE) || (c == FINAL_TSADI));
 }
 
-PRBool nsHebrewProber::isNonFinal(char c)
-{
+PRBool nsHebrewProber::isNonFinal(char c)	{
+
   return ((c == NORMAL_KAF) || (c == NORMAL_MEM) || (c == NORMAL_NUN) || (c == NORMAL_PE));
   // The normal Tsadi is not a good Non-Final letter due to words like 
   // 'lechotet' (to chat) containing an apostrophe after the tsadi. This 
@@ -106,8 +106,8 @@ PRBool nsHebrewProber::isNonFinal(char c)
  * The input buffer should not contain any white spaces that are not (' ')
  * or any low-ascii punctuation marks. 
  */
-nsProbingState nsHebrewProber::HandleData(const char* aBuf, PRUint32 aLen)
-{
+nsProbingState nsHebrewProber::HandleData(const char* aBuf, PRUint32 aLen)	{
+
   // Both model probers say it's not them. No reason to continue.
   if (GetState() == eNotMe)
     return eNotMe;
@@ -178,8 +178,8 @@ void nsHebrewProber::Reset(void)	{
   mBeforePrev = ' ';
 }
 
-nsProbingState nsHebrewProber::GetState(void) 
-{
+nsProbingState nsHebrewProber::GetState(void)	{
+
   // Remain active as long as any of the model probers are active.
   if ((mLogicalProb->GetState() == eNotMe) && (mVisualProb->GetState() == eNotMe))
     return eNotMe;

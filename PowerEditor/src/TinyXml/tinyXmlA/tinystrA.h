@@ -49,8 +49,8 @@ class TiXmlStringA	{
     TiXmlStringA (const char * instring);
 
     // TiXmlStringA empty constructor
-    TiXmlStringA ()
-    {
+    TiXmlStringA ()	{
+
         allocated = 0;
         cstring = NULL;
         current_length = 0;

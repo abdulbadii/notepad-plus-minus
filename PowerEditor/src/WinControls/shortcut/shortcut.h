@@ -131,8 +131,8 @@ public:
 		return !(a == b);
 	};
 
-	virtual INT_PTR doDialog()
-	{
+	virtual INT_PTR doDialog()	{
+
 		return ::DialogBoxParam(_hInst, MAKEINTRESOURCE(IDD_SHORTCUT_DLG), _hParent, dlgProc, reinterpret_cast<LPARAM>(this));
     };
 

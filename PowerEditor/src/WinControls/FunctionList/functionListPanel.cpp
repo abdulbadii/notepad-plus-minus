@@ -69,8 +69,8 @@ void FunctionListPanel::removeAllEntries()	{
 }
 
 // bodyOpenSybe mbol & bodyCloseSymbol should be RE
-size_t FunctionListPanel::getBodyClosePos(size_t begin, const TCHAR *bodyOpenSymbol, const TCHAR *bodyCloseSymbol)
-{
+size_t FunctionListPanel::getBodyClosePos(size_t begin, const TCHAR *bodyOpenSymbol, const TCHAR *bodyCloseSymbol)	{
+
 	size_t cntOpen = 1;
 
 	int docLen = (*_ppEditView)->getCurrentDocLen();
@@ -184,8 +184,8 @@ void FunctionListPanel::addInStateArray(TreeStateNode tree2Update, const TCHAR *
 	}
 }
 
-TreeParams* FunctionListPanel::getFromStateArray(generic_string fullFilePath)
-{
+TreeParams* FunctionListPanel::getFromStateArray(generic_string fullFilePath)	{
+
 	for (size_t i = 0, len = _treeParams.size(); i < len; ++i)	{
 
 		if (_treeParams[i]._treeState._extraData == fullFilePath)

@@ -38,8 +38,8 @@
 #include "../Utf8.h"
 #include <Parameters.h>
 
-std::string getFileContent(const TCHAR *file2read)
-{
+std::string getFileContent(const TCHAR *file2read)	{
+
 	if (!::PathFileExists(file2read))
 		return "";
 
@@ -521,8 +521,8 @@ const char * WcharMbcsConvertor::wchar2char(const wchar_t * wcharStr2Convert, UI
 }
 
 
-std::wstring string2wstring(const std::string & rString, UINT codepage)
-{
+std::wstring string2wstring(const std::string & rString, UINT codepage)	{
+
 	int len = MultiByteToWideChar(codepage, 0, rString.c_str(), -1, NULL, 0);
 	if (len > 0)	{
 
@@ -534,8 +534,8 @@ std::wstring string2wstring(const std::string & rString, UINT codepage)
 }
 
 
-std::string wstring2string(const std::wstring & rwString, UINT codepage)
-{
+std::string wstring2string(const std::wstring & rwString, UINT codepage)	{
+
 	int len = WideCharToMultiByte(codepage, 0, rwString.c_str(), -1, NULL, 0, NULL, NULL);
 	if (len > 0)	{
 
@@ -1145,13 +1145,13 @@ bool isCertificateValidated(const generic_string & fullFilePath, const generic_s
 
 		isOK = true;
 	}
-	catch (const generic_string& s)
-	{
+	catch (const generic_string& s)	{
+
 		// display error message
 		MessageBox(NULL, s.c_str(), L"Certificate checking", MB_OK);
 	}
-	catch (...)
-	{
+	catch (...)	{
+
 		// Unknown error
 		generic_string errorMessage = L"Unknown exception occured. ";
 		errorMessage += GetLastErrorAsString(GetLastError());
@@ -1193,16 +1193,16 @@ bool isAssoCommandExisting(LPCTSTR FullPathName)	{
 	return isAssoCommandExisting;
 }
 
-std::wstring s2ws(const std::string& str)
-{
+std::wstring s2ws(const std::string& str)	{
+
 	using convert_typeX = std::codecvt_utf8<wchar_t>;
 	std::wstring_convert<convert_typeX, wchar_t> converterX;
 
 	return converterX.from_bytes(str);
 }
 
-std::string ws2s(const std::wstring& wstr)
-{
+std::string ws2s(const std::wstring& wstr)	{
+
 	using convert_typeX = std::codecvt_utf8<wchar_t>;
 	std::wstring_convert<convert_typeX, wchar_t> converterX;
 

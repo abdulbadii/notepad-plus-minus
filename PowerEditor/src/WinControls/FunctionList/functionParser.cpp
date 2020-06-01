@@ -443,8 +443,8 @@ bool FunctionParsersManager::parse(std::vector<foundInfo> & foundInfos, const As
 }
 
 
-size_t FunctionZoneParser::getBodyClosePos(size_t begin, const TCHAR *bodyOpenSymbol, const TCHAR *bodyCloseSymbol, const std::vector< std::pair<int, int> > & commentZones, ScintillaEditView **ppEditView)
-{
+size_t FunctionZoneParser::getBodyClosePos(size_t begin, const TCHAR *bodyOpenSymbol, const TCHAR *bodyCloseSymbol, const std::vector< std::pair<int, int> > & commentZones, ScintillaEditView **ppEditView)	{
+
 	size_t cntOpen = 1;
 
 	int docLen = (*ppEditView)->getCurrentDocLen();

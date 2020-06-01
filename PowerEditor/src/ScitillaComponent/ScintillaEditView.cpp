@@ -1760,8 +1760,8 @@ void ScintillaEditView::defineDocType(LangType typeDoc)	{
 	}
 }
 
-BufferID ScintillaEditView::attachDefaultDoc()
-{
+BufferID ScintillaEditView::attachDefaultDoc()	{
+
 	// get the doc pointer attached (by default) on the view Scintilla
 	Document doc = f(SCI_GETDOCPOINTER, 0, 0);
 	f(SCI_ADDREFDOCUMENT, 0, doc);
@@ -2443,12 +2443,14 @@ void ScintillaEditView::performCrHiLi()	{
 	Style& style = param.getMiscStylerArray().styleOf(L"Current line background colour", is);
 	if (is)	{
 		if (style._lastColorState || style._colorStyle)	{
-			f(SCI_SETCARETLINEBACK, style._lastColorState);
+			f(SCI_SETCARETLINEBACK, style._lastColorState ? style._lastColorState : style._bgColor);
 			f(SCI_SETCARETLINEFRAME, style._colorStyle);
 			f(SCI_SETCARETLINEVISIBLE, 1);
 		}
-		else
+		else	{
+			f(SCI_SETCARETLINEBACK, style._fgColor ? style._fgColor : style._bgColor ? style._bgColor : 0xCC7171);
 			f(SCI_SETCARETLINEVISIBLE, 0);
+		}
 	}
 }
 
@@ -2939,8 +2941,8 @@ TCHAR * int2str(TCHAR *str, int strLen, int number, int base, int nbChiffre, boo
 	return str;
 }
 
-ColumnModeInfos ScintillaEditView::getColumnModeSelectInfo()
-{
+ColumnModeInfos ScintillaEditView::getColumnModeSelectInfo()	{
+
 	ColumnModeInfos columnModeInfos;
 	if (f(SCI_GETSELECTIONS) > 1)	{ // Multi-Selection || Column mode
 

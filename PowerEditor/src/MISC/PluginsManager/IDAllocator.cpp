@@ -33,8 +33,8 @@
 IDAllocator::IDAllocator(int start, int maximumID)
 	: _start(start),
 	  _nextID(start),
-	  _maximumID(maximumID)
-{
+	  _maximumID(maximumID)	{
+
 }
 
 int IDAllocator::allocate(int quantity)	{

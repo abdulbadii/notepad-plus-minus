@@ -408,8 +408,8 @@ INT_PTR CALLBACK DlgProcSettings(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 
 // --- CShellExtClassFactory ---
 CShellExtClassFactory::CShellExtClassFactory() :
-	m_cRef(0L)
-{
+	m_cRef(0L)	{
+
 	_cRef++;
 }
 
@@ -432,8 +432,8 @@ STDMETHODIMP_(ULONG) CShellExtClassFactory::AddRef() {
 	return ++m_cRef;
 }
 
-STDMETHODIMP_(ULONG) CShellExtClassFactory::Release()
-{
+STDMETHODIMP_(ULONG) CShellExtClassFactory::Release()	{
+
 	if (--m_cRef)
 		return m_cRef;
 	delete this;
@@ -468,8 +468,8 @@ CShellExt::CShellExt() :
 	m_nameMaxLength(maxText),
 	m_isDynamic(false),
 	m_winVer(0),
-	m_hBitmap(NULL)
-{
+	m_hBitmap(NULL)	{
+
 	TCHAR szKeyTemp [MAX_PATH + GUID_STRING_SIZE];
 	ZeroMemory(&m_stgMedium, sizeof(m_stgMedium));
 	_cRef++;

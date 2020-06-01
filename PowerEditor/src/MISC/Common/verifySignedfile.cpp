@@ -45,8 +45,8 @@ using namespace std;
 //SecurityMode SecurityGard::_securityMode = sm_sha256;
 SecurityMode SecurityGard::_securityMode = sm_certif;
 
-SecurityGard::SecurityGard()
-{
+SecurityGard::SecurityGard()	{
+
 	_scilexerSha256.push_back(L"03c9177631d2b32de3d32c73a8841cf68fc2cb17f306825489dc3df98000db85"); // v3.5.6 32 bit (signed)
 	_scilexerSha256.push_back(L"9896c4089275e21412fd80421827912ebd80e357394b05145a613d190462e211"); // v3.5.6 64 bit (signed)
 

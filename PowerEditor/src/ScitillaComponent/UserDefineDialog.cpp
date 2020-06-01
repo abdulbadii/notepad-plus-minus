@@ -842,8 +842,8 @@ void SymbolsStyleDialog::setKeywords2List(int id)	{
     }
 }
 
-UserDefineDialog::UserDefineDialog(): SharedParametersDialog()
-{
+UserDefineDialog::UserDefineDialog(): SharedParametersDialog()	{
+
     _pCurrentUserLang = new UserLangContainer();
 
     _pCurrentUserLang->_styleArray.addStyler(SCE_USER_STYLE_DEFAULT,              globalMappper().styleNameMapper[SCE_USER_STYLE_DEFAULT].c_str());

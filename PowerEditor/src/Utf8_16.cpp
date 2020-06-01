@@ -49,8 +49,8 @@ Utf8_16_Read::~Utf8_16_Read()
 // 0 : utf8
 // 1 : 7bits
 // 2 : 8bits
-u78 Utf8_16_Read::utf8_7bits_8bits()
-{
+u78 Utf8_16_Read::utf8_7bits_8bits()	{
+
 	int rv = 1;
 	int ASCII7only = 1;
 	utf8 *sx	= (utf8 *)m_pBuf;
@@ -121,8 +121,8 @@ u78 Utf8_16_Read::utf8_7bits_8bits()
 	return ascii8bits;
 }
 
-size_t Utf8_16_Read::convert(char* buf, size_t len)
-{
+size_t Utf8_16_Read::convert(char* buf, size_t len)	{
+
 	// bugfix by Jens Lorenz
 	static	size_t nSkip = 0;
 
@@ -244,8 +244,8 @@ void Utf8_16_Read::determineEncoding()	{
 	}
 }
 
-UniMode Utf8_16_Read::determineEncoding(const unsigned char *buf, size_t bufLen)
-{
+UniMode Utf8_16_Read::determineEncoding(const unsigned char *buf, size_t bufLen)	{
+
     // detect UTF-16 big-endian with BOM
 	if (bufLen > 1 && buf[0] == k_Boms[uni16BE][0] && buf[1] == k_Boms[uni16BE][1])	{
 
@@ -271,8 +271,8 @@ UniMode Utf8_16_Read::determineEncoding(const unsigned char *buf, size_t bufLen)
 
 // ==================================================================
 
-Utf8_16_Write::Utf8_16_Write()
-{
+Utf8_16_Write::Utf8_16_Write()	{
+
 	m_eEncoding = uni8Bit;
 	m_pFile = NULL;
 	m_pNewBuf = NULL;
@@ -294,8 +294,8 @@ FILE * Utf8_16_Write::fopen(const TCHAR *_name, const TCHAR *_type)	{
 	return m_pFile;
 }
 
-size_t Utf8_16_Write::fwrite(const void* p, size_t _size)
-{
+size_t Utf8_16_Write::fwrite(const void* p, size_t _size)	{
+
     // no file open
 	if (!m_pFile)	{
 
@@ -365,8 +365,8 @@ size_t Utf8_16_Write::fwrite(const void* p, size_t _size)
 }
 
 
-size_t Utf8_16_Write::convert(char* p, size_t _size)
-{
+size_t Utf8_16_Write::convert(char* p, size_t _size)	{
+
 	if (m_pNewBuf)	{
 
 		delete [] m_pNewBuf;
@@ -443,8 +443,8 @@ void Utf8_16_Write::fclose()	{
 
 
 //=================================================================
-Utf8_Iter::Utf8_Iter()
-{
+Utf8_Iter::Utf8_Iter()	{
+
 	reset();
 }
 
@@ -516,8 +516,8 @@ void Utf8_Iter::swap()	{
 }
 
 //==================================================
-Utf16_Iter::Utf16_Iter()
-{
+Utf16_Iter::Utf16_Iter()	{
+
 	reset();
 }
 

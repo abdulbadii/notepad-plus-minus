@@ -53,8 +53,8 @@ class TiXmlParsingDataA	{
 
   private:
 	// Only used by the document!
-	TiXmlParsingDataA( const char* start, int _tabsize, int row, int col )
-	{
+	TiXmlParsingDataA( const char* start, int _tabsize, int row, int col )	{
+
 		assert( start );
 		stamp = start;
 		tabsize = _tabsize;
@@ -517,8 +517,8 @@ void TiXmlDocumentA::SetError( int err, const char* pError, TiXmlParsingDataA* d
 }
 
 
-TiXmlNodeA* TiXmlNodeA::Identify( const char* p )
-{
+TiXmlNodeA* TiXmlNodeA::Identify( const char* p )	{
+
 	TiXmlNodeA* returnNode = 0;
 
 	p = SkipWhiteSpace( p );

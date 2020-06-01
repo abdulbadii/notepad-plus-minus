@@ -219,8 +219,8 @@ public:
 		try {
 			return _pScintillaFunc(_pScintillaPtr, Msg, wParam, lParam);
 		}
-		catch (...)
-		{
+		catch (...)	{
+
 			return -1;
 		}
 	};

@@ -56,8 +56,8 @@ const char *ProberName[] =
 
 #endif
 
-nsMBCSGroupProber::nsMBCSGroupProber(PRUint32 aLanguageFilter)
-{
+nsMBCSGroupProber::nsMBCSGroupProber(PRUint32 aLanguageFilter)	{
+
   for (PRUint32 i = 0; i < NUM_OF_PROBERS; ++i )
     mProbers[i] = nsnull;
 
@@ -117,8 +117,8 @@ void  nsMBCSGroupProber::Reset(void)	{
   mKeepNext = 0;
 }
 
-nsProbingState nsMBCSGroupProber::HandleData(const char* aBuf, PRUint32 aLen)
-{
+nsProbingState nsMBCSGroupProber::HandleData(const char* aBuf, PRUint32 aLen)	{
+
   nsProbingState st;
   PRUint32 start = 0;
   PRUint32 keepNext = mKeepNext;

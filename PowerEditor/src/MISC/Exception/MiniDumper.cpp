@@ -34,8 +34,8 @@
 
 LPCTSTR msgTitle = L"Notepad++ crash analysis";
 
-MiniDumper::MiniDumper()
-{
+MiniDumper::MiniDumper()	{
+
 }
 
 bool MiniDumper::writeDump(EXCEPTION_POINTERS * pExceptionInfo)	{

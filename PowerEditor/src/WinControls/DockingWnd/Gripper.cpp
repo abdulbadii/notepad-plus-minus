@@ -88,8 +88,8 @@ static LRESULT CALLBACK hookProcKeyboard(int nCode, WPARAM wParam, LPARAM lParam
 	return ::CallNextHookEx(hookKeyboard, nCode, wParam, lParam);
 }
 
-Gripper::Gripper()
-{
+Gripper::Gripper()	{
+
 	_hInst			= NULL;
 	_hParent		= NULL;
 	_hSelf			= NULL;
@@ -726,8 +726,8 @@ void Gripper::getMovingRect(POINT pt, RECT *rc)	{
 }
 
 
-DockingCont* Gripper::contHitTest(POINT pt)
-{
+DockingCont* Gripper::contHitTest(POINT pt)	{
+
 	vector<DockingCont*>	vCont	= _pDockMgr->getContainerInfo();
 	HWND					hWnd	= ::WindowFromPoint(pt);
 
@@ -779,8 +779,8 @@ DockingCont* Gripper::contHitTest(POINT pt)
 }
 
 
-DockingCont* Gripper::workHitTest(POINT pt, RECT *rc)
-{
+DockingCont* Gripper::workHitTest(POINT pt, RECT *rc)	{
+
 	RECT					rcCont	= {0};
 	vector<DockingCont*>	vCont	= _pDockMgr->getContainerInfo();
 

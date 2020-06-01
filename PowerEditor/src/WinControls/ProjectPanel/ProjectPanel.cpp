@@ -739,8 +739,8 @@ void ProjectPanel::setWorkSpaceDirty(bool isDirty)	{
 	_treeView.setItemImage(_treeView.getRoot(), iImg, iImg);
 }
 
-NodeType ProjectPanel::getNodeType(HTREEITEM hItem)
-{
+NodeType ProjectPanel::getNodeType(HTREEITEM hItem)	{
+
 	TVITEM tvItem;
 	tvItem.hItem = hItem;
 	tvItem.mask = TVIF_IMAGE | TVIF_PARAM;

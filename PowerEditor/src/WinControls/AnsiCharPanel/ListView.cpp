@@ -120,8 +120,8 @@ void ListView::addLine(const vector<generic_string> & values2Add, LPARAM lParam,
 	}
 }
 
-size_t ListView::findAlphabeticalOrderPos(const generic_string& string2Cmp, SortDirection sortDir)
-{
+size_t ListView::findAlphabeticalOrderPos(const generic_string& string2Cmp, SortDirection sortDir)	{
+
 	size_t nbItem = ListView_GetItemCount(_hSelf);
 	if (!nbItem)
 		return 0;

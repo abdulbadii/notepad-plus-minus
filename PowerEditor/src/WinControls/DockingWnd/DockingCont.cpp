@@ -66,8 +66,8 @@ static LRESULT CALLBACK hookProcMouse(int nCode, WPARAM wParam, LPARAM lParam)	{
 }
 
 
-DockingCont::DockingCont()
-{
+DockingCont::DockingCont()	{
+
 	_isMouseOver		= FALSE;
 	_isMouseClose		= FALSE;
 	_isMouseDown		= FALSE;
@@ -130,8 +130,8 @@ void DockingCont::doDialog(bool willBeShown, bool isFloating)	{
 }
 
 
-tTbData* DockingCont::createToolbar(tTbData data, bool isVisible)
-{
+tTbData* DockingCont::createToolbar(tTbData data, bool isVisible)	{
+
 	tTbData *pTbData = new tTbData;
 
 	*pTbData = data;
@@ -179,8 +179,8 @@ void DockingCont::removeToolbar(tTbData TbData)	{
 }
 
 
-tTbData* DockingCont::findToolbarByWnd(HWND hClient)
-{
+tTbData* DockingCont::findToolbarByWnd(HWND hClient)	{
+
 	tTbData*	pTbData		= NULL;
 
 	// find entry by handle
@@ -194,8 +194,8 @@ tTbData* DockingCont::findToolbarByWnd(HWND hClient)
 	return pTbData;
 }
 
-tTbData* DockingCont::findToolbarByName(TCHAR* pszName)
-{
+tTbData* DockingCont::findToolbarByName(TCHAR* pszName)	{
+
 	tTbData*	pTbData		= NULL;
 
 	// find entry by handle
@@ -228,8 +228,8 @@ int DockingCont::getActiveTb()	{
 	return static_cast<int32_t>(::SendMessage(_hContTab, TCM_GETCURSEL, 0, 0));
 }
 
-tTbData* DockingCont::getDataOfActiveTb()
-{
+tTbData* DockingCont::getDataOfActiveTb()	{
+
 	tTbData*	pTbData	= NULL;
 	int			iItem	= getActiveTb();
 
@@ -598,8 +598,8 @@ void DockingCont::drawCaptionItem(DRAWITEMSTRUCT *pDrawItemStruct)	{
 	::RestoreDC(hDc, nSavedDC);
 }
 
-eMousePos DockingCont::isInRect(HWND hwnd, int x, int y)
-{
+eMousePos DockingCont::isInRect(HWND hwnd, int x, int y)	{
+
 	RECT		rc;
 	eMousePos	ret	= posOutside;
 

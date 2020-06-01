@@ -38,8 +38,8 @@ protected:
 	using Base = std::list<C>;
 
 public:
-	CThreadSafeQueue()
-	{
+	CThreadSafeQueue()	{
+
 		m_hEvent = ::CreateEvent(
 			NULL,		// no security attributes
 			FALSE,		// auto reset

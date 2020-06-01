@@ -103,8 +103,8 @@ void TiXmlBase::PutString( const TIXML_STRING& str, TIXML_STRING* outString )	{
 
 
 // <-- Strange class for a bug fix. Search for STL_STRING_BUG
-TiXmlBase::StringToBuffer::StringToBuffer( const TIXML_STRING& str )
-{
+TiXmlBase::StringToBuffer::StringToBuffer( const TIXML_STRING& str )	{
+
 	const size_t strLen = str.length() + 1;
 	buffer = new TCHAR[strLen];
 	if (buffer)	{
@@ -121,8 +121,8 @@ TiXmlBase::StringToBuffer::~StringToBuffer()
 // End strange bug fix. -->
 
 
-TiXmlNode::TiXmlNode( NodeType _type )
-{
+TiXmlNode::TiXmlNode( NodeType _type )	{
+
 	parent = 0;
 	type = _type;
 	firstChild = 0;
@@ -164,8 +164,8 @@ void TiXmlNode::Clear()	{
 }
 
 
-TiXmlNode* TiXmlNode::LinkEndChild( TiXmlNode* node )
-{
+TiXmlNode* TiXmlNode::LinkEndChild( TiXmlNode* node )	{
+
 	node->parent = this;
 
 	node->prev = lastChild;
@@ -181,8 +181,8 @@ TiXmlNode* TiXmlNode::LinkEndChild( TiXmlNode* node )
 }
 
 
-TiXmlNode* TiXmlNode::InsertEndChild( const TiXmlNode& addThis )
-{
+TiXmlNode* TiXmlNode::InsertEndChild( const TiXmlNode& addThis )	{
+
 	TiXmlNode* node = addThis.Clone();
 	if ( !node )
 		return 0;
@@ -191,8 +191,8 @@ TiXmlNode* TiXmlNode::InsertEndChild( const TiXmlNode& addThis )
 }
 
 
-TiXmlNode* TiXmlNode::InsertBeforeChild( TiXmlNode* beforeThis, const TiXmlNode& addThis )
-{	
+TiXmlNode* TiXmlNode::InsertBeforeChild( TiXmlNode* beforeThis, const TiXmlNode& addThis )	{
+	
 	if ( !beforeThis || beforeThis->parent != this )
 		return 0;
 
@@ -217,8 +217,8 @@ TiXmlNode* TiXmlNode::InsertBeforeChild( TiXmlNode* beforeThis, const TiXmlNode&
 }
 
 
-TiXmlNode* TiXmlNode::InsertAfterChild( TiXmlNode* afterThis, const TiXmlNode& addThis )
-{
+TiXmlNode* TiXmlNode::InsertAfterChild( TiXmlNode* afterThis, const TiXmlNode& addThis )	{
+
 	if ( !afterThis || afterThis->parent != this )
 		return 0;
 
@@ -243,8 +243,8 @@ TiXmlNode* TiXmlNode::InsertAfterChild( TiXmlNode* afterThis, const TiXmlNode& a
 }
 
 
-TiXmlNode* TiXmlNode::ReplaceChild( TiXmlNode* replaceThis, const TiXmlNode& withThis )
-{
+TiXmlNode* TiXmlNode::ReplaceChild( TiXmlNode* replaceThis, const TiXmlNode& withThis )	{
+
 	if ( replaceThis->parent != this )
 		return 0;
 
@@ -658,14 +658,14 @@ TiXmlNode* TiXmlElement::Clone() const
 }
 
 
-TiXmlDocument::TiXmlDocument() : TiXmlNode( TiXmlNode::DOCUMENT )
-{
+TiXmlDocument::TiXmlDocument() : TiXmlNode( TiXmlNode::DOCUMENT )	{
+
 	tabsize = 4;
 	ClearError();
 }
 
-TiXmlDocument::TiXmlDocument( const TCHAR * documentName ) : TiXmlNode( TiXmlNode::DOCUMENT )
-{
+TiXmlDocument::TiXmlDocument( const TCHAR * documentName ) : TiXmlNode( TiXmlNode::DOCUMENT )	{
+
 	tabsize = 4;
 	value = documentName;
 	ClearError();
@@ -1044,8 +1044,8 @@ TiXmlNode* TiXmlUnknown::Clone() const
 }
 
 
-TiXmlAttributeSet::TiXmlAttributeSet()
-{
+TiXmlAttributeSet::TiXmlAttributeSet()	{
+
 	sentinel.next = &sentinel;
 	sentinel.prev = &sentinel;
 }

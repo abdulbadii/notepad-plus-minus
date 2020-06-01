@@ -79,8 +79,8 @@ bool DocTabView::activateBuffer(BufferID buffer)	{
 }
 
 
-BufferID DocTabView::activeBuffer()
-{
+BufferID DocTabView::activeBuffer()	{
+
 	int index = getCurrentTabIndex();
 	return static_cast<BufferID>(getBufferByIndex(index));
 }
@@ -120,8 +120,8 @@ int DocTabView::getIndexByBuffer(BufferID id)	{
 }
 
 
-BufferID DocTabView::getBufferByIndex(size_t index)
-{
+BufferID DocTabView::getBufferByIndex(size_t index)	{
+
 	TCITEM tie;
 	tie.lParam = -1;
 	tie.mask = TCIF_PARAM;

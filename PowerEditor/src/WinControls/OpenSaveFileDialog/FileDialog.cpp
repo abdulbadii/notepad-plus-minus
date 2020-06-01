@@ -183,8 +183,8 @@ TCHAR* FileDialog::doOpenSingleFileDlg()	{
 			param.setDefOpenSaveDir(dir, 0);
 		}
 	}
-	catch (std::exception& e)
-	{
+	catch (std::exception& e)	{
+
 		generic_string msg = L"An exception occurred while opening file: ";
 		msg += _fileName;
 		msg += L"\r\n\r\nException reason: ";
@@ -192,8 +192,8 @@ TCHAR* FileDialog::doOpenSingleFileDlg()	{
 
 		::MessageBox(NULL, msg.c_str(), L"File Open Exception", MB_OK);
 	}
-	catch (...)
-	{
+	catch (...)	{
+
 		::MessageBox(NULL, L"doOpenSingleFileDlg crashes!!!", L"", MB_OK);
 	}
 
@@ -283,8 +283,8 @@ TCHAR * FileDialog::doSaveDlg()	{
 			param.setDefOpenSaveDir(dir, 0);
 		}
 	}
-	catch (std::exception& e)
-	{
+	catch (std::exception& e)	{
+
 		generic_string msg = L"An exception occurred while saving file: ";
 		msg += _fileName;
 		msg += L"\r\n\r\nException reason: ";
@@ -292,8 +292,8 @@ TCHAR * FileDialog::doSaveDlg()	{
 
 		::MessageBox(NULL, msg.c_str(), L"File Save Exception", MB_OK);
 	}
-	catch (...)
-	{
+	catch (...)	{
+
 		::MessageBox(NULL, L"GetSaveFileName crashes!!!", L"", MB_OK);
 	}
 

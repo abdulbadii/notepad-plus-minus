@@ -569,8 +569,8 @@ int getKwClassFromName(const TCHAR *str)	{
 }
 
 	
-size_t getAsciiLenFromBase64Len(size_t base64StrLen)
-{
+size_t getAsciiLenFromBase64Len(size_t base64StrLen)	{
+
 	return (base64StrLen % 4) ? 0 : (base64StrLen - base64StrLen / 4);
 }
 
@@ -737,8 +737,8 @@ generic_string ThemeSwitcher::getThemeFromXmlFileName(const TCHAR *xmlFullPath) 
 }
 
 
-winVer NppParameters::getWindowsVersion()
-{
+winVer NppParameters::getWindowsVersion()	{
+
 	OSVERSIONINFOEX osvi;
 	SYSTEM_INFO si;
 	PGNSI pGNSI;
@@ -843,8 +843,8 @@ winVer NppParameters::getWindowsVersion()
 int FileDialog::_dialogFileBoxId = param.getWinVersion() < WV_W2K?edt1:cmb13;
 
 
-NppParameters::NppParameters()
-{
+NppParameters::NppParameters()	{
+
 	//Get windows version
 	_winVersion = getWindowsVersion();
 
@@ -1482,8 +1482,8 @@ int NppParameters::getExternalLangIndexFromName(const TCHAR* externalLangName) c
 }
 
 
-UserLangContainer* NppParameters::getULCFromName(const TCHAR *userLangName)
-{
+UserLangContainer* NppParameters::getULCFromName(const TCHAR *userLangName)	{
+
 	for (int i = 0 ; i < _nbUserLang ; ++i)	{
 
 		if (!lstrcmp(userLangName, _userLangArray[i]->_name.c_str()))
@@ -2596,8 +2596,8 @@ std::pair<unsigned char, unsigned char> NppParameters::feedUserLang(TiXmlNode *n
 			}
 
 		}
-		catch (const std::exception& /*e*/)
-		{
+		catch (const std::exception& /*e*/)	{
+
 			delete _userLangArray[--_nbUserLang];
 		}
 	}
@@ -2643,8 +2643,8 @@ bool NppParameters::exportUDLToFile(size_t langIndex2export, const generic_strin
 	return result;
 }
 
-LangType NppParameters::getLangFromExt(const TCHAR *ext)
-{
+LangType NppParameters::getLangFromExt(const TCHAR *ext)	{
+
 	int i = getNbLang();
 	i--;
 	while (i >= 0)	{
@@ -3675,8 +3675,8 @@ TiXmlNode * NppParameters::getChildElementByAttribut(TiXmlNode *pere, const TCHA
 }
 
 // 2 restes : L_H, L_USER
-LangType NppParameters::getLangIDFromStr(const TCHAR *langName)
-{
+LangType NppParameters::getLangIDFromStr(const TCHAR *langName)	{
+
 	int lang = static_cast<int32_t>(L_TEXT);
 	for (; lang < L_EXTERNAL; ++lang)	{
 
@@ -6807,8 +6807,8 @@ void NppParameters::setUdlXmlDirtyFromXmlDoc(const TiXmlDocument* xmlDoc)	{
 	}
 }
 
-Date::Date(const TCHAR *dateStr)
-{
+Date::Date(const TCHAR *dateStr)	{
+
 	// timeStr should be Notepad++ date format : YYYYMMDD
 	assert(dateStr);
 	int D = lstrlen(dateStr);
@@ -6838,8 +6838,8 @@ Date::Date(const TCHAR *dateStr)
 // The constructor which makes the date of number of days from now
 // nbDaysFromNow could be negative if user want to make a date in the past
 // if the value of nbDaysFromNow is 0 then the date will be now
-Date::Date(int nbDaysFromNow)
-{
+Date::Date(int nbDaysFromNow)	{
+
 	const time_t oneDay = (60 * 60 * 24);
 
 	time_t rawtime;
@@ -6869,8 +6869,8 @@ void Date::now()	{
 }
 
 
-EolType convertIntToFormatType(int value, EolType defvalue)
-{
+EolType convertIntToFormatType(int value, EolType defvalue)	{
+
 	switch (value)	{
 
 		case static_cast<LPARAM>(EolType::windows) :

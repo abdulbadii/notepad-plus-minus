@@ -1133,8 +1133,8 @@ INT_PTR CALLBACK ScintillaKeyMap::run_dlgProc(UINT Message, WPARAM wParam, LPARA
 	//return FALSE;
 }
 
-CommandShortcut::CommandShortcut(const Shortcut& sc, long id) :	Shortcut(sc), _id(id)
-{
+CommandShortcut::CommandShortcut(const Shortcut& sc, long id) :	Shortcut(sc), _id(id)	{
+
 	if ( _id < IDM_EDIT)
 		_category = L"File";
 	else if ( _id < IDM_SEARCH)

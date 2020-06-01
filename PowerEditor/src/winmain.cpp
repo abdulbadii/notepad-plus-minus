@@ -74,8 +74,8 @@ void allowWmCopydataMessages(Notepad_plus_Window& notepad_plus_plus, const NppPa
 }
 
 //commandLine should contain path to n++ executable running
-ParamVector parseCommandLine(const TCHAR* commandLine)
-{
+ParamVector parseCommandLine(const TCHAR* commandLine)	{
+
 	ParamVector result;
 	if ( commandLine[0] )	{
 
@@ -93,8 +93,8 @@ ParamVector parseCommandLine(const TCHAR* commandLine)
 // 1. Converts /p to -quickPrint if it exists as the first parameter
 // 2. Concatenates all remaining parameters to form a file path, adding appending .txt extension if necessary
 // This seems to mirror Notepad's behaviour
-ParamVector convertParamsToNotepadStyle(PWSTR pCmdLine)
-{
+ParamVector convertParamsToNotepadStyle(PWSTR pCmdLine)	{
+
 	ParamVector params;
 	if ( !_tcsnicmp(L"/p", pCmdLine, 2) )	{ // Notepad accepts both /p and /P, so compare case insensitively
 
@@ -172,8 +172,8 @@ bool getParamValFromString(const TCHAR *str, ParamVector & params, generic_strin
 	return false;
 }
 
-LangType getLangTypeFromParam(ParamVector & params)
-{
+LangType getLangTypeFromParam(ParamVector & params)	{
+
 	generic_string langStr;
 	if (!getParamVal('l', params, langStr))
 		return L_EXTERNAL;
@@ -346,8 +346,8 @@ PWSTR stripIgnoredParams(ParamVector & params, PWSTR pCmdLine)	{
 }
 }
 
-int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
-{
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)	{
+
 	ParamVector params = parseCommandLine(pCmdLine);
 	PWSTR pCmdLineWithoutIgnores = stripIgnoredParams(params, pCmdLine);
 
@@ -573,8 +573,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 				}
 		}
 	}
-	catch (int i)
-	{
+	catch (int i)	{
+
 		TCHAR str[50] = L"God Damned Exception : ";
 		TCHAR code[10];
 		wsprintf(code, L"%d", i);
@@ -582,13 +582,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 		::MessageBox(Notepad_plus_Window::gNppHWND, str, L"Int Exception", MB_OK);
 		doException(notepad_plus_plus);
 	}
-	catch (std::runtime_error & ex)
-	{
+	catch (std::runtime_error & ex)	{
+
 		::MessageBoxA(Notepad_plus_Window::gNppHWND, ex.what(), "Runtime Exception", MB_OK);
 		doException(notepad_plus_plus);
 	}
-	catch (const Win32Exception & ex)
-	{
+	catch (const Win32Exception & ex)	{
+
 		TCHAR message[1024];	//TODO: sane number
 		wsprintf(message, L"An exception occured. Notepad++ cannot recover and must be shut down.\r\nThe exception details are as follows:\r\n"
 			L"Code:\t0x%08X\r\nType:\t%S\r\nException address: 0x%p", ex.code(), ex.what(), ex.where());
@@ -596,8 +596,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 		mdump.writeDump(ex.info());
 		doException(notepad_plus_plus);
 	}
-	catch (std::exception & ex)
-	{
+	catch (std::exception & ex)	{
+
 		::MessageBoxA(Notepad_plus_Window::gNppHWND, ex.what(), "General Exception", MB_OK);
 		doException(notepad_plus_plus);
 	}

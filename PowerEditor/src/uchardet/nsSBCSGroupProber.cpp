@@ -44,8 +44,8 @@
 
 #include "nsHebrewProber.h"
 
-nsSBCSGroupProber::nsSBCSGroupProber()
-{
+nsSBCSGroupProber::nsSBCSGroupProber()	{
+
   mProbers[0] = new nsSingleByteCharSetProber(&Win1251Model);
   mProbers[1] = new nsSingleByteCharSetProber(&Koi8rModel);
   mProbers[2] = new nsSingleByteCharSetProber(&Latin5Model);
@@ -128,8 +128,8 @@ void  nsSBCSGroupProber::Reset(void)	{
 }
 
 
-nsProbingState nsSBCSGroupProber::HandleData(const char* aBuf, PRUint32 aLen)
-{
+nsProbingState nsSBCSGroupProber::HandleData(const char* aBuf, PRUint32 aLen)	{
+
   nsProbingState st;
   PRUint32 i;
   char *newBuf1 = 0;

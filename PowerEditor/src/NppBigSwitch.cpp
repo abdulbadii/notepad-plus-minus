@@ -49,8 +49,8 @@ struct SortTaskListPred final	{
 
 	DocTabView *_views[2];
 
-	SortTaskListPred(DocTabView &p, DocTabView &s)
-	{
+	SortTaskListPred(DocTabView &p, DocTabView &s)	{
+
 		_views[MAIN_VIEW] = &p;
 		_views[SUB_VIEW] = &s;
 	}
@@ -100,8 +100,8 @@ LRESULT Notepad_plus_Window::runProc(HWND hwnd, UINT message, WPARAM wParam, LPA
 				_notepad_plus_plus_core._pPublicInterface = this;
 				return _notepad_plus_plus_core.init(hwnd);
 			}
-			catch (std::exception& ex)
-			{
+			catch (std::exception& ex)	{
+
 				::MessageBoxA(hwnd, ex.what(), "Exception On WM_CREATE", MB_OK);
 				exit(-1);
 			}

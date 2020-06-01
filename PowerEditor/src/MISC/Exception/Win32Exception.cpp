@@ -35,8 +35,8 @@
 #include "Win32Exception.h"
 
 
-Win32Exception::Win32Exception(EXCEPTION_POINTERS * info)
-{
+Win32Exception::Win32Exception(EXCEPTION_POINTERS * info)	{
+
 	_location = info->ExceptionRecord->ExceptionAddress;
 	_code = info->ExceptionRecord->ExceptionCode;
 	_info = info;

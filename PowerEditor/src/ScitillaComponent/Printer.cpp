@@ -77,8 +77,8 @@ void Printer::init(HINSTANCE hInst, HWND hwnd, ScintillaEditView *pSEView, bool 
 
 
 
-size_t Printer::doPrint(bool justDoIt)
-{/*
+size_t Printer::doPrint(bool justDoIt)	{
+/*
 	if (!::PrintDlg(&_pdlg))
 			return 0;
 */

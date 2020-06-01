@@ -107,8 +107,8 @@ void TiXmlBaseA::PutString( const TIXMLA_STRING& str, TIXMLA_STRING* outString )
 
 
 // <-- Strange class for a bug fix. Search for STL_STRING_BUG
-TiXmlBaseA::StringToBuffer::StringToBuffer( const TIXMLA_STRING& str )
-{
+TiXmlBaseA::StringToBuffer::StringToBuffer( const TIXMLA_STRING& str )	{
+
 	buffer = new char[ str.length()+1 ];
 	if ( buffer )	{
 
@@ -124,8 +124,8 @@ TiXmlBaseA::StringToBuffer::~StringToBuffer()
 // End strange bug fix. -->
 
 
-TiXmlNodeA::TiXmlNodeA( NodeType _type )
-{
+TiXmlNodeA::TiXmlNodeA( NodeType _type )	{
+
 	parent = 0;
 	type = _type;
 	firstChild = 0;
@@ -167,8 +167,8 @@ void TiXmlNodeA::Clear()	{
 }
 
 
-TiXmlNodeA* TiXmlNodeA::LinkEndChild( TiXmlNodeA* node )
-{
+TiXmlNodeA* TiXmlNodeA::LinkEndChild( TiXmlNodeA* node )	{
+
 	node->parent = this;
 
 	node->prev = lastChild;
@@ -184,8 +184,8 @@ TiXmlNodeA* TiXmlNodeA::LinkEndChild( TiXmlNodeA* node )
 }
 
 
-TiXmlNodeA* TiXmlNodeA::InsertEndChild( const TiXmlNodeA& addThis )
-{
+TiXmlNodeA* TiXmlNodeA::InsertEndChild( const TiXmlNodeA& addThis )	{
+
 	TiXmlNodeA* node = addThis.Clone();
 	if ( !node )
 		return 0;
@@ -194,8 +194,8 @@ TiXmlNodeA* TiXmlNodeA::InsertEndChild( const TiXmlNodeA& addThis )
 }
 
 
-TiXmlNodeA* TiXmlNodeA::InsertBeforeChild( TiXmlNodeA* beforeThis, const TiXmlNodeA& addThis )
-{	
+TiXmlNodeA* TiXmlNodeA::InsertBeforeChild( TiXmlNodeA* beforeThis, const TiXmlNodeA& addThis )	{
+	
 	if ( !beforeThis || beforeThis->parent != this )
 		return 0;
 
@@ -220,8 +220,8 @@ TiXmlNodeA* TiXmlNodeA::InsertBeforeChild( TiXmlNodeA* beforeThis, const TiXmlNo
 }
 
 
-TiXmlNodeA* TiXmlNodeA::InsertAfterChild( TiXmlNodeA* afterThis, const TiXmlNodeA& addThis )
-{
+TiXmlNodeA* TiXmlNodeA::InsertAfterChild( TiXmlNodeA* afterThis, const TiXmlNodeA& addThis )	{
+
 	if ( !afterThis || afterThis->parent != this )
 		return 0;
 
@@ -246,8 +246,8 @@ TiXmlNodeA* TiXmlNodeA::InsertAfterChild( TiXmlNodeA* afterThis, const TiXmlNode
 }
 
 
-TiXmlNodeA* TiXmlNodeA::ReplaceChild( TiXmlNodeA* replaceThis, const TiXmlNodeA& withThis )
-{
+TiXmlNodeA* TiXmlNodeA::ReplaceChild( TiXmlNodeA* replaceThis, const TiXmlNodeA& withThis )	{
+
 	if ( replaceThis->parent != this )
 		return 0;
 
@@ -661,14 +661,14 @@ TiXmlNodeA* TiXmlElementA::Clone() const
 }
 
 
-TiXmlDocumentA::TiXmlDocumentA() : TiXmlNodeA( TiXmlNodeA::DOCUMENT )
-{
+TiXmlDocumentA::TiXmlDocumentA() : TiXmlNodeA( TiXmlNodeA::DOCUMENT )	{
+
 	tabsize = 4;
 	ClearError();
 }
 
-TiXmlDocumentA::TiXmlDocumentA( const char * documentName ) : TiXmlNodeA( TiXmlNodeA::DOCUMENT )
-{
+TiXmlDocumentA::TiXmlDocumentA( const char * documentName ) : TiXmlNodeA( TiXmlNodeA::DOCUMENT )	{
+
 	tabsize = 4;
 	value = documentName;
 	ClearError();
@@ -1117,8 +1117,8 @@ TiXmlNodeA* TiXmlUnknownA::Clone() const
 }
 
 
-TiXmlAttributeSetA::TiXmlAttributeSetA()
-{
+TiXmlAttributeSetA::TiXmlAttributeSetA()	{
+
 	sentinel.next = &sentinel;
 	sentinel.prev = &sentinel;
 }

@@ -28,8 +28,8 @@
 
 #include "trayIconControler.h"
 
-trayIconControler::trayIconControler(HWND hwnd, UINT uID, UINT uCBMsg, HICON hicon, const TCHAR *tip)
-{
+trayIconControler::trayIconControler(HWND hwnd, UINT uID, UINT uCBMsg, HICON hicon, const TCHAR *tip)	{
+
   _nid.cbSize = sizeof(_nid);
   _nid.hWnd = hwnd;
   _nid.uID = uID;

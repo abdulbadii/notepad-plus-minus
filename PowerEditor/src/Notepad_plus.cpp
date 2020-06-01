@@ -2830,8 +2830,8 @@ void Notepad_plus::setLanguage(LangType langType)	{
 	}
 };
 
-LangType Notepad_plus::menuID2LangType(int cmdID)
-{
+LangType Notepad_plus::menuID2LangType(int cmdID)	{
+
 	switch (cmdID)	{
 
 		case IDM_LANG_C	:
@@ -3078,8 +3078,8 @@ void Notepad_plus::activateDoc(size_t pos)	{
 
 static const char utflen[] = {1,1,2,3};
 
-size_t Notepad_plus::getSelectedCharNumber(UniMode u)
-{
+size_t Notepad_plus::getSelectedCharNumber(UniMode u)	{
+
 	size_t result = 0;
 	int numSel = int(_pEditView->f(SCI_GETSELECTIONS));
 	if (u == uniUTF8 || u == uniCookie)	{
@@ -3143,8 +3143,8 @@ static inline size_t countUtf8Characters(unsigned char *buf, size_t pos, size_t 
 }
 
 
-size_t Notepad_plus::getCurrentDocCharCount(UniMode u)
-{
+size_t Notepad_plus::getCurrentDocCharCount(UniMode u)	{
+
 	if (u != uniUTF8 && u != uniCookie)	{
 
 		size_t numLines = _pEditView->f(SCI_GETLINECOUNT);
@@ -3207,16 +3207,16 @@ int Notepad_plus::getBOMSize(UniMode u)	{
 	}
 }
 
-size_t Notepad_plus::getSelectedAreas()
-{
+size_t Notepad_plus::getSelectedAreas()	{
+
 	size_t numSel = _pEditView->f(SCI_GETSELECTIONS);
 	if (numSel == 1) // either 0 or 1 selection
 		return (_pEditView->f(SCI_GETSELECTIONNSTART, 0) == _pEditView->f(SCI_GETSELECTIONNEND, 0)) ? 0 : 1;
 	return (_pEditView->f(SCI_SELECTIONISRECTANGLE)) ? 1 : numSel;
 }
 
-size_t Notepad_plus::getSelectedBytes()
-{
+size_t Notepad_plus::getSelectedBytes()	{
+
 	size_t numSel = _pEditView->f(SCI_GETSELECTIONS);
 	size_t result = 0;
 	for (size_t i = 0; i < numSel; ++i)
