@@ -60,33 +60,28 @@ BOOL Notepad_plus::notify(SCNotification *notification)	{
 			if (not notifyView)
 				return FALSE;
 
-			static bool prevWasEdit = false;
+			static bool prevWasEdit;/*  = false; */
 			if (notification->modificationType & (SC_MOD_DELETETEXT|SC_MOD_INSERTTEXT))	{
 				prevWasEdit = true;
 				_linkTriggered = true;
 				::InvalidateRect(notifyView->getHSelf(), NULL, TRUE);
 				if (beginSelectPos != -1)
 					updateBeginEndSelectPosition(notification->modificationType & SC_MOD_INSERTTEXT, notification->position, notification->length);
-			}
-
-			if (notification->modificationType & (SC_MOD_DELETETEXT | SC_MOD_INSERTTEXT | SC_PERFORMED_UNDO | SC_PERFORMED_REDO))	{
-
-				// for the backup system
 				_pEditView->getCurrentBuffer()->setModifiedStatus(true);
 			}
 
-			if (notification->modificationType & SC_MOD_CHANGEFOLD)	{
+			if (notification->modificationType & (SC_PERFORMED_UNDO | SC_PERFORMED_REDO))
+				// for the backup system
+				_pEditView->getCurrentBuffer()->setModifiedStatus(true);
 
-				if (prevWasEdit)	{
+			if (notification->modificationType & SC_MOD_CHANGEFOLD && prevWasEdit)	{
 
-					notifyView->foldChanged(notification->line, notification->foldLevelNow, notification->foldLevelPrev);
-					prevWasEdit = false;
-				}
-			}
-			else if (!(notification->modificationType & (SC_MOD_DELETETEXT | SC_MOD_INSERTTEXT)))	{
-
+				notifyView->foldChanged(notification->line, notification->foldLevelNow, notification->foldLevelPrev);
 				prevWasEdit = false;
 			}
+
+			else/*  if (!(notification->modificationType & (SC_MOD_DELETETEXT | SC_MOD_INSERTTEXT))) */
+				prevWasEdit = false;
 
 			break;
 		}
